@@ -378,6 +378,7 @@ li + li {
 .knowledge-tabs {
   display: flex;
   flex-wrap: nowrap;
+  flex-shrink: 0;
   gap: 8px;
   overflow: visible;
   min-width: 0;
@@ -1611,11 +1612,6 @@ li + li {
     order: 1;
     width: 100%;
     font-size: 12px;
-  }
-
-  .tabs-row {
-    overflow-x: auto;
-    padding-bottom: 4px;
   }
 
   .knowledge-tab {

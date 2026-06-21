@@ -459,6 +459,22 @@ const TW07Layout = createDemo('TW07Layout')
 const TW07Code = createCodeLoader('style-code/TW07Layout.html')
 const TW08ContainerQueries = createDemo('TW08ContainerQueries')
 const TW08Code = createCodeLoader('style-code/TW08ContainerQueries.html')
+const TW09Installation = createDemo('TW09Installation')
+const TW09Code = createCodeLoader('style-code/TW09Installation.css.txt')
+const TW10Typography = createDemo('TW10Typography')
+const TW10Code = createCodeLoader('style-code/TW10Typography.html')
+const TW11SizingSpacing = createDemo('TW11SizingSpacing')
+const TW11Code = createCodeLoader('style-code/TW11SizingSpacing.html')
+const TW12BordersEffects = createDemo('TW12BordersEffects')
+const TW12Code = createCodeLoader('style-code/TW12BordersEffects.html')
+const TW13Motion = createDemo('TW13Motion')
+const TW13Code = createCodeLoader('style-code/TW13Motion.html')
+const TW14Forms = createDemo('TW14Forms')
+const TW14Code = createCodeLoader('style-code/TW14Forms.html')
+const TW15CustomUtilities = createDemo('TW15CustomUtilities')
+const TW15Code = createCodeLoader('style-code/TW15CustomUtilities.css.txt')
+const TW16Production = createDemo('TW16Production')
+const TW16Code = createCodeLoader('style-code/TW16Production.css.txt')
 const SC01VariablesNesting = createDemo('SC01VariablesNesting')
 const SC01Code = createCodeLoader('style-code/SC01VariablesNesting.scss.txt')
 const SC02Modules = createDemo('SC02Modules')
@@ -475,6 +491,22 @@ const SC07Extend = createDemo('SC07Extend')
 const SC07Code = createCodeLoader('style-code/SC07Extend.scss.txt')
 const SC08Architecture = createDemo('SC08Architecture')
 const SC08Code = createCodeLoader('style-code/SC08Architecture.scss.txt')
+const SC09ValuesUnits = createDemo('SC09ValuesUnits')
+const SC09Code = createCodeLoader('style-code/SC09ValuesUnits.scss.txt')
+const SC10Math = createDemo('SC10Math')
+const SC10Code = createCodeLoader('style-code/SC10Math.scss.txt')
+const SC11Color = createDemo('SC11Color')
+const SC11Code = createCodeLoader('style-code/SC11Color.scss.txt')
+const SC12Configuration = createDemo('SC12Configuration')
+const SC12Code = createCodeLoader('style-code/SC12Configuration.scss.txt')
+const SC13AtRoot = createDemo('SC13AtRoot')
+const SC13Code = createCodeLoader('style-code/SC13AtRoot.scss.txt')
+const SC14MediaQueries = createDemo('SC14MediaQueries')
+const SC14Code = createCodeLoader('style-code/SC14MediaQueries.scss.txt')
+const SC15CustomProperties = createDemo('SC15CustomProperties')
+const SC15Code = createCodeLoader('style-code/SC15CustomProperties.scss.txt')
+const SC16Diagnostics = createDemo('SC16Diagnostics')
+const SC16Code = createCodeLoader('style-code/SC16Diagnostics.scss.txt')
 
 export interface KnowledgeCategory {
   id: string
@@ -4025,5 +4057,149 @@ export const lessons: Lesson[] = [
     flow: ['按令牌、工具、组件和页面职责拆分。', '建立少量明确入口与单向依赖。', '在 CI 编译并把弃用警告纳入迁移计划。'],
     notes: ['不要照搬目录模板，规模小的项目保持扁平更好。', '迁移旧项目时先运行 Sass Migrator，再逐步收紧模块边界。'],
     problem: '解决“样式规模增长后如何保持依赖清晰、产物可控并持续升级”的问题。',
+  },
+  {
+    id: 'TW_09', title: 'v4 安装与构建工具集成', navTitle: '安装与集成', category: '工程集成',
+    path: '/tailwind-css/tw-9/installation', summary: '比较 Vite、PostCSS 和 CLI 三种接入路径，建立最小 CSS 入口。',
+    demo: TW09Installation, code: TW09Code, language: 'css',
+    principle: 'Tailwind v4 由核心包和构建适配器协作：CSS 入口导入 tailwindcss，Vite 插件、PostCSS 插件或 CLI 负责扫描候选类并生成最终 CSS。',
+    flow: ['按现有构建链选择唯一适配器。', '在全局样式入口导入 Tailwind。', '验证开发热更新与生产压缩都读取正确源文件。'],
+    notes: ['Vite 项目优先使用官方 Vite 插件。', '不要同时让多个适配器处理同一入口。'],
+    problem: '解决“Tailwind v4 应如何接入不同工程，并避免重复编译”的问题。',
+  },
+  {
+    id: 'TW_10', title: '排版层级、行高与可读行长', navTitle: '排版系统', category: '视觉基础',
+    path: '/tailwind-css/tw-10/typography', summary: '用中文课程正文组合字号、行高、字重、字距和最大行长。',
+    demo: TW10Typography, code: TW10Code, language: 'xml',
+    principle: '排版工具类分别控制 font-size、line-height、font-weight、letter-spacing 和文本宽度；视觉层级来自这些维度的稳定组合。',
+    flow: ['建立正文基准字号与行高。', '按信息层级定义标题尺度。', '限制长文行宽并分别检查中英文效果。'],
+    notes: ['中文正文通常需要更宽松行高。', '大标题也要测试窄屏换行与超长文本。'],
+    problem: '解决“如何用工具类构建清晰、稳定且适合中文阅读的排版体系”的问题。',
+  },
+  {
+    id: 'TW_11', title: '尺寸约束与间距比例尺', navTitle: '尺寸与间距', category: '视觉基础',
+    path: '/tailwind-css/tw-11/sizing-spacing', summary: '区分 width、min/max、size、gap 与 space，并形成一致视觉节奏。',
+    demo: TW11SizingSpacing, code: TW11Code, language: 'xml',
+    principle: '尺寸工具描述固定、流体与边界约束；p/m 作用于盒模型，gap 作用于布局轨道，space 在相邻子元素间添加间距。',
+    flow: ['先决定容器是固定、流体还是受最大宽度约束。', '用间距尺度建立节奏。', '在长内容与窄屏下验证最小尺寸和溢出。'],
+    notes: ['组件内部优先 gap，减少相邻 margin 规则。', 'min-w-0 常用于允许 Flex/Grid 子项正确收缩。'],
+    problem: '解决“页面尺寸与留白如何形成系统，而不是散落魔法数字”的问题。',
+  },
+  {
+    id: 'TW_12', title: '边框、轮廓、Ring 与阴影', navTitle: '边界与阴影', category: '视觉基础',
+    path: '/tailwind-css/tw-12/borders-effects', summary: '为卡片层级和键盘焦点选择正确的视觉边界工具。',
+    demo: TW12BordersEffects, code: TW12Code, language: 'xml',
+    principle: 'border 参与盒模型，outline 和 ring 可在不占布局空间时强调焦点，box-shadow 表达层级；透明度修饰符能降低彩色阴影的视觉噪声。',
+    flow: ['用边框建立静态边界。', '以 focus-visible 提供高对比焦点。', '仅在需要表达浮层高度时添加阴影。'],
+    notes: ['焦点不能只靠低对比阴影。', '过多阴影层级会削弱界面信息结构。'],
+    problem: '解决“视觉分层、边界和键盘焦点应分别使用什么效果”的问题。',
+  },
+  {
+    id: 'TW_13', title: '过渡、动画与减少动态效果', navTitle: '动画与动效', category: '交互与可访问性',
+    path: '/tailwind-css/tw-13/motion', summary: '用 transition 与 motion-safe/motion-reduce 制作克制、可访问的反馈。',
+    demo: TW13Motion, code: TW13Code, language: 'xml',
+    principle: 'transition 工具定义参与属性、时长和缓动，animate 工具应用关键帧；运动偏好变体根据 prefers-reduced-motion 提供替代。',
+    flow: ['明确动效要解释的状态变化。', '优先动画 transform 与 opacity。', '为减少动态偏好禁用或简化非必要运动。'],
+    notes: ['不要使用 transition-all 掩盖属性边界。', '持续闪烁和大幅位移可能引发不适。'],
+    problem: '解决“如何提供有意义的交互反馈，同时控制性能与运动可访问性”的问题。',
+  },
+  {
+    id: 'TW_14', title: '表单状态与无障碍语义', navTitle: '表单样式', category: '交互与可访问性',
+    path: '/tailwind-css/tw-14/forms', summary: '组合输入框状态，并用原生语义连接标签、帮助和错误信息。',
+    demo: TW14Forms, code: TW14Code, language: 'xml',
+    principle: '表单变体可响应 focus、invalid、disabled 和 aria/data 属性，但工具类只负责外观；可访问名称、描述和状态仍由语义 HTML 提供。',
+    flow: ['使用 label 和正确输入类型。', '把帮助或错误信息通过 aria-describedby 关联。', '设计焦点、无效、禁用和只读状态。'],
+    notes: ['placeholder 不能代替 label。', '错误不能只用颜色表达。'],
+    problem: '解决“表单如何同时具备一致视觉状态、键盘体验和辅助技术语义”的问题。',
+  },
+  {
+    id: 'TW_15', title: '自定义工具与 Cascade Layers', navTitle: '自定义扩展', category: '扩展机制',
+    path: '/tailwind-css/tw-15/custom-utilities', summary: '用 @utility 和 @layer 扩展少量项目能力，并继续支持变体。',
+    demo: TW15CustomUtilities, code: TW15Code, language: 'css',
+    principle: '@utility 注册静态或函数式工具并接入变体系统；@layer base、components、utilities 把自定义规则放入明确级联层级。',
+    flow: ['先确认内置工具与任意值无法清晰表达。', '把单用途能力注册为 @utility。', '按默认值、组件或工具选择正确 layer。'],
+    notes: ['自定义工具应保持单一职责。', '复杂业务组件仍应封装为 Vue 组件。'],
+    problem: '解决“项目特有 CSS 能力如何融入 Tailwind，而不建立平行样式体系”的问题。',
+  },
+  {
+    id: 'TW_16', title: '源检测、产物优化与生产排查', navTitle: '生产优化', category: '工程集成',
+    path: '/tailwind-css/tw-16/production', summary: '控制自动源检测与 @source，定位缺失类名和异常 CSS 体积。',
+    demo: TW16Production, code: TW16Code, language: 'css',
+    principle: 'Tailwind 从源码文本检测完整候选类并按需生成 CSS；@source 可显式注册、排除或内联候选，生产构建再负责压缩和缓存。',
+    flow: ['确认模板文件位于自动检测范围。', '外部包用 @source 注册明确路径。', '分析产物并修复动态拼接或过宽内联来源。'],
+    notes: ['动态类名应映射为完整静态字符串。', '大范围 safelist 会掩盖架构问题并膨胀产物。'],
+    problem: '解决“生产环境类名缺失或 CSS 过大时如何系统定位”的问题。',
+  },
+  {
+    id: 'SC_09', title: '值类型、单位与编译期计算', navTitle: '值与单位', category: '语言基础',
+    path: '/sass/sc-9/values-units', summary: '理解数字、字符串、颜色、List、Map 与单位代数的行为。',
+    demo: SC09ValuesUnits, code: SC09Code, language: 'scss',
+    principle: 'Sass 拥有带类型的值系统；数字携带分子和分母单位，兼容单位可转换，不兼容维度会在编译期报错。',
+    flow: ['识别表达式中的 Sass 值类型。', '在计算前检查单位维度。', '用 meta.type-of 等函数诊断边界输入。'],
+    notes: ['0 也可能携带单位。', '不要用插值绕过本应失败的单位检查。'],
+    problem: '解决“Sass 计算为什么有时能换算单位、有时会报维度错误”的问题。',
+  },
+  {
+    id: 'SC_10', title: 'sass:math 与单位安全计算', navTitle: '数学模块', category: '内置模块',
+    path: '/sass/sc-10/math', summary: '计算网格列宽，掌握 math.div、舍入和单位兼容边界。',
+    demo: SC10Math, code: SC10Code, language: 'scss',
+    principle: 'sass:math 提供明确除法、幂、舍入、最值和单位检查；Sass 可处理编译期已知量，浏览器上下文相关计算应保留 CSS calc。',
+    flow: ['声明输入单位契约。', '用 math.div 执行明确除法。', '无法在编译期确定的百分比关系交给 calc。'],
+    notes: ['斜杠除法已被弃用。', '浮点结果需要依据 CSS 需求决定是否舍入。'],
+    problem: '解决“如何进行可靠的设计数学计算，并保留浏览器应负责的部分”的问题。',
+  },
+  {
+    id: 'SC_11', title: 'sass:color 与配色派生', navTitle: '颜色模块', category: '内置模块',
+    path: '/sass/sc-11/color', summary: '从品牌色派生悬浮和柔和背景，并区分 adjust、scale 与 mix。',
+    demo: SC11Color, code: SC11Code, language: 'scss',
+    principle: 'sass:color 在明确颜色空间中读取和转换通道；adjust 增加固定通道量，scale 按剩余范围缩放，mix 按权重混合颜色。',
+    flow: ['选定来源颜色与颜色空间。', '按设计意图选择调整或缩放。', '对派生结果执行实际对比度验证。'],
+    notes: ['数学派生不能保证视觉可访问性。', '优先现代模块 API，避免已弃用全局颜色函数。'],
+    problem: '解决“如何从有限品牌令牌可靠派生状态颜色，并理解不同函数语义”的问题。',
+  },
+  {
+    id: 'SC_12', title: '模块配置、!default 与 with', navTitle: '模块配置', category: '模块复用',
+    path: '/sass/sc-12/configuration', summary: '让样式库暴露有限配置项，并在首次 @use 时完成定制。',
+    demo: SC12Configuration, code: SC12Code, language: 'scss',
+    principle: '模块可用 !default 声明可配置顶层变量，调用方在首次 @use 的 with 子句传值；模块只加载一次，因此配置必须唯一且先于其他加载。',
+    flow: ['只公开确有稳定契约的变量。', '为配置提供合理默认值。', '在应用入口首次加载时统一传入配置。'],
+    notes: ['不要把所有内部变量都做成配置项。', '复杂配置可用 Mixin 替代 with 的单次加载限制。'],
+    problem: '解决“可复用 Sass 库如何允许主题定制又保护内部实现”的问题。',
+  },
+  {
+    id: 'SC_13', title: '@at-root 与嵌套上下文控制', navTitle: '@at-root', category: '选择器进阶',
+    path: '/sass/sc-13/at-root', summary: '从生成器或深层上下文中输出根级规则，并精确保留 at-rule。',
+    demo: SC13AtRoot, code: SC13Code, language: 'scss',
+    principle: '@at-root 默认移除普通选择器上下文，并可用 with/without 查询控制保留 media、supports 等 at-rule，适合高级选择器生成。',
+    flow: ['确认输出规则不应继承当前选择器。', '决定需要保留的 at-rule 上下文。', '检查编译结果是否产生预期根级选择器。'],
+    notes: ['不要用 @at-root 掩盖糟糕的深层架构。', '涉及复杂选择器时可配合 sass:selector 模块。'],
+    problem: '解决“嵌套内部如何有控制地生成外层或根级规则”的问题。',
+  },
+  {
+    id: 'SC_14', title: '媒体查询冒泡与响应式 Mixin', navTitle: '媒体查询', category: '选择器进阶',
+    path: '/sass/sc-14/media-queries', summary: '在组件附近声明响应式覆盖，并理解 Sass 的冒泡与查询合并。',
+    demo: SC14MediaQueries, code: SC14Code, language: 'scss',
+    principle: 'media、supports 等 at-rule 在嵌套时会冒泡到可输出位置，Sass 还会合并可组合的外层查询；Mixin 可统一断点契约。',
+    flow: ['以内容临界点定义少量断点。', '让组件的覆盖规则靠近基础规则。', '审查编译后查询是否重复或组合爆炸。'],
+    notes: ['断点 Mixin 不应隐藏复杂业务判断。', '现代范围语法可直接表达 width >= 值。'],
+    problem: '解决“组件响应式样式如何共置，同时保持最终媒体查询清晰”的问题。',
+  },
+  {
+    id: 'SC_15', title: 'CSS 自定义属性与 Sass 插值', navTitle: 'CSS 变量协作', category: 'CSS 协作',
+    path: '/sass/sc-15/custom-properties', summary: '把编译期令牌写入运行时 CSS 变量，并正确保留字符串。',
+    demo: SC15CustomProperties, code: SC15Code, language: 'scss',
+    principle: 'Sass 值写入自定义属性时需要插值，因为属性值可能是任意 CSS 文本；meta.inspect 可在插值时保留带引号字符串表示。',
+    flow: ['区分编译期常量与运行时主题值。', '用插值输出初始自定义属性。', '浏览器端通过级联、继承或脚本覆盖变量。'],
+    notes: ['插值通常会移除字符串引号。', '运行时切换不应重新依赖 Sass 编译。'],
+    problem: '解决“Sass 令牌如何安全进入浏览器可切换的 CSS 变量体系”的问题。',
+  },
+  {
+    id: 'SC_16', title: '诊断指令、弃用与自动迁移', navTitle: '诊断与迁移', category: '工程架构',
+    path: '/sass/sc-16/diagnostics', summary: '使用 @debug、@warn、@error 建立反馈，并依据弃用信息迁移旧代码。',
+    demo: SC16Diagnostics, code: SC16Code, language: 'scss',
+    principle: '@debug 输出开发值，@warn 报告可继续问题，@error 中断非法构建；编译器弃用警告与 Sass Migrator 共同支撑模块和语法升级。',
+    flow: ['在公共函数与 Mixin 边界验证参数。', '保留带调用栈的弃用警告。', '用 Migrator 机械迁移后审查模块 API 和产物。'],
+    notes: ['不要在正常构建中制造高噪声 debug。', '自动迁移后仍需测试视觉回归与 CSS 体积。'],
+    problem: '解决“Sass 代码如何在错误时快速失败，并持续摆脱已弃用语法”的问题。',
   },
 ]

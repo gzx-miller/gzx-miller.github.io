@@ -1,0 +1,3 @@
+<script setup lang="ts">import { computed, ref } from 'vue'; const step = ref(4); const gap = computed(() => step.value * 4)</script>
+<template><div class="demo-card size-demo"><label>间距等级 {{ step }}（{{ gap }}px）<input v-model.number="step" type="range" min="1" max="10"></label><div class="stack" :style="{ gap: `${gap}px` }"><span v-for="n in 3" :key="n">内容块 {{ n }}</span></div><code>space-y-{{ step }} · p-{{ step }} · min-h-{{ step * 8 }}</code><small>间距比例尺提供视觉节奏；尺寸约束要区分固定、最小、最大与视口/容器相对单位，避免无意义的任意数值。</small></div></template>
+<style scoped>label{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}.stack{display:grid;margin:1rem 0}.stack span{padding:.55rem;border-radius:.45rem;background:#f9dfba}.size-demo>code{font-size:.76rem}</style>

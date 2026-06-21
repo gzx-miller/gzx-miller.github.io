@@ -175,35 +175,54 @@ async function calculateOverflow() {
   const nav = container.querySelector('.knowledge-tabs') as HTMLElement | null
   if (!nav) return
 
+  // 防止 nav 在测量期间被 flex 压缩，导致子元素宽度不准
+  const prevFlexShrink = nav.style.flexShrink
+  nav.style.flexShrink = '0'
+
   const containerWidth = container.clientWidth
   const items = nav.querySelectorAll('.knowledge-tab-wrapper')
-  const activeCategoryIndex = knowledgeCategories.findIndex((category) => category.id === activeKnowledge.value)
-  const activeTabWidth = activeCategoryIndex >= 0
-    ? (items[activeCategoryIndex] as HTMLElement | undefined)?.offsetWidth ?? 0
-    : 0
+  const gap = parseFloat(getComputedStyle(nav).gap) || 8
 
+  // 始终先为"更多"按钮预留空间（有溢出时一定需要它）
+  const activeCategoryIndex = knowledgeCategories.findIndex(
+    (category) => category.id === activeKnowledge.value,
+  )
+
+  let moreBtnWidth = 80
+  if (activeCategoryIndex >= 0) {
+    const activeItem = items[activeCategoryIndex] as HTMLElement | undefined
+    if (activeItem) {
+      // 当活动类别在溢出菜单中时，按钮显示其名称，需要更宽
+      moreBtnWidth = Math.max(80, activeItem.offsetWidth + 18)
+    }
+  }
+
+  // 计算可容纳的 tab 数量（为"更多"按钮 + gap 预留空间）
   let totalWidth = 0
   let count = 0
 
   for (const [index, item] of Array.from(items).entries()) {
-    const itemWidth = (item as HTMLElement).offsetWidth + 8 // 8px = gap
-    const nextCount = index + 1
-    const hasOverflow = nextCount < knowledgeCategories.length
-    const activeCategoryWillOverflow = activeCategoryIndex >= nextCount
-    const moreBtnWidth = hasOverflow
-      ? activeCategoryWillOverflow ? Math.max(80, activeTabWidth + 18) : 80
-      : 0
+    const itemWidth = (item as HTMLElement).offsetWidth + (index > 0 ? gap : 0)
 
-    if (totalWidth + itemWidth + moreBtnWidth <= containerWidth) {
+    if (totalWidth + itemWidth + gap + moreBtnWidth <= containerWidth) {
       totalWidth += itemWidth
-      count++
+      count = index + 1
     } else {
       break
     }
   }
 
-  // 至少显示一个，如果全部都放得下则不显示"更多"
-  visibleCount.value = count >= knowledgeCategories.length ? knowledgeCategories.length : Math.max(1, count)
+  nav.style.flexShrink = prevFlexShrink
+
+  // 全部放得下 → 不需要"更多"按钮
+  if (count >= knowledgeCategories.length) {
+    visibleCount.value = knowledgeCategories.length
+    return
+  }
+
+  // 至少尝试显示 1 个 tab；如果连 1 个都放不下（极窄宽度），
+  // 则显示 0 个，所有类别收入"更多"下拉菜单
+  visibleCount.value = Math.max(0, count)
 }
 
 async function handleGlobalKeydown(event: KeyboardEvent) {

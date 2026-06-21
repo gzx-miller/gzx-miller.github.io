@@ -1,0 +1,3 @@
+<script setup lang="ts">import { computed, ref } from 'vue'; const lightness = ref(50); const color = computed(() => `hsl(22 65% ${lightness.value}%)`)</script>
+<template><div class="demo-card color-demo"><label>亮度 {{ lightness }}% <input v-model.number="lightness" type="range" min="20" max="85"></label><div :style="{ background: color }">{{ color }}</div><code>color.adjust($brand, $lightness: 12%)</code><small>sass:color 提供通道读取、调整、缩放与混合；自动生成配色后仍需实际验证对比度，不应假设数学变化等于可访问。</small></div></template>
+<style scoped>label{display:flex;gap:.6rem}.color-demo div{margin:1rem 0;padding:1.3rem;border-radius:.6rem;text-align:center;color:#fff;text-shadow:0 1px 2px #0008}.color-demo>code{font-size:.75rem}</style>

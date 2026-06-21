@@ -11,8 +11,8 @@ describe('课程注册表', () => {
       { id: 'engineering', lessonCount: 16, groupCount: 5 },
       { id: 'langchain', lessonCount: 18, groupCount: 11 },
       { id: 'element-plus', lessonCount: 20, groupCount: 7 },
-      { id: 'tailwind-css', lessonCount: 8, groupCount: 4 },
-      { id: 'sass', lessonCount: 8, groupCount: 4 },
+      { id: 'tailwind-css', lessonCount: 16, groupCount: 8 },
+      { id: 'sass', lessonCount: 16, groupCount: 7 },
     ]
 
     for (const expected of expectedCurriculum) {
