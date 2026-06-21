@@ -18,6 +18,7 @@ const popoverPlacement = ref<Record<string, 'start' | 'center' | 'end'>>({})
 const tabsRowRef = useTemplateRef<HTMLElement>('tabsRow')
 const visibleCount = ref(knowledgeCategories.length)
 const moreDropdownVisible = ref(false)
+let moreDropdownCloseTimer: ReturnType<typeof setTimeout> | undefined
 
 const visibleCategories = computed(() => knowledgeCategories.slice(0, visibleCount.value))
 const overflowCategories = computed(() => knowledgeCategories.slice(visibleCount.value))
@@ -57,8 +58,28 @@ function handleMoreFocusOut(event: FocusEvent) {
   }
 }
 
-async function openMoreMenuAndFocus() {
+function openMoreDropdown() {
+  if (moreDropdownCloseTimer) clearTimeout(moreDropdownCloseTimer)
+  moreDropdownCloseTimer = undefined
   moreDropdownVisible.value = true
+}
+
+function scheduleMoreDropdownClose() {
+  if (moreDropdownCloseTimer) clearTimeout(moreDropdownCloseTimer)
+  moreDropdownCloseTimer = setTimeout(() => {
+    moreDropdownVisible.value = false
+    moreDropdownCloseTimer = undefined
+  }, 100)
+}
+
+function toggleMoreDropdown() {
+  if (moreDropdownCloseTimer) clearTimeout(moreDropdownCloseTimer)
+  moreDropdownCloseTimer = undefined
+  moreDropdownVisible.value = !moreDropdownVisible.value
+}
+
+async function openMoreMenuAndFocus() {
+  openMoreDropdown()
   await nextTick()
   tabsRowRef.value?.querySelector<HTMLElement>('.more-dropdown-item')?.focus()
 }
@@ -218,6 +239,7 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('keydown', handleGlobalKeydown)
   window.removeEventListener('resize', handleResize)
+  if (moreDropdownCloseTimer) clearTimeout(moreDropdownCloseTimer)
 })
 
 watch(activeKnowledge, () => {
@@ -314,9 +336,9 @@ useSeoMeta({
         <div
           v-if="overflowCategories.length > 0"
           class="knowledge-more-wrapper"
-          @mouseenter="moreDropdownVisible = true"
-          @mouseleave="moreDropdownVisible = false"
-          @focusin="moreDropdownVisible = true"
+          @mouseenter="openMoreDropdown"
+          @mouseleave="scheduleMoreDropdownClose"
+          @focusin="openMoreDropdown"
           @focusout="handleMoreFocusOut"
         >
           <button
@@ -326,7 +348,7 @@ useSeoMeta({
             aria-haspopup="menu"
             :aria-expanded="moreDropdownVisible"
             aria-controls="knowledge-more-menu"
-            @click="moreDropdownVisible = !moreDropdownVisible"
+            @click="toggleMoreDropdown"
             @keydown.down.prevent="openMoreMenuAndFocus"
           >
             <span>{{ moreButtonLabel }}</span>

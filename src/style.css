@@ -186,7 +186,7 @@ select:not([class*='el-']) {
   font: inherit;
 }
 
-button:not([class*='el-']),
+button:not([class*='el-']):not(.knowledge-more-btn),
 .button-row a {
   border: 1px solid var(--accent);
   border-radius: 6px;
@@ -445,6 +445,15 @@ li + li {
 .knowledge-more-wrapper {
   position: relative;
   flex-shrink: 0;
+}
+
+.knowledge-more-wrapper::after {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  height: 6px;
+  content: '';
 }
 
 .knowledge-more-btn {
