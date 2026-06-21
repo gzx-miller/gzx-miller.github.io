@@ -579,6 +579,34 @@ const V15Perf = createDemo('V15Perf')
 const V15Code = createCodeLoader('V15Perf.vue')
 const V16PluginDev = createDemo('V16PluginDev')
 const V16Code = createCodeLoader('V16PluginDev.vue')
+const D17EventLoop = createDemo('D17EventLoop')
+const D17Code = createCodeLoader('D17EventLoop.vue')
+const D18Buffer = createDemo('D18Buffer')
+const D18Code = createCodeLoader('D18Buffer.vue')
+const D19ChildProcess = createDemo('D19ChildProcess')
+const D19Code = createCodeLoader('D19ChildProcess.vue')
+const D20Cluster = createDemo('D20Cluster')
+const D20Code = createCodeLoader('D20Cluster.vue')
+const D21Crypto = createDemo('D21Crypto')
+const D21Code = createCodeLoader('D21Crypto.vue')
+const D22PerfHooks = createDemo('D22PerfHooks')
+const D22Code = createCodeLoader('D22PerfHooks.vue')
+const D23Https = createDemo('D23Https')
+const D23Code = createCodeLoader('D23Https.vue')
+const D24Cli = createDemo('D24Cli')
+const D24Code = createCodeLoader('D24Cli.vue')
+const D25Timers = createDemo('D25Timers')
+const D25Code = createCodeLoader('D25Timers.vue')
+const D26NetTcp = createDemo('D26NetTcp')
+const D26Code = createCodeLoader('D26NetTcp.vue')
+const D27Zlib = createDemo('D27Zlib')
+const D27Code = createCodeLoader('D27Zlib.vue')
+const D28Os = createDemo('D28Os')
+const D28Code = createCodeLoader('D28Os.vue')
+const D29Dns = createDemo('D29Dns')
+const D29Code = createCodeLoader('D29Dns.vue')
+const D30Readline = createDemo('D30Readline')
+const D30Code = createCodeLoader('D30Readline.vue')
 
 export interface KnowledgeCategory {
   id: string
@@ -3485,13 +3513,13 @@ export const lessons: Lesson[] = [
     problem: '解决"大型前端应用如何拆分为可独立开发和部署的子应用"的问题。',
   },
   {
-    id: 'J_01', title: '值、类型转换与严格相等', navTitle: '类型与相等', category: '语言基础',
-    path: '/javascript/j-1/types-equality', summary: '理解原始值、引用值、显式转换，以及 == 与 === 的差异。',
+    id: 'J_01', title: '原始类型、引用类型与类型转换', navTitle: '类型与相等', category: '语言基础',
+    path: '/javascript/j-1/types-equality', summary: '掌握 7 种原始类型与引用类型的 typeof 行为、显式转换（Number/String/Boolean）、5 个 falsy 值、隐式转换规则，以及 == 与 === 的经典差异。',
     demo: J01TypesEquality, code: J01Code, language: 'javascript',
-    principle: 'JavaScript 是动态类型语言，运算时可能发生隐式类型转换。严格相等不会转换操作数，更适合表达稳定的业务判断。',
-    flow: ['识别值当前的运行时类型。', '在输入边界显式转换。', '使用严格相等比较同类型值。'],
-    notes: ['typeof null 的结果是历史遗留的 object。', 'NaN 应使用 Number.isNaN 判断。'],
-    problem: '解决"表单、接口参数比较时为什么会出现反直觉结果"的问题。',
+    principle: 'JavaScript 是动态类型语言，运算时可能发生隐式类型转换。typeof 对 null 返回 object 是历史遗留；引用类型的 typeof 统一为 object（函数除外）。显式转换用 Number()、String()、Boolean()，只有 ""、0、NaN、null、undefined 五个 falsy 值。== 会先转换再比较，=== 不转换类型。',
+    flow: ['用 typeof 识别值的运行时类型。', '在输入边界显式转换而非依赖隐式规则。', '始终使用 === 严格相等。', '用 Number.isNaN() 和 Array.isArray() 处理特殊判断。'],
+    notes: ['typeof null → object 是语言早期设计的 bug。', 'NaN 不等于任何值（包括自身），须用 Number.isNaN() 判断。', '空数组 [] 和空对象 {} 都是 truthy。', 'Object.is() 可区分 NaN 和 -0 的边界场景。'],
+    problem: '解决"表单输入、API 参数比较时为什么出现反直觉结果，以及如何正确识别和转换 JavaScript 类型"的问题。',
   },
   {
     id: 'J_02', title: '词法作用域与闭包', navTitle: '作用域与闭包', category: '语言基础',
@@ -3843,6 +3871,133 @@ export const lessons: Lesson[] = [
     flow: ['识别 CPU 密集型瓶颈。', '将计算逻辑移到 Worker 线程。', '通过消息传递返回计算结果。'],
     notes: ['Worker 适合 CPU 密集，不适合 I/O 密集。', ' Piscina 等库提供 Worker 池管理。'],
     problem: '解决"CPU 密集任务如何避免阻塞 Node.js 事件循环"的问题。',
+  },
+  /***** Node.js 补全案例 D_17 ~ D_30 *****/
+  {
+    id: 'D_17', title: '事件循环与宏微任务', navTitle: '事件循环', category: '事件循环',
+    path: '/nodejs/d-17/event-loop', summary: '理解 Node.js 事件循环的六个阶段，以及微任务（nextTick、Promise）和宏任务（setTimeout、setImmediate）的执行顺序。',
+    demo: D17EventLoop, code: D17Code, language: 'vue',
+    principle: 'Node.js 事件循环分为六个阶段（Timers、Pending、Idle/Prepare、Poll、Check、Close），微任务（process.nextTick、Promise.then）在每个阶段结束后优先执行。',
+    flow: ['理解事件循环的六个阶段。', '掌握微任务和宏任务的执行顺序。', '学会使用 nextTick 和 setImmediate。'],
+    notes: ['process.nextTick 优先级高于 Promise.then。', 'setImmediate 在 Check 阶段执行，Node.js 特有。'],
+    problem: '解决"异步代码执行顺序不符合预期，以及定时器回调为什么不按时执行"的问题。',
+  },
+  {
+    id: 'D_18', title: 'Buffer 与二进制数据处理', navTitle: 'Buffer', category: '二进制',
+    path: '/nodejs/d-18/buffer', summary: '理解 Buffer 的创建、编码转换、拼接和截取，掌握二进制数据处理的基本操作。',
+    demo: D18Buffer, code: D18Code, language: 'vue',
+    principle: 'Buffer 是 Uint8Array 的子类，用于表示固定长度的字节序列；Node.js 中文件 I/O、网络传输、加密等操作都以 Buffer 为纽带。',
+    flow: ['学习 Buffer 的创建方式（from、alloc、allocUnsafe）。', '掌握不同编码（utf8、hex、base64）的转换。', '理解 Buffer 拼接和截取的最佳实践。'],
+    notes: ['优先使用 Buffer.from() 而非 new Buffer()。', '拼接多个 Buffer 时使用 Buffer.concat() 避免内存碎片。'],
+    problem: '解决"如何处理二进制数据、文件内容编码转换、以及 Stream 数据拼接"的问题。',
+  },
+  {
+    id: 'D_19', title: 'child_process 子进程', navTitle: '子进程', category: '多进程',
+    path: '/nodejs/d-19/child-process', summary: '对比 spawn、fork、exec 三种创建子进程的方式，掌握多进程架构的基础。',
+    demo: D19ChildProcess, code: D19Code, language: 'vue',
+    principle: 'child_process 提供三种创建子进程的方式：spawn（流式输出，适合大数据量）、fork（Node.js 脚本，支持 IPC）、exec（一次性输出，适合简单命令）。',
+    flow: ['对比 spawn、fork、exec 的适用场景。', '学习子进程通信（IPC、stdout/stderr）。', '掌握子进程生命周期管理。'],
+    notes: ['大数据量用 spawn（流式）。', 'Node.js 脚本用 fork（IPC 通信）。', '简单命令用 exec（一次性输出）。'],
+    problem: '解决"如何在 Node.js 中执行外部命令、利用多核 CPU、以及隔离崩溃风险"的问题。',
+  },
+  {
+    id: 'D_20', title: 'cluster 多核利用', navTitle: 'cluster', category: '多进程',
+    path: '/nodejs/d-20/cluster', summary: '使用 cluster 模块创建多进程架构，充分利用多核 CPU，提高应用吞吐量和可靠性。',
+    demo: D20Cluster, code: D20Code, language: 'vue',
+    principle: 'cluster 模块基于 child_process.fork()，主进程负责接收连接并分发给工作进程，工作进程各自独立运行，共享服务器端口；默认负载均衡策略为轮询。',
+    flow: ['理解 cluster 的主从架构。', '学习工作进程的创建和生命周期管理。', '掌握负载均衡和优雅退出策略。'],
+    notes: ['工作进程数通常设置为 CPU 核心数。', '工作进程崩溃后主进程应自动 fork 新进程。'],
+    problem: '解决"单线程 Node.js 无法充分利用多核 CPU，以及单点故障导致整个应用不可用"的问题。',
+  },
+  {
+    id: 'D_21', title: 'crypto 加密实践', navTitle: '加密', category: '安全',
+    path: '/nodejs/d-21/crypto', summary: '使用 crypto 模块进行哈希、HMAC、对称加密等操作，掌握密码存储和数据签名的最佳实践。',
+    demo: D21Crypto, code: D21Code, language: 'vue',
+    principle: 'Node.js 内置 crypto 模块提供哈希（SHA、MD5）、HMAC、对称加密（AES）、非对称加密（RSA）、签名等功能；密码存储推荐使用 bcrypt 或 scrypt。',
+    flow: ['学习哈希算法（SHA-256、SHA-512）的使用。', '掌握 HMAC 和 AES 加密。', '理解密码存储的最佳实践（bcrypt）。'],
+    notes: ['不要使用 MD5 存储密码（已不安全）。', '使用 crypto.timingSafeEqual() 防止时序攻击。'],
+    problem: '解决"用户密码如何安全存储、API 请求如何防篡改、以及敏感数据如何加密传输"的问题。',
+  },
+  {
+    id: 'D_22', title: 'perf_hooks 性能分析', navTitle: '性能分析', category: '性能',
+    path: '/nodejs/d-22/perf-hooks', summary: '使用 perf_hooks 模块进行性能打点和测量，定位函数级别的性能瓶颈。',
+    demo: D22PerfHooks, code: D22Code, language: 'vue',
+    principle: 'perf_hooks 提供与浏览器 performance API 兼容的接口；通过 performance.mark() 打点、performance.measure() 测量区间、PerformanceObserver 监听性能条目。',
+    flow: ['学习 performance.mark() 和 measure() 的使用。', '掌握 PerformanceObserver 监听性能条目。', '了解如何配合 clinic.js 做专业性能分析。'],
+    notes: ['perf_hooks 是内置模块，无需安装。', '生产环境应采样性能数据，避免全量收集影响性能。'],
+    problem: '解决"如何定位 Node.js 应用的性能瓶颈，以及函数执行时间是否符合预期"的问题。',
+  },
+  {
+    id: 'D_23', title: 'HTTPS 与 TLS 配置', navTitle: 'HTTPS', category: '网络',
+    path: '/nodejs/d-23/https', summary: '理解 HTTPS 的原理，掌握 Node.js HTTPS 服务器的创建和 TLS 配置。',
+    demo: D23Https, code: D23Code, language: 'vue',
+    principle: 'HTTPS 基于 TLS/SSL 协议，需要证书和私钥；Node.js 使用 https 模块（基于 OpenSSL）创建安全服务器；生产环境应使用 Let\'s Encrypt 等免费证书。',
+    flow: ['理解 HTTPS 和 TLS/SSL 的基本原理。', '学习使用 OpenSSL 创建自签名证书。', '掌握 Node.js HTTPS 服务器的配置。'],
+    notes: ['生产环境务必使用 HTTPS。', 'TLS 1.2 是最低版本要求，推荐 TLS 1.3。'],
+    problem: '解决"如何启用 HTTPS、如何选择合适的 TLS 版本和加密套件、以及证书如何申请和管理"的问题。',
+  },
+  {
+    id: 'D_24', title: 'CLI 参数与命令行工具', navTitle: 'CLI', category: 'CLI',
+    path: '/nodejs/d-24/cli', summary: '解析命令行参数，使用 commander 等库构建专业的命令行工具。',
+    demo: D24Cli, code: D24Code, language: 'vue',
+    principle: 'process.argv 提供原始命令行参数；实际项目使用 commander、yargs 等库解析参数、生成帮助信息、支持子命令；Vue CLI、Vite 等都基于 commander。',
+    flow: ['理解 process.argv 的结构。', '学习使用 commander 构建 CLI 工具。', '掌握子命令、选项、参数等高级用法。'],
+    notes: ['process.argv[0] 是 node 路径，argv[1] 是脚本路径。', '生产级 CLI 工具推荐使用 commander 或 cac。'],
+    problem: '解决"如何解析命令行参数、如何生成帮助信息、以及如何构建交互式 CLI 工具"的问题。',
+  },
+  {
+    id: 'D_25', title: 'timers 定时器详解', navTitle: '定时器', category: '事件循环',
+    path: '/nodejs/d-25/timers', summary: '深入理解 setTimeout、setInterval、setImmediate、process.nextTick 的语义差异和执行时机。',
+    demo: D25Timers, code: D25Code, language: 'vue',
+    principle: 'setTimeout/setInterval 在 Timers 阶段执行；setImmediate 在 Check 阶段执行；process.nextTick 是微任务，在当前操作完成后立即执行（优先于 Promise.then）。',
+    flow: ['对比四种定时器的执行时机。', '理解延迟时间的不确定性（受事件循环影响）。', '掌握定时器清除和防内存泄漏。'],
+    notes: ['setTimeout(fn, 0) 的实际延迟至少 1ms。', '在 I/O 回调中，setImmediate 先于 setTimeout 执行。'],
+    problem: '解决"定时器回调执行时间不符合预期，以及在特定场景下应该选择哪种定时器"的问题。',
+  },
+  {
+    id: 'D_26', title: 'net TCP 网络编程', navTitle: 'TCP', category: '网络',
+    path: '/nodejs/d-26/net-tcp', summary: '使用 net 模块创建 TCP 服务器和客户端，理解 Node.js 网络编程的底层基础。',
+    demo: D26NetTcp, code: D26Code, language: 'vue',
+    principle: 'net 模块提供 TCP 服务器和客户端能力；TCP 是面向连接的可靠传输协议；HTTP 服务器底层就是 TCP 服务器；socket 是双向通信的端点。',
+    flow: ['学习创建 TCP 服务器（net.createServer）。', '学习创建 TCP 客户端（net.createConnection）。', '理解 socket 事件（data、end、error）。'],
+    notes: ['TCP 服务器适合实时通信、长连接场景。', '记得处理 socket 的 error 事件，避免进程崩溃。'],
+    problem: '解决"如何构建实时通信应用、如何实现自定义协议、以及 HTTP 模块的底层是如何工作的"的问题。',
+  },
+  {
+    id: 'D_27', title: 'zlib 压缩与解压', navTitle: '压缩', category: '性能',
+    path: '/nodejs/d-27/zlib', summary: '使用 zlib 模块压缩和解压数据，减少网络传输大小和文件存储体积。',
+    demo: D27Zlib, code: D27Code, language: 'vue',
+    principle: 'zlib 模块提供 Gzip、Deflate、Brotli 等压缩算法；支持流式压缩（pipe），内存占用小；HTTP 响应压缩是 zlib 最常见的用途。',
+    flow: ['学习 gzip/deflate/brotli 的压缩率和速度对比。', '掌握流式压缩（pipe）和一次性压缩。', '了解 HTTP 响应压缩的配置。'],
+    notes: ['Brotli 压缩率最高但压缩速度较慢。', 'Node.js 18+ 支持流式压缩，内存占用小。'],
+    problem: '解决"如何减少网络传输大小、如何提高页面加载速度、以及大文件如何压缩存储"的问题。',
+  },
+  {
+    id: 'D_28', title: 'os 系统信息与资源监控', navTitle: '系统信息', category: '系统',
+    path: '/nodejs/d-28/os', summary: '使用 os 模块获取操作系统信息，实现资源监控、健康检查和平台适配。',
+    demo: D28Os, code: D28Code, language: 'vue',
+    principle: 'os 模块提供平台、架构、CPU、内存、网络接口等系统信息；常用于资源监控（CPU/内存使用率）、健康检查（/health 接口）、平台适配（path.sep）。',
+    flow: ['学习获取 CPU、内存、平台等系统信息。', '掌握资源监控和健康检查的实现。', '了解如何根据平台选择不同的命令或路径。'],
+    notes: ['os.cpus().length 是设置 cluster 工作进程数的常用依据。', 'os.freemem() 可用于实现内存告警。'],
+    problem: '解决"如何监控 Node.js 应用的资源使用、如何提供健康检查接口、以及如何适配不同操作系统"的问题。',
+  },
+  {
+    id: 'D_29', title: 'dns 域名解析', navTitle: 'DNS', category: '网络',
+    path: '/nodejs/d-29/dns', summary: '使用 dns 模块解析域名，查询各类 DNS 记录（A、AAAA、CNAME、MX、TXT、NS）。',
+    demo: D29Dns, code: D29Code, language: 'vue',
+    principle: 'dns 模块提供域名解析功能；dns.lookup() 使用系统配置（如 /etc/hosts），dns.resolve() 直接使用 DNS 服务器；支持反向解析（IP → 域名）。',
+    flow: ['学习查询各类 DNS 记录（A、AAAA、MX 等）。', '理解 dns.lookup() 和 dns.resolve() 的差异。', '掌握反向解析和 DNS 缓存。'],
+    notes: ['dns.lookup() 会受系统配置影响。', 'dns.resolve() 直接使用 DNS 服务器，更可靠。'],
+    problem: '解决"如何根据域名获取 IP 地址、如何查询邮件服务器配置、以及如何实现自定义 DNS 解析逻辑"的问题。',
+  },
+  {
+    id: 'D_30', title: 'readline 交互式输入', navTitle: 'readline', category: 'CLI',
+    path: '/nodejs/d-30/readline', summary: '使用 readline 模块实现逐行读取和交互式命令行工具。',
+    demo: D30Readline, code: D30Code, language: 'vue',
+    principle: 'readline 模块提供逐行读取流数据的能力；常用于实现交互式 CLI 工具（逐行提问）、逐行处理大文件；现代 CLI 工具推荐使用 inquirer 或 prompts 库。',
+    flow: ['学习逐行读取文件（createInterface + line 事件）。', '掌握交互式提问（question 方法）。', '了解 readline/promises 的现代用法。'],
+    notes: ['readline 是低级 API，复杂交互推荐使用 inquirer。', '记得在完成后调用 rl.close() 释放资源。'],
+    problem: '解决"如何实现交互式命令行工具、如何逐行处理大文件、以及如何优雅地读取用户输入"的问题。',
   },
   {
     id: 'S_01', title: '先判断状态归属，再选择 Store', navTitle: '状态边界', category: '设计原则',
