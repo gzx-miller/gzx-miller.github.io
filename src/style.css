@@ -404,23 +404,10 @@ li + li {
   overflow: hidden;
 }
 
-.knowledge-tab::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(246, 193, 90, 0.15), rgba(240, 138, 36, 0.15));
-  opacity: 0;
-  transition: opacity 0.25s ease;
-}
-
-.knowledge-tab:hover::before {
-  opacity: 1;
-}
-
 .knowledge-tab:hover {
-  border-color: var(--leaf-gold);
+  filter: brightness(1.08);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(246, 193, 90, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
 .knowledge-tab.active {
@@ -430,14 +417,9 @@ li + li {
   box-shadow: 0 4px 16px rgba(217, 75, 38, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
-.knowledge-tab.active::before {
-  display: none;
-}
-
 .knowledge-tab.active:hover {
   filter: brightness(1.1);
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(217, 75, 38, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .knowledge-tab:active {
@@ -468,7 +450,6 @@ li + li {
   color: var(--text);
   padding: 8px 14px;
   cursor: pointer;
-  font-size: 13px;
   white-space: nowrap;
   text-decoration: none;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -476,23 +457,10 @@ li + li {
   overflow: hidden;
 }
 
-.knowledge-more-btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(246, 193, 90, 0.15), rgba(240, 138, 36, 0.15));
-  opacity: 0;
-  transition: opacity 0.25s ease;
-}
-
-.knowledge-more-btn:hover::before {
-  opacity: 1;
-}
-
 .knowledge-more-btn:hover {
-  border-color: var(--leaf-gold);
+  filter: brightness(1.08);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(246, 193, 90, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
 .more-dropdown {
@@ -692,7 +660,7 @@ li + li {
 }
 
 .sidebar-toggle:hover {
-  background: rgba(246, 193, 90, 0.35);
+  filter: brightness(1.08);
   transform: scale(1.05);
 }
 
@@ -718,7 +686,6 @@ li + li {
 
 .sidebar-toggle.expanded:hover {
   filter: brightness(1.08);
-  box-shadow: 0 6px 16px rgba(217, 75, 38, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .toggle-icon {
@@ -1351,37 +1318,15 @@ li + li {
   background: rgba(55, 40, 32, 0.92);
 }
 
-[data-theme='dark'] .knowledge-tab::before {
-  background: linear-gradient(135deg, rgba(246, 193, 90, 0.12), rgba(232, 120, 74, 0.12));
-}
-
-[data-theme='dark'] .knowledge-tab:hover {
-  border-color: rgba(246, 193, 90, 0.5);
-  box-shadow: 0 4px 12px rgba(246, 193, 90, 0.15);
-}
-
 [data-theme='dark'] .knowledge-tab.active {
   border-color: transparent;
   background: linear-gradient(135deg, #e8623a, #f5a040);
   box-shadow: 0 4px 16px rgba(232, 120, 74, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
-[data-theme='dark'] .knowledge-tab.active:hover {
-  box-shadow: 0 6px 20px rgba(232, 120, 74, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-
 [data-theme='dark'] .knowledge-more-btn {
   border-color: rgba(246, 193, 90, 0.25);
   background: rgba(55, 40, 32, 0.92);
-}
-
-[data-theme='dark'] .knowledge-more-btn::before {
-  background: linear-gradient(135deg, rgba(246, 193, 90, 0.12), rgba(232, 120, 74, 0.12));
-}
-
-[data-theme='dark'] .knowledge-more-btn:hover {
-  border-color: rgba(246, 193, 90, 0.5);
-  box-shadow: 0 4px 12px rgba(246, 193, 90, 0.15);
 }
 
 [data-theme='dark'] .more-dropdown {
@@ -1411,16 +1356,8 @@ li + li {
   background: #2e221c;
 }
 
-[data-theme='dark'] .sidebar-toggle:hover {
-  background: rgba(246, 193, 90, 0.35);
-}
-
 [data-theme='dark'] .sidebar-toggle.expanded {
   box-shadow: 0 4px 12px rgba(232, 120, 74, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-[data-theme='dark'] .sidebar-toggle.expanded:hover {
-  box-shadow: 0 6px 16px rgba(232, 120, 74, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 [data-theme='dark'] .lesson-link:hover {
