@@ -57,13 +57,12 @@ function formatPrice(price: number) {
         v-model="searchKeyword"
         placeholder="搜索课程名或讲师"
         clearable
-        style="width: 240px"
         @input="handleSearch"
       />
       <ElButton @click="resetSearch">重置</ElButton>
     </div>
 
-    <ElTable :data="filteredCourses" stripe style="width: 100%" row-key="id">
+    <ElTable :data="filteredCourses" stripe row-key="id">
       <ElTableColumn prop="id" label="ID" width="70" />
       <ElTableColumn prop="name" label="课程名称" min-width="180" />
       <ElTableColumn prop="teacher" label="讲师" width="100" />
@@ -91,19 +90,3 @@ function formatPrice(price: number) {
   </div>
 </template>
 
-<style scoped>
-.search-bar {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 16px;
-}
-.price {
-  color: var(--leaf-red);
-  font-weight: 700;
-}
-.table-tip {
-  margin-top: 12px;
-  color: var(--muted);
-  font-size: 13px;
-}
-</style>

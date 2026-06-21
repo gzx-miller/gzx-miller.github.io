@@ -1,42 +1,10 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue'
 import squirrelHero from '../assets/squirrel-chestnut-avatar.webp'
-import { knowledgeCategories, lessons } from '../data/lessons'
+import { knowledgeCategories, lessons, type Lesson } from '../data/lessons'
 import CodeBlock from './CodeBlock.vue'
 
 const route = useRoute()
-
-const categoryDetails: Record<string, { intro: string; officialUrl: string }> = {
-  vue: {
-    intro:
-      'Vue3 是渐进式 JavaScript 框架，适合从单个交互组件逐步扩展到完整前端应用。本分类用真实小业务场景拆解组合式 API、组件、路由、状态管理和工程实践。',
-    officialUrl: 'https://vuejs.org/',
-  },
-  typescript: {
-    intro: 'TypeScript 为 JavaScript 增加静态类型系统，帮助团队在编码阶段发现接口、数据结构和重构风险。',
-    officialUrl: 'https://www.typescriptlang.org/',
-  },
-  react: {
-    intro: 'React 通过组件、状态和声明式渲染组织界面，适合构建交互复杂、状态变化频繁的前端应用。',
-    officialUrl: 'https://react.dev/',
-  },
-  engineering: {
-    intro: '工程化关注构建、测试、规范、部署和性能等协作基础，让前端项目在规模变大后仍然可维护。',
-    officialUrl: 'https://vite.dev/',
-  },
-  langchain: {
-    intro: 'LangChain.js 是构建 LLM 应用的开源框架，提供模型调用、提示模板、链式调用、RAG 检索增强生成等核心能力，帮助开发者快速搭建智能应用。',
-    officialUrl: 'https://js.langchain.com/',
-  },
-  'element-plus': {
-    intro: 'Element Plus 是基于 Vue 3 的组件库，提供丰富的表单、表格、弹窗等企业级组件，帮助快速搭建中后台界面。',
-    officialUrl: 'https://element-plus.org/',
-  },
-  nuxt: {
-    intro: 'Nuxt 是基于 Vue 3 的全栈框架，内置文件路由、自动导入、SSR/SSG、服务端 API 等能力，让 Vue 项目从单页应用升级为全栈应用。',
-    officialUrl: 'https://nuxt.com/',
-  },
-}
 
 const isSidebarTemporarilyExpanded = ref(false)
 const lastKnownWidth = ref(0)
@@ -73,9 +41,8 @@ const activeKnowledge = computed(() => {
   return knowledgeCategories.some((item) => item.id === category) ? category : 'vue'
 })
 
-const activeCategoryName = computed(() => {
-  return knowledgeCategories.find((category) => category.id === activeKnowledge.value)?.name ?? activeKnowledge.value
-})
+const activeCategory = computed(() => knowledgeCategories.find((category) => category.id === activeKnowledge.value))
+const activeCategoryName = computed(() => activeCategory.value?.name ?? activeKnowledge.value)
 
 const filteredLessons = computed(() => {
   return lessons.filter((lesson) => lesson.path.startsWith(`/${activeKnowledge.value}/`))
@@ -90,6 +57,18 @@ const visibleLessons = computed(() => {
     return [lesson.navTitle, lesson.title, lesson.category, lesson.summary]
       .some((value) => value.toLocaleLowerCase('zh-CN').includes(query))
   })
+})
+
+const lessonGroups = computed(() => {
+  const groups = new Map<string, Lesson[]>()
+
+  for (const lesson of visibleLessons.value) {
+    const group = groups.get(lesson.category) ?? []
+    group.push(lesson)
+    groups.set(lesson.category, group)
+  }
+
+  return Array.from(groups, ([title, groupLessons]) => ({ title, lessons: groupLessons }))
 })
 
 const currentLesson = computed(() => {
@@ -123,13 +102,9 @@ const nextLesson = computed(() => {
   return nextIndex > 0 && nextIndex < filteredLessons.value.length ? filteredLessons.value[nextIndex] : null
 })
 
-function getCategoryDetails(id: string) {
-  const details = categoryDetails[id]
-  return details ?? { intro: '', officialUrl: '' }
-}
-
 function formatLessonId(id: string) {
-  return id.replace(/^[A-Z]_/, '🌰')
+  const lessonNumber = id.match(/^[A-Z]_(\d+)$/)?.[1]
+  return lessonNumber ? `🌰${Number(lessonNumber)}` : id
 }
 
 function toggleSidebar() {
@@ -233,7 +208,7 @@ useSeoMeta({
               :class="`popover-panel-${popoverPlacement[item.id] ?? 'center'}`"
               role="tooltip"
             >
-              <p class="popover-intro">{{ item.intro || getCategoryDetails(item.id).intro }}</p>
+              <p class="popover-intro">{{ item.intro }}</p>
             </div>
           </Transition>
         </div>
@@ -268,19 +243,22 @@ useSeoMeta({
         </div>
 
         <nav class="lesson-nav">
-          <NuxtLink
-            v-for="lesson in visibleLessons"
-            :key="lesson.id"
-            :to="lesson.path"
-            class="lesson-link"
-            :class="{ active: lesson.id === currentLesson.id }"
-            :aria-label="`${formatLessonId(lesson.id)} ${lesson.navTitle}`"
-            :aria-current="lesson.id === currentLesson.id ? 'page' : undefined"
-            :title="lesson.navTitle"
-          >
-            <span>{{ formatLessonId(lesson.id) }}</span>
-            <strong>{{ lesson.navTitle }}</strong>
-          </NuxtLink>
+          <section v-for="group in lessonGroups" :key="group.title" class="lesson-group">
+            <h2 class="lesson-group-title">{{ group.title }}</h2>
+            <NuxtLink
+              v-for="lesson in group.lessons"
+              :key="lesson.id"
+              :to="lesson.path"
+              class="lesson-link"
+              :class="{ active: lesson.id === currentLesson.id }"
+              :aria-label="`${formatLessonId(lesson.id)} ${lesson.navTitle}`"
+              :aria-current="lesson.id === currentLesson.id ? 'page' : undefined"
+              :title="lesson.navTitle"
+            >
+              <span>{{ formatLessonId(lesson.id) }}</span>
+              <strong>{{ lesson.navTitle }}</strong>
+            </NuxtLink>
+          </section>
           <p v-if="visibleLessons.length === 0" class="lesson-empty">没有匹配的课程</p>
         </nav>
       </aside>
@@ -355,13 +333,13 @@ useSeoMeta({
         <nav class="lesson-next" aria-label="下一章节">
           <div class="bottom-nav-row">
             <a
-              v-if="getCategoryDetails(activeKnowledge).officialUrl"
-              :href="getCategoryDetails(activeKnowledge).officialUrl"
+              v-if="activeCategory?.officialUrl"
+              :href="activeCategory.officialUrl"
               target="_blank"
               rel="noopener"
               class="official-link"
             >
-              {{ getCategoryDetails(activeKnowledge).intro?.includes('Element') ? 'Element Plus 官网' : `${activeKnowledge.charAt(0).toUpperCase() + activeKnowledge.slice(1)} 官网` }} →
+              {{ activeCategoryName }} 官网 →
             </a>
             <div class="lesson-pager">
               <NuxtLink v-if="previousLesson" class="previous-lesson-link" :to="previousLesson.path">

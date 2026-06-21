@@ -4,6 +4,7 @@ import { defineAsyncComponent } from 'vue'
 const demoModules = import.meta.glob<Component>('../demos/*.vue', { import: 'default' })
 const vueCodeModules = import.meta.glob<string>('../demos/*.vue', { query: '?raw', import: 'default' })
 const jsxCodeModules = import.meta.glob<string>('../demos/react-jsx/*.jsx', { query: '?raw', import: 'default' })
+const stateCodeModules = import.meta.glob<string>('../demos/state-react/*.js', { query: '?raw', import: 'default' })
 
 function createDemo(name: string) {
   const loader = demoModules[`../demos/${name}.vue`]
@@ -12,11 +13,18 @@ function createDemo(name: string) {
     throw new Error(`未找到案例组件：${name}`)
   }
 
-  return defineAsyncComponent(loader)
+  return defineAsyncComponent(async () => {
+    if (name.startsWith('E')) await import('../element-plus/styles')
+    return loader()
+  })
 }
 
 function createCodeLoader(path: string) {
-  const modules = path.startsWith('react-jsx/') ? jsxCodeModules : vueCodeModules
+  const modules = path.startsWith('react-jsx/')
+    ? jsxCodeModules
+    : path.startsWith('state-react/')
+      ? stateCodeModules
+      : vueCodeModules
   const loader = modules[`../demos/${path}`]
 
   if (!loader) {
@@ -262,6 +270,70 @@ const G07Accessibility = createDemo('G07Accessibility')
 const G07Code = createCodeLoader('G07Accessibility.vue')
 const G08SecurityDelivery = createDemo('G08SecurityDelivery')
 const G08Code = createCodeLoader('G08SecurityDelivery.vue')
+const J01TypesEquality = createDemo('J01TypesEquality')
+const J01Code = createCodeLoader('J01TypesEquality.vue')
+const J02Closure = createDemo('J02Closure')
+const J02Code = createCodeLoader('J02Closure.vue')
+const J03ArrayPipeline = createDemo('J03ArrayPipeline')
+const J03Code = createCodeLoader('J03ArrayPipeline.vue')
+const J04ObjectOperations = createDemo('J04ObjectOperations')
+const J04Code = createCodeLoader('J04ObjectOperations.vue')
+const J05ThisBinding = createDemo('J05ThisBinding')
+const J05Code = createCodeLoader('J05ThisBinding.vue')
+const J06PrototypeClass = createDemo('J06PrototypeClass')
+const J06Code = createCodeLoader('J06PrototypeClass.vue')
+const J07PromiseCombinators = createDemo('J07PromiseCombinators')
+const J07Code = createCodeLoader('J07PromiseCombinators.vue')
+const J08EventLoop = createDemo('J08EventLoop')
+const J08Code = createCodeLoader('J08EventLoop.vue')
+const J09Modules = createDemo('J09Modules')
+const J09Code = createCodeLoader('J09Modules.vue')
+const J10EventDelegation = createDemo('J10EventDelegation')
+const J10Code = createCodeLoader('J10EventDelegation.vue')
+const D01ModuleSystem = createDemo('D01ModuleSystem')
+const D01Code = createCodeLoader('D01ModuleSystem.vue')
+const D02PathUrl = createDemo('D02PathUrl')
+const D02Code = createCodeLoader('D02PathUrl.vue')
+const D03FileSystem = createDemo('D03FileSystem')
+const D03Code = createCodeLoader('D03FileSystem.vue')
+const D04EventEmitter = createDemo('D04EventEmitter')
+const D04Code = createCodeLoader('D04EventEmitter.vue')
+const D05Streams = createDemo('D05Streams')
+const D05Code = createCodeLoader('D05Streams.vue')
+const D06HttpServer = createDemo('D06HttpServer')
+const D06Code = createCodeLoader('D06HttpServer.vue')
+const D07ProcessEnv = createDemo('D07ProcessEnv')
+const D07Code = createCodeLoader('D07ProcessEnv.vue')
+const D08Concurrency = createDemo('D08Concurrency')
+const D08Code = createCodeLoader('D08Concurrency.vue')
+const D09ErrorLogging = createDemo('D09ErrorLogging')
+const D09Code = createCodeLoader('D09ErrorLogging.vue')
+const D10NodeTest = createDemo('D10NodeTest')
+const D10Code = createCodeLoader('D10NodeTest.vue')
+const D11Security = createDemo('D11Security')
+const D11Code = createCodeLoader('D11Security.vue')
+const D12PackageManagement = createDemo('D12PackageManagement')
+const D12Code = createCodeLoader('D12PackageManagement.vue')
+const S01StateBoundaries = createDemo('S01StateBoundaries')
+const S01Code = createCodeLoader('S01StateBoundaries.vue')
+const S02PiniaSetupStore = createDemo('S02PiniaSetupStore')
+const S02Code = createCodeLoader('S02PiniaSetupStore.vue')
+const S03PiniaSubscriptions = createDemo('S03PiniaSubscriptions')
+const S03Code = createCodeLoader('S03PiniaSubscriptions.vue')
+const S04ZustandSelectors = createDemo('S04ZustandSelectors')
+const S04Code = createCodeLoader('state-react/S04ZustandSelectors.js')
+const S05ZustandMiddleware = createDemo('S05ZustandMiddleware')
+const S05Code = createCodeLoader('state-react/S05ZustandMiddleware.js')
+const S06JotaiAtoms = createDemo('S06JotaiAtoms')
+const S06Code = createCodeLoader('state-react/S06JotaiAtoms.js')
+const S07JotaiAsyncAtoms = createDemo('S07JotaiAsyncAtoms')
+const S07Code = createCodeLoader('state-react/S07JotaiAsyncAtoms.js')
+const S08ReduxToolkit = createDemo('S08ReduxToolkit')
+const S08Code = createCodeLoader('state-react/S08ReduxToolkit.js')
+const S09XStateMachine = createDemo('S09XStateMachine')
+const S09Code = createCodeLoader('state-react/S09XStateMachine.js')
+const S10StoreSelection = createDemo('S10StoreSelection')
+const S10Code = createCodeLoader('S10StoreSelection.vue')
 
 export interface KnowledgeCategory {
   id: string
@@ -289,9 +361,12 @@ export interface Lesson {
 }
 
 export const knowledgeCategories: KnowledgeCategory[] = [
-  { id: 'vue', name: 'Vue3', path: '/vue', status: 'ready' },
+  { id: 'vue', name: 'Vue3', path: '/vue', status: 'ready', intro: 'Vue3 是渐进式 JavaScript 框架。本分类用真实小业务场景拆解组合式 API、组件、路由、状态管理和工程实践。', officialUrl: 'https://vuejs.org/' },
+  { id: 'javascript', name: 'JavaScript', path: '/javascript', status: 'ready', intro: 'JavaScript 是 Web 平台的核心语言。本分类从类型、函数和对象模型出发，逐步覆盖异步机制、模块化与浏览器事件。', officialUrl: 'https://developer.mozilla.org/zh-CN/docs/Web/JavaScript' },
   { id: 'element-plus', name: 'Element Plus', path: '/element-plus', status: 'ready', intro: 'Element Plus 是基于 Vue 3 的组件库，提供丰富的企业级 UI 组件，覆盖表格、表单、弹窗、导航等常见场景。', officialUrl: 'https://element-plus.org/' },
   { id: 'typescript', name: 'TypeScript', path: '/typescript', status: 'ready', intro: 'TypeScript 为 JavaScript 增加可渐进采用的静态类型系统。本分类以 Vue 3 真实业务数据为背景，覆盖建模、收窄、泛型、类型操作与组件类型实践。', officialUrl: 'https://www.typescriptlang.org/' },
+  { id: 'nodejs', name: 'Node.js', path: '/nodejs', status: 'ready', intro: 'Node.js 让 JavaScript 运行在服务端和工具链中。本分类覆盖模块、文件、事件、流、HTTP、进程、测试、安全与依赖管理。', officialUrl: 'https://nodejs.org/docs/latest/api/' },
+  { id: 'state-management', name: '状态管理', path: '/state-management', status: 'ready', intro: '从状态归属出发，对比 Pinia、Zustand、Jotai、Redux Toolkit 与 XState 等方案的模型、粒度和适用边界。' },
   { id: 'react', name: 'React', path: '/react', status: 'ready', intro: 'React 以组件和声明式渲染组织用户界面。本分类基于 React 19.2，通过浏览器 ES Module 直接引用 React，不向当前 Vue3 工程安装 React 依赖。', officialUrl: 'https://react.dev/' },
   { id: 'engineering', name: '工程化', path: '/engineering', status: 'ready', intro: '工程化把代码质量、自动化测试、持续集成、性能、无障碍与安全发布串成可重复的交付流程，让项目在规模增长后仍然可靠。', officialUrl: 'https://vite.dev/' },
   { id: 'langchain', name: 'LangChain', path: '/langchain', status: 'ready', intro: 'LangChain.js 是构建 LLM 应用的开源框架，提供模型调用、提示模板、链式调用、RAG 检索增强生成等核心能力，帮助开发者快速搭建智能应用。', officialUrl: 'https://js.langchain.com/' },
@@ -2925,5 +3000,293 @@ export const lessons: Lesson[] = [
     flow: ['构建前扫描依赖和公开配置。', '部署时配置安全响应头。', 'HTML 短缓存、哈希资源长期不可变缓存。'],
     notes: ['CSP 应先报告再逐步收紧。', '前端校验不能替代服务端授权。'],
     problem: '解决“静态站点发布时如何兼顾安全策略与缓存性能”的问题。',
+  },
+  {
+    id: 'J_01', title: '值、类型转换与严格相等', navTitle: '类型与相等', category: '语言基础',
+    path: '/javascript/j-1/types-equality', summary: '理解原始值、引用值、显式转换，以及 == 与 === 的差异。',
+    demo: J01TypesEquality, code: J01Code, language: 'vue',
+    principle: 'JavaScript 是动态类型语言，运算时可能发生隐式类型转换。严格相等不会转换操作数，更适合表达稳定的业务判断。',
+    flow: ['识别值当前的运行时类型。', '在输入边界显式转换。', '使用严格相等比较同类型值。'],
+    notes: ['typeof null 的结果是历史遗留的 object。', 'NaN 应使用 Number.isNaN 判断。'],
+    problem: '解决“表单、接口参数比较时为什么会出现反直觉结果”的问题。',
+  },
+  {
+    id: 'J_02', title: '词法作用域与闭包', navTitle: '作用域与闭包', category: '语言基础',
+    path: '/javascript/j-2/closure', summary: '用购物车计数器理解函数如何保留创建时的变量环境。',
+    demo: J02Closure, code: J02Code, language: 'vue',
+    principle: '函数的作用域在定义位置确定；内部函数被返回后仍能访问外层变量，这个函数与词法环境的组合就是闭包。',
+    flow: ['外层函数创建局部状态。', '返回访问该状态的内部函数。', '每次调用继续读取和修改同一环境。'],
+    notes: ['闭包适合封装私有状态。', '长期持有的大对象可能增加内存占用。'],
+    problem: '解决“回调为什么能记住外层变量，以及怎样封装私有状态”的问题。',
+  },
+  {
+    id: 'J_03', title: '数组的不可变转换流水线', navTitle: '数组方法', category: '集合与数据',
+    path: '/javascript/j-3/array-pipeline', summary: '组合 filter、map 与 toSorted 完成课程搜索和排序。',
+    demo: J03ArrayPipeline, code: J03Code, language: 'vue',
+    principle: '数组迭代方法把筛选、映射和聚合拆为可组合步骤；优先返回新数组能减少共享状态被意外修改。',
+    flow: ['filter 缩小数据集合。', 'map 转换展示结构。', 'toSorted 在不修改原数组的前提下排序。'],
+    notes: ['map 不应用来执行纯副作用。', '大数据量要关注多次遍历成本。'],
+    problem: '解决“如何以可读、可预测的方式处理列表数据”的问题。',
+  },
+  {
+    id: 'J_04', title: '对象、解构与展开语法', navTitle: '对象操作', category: '集合与数据',
+    path: '/javascript/j-4/object-operations', summary: '通过用户资料更新掌握属性访问、解构、剩余与浅拷贝。',
+    demo: J04ObjectOperations, code: J04Code, language: 'vue',
+    principle: '解构按属性提取值，剩余语法收集未提取字段，展开语法把可枚举自有属性复制到新对象；这些复制都是浅层的。',
+    flow: ['从对象中解构需要的字段。', '用剩余语法保留其他字段。', '展开生成带覆盖值的新对象。'],
+    notes: ['嵌套对象仍共享引用。', '属性覆盖顺序由展开位置决定。'],
+    problem: '解决“如何清晰地读取和不可变更新对象字段”的问题。',
+  },
+  {
+    id: 'J_05', title: '函数调用方式与 this 绑定', navTitle: 'this 绑定', category: '对象模型',
+    path: '/javascript/j-5/this-binding', summary: '比较方法调用、脱离对象调用与 call 显式绑定。',
+    demo: J05ThisBinding, code: J05Code, language: 'vue',
+    principle: '普通函数的 this 由调用方式决定，而箭头函数捕获外层 this；call、apply 与 bind 可以显式指定普通函数的接收者。',
+    flow: ['先观察函数实际调用表达式。', '确定隐式或显式接收者。', '回调场景用箭头函数或 bind 保持上下文。'],
+    notes: ['不要把 this 理解为函数定义时的所属对象。', '类方法作为回调传递时也可能丢失绑定。'],
+    problem: '解决“对象方法作为回调后 this 为什么变了”的问题。',
+  },
+  {
+    id: 'J_06', title: '原型链、class 与继承', navTitle: '原型与类', category: '对象模型',
+    path: '/javascript/j-6/prototype-class', summary: '通过课程模型理解实例属性、共享方法与原型继承。',
+    demo: J06PrototypeClass, code: J06Code, language: 'vue',
+    principle: '对象通过内部原型链接查找属性；class 提供更清晰的构造与继承语法，但底层仍使用原型链共享方法。',
+    flow: ['构造函数初始化实例字段。', '方法存放在 prototype 上共享。', 'extends 建立子类到父类原型的链接。'],
+    notes: ['优先组合而非过深继承。', '私有字段可使用 #name 语法。'],
+    problem: '解决“JavaScript 对象如何共享行为以及 class 的底层机制”的问题。',
+  },
+  {
+    id: 'J_07', title: 'Promise 组合与并发请求', navTitle: 'Promise 并发', category: '异步机制',
+    path: '/javascript/j-7/promise-combinators', summary: '用 Promise.all 并发加载看板数据，并比较常用组合器语义。',
+    demo: J07PromiseCombinators, code: J07Code, language: 'vue',
+    principle: 'Promise 表示未来完成或失败的结果；all、allSettled、race 与 any 用不同策略组合多个异步任务。',
+    flow: ['同时启动互不依赖的任务。', '选择符合失败策略的组合器。', '统一处理结果与异常。'],
+    notes: ['Promise.all 遇到首个拒绝即拒绝。', '并发任务仍需考虑接口限流。'],
+    problem: '解决“多个异步请求如何高效并发并正确处理失败”的问题。',
+  },
+  {
+    id: 'J_08', title: '事件循环、任务与微任务', navTitle: '事件循环', category: '异步机制',
+    path: '/javascript/j-8/event-loop', summary: '观察同步代码、Promise 微任务和定时器任务的执行顺序。',
+    demo: J08EventLoop, code: J08Code, language: 'vue',
+    principle: '调用栈清空后，事件循环会先清空微任务队列，再进入下一个任务；渲染机会通常发生在任务之间。',
+    flow: ['执行当前脚本中的同步代码。', '清空 Promise 等微任务。', '进入定时器等后续任务。'],
+    notes: ['大量微任务也会阻塞渲染。', 'setTimeout(fn, 0) 不代表立即执行。'],
+    problem: '解决“异步日志顺序为何与代码书写顺序不同”的问题。',
+  },
+  {
+    id: 'J_09', title: 'ES Modules 与动态导入', navTitle: '模块化', category: '模块与浏览器',
+    path: '/javascript/j-9/modules', summary: '掌握静态 import/export、模块作用域和 import() 按需加载。',
+    demo: J09Modules, code: J09Code, language: 'vue',
+    principle: 'ES Module 具有独立作用域和静态依赖结构，便于打包器分析；动态 import 返回 Promise，可把低频功能拆成独立资源。',
+    flow: ['用具名或默认导出声明公共接口。', '静态导入首屏必需依赖。', '动态导入低频模块并处理加载状态。'],
+    notes: ['模块默认使用严格模式。', '避免循环依赖中的初始化顺序问题。'],
+    problem: '解决“如何组织模块边界并减少首屏加载代码”的问题。',
+  },
+  {
+    id: 'J_10', title: 'DOM 事件传播与事件委托', navTitle: '事件委托', category: '模块与浏览器',
+    path: '/javascript/j-10/event-delegation', summary: '用课程列表理解捕获、冒泡、target 与 currentTarget。',
+    demo: J10EventDelegation, code: J10Code, language: 'vue',
+    principle: 'DOM 事件经历捕获、目标和冒泡阶段；事件委托在稳定父节点监听冒泡事件，再通过 closest 判断真实交互目标。',
+    flow: ['在父容器注册一个监听器。', '从 event.target 向上寻找匹配元素。', '读取 data 属性执行对应行为。'],
+    notes: ['不是所有事件都会冒泡。', '用 closest 时要确认结果仍在委托容器内。'],
+    problem: '解决“动态列表如何减少监听器并统一处理交互”的问题。',
+  },
+  {
+    id: 'D_01', title: 'Node.js 运行时与模块系统', navTitle: '模块系统', category: '运行时与模块',
+    path: '/nodejs/d-1/module-system', summary: '理解 Node.js 运行时、ES Modules 与 CommonJS 的边界和互操作。',
+    demo: D01ModuleSystem, code: D01Code, language: 'vue',
+    principle: 'Node.js 在 V8 之上提供文件、网络和进程 API。ESM 使用 import/export，CommonJS 使用 require/module.exports，项目应明确一种主模块格式。',
+    flow: ['通过 package.json 的 type 确定默认格式。', '使用 node: 前缀导入核心模块。', '在边界处谨慎处理 ESM 与 CJS 互操作。'],
+    notes: ['ESM 中没有原生 __dirname。', '避免在同一目录混用隐式模块格式。'],
+    problem: '解决“Node 项目该选择哪种模块格式以及两者为何报错”的问题。',
+  },
+  {
+    id: 'D_02', title: '路径、URL 与跨平台文件定位', navTitle: '路径与 URL', category: '运行时与模块',
+    path: '/nodejs/d-2/path-url', summary: '使用 node:path 与 node:url 安全处理文件路径和模块位置。',
+    demo: D02PathUrl, code: D02Code, language: 'vue',
+    principle: '文件系统路径和 URL 是不同表示；path.resolve/join 处理平台分隔符，fileURLToPath 把 ESM 的 import.meta.url 转成文件路径。',
+    flow: ['确定可信的根目录。', '规范化并拼接相对路径。', '验证最终路径仍位于允许目录。'],
+    notes: ['不要手写 / 拼接跨平台路径。', '用户输入不能未经校验传给文件 API。'],
+    problem: '解决“Windows 与 Linux 路径差异及 ESM 文件定位”的问题。',
+  },
+  {
+    id: 'D_03', title: '异步文件系统操作', navTitle: '文件系统', category: '文件与事件',
+    path: '/nodejs/d-3/file-system', summary: '用 fs/promises 读取配置、写入临时文件并完成原子替换。',
+    demo: D03FileSystem, code: D03Code, language: 'vue',
+    principle: '服务端请求路径应使用异步文件 API，避免同步 I/O 阻塞事件循环；关键写入可先写临时文件再 rename 实现原子替换。',
+    flow: ['以明确编码异步读取文件。', '解析前处理不存在和权限错误。', '写临时文件后原子替换目标。'],
+    notes: ['不要在热路径使用 readFileSync。', '大文件应改用流而非一次读入内存。'],
+    problem: '解决“如何可靠且不阻塞地读写 Node.js 文件”的问题。',
+  },
+  {
+    id: 'D_04', title: 'EventEmitter 与事件解耦', navTitle: '事件发布订阅', category: '文件与事件',
+    path: '/nodejs/d-4/event-emitter', summary: '用订单事件连接库存和通知逻辑，理解监听器生命周期。',
+    demo: D04EventEmitter, code: D04Code, language: 'vue',
+    principle: 'EventEmitter 同步调用当前事件的监听器，适合同一进程内解耦模块；跨进程可靠消息需要消息队列与持久化机制。',
+    flow: ['为业务事件定义稳定名称与载荷。', '订阅方注册 on 或 once 监听器。', '不再需要时 removeListener 防止泄漏。'],
+    notes: ['监听器抛错会影响 emit 调用栈。', 'error 事件没有监听器时会终止进程。'],
+    problem: '解决“同一进程内多个模块如何响应同一业务事件”的问题。',
+  },
+  {
+    id: 'D_05', title: 'Stream、管道与背压', navTitle: '流与背压', category: '流与网络',
+    path: '/nodejs/d-5/streams', summary: '以大报表导出理解 Readable、Writable、pipeline 与背压。',
+    demo: D05Streams, code: D05Code, language: 'vue',
+    principle: '流按块处理数据，避免把完整文件放入内存；背压让生产速度服从消费速度，pipeline 统一连接与错误清理。',
+    flow: ['Readable 分块产生数据。', 'Transform 转换每个数据块。', 'pipeline 写入目标并传播错误。'],
+    notes: ['优先使用 pipeline 而不是手工 pipe 链。', '对象模式和字节模式的 highWaterMark 含义不同。'],
+    problem: '解决“大文件和网络数据如何低内存传输且不压垮消费者”的问题。',
+  },
+  {
+    id: 'D_06', title: '原生 HTTP 服务与路由', navTitle: 'HTTP 服务', category: '流与网络',
+    path: '/nodejs/d-6/http-server', summary: '从 request/response 构建最小 JSON API，理解方法、状态码与响应头。',
+    demo: D06HttpServer, code: D06Code, language: 'vue',
+    principle: 'node:http 提供底层流式请求与响应；服务需要显式匹配方法和路径、限制请求体、设置内容类型并统一结束响应。',
+    flow: ['读取 method、URL 与请求头。', '路由到对应处理器并校验输入。', '设置状态码和响应头后发送结果。'],
+    notes: ['请求体是流，必须限制最大体积。', '生产服务还需要超时、代理与优雅关闭。'],
+    problem: '解决“Node.js 如何直接接收 HTTP 请求并返回规范响应”的问题。',
+  },
+  {
+    id: 'D_07', title: '进程、环境变量与优雅退出', navTitle: '进程与配置', category: '进程与并发',
+    path: '/nodejs/d-7/process-env', summary: '集中校验环境配置，并在 SIGTERM 时停止接流量和释放资源。',
+    demo: D07ProcessEnv, code: D07Code, language: 'vue',
+    principle: 'process 提供参数、环境、信号和退出状态；配置应在启动阶段完成校验，关闭时先停止新请求，再等待存量任务结束。',
+    flow: ['启动时读取并验证环境变量。', '注册 SIGTERM/SIGINT 信号处理。', '关闭服务器和连接池后设置退出码。'],
+    notes: ['不要在业务代码到处读取 process.env。', '不要用 process.exit 强行截断异步清理。'],
+    problem: '解决“服务如何管理多环境配置并在部署时安全退出”的问题。',
+  },
+  {
+    id: 'D_08', title: '异步并发控制与任务池', navTitle: '并发控制', category: '进程与并发',
+    path: '/nodejs/d-8/concurrency', summary: '限制批处理并发度，避免耗尽文件句柄和下游连接。',
+    demo: D08Concurrency, code: D08Code, language: 'vue',
+    principle: '异步 I/O 可以并发等待，但无限 Promise.all 会同时占用外部资源；任务池以固定 worker 数限制在途任务。',
+    flow: ['建立待处理任务队列。', '启动固定数量 worker。', '每个 worker 完成后领取下一任务。'],
+    notes: ['CPU 密集任务考虑 Worker Threads。', '并发上限应结合下游容量压测。'],
+    problem: '解决“批量异步任务如何提速又不压垮系统”的问题。',
+  },
+  {
+    id: 'D_09', title: '错误边界与结构化日志', navTitle: '错误与日志', category: '可靠性',
+    path: '/nodejs/d-9/error-logging', summary: '区分操作型错误与程序错误，并记录可检索的结构化上下文。',
+    demo: D09ErrorLogging, code: D09Code, language: 'vue',
+    principle: '预期的操作型错误应转换为稳定错误码和合适响应；未知程序错误应记录堆栈、请求 ID 和上下文后由进程管理器重启。',
+    flow: ['在边界捕获异步错误。', '映射公开错误码与 HTTP 状态。', '以 JSON 记录请求 ID 和内部原因。'],
+    notes: ['日志不得包含令牌和个人敏感信息。', 'unhandledRejection 不应只打印后继续运行。'],
+    problem: '解决“服务错误如何分类、返回和排查”的问题。',
+  },
+  {
+    id: 'D_10', title: '内置 node:test 测试运行器', navTitle: 'Node 测试', category: '可靠性',
+    path: '/nodejs/d-10/node-test', summary: '使用 node:test 与 assert 编写单元测试、子测试和异步测试。',
+    demo: D10NodeTest, code: D10Code, language: 'vue',
+    principle: 'Node 内置测试运行器支持并发、Mock、覆盖率和多种报告格式，无需第三方框架即可验证核心模块。',
+    flow: ['导入 node:test 与 strict assert。', '按行为组织测试和子测试。', '在 CI 中输出覆盖率与机器可读报告。'],
+    notes: ['每个测试应可独立运行。', '不要依赖测试执行顺序和共享全局状态。'],
+    problem: '解决“如何使用 Node.js 自带能力建立可靠测试套件”的问题。',
+  },
+  {
+    id: 'D_11', title: '服务端输入与路径安全', navTitle: '输入安全', category: '安全与依赖',
+    path: '/nodejs/d-11/security', summary: '防止路径穿越、注入、超大请求和敏感信息泄漏。',
+    demo: D11Security, code: D11Code, language: 'vue',
+    principle: '所有外部输入都不可信；服务端需要白名单校验、规范化路径、最小权限、体积限制和参数化查询等多层防护。',
+    flow: ['在系统边界解析并校验输入。', '规范化后确认资源仍在允许范围。', '使用最小权限访问文件和服务。'],
+    notes: ['前端校验不能替代服务端校验。', '错误响应不要暴露内部路径和堆栈。'],
+    problem: '解决“Node 服务如何抵御常见输入攻击和敏感信息泄漏”的问题。',
+  },
+  {
+    id: 'D_12', title: '包管理、SemVer 与可重复安装', navTitle: '依赖管理', category: '安全与依赖',
+    path: '/nodejs/d-12/package-management', summary: '理解 package.json、锁文件、版本范围、脚本和依赖审计。',
+    demo: D12PackageManagement, code: D12Code, language: 'vue',
+    principle: 'package.json 声明意图，锁文件记录完整依赖图；CI 使用冻结锁文件，SemVer 范围决定允许升级的版本集合。',
+    flow: ['区分运行依赖和开发依赖。', '提交并审查锁文件变更。', 'CI 冻结安装并执行依赖审计。'],
+    notes: ['不要盲目自动升级主版本。', '安装脚本具有执行代码权限，需要审查来源。'],
+    problem: '解决“如何让团队和 CI 安装完全一致且可审计的依赖”的问题。',
+  },
+  {
+    id: 'S_01', title: '先判断状态归属，再选择 Store', navTitle: '状态边界', category: '设计原则',
+    path: '/state-management/s-1/state-boundaries', summary: '区分组件状态、URL 状态、客户端共享状态和服务端缓存状态。',
+    demo: S01StateBoundaries, code: S01Code, language: 'vue',
+    principle: 'Store 只应承载需要跨组件共享、具有业务生命周期的客户端状态；局部 UI、URL 参数和远程缓存各有更合适的归属。',
+    flow: ['确认状态的唯一事实来源。', '判断共享范围与生命周期。', '选择最小且匹配语义的状态工具。'],
+    notes: ['全局可访问不等于应该全局存储。', '远程数据还需要缓存失效与请求去重。'],
+    problem: '解决“什么状态应该进入 Store，以及什么时候根本不需要 Store”的问题。',
+  },
+  {
+    id: 'S_02', title: 'Pinia Setup Store 与 storeToRefs', navTitle: 'Pinia Setup Store', category: 'Pinia',
+    path: '/state-management/s-2/pinia-setup-store', summary: '用学习计划实现组合式 Store、派生值、Action 和响应式解构。',
+    demo: S02PiniaSetupStore, code: S02Code, language: 'vue',
+    principle: 'Setup Store 以 ref、computed 和函数分别表达 state、getter 与 action；storeToRefs 在解构时保留响应性，方法则直接从 Store 读取。',
+    flow: ['在 defineStore 回调中声明响应式状态。', '用 computed 创建派生数据。', '组件通过 storeToRefs 安全解构状态。'],
+    notes: ['不要直接解构 Store 的响应式属性。', '业务修改流程应封装为 action。'],
+    problem: '解决“如何用组合式 API 组织 Pinia Store 并避免解构失去响应性”的问题。',
+  },
+  {
+    id: 'S_03', title: 'Pinia 批量更新、订阅与副作用', navTitle: 'Pinia 订阅', category: 'Pinia',
+    path: '/state-management/s-3/pinia-subscriptions', summary: '通过 $patch 和 $subscribe 记录批量状态变更。',
+    demo: S03PiniaSubscriptions, code: S03Code, language: 'vue',
+    principle: '$patch 可把同一业务动作中的多个修改合并表达，$subscribe 观察状态提交，适合持久化、审计和同步等基础设施副作用。',
+    flow: ['用 action 或 $patch 完成一组原子修改。', '$subscribe 接收 mutation 与新状态。', '组件卸载时取消临时订阅。'],
+    notes: ['订阅回调不应再次无条件修改同一状态。', 'SSR 持久化需要区分服务端和客户端。'],
+    problem: '解决“如何观察 Pinia 变化并接入持久化或审计”的问题。',
+  },
+  {
+    id: 'S_04', title: 'Zustand Store 与细粒度 Selector', navTitle: 'Zustand Selector', category: '轻量 React Store',
+    path: '/state-management/s-4/zustand-selectors', summary: '用购物车 Store 展示 Hook API、Action 和 selector 订阅。',
+    demo: S04ZustandSelectors, code: S04Code, language: 'jsx',
+    principle: 'Zustand 创建独立于 React 树的外部 Store，组件通过 selector 订阅所需切片；切片结果不变时可以避免无关重渲染。',
+    flow: ['create 定义状态和修改函数。', '组件用 selector 读取最小切片。', 'Action 通过 set 基于前一状态更新。'],
+    notes: ['返回新对象的 selector 要关注相等比较。', 'Store 可以在 React 外通过 getState 使用。'],
+    problem: '解决“React 中如何以很少样板代码共享状态并控制重渲染”的问题。',
+  },
+  {
+    id: 'S_05', title: 'Zustand Middleware 与选择性订阅', navTitle: 'Zustand Middleware', category: '轻量 React Store',
+    path: '/state-management/s-5/zustand-middleware', summary: '使用 subscribeWithSelector 只监听课程进度变化。',
+    demo: S05ZustandMiddleware, code: S05Code, language: 'jsx',
+    principle: 'Zustand middleware 包装 Store 创建器以增加持久化、DevTools、Immer 或选择性订阅等横切能力，而不改变组件消费方式。',
+    flow: ['用 middleware 包装状态创建器。', '订阅特定 selector 的前后值。', '在 effect 清理阶段取消订阅。'],
+    notes: ['middleware 组合顺序会影响类型和行为。', '持久化前要设计版本迁移策略。'],
+    problem: '解决“如何扩展 Zustand 并监听特定状态变化”的问题。',
+  },
+  {
+    id: 'S_06', title: 'Jotai 原子状态与派生图', navTitle: 'Jotai Atom', category: '原子化状态',
+    path: '/state-management/s-6/jotai-atoms', summary: '用数量、价格和总价 Atom 理解原子组合与依赖追踪。',
+    demo: S06JotaiAtoms, code: S06Code, language: 'jsx',
+    principle: 'Jotai 以 atom 为最小状态单位，派生 atom 通过读取其他 atom 自动形成依赖图，只有受影响的消费者更新。',
+    flow: ['创建可写基础 atom。', '读取基础 atom 构造派生 atom。', '组件用 useAtom 或专用读写 Hook 消费。'],
+    notes: ['atom 配置应在组件外保持引用稳定。', '大量动态 atom 可使用 atomFamily 管理。'],
+    problem: '解决“复杂页面如何把状态拆成可组合的细粒度单元”的问题。',
+  },
+  {
+    id: 'S_07', title: 'Jotai 异步 Atom 与 Suspense', navTitle: 'Jotai 异步 Atom', category: '原子化状态',
+    path: '/state-management/s-7/jotai-async-atoms', summary: '通过异步课程 Atom 展示依赖刷新、Suspense 和加载状态。',
+    demo: S07JotaiAsyncAtoms, code: S07Code, language: 'jsx',
+    principle: '异步 atom 的读取函数可以返回 Promise，并依赖其他 atom 触发重新计算；React Suspense 负责等待期间的界面边界。',
+    flow: ['异步 atom 读取刷新依赖。', '组件读取时进入 Suspense。', '更新刷新 atom 使异步数据失效并重算。'],
+    notes: ['异步 atom 适合原子依赖场景。', '复杂服务端缓存仍需专门请求库。'],
+    problem: '解决“原子化状态如何表达异步依赖和重新加载”的问题。',
+  },
+  {
+    id: 'S_08', title: 'Redux Toolkit 的 Slice 与单向数据流', navTitle: 'Redux Toolkit', category: '结构化状态',
+    path: '/state-management/s-8/redux-toolkit', summary: '用报名 Slice 展示 reducer、action、selector 与 Provider。',
+    demo: S08ReduxToolkit, code: S08Code, language: 'jsx',
+    principle: 'Redux Toolkit 用 createSlice 同时生成 reducer 和 action，所有变更经过可追踪的 dispatch 流程，适合需要严格约束和强大工具链的团队。',
+    flow: ['Slice 定义初始状态和 reducer。', 'configureStore 组合业务 Slice。', '组件通过 selector 读取并 dispatch action。'],
+    notes: ['Reducer 中看似直接修改由 Immer 转为不可变更新。', '避免把所有临时 UI 状态放进 Redux。'],
+    problem: '解决“大型 React 项目如何获得可预测状态流和统一调试工具”的问题。',
+  },
+  {
+    id: 'S_09', title: 'XState 有限状态机与合法转换', navTitle: 'XState 状态机', category: '结构化状态',
+    path: '/state-management/s-9/xstate-machine', summary: '用结算流程限制 editing、submitting、failure 与 success 的转换。',
+    demo: S09XStateMachine, code: S09Code, language: 'jsx',
+    principle: '状态机显式列举有限状态和可接受事件，使不合法转换无法发生；状态图适合结算、审批和多步骤流程。',
+    flow: ['列出互斥业务状态。', '为每个状态声明可处理事件。', '组件从 snapshot 渲染并发送事件。'],
+    notes: ['简单布尔值不需要状态机。', '副作用使用 actor 或 invoke 建模。'],
+    problem: '解决“多个布尔值组合出非法流程状态”的问题。',
+  },
+  {
+    id: 'S_10', title: '状态管理方案选型矩阵', navTitle: '方案选型', category: '选型与架构',
+    path: '/state-management/s-10/store-selection', summary: '按框架、状态粒度、流程复杂度和团队约束比较常见方案。',
+    demo: S10StoreSelection, code: S10Code, language: 'vue',
+    principle: 'Pinia、Zustand、Jotai、Redux Toolkit 与 XState 解决的问题模型不同；选型应从事实来源、更新粒度、流程约束和调试需求出发。',
+    flow: ['先区分客户端状态与服务端状态。', '评估框架、共享范围和更新频率。', '用最小原型验证 DevTools、SSR 和测试体验。'],
+    notes: ['不要仅以包体积决定架构。', '迁移成本通常高于初始接入成本。'],
+    problem: '解决“Pinia、Zustand、Jotai、Redux Toolkit 和 XState 到底如何选择”的问题。',
   },
 ]

@@ -66,39 +66,3 @@ function disableFuture(date: Date) {
   </div>
 </template>
 
-<style scoped>
-.date-demo {
-  display: grid;
-  gap: 14px;
-}
-
-.date-demo h3,
-.date-demo p {
-  margin: 0;
-}
-
-.demo-kicker {
-  color: #8f2f18;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.report-summary {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border: 1px solid #efc48d;
-  border-radius: 7px;
-  background: #fffaf2;
-  padding: 12px;
-}
-
-.date-demo > p {
-  color: #7c563f;
-  font-size: 13px;
-}
-
-:deep(.el-date-editor) {
-  width: min(100%, 420px);
-}
-</style>

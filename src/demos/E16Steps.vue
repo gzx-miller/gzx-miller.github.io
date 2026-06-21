@@ -40,37 +40,3 @@ function resetSteps() {
   </div>
 </template>
 
-<style scoped>
-.steps-demo {
-  display: grid;
-  gap: 18px;
-}
-
-.steps-demo h3,
-.demo-kicker {
-  margin: 0;
-}
-
-.demo-kicker {
-  color: #8f2f18;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.step-status {
-  border: 1px solid #efc48d;
-  border-radius: 7px;
-  background: #fffaf2;
-  padding: 12px;
-  color: #8f2f18;
-  font-weight: 700;
-  text-align: center;
-}
-
-@media (max-width: 520px) {
-  :deep(.el-step__title) {
-    font-size: 11px;
-    line-height: 1.3;
-  }
-}
-</style>

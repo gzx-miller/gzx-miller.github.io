@@ -1,6 +1,6 @@
 # 小松鼠举栗子
 
-一个基于 `Nuxt 4 + Vue 3 + TypeScript + Pinia + Element Plus` 的中文前端知识案例库，通过独立真实案例展示 Vue3、TypeScript、工程化、Nuxt 等前端知识点。
+一个基于 `Nuxt 4 + Vue 3 + TypeScript + Pinia + Element Plus` 的中文前端知识案例库，通过独立真实案例展示 JavaScript、Node.js、Vue3、TypeScript、状态管理、工程化、Nuxt 等前端知识点。
 
 主题是“小松鼠举栗子”：秋日枫叶森林里，一只可爱小松鼠抱着栗子。每个知识点都是一个栗子，适合按顺序逐个学习。
 
@@ -42,7 +42,7 @@ pnpm build
 
 ## 学习顺序
 
-顶部导航包含 7 个可学习分类，共 118 个独立案例：`Vue3`、`Element Plus`、`TypeScript`、`React`、`工程化`、`LangChain` 与 `Nuxt`。
+顶部导航包含 10 个可学习分类，共 150 个独立案例：`Vue3`、`JavaScript`、`Element Plus`、`TypeScript`、`Node.js`、`状态管理`、`React`、`工程化`、`LangChain` 与 `Nuxt`。课程较多的分类会在左侧导航中按子类别分章节展示。
 
 每个章节都是可独立访问和静态生成的页面，右侧包含案例演示、关键代码、原理、处理流程、注意事项和解决的问题。
 

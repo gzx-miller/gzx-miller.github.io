@@ -86,18 +86,3 @@ function handleConfirm() {
   </div>
 </template>
 
-<style scoped>
-.form-item {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.form-item label {
-  font-size: 14px;
-  color: var(--muted);
-}
-.tip-content p {
-  margin: 0;
-  line-height: 1.6;
-}
-</style>

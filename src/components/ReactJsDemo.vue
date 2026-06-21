@@ -17,6 +17,7 @@ const srcdoc = computed(() => createReactDemoDocument(props.code))
     <iframe
       :title="title"
       :srcdoc="srcdoc"
+      sandbox="allow-scripts"
       loading="eager"
       @load="isLoaded = true"
     />

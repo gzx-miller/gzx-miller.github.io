@@ -88,38 +88,3 @@ function handleCheck() {
   </div>
 </template>
 
-<style scoped>
-.tree-demo {
-  display: grid;
-  gap: 14px;
-}
-
-.tree-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.tree-demo h3,
-.demo-kicker {
-  margin: 0;
-}
-
-.demo-kicker {
-  color: #8f2f18;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-:deep(.el-tree) {
-  border: 1px solid #efc48d;
-  border-radius: 7px;
-  background: #fffaf2;
-  padding: 10px;
-}
-
-.tree-demo > button {
-  justify-self: start;
-}
-</style>

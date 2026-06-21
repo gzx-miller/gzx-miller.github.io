@@ -65,12 +65,3 @@ const tooltipCode = `// ElTooltip 关键属性
   </div>
 </template>
 
-<style scoped>
-h4 { margin: 16px 0 10px; font-size: 14px; color: #8b5e3c; }
-.direction-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
-.trigger-row { display: flex; gap: 12px; flex-wrap: wrap; }
-.rich-tip strong { color: #fff; }
-.rich-tip p { margin: 2px 0; font-size: 12px; }
-.code-section { background: #fef9f3; border: 1px solid #e8c9a0; border-radius: 8px; padding: 12px; margin-top: 12px; }
-.code-block { margin: 8px 0 0; font-size: 12px; line-height: 1.6; white-space: pre-wrap; color: #5a3e2b; }
-</style>

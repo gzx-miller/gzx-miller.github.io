@@ -2,6 +2,22 @@ import { describe, expect, it } from 'vitest'
 import { knowledgeCategories, lessons } from './lessons'
 
 describe('课程注册表', () => {
+  it('新增专题课程按子类别形成完整章节', () => {
+    const expectedCurriculum = [
+      { id: 'javascript', lessonCount: 10, groupCount: 5 },
+      { id: 'nodejs', lessonCount: 12, groupCount: 6 },
+      { id: 'state-management', lessonCount: 10, groupCount: 6 },
+    ]
+
+    for (const expected of expectedCurriculum) {
+      const categoryLessons = lessons.filter((lesson) => lesson.path.startsWith(`/${expected.id}/`))
+      const groups = new Set(categoryLessons.map((lesson) => lesson.category))
+
+      expect(categoryLessons).toHaveLength(expected.lessonCount)
+      expect(groups.size).toBe(expected.groupCount)
+    }
+  })
+
   it('所有已上线分类都有课程，且课程标识和路由唯一', () => {
     const readyCategories = knowledgeCategories.filter((category) => category.status === 'ready')
     const lessonIds = lessons.map((lesson) => lesson.id)

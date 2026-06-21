@@ -73,10 +73,3 @@ async function showPrompt() {
   </div>
 </template>
 
-<style scoped>
-h4 {
-  margin: 16px 0 10px;
-  font-size: 14px;
-  color: var(--muted);
-}
-</style>

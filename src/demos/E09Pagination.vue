@@ -89,10 +89,3 @@ function handleSizeChange(size: number) {
   </div>
 </template>
 
-<style scoped>
-.course-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 13px; }
-.course-table th { text-align: left; padding: 8px 12px; border-bottom: 2px solid #e8c9a0; color: #8b5e3c; font-size: 12px; }
-.course-table td { padding: 8px 12px; border-bottom: 1px solid #f5ebe0; color: #5a3e2b; }
-.price { color: var(--leaf-red, #c8703c); font-weight: 700; }
-.pagination-row { display: flex; justify-content: center; padding: 12px 0; }
-</style>

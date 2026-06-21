@@ -70,13 +70,3 @@ const uploadCode = `// ElUpload 关键属性
   </div>
 </template>
 
-<style scoped>
-h4 { margin: 16px 0 8px; font-size: 14px; color: #8b5e3c; }
-.upload-inner { text-align: center; color: #8b5e3c; }
-.upload-inner p { margin: 4px 0; font-size: 13px; }
-.upload-icon { font-size: 32px; margin: 8px 0 !important; }
-.upload-hint { font-size: 11px; color: #a0623a; }
-em { color: #c8703c; font-style: normal; }
-.code-section { background: #fef9f3; border: 1px solid #e8c9a0; border-radius: 8px; padding: 12px; margin-top: 12px; }
-.code-block { margin: 8px 0 0; font-size: 12px; line-height: 1.6; white-space: pre-wrap; color: #5a3e2b; }
-</style>

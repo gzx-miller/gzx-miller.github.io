@@ -64,7 +64,7 @@ function resetForm() {
       </ElFormItem>
 
       <ElFormItem label="角色" prop="role">
-        <ElSelect v-model="form.role" placeholder="请选择角色" style="width: 100%">
+        <ElSelect v-model="form.role" placeholder="请选择角色">
           <ElOption label="前端开发" value="frontend" />
           <ElOption label="后端开发" value="backend" />
           <ElOption label="全栈开发" value="fullstack" />
@@ -85,7 +85,6 @@ function resetForm() {
           v-model="form.date"
           type="date"
           placeholder="选择日期"
-          style="width: 100%"
         />
       </ElFormItem>
 
@@ -103,8 +102,3 @@ function resetForm() {
   </div>
 </template>
 
-<style scoped>
-.demo-form {
-  max-width: 480px;
-}
-</style>

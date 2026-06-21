@@ -57,7 +57,6 @@ const courseList = [
           <ElInput
             v-model="searchKeyword"
             placeholder="聚焦此处"
-            style="width: 140px"
           />
         </template>
         <p>输入关键词后，系统会自动从课程库中搜索相关内容。</p>
@@ -89,29 +88,3 @@ const courseList = [
   </div>
 </template>
 
-<style scoped>
-.action-list {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.course-list {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.list-title {
-  margin: 0 0 8px;
-  font-size: 13px;
-  color: var(--muted);
-}
-.course-item {
-  padding: 6px 8px;
-  border-radius: 4px;
-  font-size: 13px;
-  cursor: pointer;
-}
-.course-item:hover {
-  background: rgba(255, 218, 159, 0.55);
-}
-</style>

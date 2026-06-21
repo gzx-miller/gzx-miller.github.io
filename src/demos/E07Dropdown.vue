@@ -91,27 +91,3 @@ function selectCourse(courseName: string) {
   </div>
 </template>
 
-<style scoped>
-.course-selector {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.label {
-  font-size: 14px;
-  color: var(--muted);
-}
-.current-course {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 8px 12px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-}
-.current-course:hover {
-  border-color: var(--accent);
-}
-</style>

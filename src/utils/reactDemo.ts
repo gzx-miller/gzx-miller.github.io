@@ -3,6 +3,13 @@ const reactImportMap = {
     react: 'https://esm.sh/react@19.2.0?dev',
     'react-dom': 'https://esm.sh/react-dom@19.2.0?dev',
     'react-dom/client': 'https://esm.sh/react-dom@19.2.0/client?dev',
+    zustand: 'https://esm.sh/zustand@5.0.14?dev&external=react',
+    'zustand/middleware': 'https://esm.sh/zustand@5.0.14/middleware?dev&external=react',
+    jotai: 'https://esm.sh/jotai@2.20.1?dev&external=react',
+    '@reduxjs/toolkit': 'https://esm.sh/@reduxjs/toolkit@2.12.0?dev',
+    'react-redux': 'https://esm.sh/react-redux@9.3.0?dev&external=react',
+    xstate: 'https://esm.sh/xstate@5.32.1?dev',
+    '@xstate/react': 'https://esm.sh/@xstate/react@6.1.0?dev&external=react',
   },
 }
 

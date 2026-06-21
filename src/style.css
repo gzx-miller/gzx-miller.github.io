@@ -125,13 +125,13 @@ body::after {
   transform: rotate(18deg);
 }
 
-button,
-input,
-select {
+button:not([class*='el-']),
+input:not([class*='el-']),
+select:not([class*='el-']) {
   font: inherit;
 }
 
-button,
+button:not([class*='el-']),
 .button-row a {
   border: 1px solid var(--accent);
   border-radius: 6px;
@@ -142,18 +142,18 @@ button,
   text-decoration: none;
 }
 
-button:hover,
+button:not([class*='el-']):hover,
 .button-row a:hover {
   background: var(--accent-strong);
 }
 
-button:disabled {
+button:not([class*='el-']):disabled {
   cursor: not-allowed;
   opacity: 0.45;
 }
 
-input,
-select {
+input:not([class*='el-']),
+select:not([class*='el-']) {
   width: 100%;
   border: 1px solid var(--border);
   border-radius: 6px;
@@ -162,8 +162,8 @@ select {
   background: #fffdf8;
 }
 
-input[type='checkbox'],
-input[type='radio'] {
+input[type='checkbox']:not([class*='el-']),
+input[type='radio']:not([class*='el-']) {
   width: auto;
   accent-color: var(--accent);
 }
@@ -509,6 +509,31 @@ li + li {
   gap: 4px;
 }
 
+.lesson-group {
+  display: grid;
+  gap: 4px;
+}
+
+.lesson-group + .lesson-group {
+  margin-top: 10px;
+}
+
+.lesson-group-title {
+  margin: 4px 8px 2px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.app-shell:not(.sidebar-expanded) .lesson-group-title {
+  display: none;
+}
+
+.app-shell:not(.sidebar-expanded) .lesson-group + .lesson-group {
+  margin-top: 4px;
+}
+
 .lesson-link {
   display: grid;
   grid-template-columns: 38px minmax(0, 1fr);
@@ -773,7 +798,7 @@ li + li {
   box-shadow: none;
 }
 
-.demo-card label {
+.demo-card label:not([class*='el-']) {
   display: grid;
   gap: 6px;
 }
@@ -798,6 +823,17 @@ li + li {
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 14px;
+}
+
+.comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.comparison-grid .mini-card p {
+  margin: 6px 0;
+  color: var(--muted);
 }
 
 .mini-card header,
@@ -833,6 +869,18 @@ li + li {
 
 .code-block code {
   font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace;
+}
+
+.mini-code {
+  overflow: auto;
+  margin: 0;
+  border: 1px solid rgba(123, 53, 29, 0.16);
+  border-radius: 7px;
+  background: #fff4df;
+  padding: 12px;
+  color: var(--chestnut);
+  font: 12px/1.6 ui-monospace, SFMono-Regular, Consolas, monospace;
+  white-space: pre-wrap;
 }
 
 .code-loading {
