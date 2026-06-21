@@ -476,6 +476,8 @@ li + li {
   border-radius: 7px;
   padding: 7px 8px;
   text-align: left;
+  background: linear-gradient(135deg, var(--leaf-red), var(--leaf-orange));
+  color: #fff;
 }
 
 .toggle-icon {
@@ -492,7 +494,7 @@ li + li {
 
 .sidebar-toggle-label {
   overflow: hidden;
-  color: var(--text);
+  color: #fff;
   font-size: 13px;
   font-weight: 650;
   text-overflow: ellipsis;

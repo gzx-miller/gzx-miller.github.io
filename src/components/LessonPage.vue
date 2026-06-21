@@ -122,7 +122,7 @@ function toggleSidebar() {
 
 function handleResize() {
   const newWidth = window.innerWidth
-  if (newWidth !== lastKnownWidth.value) {
+  if (newWidth <= 520 && lastKnownWidth.value > 520) {
     isSidebarTemporarilyExpanded.value = false
   }
   lastKnownWidth.value = newWidth
@@ -158,7 +158,9 @@ watch(activeKnowledge, () => {
 watch(
   () => route.fullPath,
   async () => {
-    isSidebarTemporarilyExpanded.value = false
+    if (window.innerWidth <= 520) {
+      isSidebarTemporarilyExpanded.value = false
+    }
     await nextTick()
     lessonPageRef.value?.scrollTo({ top: 0, left: 0 })
     lessonPageRef.value?.focus({ preventScroll: true })
