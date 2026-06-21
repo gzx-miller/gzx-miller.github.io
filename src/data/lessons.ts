@@ -260,6 +260,20 @@ const T07UnknownGuard = createDemo('T07UnknownGuard')
 const T07Code = createCodeLoader('ts-code/T07UnknownGuard.ts')
 const T08VueTyping = createDemo('T08VueTyping')
 const T08Code = createCodeLoader('T08VueTyping.vue')
+const T09IntersectionMixin = createDemo('T09IntersectionMixin')
+const T09Code = createCodeLoader('ts-code/T09IntersectionMixin.ts')
+const T10Conditional = createDemo('T10Conditional')
+const T10Code = createCodeLoader('ts-code/T10Conditional.ts')
+const T11Mapped = createDemo('T11Mapped')
+const T11Code = createCodeLoader('ts-code/T11Mapped.ts')
+const T12TemplateLiteral = createDemo('T12TemplateLiteral')
+const T12Code = createCodeLoader('ts-code/T12TemplateLiteral.ts')
+const T13FunctionTypes = createDemo('T13FunctionTypes')
+const T13Code = createCodeLoader('ts-code/T13FunctionTypes.ts')
+const T14Enums = createDemo('T14Enums')
+const T14Code = createCodeLoader('ts-code/T14Enums.ts')
+const T15DeclarationMerging = createDemo('T15DeclarationMerging')
+const T15Code = createCodeLoader('ts-code/T15DeclarationMerging.ts')
 const G01EnvironmentConfig = createDemo('G01EnvironmentConfig')
 const G01Code = createCodeLoader('G01EnvironmentConfig.vue')
 const G02CodeQuality = createDemo('G02CodeQuality')
@@ -304,6 +318,34 @@ const J09Modules = createDemo('J09Modules')
 const J09Code = createCodeLoader('js-code/J09Modules.js')
 const J10EventDelegation = createDemo('J10EventDelegation')
 const J10Code = createCodeLoader('js-code/J10EventDelegation.js')
+const J11AsyncAwait = createDemo('J11AsyncAwait')
+const J11Code = createCodeLoader('js-code/J11AsyncAwait.js')
+const J12IteratorsGenerators = createDemo('J12IteratorsGenerators')
+const J12Code = createCodeLoader('js-code/J12IteratorsGenerators.js')
+const J13ProxyReflect = createDemo('J13ProxyReflect')
+const J13Code = createCodeLoader('js-code/J13ProxyReflect.js')
+const J14MapSetWeakRef = createDemo('J14MapSetWeakRef')
+const J14Code = createCodeLoader('js-code/J14MapSetWeakRef.js')
+const J15RegExp = createDemo('J15RegExp')
+const J15Code = createCodeLoader('js-code/J15RegExp.js')
+const J16ErrorHandling = createDemo('J16ErrorHandling')
+const J16Code = createCodeLoader('js-code/J16ErrorHandling.js')
+const J17OptionalNullish = createDemo('J17OptionalNullish')
+const J17Code = createCodeLoader('js-code/J17OptionalNullish.js')
+const J18HigherOrder = createDemo('J18HigherOrder')
+const J18Code = createCodeLoader('js-code/J18HigherOrder.js')
+const J19TemplateLiterals = createDemo('J19TemplateLiterals')
+const J19Code = createCodeLoader('js-code/J19TemplateLiterals.js')
+const J20JsonClone = createDemo('J20JsonClone')
+const J20Code = createCodeLoader('js-code/J20JsonClone.js')
+const J21PropertyDescriptors = createDemo('J21PropertyDescriptors')
+const J21Code = createCodeLoader('js-code/J21PropertyDescriptors.js')
+const J22Symbol = createDemo('J22Symbol')
+const J22Code = createCodeLoader('js-code/J22Symbol.js')
+const J23StringIntl = createDemo('J23StringIntl')
+const J23Code = createCodeLoader('js-code/J23StringIntl.js')
+const J24LogicalBitwise = createDemo('J24LogicalBitwise')
+const J24Code = createCodeLoader('js-code/J24LogicalBitwise.js')
 const D01ModuleSystem = createDemo('D01ModuleSystem')
 const D01Code = createCodeLoader('D01ModuleSystem.vue')
 const D02PathUrl = createDemo('D02PathUrl')
@@ -2944,6 +2986,69 @@ export const lessons: Lesson[] = [
     problem: '解决“如何让 Vue 组件的输入、输出和模板引用获得完整类型检查”的问题。',
   },
   {
+    id: 'T_09', title: '交叉类型与 Mixin 模式', navTitle: '交叉与 Mixin', category: '类型进阶',
+    path: '/typescript/t-9/intersection-mixin', summary: '用交叉类型组合多个能力片段，用 Mixin 函数叠加行为。',
+    demo: T09IntersectionMixin, code: T09Code, language: 'typescript',
+    principle: '交叉类型 & 把多个接口合并为一个，要求同时满足所有成员；Mixin 用函数在运行时组合行为，提供比继承更灵活的复用方式。',
+    flow: ['定义独立的能力接口。', '用 & 组合成交叉类型。', 'Mixin 函数在运行时叠加方法。'],
+    notes: ['交叉类型中同名属性取交集。', 'Mixin 组合注意方法冲突。'],
+    problem: '解决“如何灵活组合多个能力而不依赖继承层级”的问题。',
+  },
+  {
+    id: 'T_10', title: '条件类型与类型推导', navTitle: '条件类型', category: '类型进阶',
+    path: '/typescript/t-10/conditional', summary: '用条件类型和 infer 从联合响应中提取精确类型。',
+    demo: T10Conditional, code: T10Code, language: 'typescript',
+    principle: '条件类型根据 extends 关系选择分支；infer 可在 extends 子句中捕获并复用未知类型，是构建高级工具类型的核心机制。',
+    flow: ['用 T extends U ? X : Y 描述类型分支。', '用 infer 捕获嵌套或返回类型。', '组合条件类型实现复杂推导。'],
+    notes: ['裸类型参数上的条件类型会自动分发。', 'ReturnType 和 Parameters 的底层就是 infer。'],
+    problem: '解决“如何从复杂泛型中自动提取和转换子类型”的问题。',
+  },
+  {
+    id: 'T_11', title: '映射类型与键转换', navTitle: '映射类型', category: '类型进阶',
+    path: '/typescript/t-11/mapped', summary: '用映射类型批量转换属性，掌握修饰符和键重命名。',
+    demo: T11Mapped, code: T11Code, language: 'typescript',
+    principle: '映射类型遍历已有类型的键并生成新类型，可添加 readonly/可选修饰符，也可通过 as 子句重命名或过滤键。',
+    flow: ['从已有模型遍历键。', '添加或移除修饰符。', '用 as 重命名或排除键。'],
+    notes: ['Partial 和 Readonly 的底层就是映射类型。', '-? 可以移除可选修饰符。'],
+    problem: '解决“如何从一个模型批量派生只读、可选或重命名版本”的问题。',
+  },
+  {
+    id: 'T_12', title: '模板字面量类型', navTitle: '模板字面量', category: '类型进阶',
+    path: '/typescript/t-12/template-literal', summary: '构建类型安全的事件名、路由路径和 CSS 类名。',
+    demo: T12TemplateLiteral, code: T12Code, language: 'typescript',
+    principle: '模板字面量类型把字符串拼接提升到类型层面，配合 Uppercase 等内置工具可构造精确的字符串约束。',
+    flow: ['用 `${T}${U}` 拼接字面量类型。', '用 Capitalize 等转换大小写。', '结合条件类型提取字符串片段。'],
+    notes: ['模板字面量类型会产生联合展开。', '配合 infer 可以从字符串类型中解析结构。'],
+    problem: '解决“如何让事件名、路由和 CSS 类名在编译期就保证正确性”的问题。',
+  },
+  {
+    id: 'T_13', title: '函数类型、重载与断言函数', navTitle: '函数类型', category: '类型进阶',
+    path: '/typescript/t-13/function-types', summary: '为 API 编写重载签名，用断言函数做运行时类型守卫。',
+    demo: T13FunctionTypes, code: T13Code, language: 'typescript',
+    principle: '函数类型表达式描述签名，重载让同一函数名对不同输入返回不同类型；断言函数在运行时校验后收窄调用方的类型。',
+    flow: ['声明函数类型表达式。', '编写重载签名覆盖多种调用方式。', '用 asserts 签名做运行时守卫。'],
+    notes: ['重载签名必须从最具体到最宽泛排列。', '断言函数返回值是 void 而非 boolean。'],
+    problem: '解决“同一函数如何根据输入返回不同类型，以及如何安全收窄 unknown”的问题。',
+  },
+  {
+    id: 'T_14', title: '枚举、常量枚举与字面量映射', navTitle: '枚举与映射', category: '类型进阶',
+    path: '/typescript/t-14/enums', summary: '比较枚举与联合字面量在状态建模中的差异和适用场景。',
+    demo: T14Enums, code: T14Code, language: 'typescript',
+    principle: '枚举提供运行时值，其中数字枚举还会生成反向映射；联合字面量配合 as const 对象可实现类似效果，通常产物更轻、组合更灵活。',
+    flow: ['用枚举定义有限状态集合。', '对比 const enum 的编译产物。', '用 as const + Record 实现无枚举映射。'],
+    notes: ['数字枚举有反向映射，字符串枚举没有。', 'const enum 会内联成员，但在库声明和独立转译流程中应谨慎使用。'],
+    problem: '解决“有限状态集合应该用枚举还是联合字面量来建模”的问题。',
+  },
+  {
+    id: 'T_15', title: '声明合并与模块扩展', navTitle: '声明合并', category: '类型进阶',
+    path: '/typescript/t-15/declaration-merging', summary: '扩展第三方库类型，掌握接口合并和模块增强。',
+    demo: T15DeclarationMerging, code: T15Code, language: 'typescript',
+    principle: '同名 interface 自动合并，namespace 可与 class/function 合并；declare module 可为第三方包追加类型声明。',
+    flow: ['声明同名接口触发合并。', '用 declare module 扩展已有模块。', '在 .d.ts 文件中放置全局类型增强。'],
+    notes: ['class 不能与 class 合并。', '模块增强必须在模块作用域中使用。'],
+    problem: '解决“如何在不修改源码的前提下为第三方库补充类型”的问题。',
+  },
+  {
     id: 'G_01', title: '环境变量与运行配置', navTitle: '环境配置', category: '构建基础',
     path: '/engineering/g-1/environment-config', summary: '区分构建时环境变量、公开配置和服务端密钥。',
     demo: G01EnvironmentConfig, code: G01Code, language: 'vue',
@@ -3013,7 +3118,7 @@ export const lessons: Lesson[] = [
     principle: '安全发布需要最小化客户端暴露、限制资源来源、持续修复依赖漏洞，并为带内容哈希的静态资源设置长期缓存。',
     flow: ['构建前扫描依赖和公开配置。', '部署时配置安全响应头。', 'HTML 短缓存、哈希资源长期不可变缓存。'],
     notes: ['CSP 应先报告再逐步收紧。', '前端校验不能替代服务端授权。'],
-    problem: '解决”静态站点发布时如何兼顾安全策略与缓存性能”的问题。',
+    problem: '解决“静态站点发布时如何兼顾安全策略与缓存性能”的问题。',
   },
   {
     id: 'G_09', title: 'Vite 构建插件与钩子机制', navTitle: '构建插件', category: '构建基础',
@@ -3022,7 +3127,7 @@ export const lessons: Lesson[] = [
     principle: 'Vite 基于 Rollup 插件体系，通过 resolveId、transform、generateBundle 等钩子介入构建流程；插件按注册顺序执行，每个钩子负责不同阶段的资源转换。',
     flow: ['在 vite.config.ts 中注册插件并声明需要的钩子。', 'transform 钩子逐个文件处理内容替换和注入。', 'generateBundle 钩子在产物输出前执行最终优化。'],
     notes: ['插件应尽量只做一件事，避免在单个插件中混合多种职责。', 'transform 返回值可以是字符串或 { code, map } 对象，后者保留 source map。'],
-    problem: '解决”如何在构建流程中介入自定义转换逻辑，以及不同钩子各自负责什么阶段”的问题。',
+    problem: '解决“如何在构建流程中介入自定义转换逻辑，以及不同钩子各自负责什么阶段”的问题。',
   },
   {
     id: 'G_10', title: '端到端测试与流程编排', navTitle: 'E2E 测试', category: '质量保障',
@@ -3031,7 +3136,7 @@ export const lessons: Lesson[] = [
     principle: '端到端测试从用户视角验证完整业务流程，通过可访问选择器定位元素、编排操作步骤、断言可见结果，失败时自动截图并精确定位出错步骤。',
     flow: ['用 getByRole、getByLabel 等可访问查询定位元素。', '按用户操作顺序编排点击、输入和导航步骤。', '断言页面呈现的文本、状态和可访问角色。'],
     notes: ['优先使用用户可见的选择器，避免依赖 CSS 类名或 data 属性。', '测试数据应独立，每次运行前重置状态以避免用例间相互影响。', '失败截图和 trace 是定位问题的关键产物，CI 中应保留这些文件。'],
-    problem: '解决”如何从用户视角验证完整业务流程，并在失败时快速定位问题”的问题。',
+    problem: '解决“如何从用户视角验证完整业务流程，并在失败时快速定位问题”的问题。',
   },
   {
     id: 'G_11', title: '构建产物分析与拆分策略', navTitle: '产物分析', category: '用户体验',
@@ -3040,7 +3145,7 @@ export const lessons: Lesson[] = [
     principle: '构建产物分析把抽象的”打包体积”变成可视化的模块树，帮助定位体积热点；超过阈值的 chunk 可通过动态导入、按需加载或提取公共模块来拆分。',
     flow: ['使用 rollup-plugin-visualizer 或 webpack-bundle-analyzer 生成产物报告。', '按模块类型分类观察 vendor、app 和资源的体积占比。', '对超出预算的模块制定拆分或替换方案。'],
     notes: ['vendor 体积优先检查是否有可替换的轻量方案。', 'tree-shaking 依赖 ESM 导出，混用 CommonJS 会导致整个模块被打包。', '动态导入让路由级组件按需加载，减少首屏所需的初始包体积。'],
-    problem: '解决”构建产物为什么越来越大，以及如何系统性地控制体积”的问题。',
+    problem: '解决“构建产物为什么越来越大，以及如何系统性地控制体积”的问题。',
   },
   {
     id: 'G_12', title: 'Monorepo 工作区与多包管理', navTitle: 'Monorepo', category: '构建基础',
@@ -3049,7 +3154,7 @@ export const lessons: Lesson[] = [
     principle: 'Monorepo 通过 workspace 协议把多个包放在同一仓库，共享依赖和工具链；构建按依赖拓扑排序执行，版本管理借助 changesets 实现独立发版。',
     flow: ['在根目录 pnpm-workspace.yaml 声明 packages 匹配规则。', '各包通过 workspace: 协议引用内部依赖，pnpm 自动链接。', '构建工具按拓扑顺序编译，确保被依赖包先于依赖方构建。'],
     notes: ['workspace 协议只在开发环境生效，发布后自动替换为具体版本号。', '修改一个包后，依赖它的所有包都需要重新构建和测试。', '使用 changesets 管理版本，每个变更生成一个 .md 描述文件，发版时自动计算版本号。'],
-    problem: '解决”多包项目如何共享代码、统一版本并按依赖顺序可靠构建”的问题。',
+    problem: '解决“多包项目如何共享代码、统一版本并按依赖顺序可靠构建”的问题。',
   },
   {
     id: 'J_01', title: '值、类型转换与严格相等', navTitle: '类型与相等', category: '语言基础',
@@ -3140,6 +3245,132 @@ export const lessons: Lesson[] = [
     flow: ['在父容器注册一个监听器。', '从 event.target 向上寻找匹配元素。', '读取 data 属性执行对应行为。'],
     notes: ['不是所有事件都会冒泡。', '用 closest 时要确认结果仍在委托容器内。'],
     problem: '解决“动态列表如何减少监听器并统一处理交互”的问题。',
+  },
+  {
+    id: 'J_11', title: 'async/await 与异步流控', navTitle: 'async/await', category: '异步机制',
+    path: '/javascript/j-11/async-await', summary: '用 async 函数和 await 表达串行与并发加载，掌握异步错误处理。',
+    demo: J11AsyncAwait, code: J11Code, language: 'javascript',
+    principle: 'async 函数返回 Promise，await 暂停执行直到 Promise 解决；串行用 for...of 逐个等待，并发用 Promise.all 同时发起。',
+    flow: ['用 async 声明异步函数。', '用 await 等待 Promise 结果。', '选择串行或并发策略并处理异常。'],
+    notes: ['await 只能在 async 函数或模块顶层使用。', '并发任务仍需考虑接口限流。'],
+    problem: '解决“如何用同步写法组织异步流程并选择正确的并发策略”的问题。',
+  },
+  {
+    id: 'J_12', title: '迭代协议与生成器', navTitle: '迭代器与生成器', category: '集合与数据',
+    path: '/javascript/j-12/iterators-generators', summary: '用生成器逐步产出课程列表，理解迭代协议和 yield 通信。',
+    demo: J12IteratorsGenerators, code: J12Code, language: 'javascript',
+    principle: '迭代协议规定 next() 返回 {value, done}；生成器函数用 yield 暂停和恢复，支持双向通信和委托 yield*。',
+    flow: ['实现 [Symbol.iterator] 让对象可迭代。', '用 function* 和 yield 创建生成器。', '通过 next(value) 向生成器传入数据。'],
+    notes: ['for...of 和展开语法都依赖迭代协议。', 'yield* 可委托给另一个可迭代对象。'],
+    problem: '解决“如何惰性产出序列并实现自定义可迭代对象”的问题。',
+  },
+  {
+    id: 'J_13', title: 'Proxy 与 Reflect', navTitle: 'Proxy 与 Reflect', category: '对象模型',
+    path: '/javascript/j-13/proxy-reflect', summary: '用 Proxy 拦截对象操作实现响应式验证和数据追踪。',
+    demo: J13ProxyReflect, code: J13Code, language: 'javascript',
+    principle: 'Proxy 创建对象代理，拦截 get/set/has 等基本操作；Reflect 提供与 Proxy 陷阱对应的默认行为，保证原型链和 this 正确。',
+    flow: ['用 new Proxy 包装目标对象。', '在陷阱中执行自定义逻辑。', '用 Reflect 转发默认操作。'],
+    notes: ['Proxy 不能代理内部槽位（如 Date 的 [[DateValue]]）。', 'Vue 3 响应式的底层就是 Proxy。'],
+    problem: '解决“如何透明地拦截和增强对象行为”的问题。',
+  },
+  {
+    id: 'J_14', title: 'Map、Set 与弱引用', navTitle: 'Map/Set/WeakRef', category: '集合与数据',
+    path: '/javascript/j-14/map-set-weakref', summary: '用 Set 去重、Map 关联数据、WeakMap 绑定 DOM 元数据。',
+    demo: J14MapSetWeakRef, code: J14Code, language: 'javascript',
+    principle: 'Map 允许任意类型做键，Set 保证值唯一；WeakMap/WeakSet 的键是弱引用，不阻止垃圾回收，适合关联临时元数据。',
+    flow: ['用 Set 收集不重复标签。', '用 Map 建立对象到数据的映射。', '用 WeakMap 给 DOM 元素附加私有数据。'],
+    notes: ['WeakMap 的键不可枚举，且仅在键没有其他强引用时才允许回收。', 'GC 时机不可预测，WeakRef 与 FinalizationRegistry 不适合承载关键业务逻辑。'],
+    problem: '解决“何时用 Map/Set 替代对象和数组，以及如何避免内存泄漏”的问题。',
+  },
+  {
+    id: 'J_15', title: '正则表达式与模式匹配', navTitle: '正则表达式', category: '语言基础',
+    path: '/javascript/j-15/regexp', summary: '用正则验证手机号、邮箱和身份证号，掌握分组和断言。',
+    demo: J15RegExp, code: J15Code, language: 'javascript',
+    principle: '正则表达式描述字符串的匹配模式；字符类、量词、分组和断言组合出精确规则，test 验证、exec 提取、matchAll 遍历所有匹配。',
+    flow: ['用字符类和量词描述模式。', '用分组和命名组提取子串。', '用 lookahead/lookbehind 限定上下文。'],
+    notes: ['全局正则的 lastIndex 会影响多次 test 结果。', '复杂验证建议拆成多个正则组合。'],
+    problem: '解决“如何用声明式模式匹配和提取字符串中的结构化信息”的问题。',
+  },
+  {
+    id: 'J_16', title: '错误处理与自定义异常', navTitle: '错误处理', category: '语言基础',
+    path: '/javascript/j-16/error-handling', summary: '用 try/catch/finally 和自定义 Error 类构建可恢复的错误流。',
+    demo: J16ErrorHandling, code: J16Code, language: 'javascript',
+    principle: 'try/catch 捕获同步和异步错误，finally 保证清理逻辑执行；自定义 Error 子类携带业务语义，cause 属性建立错误链。',
+    flow: ['try 包裹可能出错的代码。', 'catch 按错误类型分支处理。', 'finally 执行清理，不论成功失败。'],
+    notes: ['catch 无法捕获异步回调中的同步抛出。', 'Error.cause（ES2022）可追溯原始错误。'],
+    problem: '解决“如何优雅捕获异常、区分错误类型并保留错误上下文”的问题。',
+  },
+  {
+    id: 'J_17', title: '可选链、空值合并与逻辑赋值', navTitle: '可选链与空值合并', category: '语言基础',
+    path: '/javascript/j-17/optional-nullish', summary: '安全访问深层属性、处理空值默认值和逻辑赋值运算符。',
+    demo: J17OptionalNullish, code: J17Code, language: 'javascript',
+    principle: '?. 在 null/undefined 处短路返回 undefined；?? 只在左侧为 null/undefined 时取右侧值；??= ||= &&= 把判断和赋值合并为一步。',
+    flow: ['用 ?. 安全访问嵌套属性。', '用 ?? 提供空值默认值。', '用逻辑赋值运算符简化条件初始化。'],
+    notes: ['?? 和 || 的区别：|| 对空字符串和 0 也取右侧。', '?.() 可安全调用可能不存在的函数。'],
+    problem: '解决“如何简洁地处理深层对象的空值和条件赋值”的问题。',
+  },
+  {
+    id: 'J_18', title: '高阶函数、柯里化与组合', navTitle: '高阶函数', category: '函数与组合',
+    path: '/javascript/j-18/higher-order', summary: '用函数组合构建价格计算器，掌握柯里化、偏函数和防抖节流。',
+    demo: J18HigherOrder, code: J18Code, language: 'javascript',
+    principle: '高阶函数接收或返回函数；柯里化把多参函数转为单参链；pipe 把多个单步函数串联为流水线；防抖和节流控制执行频率。',
+    flow: ['用柯里化拆解多参函数。', '用 pipe 组合单步转换为流水线。', '用防抖/节流控制高频事件回调。'],
+    notes: ['Array.prototype.map/filter/reduce 本身就是高阶函数。', 'compose 从右到左，pipe 从左到右。'],
+    problem: '解决“如何用函数组合代替重复代码并控制执行频率”的问题。',
+  },
+  {
+    id: 'J_19', title: '模板字面量与标签模板', navTitle: '模板字面量', category: '语言基础',
+    path: '/javascript/j-19/template-literals', summary: '用标签模板实现国际化系统，掌握原始字符串和 DSL 构建。',
+    demo: J19TemplateLiterals, code: J19Code, language: 'javascript',
+    principle: '模板字面量支持插值和多行文本；标签模板把字符串片段和表达式值分别传给函数，可构建 DSL、HTML 转义和 CSS-in-JS。',
+    flow: ['用 ${} 嵌入表达式。', '定义标签函数处理 strings 和 values。', '用 String.raw 获取未转义的原始文本。'],
+    notes: ['标签函数的第一个参数是字符串数组，其余参数是插值。', 'graphql-tag 和 styled-components 都基于标签模板。'],
+    problem: '解决“如何在字符串中嵌入逻辑并构建领域专用语言”的问题。',
+  },
+  {
+    id: 'J_20', title: 'JSON 与结构化克隆', navTitle: 'JSON 与克隆', category: '集合与数据',
+    path: '/javascript/j-20/json-clone', summary: '用 replacer/reviver 控制序列化，用 structuredClone 深拷贝。',
+    demo: J20JsonClone, code: J20Code, language: 'javascript',
+    principle: 'JSON.stringify/parse 通过 replacer 和 reviver 控制转换；structuredClone 能处理循环引用和更多内置类型，是真正的深拷贝。',
+    flow: ['用 replacer 函数过滤或转换字段。', '用 reviver 在解析时还原类型。', '用 structuredClone 处理循环引用。'],
+    notes: ['JSON 不支持 undefined、函数、Symbol、循环引用。', 'structuredClone 不支持 DOM 节点和函数。'],
+    problem: '解决“如何正确序列化复杂对象并实现可靠的深拷贝”的问题。',
+  },
+  {
+    id: 'J_21', title: '属性描述符与对象控制', navTitle: '属性描述符', category: '对象模型',
+    path: '/javascript/j-21/property-descriptors', summary: '用 defineProperty 精确控制属性行为，用 freeze/seal 锁定对象。',
+    demo: J21PropertyDescriptors, code: J21Code, language: 'javascript',
+    principle: '每个属性有 configurable/enumerable/writable 描述符；getter/setter 提供计算属性；freeze/seal/preventExtensions 逐级限制对象修改。',
+    flow: ['用 defineProperty 设置单个属性描述符。', '用 getter/setter 创建计算属性。', '用 freeze 冻结对象防止任何修改。'],
+    notes: ['Object.freeze 是浅层的，嵌套对象需递归冻结。', 'Object.keys/values/entries 只返回可枚举自有属性。'],
+    problem: '解决“如何精确控制对象属性的可写、可枚举和可配置性”的问题。',
+  },
+  {
+    id: 'J_22', title: 'Symbol 与内置符号', navTitle: 'Symbol', category: '语言基础',
+    path: '/javascript/j-22/symbol', summary: '用 Symbol 实现唯一标识和自定义迭代，理解内置符号的作用。',
+    demo: J22Symbol, code: J22Code, language: 'javascript',
+    principle: 'Symbol 生成唯一标识符；内置符号（Symbol.iterator、Symbol.toPrimitive 等）允许自定义对象的迭代、转换和字符串化行为。',
+    flow: ['用 Symbol() 创建唯一键。', '实现 Symbol.iterator 让对象可迭代。', '用 Symbol.toPrimitive 自定义类型转换。'],
+    notes: ['Symbol.for 在全局注册表中共享。', 'Symbol.hasInstance 可自定义 instanceof 行为。'],
+    problem: '解决“如何创建不冲突的属性键并自定义对象的内置行为”的问题。',
+  },
+  {
+    id: 'J_23', title: '字符串方法与国际化', navTitle: '字符串与 Intl', category: '语言基础',
+    path: '/javascript/j-23/string-intl', summary: '用字符串方法搜索和转换文本，用 Intl 格式化日期和货币。',
+    demo: J23StringIntl, code: J23Code, language: 'javascript',
+    principle: '字符串方法覆盖搜索、截取和替换；Intl API 提供地区感知的日期、数字和排序格式化，是国际化的标准方案。',
+    flow: ['用 includes/matchAll 搜索文本。', '用 replaceAll 批量替换。', '用 Intl.DateTimeFormat/NumberFormat 格式化输出。'],
+    notes: ['字符串是不可变的，方法都返回新字符串。', 'Intl.Collator 可正确排序中文等多语言文本。'],
+    problem: '解决“如何高效处理字符串搜索替换和地区化格式显示”的问题。',
+  },
+  {
+    id: 'J_24', title: '逻辑运算、位运算与权限模型', navTitle: '逻辑与位运算', category: '语言基础',
+    path: '/javascript/j-24/logical-bitwise', summary: '用位运算实现权限标志模型，掌握逻辑短路和赋值运算符。',
+    demo: J24LogicalBitwise, code: J24Code, language: 'javascript',
+    principle: '逻辑运算符支持短路求值和条件赋值；位运算在整数层面操作二进制位，适合实现权限标志、状态压缩等场景。',
+    flow: ['用 && || 短路求值简化条件。', '用位运算 OR 组合权限标志。', '用 AND 检查、XOR 切换权限位。'],
+    notes: ['??= ||= &&= 只在条件满足时赋值。', '位运算对 32 位整数操作，超出范围会截断。'],
+    problem: '解决“如何用位运算实现高效的权限和状态管理”的问题。',
   },
   {
     id: 'D_01', title: 'Node.js 运行时与模块系统', navTitle: '模块系统', category: '运行时与模块',
