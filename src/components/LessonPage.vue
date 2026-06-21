@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue'
 import squirrelHero from '../assets/squirrel-chestnut-avatar.webp'
-import { knowledgeCategories, lessons, type Lesson } from '../data/lessons'
+import { knowledgeCategories, lessons } from '../data/lessons'
 import CodeBlock from './CodeBlock.vue'
 import { useTheme } from '../composables/useTheme'
+import { createLessonOrderMap, flattenLessonGroups, groupLessons } from '../utils/lessonNavigation'
 
 const route = useRoute()
 const { isDark, toggleTheme } = useTheme()
@@ -20,6 +21,10 @@ const moreDropdownVisible = ref(false)
 
 const visibleCategories = computed(() => knowledgeCategories.slice(0, visibleCount.value))
 const overflowCategories = computed(() => knowledgeCategories.slice(visibleCount.value))
+const activeOverflowCategory = computed(() => {
+  return overflowCategories.value.find((category) => category.id === activeKnowledge.value)
+})
+const moreButtonLabel = computed(() => activeOverflowCategory.value?.name ?? '更多')
 
 function showPopover(id: string, event: Event) {
   const trigger = event.currentTarget as HTMLElement
@@ -43,6 +48,21 @@ function hidePopover(id: string) {
   popoverVisible.value[id] = false
 }
 
+function handleMoreFocusOut(event: FocusEvent) {
+  const wrapper = event.currentTarget as HTMLElement
+  const nextTarget = event.relatedTarget as Node | null
+
+  if (!nextTarget || !wrapper.contains(nextTarget)) {
+    moreDropdownVisible.value = false
+  }
+}
+
+async function openMoreMenuAndFocus() {
+  moreDropdownVisible.value = true
+  await nextTick()
+  tabsRowRef.value?.querySelector<HTMLElement>('.more-dropdown-item')?.focus()
+}
+
 const activeKnowledge = computed(() => {
   const category = route.path.split('/').filter(Boolean)[0]
   return knowledgeCategories.some((item) => item.id === category) ? category : 'vue'
@@ -55,37 +75,28 @@ const filteredLessons = computed(() => {
   return lessons.filter((lesson) => lesson.path.startsWith(`/${activeKnowledge.value}/`))
 })
 
-const visibleLessons = computed(() => {
-  const query = searchQuery.value.trim().toLocaleLowerCase('zh-CN')
-
-  if (!query) return filteredLessons.value
-
-  return filteredLessons.value.filter((lesson) => {
-    return [lesson.navTitle, lesson.title, lesson.category, lesson.summary]
-      .some((value) => value.toLocaleLowerCase('zh-CN').includes(query))
-  })
-})
+const allLessonGroups = computed(() => groupLessons(filteredLessons.value))
+const orderedLessons = computed(() => flattenLessonGroups(allLessonGroups.value))
+const lessonOrderMap = computed(() => createLessonOrderMap(orderedLessons.value))
 
 const lessonGroups = computed(() => {
-  const groups = new Map<string, Lesson[]>()
+  const query = searchQuery.value.trim().toLocaleLowerCase('zh-CN')
 
-  for (const lesson of visibleLessons.value) {
-    const group = groups.get(lesson.category) ?? []
-    group.push(lesson)
-    groups.set(lesson.category, group)
-  }
+  if (!query) return allLessonGroups.value
 
-  return Array.from(groups, ([title, groupLessons]) => ({ title, lessons: groupLessons }))
+  return allLessonGroups.value
+    .map((group) => ({
+      ...group,
+      lessons: group.lessons.filter((lesson) => {
+        return [lesson.navTitle, lesson.title, lesson.category, lesson.summary]
+          .some((value) => value.toLocaleLowerCase('zh-CN').includes(query))
+      }),
+    }))
+    .filter((group) => group.lessons.length > 0)
 })
 
 function getLessonGroupIndex(lessonId: string): number {
-  let offset = 0
-  for (const group of lessonGroups.value) {
-    const idx = group.lessons.findIndex((l) => l.id === lessonId)
-    if (idx !== -1) return offset + idx
-    offset += group.lessons.length
-  }
-  return 0
+  return lessonOrderMap.value.get(lessonId) ?? 0
 }
 
 const currentLesson = computed(() => {
@@ -107,16 +118,20 @@ const {
 )
 
 const currentLessonIndex = computed(() => {
-  return filteredLessons.value.findIndex((lesson) => lesson.id === currentLesson.value.id)
+  return orderedLessons.value.findIndex((lesson) => lesson.id === currentLesson.value.id)
+})
+const lessonProgress = computed(() => {
+  if (currentLessonIndex.value < 0 || orderedLessons.value.length === 0) return 0
+  return Math.round(((currentLessonIndex.value + 1) / orderedLessons.value.length) * 100)
 })
 
 const previousLesson = computed(() => {
-  return currentLessonIndex.value > 0 ? filteredLessons.value[currentLessonIndex.value - 1] : null
+  return currentLessonIndex.value > 0 ? orderedLessons.value[currentLessonIndex.value - 1] : null
 })
 
 const nextLesson = computed(() => {
   const nextIndex = currentLessonIndex.value + 1
-  return nextIndex > 0 && nextIndex < filteredLessons.value.length ? filteredLessons.value[nextIndex] : null
+  return nextIndex > 0 && nextIndex < orderedLessons.value.length ? orderedLessons.value[nextIndex] : null
 })
 
 function formatLessonId(index: number) {
@@ -141,13 +156,23 @@ async function calculateOverflow() {
 
   const containerWidth = container.clientWidth
   const items = nav.querySelectorAll('.knowledge-tab-wrapper')
-  const moreBtnWidth = 80 // "更多" 按钮预估宽度
+  const activeCategoryIndex = knowledgeCategories.findIndex((category) => category.id === activeKnowledge.value)
+  const activeTabWidth = activeCategoryIndex >= 0
+    ? (items[activeCategoryIndex] as HTMLElement | undefined)?.offsetWidth ?? 0
+    : 0
 
   let totalWidth = 0
   let count = 0
 
-  for (const item of Array.from(items)) {
+  for (const [index, item] of Array.from(items).entries()) {
     const itemWidth = (item as HTMLElement).offsetWidth + 8 // 8px = gap
+    const nextCount = index + 1
+    const hasOverflow = nextCount < knowledgeCategories.length
+    const activeCategoryWillOverflow = activeCategoryIndex >= nextCount
+    const moreBtnWidth = hasOverflow
+      ? activeCategoryWillOverflow ? Math.max(80, activeTabWidth + 18) : 80
+      : 0
+
     if (totalWidth + itemWidth + moreBtnWidth <= containerWidth) {
       totalWidth += itemWidth
       count++
@@ -291,20 +316,30 @@ useSeoMeta({
           class="knowledge-more-wrapper"
           @mouseenter="moreDropdownVisible = true"
           @mouseleave="moreDropdownVisible = false"
+          @focusin="moreDropdownVisible = true"
+          @focusout="handleMoreFocusOut"
         >
           <button
             class="knowledge-more-btn"
-            aria-label="更多知识类别"
+            :class="{ active: activeOverflowCategory }"
+            :aria-label="activeOverflowCategory ? `当前类别：${moreButtonLabel}，展开更多知识类别` : '展开更多知识类别'"
+            aria-haspopup="menu"
+            :aria-expanded="moreDropdownVisible"
+            aria-controls="knowledge-more-menu"
+            @click="moreDropdownVisible = !moreDropdownVisible"
+            @keydown.down.prevent="openMoreMenuAndFocus"
           >
-            更多 ▾
+            <span>{{ moreButtonLabel }}</span>
+            <span class="knowledge-more-chevron" aria-hidden="true">▾</span>
           </button>
           <Transition name="fade">
-            <div v-if="moreDropdownVisible" class="more-dropdown" role="menu">
+            <div v-if="moreDropdownVisible" id="knowledge-more-menu" class="more-dropdown" role="menu">
               <NuxtLink
                 v-for="item in overflowCategories"
                 :key="item.id"
                 :to="item.status === 'ready' ? item.path : '/vue'"
                 class="more-dropdown-item"
+                role="menuitem"
                 :class="{ active: item.id === activeKnowledge, planned: item.status === 'planned' }"
                 :aria-disabled="item.status === 'planned'"
                 :aria-current="item.id === activeKnowledge ? 'page' : undefined"
@@ -362,7 +397,7 @@ useSeoMeta({
               <strong>{{ lesson.navTitle }}</strong>
             </NuxtLink>
           </section>
-          <p v-if="visibleLessons.length === 0" class="lesson-empty">没有匹配的课程</p>
+          <p v-if="lessonGroups.length === 0" class="lesson-empty">没有匹配的课程</p>
         </nav>
       </aside>
 
@@ -376,8 +411,18 @@ useSeoMeta({
           <NuxtLink :to="`/${activeKnowledge}`">{{ activeCategoryName }}</NuxtLink>
           <span aria-hidden="true">/</span>
           <span aria-current="page">{{ currentLesson.navTitle }}</span>
-          <small>{{ currentLessonIndex + 1 }} / {{ filteredLessons.length }}</small>
+          <small>{{ currentLessonIndex + 1 }} / {{ orderedLessons.length }}</small>
         </nav>
+        <div
+          class="lesson-progress"
+          role="progressbar"
+          :aria-label="`${activeCategoryName} 学习进度`"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          :aria-valuenow="lessonProgress"
+        >
+          <span :style="{ width: `${lessonProgress}%` }"></span>
+        </div>
         <header class="lesson-header">
           <div class="lesson-copy">
             <p class="eyebrow">{{ formatLessonId(getLessonGroupIndex(currentLesson.id)) }} · {{ currentLesson.category }}</p>

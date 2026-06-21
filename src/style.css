@@ -388,7 +388,8 @@ li + li {
   position: relative;
 }
 
-.knowledge-tab {
+.knowledge-tab,
+.knowledge-more-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -399,30 +400,36 @@ li + li {
   padding: 8px 14px;
   text-decoration: none;
   white-space: nowrap;
+  font: inherit;
+  line-height: inherit;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
 }
 
-.knowledge-tab:hover {
+.knowledge-tab:hover,
+.knowledge-more-btn:hover {
   filter: brightness(1.08);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
-.knowledge-tab.active {
+.knowledge-tab.active,
+.knowledge-more-btn.active {
   border-color: var(--accent);
   background: linear-gradient(135deg, var(--leaf-red), var(--leaf-orange));
   color: #fff;
   box-shadow: 0 4px 16px rgba(217, 75, 38, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
-.knowledge-tab.active:hover {
+.knowledge-tab.active:hover,
+.knowledge-more-btn.active:hover {
   filter: brightness(1.1);
   transform: translateY(-1px);
 }
 
-.knowledge-tab:active {
+.knowledge-tab:active,
+.knowledge-more-btn:active {
   transform: translateY(0);
 }
 
@@ -441,26 +448,17 @@ li + li {
 }
 
 .knowledge-more-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  border: 1px solid rgba(123, 53, 29, 0.2);
-  border-radius: 999px;
-  background: rgba(255, 250, 242, 0.82);
-  color: var(--text);
-  padding: 8px 14px;
   cursor: pointer;
-  white-space: nowrap;
-  text-decoration: none;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
 }
 
-.knowledge-more-btn:hover {
-  filter: brightness(1.08);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+.knowledge-more-chevron {
+  display: inline-block;
+  font-size: 11px;
+  transition: transform 0.2s ease;
+}
+
+.knowledge-more-btn[aria-expanded='true'] .knowledge-more-chevron {
+  transform: rotate(180deg);
 }
 
 .more-dropdown {
@@ -837,6 +835,24 @@ li + li {
   padding: 4px 12px;
   font-weight: 700;
   font-size: 12px;
+}
+
+.lesson-progress {
+  height: 4px;
+  margin-top: -8px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(123, 53, 29, 0.1);
+}
+
+.lesson-progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--leaf-red), var(--leaf-orange), var(--sun));
+  box-shadow: 0 0 10px rgba(240, 138, 36, 0.28);
+  transition: width 0.35s ease;
 }
 
 .lesson-header,
@@ -1313,20 +1329,17 @@ li + li {
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5), 0 0 0 4px rgba(246, 193, 90, 0.12);
 }
 
-[data-theme='dark'] .knowledge-tab {
-  border-color: rgba(246, 193, 90, 0.25);
-  background: rgba(55, 40, 32, 0.92);
-}
-
-[data-theme='dark'] .knowledge-tab.active {
-  border-color: transparent;
-  background: linear-gradient(135deg, #e8623a, #f5a040);
-  box-shadow: 0 4px 16px rgba(232, 120, 74, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-
+[data-theme='dark'] .knowledge-tab,
 [data-theme='dark'] .knowledge-more-btn {
   border-color: rgba(246, 193, 90, 0.25);
   background: rgba(55, 40, 32, 0.92);
+}
+
+[data-theme='dark'] .knowledge-tab.active,
+[data-theme='dark'] .knowledge-more-btn.active {
+  border-color: transparent;
+  background: linear-gradient(135deg, #e8623a, #f5a040);
+  box-shadow: 0 4px 16px rgba(232, 120, 74, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 [data-theme='dark'] .more-dropdown {
@@ -1394,6 +1407,10 @@ li + li {
 
 [data-theme='dark'] .breadcrumb small {
   background: linear-gradient(135deg, rgba(246, 193, 90, 0.15), rgba(232, 120, 74, 0.12));
+}
+
+[data-theme='dark'] .lesson-progress {
+  background: rgba(246, 193, 90, 0.1);
 }
 
 [data-theme='dark'] .official-link {

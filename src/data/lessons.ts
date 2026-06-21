@@ -2874,7 +2874,7 @@ export const lessons: Lesson[] = [
   {
     id: 'T_01', title: '类型推导与显式标注', navTitle: '类型推导', category: '类型基础',
     path: '/typescript/t-1/type-inference', summary: '从课程表单理解 TypeScript 如何推导类型，以及何时需要显式标注。',
-    demo: T01TypeInference, code: T01Code, language: 'vue',
+    demo: T01TypeInference, code: T01Code, language: 'typescript',
     principle: 'TypeScript 会根据初始值推导变量类型；当值可能为空、类型会变化或公共 API 需要稳定契约时，应补充显式类型标注。',
     flow: ['先让编译器从确定的初始值推导类型。', '遇到联合状态或空值时显式声明。', '在编辑器和类型检查阶段发现不合法赋值。'],
     notes: ['避免给所有局部变量重复写显而易见的类型。', '不要用 any 绕过建模问题。'],
@@ -2883,7 +2883,7 @@ export const lessons: Lesson[] = [
   {
     id: 'T_02', title: '联合类型与控制流收窄', navTitle: '联合与收窄', category: '类型基础',
     path: '/typescript/t-2/union-narrowing', summary: '用订单状态机掌握字面量联合类型和条件分支收窄。',
-    demo: T02UnionNarrowing, code: T02Code, language: 'vue',
+    demo: T02UnionNarrowing, code: T02Code, language: 'typescript',
     principle: '联合类型列出值的有限可能，TypeScript 会根据相等判断、typeof、in 等运行时检查逐步收窄到具体成员。',
     flow: ['用字面量联合定义合法状态。', '在条件分支中判断当前状态。', '收窄后执行该状态专属的业务逻辑。'],
     notes: ['状态值应来自一个统一类型。', '穷尽检查能在新增状态时提醒遗漏分支。'],
@@ -2892,7 +2892,7 @@ export const lessons: Lesson[] = [
   {
     id: 'T_03', title: '对象类型与领域建模', navTitle: '对象建模', category: '类型基础',
     path: '/typescript/t-3/object-modeling', summary: '通过会员资料区分 interface、type 与对象结构约束。',
-    demo: T03ObjectModeling, code: T03Code, language: 'vue',
+    demo: T03ObjectModeling, code: T03Code, language: 'typescript',
     principle: 'interface 适合表达可扩展的对象契约，type 能组合联合、交叉和其他类型表达式；两者都遵循结构化类型系统。',
     flow: ['识别领域对象的稳定字段。', '声明字段类型和有限枚举值。', '让响应式状态遵守同一份业务契约。'],
     notes: ['公共模型应使用业务语言命名。', '可选字段只用于数据确实可能缺失的场景。'],
@@ -2901,7 +2901,7 @@ export const lessons: Lesson[] = [
   {
     id: 'T_04', title: '泛型：复用类型关系', navTitle: '泛型', category: '类型进阶',
     path: '/typescript/t-4/generics', summary: '用通用 API 响应保留课程列表的精确数据类型。',
-    demo: T04Generics, code: T04Code, language: 'vue',
+    demo: T04Generics, code: T04Code, language: 'typescript',
     principle: '泛型把类型作为参数传递，使函数和容器既能复用实现，又能保留输入与输出之间的精确关系。',
     flow: ['找出实现中需要变化的类型。', '用类型参数表达输入输出关系。', '调用时由实参推导具体类型。'],
     notes: ['类型参数名应表达角色。', '仅使用一次且没有关系的类型参数通常没有价值。'],
@@ -2910,7 +2910,7 @@ export const lessons: Lesson[] = [
   {
     id: 'T_05', title: 'keyof 与索引访问类型', navTitle: 'keyof', category: '类型进阶',
     path: '/typescript/t-5/keyof', summary: '构建只能读取合法配置键的设置面板。',
-    demo: T05Keyof, code: T05Code, language: 'vue',
+    demo: T05Keyof, code: T05Code, language: 'typescript',
     principle: 'keyof 从对象类型得到键的联合，T[K] 根据键取得对应值类型，两者结合可编写安全的动态属性访问。',
     flow: ['从对象模型提取合法键。', '让函数参数受键联合约束。', '通过索引访问获得匹配的值类型。'],
     notes: ['Object.keys 默认返回 string[]，必要时需要安全封装。', '不要用宽泛 string 索引绕过键约束。'],
@@ -2919,7 +2919,7 @@ export const lessons: Lesson[] = [
   {
     id: 'T_06', title: '工具类型与更新模型', navTitle: '工具类型', category: '类型进阶',
     path: '/typescript/t-6/utility-types', summary: '用 Partial、Pick 和 Omit 表达课程的局部更新。',
-    demo: T06UtilityTypes, code: T06Code, language: 'vue',
+    demo: T06UtilityTypes, code: T06Code, language: 'typescript',
     principle: '内置工具类型通过映射和条件类型从已有模型派生新契约，减少新增、详情、更新模型之间的重复。',
     flow: ['先定义完整领域模型。', '按操作语义挑选或排除字段。', '用 Partial 将更新字段变为可选。'],
     notes: ['派生类型应保持来源清晰。', '深层对象的 Partial 不会自动递归。'],
@@ -2928,7 +2928,7 @@ export const lessons: Lesson[] = [
   {
     id: 'T_07', title: 'unknown 与自定义类型守卫', navTitle: '安全边界', category: '安全边界',
     path: '/typescript/t-7/unknown-guard', summary: '安全解析用户导入的 JSON，在使用前验证未知数据。',
-    demo: T07UnknownGuard, code: T07Code, language: 'vue',
+    demo: T07UnknownGuard, code: T07Code, language: 'typescript',
     principle: '外部输入在验证前应视为 unknown；类型守卫同时执行运行时检查，并向编译器证明检查后的精确类型。',
     flow: ['把网络或用户输入接收为 unknown。', '检查对象、字段与基本类型。', '守卫通过后再进入业务逻辑。'],
     notes: ['类型断言不会产生运行时校验。', '复杂结构可使用 schema 校验库。'],
@@ -3054,7 +3054,7 @@ export const lessons: Lesson[] = [
   {
     id: 'J_01', title: '值、类型转换与严格相等', navTitle: '类型与相等', category: '语言基础',
     path: '/javascript/j-1/types-equality', summary: '理解原始值、引用值、显式转换，以及 == 与 === 的差异。',
-    demo: J01TypesEquality, code: J01Code, language: 'vue',
+    demo: J01TypesEquality, code: J01Code, language: 'javascript',
     principle: 'JavaScript 是动态类型语言，运算时可能发生隐式类型转换。严格相等不会转换操作数，更适合表达稳定的业务判断。',
     flow: ['识别值当前的运行时类型。', '在输入边界显式转换。', '使用严格相等比较同类型值。'],
     notes: ['typeof null 的结果是历史遗留的 object。', 'NaN 应使用 Number.isNaN 判断。'],
@@ -3063,7 +3063,7 @@ export const lessons: Lesson[] = [
   {
     id: 'J_02', title: '词法作用域与闭包', navTitle: '作用域与闭包', category: '语言基础',
     path: '/javascript/j-2/closure', summary: '用购物车计数器理解函数如何保留创建时的变量环境。',
-    demo: J02Closure, code: J02Code, language: 'vue',
+    demo: J02Closure, code: J02Code, language: 'javascript',
     principle: '函数的作用域在定义位置确定；内部函数被返回后仍能访问外层变量，这个函数与词法环境的组合就是闭包。',
     flow: ['外层函数创建局部状态。', '返回访问该状态的内部函数。', '每次调用继续读取和修改同一环境。'],
     notes: ['闭包适合封装私有状态。', '长期持有的大对象可能增加内存占用。'],
@@ -3072,7 +3072,7 @@ export const lessons: Lesson[] = [
   {
     id: 'J_03', title: '数组的不可变转换流水线', navTitle: '数组方法', category: '集合与数据',
     path: '/javascript/j-3/array-pipeline', summary: '组合 filter、map 与 toSorted 完成课程搜索和排序。',
-    demo: J03ArrayPipeline, code: J03Code, language: 'vue',
+    demo: J03ArrayPipeline, code: J03Code, language: 'javascript',
     principle: '数组迭代方法把筛选、映射和聚合拆为可组合步骤；优先返回新数组能减少共享状态被意外修改。',
     flow: ['filter 缩小数据集合。', 'map 转换展示结构。', 'toSorted 在不修改原数组的前提下排序。'],
     notes: ['map 不应用来执行纯副作用。', '大数据量要关注多次遍历成本。'],
@@ -3081,7 +3081,7 @@ export const lessons: Lesson[] = [
   {
     id: 'J_04', title: '对象、解构与展开语法', navTitle: '对象操作', category: '集合与数据',
     path: '/javascript/j-4/object-operations', summary: '通过用户资料更新掌握属性访问、解构、剩余与浅拷贝。',
-    demo: J04ObjectOperations, code: J04Code, language: 'vue',
+    demo: J04ObjectOperations, code: J04Code, language: 'javascript',
     principle: '解构按属性提取值，剩余语法收集未提取字段，展开语法把可枚举自有属性复制到新对象；这些复制都是浅层的。',
     flow: ['从对象中解构需要的字段。', '用剩余语法保留其他字段。', '展开生成带覆盖值的新对象。'],
     notes: ['嵌套对象仍共享引用。', '属性覆盖顺序由展开位置决定。'],
@@ -3090,7 +3090,7 @@ export const lessons: Lesson[] = [
   {
     id: 'J_05', title: '函数调用方式与 this 绑定', navTitle: 'this 绑定', category: '对象模型',
     path: '/javascript/j-5/this-binding', summary: '比较方法调用、脱离对象调用与 call 显式绑定。',
-    demo: J05ThisBinding, code: J05Code, language: 'vue',
+    demo: J05ThisBinding, code: J05Code, language: 'javascript',
     principle: '普通函数的 this 由调用方式决定，而箭头函数捕获外层 this；call、apply 与 bind 可以显式指定普通函数的接收者。',
     flow: ['先观察函数实际调用表达式。', '确定隐式或显式接收者。', '回调场景用箭头函数或 bind 保持上下文。'],
     notes: ['不要把 this 理解为函数定义时的所属对象。', '类方法作为回调传递时也可能丢失绑定。'],
@@ -3099,7 +3099,7 @@ export const lessons: Lesson[] = [
   {
     id: 'J_06', title: '原型链、class 与继承', navTitle: '原型与类', category: '对象模型',
     path: '/javascript/j-6/prototype-class', summary: '通过课程模型理解实例属性、共享方法与原型继承。',
-    demo: J06PrototypeClass, code: J06Code, language: 'vue',
+    demo: J06PrototypeClass, code: J06Code, language: 'javascript',
     principle: '对象通过内部原型链接查找属性；class 提供更清晰的构造与继承语法，但底层仍使用原型链共享方法。',
     flow: ['构造函数初始化实例字段。', '方法存放在 prototype 上共享。', 'extends 建立子类到父类原型的链接。'],
     notes: ['优先组合而非过深继承。', '私有字段可使用 #name 语法。'],
@@ -3108,7 +3108,7 @@ export const lessons: Lesson[] = [
   {
     id: 'J_07', title: 'Promise 组合与并发请求', navTitle: 'Promise 并发', category: '异步机制',
     path: '/javascript/j-7/promise-combinators', summary: '用 Promise.all 并发加载看板数据，并比较常用组合器语义。',
-    demo: J07PromiseCombinators, code: J07Code, language: 'vue',
+    demo: J07PromiseCombinators, code: J07Code, language: 'javascript',
     principle: 'Promise 表示未来完成或失败的结果；all、allSettled、race 与 any 用不同策略组合多个异步任务。',
     flow: ['同时启动互不依赖的任务。', '选择符合失败策略的组合器。', '统一处理结果与异常。'],
     notes: ['Promise.all 遇到首个拒绝即拒绝。', '并发任务仍需考虑接口限流。'],
@@ -3117,7 +3117,7 @@ export const lessons: Lesson[] = [
   {
     id: 'J_08', title: '事件循环、任务与微任务', navTitle: '事件循环', category: '异步机制',
     path: '/javascript/j-8/event-loop', summary: '观察同步代码、Promise 微任务和定时器任务的执行顺序。',
-    demo: J08EventLoop, code: J08Code, language: 'vue',
+    demo: J08EventLoop, code: J08Code, language: 'javascript',
     principle: '调用栈清空后，事件循环会先清空微任务队列，再进入下一个任务；渲染机会通常发生在任务之间。',
     flow: ['执行当前脚本中的同步代码。', '清空 Promise 等微任务。', '进入定时器等后续任务。'],
     notes: ['大量微任务也会阻塞渲染。', 'setTimeout(fn, 0) 不代表立即执行。'],
@@ -3126,7 +3126,7 @@ export const lessons: Lesson[] = [
   {
     id: 'J_09', title: 'ES Modules 与动态导入', navTitle: '模块化', category: '模块与浏览器',
     path: '/javascript/j-9/modules', summary: '掌握静态 import/export、模块作用域和 import() 按需加载。',
-    demo: J09Modules, code: J09Code, language: 'vue',
+    demo: J09Modules, code: J09Code, language: 'javascript',
     principle: 'ES Module 具有独立作用域和静态依赖结构，便于打包器分析；动态 import 返回 Promise，可把低频功能拆成独立资源。',
     flow: ['用具名或默认导出声明公共接口。', '静态导入首屏必需依赖。', '动态导入低频模块并处理加载状态。'],
     notes: ['模块默认使用严格模式。', '避免循环依赖中的初始化顺序问题。'],
@@ -3135,7 +3135,7 @@ export const lessons: Lesson[] = [
   {
     id: 'J_10', title: 'DOM 事件传播与事件委托', navTitle: '事件委托', category: '模块与浏览器',
     path: '/javascript/j-10/event-delegation', summary: '用课程列表理解捕获、冒泡、target 与 currentTarget。',
-    demo: J10EventDelegation, code: J10Code, language: 'vue',
+    demo: J10EventDelegation, code: J10Code, language: 'javascript',
     principle: 'DOM 事件经历捕获、目标和冒泡阶段；事件委托在稳定父节点监听冒泡事件，再通过 closest 判断真实交互目标。',
     flow: ['在父容器注册一个监听器。', '从 event.target 向上寻找匹配元素。', '读取 data 属性执行对应行为。'],
     notes: ['不是所有事件都会冒泡。', '用 closest 时要确认结果仍在委托容器内。'],
