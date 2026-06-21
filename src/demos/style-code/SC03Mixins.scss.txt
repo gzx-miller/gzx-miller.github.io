@@ -1,0 +1,11 @@
+@mixin button-size($padding-y, $padding-x) {
+  padding: $padding-y $padding-x;
+  @content;
+}
+
+.button {
+  @include button-size(0.625rem, 1rem) {
+    font-weight: 600;
+  }
+}
+// 可选参数优先使用 $name: value 的关键字调用，语义更稳。

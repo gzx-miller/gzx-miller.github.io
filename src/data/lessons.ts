@@ -7,6 +7,7 @@ const jsxCodeModules = import.meta.glob<string>('../demos/react-jsx/*.jsx', { qu
 const stateCodeModules = import.meta.glob<string>('../demos/state-react/*.js', { query: '?raw', import: 'default' })
 const jsCodeModules = import.meta.glob<string>('../demos/js-code/*.js', { query: '?raw', import: 'default' })
 const tsCodeModules = import.meta.glob<string>('../demos/ts-code/*.ts', { query: '?raw', import: 'default' })
+const styleCodeModules = import.meta.glob<string>('../demos/style-code/*', { query: '?raw', import: 'default' })
 
 function createDemo(name: string) {
   const loader = demoModules[`../demos/${name}.vue`]
@@ -30,7 +31,9 @@ function createCodeLoader(path: string) {
         ? jsCodeModules
         : path.startsWith('ts-code/')
           ? tsCodeModules
-          : vueCodeModules
+          : path.startsWith('style-code/')
+            ? styleCodeModules
+            : vueCodeModules
   const loader = modules[`../demos/${path}`]
 
   if (!loader) {
@@ -440,6 +443,38 @@ const S15Persistence = createDemo('S15Persistence')
 const S15Code = createCodeLoader('S15Persistence.vue')
 const S16Comparison = createDemo('S16Comparison')
 const S16Code = createCodeLoader('S16Comparison.vue')
+const TW01UtilityFirst = createDemo('TW01UtilityFirst')
+const TW01Code = createCodeLoader('style-code/TW01UtilityFirst.html')
+const TW02Responsive = createDemo('TW02Responsive')
+const TW02Code = createCodeLoader('style-code/TW02Responsive.html')
+const TW03StateVariants = createDemo('TW03StateVariants')
+const TW03Code = createCodeLoader('style-code/TW03StateVariants.html')
+const TW04DarkMode = createDemo('TW04DarkMode')
+const TW04Code = createCodeLoader('style-code/TW04DarkMode.html')
+const TW05ThemeTokens = createDemo('TW05ThemeTokens')
+const TW05Code = createCodeLoader('style-code/TW05ThemeTokens.css.txt')
+const TW06ArbitraryValues = createDemo('TW06ArbitraryValues')
+const TW06Code = createCodeLoader('style-code/TW06ArbitraryValues.html')
+const TW07Layout = createDemo('TW07Layout')
+const TW07Code = createCodeLoader('style-code/TW07Layout.html')
+const TW08ContainerQueries = createDemo('TW08ContainerQueries')
+const TW08Code = createCodeLoader('style-code/TW08ContainerQueries.html')
+const SC01VariablesNesting = createDemo('SC01VariablesNesting')
+const SC01Code = createCodeLoader('style-code/SC01VariablesNesting.scss.txt')
+const SC02Modules = createDemo('SC02Modules')
+const SC02Code = createCodeLoader('style-code/SC02Modules.scss.txt')
+const SC03Mixins = createDemo('SC03Mixins')
+const SC03Code = createCodeLoader('style-code/SC03Mixins.scss.txt')
+const SC04Functions = createDemo('SC04Functions')
+const SC04Code = createCodeLoader('style-code/SC04Functions.scss.txt')
+const SC05Collections = createDemo('SC05Collections')
+const SC05Code = createCodeLoader('style-code/SC05Collections.scss.txt')
+const SC06Selectors = createDemo('SC06Selectors')
+const SC06Code = createCodeLoader('style-code/SC06Selectors.scss.txt')
+const SC07Extend = createDemo('SC07Extend')
+const SC07Code = createCodeLoader('style-code/SC07Extend.scss.txt')
+const SC08Architecture = createDemo('SC08Architecture')
+const SC08Code = createCodeLoader('style-code/SC08Architecture.scss.txt')
 
 export interface KnowledgeCategory {
   id: string
@@ -475,6 +510,8 @@ export const knowledgeCategories: KnowledgeCategory[] = [
   { id: 'nuxt', name: 'Nuxt', path: '/nuxt', status: 'ready', intro: 'Nuxt 是基于 Vue 3 的全栈框架，内置文件路由、自动导入、SSR/SSG、服务端 API 等能力，让 Vue 项目从单页应用升级为全栈应用。', officialUrl: 'https://nuxt.com/' },
   { id: 'nodejs', name: 'Node.js', path: '/nodejs', status: 'ready', intro: 'Node.js 让 JavaScript 运行在服务端和工具链中。本分类覆盖模块、文件、事件、流、HTTP、进程、测试、安全与依赖管理。', officialUrl: 'https://nodejs.org/docs/latest/api/' },
   { id: 'engineering', name: '工程化', path: '/engineering', status: 'ready', intro: '工程化把代码质量、自动化测试、持续集成、性能、无障碍与安全发布串成可重复的交付流程，让项目在规模增长后仍然可靠。', officialUrl: 'https://vite.dev/' },
+  { id: 'tailwind-css', name: 'Tailwind CSS', path: '/tailwind-css', status: 'ready', intro: 'Tailwind CSS 以原子化工具类直接组合界面。本分类基于 v4 的 CSS-first 模型，覆盖响应式、状态变体、主题令牌、暗色模式、任意值与容器查询。', officialUrl: 'https://tailwindcss.com/docs' },
+  { id: 'sass', name: 'Sass', path: '/sass', status: 'ready', intro: 'Sass 为 CSS 增加模块、变量、嵌套、Mixin、函数与集合操作。本分类使用现代模块系统组织可维护样式，避开已弃用的 @import 工作流。', officialUrl: 'https://sass-lang.com/documentation/' },
   { id: 'react', name: 'React', path: '/react', status: 'ready', intro: 'React 以组件和声明式渲染组织用户界面。本分类基于 React 19.2，通过浏览器 ES Module 直接引用 React，不向当前 Vue3 工程安装 React 依赖。', officialUrl: 'https://react.dev/' },
   { id: 'langchain', name: 'LangChain', path: '/langchain', status: 'ready', intro: 'LangChain.js 是构建 LLM 应用的开源框架，提供模型调用、提示模板、链式调用、RAG 检索增强生成等核心能力，帮助开发者快速搭建智能应用。', officialUrl: 'https://js.langchain.com/' },
 ]
@@ -3844,5 +3881,149 @@ export const lessons: Lesson[] = [
     flow: ['列出评估维度和权重。', '对每个方案在各维度打分。', '用加权总分辅助决策并用原型验证。'],
     notes: ['评估维度应包括包体积、TypeScript、SSR、DevTools 和学习曲线。', '技术选型不应只看当前需求，还要考虑未来扩展。'],
     problem: '解决”面对众多状态管理方案如何系统化地做出最优选择”的问题。',
+  },
+  {
+    id: 'TW_01', title: '工具优先与原子类组合', navTitle: '工具优先', category: '核心理念',
+    path: '/tailwind-css/tw-1/utility-first', summary: '用课程卡片理解工具类如何映射声明，以及何时抽取组件。',
+    demo: TW01UtilityFirst, code: TW01Code, language: 'xml',
+    principle: 'Tailwind 工具类把有限的设计约束直接组合在标记中，减少命名和样式文件间跳转；可复用性主要由组件边界承担，而不是复制长串类名。',
+    flow: ['把视觉拆成布局、间距、颜色和排版。', '用单用途工具类逐层组合。', '重复业务结构抽成 Vue 组件并保留可配置 Props。'],
+    notes: ['不要仅为缩短 class 而滥用 @apply。', '样式共置不等于放弃组件抽象。'],
+    problem: '解决“如何用受约束的工具类快速构建一致界面，并控制重复”的问题。',
+  },
+  {
+    id: 'TW_02', title: '移动优先响应式设计', navTitle: '响应式断点', category: '响应与状态',
+    path: '/tailwind-css/tw-2/responsive', summary: '从单列到多列课程网格，掌握无前缀规则与断点变体。',
+    demo: TW02Responsive, code: TW02Code, language: 'xml',
+    principle: '响应式变体以 min-width 媒体查询逐步增强：无前缀工具覆盖最小尺寸，sm、md、lg 等前缀在对应断点及以上覆盖。',
+    flow: ['先完成窄屏基础布局。', '在内容开始拥挤时增加断点。', '同时检查间距、字号和交互目标尺寸。'],
+    notes: ['sm 表示小断点以上，不是“仅手机”。', '断点应服务内容，不要为每个设备型号定制。'],
+    problem: '解决“同一组件如何从手机到桌面逐步增强布局”的问题。',
+  },
+  {
+    id: 'TW_03', title: '状态、Group 与 Peer 变体', navTitle: '状态变体', category: '响应与状态',
+    path: '/tailwind-css/tw-3/state-variants', summary: '处理 hover、focus-visible、disabled、父级和同级联动状态。',
+    demo: TW03StateVariants, code: TW03Code, language: 'xml',
+    principle: '变体把条件编码为前缀并生成对应选择器；group 读取标记父级状态，peer 读取前置同级状态，结构关系决定规则能否命中。',
+    flow: ['先实现键盘可见的聚焦状态。', '为禁用和校验状态添加语义反馈。', '用 group/peer 表达必要的跨元素联动。'],
+    notes: ['不能只依赖 hover 传达信息。', 'peer 只能匹配其后的同级元素，这是 CSS 后续兄弟选择器的限制。'],
+    problem: '解决“复杂交互状态如何保持声明式、可访问且无需额外脚本”的问题。',
+  },
+  {
+    id: 'TW_04', title: '暗色模式与主题切换', navTitle: '暗色模式', category: '设计系统',
+    path: '/tailwind-css/tw-4/dark-mode', summary: '为学习进度卡设计成对色彩，并处理系统主题与手动偏好。',
+    demo: TW04DarkMode, code: TW04Code, language: 'xml',
+    principle: 'dark 变体为暗色环境生成覆盖规则；可以跟随 prefers-color-scheme，也可用自定义变体绑定祖先类或 data 属性实现手动切换。',
+    flow: ['为背景、文字和边框成对选色。', '决定跟随系统还是保存用户偏好。', '在首屏渲染前应用主题以避免闪烁。'],
+    notes: ['暗色主题不是简单反色。', '两套主题都要验证文本、焦点环和禁用态对比度。'],
+    problem: '解决“如何构建稳定、无闪烁且可访问的明暗主题”的问题。',
+  },
+  {
+    id: 'TW_05', title: 'v4 主题变量与设计令牌', navTitle: '主题令牌', category: '设计系统',
+    path: '/tailwind-css/tw-5/theme-tokens', summary: '用 @theme 定义品牌色、字体和圆角，并生成对应工具类。',
+    demo: TW05ThemeTokens, code: TW05Code, language: 'css',
+    principle: 'Tailwind v4 的 @theme 使用 CSS 变量命名空间定义设计令牌，编译器据此生成颜色、字体、断点等工具类，并允许令牌在运行时作为自定义属性复用。',
+    flow: ['从现有视觉规范提取语义令牌。', '放入正确的 @theme 命名空间。', '用生成的工具类替换散落数值。'],
+    notes: ['令牌应代表稳定系统约束，而非包装每个魔法数。', '普通运行时变量不需要放进 @theme。'],
+    problem: '解决“品牌规范如何成为可复用、可约束的 Tailwind 设计系统”的问题。',
+  },
+  {
+    id: 'TW_06', title: '任意值、任意属性与静态检测', navTitle: '任意值', category: '核心理念',
+    path: '/tailwind-css/tw-6/arbitrary-values', summary: '处理精确网格、流体间距和 data 状态，同时理解类名扫描边界。',
+    demo: TW06ArbitraryValues, code: TW06Code, language: 'xml',
+    principle: '方括号语法允许一次性值、属性和变体进入工具类体系；构建器把源码视为纯文本检测候选类，因此运行时拼接的不完整类名不会可靠生成 CSS。',
+    flow: ['确认数值确实不属于设计令牌。', '以完整静态类名写入源码。', '重复出现后提升为主题令牌或受控映射。'],
+    notes: ['不要写 bg-${color}-600 这类碎片拼接。', '任意值过多通常意味着设计约束尚未收敛。'],
+    problem: '解决“如何表达特殊 CSS 约束，又不破坏构建期生成与设计一致性”的问题。',
+  },
+  {
+    id: 'TW_07', title: 'Flex、Grid 与现代布局', navTitle: 'Flex 与 Grid', category: '布局进阶',
+    path: '/tailwind-css/tw-7/layout', summary: '用筛选侧栏和课程网格选择一维 Flex 与二维 Grid。',
+    demo: TW07Layout, code: TW07Code, language: 'xml',
+    principle: 'Flex 负责主轴上的一维分配和对齐，Grid 负责行列二维轨道；minmax(0, 1fr) 可避免内容的最小尺寸把弹性轨道撑破。',
+    flow: ['判断布局是一维流还是二维轨道。', '建立尺寸、换行和溢出规则。', '最后添加响应式覆盖与视觉间距。'],
+    notes: ['不要用大量 margin 模拟布局系统。', '遇到长文本时检查 min-w-0 与溢出策略。'],
+    problem: '解决“复杂页面骨架该选择 Flex 还是 Grid，以及如何避免内容溢出”的问题。',
+  },
+  {
+    id: 'TW_08', title: '容器查询与可复用组件', navTitle: '容器查询', category: '布局进阶',
+    path: '/tailwind-css/tw-8/container-queries', summary: '让同一课程卡根据所在容器宽度切换结构，而非依赖视口。',
+    demo: TW08ContainerQueries, code: TW08Code, language: 'xml',
+    principle: '@container 在父级建立查询上下文，容器尺寸变体根据最近匹配容器切换子元素工具类，使组件在侧栏、弹窗和主内容区都能自适应。',
+    flow: ['在承载组件的父级建立容器。', '以内容临界点选择容器尺寸变体。', '嵌套场景用命名容器消除歧义。'],
+    notes: ['容器查询补充而非取代视口媒体查询。', '查询容器必须满足相应 containment 条件。'],
+    problem: '解决“可复用组件如何根据实际可用空间独立响应”的问题。',
+  },
+  {
+    id: 'SC_01', title: '变量、作用域与安全嵌套', navTitle: '变量与嵌套', category: '语言基础',
+    path: '/sass/sc-1/variables-nesting', summary: '为课程卡提取编译期变量，并建立浅层、可维护的选择器结构。',
+    demo: SC01VariablesNesting, code: SC01Code, language: 'scss',
+    principle: 'Sass 变量在编译时参与计算并受词法作用域约束；嵌套表达选择器上下文，但输出仍是普通 CSS，层级越深通常特异性和结构耦合越高。',
+    flow: ['提取编译期稳定的颜色和尺寸。', '让嵌套只表达组件直接关系。', '运行时主题值保留为 CSS 自定义属性。'],
+    notes: ['Sass 变量不会像 CSS 变量一样在浏览器运行时更新。', '避免按完整 DOM 树逐层嵌套。'],
+    problem: '解决“何时使用 Sass 变量，以及如何避免嵌套造成选择器失控”的问题。',
+  },
+  {
+    id: 'SC_02', title: '模块系统：@use 与 @forward', navTitle: '模块系统', category: '模块复用',
+    path: '/sass/sc-2/modules', summary: '拆分令牌和组件模块，以命名空间与公共 API 管理依赖。',
+    demo: SC02Modules, code: SC02Code, language: 'scss',
+    principle: '@use 只加载模块一次并通过命名空间访问成员；@forward 重新导出经过筛选或配置的成员，用于构造样式库公共 API。',
+    flow: ['按职责拆分 partial 文件。', '消费方通过 @use 显式声明依赖。', '聚合入口用 @forward 控制公开成员。'],
+    notes: ['@import 已弃用，新代码使用模块系统。', 'as * 会移除命名空间，只有在成员明确且无冲突时使用。'],
+    problem: '解决“多文件样式如何避免全局污染、重复输出和隐式依赖”的问题。',
+  },
+  {
+    id: 'SC_03', title: 'Mixin、参数与 @content', navTitle: 'Mixin', category: '模块复用',
+    path: '/sass/sc-3/mixins', summary: '封装按钮尺寸规则，通过参数和内容块保留调用方扩展能力。',
+    demo: SC03Mixins, code: SC03Code, language: 'scss',
+    principle: '@mixin 定义可带位置参数、关键字参数和 @content 内容块的声明生成器，@include 在调用位置展开最终 CSS。',
+    flow: ['确认复用目标是一组声明而不是一个值。', '为变化维度设计具名参数与默认值。', '需要调用方注入规则时提供 @content。'],
+    notes: ['Mixin 每次 include 都会复制声明，需留意产物体积。', '简单复用优先普通类或 CSS 自定义属性。'],
+    problem: '解决“可配置样式片段如何复用而不复制维护逻辑”的问题。',
+  },
+  {
+    id: 'SC_04', title: '函数、控制流与内置模块', navTitle: '函数与控制流', category: '编程能力',
+    path: '/sass/sc-4/functions', summary: '编写间距函数并用 sass:math、sass:color 完成可验证计算。',
+    demo: SC04Functions, code: SC04Code, language: 'scss',
+    principle: '@function 返回 Sass 值并可使用 @if、@each 等控制流；现代内置能力通过 sass:* 模块提供，名称与依赖来源更清晰。',
+    flow: ['明确函数输入单位和返回类型。', '用 @error 拒绝非法参数。', '通过模块化内置函数执行数学或颜色转换。'],
+    notes: ['函数不应产生 CSS 声明。', '除法使用 math.div，避免已弃用的斜杠除法语义。'],
+    problem: '解决“设计计算如何集中、校验并在编译期复用”的问题。',
+  },
+  {
+    id: 'SC_05', title: 'Map、List 与批量生成', navTitle: '集合与循环', category: '编程能力',
+    path: '/sass/sc-5/collections', summary: '从状态颜色 Map 批量生成通知样式，掌握集合 API 与 @each。',
+    demo: SC05Collections, code: SC05Code, language: 'scss',
+    principle: 'Sass Map 表达键值配置，List 表达有序数据；@each 遍历集合生成规则，sass:map 与 sass:list 模块负责查询和转换。',
+    flow: ['用 Map 建模有限且稳定的设计配置。', '通过 @each 解构键和值。', '对生成的选择器数量和最终体积做审查。'],
+    notes: ['不要用循环生成大量实际不会使用的组合。', '业务数据不应进入 Sass，样式配置才适合集合。'],
+    problem: '解决“有限设计变体如何由单一配置源批量生成”的问题。',
+  },
+  {
+    id: 'SC_06', title: '父选择器、插值与选择器构造', navTitle: '选择器构造', category: '语言基础',
+    path: '/sass/sc-6/selectors', summary: '使用 & 表达状态和 BEM 后缀，并理解插值的能力与维护成本。',
+    demo: SC06Selectors, code: SC06Code, language: 'scss',
+    principle: '& 表示当前外层复合选择器，可放入伪类、后缀和上下文位置；插值 #{} 把 Sass 表达式嵌入选择器、属性名或字符串。',
+    flow: ['用 & 连接组件状态与修饰符。', '只在确需生成标识符时使用插值。', '检查编译后的选择器是否简短且可预测。'],
+    notes: ['& 的结果取决于完整外层选择器。', '动态选择器会降低全文搜索、静态分析和重构能力。'],
+    problem: '解决“如何在不重复组件类名的前提下构造状态与修饰选择器”的问题。',
+  },
+  {
+    id: 'SC_07', title: '占位选择器与 @extend 边界', navTitle: '@extend', category: '模块复用',
+    path: '/sass/sc-7/extend', summary: '用 %placeholder 合并同类通知选择器，并与 Mixin 的复制语义对比。',
+    demo: SC07Extend, code: SC07Code, language: 'scss',
+    principle: '%placeholder 自身不输出 CSS，只有被 @extend 时才参与选择器合并；extend 表达“这个选择器属于同一语义集合”，Mixin 则复制声明。',
+    flow: ['确认扩展方确实是被扩展类型的一种。', '优先扩展占位选择器而非具体类。', '检查编译结果，避免跨模块形成巨大选择器列表。'],
+    notes: ['@extend 不能跨 @media 上下文任意工作。', '只想共享声明时 Mixin 通常更直观。'],
+    problem: '解决“何时用选择器合并复用样式，以及何时应该复制声明”的问题。',
+  },
+  {
+    id: 'SC_08', title: '样式架构、构建与迁移', navTitle: '架构与构建', category: '工程架构',
+    path: '/sass/sc-8/architecture', summary: '组织 abstracts、components、pages 和入口文件，并建立现代构建门禁。',
+    demo: SC08Architecture, code: SC08Code, language: 'scss',
+    principle: 'Sass 工程以模块依赖图而非隐式全局顺序组织：入口只装配模块，@forward 定义公共 API，编译器负责压缩、Source Map 与弃用诊断。',
+    flow: ['按令牌、工具、组件和页面职责拆分。', '建立少量明确入口与单向依赖。', '在 CI 编译并把弃用警告纳入迁移计划。'],
+    notes: ['不要照搬目录模板，规模小的项目保持扁平更好。', '迁移旧项目时先运行 Sass Migrator，再逐步收紧模块边界。'],
+    problem: '解决“样式规模增长后如何保持依赖清晰、产物可控并持续升级”的问题。',
   },
 ]

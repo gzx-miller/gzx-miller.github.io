@@ -1,0 +1,9 @@
+$accent: #c45125;
+$card-radius: 0.75rem;
+.course-card {
+  border-left: 4px solid $accent;
+  border-radius: $card-radius;
+  &__title { color: $accent; }
+  &:hover { box-shadow: 0 8px 24px rgb(90 40 15 / 12%); }
+}
+// 运行时切换的主题值优先使用 CSS 自定义属性，而不是 Sass 变量。

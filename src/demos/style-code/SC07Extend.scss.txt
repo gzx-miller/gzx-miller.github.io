@@ -1,0 +1,12 @@
+%notice-base {
+  padding: 0.75rem;
+  border: 1px solid;
+  border-radius: 0.5rem;
+}
+
+.notice-info {
+  @extend %notice-base;
+  color: #225b88;
+  background: #e5f0fb;
+}
+// @extend 表示“是同一种语义类型”，Mixin 表示“复制一组声明”。

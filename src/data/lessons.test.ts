@@ -11,6 +11,8 @@ describe('课程注册表', () => {
       { id: 'engineering', lessonCount: 16, groupCount: 5 },
       { id: 'langchain', lessonCount: 18, groupCount: 11 },
       { id: 'element-plus', lessonCount: 20, groupCount: 7 },
+      { id: 'tailwind-css', lessonCount: 8, groupCount: 4 },
+      { id: 'sass', lessonCount: 8, groupCount: 4 },
     ]
 
     for (const expected of expectedCurriculum) {
@@ -51,7 +53,7 @@ describe('课程注册表', () => {
     const sources = await Promise.all(lessons.map((lesson) => lesson.code()))
 
     for (const [index, source] of sources.entries()) {
-      expect(source.trim().length).toBeGreaterThan(80)
+      expect(source.trim().length, `${lessons[index].id} 的源码为空或过短`).toBeGreaterThan(80)
 
       if (lessons[index].language === 'vue') {
         expect(source).toContain('<template>')

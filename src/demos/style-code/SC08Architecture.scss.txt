@@ -1,0 +1,13 @@
+// styles/_index.scss：库的公共 API
+@forward "abstracts/tokens" show $brand, $space-unit;
+@forward "abstracts/mixins";
+
+// styles/app.scss：应用入口只负责装配
+@use "index" as design;
+@use "base/reset";
+@use "components/button";
+@use "components/card";
+@use "pages/home";
+
+// sass --style=compressed --source-map styles/app.scss dist/app.css
+// @import 已弃用；新项目使用 @use / @forward。
