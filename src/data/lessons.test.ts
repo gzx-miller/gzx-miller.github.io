@@ -7,6 +7,7 @@ describe('课程注册表', () => {
       { id: 'javascript', lessonCount: 10, groupCount: 5 },
       { id: 'nodejs', lessonCount: 12, groupCount: 6 },
       { id: 'state-management', lessonCount: 10, groupCount: 6 },
+      { id: 'engineering', lessonCount: 12, groupCount: 4 },
     ]
 
     for (const expected of expectedCurriculum) {

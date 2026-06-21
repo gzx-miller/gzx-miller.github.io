@@ -270,6 +270,14 @@ const G07Accessibility = createDemo('G07Accessibility')
 const G07Code = createCodeLoader('G07Accessibility.vue')
 const G08SecurityDelivery = createDemo('G08SecurityDelivery')
 const G08Code = createCodeLoader('G08SecurityDelivery.vue')
+const G09BuildPlugin = createDemo('G09BuildPlugin')
+const G09Code = createCodeLoader('G09BuildPlugin.vue')
+const G10E2eTesting = createDemo('G10E2eTesting')
+const G10Code = createCodeLoader('G10E2eTesting.vue')
+const G11BundleAnalysis = createDemo('G11BundleAnalysis')
+const G11Code = createCodeLoader('G11BundleAnalysis.vue')
+const G12Monorepo = createDemo('G12Monorepo')
+const G12Code = createCodeLoader('G12Monorepo.vue')
 const J01TypesEquality = createDemo('J01TypesEquality')
 const J01Code = createCodeLoader('J01TypesEquality.vue')
 const J02Closure = createDemo('J02Closure')
@@ -2999,7 +3007,43 @@ export const lessons: Lesson[] = [
     principle: '安全发布需要最小化客户端暴露、限制资源来源、持续修复依赖漏洞，并为带内容哈希的静态资源设置长期缓存。',
     flow: ['构建前扫描依赖和公开配置。', '部署时配置安全响应头。', 'HTML 短缓存、哈希资源长期不可变缓存。'],
     notes: ['CSP 应先报告再逐步收紧。', '前端校验不能替代服务端授权。'],
-    problem: '解决“静态站点发布时如何兼顾安全策略与缓存性能”的问题。',
+    problem: '解决”静态站点发布时如何兼顾安全策略与缓存性能”的问题。',
+  },
+  {
+    id: 'G_09', title: 'Vite 构建插件与钩子机制', navTitle: '构建插件', category: '构建基础',
+    path: '/engineering/g-9/build-plugin', summary: '用自定义 Vite 插件展示构建钩子、资源转换和插件执行顺序。',
+    demo: G09BuildPlugin, code: G09Code, language: 'vue',
+    principle: 'Vite 基于 Rollup 插件体系，通过 resolveId、transform、generateBundle 等钩子介入构建流程；插件按注册顺序执行，每个钩子负责不同阶段的资源转换。',
+    flow: ['在 vite.config.ts 中注册插件并声明需要的钩子。', 'transform 钩子逐个文件处理内容替换和注入。', 'generateBundle 钩子在产物输出前执行最终优化。'],
+    notes: ['插件应尽量只做一件事，避免在单个插件中混合多种职责。', 'transform 返回值可以是字符串或 { code, map } 对象，后者保留 source map。'],
+    problem: '解决”如何在构建流程中介入自定义转换逻辑，以及不同钩子各自负责什么阶段”的问题。',
+  },
+  {
+    id: 'G_10', title: '端到端测试与流程编排', navTitle: 'E2E 测试', category: '质量保障',
+    path: '/engineering/g-10/e2e-testing', summary: '以报名表单流程为例，展示端到端测试的步骤编排、断言和失败定位。',
+    demo: G10E2eTesting, code: G10Code, language: 'vue',
+    principle: '端到端测试从用户视角验证完整业务流程，通过可访问选择器定位元素、编排操作步骤、断言可见结果，失败时自动截图并精确定位出错步骤。',
+    flow: ['用 getByRole、getByLabel 等可访问查询定位元素。', '按用户操作顺序编排点击、输入和导航步骤。', '断言页面呈现的文本、状态和可访问角色。'],
+    notes: ['优先使用用户可见的选择器，避免依赖 CSS 类名或 data 属性。', '测试数据应独立，每次运行前重置状态以避免用例间相互影响。', '失败截图和 trace 是定位问题的关键产物，CI 中应保留这些文件。'],
+    problem: '解决”如何从用户视角验证完整业务流程，并在失败时快速定位问题”的问题。',
+  },
+  {
+    id: 'G_11', title: '构建产物分析与拆分策略', navTitle: '产物分析', category: '用户体验',
+    path: '/engineering/g-11/bundle-analysis', summary: '用可视化树状图分析构建产物组成，定位体积热点并制定拆分策略。',
+    demo: G11BundleAnalysis, code: G11Code, language: 'vue',
+    principle: '构建产物分析把抽象的”打包体积”变成可视化的模块树，帮助定位体积热点；超过阈值的 chunk 可通过动态导入、按需加载或提取公共模块来拆分。',
+    flow: ['使用 rollup-plugin-visualizer 或 webpack-bundle-analyzer 生成产物报告。', '按模块类型分类观察 vendor、app 和资源的体积占比。', '对超出预算的模块制定拆分或替换方案。'],
+    notes: ['vendor 体积优先检查是否有可替换的轻量方案。', 'tree-shaking 依赖 ESM 导出，混用 CommonJS 会导致整个模块被打包。', '动态导入让路由级组件按需加载，减少首屏所需的初始包体积。'],
+    problem: '解决”构建产物为什么越来越大，以及如何系统性地控制体积”的问题。',
+  },
+  {
+    id: 'G_12', title: 'Monorepo 工作区与多包管理', navTitle: 'Monorepo', category: '构建基础',
+    path: '/engineering/g-12/monorepo', summary: '用 pnpm workspace 组织多包项目，展示依赖拓扑、版本同步和独立构建。',
+    demo: G12Monorepo, code: G12Code, language: 'vue',
+    principle: 'Monorepo 通过 workspace 协议把多个包放在同一仓库，共享依赖和工具链；构建按依赖拓扑排序执行，版本管理借助 changesets 实现独立发版。',
+    flow: ['在根目录 pnpm-workspace.yaml 声明 packages 匹配规则。', '各包通过 workspace: 协议引用内部依赖，pnpm 自动链接。', '构建工具按拓扑顺序编译，确保被依赖包先于依赖方构建。'],
+    notes: ['workspace 协议只在开发环境生效，发布后自动替换为具体版本号。', '修改一个包后，依赖它的所有包都需要重新构建和测试。', '使用 changesets 管理版本，每个变更生成一个 .md 描述文件，发版时自动计算版本号。'],
+    problem: '解决”多包项目如何共享代码、统一版本并按依赖顺序可靠构建”的问题。',
   },
   {
     id: 'J_01', title: '值、类型转换与严格相等', navTitle: '类型与相等', category: '语言基础',

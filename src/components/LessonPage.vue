@@ -71,6 +71,16 @@ const lessonGroups = computed(() => {
   return Array.from(groups, ([title, groupLessons]) => ({ title, lessons: groupLessons }))
 })
 
+function getLessonGroupIndex(lessonId: string): number {
+  let offset = 0
+  for (const group of lessonGroups.value) {
+    const idx = group.lessons.findIndex((l) => l.id === lessonId)
+    if (idx !== -1) return offset + idx
+    offset += group.lessons.length
+  }
+  return 0
+}
+
 const currentLesson = computed(() => {
   if (route.path.startsWith('/vue/k-12/routing/')) {
     return lessons.find((lesson) => lesson.id === 'K_12') ?? lessons[0]
@@ -102,9 +112,8 @@ const nextLesson = computed(() => {
   return nextIndex > 0 && nextIndex < filteredLessons.value.length ? filteredLessons.value[nextIndex] : null
 })
 
-function formatLessonId(id: string) {
-  const lessonNumber = id.match(/^[A-Z]_(\d+)$/)?.[1]
-  return lessonNumber ? `🌰${Number(lessonNumber)}` : id
+function formatLessonId(index: number) {
+  return `🌰${index + 1}`
 }
 
 function toggleSidebar() {
@@ -251,11 +260,11 @@ useSeoMeta({
               :to="lesson.path"
               class="lesson-link"
               :class="{ active: lesson.id === currentLesson.id }"
-              :aria-label="`${formatLessonId(lesson.id)} ${lesson.navTitle}`"
+              :aria-label="`${formatLessonId(getLessonGroupIndex(lesson.id))} ${lesson.navTitle}`"
               :aria-current="lesson.id === currentLesson.id ? 'page' : undefined"
               :title="lesson.navTitle"
             >
-              <span>{{ formatLessonId(lesson.id) }}</span>
+              <span>{{ formatLessonId(getLessonGroupIndex(lesson.id)) }}</span>
               <strong>{{ lesson.navTitle }}</strong>
             </NuxtLink>
           </section>
@@ -277,7 +286,7 @@ useSeoMeta({
         </nav>
         <header class="lesson-header">
           <div class="lesson-copy">
-            <p class="eyebrow">{{ formatLessonId(currentLesson.id) }} · {{ currentLesson.category }}</p>
+            <p class="eyebrow">{{ formatLessonId(getLessonGroupIndex(currentLesson.id)) }} · {{ currentLesson.category }}</p>
             <h1>{{ currentLesson.title }}</h1>
             <p>{{ currentLesson.summary }}</p>
           </div>
@@ -344,11 +353,11 @@ useSeoMeta({
             <div class="lesson-pager">
               <NuxtLink v-if="previousLesson" class="previous-lesson-link" :to="previousLesson.path">
                 <span>上一颗</span>
-                <strong>{{ formatLessonId(previousLesson.id) }} {{ previousLesson.navTitle }}</strong>
+                <strong>{{ formatLessonId(getLessonGroupIndex(previousLesson.id)) }} {{ previousLesson.navTitle }}</strong>
               </NuxtLink>
               <NuxtLink v-if="nextLesson" class="next-lesson-link" :to="nextLesson.path">
                 <span>下一颗</span>
-                <strong>{{ formatLessonId(nextLesson.id) }} {{ nextLesson.navTitle }}</strong>
+                <strong>{{ formatLessonId(getLessonGroupIndex(nextLesson.id)) }} {{ nextLesson.navTitle }}</strong>
               </NuxtLink>
               <span v-else class="category-complete">✓ 本分类已学完</span>
             </div>
