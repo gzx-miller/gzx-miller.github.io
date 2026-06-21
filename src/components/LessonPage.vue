@@ -6,8 +6,7 @@ import CodeBlock from './CodeBlock.vue'
 
 const route = useRoute()
 
-const isSidebarTemporarilyExpanded = ref(false)
-const lastKnownWidth = ref(0)
+const isSidebarTemporarilyExpanded = useState('sidebarExpanded', () => true)
 const lessonPageRef = ref<HTMLElement | null>(null)
 const lessonSearchInput = useTemplateRef<HTMLInputElement>('lessonSearchInput')
 const searchQuery = ref('')
@@ -120,14 +119,6 @@ function toggleSidebar() {
   isSidebarTemporarilyExpanded.value = !isSidebarTemporarilyExpanded.value
 }
 
-function handleResize() {
-  const newWidth = window.innerWidth
-  if (newWidth <= 520 && lastKnownWidth.value > 520) {
-    isSidebarTemporarilyExpanded.value = false
-  }
-  lastKnownWidth.value = newWidth
-}
-
 async function handleGlobalKeydown(event: KeyboardEvent) {
   const target = event.target as HTMLElement | null
   const isTyping = target?.matches('input, textarea, select, [contenteditable="true"]')
@@ -138,16 +129,18 @@ async function handleGlobalKeydown(event: KeyboardEvent) {
     await nextTick()
     lessonSearchInput.value?.focus()
   }
+
+  if (event.key === 'Escape' && isSidebarTemporarilyExpanded.value) {
+    isSidebarTemporarilyExpanded.value = false
+    lessonSearchInput.value?.blur()
+  }
 }
 
 onMounted(() => {
-  lastKnownWidth.value = window.innerWidth
-  window.addEventListener('resize', handleResize)
   window.addEventListener('keydown', handleGlobalKeydown)
 })
 
 onUnmounted(() => {
-  window.removeEventListener('resize', handleResize)
   window.removeEventListener('keydown', handleGlobalKeydown)
 })
 
@@ -158,9 +151,6 @@ watch(activeKnowledge, () => {
 watch(
   () => route.fullPath,
   async () => {
-    if (window.innerWidth <= 520) {
-      isSidebarTemporarilyExpanded.value = false
-    }
     await nextTick()
     lessonPageRef.value?.scrollTo({ top: 0, left: 0 })
     lessonPageRef.value?.focus({ preventScroll: true })
