@@ -507,6 +507,46 @@ const SC15CustomProperties = createDemo('SC15CustomProperties')
 const SC15Code = createCodeLoader('style-code/SC15CustomProperties.scss.txt')
 const SC16Diagnostics = createDemo('SC16Diagnostics')
 const SC16Code = createCodeLoader('style-code/SC16Diagnostics.scss.txt')
+const C01Selectors = createDemo('C01Selectors')
+const C01Code = createCodeLoader('C01Selectors.vue')
+const C02BoxModel = createDemo('C02BoxModel')
+const C02Code = createCodeLoader('C02BoxModel.vue')
+const C03Flexbox = createDemo('C03Flexbox')
+const C03Code = createCodeLoader('C03Flexbox.vue')
+const C04Grid = createDemo('C04Grid')
+const C04Code = createCodeLoader('C04Grid.vue')
+const C05Position = createDemo('C05Position')
+const C05Code = createCodeLoader('C05Position.vue')
+const C06Cascade = createDemo('C06Cascade')
+const C06Code = createCodeLoader('C06Cascade.vue')
+const C07Variables = createDemo('C07Variables')
+const C07Code = createCodeLoader('C07Variables.vue')
+const C08Transition = createDemo('C08Transition')
+const C08Code = createCodeLoader('C08Transition.vue')
+const C09MediaQuery = createDemo('C09MediaQuery')
+const C09Code = createCodeLoader('C09MediaQuery.vue')
+const C10Gradient = createDemo('C10Gradient')
+const C10Code = createCodeLoader('C10Gradient.vue')
+const C11Filter = createDemo('C11Filter')
+const C11Code = createCodeLoader('C11Filter.vue')
+const C12MathFunctions = createDemo('C12MathFunctions')
+const C12Code = createCodeLoader('C12MathFunctions.vue')
+const C13ViewportUnits = createDemo('C13ViewportUnits')
+const C13Code = createCodeLoader('C13ViewportUnits.vue')
+const C14ClipPath = createDemo('C14ClipPath')
+const C14Code = createCodeLoader('C14ClipPath.vue')
+const C15LogicalProperties = createDemo('C15LogicalProperties')
+const C15Code = createCodeLoader('C15LogicalProperties.vue')
+const C16ContainerQuery = createDemo('C16ContainerQuery')
+const C16Code = createCodeLoader('C16ContainerQuery.vue')
+const C17StackingContext = createDemo('C17StackingContext')
+const C17Code = createCodeLoader('C17StackingContext.vue')
+const C18FormattingContext = createDemo('C18FormattingContext')
+const C18Code = createCodeLoader('C18FormattingContext.vue')
+const C19BEM = createDemo('C19BEM')
+const C19Code = createCodeLoader('C19BEM.vue')
+const C20Performance = createDemo('C20Performance')
+const C20Code = createCodeLoader('C20Performance.vue')
 
 export interface KnowledgeCategory {
   id: string
@@ -544,6 +584,7 @@ export const knowledgeCategories: KnowledgeCategory[] = [
   { id: 'engineering', name: '工程化', path: '/engineering', status: 'ready', intro: '工程化把代码质量、自动化测试、持续集成、性能、无障碍与安全发布串成可重复的交付流程，让项目在规模增长后仍然可靠。', officialUrl: 'https://vite.dev/' },
   { id: 'tailwind-css', name: 'Tailwind CSS', path: '/tailwind-css', status: 'ready', intro: 'Tailwind CSS 以原子化工具类直接组合界面。本分类基于 v4 的 CSS-first 模型，覆盖响应式、状态变体、主题令牌、暗色模式、任意值与容器查询。', officialUrl: 'https://tailwindcss.com/docs' },
   { id: 'sass', name: 'Sass', path: '/sass', status: 'ready', intro: 'Sass 为 CSS 增加模块、变量、嵌套、Mixin、函数与集合操作。本分类使用现代模块系统组织可维护样式，避开已弃用的 @import 工作流。', officialUrl: 'https://sass-lang.com/documentation/' },
+  { id: 'css', name: 'CSS', path: '/css', status: 'ready', intro: 'CSS 是 Web 样式的核心语言。本分类从选择器、盒模型、布局系统出发，逐步覆盖定位、层叠、变量、动画、响应式、裁剪、逻辑属性、容器查询与性能优化。', officialUrl: 'https://developer.mozilla.org/zh-CN/docs/Web/CSS' },
   { id: 'react', name: 'React', path: '/react', status: 'ready', intro: 'React 以组件和声明式渲染组织用户界面。本分类基于 React 19.2，通过浏览器 ES Module 直接引用 React，不向当前 Vue3 工程安装 React 依赖。', officialUrl: 'https://react.dev/' },
   { id: 'langchain', name: 'LangChain', path: '/langchain', status: 'ready', intro: 'LangChain.js 是构建 LLM 应用的开源框架，提供模型调用、提示模板、链式调用、RAG 检索增强生成等核心能力，帮助开发者快速搭建智能应用。', officialUrl: 'https://js.langchain.com/' },
 ]
@@ -3111,7 +3152,7 @@ export const lessons: Lesson[] = [
     principle: 'TypeScript 会根据初始值推导变量类型；当值可能为空、类型会变化或公共 API 需要稳定契约时，应补充显式类型标注。',
     flow: ['先让编译器从确定的初始值推导类型。', '遇到联合状态或空值时显式声明。', '在编辑器和类型检查阶段发现不合法赋值。'],
     notes: ['避免给所有局部变量重复写显而易见的类型。', '不要用 any 绕过建模问题。'],
-    problem: '解决“哪些类型可以交给编译器推导、哪些边界必须显式声明”的问题。',
+    problem: '解决"哪些类型可以交给编译器推导、哪些边界必须显式声明"的问题。',
   },
   {
     id: 'T_02', title: '联合类型与控制流收窄', navTitle: '联合与收窄', category: '类型基础',
@@ -3120,7 +3161,7 @@ export const lessons: Lesson[] = [
     principle: '联合类型列出值的有限可能，TypeScript 会根据相等判断、typeof、in 等运行时检查逐步收窄到具体成员。',
     flow: ['用字面量联合定义合法状态。', '在条件分支中判断当前状态。', '收窄后执行该状态专属的业务逻辑。'],
     notes: ['状态值应来自一个统一类型。', '穷尽检查能在新增状态时提醒遗漏分支。'],
-    problem: '解决“如何让非法业务状态无法被创建，并安全处理不同分支”的问题。',
+    problem: '解决"如何让非法业务状态无法被创建，并安全处理不同分支"的问题。',
   },
   {
     id: 'T_03', title: '对象类型与领域建模', navTitle: '对象建模', category: '类型基础',
@@ -3129,7 +3170,7 @@ export const lessons: Lesson[] = [
     principle: 'interface 适合表达可扩展的对象契约，type 能组合联合、交叉和其他类型表达式；两者都遵循结构化类型系统。',
     flow: ['识别领域对象的稳定字段。', '声明字段类型和有限枚举值。', '让响应式状态遵守同一份业务契约。'],
     notes: ['公共模型应使用业务语言命名。', '可选字段只用于数据确实可能缺失的场景。'],
-    problem: '解决“如何把接口返回和业务对象建模成可维护类型”的问题。',
+    problem: '解决"如何把接口返回和业务对象建模成可维护类型"的问题。',
   },
   {
     id: 'T_04', title: '泛型：复用类型关系', navTitle: '泛型', category: '类型进阶',
@@ -3138,7 +3179,7 @@ export const lessons: Lesson[] = [
     principle: '泛型把类型作为参数传递，使函数和容器既能复用实现，又能保留输入与输出之间的精确关系。',
     flow: ['找出实现中需要变化的类型。', '用类型参数表达输入输出关系。', '调用时由实参推导具体类型。'],
     notes: ['类型参数名应表达角色。', '仅使用一次且没有关系的类型参数通常没有价值。'],
-    problem: '解决“如何复用 API、列表和工具函数而不丢失类型信息”的问题。',
+    problem: '解决"如何复用 API、列表和工具函数而不丢失类型信息"的问题。',
   },
   {
     id: 'T_05', title: 'keyof 与索引访问类型', navTitle: 'keyof', category: '类型进阶',
@@ -3147,7 +3188,7 @@ export const lessons: Lesson[] = [
     principle: 'keyof 从对象类型得到键的联合，T[K] 根据键取得对应值类型，两者结合可编写安全的动态属性访问。',
     flow: ['从对象模型提取合法键。', '让函数参数受键联合约束。', '通过索引访问获得匹配的值类型。'],
     notes: ['Object.keys 默认返回 string[]，必要时需要安全封装。', '不要用宽泛 string 索引绕过键约束。'],
-    problem: '解决“动态访问对象属性时如何避免键名拼写错误”的问题。',
+    problem: '解决"动态访问对象属性时如何避免键名拼写错误"的问题。',
   },
   {
     id: 'T_06', title: '工具类型与更新模型', navTitle: '工具类型', category: '类型进阶',
@@ -3156,7 +3197,7 @@ export const lessons: Lesson[] = [
     principle: '内置工具类型通过映射和条件类型从已有模型派生新契约，减少新增、详情、更新模型之间的重复。',
     flow: ['先定义完整领域模型。', '按操作语义挑选或排除字段。', '用 Partial 将更新字段变为可选。'],
     notes: ['派生类型应保持来源清晰。', '深层对象的 Partial 不会自动递归。'],
-    problem: '解决“创建、编辑和接口响应类型重复且容易漂移”的问题。',
+    problem: '解决"创建、编辑和接口响应类型重复且容易漂移"的问题。',
   },
   {
     id: 'T_07', title: 'unknown 与自定义类型守卫', navTitle: '安全边界', category: '安全边界',
@@ -3165,7 +3206,7 @@ export const lessons: Lesson[] = [
     principle: '外部输入在验证前应视为 unknown；类型守卫同时执行运行时检查，并向编译器证明检查后的精确类型。',
     flow: ['把网络或用户输入接收为 unknown。', '检查对象、字段与基本类型。', '守卫通过后再进入业务逻辑。'],
     notes: ['类型断言不会产生运行时校验。', '复杂结构可使用 schema 校验库。'],
-    problem: '解决“接口或本地数据不可信时，如何避免错误断言导致运行时崩溃”的问题。',
+    problem: '解决"接口或本地数据不可信时，如何避免错误断言导致运行时崩溃"的问题。',
   },
   {
     id: 'T_08', title: 'Vue 3 组件类型实践', navTitle: 'Vue 类型', category: '框架实践',
@@ -3174,7 +3215,7 @@ export const lessons: Lesson[] = [
     principle: 'Vue 3 的宏和组合式 API 能从泛型声明推导模板类型；DOM 模板引用还需要处理挂载前的 null 状态。',
     flow: ['为业务状态声明接口。', '用泛型约束 Props、Emits 或模板引用。', '在访问 DOM 或子组件前处理空值。'],
     notes: ['优先使用类型化的 defineProps 和 defineEmits。', '避免把组件实例直接声明为 any。'],
-    problem: '解决“如何让 Vue 组件的输入、输出和模板引用获得完整类型检查”的问题。',
+    problem: '解决"如何让 Vue 组件的输入、输出和模板引用获得完整类型检查"的问题。',
   },
   {
     id: 'T_09', title: '交叉类型与 Mixin 模式', navTitle: '交叉与 Mixin', category: '类型进阶',
@@ -3183,7 +3224,7 @@ export const lessons: Lesson[] = [
     principle: '交叉类型 & 把多个接口合并为一个，要求同时满足所有成员；Mixin 用函数在运行时组合行为，提供比继承更灵活的复用方式。',
     flow: ['定义独立的能力接口。', '用 & 组合成交叉类型。', 'Mixin 函数在运行时叠加方法。'],
     notes: ['交叉类型中同名属性取交集。', 'Mixin 组合注意方法冲突。'],
-    problem: '解决“如何灵活组合多个能力而不依赖继承层级”的问题。',
+    problem: '解决"如何灵活组合多个能力而不依赖继承层级"的问题。',
   },
   {
     id: 'T_10', title: '条件类型与类型推导', navTitle: '条件类型', category: '类型进阶',
@@ -3192,7 +3233,7 @@ export const lessons: Lesson[] = [
     principle: '条件类型根据 extends 关系选择分支；infer 可在 extends 子句中捕获并复用未知类型，是构建高级工具类型的核心机制。',
     flow: ['用 T extends U ? X : Y 描述类型分支。', '用 infer 捕获嵌套或返回类型。', '组合条件类型实现复杂推导。'],
     notes: ['裸类型参数上的条件类型会自动分发。', 'ReturnType 和 Parameters 的底层就是 infer。'],
-    problem: '解决“如何从复杂泛型中自动提取和转换子类型”的问题。',
+    problem: '解决"如何从复杂泛型中自动提取和转换子类型"的问题。',
   },
   {
     id: 'T_11', title: '映射类型与键转换', navTitle: '映射类型', category: '类型进阶',
@@ -3201,7 +3242,7 @@ export const lessons: Lesson[] = [
     principle: '映射类型遍历已有类型的键并生成新类型，可添加 readonly/可选修饰符，也可通过 as 子句重命名或过滤键。',
     flow: ['从已有模型遍历键。', '添加或移除修饰符。', '用 as 重命名或排除键。'],
     notes: ['Partial 和 Readonly 的底层就是映射类型。', '-? 可以移除可选修饰符。'],
-    problem: '解决“如何从一个模型批量派生只读、可选或重命名版本”的问题。',
+    problem: '解决"如何从一个模型批量派生只读、可选或重命名版本"的问题。',
   },
   {
     id: 'T_12', title: '模板字面量类型', navTitle: '模板字面量', category: '类型进阶',
@@ -3210,7 +3251,7 @@ export const lessons: Lesson[] = [
     principle: '模板字面量类型把字符串拼接提升到类型层面，配合 Uppercase 等内置工具可构造精确的字符串约束。',
     flow: ['用 `${T}${U}` 拼接字面量类型。', '用 Capitalize 等转换大小写。', '结合条件类型提取字符串片段。'],
     notes: ['模板字面量类型会产生联合展开。', '配合 infer 可以从字符串类型中解析结构。'],
-    problem: '解决“如何让事件名、路由和 CSS 类名在编译期就保证正确性”的问题。',
+    problem: '解决"如何让事件名、路由和 CSS 类名在编译期就保证正确性"的问题。',
   },
   {
     id: 'T_13', title: '函数类型、重载与断言函数', navTitle: '函数类型', category: '类型进阶',
@@ -3219,7 +3260,7 @@ export const lessons: Lesson[] = [
     principle: '函数类型表达式描述签名，重载让同一函数名对不同输入返回不同类型；断言函数在运行时校验后收窄调用方的类型。',
     flow: ['声明函数类型表达式。', '编写重载签名覆盖多种调用方式。', '用 asserts 签名做运行时守卫。'],
     notes: ['重载签名必须从最具体到最宽泛排列。', '断言函数返回值是 void 而非 boolean。'],
-    problem: '解决“同一函数如何根据输入返回不同类型，以及如何安全收窄 unknown”的问题。',
+    problem: '解决"同一函数如何根据输入返回不同类型，以及如何安全收窄 unknown"的问题。',
   },
   {
     id: 'T_14', title: '枚举、常量枚举与字面量映射', navTitle: '枚举与映射', category: '类型进阶',
@@ -3228,7 +3269,7 @@ export const lessons: Lesson[] = [
     principle: '枚举提供运行时值，其中数字枚举还会生成反向映射；联合字面量配合 as const 对象可实现类似效果，通常产物更轻、组合更灵活。',
     flow: ['用枚举定义有限状态集合。', '对比 const enum 的编译产物。', '用 as const + Record 实现无枚举映射。'],
     notes: ['数字枚举有反向映射，字符串枚举没有。', 'const enum 会内联成员，但在库声明和独立转译流程中应谨慎使用。'],
-    problem: '解决“有限状态集合应该用枚举还是联合字面量来建模”的问题。',
+    problem: '解决"有限状态集合应该用枚举还是联合字面量来建模"的问题。',
   },
   {
     id: 'T_15', title: '声明合并与模块扩展', navTitle: '声明合并', category: '类型进阶',
@@ -3237,7 +3278,7 @@ export const lessons: Lesson[] = [
     principle: '同名 interface 自动合并，namespace 可与 class/function 合并；declare module 可为第三方包追加类型声明。',
     flow: ['声明同名接口触发合并。', '用 declare module 扩展已有模块。', '在 .d.ts 文件中放置全局类型增强。'],
     notes: ['class 不能与 class 合并。', '模块增强必须在模块作用域中使用。'],
-    problem: '解决”如何在不修改源码的前提下为第三方库补充类型”的问题。',
+    problem: '解决"如何在不修改源码的前提下为第三方库补充类型"的问题。',
   },
   {
     id: 'T_16', title: 'tsconfig 编译配置详解', navTitle: 'tsconfig', category: '类型进阶',
@@ -3246,7 +3287,7 @@ export const lessons: Lesson[] = [
     principle: 'tsconfig.json 控制 TypeScript 编译行为；strict 系列决定类型安全等级，target 决定输出 JS 版本，module/moduleResolution 决定模块系统。',
     flow: ['从 strict: true 开始获得最严格的类型检查。', '根据运行环境选择 target 和 module。', '用 paths 和 baseUrl 配置模块别名。'],
     notes: ['新项目建议直接启用 strict。', 'moduleResolution 的 bundler 模式适合 Vite 项目。'],
-    problem: '解决”tsconfig 选项太多，如何理解和配置核心编译选项”的问题。',
+    problem: '解决"tsconfig 选项太多，如何理解和配置核心编译选项"的问题。',
   },
   {
     id: 'T_17', title: '声明文件与全局类型增强', navTitle: '声明文件', category: '类型进阶',
@@ -3255,7 +3296,7 @@ export const lessons: Lesson[] = [
     principle: '声明文件 (.d.ts) 为 JavaScript 代码提供类型信息；ambient 声明用 declare 关键字，全局增强通过 declare global，模块声明用 declare module。',
     flow: ['为无类型的 JS 库编写 declare module。', '用 declare global 扩展 Window 等全局对象。', '在项目中组织 .d.ts 文件的引用路径。'],
     notes: ['DefinitelyTyped 是社区维护的类型声明仓库。', '声明文件不包含实现代码。'],
-    problem: '解决”如何为 JavaScript 库和全局环境补充 TypeScript 类型声明”的问题。',
+    problem: '解决"如何为 JavaScript 库和全局环境补充 TypeScript 类型声明"的问题。',
   },
   {
     id: 'T_18', title: '命名空间与模块模式对比', navTitle: '命名空间', category: '类型进阶',
@@ -3264,7 +3305,7 @@ export const lessons: Lesson[] = [
     principle: 'namespace 是 TypeScript 早期的模块组织方式，支持声明合并；ES Module 是现代标准，两者不应混用。新项目应优先使用 ES Module。',
     flow: ['了解 namespace 的声明合并能力。', '对比 namespace 与 ES Module 的产物差异。', '确定项目中统一使用 ES Module。'],
     notes: ['namespace 主要存在于旧代码和声明文件中。', '不要在同一项目中混用 namespace 和 ES Module。'],
-    problem: '解决”何时使用 namespace、何时使用 ES Module 来组织类型”的问题。',
+    problem: '解决"何时使用 namespace、何时使用 ES Module 来组织类型"的问题。',
   },
   {
     id: 'G_01', title: '环境变量与运行配置', navTitle: '环境配置', category: '构建基础',
@@ -3273,7 +3314,7 @@ export const lessons: Lesson[] = [
     principle: '环境配置把同一份代码连接到不同服务；任何进入客户端产物的变量都可被用户读取，密钥必须留在服务端。',
     flow: ['定义开发、测试和生产环境差异。', '只暴露客户端确实需要的公开值。', '在构建和部署阶段注入配置。'],
     notes: ['不要把 .env 当作权限边界。', '环境变量名和默认值应形成文档。'],
-    problem: '解决“多环境地址如何切换，以及密钥应该放在哪里”的问题。',
+    problem: '解决"多环境地址如何切换，以及密钥应该放在哪里"的问题。',
   },
   {
     id: 'G_02', title: '代码规范与自动检查', navTitle: '代码质量', category: '质量保障',
@@ -3282,7 +3323,7 @@ export const lessons: Lesson[] = [
     principle: '格式化统一外观，Lint 发现可疑模式，类型检查验证契约；三者职责不同，应在本地和 CI 中使用同一命令。',
     flow: ['编辑器保存时快速格式化。', '提交前运行静态检查。', 'CI 再执行一次并阻止不合格变更。'],
     notes: ['规则应服务于缺陷预防。', '不要让本地配置与 CI 配置分叉。'],
-    problem: '解决“团队如何稳定保持一致风格并提前发现低级错误”的问题。',
+    problem: '解决"团队如何稳定保持一致风格并提前发现低级错误"的问题。',
   },
   {
     id: 'G_03', title: '单元测试与边界用例', navTitle: '单元测试', category: '质量保障',
@@ -3291,7 +3332,7 @@ export const lessons: Lesson[] = [
     principle: '单元测试隔离验证一个纯逻辑单元，重点覆盖正常值、边界值和错误输入，而不是复制实现细节。',
     flow: ['安排输入与依赖。', '执行一个明确行为。', '断言公开结果并覆盖边界。'],
     notes: ['测试名称应描述行为。', '时间和随机数需要可控替身。'],
-    problem: '解决“哪些逻辑值得单测，以及怎样写出稳定断言”的问题。',
+    problem: '解决"哪些逻辑值得单测，以及怎样写出稳定断言"的问题。',
   },
   {
     id: 'G_04', title: '组件交互测试', navTitle: '组件测试', category: '质量保障',
@@ -3300,7 +3341,7 @@ export const lessons: Lesson[] = [
     principle: '组件测试应通过用户可见文本、角色和交互观察行为，避免依赖内部 ref、方法名或脆弱 DOM 层级。',
     flow: ['按角色或标签找到控件。', '触发真实点击或输入。', '断言页面呈现的结果。'],
     notes: ['优先断言可访问查询。', '只在边界处模拟网络和外部服务。'],
-    problem: '解决“如何验证组件交互而不把测试绑死在实现细节上”的问题。',
+    problem: '解决"如何验证组件交互而不把测试绑死在实现细节上"的问题。',
   },
   {
     id: 'G_05', title: '持续集成与发布流水线', navTitle: 'CI 流水线', category: '自动化交付',
@@ -3309,16 +3350,16 @@ export const lessons: Lesson[] = [
     principle: 'CI 在干净环境重现项目验证过程，只有全部质量门通过的不可变产物才能进入发布阶段。',
     flow: ['锁定依赖并恢复缓存。', '并行运行类型检查和测试。', '构建一次并发布同一份产物。'],
     notes: ['流水线密钥使用平台 Secret。', '失败步骤应保留日志和测试报告。'],
-    problem: '解决“如何让每次提交都经过一致验证并可靠发布”的问题。',
+    problem: '解决"如何让每次提交都经过一致验证并可靠发布"的问题。',
   },
   {
     id: 'G_06', title: '性能预算与持续度量', navTitle: '性能预算', category: '用户体验',
     path: '/engineering/g-6/performance-budget', summary: '给脚本、图片和总体积设置可执行的性能预算。',
     demo: G06PerformanceBudget, code: G06Code, language: 'vue',
-    principle: '性能预算把“页面要快”转为可自动判断的上限，并结合真实用户指标持续观察回归。',
+    principle: '性能预算把"页面要快"转为可自动判断的上限，并结合真实用户指标持续观察回归。',
     flow: ['按网络和设备目标制定预算。', '构建时测量资源体积。', '超出阈值时阻止合并并定位增量。'],
     notes: ['压缩后体积和执行成本都要关注。', '实验室指标应与真实用户数据互补。'],
-    problem: '解决“如何防止依赖和资源在迭代中悄悄拖慢页面”的问题。',
+    problem: '解决"如何防止依赖和资源在迭代中悄悄拖慢页面"的问题。',
   },
   {
     id: 'G_07', title: '无障碍作为工程质量门', navTitle: '无障碍', category: '用户体验',
@@ -3327,7 +3368,7 @@ export const lessons: Lesson[] = [
     principle: '无障碍首先依赖正确 HTML 语义，再用自动扫描发现常见问题，并通过键盘与读屏人工验证关键流程。',
     flow: ['使用原生语义和关联标签。', '运行自动规则扫描。', '用键盘和读屏完成核心任务。'],
     notes: ['ARIA 不能替代原生语义。', '不要只靠颜色传递状态。'],
-    problem: '解决“如何让更多用户可用，并把无障碍从补丁变成日常质量要求”的问题。',
+    problem: '解决"如何让更多用户可用，并把无障碍从补丁变成日常质量要求"的问题。',
   },
   {
     id: 'G_08', title: 'Web 安全与静态发布', navTitle: '安全发布', category: '自动化交付',
@@ -3336,7 +3377,7 @@ export const lessons: Lesson[] = [
     principle: '安全发布需要最小化客户端暴露、限制资源来源、持续修复依赖漏洞，并为带内容哈希的静态资源设置长期缓存。',
     flow: ['构建前扫描依赖和公开配置。', '部署时配置安全响应头。', 'HTML 短缓存、哈希资源长期不可变缓存。'],
     notes: ['CSP 应先报告再逐步收紧。', '前端校验不能替代服务端授权。'],
-    problem: '解决“静态站点发布时如何兼顾安全策略与缓存性能”的问题。',
+    problem: '解决"静态站点发布时如何兼顾安全策略与缓存性能"的问题。',
   },
   {
     id: 'G_09', title: 'Vite 构建插件与钩子机制', navTitle: '构建插件', category: '构建基础',
@@ -3345,7 +3386,7 @@ export const lessons: Lesson[] = [
     principle: 'Vite 基于 Rollup 插件体系，通过 resolveId、transform、generateBundle 等钩子介入构建流程；插件按注册顺序执行，每个钩子负责不同阶段的资源转换。',
     flow: ['在 vite.config.ts 中注册插件并声明需要的钩子。', 'transform 钩子逐个文件处理内容替换和注入。', 'generateBundle 钩子在产物输出前执行最终优化。'],
     notes: ['插件应尽量只做一件事，避免在单个插件中混合多种职责。', 'transform 返回值可以是字符串或 { code, map } 对象，后者保留 source map。'],
-    problem: '解决“如何在构建流程中介入自定义转换逻辑，以及不同钩子各自负责什么阶段”的问题。',
+    problem: '解决"如何在构建流程中介入自定义转换逻辑，以及不同钩子各自负责什么阶段"的问题。',
   },
   {
     id: 'G_10', title: '端到端测试与流程编排', navTitle: 'E2E 测试', category: '质量保障',
@@ -3354,16 +3395,16 @@ export const lessons: Lesson[] = [
     principle: '端到端测试从用户视角验证完整业务流程，通过可访问选择器定位元素、编排操作步骤、断言可见结果，失败时自动截图并精确定位出错步骤。',
     flow: ['用 getByRole、getByLabel 等可访问查询定位元素。', '按用户操作顺序编排点击、输入和导航步骤。', '断言页面呈现的文本、状态和可访问角色。'],
     notes: ['优先使用用户可见的选择器，避免依赖 CSS 类名或 data 属性。', '测试数据应独立，每次运行前重置状态以避免用例间相互影响。', '失败截图和 trace 是定位问题的关键产物，CI 中应保留这些文件。'],
-    problem: '解决“如何从用户视角验证完整业务流程，并在失败时快速定位问题”的问题。',
+    problem: '解决"如何从用户视角验证完整业务流程，并在失败时快速定位问题"的问题。',
   },
   {
     id: 'G_11', title: '构建产物分析与拆分策略', navTitle: '产物分析', category: '用户体验',
     path: '/engineering/g-11/bundle-analysis', summary: '用可视化树状图分析构建产物组成，定位体积热点并制定拆分策略。',
     demo: G11BundleAnalysis, code: G11Code, language: 'vue',
-    principle: '构建产物分析把抽象的”打包体积”变成可视化的模块树，帮助定位体积热点；超过阈值的 chunk 可通过动态导入、按需加载或提取公共模块来拆分。',
+    principle: '构建产物分析把抽象的"打包体积"变成可视化的模块树，帮助定位体积热点；超过阈值的 chunk 可通过动态导入、按需加载或提取公共模块来拆分。',
     flow: ['使用 rollup-plugin-visualizer 或 webpack-bundle-analyzer 生成产物报告。', '按模块类型分类观察 vendor、app 和资源的体积占比。', '对超出预算的模块制定拆分或替换方案。'],
     notes: ['vendor 体积优先检查是否有可替换的轻量方案。', 'tree-shaking 依赖 ESM 导出，混用 CommonJS 会导致整个模块被打包。', '动态导入让路由级组件按需加载，减少首屏所需的初始包体积。'],
-    problem: '解决“构建产物为什么越来越大，以及如何系统性地控制体积”的问题。',
+    problem: '解决"构建产物为什么越来越大，以及如何系统性地控制体积"的问题。',
   },
   {
     id: 'G_12', title: 'Monorepo 工作区与多包管理', navTitle: 'Monorepo', category: '构建基础',
@@ -3372,7 +3413,7 @@ export const lessons: Lesson[] = [
     principle: 'Monorepo 通过 workspace 协议把多个包放在同一仓库，共享依赖和工具链；构建按依赖拓扑排序执行，版本管理借助 changesets 实现独立发版。',
     flow: ['在根目录 pnpm-workspace.yaml 声明 packages 匹配规则。', '各包通过 workspace: 协议引用内部依赖，pnpm 自动链接。', '构建工具按拓扑顺序编译，确保被依赖包先于依赖方构建。'],
     notes: ['workspace 协议只在开发环境生效，发布后自动替换为具体版本号。', '修改一个包后，依赖它的所有包都需要重新构建和测试。', '使用 changesets 管理版本，每个变更生成一个 .md 描述文件，发版时自动计算版本号。'],
-    problem: '解决”多包项目如何共享代码、统一版本并按依赖顺序可靠构建”的问题。',
+    problem: '解决"多包项目如何共享代码、统一版本并按依赖顺序可靠构建"的问题。',
   },
   {
     id: 'G_13', title: 'Docker 容器化与多阶段构建', navTitle: 'Docker', category: '部署与运维',
@@ -3381,7 +3422,7 @@ export const lessons: Lesson[] = [
     principle: 'Docker 把应用和依赖打包为不可变镜像；多阶段构建分离编译和运行环境，最终镜像只包含运行时必要文件，减小体积和攻击面。',
     flow: ['选择合适的基础镜像。', '按变更频率排列层以利用缓存。', '多阶段构建分离构建和运行阶段。'],
     notes: ['不要把 node_modules 和 .env 打进镜像。', '非 root 用户运行容器提高安全性。'],
-    problem: '解决”如何可靠地将应用打包并部署到不同环境”的问题。',
+    problem: '解决"如何可靠地将应用打包并部署到不同环境"的问题。',
   },
   {
     id: 'G_14', title: 'Git 工作流与提交规范', navTitle: 'Git 工作流', category: '质量保障',
@@ -3390,7 +3431,7 @@ export const lessons: Lesson[] = [
     principle: '分支策略决定团队协作方式；Conventional Commits 用结构化提交信息驱动自动版本号计算和 CHANGELOG 生成，husky + lint-staged 在提交时执行检查。',
     flow: ['根据团队规模选择分支策略。', '使用 Conventional Commits 规范提交信息。', '用 husky 和 lint-staged 在提交时自动检查。'],
     notes: ['小团队适合 GitHub Flow 或 Trunk-Based。', 'commitlint 可以强制校验提交信息格式。'],
-    problem: '解决”团队如何统一分支策略和提交规范以提高协作效率”的问题。',
+    problem: '解决"团队如何统一分支策略和提交规范以提高协作效率"的问题。',
   },
   {
     id: 'G_15', title: '国际化 i18n 方案实践', navTitle: 'i18n', category: '用户体验',
@@ -3399,7 +3440,7 @@ export const lessons: Lesson[] = [
     principle: 'i18n 把可翻译文本抽取为消息文件，运行时根据 locale 选择对应翻译；复数规则、日期/数字格式化和消息懒加载是生产级国际化的关键。',
     flow: ['抽取文本为消息 JSON 文件。', '配置 locale 切换和回退策略。', '按需加载语言包减少首屏体积。'],
     notes: ['翻译键使用业务语义命名而非页面位置。', 'RTL 语言需要额外的布局适配。'],
-    problem: '解决”如何让应用支持多语言并高效管理翻译资源”的问题。',
+    problem: '解决"如何让应用支持多语言并高效管理翻译资源"的问题。',
   },
   {
     id: 'G_16', title: '微前端架构与模块联邦', navTitle: '微前端', category: '部署与运维',
@@ -3408,7 +3449,7 @@ export const lessons: Lesson[] = [
     principle: '微前端把大型应用拆分为独立开发部署的子应用；Module Federation 共享依赖最高效，qiankun 兼容性最好，iframe 隔离性最强但集成成本最高。',
     flow: ['评估团队和应用的拆分需求。', '选择合适的微前端方案。', '配置路由协调和依赖共享策略。'],
     notes: ['微前端引入复杂度，仅在团队和应用确实需要独立部署时采用。', '共享依赖版本冲突是最常见的运行时问题。'],
-    problem: '解决”大型前端应用如何拆分为可独立开发和部署的子应用”的问题。',
+    problem: '解决"大型前端应用如何拆分为可独立开发和部署的子应用"的问题。',
   },
   {
     id: 'J_01', title: '值、类型转换与严格相等', navTitle: '类型与相等', category: '语言基础',
@@ -3417,7 +3458,7 @@ export const lessons: Lesson[] = [
     principle: 'JavaScript 是动态类型语言，运算时可能发生隐式类型转换。严格相等不会转换操作数，更适合表达稳定的业务判断。',
     flow: ['识别值当前的运行时类型。', '在输入边界显式转换。', '使用严格相等比较同类型值。'],
     notes: ['typeof null 的结果是历史遗留的 object。', 'NaN 应使用 Number.isNaN 判断。'],
-    problem: '解决“表单、接口参数比较时为什么会出现反直觉结果”的问题。',
+    problem: '解决"表单、接口参数比较时为什么会出现反直觉结果"的问题。',
   },
   {
     id: 'J_02', title: '词法作用域与闭包', navTitle: '作用域与闭包', category: '语言基础',
@@ -3426,7 +3467,7 @@ export const lessons: Lesson[] = [
     principle: '函数的作用域在定义位置确定；内部函数被返回后仍能访问外层变量，这个函数与词法环境的组合就是闭包。',
     flow: ['外层函数创建局部状态。', '返回访问该状态的内部函数。', '每次调用继续读取和修改同一环境。'],
     notes: ['闭包适合封装私有状态。', '长期持有的大对象可能增加内存占用。'],
-    problem: '解决“回调为什么能记住外层变量，以及怎样封装私有状态”的问题。',
+    problem: '解决"回调为什么能记住外层变量，以及怎样封装私有状态"的问题。',
   },
   {
     id: 'J_03', title: '数组的不可变转换流水线', navTitle: '数组方法', category: '集合与数据',
@@ -3435,7 +3476,7 @@ export const lessons: Lesson[] = [
     principle: '数组迭代方法把筛选、映射和聚合拆为可组合步骤；优先返回新数组能减少共享状态被意外修改。',
     flow: ['filter 缩小数据集合。', 'map 转换展示结构。', 'toSorted 在不修改原数组的前提下排序。'],
     notes: ['map 不应用来执行纯副作用。', '大数据量要关注多次遍历成本。'],
-    problem: '解决“如何以可读、可预测的方式处理列表数据”的问题。',
+    problem: '解决"如何以可读、可预测的方式处理列表数据"的问题。',
   },
   {
     id: 'J_04', title: '对象、解构与展开语法', navTitle: '对象操作', category: '集合与数据',
@@ -3444,7 +3485,7 @@ export const lessons: Lesson[] = [
     principle: '解构按属性提取值，剩余语法收集未提取字段，展开语法把可枚举自有属性复制到新对象；这些复制都是浅层的。',
     flow: ['从对象中解构需要的字段。', '用剩余语法保留其他字段。', '展开生成带覆盖值的新对象。'],
     notes: ['嵌套对象仍共享引用。', '属性覆盖顺序由展开位置决定。'],
-    problem: '解决“如何清晰地读取和不可变更新对象字段”的问题。',
+    problem: '解决"如何清晰地读取和不可变更新对象字段"的问题。',
   },
   {
     id: 'J_05', title: '函数调用方式与 this 绑定', navTitle: 'this 绑定', category: '对象模型',
@@ -3453,7 +3494,7 @@ export const lessons: Lesson[] = [
     principle: '普通函数的 this 由调用方式决定，而箭头函数捕获外层 this；call、apply 与 bind 可以显式指定普通函数的接收者。',
     flow: ['先观察函数实际调用表达式。', '确定隐式或显式接收者。', '回调场景用箭头函数或 bind 保持上下文。'],
     notes: ['不要把 this 理解为函数定义时的所属对象。', '类方法作为回调传递时也可能丢失绑定。'],
-    problem: '解决“对象方法作为回调后 this 为什么变了”的问题。',
+    problem: '解决"对象方法作为回调后 this 为什么变了"的问题。',
   },
   {
     id: 'J_06', title: '原型链、class 与继承', navTitle: '原型与类', category: '对象模型',
@@ -3462,7 +3503,7 @@ export const lessons: Lesson[] = [
     principle: '对象通过内部原型链接查找属性；class 提供更清晰的构造与继承语法，但底层仍使用原型链共享方法。',
     flow: ['构造函数初始化实例字段。', '方法存放在 prototype 上共享。', 'extends 建立子类到父类原型的链接。'],
     notes: ['优先组合而非过深继承。', '私有字段可使用 #name 语法。'],
-    problem: '解决“JavaScript 对象如何共享行为以及 class 的底层机制”的问题。',
+    problem: '解决"JavaScript 对象如何共享行为以及 class 的底层机制"的问题。',
   },
   {
     id: 'J_07', title: 'Promise 组合与并发请求', navTitle: 'Promise 并发', category: '异步机制',
@@ -3471,7 +3512,7 @@ export const lessons: Lesson[] = [
     principle: 'Promise 表示未来完成或失败的结果；all、allSettled、race 与 any 用不同策略组合多个异步任务。',
     flow: ['同时启动互不依赖的任务。', '选择符合失败策略的组合器。', '统一处理结果与异常。'],
     notes: ['Promise.all 遇到首个拒绝即拒绝。', '并发任务仍需考虑接口限流。'],
-    problem: '解决“多个异步请求如何高效并发并正确处理失败”的问题。',
+    problem: '解决"多个异步请求如何高效并发并正确处理失败"的问题。',
   },
   {
     id: 'J_08', title: '事件循环、任务与微任务', navTitle: '事件循环', category: '异步机制',
@@ -3480,7 +3521,7 @@ export const lessons: Lesson[] = [
     principle: '调用栈清空后，事件循环会先清空微任务队列，再进入下一个任务；渲染机会通常发生在任务之间。',
     flow: ['执行当前脚本中的同步代码。', '清空 Promise 等微任务。', '进入定时器等后续任务。'],
     notes: ['大量微任务也会阻塞渲染。', 'setTimeout(fn, 0) 不代表立即执行。'],
-    problem: '解决“异步日志顺序为何与代码书写顺序不同”的问题。',
+    problem: '解决"异步日志顺序为何与代码书写顺序不同"的问题。',
   },
   {
     id: 'J_09', title: 'ES Modules 与动态导入', navTitle: '模块化', category: '模块与浏览器',
@@ -3489,7 +3530,7 @@ export const lessons: Lesson[] = [
     principle: 'ES Module 具有独立作用域和静态依赖结构，便于打包器分析；动态 import 返回 Promise，可把低频功能拆成独立资源。',
     flow: ['用具名或默认导出声明公共接口。', '静态导入首屏必需依赖。', '动态导入低频模块并处理加载状态。'],
     notes: ['模块默认使用严格模式。', '避免循环依赖中的初始化顺序问题。'],
-    problem: '解决“如何组织模块边界并减少首屏加载代码”的问题。',
+    problem: '解决"如何组织模块边界并减少首屏加载代码"的问题。',
   },
   {
     id: 'J_10', title: 'DOM 事件传播与事件委托', navTitle: '事件委托', category: '模块与浏览器',
@@ -3498,7 +3539,7 @@ export const lessons: Lesson[] = [
     principle: 'DOM 事件经历捕获、目标和冒泡阶段；事件委托在稳定父节点监听冒泡事件，再通过 closest 判断真实交互目标。',
     flow: ['在父容器注册一个监听器。', '从 event.target 向上寻找匹配元素。', '读取 data 属性执行对应行为。'],
     notes: ['不是所有事件都会冒泡。', '用 closest 时要确认结果仍在委托容器内。'],
-    problem: '解决“动态列表如何减少监听器并统一处理交互”的问题。',
+    problem: '解决"动态列表如何减少监听器并统一处理交互"的问题。',
   },
   {
     id: 'J_11', title: 'async/await 与异步流控', navTitle: 'async/await', category: '异步机制',
@@ -3507,7 +3548,7 @@ export const lessons: Lesson[] = [
     principle: 'async 函数返回 Promise，await 暂停执行直到 Promise 解决；串行用 for...of 逐个等待，并发用 Promise.all 同时发起。',
     flow: ['用 async 声明异步函数。', '用 await 等待 Promise 结果。', '选择串行或并发策略并处理异常。'],
     notes: ['await 只能在 async 函数或模块顶层使用。', '并发任务仍需考虑接口限流。'],
-    problem: '解决“如何用同步写法组织异步流程并选择正确的并发策略”的问题。',
+    problem: '解决"如何用同步写法组织异步流程并选择正确的并发策略"的问题。',
   },
   {
     id: 'J_12', title: '迭代协议与生成器', navTitle: '迭代器与生成器', category: '集合与数据',
@@ -3516,7 +3557,7 @@ export const lessons: Lesson[] = [
     principle: '迭代协议规定 next() 返回 {value, done}；生成器函数用 yield 暂停和恢复，支持双向通信和委托 yield*。',
     flow: ['实现 [Symbol.iterator] 让对象可迭代。', '用 function* 和 yield 创建生成器。', '通过 next(value) 向生成器传入数据。'],
     notes: ['for...of 和展开语法都依赖迭代协议。', 'yield* 可委托给另一个可迭代对象。'],
-    problem: '解决“如何惰性产出序列并实现自定义可迭代对象”的问题。',
+    problem: '解决"如何惰性产出序列并实现自定义可迭代对象"的问题。',
   },
   {
     id: 'J_13', title: 'Proxy 与 Reflect', navTitle: 'Proxy 与 Reflect', category: '对象模型',
@@ -3525,7 +3566,7 @@ export const lessons: Lesson[] = [
     principle: 'Proxy 创建对象代理，拦截 get/set/has 等基本操作；Reflect 提供与 Proxy 陷阱对应的默认行为，保证原型链和 this 正确。',
     flow: ['用 new Proxy 包装目标对象。', '在陷阱中执行自定义逻辑。', '用 Reflect 转发默认操作。'],
     notes: ['Proxy 不能代理内部槽位（如 Date 的 [[DateValue]]）。', 'Vue 3 响应式的底层就是 Proxy。'],
-    problem: '解决“如何透明地拦截和增强对象行为”的问题。',
+    problem: '解决"如何透明地拦截和增强对象行为"的问题。',
   },
   {
     id: 'J_14', title: 'Map、Set 与弱引用', navTitle: 'Map/Set/WeakRef', category: '集合与数据',
@@ -3534,7 +3575,7 @@ export const lessons: Lesson[] = [
     principle: 'Map 允许任意类型做键，Set 保证值唯一；WeakMap/WeakSet 的键是弱引用，不阻止垃圾回收，适合关联临时元数据。',
     flow: ['用 Set 收集不重复标签。', '用 Map 建立对象到数据的映射。', '用 WeakMap 给 DOM 元素附加私有数据。'],
     notes: ['WeakMap 的键不可枚举，且仅在键没有其他强引用时才允许回收。', 'GC 时机不可预测，WeakRef 与 FinalizationRegistry 不适合承载关键业务逻辑。'],
-    problem: '解决“何时用 Map/Set 替代对象和数组，以及如何避免内存泄漏”的问题。',
+    problem: '解决"何时用 Map/Set 替代对象和数组，以及如何避免内存泄漏"的问题。',
   },
   {
     id: 'J_15', title: '正则表达式与模式匹配', navTitle: '正则表达式', category: '语言基础',
@@ -3543,7 +3584,7 @@ export const lessons: Lesson[] = [
     principle: '正则表达式描述字符串的匹配模式；字符类、量词、分组和断言组合出精确规则，test 验证、exec 提取、matchAll 遍历所有匹配。',
     flow: ['用字符类和量词描述模式。', '用分组和命名组提取子串。', '用 lookahead/lookbehind 限定上下文。'],
     notes: ['全局正则的 lastIndex 会影响多次 test 结果。', '复杂验证建议拆成多个正则组合。'],
-    problem: '解决“如何用声明式模式匹配和提取字符串中的结构化信息”的问题。',
+    problem: '解决"如何用声明式模式匹配和提取字符串中的结构化信息"的问题。',
   },
   {
     id: 'J_16', title: '错误处理与自定义异常', navTitle: '错误处理', category: '语言基础',
@@ -3552,7 +3593,7 @@ export const lessons: Lesson[] = [
     principle: 'try/catch 捕获同步和异步错误，finally 保证清理逻辑执行；自定义 Error 子类携带业务语义，cause 属性建立错误链。',
     flow: ['try 包裹可能出错的代码。', 'catch 按错误类型分支处理。', 'finally 执行清理，不论成功失败。'],
     notes: ['catch 无法捕获异步回调中的同步抛出。', 'Error.cause（ES2022）可追溯原始错误。'],
-    problem: '解决“如何优雅捕获异常、区分错误类型并保留错误上下文”的问题。',
+    problem: '解决"如何优雅捕获异常、区分错误类型并保留错误上下文"的问题。',
   },
   {
     id: 'J_17', title: '可选链、空值合并与逻辑赋值', navTitle: '可选链与空值合并', category: '语言基础',
@@ -3561,7 +3602,7 @@ export const lessons: Lesson[] = [
     principle: '?. 在 null/undefined 处短路返回 undefined；?? 只在左侧为 null/undefined 时取右侧值；??= ||= &&= 把判断和赋值合并为一步。',
     flow: ['用 ?. 安全访问嵌套属性。', '用 ?? 提供空值默认值。', '用逻辑赋值运算符简化条件初始化。'],
     notes: ['?? 和 || 的区别：|| 对空字符串和 0 也取右侧。', '?.() 可安全调用可能不存在的函数。'],
-    problem: '解决“如何简洁地处理深层对象的空值和条件赋值”的问题。',
+    problem: '解决"如何简洁地处理深层对象的空值和条件赋值"的问题。',
   },
   {
     id: 'J_18', title: '高阶函数、柯里化与组合', navTitle: '高阶函数', category: '函数与组合',
@@ -3570,7 +3611,7 @@ export const lessons: Lesson[] = [
     principle: '高阶函数接收或返回函数；柯里化把多参函数转为单参链；pipe 把多个单步函数串联为流水线；防抖和节流控制执行频率。',
     flow: ['用柯里化拆解多参函数。', '用 pipe 组合单步转换为流水线。', '用防抖/节流控制高频事件回调。'],
     notes: ['Array.prototype.map/filter/reduce 本身就是高阶函数。', 'compose 从右到左，pipe 从左到右。'],
-    problem: '解决“如何用函数组合代替重复代码并控制执行频率”的问题。',
+    problem: '解决"如何用函数组合代替重复代码并控制执行频率"的问题。',
   },
   {
     id: 'J_19', title: '模板字面量与标签模板', navTitle: '模板字面量', category: '语言基础',
@@ -3579,7 +3620,7 @@ export const lessons: Lesson[] = [
     principle: '模板字面量支持插值和多行文本；标签模板把字符串片段和表达式值分别传给函数，可构建 DSL、HTML 转义和 CSS-in-JS。',
     flow: ['用 ${} 嵌入表达式。', '定义标签函数处理 strings 和 values。', '用 String.raw 获取未转义的原始文本。'],
     notes: ['标签函数的第一个参数是字符串数组，其余参数是插值。', 'graphql-tag 和 styled-components 都基于标签模板。'],
-    problem: '解决“如何在字符串中嵌入逻辑并构建领域专用语言”的问题。',
+    problem: '解决"如何在字符串中嵌入逻辑并构建领域专用语言"的问题。',
   },
   {
     id: 'J_20', title: 'JSON 与结构化克隆', navTitle: 'JSON 与克隆', category: '集合与数据',
@@ -3588,7 +3629,7 @@ export const lessons: Lesson[] = [
     principle: 'JSON.stringify/parse 通过 replacer 和 reviver 控制转换；structuredClone 能处理循环引用和更多内置类型，是真正的深拷贝。',
     flow: ['用 replacer 函数过滤或转换字段。', '用 reviver 在解析时还原类型。', '用 structuredClone 处理循环引用。'],
     notes: ['JSON 不支持 undefined、函数、Symbol、循环引用。', 'structuredClone 不支持 DOM 节点和函数。'],
-    problem: '解决“如何正确序列化复杂对象并实现可靠的深拷贝”的问题。',
+    problem: '解决"如何正确序列化复杂对象并实现可靠的深拷贝"的问题。',
   },
   {
     id: 'J_21', title: '属性描述符与对象控制', navTitle: '属性描述符', category: '对象模型',
@@ -3597,7 +3638,7 @@ export const lessons: Lesson[] = [
     principle: '每个属性有 configurable/enumerable/writable 描述符；getter/setter 提供计算属性；freeze/seal/preventExtensions 逐级限制对象修改。',
     flow: ['用 defineProperty 设置单个属性描述符。', '用 getter/setter 创建计算属性。', '用 freeze 冻结对象防止任何修改。'],
     notes: ['Object.freeze 是浅层的，嵌套对象需递归冻结。', 'Object.keys/values/entries 只返回可枚举自有属性。'],
-    problem: '解决“如何精确控制对象属性的可写、可枚举和可配置性”的问题。',
+    problem: '解决"如何精确控制对象属性的可写、可枚举和可配置性"的问题。',
   },
   {
     id: 'J_22', title: 'Symbol 与内置符号', navTitle: 'Symbol', category: '语言基础',
@@ -3606,7 +3647,7 @@ export const lessons: Lesson[] = [
     principle: 'Symbol 生成唯一标识符；内置符号（Symbol.iterator、Symbol.toPrimitive 等）允许自定义对象的迭代、转换和字符串化行为。',
     flow: ['用 Symbol() 创建唯一键。', '实现 Symbol.iterator 让对象可迭代。', '用 Symbol.toPrimitive 自定义类型转换。'],
     notes: ['Symbol.for 在全局注册表中共享。', 'Symbol.hasInstance 可自定义 instanceof 行为。'],
-    problem: '解决“如何创建不冲突的属性键并自定义对象的内置行为”的问题。',
+    problem: '解决"如何创建不冲突的属性键并自定义对象的内置行为"的问题。',
   },
   {
     id: 'J_23', title: '字符串方法与国际化', navTitle: '字符串与 Intl', category: '语言基础',
@@ -3615,7 +3656,7 @@ export const lessons: Lesson[] = [
     principle: '字符串方法覆盖搜索、截取和替换；Intl API 提供地区感知的日期、数字和排序格式化，是国际化的标准方案。',
     flow: ['用 includes/matchAll 搜索文本。', '用 replaceAll 批量替换。', '用 Intl.DateTimeFormat/NumberFormat 格式化输出。'],
     notes: ['字符串是不可变的，方法都返回新字符串。', 'Intl.Collator 可正确排序中文等多语言文本。'],
-    problem: '解决“如何高效处理字符串搜索替换和地区化格式显示”的问题。',
+    problem: '解决"如何高效处理字符串搜索替换和地区化格式显示"的问题。',
   },
   {
     id: 'J_24', title: '逻辑运算、位运算与权限模型', navTitle: '逻辑与位运算', category: '语言基础',
@@ -3624,7 +3665,7 @@ export const lessons: Lesson[] = [
     principle: '逻辑运算符支持短路求值和条件赋值；位运算在整数层面操作二进制位，适合实现权限标志、状态压缩等场景。',
     flow: ['用 && || 短路求值简化条件。', '用位运算 OR 组合权限标志。', '用 AND 检查、XOR 切换权限位。'],
     notes: ['??= ||= &&= 只在条件满足时赋值。', '位运算对 32 位整数操作，超出范围会截断。'],
-    problem: '解决“如何用位运算实现高效的权限和状态管理”的问题。',
+    problem: '解决"如何用位运算实现高效的权限和状态管理"的问题。',
   },
   {
     id: 'D_01', title: 'Node.js 运行时与模块系统', navTitle: '模块系统', category: '运行时与模块',
@@ -3633,7 +3674,7 @@ export const lessons: Lesson[] = [
     principle: 'Node.js 在 V8 之上提供文件、网络和进程 API。ESM 使用 import/export，CommonJS 使用 require/module.exports，项目应明确一种主模块格式。',
     flow: ['通过 package.json 的 type 确定默认格式。', '使用 node: 前缀导入核心模块。', '在边界处谨慎处理 ESM 与 CJS 互操作。'],
     notes: ['ESM 中没有原生 __dirname。', '避免在同一目录混用隐式模块格式。'],
-    problem: '解决“Node 项目该选择哪种模块格式以及两者为何报错”的问题。',
+    problem: '解决"Node 项目该选择哪种模块格式以及两者为何报错"的问题。',
   },
   {
     id: 'D_02', title: '路径、URL 与跨平台文件定位', navTitle: '路径与 URL', category: '运行时与模块',
@@ -3642,7 +3683,7 @@ export const lessons: Lesson[] = [
     principle: '文件系统路径和 URL 是不同表示；path.resolve/join 处理平台分隔符，fileURLToPath 把 ESM 的 import.meta.url 转成文件路径。',
     flow: ['确定可信的根目录。', '规范化并拼接相对路径。', '验证最终路径仍位于允许目录。'],
     notes: ['不要手写 / 拼接跨平台路径。', '用户输入不能未经校验传给文件 API。'],
-    problem: '解决“Windows 与 Linux 路径差异及 ESM 文件定位”的问题。',
+    problem: '解决"Windows 与 Linux 路径差异及 ESM 文件定位"的问题。',
   },
   {
     id: 'D_03', title: '异步文件系统操作', navTitle: '文件系统', category: '文件与事件',
@@ -3651,7 +3692,7 @@ export const lessons: Lesson[] = [
     principle: '服务端请求路径应使用异步文件 API，避免同步 I/O 阻塞事件循环；关键写入可先写临时文件再 rename 实现原子替换。',
     flow: ['以明确编码异步读取文件。', '解析前处理不存在和权限错误。', '写临时文件后原子替换目标。'],
     notes: ['不要在热路径使用 readFileSync。', '大文件应改用流而非一次读入内存。'],
-    problem: '解决“如何可靠且不阻塞地读写 Node.js 文件”的问题。',
+    problem: '解决"如何可靠且不阻塞地读写 Node.js 文件"的问题。',
   },
   {
     id: 'D_04', title: 'EventEmitter 与事件解耦', navTitle: '事件发布订阅', category: '文件与事件',
@@ -3660,7 +3701,7 @@ export const lessons: Lesson[] = [
     principle: 'EventEmitter 同步调用当前事件的监听器，适合同一进程内解耦模块；跨进程可靠消息需要消息队列与持久化机制。',
     flow: ['为业务事件定义稳定名称与载荷。', '订阅方注册 on 或 once 监听器。', '不再需要时 removeListener 防止泄漏。'],
     notes: ['监听器抛错会影响 emit 调用栈。', 'error 事件没有监听器时会终止进程。'],
-    problem: '解决“同一进程内多个模块如何响应同一业务事件”的问题。',
+    problem: '解决"同一进程内多个模块如何响应同一业务事件"的问题。',
   },
   {
     id: 'D_05', title: 'Stream、管道与背压', navTitle: '流与背压', category: '流与网络',
@@ -3669,7 +3710,7 @@ export const lessons: Lesson[] = [
     principle: '流按块处理数据，避免把完整文件放入内存；背压让生产速度服从消费速度，pipeline 统一连接与错误清理。',
     flow: ['Readable 分块产生数据。', 'Transform 转换每个数据块。', 'pipeline 写入目标并传播错误。'],
     notes: ['优先使用 pipeline 而不是手工 pipe 链。', '对象模式和字节模式的 highWaterMark 含义不同。'],
-    problem: '解决“大文件和网络数据如何低内存传输且不压垮消费者”的问题。',
+    problem: '解决"大文件和网络数据如何低内存传输且不压垮消费者"的问题。',
   },
   {
     id: 'D_06', title: '原生 HTTP 服务与路由', navTitle: 'HTTP 服务', category: '流与网络',
@@ -3678,7 +3719,7 @@ export const lessons: Lesson[] = [
     principle: 'node:http 提供底层流式请求与响应；服务需要显式匹配方法和路径、限制请求体、设置内容类型并统一结束响应。',
     flow: ['读取 method、URL 与请求头。', '路由到对应处理器并校验输入。', '设置状态码和响应头后发送结果。'],
     notes: ['请求体是流，必须限制最大体积。', '生产服务还需要超时、代理与优雅关闭。'],
-    problem: '解决“Node.js 如何直接接收 HTTP 请求并返回规范响应”的问题。',
+    problem: '解决"Node.js 如何直接接收 HTTP 请求并返回规范响应"的问题。',
   },
   {
     id: 'D_07', title: '进程、环境变量与优雅退出', navTitle: '进程与配置', category: '进程与并发',
@@ -3687,7 +3728,7 @@ export const lessons: Lesson[] = [
     principle: 'process 提供参数、环境、信号和退出状态；配置应在启动阶段完成校验，关闭时先停止新请求，再等待存量任务结束。',
     flow: ['启动时读取并验证环境变量。', '注册 SIGTERM/SIGINT 信号处理。', '关闭服务器和连接池后设置退出码。'],
     notes: ['不要在业务代码到处读取 process.env。', '不要用 process.exit 强行截断异步清理。'],
-    problem: '解决“服务如何管理多环境配置并在部署时安全退出”的问题。',
+    problem: '解决"服务如何管理多环境配置并在部署时安全退出"的问题。',
   },
   {
     id: 'D_08', title: '异步并发控制与任务池', navTitle: '并发控制', category: '进程与并发',
@@ -3696,7 +3737,7 @@ export const lessons: Lesson[] = [
     principle: '异步 I/O 可以并发等待，但无限 Promise.all 会同时占用外部资源；任务池以固定 worker 数限制在途任务。',
     flow: ['建立待处理任务队列。', '启动固定数量 worker。', '每个 worker 完成后领取下一任务。'],
     notes: ['CPU 密集任务考虑 Worker Threads。', '并发上限应结合下游容量压测。'],
-    problem: '解决“批量异步任务如何提速又不压垮系统”的问题。',
+    problem: '解决"批量异步任务如何提速又不压垮系统"的问题。',
   },
   {
     id: 'D_09', title: '错误边界与结构化日志', navTitle: '错误与日志', category: '可靠性',
@@ -3705,7 +3746,7 @@ export const lessons: Lesson[] = [
     principle: '预期的操作型错误应转换为稳定错误码和合适响应；未知程序错误应记录堆栈、请求 ID 和上下文后由进程管理器重启。',
     flow: ['在边界捕获异步错误。', '映射公开错误码与 HTTP 状态。', '以 JSON 记录请求 ID 和内部原因。'],
     notes: ['日志不得包含令牌和个人敏感信息。', 'unhandledRejection 不应只打印后继续运行。'],
-    problem: '解决“服务错误如何分类、返回和排查”的问题。',
+    problem: '解决"服务错误如何分类、返回和排查"的问题。',
   },
   {
     id: 'D_10', title: '内置 node:test 测试运行器', navTitle: 'Node 测试', category: '可靠性',
@@ -3714,7 +3755,7 @@ export const lessons: Lesson[] = [
     principle: 'Node 内置测试运行器支持并发、Mock、覆盖率和多种报告格式，无需第三方框架即可验证核心模块。',
     flow: ['导入 node:test 与 strict assert。', '按行为组织测试和子测试。', '在 CI 中输出覆盖率与机器可读报告。'],
     notes: ['每个测试应可独立运行。', '不要依赖测试执行顺序和共享全局状态。'],
-    problem: '解决“如何使用 Node.js 自带能力建立可靠测试套件”的问题。',
+    problem: '解决"如何使用 Node.js 自带能力建立可靠测试套件"的问题。',
   },
   {
     id: 'D_11', title: '服务端输入与路径安全', navTitle: '输入安全', category: '安全与依赖',
@@ -3723,7 +3764,7 @@ export const lessons: Lesson[] = [
     principle: '所有外部输入都不可信；服务端需要白名单校验、规范化路径、最小权限、体积限制和参数化查询等多层防护。',
     flow: ['在系统边界解析并校验输入。', '规范化后确认资源仍在允许范围。', '使用最小权限访问文件和服务。'],
     notes: ['前端校验不能替代服务端校验。', '错误响应不要暴露内部路径和堆栈。'],
-    problem: '解决“Node 服务如何抵御常见输入攻击和敏感信息泄漏”的问题。',
+    problem: '解决"Node 服务如何抵御常见输入攻击和敏感信息泄漏"的问题。',
   },
   {
     id: 'D_12', title: '包管理、SemVer 与可重复安装', navTitle: '依赖管理', category: '安全与依赖',
@@ -3732,7 +3773,7 @@ export const lessons: Lesson[] = [
     principle: 'package.json 声明意图，锁文件记录完整依赖图；CI 使用冻结锁文件，SemVer 范围决定允许升级的版本集合。',
     flow: ['区分运行依赖和开发依赖。', '提交并审查锁文件变更。', 'CI 冻结安装并执行依赖审计。'],
     notes: ['不要盲目自动升级主版本。', '安装脚本具有执行代码权限，需要审查来源。'],
-    problem: '解决”如何让团队和 CI 安装完全一致且可审计的依赖”的问题。',
+    problem: '解决"如何让团队和 CI 安装完全一致且可审计的依赖"的问题。',
   },
   {
     id: 'D_13', title: 'Express 与 Fastify 路由对比', navTitle: 'Express/Fastify', category: 'Web 框架',
@@ -3741,7 +3782,7 @@ export const lessons: Lesson[] = [
     principle: 'Express 用洋葱模型中间件链处理请求，灵活但缺乏约束；Fastify 用 JSON Schema 验证输入输出，启动时编译路由性能更高，适合需要严格接口契约的场景。',
     flow: ['理解 Express 的 middleware 链式调用。', '了解 Fastify 的 Schema 验证和序列化。', '根据项目需求选择合适的框架。'],
     notes: ['Express 生态最大，Fastify 性能更好。', 'Fastify 的 Schema 验证同时生成类型和运行时校验。'],
-    problem: '解决”Node.js Web 框架如何选择，以及路由和验证的最佳实践”的问题。',
+    problem: '解决"Node.js Web 框架如何选择，以及路由和验证的最佳实践"的问题。',
   },
   {
     id: 'D_14', title: 'WebSocket 实时通信', navTitle: 'WebSocket', category: 'Web 框架',
@@ -3750,7 +3791,7 @@ export const lessons: Lesson[] = [
     principle: 'WebSocket 提供双向持久连接，服务端可主动推送消息；心跳检测连接活性，断线重连保证可用性，广播将消息分发给所有连接的客户端。',
     flow: ['建立 WebSocket 连接并完成握手。', '定时发送心跳检测连接状态。', '断线后指数退避重连。'],
     notes: ['WebSocket 连接是持久资源，需要管理连接池。', '生产环境通常需要 Redis Pub/Sub 实现多实例广播。'],
-    problem: '解决”如何实现服务端主动推送的双向实时通信”的问题。',
+    problem: '解决"如何实现服务端主动推送的双向实时通信"的问题。',
   },
   {
     id: 'D_15', title: '数据库连接与迁移', navTitle: '数据库', category: '数据与存储',
@@ -3759,7 +3800,7 @@ export const lessons: Lesson[] = [
     principle: '数据库访问有三种层次：原生 SQL 最灵活，查询构建器平衡灵活与安全，ORM 提供对象映射但隐藏复杂度；迁移脚本管理 Schema 变更，支持向上和向下操作。',
     flow: ['配置连接池控制并发。', '选择适合项目的数据访问层。', '用迁移脚本管理 Schema 版本。'],
     notes: ['连接池大小要根据并发和数据库限制调整。', '迁移脚本必须可重复执行且幂等。'],
-    problem: '解决”Node.js 项目如何选择数据访问层并管理数据库 Schema 变更”的问题。',
+    problem: '解决"Node.js 项目如何选择数据访问层并管理数据库 Schema 变更"的问题。',
   },
   {
     id: 'D_16', title: 'Worker 线程与 CPU 密集任务', navTitle: 'Worker 线程', category: '进程与并发',
@@ -3768,7 +3809,7 @@ export const lessons: Lesson[] = [
     principle: 'Node.js 的事件循环是单线程的，CPU 密集任务会阻塞其他请求；Worker Threads 在独立线程中执行计算，通过 MessageChannel 与主线程通信，保持事件循环畅通。',
     flow: ['识别 CPU 密集型瓶颈。', '将计算逻辑移到 Worker 线程。', '通过消息传递返回计算结果。'],
     notes: ['Worker 适合 CPU 密集，不适合 I/O 密集。', ' Piscina 等库提供 Worker 池管理。'],
-    problem: '解决”CPU 密集任务如何避免阻塞 Node.js 事件循环”的问题。',
+    problem: '解决"CPU 密集任务如何避免阻塞 Node.js 事件循环"的问题。',
   },
   {
     id: 'S_01', title: '先判断状态归属，再选择 Store', navTitle: '状态边界', category: '设计原则',
@@ -3777,7 +3818,7 @@ export const lessons: Lesson[] = [
     principle: 'Store 只应承载需要跨组件共享、具有业务生命周期的客户端状态；局部 UI、URL 参数和远程缓存各有更合适的归属。',
     flow: ['确认状态的唯一事实来源。', '判断共享范围与生命周期。', '选择最小且匹配语义的状态工具。'],
     notes: ['全局可访问不等于应该全局存储。', '远程数据还需要缓存失效与请求去重。'],
-    problem: '解决“什么状态应该进入 Store，以及什么时候根本不需要 Store”的问题。',
+    problem: '解决"什么状态应该进入 Store，以及什么时候根本不需要 Store"的问题。',
   },
   {
     id: 'S_02', title: 'Pinia Setup Store 与 storeToRefs', navTitle: 'Pinia Setup Store', category: 'Pinia',
@@ -3786,7 +3827,7 @@ export const lessons: Lesson[] = [
     principle: 'Setup Store 以 ref、computed 和函数分别表达 state、getter 与 action；storeToRefs 在解构时保留响应性，方法则直接从 Store 读取。',
     flow: ['在 defineStore 回调中声明响应式状态。', '用 computed 创建派生数据。', '组件通过 storeToRefs 安全解构状态。'],
     notes: ['不要直接解构 Store 的响应式属性。', '业务修改流程应封装为 action。'],
-    problem: '解决“如何用组合式 API 组织 Pinia Store 并避免解构失去响应性”的问题。',
+    problem: '解决"如何用组合式 API 组织 Pinia Store 并避免解构失去响应性"的问题。',
   },
   {
     id: 'S_03', title: 'Pinia 批量更新、订阅与副作用', navTitle: 'Pinia 订阅', category: 'Pinia',
@@ -3795,7 +3836,7 @@ export const lessons: Lesson[] = [
     principle: '$patch 可把同一业务动作中的多个修改合并表达，$subscribe 观察状态提交，适合持久化、审计和同步等基础设施副作用。',
     flow: ['用 action 或 $patch 完成一组原子修改。', '$subscribe 接收 mutation 与新状态。', '组件卸载时取消临时订阅。'],
     notes: ['订阅回调不应再次无条件修改同一状态。', 'SSR 持久化需要区分服务端和客户端。'],
-    problem: '解决“如何观察 Pinia 变化并接入持久化或审计”的问题。',
+    problem: '解决"如何观察 Pinia 变化并接入持久化或审计"的问题。',
   },
   {
     id: 'S_04', title: 'Zustand Store 与细粒度 Selector', navTitle: 'Zustand Selector', category: '轻量 React Store',
@@ -3804,7 +3845,7 @@ export const lessons: Lesson[] = [
     principle: 'Zustand 创建独立于 React 树的外部 Store，组件通过 selector 订阅所需切片；切片结果不变时可以避免无关重渲染。',
     flow: ['create 定义状态和修改函数。', '组件用 selector 读取最小切片。', 'Action 通过 set 基于前一状态更新。'],
     notes: ['返回新对象的 selector 要关注相等比较。', 'Store 可以在 React 外通过 getState 使用。'],
-    problem: '解决“React 中如何以很少样板代码共享状态并控制重渲染”的问题。',
+    problem: '解决"React 中如何以很少样板代码共享状态并控制重渲染"的问题。',
   },
   {
     id: 'S_05', title: 'Zustand Middleware 与选择性订阅', navTitle: 'Zustand Middleware', category: '轻量 React Store',
@@ -3813,7 +3854,7 @@ export const lessons: Lesson[] = [
     principle: 'Zustand middleware 包装 Store 创建器以增加持久化、DevTools、Immer 或选择性订阅等横切能力，而不改变组件消费方式。',
     flow: ['用 middleware 包装状态创建器。', '订阅特定 selector 的前后值。', '在 effect 清理阶段取消订阅。'],
     notes: ['middleware 组合顺序会影响类型和行为。', '持久化前要设计版本迁移策略。'],
-    problem: '解决“如何扩展 Zustand 并监听特定状态变化”的问题。',
+    problem: '解决"如何扩展 Zustand 并监听特定状态变化"的问题。',
   },
   {
     id: 'S_06', title: 'Jotai 原子状态与派生图', navTitle: 'Jotai Atom', category: '原子化状态',
@@ -3822,7 +3863,7 @@ export const lessons: Lesson[] = [
     principle: 'Jotai 以 atom 为最小状态单位，派生 atom 通过读取其他 atom 自动形成依赖图，只有受影响的消费者更新。',
     flow: ['创建可写基础 atom。', '读取基础 atom 构造派生 atom。', '组件用 useAtom 或专用读写 Hook 消费。'],
     notes: ['atom 配置应在组件外保持引用稳定。', '大量动态 atom 可使用 atomFamily 管理。'],
-    problem: '解决“复杂页面如何把状态拆成可组合的细粒度单元”的问题。',
+    problem: '解决"复杂页面如何把状态拆成可组合的细粒度单元"的问题。',
   },
   {
     id: 'S_07', title: 'Jotai 异步 Atom 与 Suspense', navTitle: 'Jotai 异步 Atom', category: '原子化状态',
@@ -3831,7 +3872,7 @@ export const lessons: Lesson[] = [
     principle: '异步 atom 的读取函数可以返回 Promise，并依赖其他 atom 触发重新计算；React Suspense 负责等待期间的界面边界。',
     flow: ['异步 atom 读取刷新依赖。', '组件读取时进入 Suspense。', '更新刷新 atom 使异步数据失效并重算。'],
     notes: ['异步 atom 适合原子依赖场景。', '复杂服务端缓存仍需专门请求库。'],
-    problem: '解决“原子化状态如何表达异步依赖和重新加载”的问题。',
+    problem: '解决"原子化状态如何表达异步依赖和重新加载"的问题。',
   },
   {
     id: 'S_08', title: 'Redux Toolkit 的 Slice 与单向数据流', navTitle: 'Redux Toolkit', category: '结构化状态',
@@ -3840,7 +3881,7 @@ export const lessons: Lesson[] = [
     principle: 'Redux Toolkit 用 createSlice 同时生成 reducer 和 action，所有变更经过可追踪的 dispatch 流程，适合需要严格约束和强大工具链的团队。',
     flow: ['Slice 定义初始状态和 reducer。', 'configureStore 组合业务 Slice。', '组件通过 selector 读取并 dispatch action。'],
     notes: ['Reducer 中看似直接修改由 Immer 转为不可变更新。', '避免把所有临时 UI 状态放进 Redux。'],
-    problem: '解决“大型 React 项目如何获得可预测状态流和统一调试工具”的问题。',
+    problem: '解决"大型 React 项目如何获得可预测状态流和统一调试工具"的问题。',
   },
   {
     id: 'S_09', title: 'XState 有限状态机与合法转换', navTitle: 'XState 状态机', category: '结构化状态',
@@ -3849,7 +3890,7 @@ export const lessons: Lesson[] = [
     principle: '状态机显式列举有限状态和可接受事件，使不合法转换无法发生；状态图适合结算、审批和多步骤流程。',
     flow: ['列出互斥业务状态。', '为每个状态声明可处理事件。', '组件从 snapshot 渲染并发送事件。'],
     notes: ['简单布尔值不需要状态机。', '副作用使用 actor 或 invoke 建模。'],
-    problem: '解决“多个布尔值组合出非法流程状态”的问题。',
+    problem: '解决"多个布尔值组合出非法流程状态"的问题。',
   },
   {
     id: 'S_10', title: '状态管理方案选型矩阵', navTitle: '方案选型', category: '选型与架构',
@@ -3858,7 +3899,7 @@ export const lessons: Lesson[] = [
     principle: 'Pinia、Zustand、Jotai、Redux Toolkit 与 XState 解决的问题模型不同；选型应从事实来源、更新粒度、流程约束和调试需求出发。',
     flow: ['先区分客户端状态与服务端状态。', '评估框架、共享范围和更新频率。', '用最小原型验证 DevTools、SSR 和测试体验。'],
     notes: ['不要仅以包体积决定架构。', '迁移成本通常高于初始接入成本。'],
-    problem: '解决”Pinia、Zustand、Jotai、Redux Toolkit 和 XState 到底如何选择”的问题。',
+    problem: '解决"Pinia、Zustand、Jotai、Redux Toolkit 和 XState 到底如何选择"的问题。',
   },
   {
     id: 'S_11', title: 'Vuex 到 Pinia 迁移指南', navTitle: 'Vuex 迁移', category: 'Vue Store',
@@ -3867,7 +3908,7 @@ export const lessons: Lesson[] = [
     principle: 'Vuex 的 mutations/actions/getters 在 Pinia 中简化为直接的 state/action/getter；Pinia 支持多个独立 Store，无需嵌套模块，TypeScript 推导更好。',
     flow: ['先理解 Vuex 和 Pinia 的 API 映射关系。', '从最独立的模块开始逐步迁移。', '最终移除 Vuex 依赖，完成切换。'],
     notes: ['Pinia 没有 mutations，所有修改都在 action 中完成。', '可以使用 pinia-compat 在迁移期间兼容旧代码。'],
-    problem: '解决”Vuex 项目如何安全地渐进迁移到 Pinia”的问题。',
+    problem: '解决"Vuex 项目如何安全地渐进迁移到 Pinia"的问题。',
   },
   {
     id: 'S_12', title: 'Valtio 与 Proxy 响应式状态', navTitle: 'Valtio', category: '轻量 React Store',
@@ -3876,7 +3917,7 @@ export const lessons: Lesson[] = [
     principle: 'Valtio 用 Proxy 包裹状态对象，直接修改即触发更新；snapshot 获取不可变快照用于渲染，自动追踪依赖关系避免不必要的重渲染。',
     flow: ['用 proxy 创建响应式状态。', '直接修改 proxy 对象的属性。', '用 useSnapshot 在组件中读取并追踪依赖。'],
     notes: ['Valtio 的 subscribe 可以监听任意路径变化。', 'proxy 对象不适合放在 React context 中。'],
-    problem: '解决”如何用最少的样板代码实现 React 的响应式状态管理”的问题。',
+    problem: '解决"如何用最少的样板代码实现 React 的响应式状态管理"的问题。',
   },
   {
     id: 'S_13', title: 'TanStack Query 服务端状态', navTitle: 'TanStack Query', category: '服务端状态',
@@ -3885,7 +3926,7 @@ export const lessons: Lesson[] = [
     principle: 'TanStack Query 把服务端数据视为缓存而非状态；staleTime 和 cacheTime 控制新鲜度，useMutation 处理写入，optimistic update 提供即时反馈。',
     flow: ['用 useQuery 获取和缓存服务端数据。', '用 useMutation 处理创建和更新操作。', '配置乐观更新和回滚策略。'],
     notes: ['服务端状态和客户端状态应分开管理。', 'Query Key 的设计直接影响缓存命中率。'],
-    problem: '解决”如何高效管理服务端数据的缓存、同步和乐观更新”的问题。',
+    problem: '解决"如何高效管理服务端数据的缓存、同步和乐观更新"的问题。',
   },
   {
     id: 'S_14', title: 'Signals 信号响应式模式', navTitle: 'Signals', category: '设计原则',
@@ -3894,7 +3935,7 @@ export const lessons: Lesson[] = [
     principle: 'Signals 是响应式的基础原语：信号值变化时自动通知依赖者更新，无需手动订阅；computed 派生新信号，effect 执行副作用，三者构成完整的响应式图。',
     flow: ['创建基础信号存储原始值。', '用 computed 派生计算信号。', '用 effect 响应信号变化执行副作用。'],
     notes: ['Angular、Solid、Preact 等都采用了 Signals 模式。', 'Vue 的 ref/computed/watchEffect 本质上就是 Signals。'],
-    problem: '解决”什么是 Signals 以及它与传统状态管理有何不同”的问题。',
+    problem: '解决"什么是 Signals 以及它与传统状态管理有何不同"的问题。',
   },
   {
     id: 'S_15', title: '状态持久化与水合策略', navTitle: '持久化水合', category: '设计原则',
@@ -3903,7 +3944,7 @@ export const lessons: Lesson[] = [
     principle: '状态持久化需要在应用启动时从存储恢复状态；SSR 场景下水合阶段必须保证服务端和客户端状态一致；版本迁移处理数据结构随时间变化的兼容性。',
     flow: ['序列化状态到 localStorage 或 IndexedDB。', '启动时恢复状态并处理水合不匹配。', '检测版本差异并执行迁移逻辑。'],
     notes: ['敏感数据不应存入 localStorage。', 'SSR 水合不匹配会导致 UI 闪烁或功能异常。'],
-    problem: '解决”如何让状态在刷新、SSR 和版本升级后正确恢复”的问题。',
+    problem: '解决"如何让状态在刷新、SSR 和版本升级后正确恢复"的问题。',
   },
   {
     id: 'S_16', title: '状态管理全景对比与选型', navTitle: '全景对比', category: '选型与架构',
@@ -3912,7 +3953,7 @@ export const lessons: Lesson[] = [
     principle: '没有万能的状态管理方案；选择应基于框架生态、状态模型复杂度、团队熟悉度和运维需求；评分矩阵帮助量化比较，但最终需要用最小原型验证。',
     flow: ['列出评估维度和权重。', '对每个方案在各维度打分。', '用加权总分辅助决策并用原型验证。'],
     notes: ['评估维度应包括包体积、TypeScript、SSR、DevTools 和学习曲线。', '技术选型不应只看当前需求，还要考虑未来扩展。'],
-    problem: '解决”面对众多状态管理方案如何系统化地做出最优选择”的问题。',
+    problem: '解决"面对众多状态管理方案如何系统化地做出最优选择"的问题。',
   },
   {
     id: 'TW_01', title: '工具优先与原子类组合', navTitle: '工具优先', category: '核心理念',
@@ -3921,7 +3962,7 @@ export const lessons: Lesson[] = [
     principle: 'Tailwind 工具类把有限的设计约束直接组合在标记中，减少命名和样式文件间跳转；可复用性主要由组件边界承担，而不是复制长串类名。',
     flow: ['把视觉拆成布局、间距、颜色和排版。', '用单用途工具类逐层组合。', '重复业务结构抽成 Vue 组件并保留可配置 Props。'],
     notes: ['不要仅为缩短 class 而滥用 @apply。', '样式共置不等于放弃组件抽象。'],
-    problem: '解决“如何用受约束的工具类快速构建一致界面，并控制重复”的问题。',
+    problem: '解决"如何用受约束的工具类快速构建一致界面，并控制重复"的问题。',
   },
   {
     id: 'TW_02', title: '移动优先响应式设计', navTitle: '响应式断点', category: '响应与状态',
@@ -3929,8 +3970,8 @@ export const lessons: Lesson[] = [
     demo: TW02Responsive, code: TW02Code, language: 'xml',
     principle: '响应式变体以 min-width 媒体查询逐步增强：无前缀工具覆盖最小尺寸，sm、md、lg 等前缀在对应断点及以上覆盖。',
     flow: ['先完成窄屏基础布局。', '在内容开始拥挤时增加断点。', '同时检查间距、字号和交互目标尺寸。'],
-    notes: ['sm 表示小断点以上，不是“仅手机”。', '断点应服务内容，不要为每个设备型号定制。'],
-    problem: '解决“同一组件如何从手机到桌面逐步增强布局”的问题。',
+    notes: ['sm 表示小断点以上，不是"仅手机"。', '断点应服务内容，不要为每个设备型号定制。'],
+    problem: '解决"同一组件如何从手机到桌面逐步增强布局"的问题。',
   },
   {
     id: 'TW_03', title: '状态、Group 与 Peer 变体', navTitle: '状态变体', category: '响应与状态',
@@ -3939,7 +3980,7 @@ export const lessons: Lesson[] = [
     principle: '变体把条件编码为前缀并生成对应选择器；group 读取标记父级状态，peer 读取前置同级状态，结构关系决定规则能否命中。',
     flow: ['先实现键盘可见的聚焦状态。', '为禁用和校验状态添加语义反馈。', '用 group/peer 表达必要的跨元素联动。'],
     notes: ['不能只依赖 hover 传达信息。', 'peer 只能匹配其后的同级元素，这是 CSS 后续兄弟选择器的限制。'],
-    problem: '解决“复杂交互状态如何保持声明式、可访问且无需额外脚本”的问题。',
+    problem: '解决"复杂交互状态如何保持声明式、可访问且无需额外脚本"的问题。',
   },
   {
     id: 'TW_04', title: '暗色模式与主题切换', navTitle: '暗色模式', category: '设计系统',
@@ -3948,7 +3989,7 @@ export const lessons: Lesson[] = [
     principle: 'dark 变体为暗色环境生成覆盖规则；可以跟随 prefers-color-scheme，也可用自定义变体绑定祖先类或 data 属性实现手动切换。',
     flow: ['为背景、文字和边框成对选色。', '决定跟随系统还是保存用户偏好。', '在首屏渲染前应用主题以避免闪烁。'],
     notes: ['暗色主题不是简单反色。', '两套主题都要验证文本、焦点环和禁用态对比度。'],
-    problem: '解决“如何构建稳定、无闪烁且可访问的明暗主题”的问题。',
+    problem: '解决"如何构建稳定、无闪烁且可访问的明暗主题"的问题。',
   },
   {
     id: 'TW_05', title: 'v4 主题变量与设计令牌', navTitle: '主题令牌', category: '设计系统',
@@ -3957,7 +3998,7 @@ export const lessons: Lesson[] = [
     principle: 'Tailwind v4 的 @theme 使用 CSS 变量命名空间定义设计令牌，编译器据此生成颜色、字体、断点等工具类，并允许令牌在运行时作为自定义属性复用。',
     flow: ['从现有视觉规范提取语义令牌。', '放入正确的 @theme 命名空间。', '用生成的工具类替换散落数值。'],
     notes: ['令牌应代表稳定系统约束，而非包装每个魔法数。', '普通运行时变量不需要放进 @theme。'],
-    problem: '解决“品牌规范如何成为可复用、可约束的 Tailwind 设计系统”的问题。',
+    problem: '解决"品牌规范如何成为可复用、可约束的 Tailwind 设计系统"的问题。',
   },
   {
     id: 'TW_06', title: '任意值、任意属性与静态检测', navTitle: '任意值', category: '核心理念',
@@ -3966,7 +4007,7 @@ export const lessons: Lesson[] = [
     principle: '方括号语法允许一次性值、属性和变体进入工具类体系；构建器把源码视为纯文本检测候选类，因此运行时拼接的不完整类名不会可靠生成 CSS。',
     flow: ['确认数值确实不属于设计令牌。', '以完整静态类名写入源码。', '重复出现后提升为主题令牌或受控映射。'],
     notes: ['不要写 bg-${color}-600 这类碎片拼接。', '任意值过多通常意味着设计约束尚未收敛。'],
-    problem: '解决“如何表达特殊 CSS 约束，又不破坏构建期生成与设计一致性”的问题。',
+    problem: '解决"如何表达特殊 CSS 约束，又不破坏构建期生成与设计一致性"的问题。',
   },
   {
     id: 'TW_07', title: 'Flex、Grid 与现代布局', navTitle: 'Flex 与 Grid', category: '布局进阶',
@@ -3975,7 +4016,7 @@ export const lessons: Lesson[] = [
     principle: 'Flex 负责主轴上的一维分配和对齐，Grid 负责行列二维轨道；minmax(0, 1fr) 可避免内容的最小尺寸把弹性轨道撑破。',
     flow: ['判断布局是一维流还是二维轨道。', '建立尺寸、换行和溢出规则。', '最后添加响应式覆盖与视觉间距。'],
     notes: ['不要用大量 margin 模拟布局系统。', '遇到长文本时检查 min-w-0 与溢出策略。'],
-    problem: '解决“复杂页面骨架该选择 Flex 还是 Grid，以及如何避免内容溢出”的问题。',
+    problem: '解决"复杂页面骨架该选择 Flex 还是 Grid，以及如何避免内容溢出"的问题。',
   },
   {
     id: 'TW_08', title: '容器查询与可复用组件', navTitle: '容器查询', category: '布局进阶',
@@ -3984,7 +4025,7 @@ export const lessons: Lesson[] = [
     principle: '@container 在父级建立查询上下文，容器尺寸变体根据最近匹配容器切换子元素工具类，使组件在侧栏、弹窗和主内容区都能自适应。',
     flow: ['在承载组件的父级建立容器。', '以内容临界点选择容器尺寸变体。', '嵌套场景用命名容器消除歧义。'],
     notes: ['容器查询补充而非取代视口媒体查询。', '查询容器必须满足相应 containment 条件。'],
-    problem: '解决“可复用组件如何根据实际可用空间独立响应”的问题。',
+    problem: '解决"可复用组件如何根据实际可用空间独立响应"的问题。',
   },
   {
     id: 'SC_01', title: '变量、作用域与安全嵌套', navTitle: '变量与嵌套', category: '语言基础',
@@ -3993,7 +4034,7 @@ export const lessons: Lesson[] = [
     principle: 'Sass 变量在编译时参与计算并受词法作用域约束；嵌套表达选择器上下文，但输出仍是普通 CSS，层级越深通常特异性和结构耦合越高。',
     flow: ['提取编译期稳定的颜色和尺寸。', '让嵌套只表达组件直接关系。', '运行时主题值保留为 CSS 自定义属性。'],
     notes: ['Sass 变量不会像 CSS 变量一样在浏览器运行时更新。', '避免按完整 DOM 树逐层嵌套。'],
-    problem: '解决“何时使用 Sass 变量，以及如何避免嵌套造成选择器失控”的问题。',
+    problem: '解决"何时使用 Sass 变量，以及如何避免嵌套造成选择器失控"的问题。',
   },
   {
     id: 'SC_02', title: '模块系统：@use 与 @forward', navTitle: '模块系统', category: '模块复用',
@@ -4002,7 +4043,7 @@ export const lessons: Lesson[] = [
     principle: '@use 只加载模块一次并通过命名空间访问成员；@forward 重新导出经过筛选或配置的成员，用于构造样式库公共 API。',
     flow: ['按职责拆分 partial 文件。', '消费方通过 @use 显式声明依赖。', '聚合入口用 @forward 控制公开成员。'],
     notes: ['@import 已弃用，新代码使用模块系统。', 'as * 会移除命名空间，只有在成员明确且无冲突时使用。'],
-    problem: '解决“多文件样式如何避免全局污染、重复输出和隐式依赖”的问题。',
+    problem: '解决"多文件样式如何避免全局污染、重复输出和隐式依赖"的问题。',
   },
   {
     id: 'SC_03', title: 'Mixin、参数与 @content', navTitle: 'Mixin', category: '模块复用',
@@ -4011,7 +4052,7 @@ export const lessons: Lesson[] = [
     principle: '@mixin 定义可带位置参数、关键字参数和 @content 内容块的声明生成器，@include 在调用位置展开最终 CSS。',
     flow: ['确认复用目标是一组声明而不是一个值。', '为变化维度设计具名参数与默认值。', '需要调用方注入规则时提供 @content。'],
     notes: ['Mixin 每次 include 都会复制声明，需留意产物体积。', '简单复用优先普通类或 CSS 自定义属性。'],
-    problem: '解决“可配置样式片段如何复用而不复制维护逻辑”的问题。',
+    problem: '解决"可配置样式片段如何复用而不复制维护逻辑"的问题。',
   },
   {
     id: 'SC_04', title: '函数、控制流与内置模块', navTitle: '函数与控制流', category: '编程能力',
@@ -4020,7 +4061,7 @@ export const lessons: Lesson[] = [
     principle: '@function 返回 Sass 值并可使用 @if、@each 等控制流；现代内置能力通过 sass:* 模块提供，名称与依赖来源更清晰。',
     flow: ['明确函数输入单位和返回类型。', '用 @error 拒绝非法参数。', '通过模块化内置函数执行数学或颜色转换。'],
     notes: ['函数不应产生 CSS 声明。', '除法使用 math.div，避免已弃用的斜杠除法语义。'],
-    problem: '解决“设计计算如何集中、校验并在编译期复用”的问题。',
+    problem: '解决"设计计算如何集中、校验并在编译期复用"的问题。',
   },
   {
     id: 'SC_05', title: 'Map、List 与批量生成', navTitle: '集合与循环', category: '编程能力',
@@ -4029,7 +4070,7 @@ export const lessons: Lesson[] = [
     principle: 'Sass Map 表达键值配置，List 表达有序数据；@each 遍历集合生成规则，sass:map 与 sass:list 模块负责查询和转换。',
     flow: ['用 Map 建模有限且稳定的设计配置。', '通过 @each 解构键和值。', '对生成的选择器数量和最终体积做审查。'],
     notes: ['不要用循环生成大量实际不会使用的组合。', '业务数据不应进入 Sass，样式配置才适合集合。'],
-    problem: '解决“有限设计变体如何由单一配置源批量生成”的问题。',
+    problem: '解决"有限设计变体如何由单一配置源批量生成"的问题。',
   },
   {
     id: 'SC_06', title: '父选择器、插值与选择器构造', navTitle: '选择器构造', category: '语言基础',
@@ -4038,16 +4079,16 @@ export const lessons: Lesson[] = [
     principle: '& 表示当前外层复合选择器，可放入伪类、后缀和上下文位置；插值 #{} 把 Sass 表达式嵌入选择器、属性名或字符串。',
     flow: ['用 & 连接组件状态与修饰符。', '只在确需生成标识符时使用插值。', '检查编译后的选择器是否简短且可预测。'],
     notes: ['& 的结果取决于完整外层选择器。', '动态选择器会降低全文搜索、静态分析和重构能力。'],
-    problem: '解决“如何在不重复组件类名的前提下构造状态与修饰选择器”的问题。',
+    problem: '解决"如何在不重复组件类名的前提下构造状态与修饰选择器"的问题。',
   },
   {
     id: 'SC_07', title: '占位选择器与 @extend 边界', navTitle: '@extend', category: '模块复用',
     path: '/sass/sc-7/extend', summary: '用 %placeholder 合并同类通知选择器，并与 Mixin 的复制语义对比。',
     demo: SC07Extend, code: SC07Code, language: 'scss',
-    principle: '%placeholder 自身不输出 CSS，只有被 @extend 时才参与选择器合并；extend 表达“这个选择器属于同一语义集合”，Mixin 则复制声明。',
+    principle: '%placeholder 自身不输出 CSS，只有被 @extend 时才参与选择器合并；extend 表达"这个选择器属于同一语义集合"，Mixin 则复制声明。',
     flow: ['确认扩展方确实是被扩展类型的一种。', '优先扩展占位选择器而非具体类。', '检查编译结果，避免跨模块形成巨大选择器列表。'],
     notes: ['@extend 不能跨 @media 上下文任意工作。', '只想共享声明时 Mixin 通常更直观。'],
-    problem: '解决“何时用选择器合并复用样式，以及何时应该复制声明”的问题。',
+    problem: '解决"何时用选择器合并复用样式，以及何时应该复制声明"的问题。',
   },
   {
     id: 'SC_08', title: '样式架构、构建与迁移', navTitle: '架构与构建', category: '工程架构',
@@ -4056,7 +4097,7 @@ export const lessons: Lesson[] = [
     principle: 'Sass 工程以模块依赖图而非隐式全局顺序组织：入口只装配模块，@forward 定义公共 API，编译器负责压缩、Source Map 与弃用诊断。',
     flow: ['按令牌、工具、组件和页面职责拆分。', '建立少量明确入口与单向依赖。', '在 CI 编译并把弃用警告纳入迁移计划。'],
     notes: ['不要照搬目录模板，规模小的项目保持扁平更好。', '迁移旧项目时先运行 Sass Migrator，再逐步收紧模块边界。'],
-    problem: '解决“样式规模增长后如何保持依赖清晰、产物可控并持续升级”的问题。',
+    problem: '解决"样式规模增长后如何保持依赖清晰、产物可控并持续升级"的问题。',
   },
   {
     id: 'TW_09', title: 'v4 安装与构建工具集成', navTitle: '安装与集成', category: '工程集成',
@@ -4065,7 +4106,7 @@ export const lessons: Lesson[] = [
     principle: 'Tailwind v4 由核心包和构建适配器协作：CSS 入口导入 tailwindcss，Vite 插件、PostCSS 插件或 CLI 负责扫描候选类并生成最终 CSS。',
     flow: ['按现有构建链选择唯一适配器。', '在全局样式入口导入 Tailwind。', '验证开发热更新与生产压缩都读取正确源文件。'],
     notes: ['Vite 项目优先使用官方 Vite 插件。', '不要同时让多个适配器处理同一入口。'],
-    problem: '解决“Tailwind v4 应如何接入不同工程，并避免重复编译”的问题。',
+    problem: '解决"Tailwind v4 应如何接入不同工程，并避免重复编译"的问题。',
   },
   {
     id: 'TW_10', title: '排版层级、行高与可读行长', navTitle: '排版系统', category: '视觉基础',
@@ -4074,7 +4115,7 @@ export const lessons: Lesson[] = [
     principle: '排版工具类分别控制 font-size、line-height、font-weight、letter-spacing 和文本宽度；视觉层级来自这些维度的稳定组合。',
     flow: ['建立正文基准字号与行高。', '按信息层级定义标题尺度。', '限制长文行宽并分别检查中英文效果。'],
     notes: ['中文正文通常需要更宽松行高。', '大标题也要测试窄屏换行与超长文本。'],
-    problem: '解决“如何用工具类构建清晰、稳定且适合中文阅读的排版体系”的问题。',
+    problem: '解决"如何用工具类构建清晰、稳定且适合中文阅读的排版体系"的问题。',
   },
   {
     id: 'TW_11', title: '尺寸约束与间距比例尺', navTitle: '尺寸与间距', category: '视觉基础',
@@ -4083,7 +4124,7 @@ export const lessons: Lesson[] = [
     principle: '尺寸工具描述固定、流体与边界约束；p/m 作用于盒模型，gap 作用于布局轨道，space 在相邻子元素间添加间距。',
     flow: ['先决定容器是固定、流体还是受最大宽度约束。', '用间距尺度建立节奏。', '在长内容与窄屏下验证最小尺寸和溢出。'],
     notes: ['组件内部优先 gap，减少相邻 margin 规则。', 'min-w-0 常用于允许 Flex/Grid 子项正确收缩。'],
-    problem: '解决“页面尺寸与留白如何形成系统，而不是散落魔法数字”的问题。',
+    problem: '解决"页面尺寸与留白如何形成系统，而不是散落魔法数字"的问题。',
   },
   {
     id: 'TW_12', title: '边框、轮廓、Ring 与阴影', navTitle: '边界与阴影', category: '视觉基础',
@@ -4092,7 +4133,7 @@ export const lessons: Lesson[] = [
     principle: 'border 参与盒模型，outline 和 ring 可在不占布局空间时强调焦点，box-shadow 表达层级；透明度修饰符能降低彩色阴影的视觉噪声。',
     flow: ['用边框建立静态边界。', '以 focus-visible 提供高对比焦点。', '仅在需要表达浮层高度时添加阴影。'],
     notes: ['焦点不能只靠低对比阴影。', '过多阴影层级会削弱界面信息结构。'],
-    problem: '解决“视觉分层、边界和键盘焦点应分别使用什么效果”的问题。',
+    problem: '解决"视觉分层、边界和键盘焦点应分别使用什么效果"的问题。',
   },
   {
     id: 'TW_13', title: '过渡、动画与减少动态效果', navTitle: '动画与动效', category: '交互与可访问性',
@@ -4101,7 +4142,7 @@ export const lessons: Lesson[] = [
     principle: 'transition 工具定义参与属性、时长和缓动，animate 工具应用关键帧；运动偏好变体根据 prefers-reduced-motion 提供替代。',
     flow: ['明确动效要解释的状态变化。', '优先动画 transform 与 opacity。', '为减少动态偏好禁用或简化非必要运动。'],
     notes: ['不要使用 transition-all 掩盖属性边界。', '持续闪烁和大幅位移可能引发不适。'],
-    problem: '解决“如何提供有意义的交互反馈，同时控制性能与运动可访问性”的问题。',
+    problem: '解决"如何提供有意义的交互反馈，同时控制性能与运动可访问性"的问题。',
   },
   {
     id: 'TW_14', title: '表单状态与无障碍语义', navTitle: '表单样式', category: '交互与可访问性',
@@ -4110,7 +4151,7 @@ export const lessons: Lesson[] = [
     principle: '表单变体可响应 focus、invalid、disabled 和 aria/data 属性，但工具类只负责外观；可访问名称、描述和状态仍由语义 HTML 提供。',
     flow: ['使用 label 和正确输入类型。', '把帮助或错误信息通过 aria-describedby 关联。', '设计焦点、无效、禁用和只读状态。'],
     notes: ['placeholder 不能代替 label。', '错误不能只用颜色表达。'],
-    problem: '解决“表单如何同时具备一致视觉状态、键盘体验和辅助技术语义”的问题。',
+    problem: '解决"表单如何同时具备一致视觉状态、键盘体验和辅助技术语义"的问题。',
   },
   {
     id: 'TW_15', title: '自定义工具与 Cascade Layers', navTitle: '自定义扩展', category: '扩展机制',
@@ -4119,7 +4160,7 @@ export const lessons: Lesson[] = [
     principle: '@utility 注册静态或函数式工具并接入变体系统；@layer base、components、utilities 把自定义规则放入明确级联层级。',
     flow: ['先确认内置工具与任意值无法清晰表达。', '把单用途能力注册为 @utility。', '按默认值、组件或工具选择正确 layer。'],
     notes: ['自定义工具应保持单一职责。', '复杂业务组件仍应封装为 Vue 组件。'],
-    problem: '解决“项目特有 CSS 能力如何融入 Tailwind，而不建立平行样式体系”的问题。',
+    problem: '解决"项目特有 CSS 能力如何融入 Tailwind，而不建立平行样式体系"的问题。',
   },
   {
     id: 'TW_16', title: '源检测、产物优化与生产排查', navTitle: '生产优化', category: '工程集成',
@@ -4128,7 +4169,7 @@ export const lessons: Lesson[] = [
     principle: 'Tailwind 从源码文本检测完整候选类并按需生成 CSS；@source 可显式注册、排除或内联候选，生产构建再负责压缩和缓存。',
     flow: ['确认模板文件位于自动检测范围。', '外部包用 @source 注册明确路径。', '分析产物并修复动态拼接或过宽内联来源。'],
     notes: ['动态类名应映射为完整静态字符串。', '大范围 safelist 会掩盖架构问题并膨胀产物。'],
-    problem: '解决“生产环境类名缺失或 CSS 过大时如何系统定位”的问题。',
+    problem: '解决"生产环境类名缺失或 CSS 过大时如何系统定位"的问题。',
   },
   {
     id: 'SC_09', title: '值类型、单位与编译期计算', navTitle: '值与单位', category: '语言基础',
@@ -4137,7 +4178,7 @@ export const lessons: Lesson[] = [
     principle: 'Sass 拥有带类型的值系统；数字携带分子和分母单位，兼容单位可转换，不兼容维度会在编译期报错。',
     flow: ['识别表达式中的 Sass 值类型。', '在计算前检查单位维度。', '用 meta.type-of 等函数诊断边界输入。'],
     notes: ['0 也可能携带单位。', '不要用插值绕过本应失败的单位检查。'],
-    problem: '解决“Sass 计算为什么有时能换算单位、有时会报维度错误”的问题。',
+    problem: '解决"Sass 计算为什么有时能换算单位、有时会报维度错误"的问题。',
   },
   {
     id: 'SC_10', title: 'sass:math 与单位安全计算', navTitle: '数学模块', category: '内置模块',
@@ -4146,7 +4187,7 @@ export const lessons: Lesson[] = [
     principle: 'sass:math 提供明确除法、幂、舍入、最值和单位检查；Sass 可处理编译期已知量，浏览器上下文相关计算应保留 CSS calc。',
     flow: ['声明输入单位契约。', '用 math.div 执行明确除法。', '无法在编译期确定的百分比关系交给 calc。'],
     notes: ['斜杠除法已被弃用。', '浮点结果需要依据 CSS 需求决定是否舍入。'],
-    problem: '解决“如何进行可靠的设计数学计算，并保留浏览器应负责的部分”的问题。',
+    problem: '解决"如何进行可靠的设计数学计算，并保留浏览器应负责的部分"的问题。',
   },
   {
     id: 'SC_11', title: 'sass:color 与配色派生', navTitle: '颜色模块', category: '内置模块',
@@ -4155,7 +4196,7 @@ export const lessons: Lesson[] = [
     principle: 'sass:color 在明确颜色空间中读取和转换通道；adjust 增加固定通道量，scale 按剩余范围缩放，mix 按权重混合颜色。',
     flow: ['选定来源颜色与颜色空间。', '按设计意图选择调整或缩放。', '对派生结果执行实际对比度验证。'],
     notes: ['数学派生不能保证视觉可访问性。', '优先现代模块 API，避免已弃用全局颜色函数。'],
-    problem: '解决“如何从有限品牌令牌可靠派生状态颜色，并理解不同函数语义”的问题。',
+    problem: '解决"如何从有限品牌令牌可靠派生状态颜色，并理解不同函数语义"的问题。',
   },
   {
     id: 'SC_12', title: '模块配置、!default 与 with', navTitle: '模块配置', category: '模块复用',
@@ -4164,7 +4205,7 @@ export const lessons: Lesson[] = [
     principle: '模块可用 !default 声明可配置顶层变量，调用方在首次 @use 的 with 子句传值；模块只加载一次，因此配置必须唯一且先于其他加载。',
     flow: ['只公开确有稳定契约的变量。', '为配置提供合理默认值。', '在应用入口首次加载时统一传入配置。'],
     notes: ['不要把所有内部变量都做成配置项。', '复杂配置可用 Mixin 替代 with 的单次加载限制。'],
-    problem: '解决“可复用 Sass 库如何允许主题定制又保护内部实现”的问题。',
+    problem: '解决"可复用 Sass 库如何允许主题定制又保护内部实现"的问题。',
   },
   {
     id: 'SC_13', title: '@at-root 与嵌套上下文控制', navTitle: '@at-root', category: '选择器进阶',
@@ -4173,7 +4214,7 @@ export const lessons: Lesson[] = [
     principle: '@at-root 默认移除普通选择器上下文，并可用 with/without 查询控制保留 media、supports 等 at-rule，适合高级选择器生成。',
     flow: ['确认输出规则不应继承当前选择器。', '决定需要保留的 at-rule 上下文。', '检查编译结果是否产生预期根级选择器。'],
     notes: ['不要用 @at-root 掩盖糟糕的深层架构。', '涉及复杂选择器时可配合 sass:selector 模块。'],
-    problem: '解决“嵌套内部如何有控制地生成外层或根级规则”的问题。',
+    problem: '解决"嵌套内部如何有控制地生成外层或根级规则"的问题。',
   },
   {
     id: 'SC_14', title: '媒体查询冒泡与响应式 Mixin', navTitle: '媒体查询', category: '选择器进阶',
@@ -4182,7 +4223,7 @@ export const lessons: Lesson[] = [
     principle: 'media、supports 等 at-rule 在嵌套时会冒泡到可输出位置，Sass 还会合并可组合的外层查询；Mixin 可统一断点契约。',
     flow: ['以内容临界点定义少量断点。', '让组件的覆盖规则靠近基础规则。', '审查编译后查询是否重复或组合爆炸。'],
     notes: ['断点 Mixin 不应隐藏复杂业务判断。', '现代范围语法可直接表达 width >= 值。'],
-    problem: '解决“组件响应式样式如何共置，同时保持最终媒体查询清晰”的问题。',
+    problem: '解决"组件响应式样式如何共置，同时保持最终媒体查询清晰"的问题。',
   },
   {
     id: 'SC_15', title: 'CSS 自定义属性与 Sass 插值', navTitle: 'CSS 变量协作', category: 'CSS 协作',
@@ -4191,7 +4232,7 @@ export const lessons: Lesson[] = [
     principle: 'Sass 值写入自定义属性时需要插值，因为属性值可能是任意 CSS 文本；meta.inspect 可在插值时保留带引号字符串表示。',
     flow: ['区分编译期常量与运行时主题值。', '用插值输出初始自定义属性。', '浏览器端通过级联、继承或脚本覆盖变量。'],
     notes: ['插值通常会移除字符串引号。', '运行时切换不应重新依赖 Sass 编译。'],
-    problem: '解决“Sass 令牌如何安全进入浏览器可切换的 CSS 变量体系”的问题。',
+    problem: '解决"Sass 令牌如何安全进入浏览器可切换的 CSS 变量体系"的问题。',
   },
   {
     id: 'SC_16', title: '诊断指令、弃用与自动迁移', navTitle: '诊断与迁移', category: '工程架构',
@@ -4200,6 +4241,188 @@ export const lessons: Lesson[] = [
     principle: '@debug 输出开发值，@warn 报告可继续问题，@error 中断非法构建；编译器弃用警告与 Sass Migrator 共同支撑模块和语法升级。',
     flow: ['在公共函数与 Mixin 边界验证参数。', '保留带调用栈的弃用警告。', '用 Migrator 机械迁移后审查模块 API 和产物。'],
     notes: ['不要在正常构建中制造高噪声 debug。', '自动迁移后仍需测试视觉回归与 CSS 体积。'],
-    problem: '解决“Sass 代码如何在错误时快速失败，并持续摆脱已弃用语法”的问题。',
+    problem: '解决"Sass 代码如何在错误时快速失败，并持续摆脱已弃用语法"的问题。',
+  },
+
+  /***** CSS 核心知识 *****/
+  {
+    id: 'C_01', title: '选择器详解', navTitle: '选择器', category: '选择器',
+    path: '/css/c-1/selectors', summary: '理解通配、类型、类、ID、属性、伪类、伪元素与组合器的匹配规则与优先级。',
+    demo: C01Selectors, code: C01Code, language: 'vue',
+    principle: 'CSS 选择器按优先级（内联 > ID > 类 > 元素 > 通配）决定哪条规则生效；组合器可表达父子、兄弟等关系。',
+    flow: ['用课程标签筛选理解各类选择器。', '观察不同选择器的生效范围。', '理解优先级计算规则。'],
+    notes: ['!important 会破坏优先级规则，应尽量避免。', '选择器过深会影响性能与可维护性。'],
+    problem: '解决"如何精准选中目标元素，并理解样式覆盖顺序"的问题。',
+  },
+  {
+    id: 'C_02', title: '盒模型与尺寸计算', navTitle: '盒模型', category: '基础模型',
+    path: '/css/c-2/box-model', summary: '理解 content-box 与 border-box 的尺寸差异，以及外边距折叠现象。',
+    demo: C02BoxModel, code: C02Code, language: 'vue',
+    principle: 'box-sizing 决定 width/height 是否包含 padding 和 border；border-box 更符合直觉。外边距折叠发生在垂直相邻的块级元素之间。',
+    flow: ['切换 box-sizing 观察总宽度变化。', '查看尺寸计算表。', '切换外边距折叠演示。'],
+    notes: ['全局设置 * { box-sizing: border-box } 是常见做法。', '外边距折叠只发生在垂直方向，且只影响普通文档流。'],
+    problem: '解决"设置 width: 200px 但元素实际更宽，以及相邻元素间距不符合预期"的问题。',
+  },
+  {
+    id: 'C_03', title: 'Flexbox 弹性布局', navTitle: 'Flexbox', category: '布局系统',
+    path: '/css/c-3/flexbox', summary: '用课程卡片列表理解主轴、交叉轴对齐与弹性伸缩。',
+    demo: C03Flexbox, code: C03Code, language: 'vue',
+    principle: 'Flexbox 是一维布局模型：主轴由 flex-direction 决定，交叉轴垂直于主轴；justify-content 控制主轴对齐，align-items 控制交叉轴对齐。',
+    flow: ['调整主轴对齐方式。', '调整交叉轴对齐方式。', '观察 order 属性对排列顺序的影响。'],
+    notes: ['Flexbox 适合组件内或一维排列。', 'flex: 1 是 flex-grow:1 flex-shrink:1 flex-basis:0% 的简写。'],
+    problem: '解决"如何让子元素在主轴/交叉轴上灵活对齐，并处理空间分配"的问题。',
+  },
+  {
+    id: 'C_04', title: 'Grid 二维网格布局', navTitle: 'Grid', category: '布局系统',
+    path: '/css/c-4/grid', summary: '用课程仪表盘理解轨道定义、区域命名与网格线放置。',
+    demo: C04Grid, code: C04Code, language: 'vue',
+    principle: 'Grid 是二维布局模型：通过 grid-template-columns/rows 定义轨道，通过 grid-area 或 grid-column/row 放置项目；还支持 grid-template-areas 语义化布局。',
+    flow: ['切换列轨道定义方式。', '启用 grid-area 区域布局。', '观察网格线编号规律。'],
+    notes: ['Grid 适合整体页面布局；Flexbox 适合一维排列。', 'fr 单位表示可用空间的分配比例。'],
+    problem: '解决"如何同时控制行和列的布局，并用语义化方式描述页面结构"的问题。',
+  },
+  {
+    id: 'C_05', title: '定位机制', navTitle: '定位', category: '定位与布局',
+    path: '/css/c-5/position', summary: '理解 static / relative / absolute / fixed / sticky 的偏移基准与文档流行为。',
+    demo: C05Position, code: C05Code, language: 'vue',
+    principle: 'position 决定元素的定位参考系：static（默认）、relative（相对原位置）、absolute（相对最近定位祖先）、fixed（相对视口）、sticky（滚动时切换 fixed）。',
+    flow: ['切换五种定位值。', '观察是否脱离文档流。', '理解 sticky 的阈值触发条件。'],
+    notes: ['absolute 定位需要最近的非 static 祖先作为参考。', 'sticky 必须指定 top/bottom/left/right 才会生效。'],
+    problem: '解决"元素应该相对谁偏移，以及是否应脱离正常文档流"的问题。',
+  },
+  {
+    id: 'C_06', title: '层叠与继承', navTitle: '层叠', category: '层叠与继承',
+    path: '/css/c-6/cascade', summary: '理解 CSS 层叠优先级（!important > 内联 > ID > 类 > 元素）与属性继承规则。',
+    demo: C06Cascade, code: C06Code, language: 'vue',
+    principle: '层叠通过来源（作者/用户/浏览器）、重要性（!important）、专用性（#id > .class > 元素）和出现顺序决定最终值；继承让某些属性自动从父元素获取值。',
+    flow: ['观察不同专用性选择器的覆盖关系。', '理解 !important 的破坏力。', '区分可继承与不可继承属性。'],
+    notes: ['专用性计算：内联 1000，ID 100，类 10，元素 1。', 'inherit、initial、unset、revert 可精细控制继承行为。'],
+    problem: '解决"为什么写的样式不生效（被覆盖），以及如何正确控制优先级"的问题。',
+  },
+  {
+    id: 'C_07', title: 'CSS 变量（自定义属性）', navTitle: 'CSS 变量', category: '变量与主题',
+    path: '/css/c-7/variables', summary: '用主题切换理解自定义属性的声明、读取、继承与动态更新。',
+    demo: C07Variables, code: C07Code, language: 'vue',
+    principle: '自定义属性以 --name 声明，用 var(--name, fallback) 读取；它们可继承，可在运行时通过 JS 修改，是实现主题切换的核心机制。',
+    flow: ['切换暖色/冷色主题观察变量变化。', '拖动滑块改变间距变量。', '理解 fallback 的作用。'],
+    notes: ['自定义属性有继承性，与普通 CSS 属性不同。', ':root 上声明的变量全局可用，组件内声明则局部覆盖。'],
+    problem: '解决"如何在运行时动态切换主题，并让多个属性共享同一设计令牌"的问题。',
+  },
+  {
+    id: 'C_08', title: '过渡与动画', navTitle: '过渡动画', category: '动画与过渡',
+    path: '/css/c-8/transition-animation', summary: '用课程卡片交互动效理解 transition 与 animation 的差异与适用场景。',
+    demo: C08Transition, code: C08Code, language: 'vue',
+    principle: 'transition 需要状态变化触发，适合简单过渡；animation 通过 @keyframes 定义关键帧，可自动播放、循环、暂停，适合复杂动画。',
+    flow: ['对比 transition 与 animation 的触发方式。', '调整动画时长观察效果。', '理解 @keyframes 的关键帧定义。'],
+    notes: ['优先使用 transform 和 opacity 做动画（由 GPU 合成，不触发重排）。', 'animation-fill-mode 可控制动画前后的样式保持。'],
+    problem: '解决"哪种动画方式更适合当前交互场景，以及如何避免动画性能问题"的问题。',
+  },
+  {
+    id: 'C_09', title: '媒体查询与响应式', navTitle: '媒体查询', category: '响应式',
+    path: '/css/c-9/media-query', summary: '用课程卡片列表理解移动优先（mobile-first）的断点与媒体查询写法。',
+    demo: C09MediaQuery, code: C09Code, language: 'vue',
+    principle: '媒体查询通过 @media 根据视口尺寸、设备特性等条件应用不同样式；移动优先指先写小屏样式，再用 min-width 逐步增强大屏。',
+    flow: ['拖动滑块模拟不同视口宽度。', '观察课程卡片列数的响应式变化。', '理解移动优先的断点编写顺序。'],
+    notes: ['移动优先的断点用 min-width（从小屏开始写）。', 'prefers-color-scheme、prefers-reduced-motion 等媒体特性可实现无障碍适配。'],
+    problem: '解决"同一套 HTML 如何在手机、平板、桌面上呈现不同布局"的问题。',
+  },
+  {
+    id: 'C_10', title: '渐变与背景', navTitle: '渐变背景', category: '视觉效果',
+    path: '/css/c-10/gradient-bg', summary: '用课程卡片背景理解 linear / radial / conic-gradient 的语法与色标控制。',
+    demo: C10Gradient, code: C10Code, language: 'vue',
+    principle: 'CSS 渐变是 image 类型：linear-gradient 沿直线过渡，radial-gradient 沿半径过渡，conic-gradient 沿角度过渡；色标可指定位置百分比。',
+    flow: ['切换三种渐变类型。', '调整线性渐变角度。', '观察预设渐变效果。'],
+    notes: ['渐变可叠加（逗号分隔多个 gradient）。', 'background-size 可控制背景图的尺寸，实现平铺渐变。'],
+    problem: '解决"如何用纯 CSS 实现丰富的背景效果，避免切图"的问题。',
+  },
+  {
+    id: 'C_11', title: '滤镜与混合模式', navTitle: '滤镜混合', category: '视觉效果',
+    path: '/css/c-11/filter-blend', summary: '用课程封面图理解 filter 视觉效果与 mix-blend-mode 色彩混合。',
+    demo: C11Filter, code: C11Code, language: 'vue',
+    principle: 'filter 对元素整体应用模糊、灰度等视觉效果；mix-blend-mode 决定元素与背景（或兄弟元素）的色彩混合方式；backdrop-filter 只对元素后方区域应用滤镜。',
+    flow: ['切换不同滤镜效果。', '切换混合模式观察色彩变化。', '理解 backdrop-filter 与 filter 的区别。'],
+    notes: ['filter 可能影响性能，动画中需谨慎使用。', 'mix-blend-mode 在重叠元素间生效，需注意可读性。'],
+    problem: '解决"如何为图片添加视觉效果，或让文字与背景图片产生自然的色彩融合"的问题。',
+  },
+  {
+    id: 'C_12', title: 'CSS 数学函数', navTitle: '数学函数', category: '函数与计算',
+    path: '/css/c-12/math-functions', summary: '用课程卡片自适应宽度理解 calc / min / max / clamp 的语法与典型场景。',
+    demo: C12MathFunctions, code: C12Code, language: 'vue',
+    principle: 'calc() 支持混合单位的四则运算；min() 取最小值（适合 max-width）；max() 取最大值（适合响应式字体）；clamp() 提供最小值-理想值-最大值的区间限制。',
+    flow: ['切换四种数学函数。', '观察容器宽度的动态计算。', '理解 clamp 在响应式排版中的价值。'],
+    notes: ['clamp(min, val, max) 的 val 通常用相对单位（如 2vw）。', '这些函数可嵌套使用，非常灵活。'],
+    problem: '解决"如何让尺寸在不同屏幕下自适应，同时限制最小和最大值"的问题。',
+  },
+  {
+    id: 'C_13', title: '视口与容器单位', navTitle: '视口单位', category: '单位与尺寸',
+    path: '/css/c-13/viewport-units', summary: '理解 vw / vh / dvh / cqw / rem / ch 的基准与适用场景。',
+    demo: C13ViewportUnits, code: C13Code, language: 'vue',
+    principle: 'vw/vh 相对于视口尺寸；dvh 会在移动端工具栏收起/展开时动态调整（比 vh 更准确）；cqw/cqh 相对于容器尺寸（配合容器查询）；rem 相对于根字号；ch 相当于字符 0 的宽度。',
+    flow: ['切换不同 CSS 单位观察效果。', '理解各单位的参考基准。', '对比 vh 与 dvh 在移动端的差异。'],
+    notes: ['移动端推荐用 dvh 替代 vh 避免工具栏问题。', 'rem 适合可缩放的全局间距/字号；px 适合边框等固定值。'],
+    problem: '解决"如何选择最合适的 CSS 单位，让布局在不同设备和容器中都能自适应"的问题。',
+  },
+  {
+    id: 'C_14', title: '形状与裁剪', navTitle: '裁剪形状', category: '视觉效果',
+    path: '/css/c-14/clip-path-mask', summary: '用课程封面图理解 clip-path 裁剪区域与 mask 遮罩的差异。',
+    demo: C14ClipPath, code: C14Code, language: 'vue',
+    principle: 'clip-path 通过几何形状裁剪元素的可见区域（保留布局空间）；mask 通过图像或渐变的透明度决定可见性；两者都可做动画。',
+    flow: ['切换 clip-path 形状（圆形、椭圆、三角形等）。', '对比 mask 遮罩效果。', '理解两者是否保留交互区域。'],
+    notes: ['clip-path 裁剪的区域无法接收点击事件。', 'mask 需要 -webkit-mask 前缀以兼容 Safari。'],
+    problem: '解决"如何把元素裁剪成非矩形，或用渐变实现复杂的图片遮罩效果"的问题。',
+  },
+  {
+    id: 'C_15', title: '逻辑属性', navTitle: '逻辑属性', category: '逻辑属性',
+    path: '/css/c-15/logical-properties', summary: '用中英文/rtl 布局理解物理属性与逻辑属性的差异，以及书写模式适配。',
+    demo: C15LogicalProperties, code: C15Code, language: 'vue',
+    principle: '逻辑属性用 start/end 替代物理方向（left/right/top/bottom），自动适配 LTR/RTL 书写模式；inline 对应文本流向，block 对应块流向。',
+    flow: ['切换 LTR/RTL 书写方向。', '对比物理属性与逻辑属性的表现。', '理解 inline-size 替代 width 的意义。'],
+    notes: ['逻辑属性是国际化（i18n）适配的最佳实践。', 'inset-inline-start 等价于 LTR 下的 left 或 RTL 下的 right。'],
+    problem: '解决"如何让布局自动适配不同书写方向（如阿拉伯语 RTL），而不用手动切换 left/right"的问题。',
+  },
+  {
+    id: 'C_16', title: '容器查询', navTitle: '容器查询', category: '响应式进阶',
+    path: '/css/c-16/container-query', summary: '用课程卡片理解基于容器尺寸（而非视口）的响应式布局。',
+    demo: C16ContainerQuery, code: C16Code, language: 'vue',
+    principle: '容器查询通过 @container 根据祖先容器的尺寸应用样式（而非视口尺寸）；需要先通过 container-type 声明容器；cqw/cqh 是相对于容器尺寸的单位。',
+    flow: ['拖动滑块改变容器宽度。', '观察卡片内部布局如何响应容器变化。', '理解 @container 与 @media 的区别。'],
+    notes: ['容器查询适合组件级响应式（卡片、侧边栏等）。', '@media 仍适合页面级响应式（整体布局断点）。'],
+    problem: '解决"组件在不同宽度的容器中应如何自适应，而不是只根据视口宽度响应"的问题。',
+  },
+  {
+    id: 'C_17', title: '层叠上下文', navTitle: '层叠上下文', category: '层叠与 z-index',
+    path: '/css/c-17/stacking-context', summary: '理解 z-index 失效的原因：层叠上下文的创建条件与层级隔离。',
+    demo: C17StackingContext, code: C17Code, language: 'vue',
+    principle: '层叠上下文是一个独立的渲染层级；子元素的 z-index 只在当前上下文内比较；当父元素创建了新上下文，子元素再高的 z-index 也无法覆盖上下文外的元素。',
+    flow: ['观察默认情况下 z-index 的生效方式。', '触发 opacity < 1 创建新层叠上下文。', '触发 transform 创建新层叠上下文。'],
+    notes: ['常见创建层叠上下文的属性：opacity<1、transform≠none、filter≠none、isolation:isolate。', 'isolation: isolate 可专门创建上下文而不影响视觉。'],
+    problem: '解决"为什么设置了很高的 z-index 仍然被其他元素覆盖"的问题。',
+  },
+  {
+    id: 'C_18', title: '格式化上下文', navTitle: '格式化上下文', category: '布局原理',
+    path: '/css/c-18/formatting-context', summary: '理解 BFC / IFC / FFC / GFC 的创建方式与布局影响。',
+    demo: C18FormattingContext, code: C18Code, language: 'vue',
+    principle: '格式化上下文决定浏览器如何布局子元素：BFC（块级）隔离浮动、防止外边距折叠；IFC（行内级）控制行盒排列与基线对齐；FFC/GFC 分别对应 Flex/Grid 布局。',
+    flow: ['对比 BFC 创建前后的浮动包裹行为。', '观察 IFC 内行内元素的基线对齐。', '理解外边距折叠与 BFC 的关系。'],
+    notes: ['overflow≠visible、float≠none、display:flow-root 都可创建 BFC。', 'display:flow-root 是创建 BFC 且不副作用的最佳方式。'],
+    problem: '解决"浮动元素溢出容器、外边距异常折叠"等经典 CSS 布局问题。',
+  },
+  {
+    id: 'C_19', title: 'CSS 架构方法论', navTitle: 'CSS 架构', category: '工程架构',
+    path: '/css/c-19/architecture', summary: '用课程卡片组件理解 BEM / OOCSS / SMACSS 的命名与组织思路。',
+    demo: C19BEM, code: C19Code, language: 'vue',
+    principle: 'BEM（Block__Element--Modifier）通过严格的命名约定实现组件化；OOCSS 分离结构与皮肤；SMACSS 按角色（布局/模块/状态/主题）分类选择器；现代项目多用 CSS Modules 或 CSS-in-JS 实现局部作用域。',
+    flow: ['对比三种方法论的命名方式。', '理解各自适用场景。', '结合现代工程化工具选择方案。'],
+    notes: ['BEM 类名较长但在大型项目中可预测性强。', '现代构建工具（Vite/webpack）的 CSS Modules 可自动哈希类名，实现真正的局部作用域。'],
+    problem: '解决"大型项目中 CSS 如何组织，才能避免样式冲突、提高可维护性"的问题。',
+  },
+  {
+    id: 'C_20', title: 'CSS 性能优化', navTitle: 'CSS 性能', category: '性能优化',
+    path: '/css/c-20/performance', summary: '理解渲染阻塞、图层提升、动画性能与 content-visibility 等优化手段。',
+    demo: C20Performance, code: C20Code, language: 'vue',
+    principle: 'CSS 性能优化核心：减少阻塞渲染（尽早加载关键 CSS）、使用 GPU 加速属性（transform/opacity）、避免强制同步布局、利用 content-visibility 跳过离屏渲染、控制选择器复杂度。',
+    flow: ['理解 will-change 与图层提升的关系。', '学习 content-visibility 跳过离屏渲染。', '掌握 CSS 性能最佳实践。'],
+    notes: ['动画优先用 transform 和 opacity（合成层，不触发重排/重绘）。', 'will-change 不要滥用，会增加 GPU 内存占用。', 'content-visibility: auto 可大幅提升长列表渲染性能。'],
+    problem: '解决"页面滚动卡顿、动画不流畅、首次渲染慢"等 CSS 性能问题。',
   },
 ]
