@@ -5,10 +5,12 @@ describe('课程注册表', () => {
   it('新增专题课程按子类别形成完整章节', () => {
     const expectedCurriculum = [
       { id: 'javascript', lessonCount: 24, groupCount: 6 },
-      { id: 'typescript', lessonCount: 15, groupCount: 4 },
-      { id: 'nodejs', lessonCount: 12, groupCount: 6 },
-      { id: 'state-management', lessonCount: 10, groupCount: 6 },
-      { id: 'engineering', lessonCount: 12, groupCount: 4 },
+      { id: 'typescript', lessonCount: 18, groupCount: 4 },
+      { id: 'nodejs', lessonCount: 16, groupCount: 8 },
+      { id: 'state-management', lessonCount: 16, groupCount: 8 },
+      { id: 'engineering', lessonCount: 16, groupCount: 5 },
+      { id: 'langchain', lessonCount: 18, groupCount: 11 },
+      { id: 'element-plus', lessonCount: 20, groupCount: 7 },
     ]
 
     for (const expected of expectedCurriculum) {

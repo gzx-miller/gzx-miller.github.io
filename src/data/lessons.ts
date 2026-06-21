@@ -128,6 +128,14 @@ const E15Drawer = createDemo('E15Drawer')
 const E15Code = createCodeLoader('E15Drawer.vue')
 const E16Steps = createDemo('E16Steps')
 const E16Code = createCodeLoader('E16Steps.vue')
+const E17Transfer = createDemo('E17Transfer')
+const E17Code = createCodeLoader('E17Transfer.vue')
+const E18Result = createDemo('E18Result')
+const E18Code = createCodeLoader('E18Result.vue')
+const E19Progress = createDemo('E19Progress')
+const E19Code = createCodeLoader('E19Progress.vue')
+const E20Skeleton = createDemo('E20Skeleton')
+const E20Code = createCodeLoader('E20Skeleton.vue')
 const R01ComponentProps = createDemo('R01ComponentProps')
 const R01Code = createCodeLoader('react-jsx/R01ComponentProps.jsx')
 const R02StateUpdates = createDemo('R02StateUpdates')
@@ -204,6 +212,14 @@ const L13Streaming = createDemo('L13Streaming')
 const L13Code = createCodeLoader('L13Streaming.vue')
 const L14Evaluation = createDemo('L14Evaluation')
 const L14Code = createCodeLoader('L14Evaluation.vue')
+const L15StructuredOutput = createDemo('L15StructuredOutput')
+const L15Code = createCodeLoader('L15StructuredOutput.vue')
+const L16LangGraph = createDemo('L16LangGraph')
+const L16Code = createCodeLoader('L16LangGraph.vue')
+const L17VectorStore = createDemo('L17VectorStore')
+const L17Code = createCodeLoader('L17VectorStore.vue')
+const L18Deploy = createDemo('L18Deploy')
+const L18Code = createCodeLoader('L18Deploy.vue')
 const N01ProjectStructure = createDemo('N01ProjectStructure')
 const N01Code = createCodeLoader('N01ProjectStructure.vue')
 const N02FileRouting = createDemo('N02FileRouting')
@@ -274,6 +290,12 @@ const T14Enums = createDemo('T14Enums')
 const T14Code = createCodeLoader('ts-code/T14Enums.ts')
 const T15DeclarationMerging = createDemo('T15DeclarationMerging')
 const T15Code = createCodeLoader('ts-code/T15DeclarationMerging.ts')
+const T16CompilerOptions = createDemo('T16CompilerOptions')
+const T16Code = createCodeLoader('T16CompilerOptions.vue')
+const T17DeclarationFiles = createDemo('T17DeclarationFiles')
+const T17Code = createCodeLoader('T17DeclarationFiles.vue')
+const T18Namespace = createDemo('T18Namespace')
+const T18Code = createCodeLoader('T18Namespace.vue')
 const G01EnvironmentConfig = createDemo('G01EnvironmentConfig')
 const G01Code = createCodeLoader('G01EnvironmentConfig.vue')
 const G02CodeQuality = createDemo('G02CodeQuality')
@@ -298,6 +320,14 @@ const G11BundleAnalysis = createDemo('G11BundleAnalysis')
 const G11Code = createCodeLoader('G11BundleAnalysis.vue')
 const G12Monorepo = createDemo('G12Monorepo')
 const G12Code = createCodeLoader('G12Monorepo.vue')
+const G13Docker = createDemo('G13Docker')
+const G13Code = createCodeLoader('G13Docker.vue')
+const G14GitWorkflow = createDemo('G14GitWorkflow')
+const G14Code = createCodeLoader('G14GitWorkflow.vue')
+const G15I18n = createDemo('G15I18n')
+const G15Code = createCodeLoader('G15I18n.vue')
+const G16MicroFrontend = createDemo('G16MicroFrontend')
+const G16Code = createCodeLoader('G16MicroFrontend.vue')
 const J01TypesEquality = createDemo('J01TypesEquality')
 const J01Code = createCodeLoader('js-code/J01TypesEquality.js')
 const J02Closure = createDemo('J02Closure')
@@ -370,6 +400,14 @@ const D11Security = createDemo('D11Security')
 const D11Code = createCodeLoader('D11Security.vue')
 const D12PackageManagement = createDemo('D12PackageManagement')
 const D12Code = createCodeLoader('D12PackageManagement.vue')
+const D13ExpressFastify = createDemo('D13ExpressFastify')
+const D13Code = createCodeLoader('D13ExpressFastify.vue')
+const D14WebSocket = createDemo('D14WebSocket')
+const D14Code = createCodeLoader('D14WebSocket.vue')
+const D15Database = createDemo('D15Database')
+const D15Code = createCodeLoader('D15Database.vue')
+const D16WorkerThreads = createDemo('D16WorkerThreads')
+const D16Code = createCodeLoader('D16WorkerThreads.vue')
 const S01StateBoundaries = createDemo('S01StateBoundaries')
 const S01Code = createCodeLoader('S01StateBoundaries.vue')
 const S02PiniaSetupStore = createDemo('S02PiniaSetupStore')
@@ -390,6 +428,18 @@ const S09XStateMachine = createDemo('S09XStateMachine')
 const S09Code = createCodeLoader('state-react/S09XStateMachine.js')
 const S10StoreSelection = createDemo('S10StoreSelection')
 const S10Code = createCodeLoader('S10StoreSelection.vue')
+const S11VuexMigration = createDemo('S11VuexMigration')
+const S11Code = createCodeLoader('S11VuexMigration.vue')
+const S12Valtio = createDemo('S12Valtio')
+const S12Code = createCodeLoader('S12Valtio.vue')
+const S13TanStackQuery = createDemo('S13TanStackQuery')
+const S13Code = createCodeLoader('S13TanStackQuery.vue')
+const S14Signals = createDemo('S14Signals')
+const S14Code = createCodeLoader('S14Signals.vue')
+const S15Persistence = createDemo('S15Persistence')
+const S15Code = createCodeLoader('S15Persistence.vue')
+const S16Comparison = createDemo('S16Comparison')
+const S16Code = createCodeLoader('S16Comparison.vue')
 
 export interface KnowledgeCategory {
   id: string
@@ -1508,6 +1558,42 @@ export const lessons: Lesson[] = [
     ],
     problem: '解决"报名、审批、订单等多阶段流程如何清晰展示当前进度"的问题。',
   },
+  {
+    id: 'E_17', title: '穿梭框：Transfer 数据分配', navTitle: '穿梭框', category: '数据组件',
+    path: '/element-plus/e-17/transfer', summary: '用课程分类分配展示 ElTransfer 的筛选、移动和自定义渲染。',
+    demo: E17Transfer, code: E17Code, language: 'vue',
+    principle: 'ElTransfer 提供双列表穿梭选择，支持搜索过滤、自定义渲染和左右面板标题，适合需要在两个集合间移动数据的场景。',
+    flow: ['准备带 key/label 的数据源。', '配置筛选和自定义渲染。', '通过 v-model 获取右侧选中项。'],
+    notes: ['数据项的 key 必须唯一。', '大数据量时注意 filter-method 性能。'],
+    problem: '解决"如何在两个集合之间直观地分配和移动数据项"的问题。',
+  },
+  {
+    id: 'E_18', title: '结果页：Result 操作反馈', navTitle: '结果页', category: '反馈组件',
+    path: '/element-plus/e-18/result', summary: '用课程提交结果展示 ElResult 的成功、警告、错误和信息状态。',
+    demo: E18Result, code: E18Code, language: 'vue',
+    principle: 'ElResult 提供标准化的操作结果反馈页面，内置 success/warning/error/info 四种状态，支持自定义标题、描述和操作按钮。',
+    flow: ['根据操作结果选择对应状态类型。', '设置标题和描述说明。', '在 extra 插槽中放置操作按钮。'],
+    notes: ['结果页适合操作完成后的整页反馈。', '轻量反馈优先使用 ElMessage 或 ElMessageBox。'],
+    problem: '解决"表单提交或操作完成后如何给出标准化反馈页面"的问题。',
+  },
+  {
+    id: 'E_19', title: '进度条：Progress 学习进度', navTitle: '进度条', category: '数据组件',
+    path: '/element-plus/e-19/progress', summary: '用课程学习进度展示 ElProgress 的线形、环形和仪表盘模式。',
+    demo: E19Progress, code: E19Code, language: 'vue',
+    principle: 'ElProgress 通过 percentage 控制进度，type 切换线形和环形，color 支持分段着色，stroke-width 调整粗细，适合展示任务完成度。',
+    flow: ['根据业务数据计算百分比。', '选择合适的展示类型和颜色方案。', '动态更新进度并处理完成状态。'],
+    notes: ['环形进度条的 width 控制整体尺寸。', '多色分段用数组形式的 color 属性。'],
+    problem: '解决"如何直观展示任务完成度或操作进度"的问题。',
+  },
+  {
+    id: 'E_20', title: '骨架屏：Skeleton 加载占位', navTitle: '骨架屏', category: '反馈组件',
+    path: '/element-plus/e-20/skeleton', summary: '用课程卡片加载态展示 ElSkeleton 的基础占位和自定义模板。',
+    demo: E20Skeleton, code: E20Code, language: 'vue',
+    principle: 'ElSkeleton 在数据加载期间展示占位内容，减少白屏感；loading 控制显隐，animated 添加闪光动画，template 插槽支持自定义占位结构。',
+    flow: ['数据加载中显示骨架屏。', '通过 loading 属性切换骨架和内容。', '用 template 插槽定制占位结构。'],
+    notes: ['骨架屏形状应尽量贴近真实内容布局。', '避免对所有组件都使用骨架屏，简单加载态可用 v-loading。'],
+    problem: '解决"数据加载期间如何减少白屏感并提供更好的加载体验"的问题。',
+  },
   // LangChain 知识案例
   {
     id: 'L_1',
@@ -1856,6 +1942,42 @@ export const lessons: Lesson[] = [
       'LangSmith 提供了内置的评估和追踪功能，推荐在生产环境使用。',
     ],
     problem: '解决"LLM 输出质量如何客观评估，以及如何持续监控"的问题。',
+  },
+  {
+    id: 'L_15', title: '结构化输出与 Zod Schema', navTitle: '结构化输出', category: '输出控制',
+    path: '/langchain/l-15/structured-output', summary: '用 Zod Schema 约束 LLM 输出为结构化数据，对比 JSON Mode 和函数调用。',
+    demo: L15StructuredOutput, code: L15Code, language: 'vue',
+    principle: '结构化输出通过 Schema 定义强制 LLM 返回指定格式的数据；JSON Mode 适合简单结构，函数调用（withStructuredOutput）提供更可靠的格式保证和校验。',
+    flow: ['用 Zod 定义输出数据的 Schema。', '选择 JSON Mode 或函数调用模式。', '验证并解析返回的结构化结果。'],
+    notes: ['函数调用模式的格式可靠性高于 JSON Mode。', 'Zod Schema 同时提供运行时校验和类型推导。'],
+    problem: '解决"如何让 LLM 稳定返回可解析的结构化数据而非自由文本"的问题。',
+  },
+  {
+    id: 'L_16', title: 'LangGraph 多智能体编排', navTitle: 'LangGraph', category: '智能体',
+    path: '/langchain/l-16/langgraph', summary: '用状态图编排课程推荐智能体，掌握节点、边和条件路由。',
+    demo: L16LangGraph, code: L16Code, language: 'vue',
+    principle: 'LangGraph 把智能体工作流建模为有向图：节点执行计算，边定义转移，条件边根据状态动态路由；状态在节点间共享并支持检查点和回溯。',
+    flow: ['定义状态接口和节点函数。', '用条件边连接节点形成工作流。', '编译图并传入初始状态执行。'],
+    notes: ['LangGraph 支持检查点，可暂停和恢复执行。', '条件边使工作流能根据中间结果动态分支。'],
+    problem: '解决"如何把复杂智能体工作流建模为可控、可调试的状态图"的问题。',
+  },
+  {
+    id: 'L_17', title: '向量存储与检索策略', navTitle: '向量存储', category: 'RAG',
+    path: '/langchain/l-17/vector-store', summary: '比较 Chroma、FAISS、Pinecone 和 pgvector 的适用场景与检索策略。',
+    demo: L17VectorStore, code: L17Code, language: 'vue',
+    principle: '向量存储把文本嵌入为高维向量并按相似度检索；不同后端在规模、延迟、混合搜索和部署复杂度上各有取舍，检索策略需结合关键词和语义。',
+    flow: ['选择合适的向量数据库。', '配置嵌入模型和相似度度量。', '结合关键词过滤实现混合检索。'],
+    notes: ['小规模实验用 Chroma/FAISS，生产环境考虑 Pinecone/pgvector。', '混合检索（向量+关键词）通常比纯向量效果更好。'],
+    problem: '解决"如何选择合适的向量存储并设计高效的 RAG 检索策略"的问题。',
+  },
+  {
+    id: 'L_18', title: '部署优化与语义缓存', navTitle: '部署优化', category: '工程实践',
+    path: '/langchain/l-18/deploy', summary: '掌握 LLM 应用的缓存、流式输出、Token 预算和成本控制策略。',
+    demo: L18Deploy, code: L18Code, language: 'vue',
+    principle: 'LLM 应用部署需要关注延迟（语义缓存、流式输出）、成本（Token 预算、模型选择）和可靠性（重试、降级），优化策略直接影响用户体验和运营成本。',
+    flow: ['实现语义缓存减少重复调用。', '使用 SSE 流式输出降低感知延迟。', '设置 Token 预算和成本监控。'],
+    notes: ['语义缓存的相似度阈值需要调优。', '流式输出需要前端配合逐块渲染。'],
+    problem: '解决"LLM 应用如何优化延迟、控制成本并保证生产可靠性"的问题。',
   },
   {
     id: 'R_1',
@@ -3046,7 +3168,34 @@ export const lessons: Lesson[] = [
     principle: '同名 interface 自动合并，namespace 可与 class/function 合并；declare module 可为第三方包追加类型声明。',
     flow: ['声明同名接口触发合并。', '用 declare module 扩展已有模块。', '在 .d.ts 文件中放置全局类型增强。'],
     notes: ['class 不能与 class 合并。', '模块增强必须在模块作用域中使用。'],
-    problem: '解决“如何在不修改源码的前提下为第三方库补充类型”的问题。',
+    problem: '解决”如何在不修改源码的前提下为第三方库补充类型”的问题。',
+  },
+  {
+    id: 'T_16', title: 'tsconfig 编译配置详解', navTitle: 'tsconfig', category: '类型进阶',
+    path: '/typescript/t-16/compiler-options', summary: '理解 strict、target、module 等核心编译选项对类型检查行为的影响。',
+    demo: T16CompilerOptions, code: T16Code, language: 'vue',
+    principle: 'tsconfig.json 控制 TypeScript 编译行为；strict 系列决定类型安全等级，target 决定输出 JS 版本，module/moduleResolution 决定模块系统。',
+    flow: ['从 strict: true 开始获得最严格的类型检查。', '根据运行环境选择 target 和 module。', '用 paths 和 baseUrl 配置模块别名。'],
+    notes: ['新项目建议直接启用 strict。', 'moduleResolution 的 bundler 模式适合 Vite 项目。'],
+    problem: '解决”tsconfig 选项太多，如何理解和配置核心编译选项”的问题。',
+  },
+  {
+    id: 'T_17', title: '声明文件与全局类型增强', navTitle: '声明文件', category: '类型进阶',
+    path: '/typescript/t-17/declaration-files', summary: '掌握 .d.ts 声明文件的编写模式、全局增强和第三方库类型补充。',
+    demo: T17DeclarationFiles, code: T17Code, language: 'vue',
+    principle: '声明文件 (.d.ts) 为 JavaScript 代码提供类型信息；ambient 声明用 declare 关键字，全局增强通过 declare global，模块声明用 declare module。',
+    flow: ['为无类型的 JS 库编写 declare module。', '用 declare global 扩展 Window 等全局对象。', '在项目中组织 .d.ts 文件的引用路径。'],
+    notes: ['DefinitelyTyped 是社区维护的类型声明仓库。', '声明文件不包含实现代码。'],
+    problem: '解决”如何为 JavaScript 库和全局环境补充 TypeScript 类型声明”的问题。',
+  },
+  {
+    id: 'T_18', title: '命名空间与模块模式对比', navTitle: '命名空间', category: '类型进阶',
+    path: '/typescript/t-18/namespace', summary: '比较 namespace 与 ES Module 在类型组织中的差异和适用场景。',
+    demo: T18Namespace, code: T18Code, language: 'vue',
+    principle: 'namespace 是 TypeScript 早期的模块组织方式，支持声明合并；ES Module 是现代标准，两者不应混用。新项目应优先使用 ES Module。',
+    flow: ['了解 namespace 的声明合并能力。', '对比 namespace 与 ES Module 的产物差异。', '确定项目中统一使用 ES Module。'],
+    notes: ['namespace 主要存在于旧代码和声明文件中。', '不要在同一项目中混用 namespace 和 ES Module。'],
+    problem: '解决”何时使用 namespace、何时使用 ES Module 来组织类型”的问题。',
   },
   {
     id: 'G_01', title: '环境变量与运行配置', navTitle: '环境配置', category: '构建基础',
@@ -3154,7 +3303,43 @@ export const lessons: Lesson[] = [
     principle: 'Monorepo 通过 workspace 协议把多个包放在同一仓库，共享依赖和工具链；构建按依赖拓扑排序执行，版本管理借助 changesets 实现独立发版。',
     flow: ['在根目录 pnpm-workspace.yaml 声明 packages 匹配规则。', '各包通过 workspace: 协议引用内部依赖，pnpm 自动链接。', '构建工具按拓扑顺序编译，确保被依赖包先于依赖方构建。'],
     notes: ['workspace 协议只在开发环境生效，发布后自动替换为具体版本号。', '修改一个包后，依赖它的所有包都需要重新构建和测试。', '使用 changesets 管理版本，每个变更生成一个 .md 描述文件，发版时自动计算版本号。'],
-    problem: '解决“多包项目如何共享代码、统一版本并按依赖顺序可靠构建”的问题。',
+    problem: '解决”多包项目如何共享代码、统一版本并按依赖顺序可靠构建”的问题。',
+  },
+  {
+    id: 'G_13', title: 'Docker 容器化与多阶段构建', navTitle: 'Docker', category: '部署与运维',
+    path: '/engineering/g-13/docker', summary: '用多阶段 Dockerfile 构建 Node.js 应用镜像，掌握层缓存和镜像瘦身。',
+    demo: G13Docker, code: G13Code, language: 'vue',
+    principle: 'Docker 把应用和依赖打包为不可变镜像；多阶段构建分离编译和运行环境，最终镜像只包含运行时必要文件，减小体积和攻击面。',
+    flow: ['选择合适的基础镜像。', '按变更频率排列层以利用缓存。', '多阶段构建分离构建和运行阶段。'],
+    notes: ['不要把 node_modules 和 .env 打进镜像。', '非 root 用户运行容器提高安全性。'],
+    problem: '解决”如何可靠地将应用打包并部署到不同环境”的问题。',
+  },
+  {
+    id: 'G_14', title: 'Git 工作流与提交规范', navTitle: 'Git 工作流', category: '质量保障',
+    path: '/engineering/g-14/git-workflow', summary: '对比 Git Flow、GitHub Flow 和 Trunk-Based，掌握 Conventional Commits。',
+    demo: G14GitWorkflow, code: G14Code, language: 'vue',
+    principle: '分支策略决定团队协作方式；Conventional Commits 用结构化提交信息驱动自动版本号计算和 CHANGELOG 生成，husky + lint-staged 在提交时执行检查。',
+    flow: ['根据团队规模选择分支策略。', '使用 Conventional Commits 规范提交信息。', '用 husky 和 lint-staged 在提交时自动检查。'],
+    notes: ['小团队适合 GitHub Flow 或 Trunk-Based。', 'commitlint 可以强制校验提交信息格式。'],
+    problem: '解决”团队如何统一分支策略和提交规范以提高协作效率”的问题。',
+  },
+  {
+    id: 'G_15', title: '国际化 i18n 方案实践', navTitle: 'i18n', category: '用户体验',
+    path: '/engineering/g-15/i18n', summary: '用 vue-i18n 实现多语言切换，掌握复数规则、日期格式化和消息懒加载。',
+    demo: G15I18n, code: G15Code, language: 'vue',
+    principle: 'i18n 把可翻译文本抽取为消息文件，运行时根据 locale 选择对应翻译；复数规则、日期/数字格式化和消息懒加载是生产级国际化的关键。',
+    flow: ['抽取文本为消息 JSON 文件。', '配置 locale 切换和回退策略。', '按需加载语言包减少首屏体积。'],
+    notes: ['翻译键使用业务语义命名而非页面位置。', 'RTL 语言需要额外的布局适配。'],
+    problem: '解决”如何让应用支持多语言并高效管理翻译资源”的问题。',
+  },
+  {
+    id: 'G_16', title: '微前端架构与模块联邦', navTitle: '微前端', category: '部署与运维',
+    path: '/engineering/g-16/micro-frontend', summary: '对比 Module Federation、qiankun 和 iframe 三种微前端方案。',
+    demo: G16MicroFrontend, code: G16Code, language: 'vue',
+    principle: '微前端把大型应用拆分为独立开发部署的子应用；Module Federation 共享依赖最高效，qiankun 兼容性最好，iframe 隔离性最强但集成成本最高。',
+    flow: ['评估团队和应用的拆分需求。', '选择合适的微前端方案。', '配置路由协调和依赖共享策略。'],
+    notes: ['微前端引入复杂度，仅在团队和应用确实需要独立部署时采用。', '共享依赖版本冲突是最常见的运行时问题。'],
+    problem: '解决”大型前端应用如何拆分为可独立开发和部署的子应用”的问题。',
   },
   {
     id: 'J_01', title: '值、类型转换与严格相等', navTitle: '类型与相等', category: '语言基础',
@@ -3478,7 +3663,43 @@ export const lessons: Lesson[] = [
     principle: 'package.json 声明意图，锁文件记录完整依赖图；CI 使用冻结锁文件，SemVer 范围决定允许升级的版本集合。',
     flow: ['区分运行依赖和开发依赖。', '提交并审查锁文件变更。', 'CI 冻结安装并执行依赖审计。'],
     notes: ['不要盲目自动升级主版本。', '安装脚本具有执行代码权限，需要审查来源。'],
-    problem: '解决“如何让团队和 CI 安装完全一致且可审计的依赖”的问题。',
+    problem: '解决”如何让团队和 CI 安装完全一致且可审计的依赖”的问题。',
+  },
+  {
+    id: 'D_13', title: 'Express 与 Fastify 路由对比', navTitle: 'Express/Fastify', category: 'Web 框架',
+    path: '/nodejs/d-13/express-fastify', summary: '对比 Express 中间件链和 Fastify Schema 验证两种路由模式。',
+    demo: D13ExpressFastify, code: D13Code, language: 'vue',
+    principle: 'Express 用洋葱模型中间件链处理请求，灵活但缺乏约束；Fastify 用 JSON Schema 验证输入输出，启动时编译路由性能更高，适合需要严格接口契约的场景。',
+    flow: ['理解 Express 的 middleware 链式调用。', '了解 Fastify 的 Schema 验证和序列化。', '根据项目需求选择合适的框架。'],
+    notes: ['Express 生态最大，Fastify 性能更好。', 'Fastify 的 Schema 验证同时生成类型和运行时校验。'],
+    problem: '解决”Node.js Web 框架如何选择，以及路由和验证的最佳实践”的问题。',
+  },
+  {
+    id: 'D_14', title: 'WebSocket 实时通信', navTitle: 'WebSocket', category: 'Web 框架',
+    path: '/nodejs/d-14/websocket', summary: '用 WebSocket 实现实时聊天，掌握连接、心跳、广播和重连策略。',
+    demo: D14WebSocket, code: D14Code, language: 'vue',
+    principle: 'WebSocket 提供双向持久连接，服务端可主动推送消息；心跳检测连接活性，断线重连保证可用性，广播将消息分发给所有连接的客户端。',
+    flow: ['建立 WebSocket 连接并完成握手。', '定时发送心跳检测连接状态。', '断线后指数退避重连。'],
+    notes: ['WebSocket 连接是持久资源，需要管理连接池。', '生产环境通常需要 Redis Pub/Sub 实现多实例广播。'],
+    problem: '解决”如何实现服务端主动推送的双向实时通信”的问题。',
+  },
+  {
+    id: 'D_15', title: '数据库连接与迁移', navTitle: '数据库', category: '数据与存储',
+    path: '/nodejs/d-15/database', summary: '比较原生 SQL、查询构建器和 ORM，掌握数据库迁移工作流。',
+    demo: D15Database, code: D15Code, language: 'vue',
+    principle: '数据库访问有三种层次：原生 SQL 最灵活，查询构建器平衡灵活与安全，ORM 提供对象映射但隐藏复杂度；迁移脚本管理 Schema 变更，支持向上和向下操作。',
+    flow: ['配置连接池控制并发。', '选择适合项目的数据访问层。', '用迁移脚本管理 Schema 版本。'],
+    notes: ['连接池大小要根据并发和数据库限制调整。', '迁移脚本必须可重复执行且幂等。'],
+    problem: '解决”Node.js 项目如何选择数据访问层并管理数据库 Schema 变更”的问题。',
+  },
+  {
+    id: 'D_16', title: 'Worker 线程与 CPU 密集任务', navTitle: 'Worker 线程', category: '进程与并发',
+    path: '/nodejs/d-16/worker-threads', summary: '用 Worker 线程卸载 CPU 密集计算，保持事件循环响应。',
+    demo: D16WorkerThreads, code: D16Code, language: 'vue',
+    principle: 'Node.js 的事件循环是单线程的，CPU 密集任务会阻塞其他请求；Worker Threads 在独立线程中执行计算，通过 MessageChannel 与主线程通信，保持事件循环畅通。',
+    flow: ['识别 CPU 密集型瓶颈。', '将计算逻辑移到 Worker 线程。', '通过消息传递返回计算结果。'],
+    notes: ['Worker 适合 CPU 密集，不适合 I/O 密集。', ' Piscina 等库提供 Worker 池管理。'],
+    problem: '解决”CPU 密集任务如何避免阻塞 Node.js 事件循环”的问题。',
   },
   {
     id: 'S_01', title: '先判断状态归属，再选择 Store', navTitle: '状态边界', category: '设计原则',
@@ -3568,6 +3789,60 @@ export const lessons: Lesson[] = [
     principle: 'Pinia、Zustand、Jotai、Redux Toolkit 与 XState 解决的问题模型不同；选型应从事实来源、更新粒度、流程约束和调试需求出发。',
     flow: ['先区分客户端状态与服务端状态。', '评估框架、共享范围和更新频率。', '用最小原型验证 DevTools、SSR 和测试体验。'],
     notes: ['不要仅以包体积决定架构。', '迁移成本通常高于初始接入成本。'],
-    problem: '解决“Pinia、Zustand、Jotai、Redux Toolkit 和 XState 到底如何选择”的问题。',
+    problem: '解决”Pinia、Zustand、Jotai、Redux Toolkit 和 XState 到底如何选择”的问题。',
+  },
+  {
+    id: 'S_11', title: 'Vuex 到 Pinia 迁移指南', navTitle: 'Vuex 迁移', category: 'Vue Store',
+    path: '/state-management/s-11/vuex-migration', summary: '对比 Vuex 模块与 Pinia Store 的模式差异，制定渐进迁移策略。',
+    demo: S11VuexMigration, code: S11Code, language: 'vue',
+    principle: 'Vuex 的 mutations/actions/getters 在 Pinia 中简化为直接的 state/action/getter；Pinia 支持多个独立 Store，无需嵌套模块，TypeScript 推导更好。',
+    flow: ['先理解 Vuex 和 Pinia 的 API 映射关系。', '从最独立的模块开始逐步迁移。', '最终移除 Vuex 依赖，完成切换。'],
+    notes: ['Pinia 没有 mutations，所有修改都在 action 中完成。', '可以使用 pinia-compat 在迁移期间兼容旧代码。'],
+    problem: '解决”Vuex 项目如何安全地渐进迁移到 Pinia”的问题。',
+  },
+  {
+    id: 'S_12', title: 'Valtio 与 Proxy 响应式状态', navTitle: 'Valtio', category: '轻量 React Store',
+    path: '/state-management/s-12/valtio', summary: '用 Valtio 的 proxy/snapshot 模式管理 React 状态，理解 Proxy 响应式原理。',
+    demo: S12Valtio, code: S12Code, language: 'jsx',
+    principle: 'Valtio 用 Proxy 包裹状态对象，直接修改即触发更新；snapshot 获取不可变快照用于渲染，自动追踪依赖关系避免不必要的重渲染。',
+    flow: ['用 proxy 创建响应式状态。', '直接修改 proxy 对象的属性。', '用 useSnapshot 在组件中读取并追踪依赖。'],
+    notes: ['Valtio 的 subscribe 可以监听任意路径变化。', 'proxy 对象不适合放在 React context 中。'],
+    problem: '解决”如何用最少的样板代码实现 React 的响应式状态管理”的问题。',
+  },
+  {
+    id: 'S_13', title: 'TanStack Query 服务端状态', navTitle: 'TanStack Query', category: '服务端状态',
+    path: '/state-management/s-13/tanstack-query', summary: '用缓存策略、乐观更新和后台同步管理服务端数据状态。',
+    demo: S13TanStackQuery, code: S13Code, language: 'jsx',
+    principle: 'TanStack Query 把服务端数据视为缓存而非状态；staleTime 和 cacheTime 控制新鲜度，useMutation 处理写入，optimistic update 提供即时反馈。',
+    flow: ['用 useQuery 获取和缓存服务端数据。', '用 useMutation 处理创建和更新操作。', '配置乐观更新和回滚策略。'],
+    notes: ['服务端状态和客户端状态应分开管理。', 'Query Key 的设计直接影响缓存命中率。'],
+    problem: '解决”如何高效管理服务端数据的缓存、同步和乐观更新”的问题。',
+  },
+  {
+    id: 'S_14', title: 'Signals 信号响应式模式', navTitle: 'Signals', category: '设计原则',
+    path: '/state-management/s-14/signals', summary: '理解 Signal 的自动追踪和细粒度更新，对比 ref 和 computed。',
+    demo: S14Signals, code: S14Code, language: 'vue',
+    principle: 'Signals 是响应式的基础原语：信号值变化时自动通知依赖者更新，无需手动订阅；computed 派生新信号，effect 执行副作用，三者构成完整的响应式图。',
+    flow: ['创建基础信号存储原始值。', '用 computed 派生计算信号。', '用 effect 响应信号变化执行副作用。'],
+    notes: ['Angular、Solid、Preact 等都采用了 Signals 模式。', 'Vue 的 ref/computed/watchEffect 本质上就是 Signals。'],
+    problem: '解决”什么是 Signals 以及它与传统状态管理有何不同”的问题。',
+  },
+  {
+    id: 'S_15', title: '状态持久化与水合策略', navTitle: '持久化水合', category: '设计原则',
+    path: '/state-management/s-15/persistence', summary: '设计 localStorage 同步、SSR 水合和版本迁移的可靠策略。',
+    demo: S15Persistence, code: S15Code, language: 'vue',
+    principle: '状态持久化需要在应用启动时从存储恢复状态；SSR 场景下水合阶段必须保证服务端和客户端状态一致；版本迁移处理数据结构随时间变化的兼容性。',
+    flow: ['序列化状态到 localStorage 或 IndexedDB。', '启动时恢复状态并处理水合不匹配。', '检测版本差异并执行迁移逻辑。'],
+    notes: ['敏感数据不应存入 localStorage。', 'SSR 水合不匹配会导致 UI 闪烁或功能异常。'],
+    problem: '解决”如何让状态在刷新、SSR 和版本升级后正确恢复”的问题。',
+  },
+  {
+    id: 'S_16', title: '状态管理全景对比与选型', navTitle: '全景对比', category: '选型与架构',
+    path: '/state-management/s-16/comparison', summary: '从包体积、学习曲线、SSR、TypeScript 等维度对比所有主流方案。',
+    demo: S16Comparison, code: S16Code, language: 'vue',
+    principle: '没有万能的状态管理方案；选择应基于框架生态、状态模型复杂度、团队熟悉度和运维需求；评分矩阵帮助量化比较，但最终需要用最小原型验证。',
+    flow: ['列出评估维度和权重。', '对每个方案在各维度打分。', '用加权总分辅助决策并用原型验证。'],
+    notes: ['评估维度应包括包体积、TypeScript、SSR、DevTools 和学习曲线。', '技术选型不应只看当前需求，还要考虑未来扩展。'],
+    problem: '解决”面对众多状态管理方案如何系统化地做出最优选择”的问题。',
   },
 ]
