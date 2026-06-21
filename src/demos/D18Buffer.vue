@@ -40,7 +40,7 @@ const result = computed(() => {
   }
   lines.push('')
   lines.push('// Node.js 中的实际用法：')
-  lines.push(`const buf = Buffer.from("${text.replace(/"/g, '\\"')}")`))
+  lines.push(`const buf = Buffer.from("${text.replace(/"/g, '\\"')}")`)
   lines.push('buf.toString("hex")  // 十六进制')
   lines.push('buf.toString("base64")  // Base64')
   lines.push('buf.slice(0, 5)  // 截取前 5 字节')

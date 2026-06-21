@@ -2,11 +2,11 @@
 import { ref, computed } from 'vue'
 
 const text = ref('Hello 栗子🌰'.repeat(100))
-const method = ref<'gzip' | 'deflate' | 'brotli'>('gzip')
+const method = ref('gzip')
 
-const模拟压缩 = computed(() => {
+const moniZip = computed(() => {
   const originalSize = new Blob([text.value]).size
-  // 模拟压缩比
+  // moniZip比
   const ratios: Record<string, number> = {
     gzip: 0.35,
     deflate: 0.33,
@@ -43,15 +43,15 @@ const methods = [
   <div class="compress-result">
     <div class="result-row">
       <span>原始大小</span>
-      <strong>{{ 模拟压缩.originalSize }} 字节</strong>
+      <strong>{{ moniZip.originalSize }} 字节</strong>
     </div>
     <div class="result-row">
       <span>压缩后大小（{{ method }}）</span>
-      <strong>{{ 模拟压缩.compressedSize }} 字节</strong>
+      <strong>{{ moniZip.compressedSize }} 字节</strong>
     </div>
     <div class="result-row">
       <span>节省空间</span>
-      <strong class="saved">{{ 模拟压缩.saved }} 字节（{{ 模拟压缩.savedPercent }}%）</strong>
+      <strong class="saved">{{ moniZip.saved }} 字节（{{ moniZip.savedPercent }}%）</strong>
     </div>
   </div>
 
