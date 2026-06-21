@@ -359,6 +359,7 @@ li + li {
   gap: 8px;
   overflow: hidden;
   min-width: 0;
+  padding: 4px 0;
 }
 
 .knowledge-tab-wrapper {
@@ -438,20 +439,38 @@ li + li {
 .knowledge-more-btn {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   border: 1px solid rgba(123, 53, 29, 0.2);
   border-radius: 999px;
   background: rgba(255, 250, 242, 0.82);
   color: var(--text);
-  padding: 8px 12px;
+  padding: 8px 14px;
   cursor: pointer;
   font-size: 13px;
   white-space: nowrap;
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.knowledge-more-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(246, 193, 90, 0.15), rgba(240, 138, 36, 0.15));
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.knowledge-more-btn:hover::before {
+  opacity: 1;
 }
 
 .knowledge-more-btn:hover {
-  background: rgba(246, 193, 90, 0.3);
   border-color: var(--leaf-gold);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(246, 193, 90, 0.15);
 }
 
 .more-dropdown {
