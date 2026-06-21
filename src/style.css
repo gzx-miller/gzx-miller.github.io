@@ -379,7 +379,7 @@ li + li {
   display: flex;
   flex-wrap: nowrap;
   gap: 8px;
-  overflow: hidden;
+  overflow: visible;
   min-width: 0;
   padding: 4px 0;
 }
@@ -1347,37 +1347,41 @@ li + li {
 }
 
 [data-theme='dark'] .knowledge-tab {
-  border-color: rgba(74, 52, 40, 0.6);
-  background: rgba(42, 30, 24, 0.82);
+  border-color: rgba(246, 193, 90, 0.25);
+  background: rgba(55, 40, 32, 0.92);
 }
 
 [data-theme='dark'] .knowledge-tab::before {
-  background: linear-gradient(135deg, rgba(246, 193, 90, 0.1), rgba(232, 120, 74, 0.1));
+  background: linear-gradient(135deg, rgba(246, 193, 90, 0.12), rgba(232, 120, 74, 0.12));
 }
 
 [data-theme='dark'] .knowledge-tab:hover {
-  box-shadow: 0 4px 12px rgba(246, 193, 90, 0.1);
+  border-color: rgba(246, 193, 90, 0.5);
+  box-shadow: 0 4px 12px rgba(246, 193, 90, 0.15);
 }
 
 [data-theme='dark'] .knowledge-tab.active {
-  box-shadow: 0 4px 16px rgba(232, 120, 74, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border-color: transparent;
+  background: linear-gradient(135deg, #e8623a, #f5a040);
+  box-shadow: 0 4px 16px rgba(232, 120, 74, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 [data-theme='dark'] .knowledge-tab.active:hover {
-  box-shadow: 0 6px 20px rgba(232, 120, 74, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: 0 6px 20px rgba(232, 120, 74, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 [data-theme='dark'] .knowledge-more-btn {
-  border-color: rgba(74, 52, 40, 0.6);
-  background: rgba(42, 30, 24, 0.82);
+  border-color: rgba(246, 193, 90, 0.25);
+  background: rgba(55, 40, 32, 0.92);
 }
 
 [data-theme='dark'] .knowledge-more-btn::before {
-  background: linear-gradient(135deg, rgba(246, 193, 90, 0.1), rgba(232, 120, 74, 0.1));
+  background: linear-gradient(135deg, rgba(246, 193, 90, 0.12), rgba(232, 120, 74, 0.12));
 }
 
 [data-theme='dark'] .knowledge-more-btn:hover {
-  box-shadow: 0 4px 12px rgba(246, 193, 90, 0.1);
+  border-color: rgba(246, 193, 90, 0.5);
+  box-shadow: 0 4px 12px rgba(246, 193, 90, 0.15);
 }
 
 [data-theme='dark'] .more-dropdown {
@@ -1408,7 +1412,7 @@ li + li {
 }
 
 [data-theme='dark'] .sidebar-toggle:hover {
-  background: rgba(246, 193, 90, 0.2);
+  background: rgba(246, 193, 90, 0.35);
 }
 
 [data-theme='dark'] .sidebar-toggle.expanded {

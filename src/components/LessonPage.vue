@@ -184,24 +184,15 @@ function handleResize() {
   calculateOverflow()
 }
 
-function handleDocumentClick(event: MouseEvent) {
-  const target = event.target as HTMLElement
-  if (!target.closest('.knowledge-more-wrapper')) {
-    moreDropdownVisible.value = false
-  }
-}
-
 onMounted(() => {
   window.addEventListener('keydown', handleGlobalKeydown)
   window.addEventListener('resize', handleResize)
-  document.addEventListener('click', handleDocumentClick)
   calculateOverflow()
 })
 
 onUnmounted(() => {
   window.removeEventListener('keydown', handleGlobalKeydown)
   window.removeEventListener('resize', handleResize)
-  document.removeEventListener('click', handleDocumentClick)
 })
 
 watch(activeKnowledge, () => {
@@ -295,10 +286,14 @@ useSeoMeta({
             </Transition>
           </div>
         </nav>
-        <div v-if="overflowCategories.length > 0" class="knowledge-more-wrapper">
+        <div
+          v-if="overflowCategories.length > 0"
+          class="knowledge-more-wrapper"
+          @mouseenter="moreDropdownVisible = true"
+          @mouseleave="moreDropdownVisible = false"
+        >
           <button
             class="knowledge-more-btn"
-            @click="moreDropdownVisible = !moreDropdownVisible"
             aria-label="更多知识类别"
           >
             更多 ▾
@@ -347,7 +342,6 @@ useSeoMeta({
               placeholder="搜索课程…"
               autocomplete="off"
             />
-            <kbd>/</kbd>
           </label>
         </div>
 
