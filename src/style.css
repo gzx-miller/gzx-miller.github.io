@@ -504,8 +504,9 @@ li + li {
 }
 
 .knowledge-more-chevron {
-  display: inline-block;
-  font-size: 11px;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
   transition: transform 0.2s ease;
 }
 
@@ -1619,9 +1620,9 @@ li + li {
   justify-content: center;
   width: 34px;
   height: 34px;
-  border: 1px solid transparent;
+  border: 1px solid rgba(123, 53, 29, 0.12);
   border-radius: 999px;
-  background: transparent;
+  background: rgba(255, 250, 242, 0.6);
   color: var(--muted);
   cursor: pointer;
   padding: 0;
@@ -1630,8 +1631,8 @@ li + li {
 }
 
 [data-theme='dark'] .theme-toggle {
-  border-color: transparent;
-  background: transparent;
+  border-color: rgba(246, 193, 90, 0.12);
+  background: rgba(42, 30, 24, 0.6);
   color: var(--muted);
 }
 
@@ -1650,6 +1651,7 @@ li + li {
 .theme-toggle svg {
   width: 18px;
   height: 18px;
+  flex-shrink: 0;
 }
 
 @media (max-width: 920px) {
