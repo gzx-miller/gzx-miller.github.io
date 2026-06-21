@@ -12,6 +12,12 @@ const lessonSearchInput = useTemplateRef<HTMLInputElement>('lessonSearchInput')
 const searchQuery = ref('')
 const popoverVisible = ref<Record<string, boolean>>({})
 const popoverPlacement = ref<Record<string, 'start' | 'center' | 'end'>>({})
+const tabsRowRef = useTemplateRef<HTMLElement>('tabsRow')
+const visibleCount = ref(knowledgeCategories.length)
+const moreDropdownVisible = ref(false)
+
+const visibleCategories = computed(() => knowledgeCategories.slice(0, visibleCount.value))
+const overflowCategories = computed(() => knowledgeCategories.slice(visibleCount.value))
 
 function showPopover(id: string, event: Event) {
   const trigger = event.currentTarget as HTMLElement
@@ -119,6 +125,39 @@ function toggleSidebar() {
   isSidebarTemporarilyExpanded.value = !isSidebarTemporarilyExpanded.value
 }
 
+async function calculateOverflow() {
+  await nextTick()
+  const container = tabsRowRef.value
+  if (!container) return
+
+  // 先显示全部以获取真实宽度
+  visibleCount.value = knowledgeCategories.length
+  await nextTick()
+
+  const nav = container.querySelector('.knowledge-tabs') as HTMLElement | null
+  if (!nav) return
+
+  const containerWidth = container.clientWidth
+  const items = nav.querySelectorAll('.knowledge-tab-wrapper')
+  const moreBtnWidth = 80 // "更多" 按钮预估宽度
+
+  let totalWidth = 0
+  let count = 0
+
+  for (const item of Array.from(items)) {
+    const itemWidth = (item as HTMLElement).offsetWidth + 8 // 8px = gap
+    if (totalWidth + itemWidth + moreBtnWidth <= containerWidth) {
+      totalWidth += itemWidth
+      count++
+    } else {
+      break
+    }
+  }
+
+  // 至少显示一个，如果全部都放得下则不显示"更多"
+  visibleCount.value = count >= knowledgeCategories.length ? knowledgeCategories.length : Math.max(1, count)
+}
+
 async function handleGlobalKeydown(event: KeyboardEvent) {
   const target = event.target as HTMLElement | null
   const isTyping = target?.matches('input, textarea, select, [contenteditable="true"]')
@@ -130,27 +169,48 @@ async function handleGlobalKeydown(event: KeyboardEvent) {
     lessonSearchInput.value?.focus()
   }
 
-  if (event.key === 'Escape' && isSidebarTemporarilyExpanded.value) {
-    isSidebarTemporarilyExpanded.value = false
-    lessonSearchInput.value?.blur()
+  if (event.key === 'Escape') {
+    if (isSidebarTemporarilyExpanded.value) {
+      isSidebarTemporarilyExpanded.value = false
+      lessonSearchInput.value?.blur()
+    }
+    moreDropdownVisible.value = false
+  }
+}
+
+function handleResize() {
+  calculateOverflow()
+}
+
+function handleDocumentClick(event: MouseEvent) {
+  const target = event.target as HTMLElement
+  if (!target.closest('.knowledge-more-wrapper')) {
+    moreDropdownVisible.value = false
   }
 }
 
 onMounted(() => {
   window.addEventListener('keydown', handleGlobalKeydown)
+  window.addEventListener('resize', handleResize)
+  document.addEventListener('click', handleDocumentClick)
+  calculateOverflow()
 })
 
 onUnmounted(() => {
   window.removeEventListener('keydown', handleGlobalKeydown)
+  window.removeEventListener('resize', handleResize)
+  document.removeEventListener('click', handleDocumentClick)
 })
 
 watch(activeKnowledge, () => {
   searchQuery.value = ''
+  calculateOverflow()
 })
 
 watch(
   () => route.fullPath,
   async () => {
+    moreDropdownVisible.value = false
     await nextTick()
     lessonPageRef.value?.scrollTo({ top: 0, left: 0 })
     lessonPageRef.value?.focus({ preventScroll: true })
@@ -174,46 +234,77 @@ useSeoMeta({
   <a class="skip-link" href="#main-content">跳到正文</a>
   <div class="app-frame">
     <header class="top-nav">
-      <NuxtLink class="top-brand" to="/vue" aria-label="回到 Vue3 学习首页">
-        <img class="brand-avatar" :src="squirrelHero" alt="小松鼠举着栗子" />
-        <div>
-          <strong>小松鼠举栗子</strong>
-          <span >gzx_miller@foxmail.com</span>
-        </div>
-      </NuxtLink>
+      <div class="top-bar">
+        <NuxtLink class="top-brand" to="/vue" aria-label="回到 Vue3 学习首页">
+          <img class="brand-avatar" :src="squirrelHero" alt="小松鼠举着栗子" />
+          <div>
+            <strong>小松鼠举栗子</strong>
+            <span >gzx_miller@foxmail.com</span>
+          </div>
+        </NuxtLink>
+        <p class="site-intro">中文前端知识案例库 · 通过独立真实案例学习前端核心技术</p>
+      </div>
 
-      <nav class="knowledge-tabs" aria-label="知识类别导航">
-        <div
-          v-for="item in knowledgeCategories"
-          :key="item.id"
-          class="knowledge-tab-wrapper"
-        >
-          <NuxtLink
-            :to="item.status === 'ready' ? item.path : '/vue'"
-            class="knowledge-tab"
-            :class="{ active: item.id === activeKnowledge, planned: item.status === 'planned' }"
-            :aria-disabled="item.status === 'planned'"
-            :aria-current="item.id === activeKnowledge ? 'page' : undefined"
-            @mouseenter="showPopover(item.id, $event)"
-            @mouseleave="hidePopover(item.id)"
-            @focus="showPopover(item.id, $event)"
-            @blur="hidePopover(item.id)"
+      <div ref="tabsRow" class="tabs-row">
+        <nav class="knowledge-tabs" aria-label="知识类别导航">
+          <div
+            v-for="item in visibleCategories"
+            :key="item.id"
+            class="knowledge-tab-wrapper"
           >
-            <span>{{ item.name }}</span>
-            <small v-if="item.status === 'planned'">规划中</small>
-          </NuxtLink>
-          <Transition name="fade">
-            <div
-              v-if="popoverVisible[item.id]"
-              class="popover-panel"
-              :class="`popover-panel-${popoverPlacement[item.id] ?? 'center'}`"
-              role="tooltip"
+            <NuxtLink
+              :to="item.status === 'ready' ? item.path : '/vue'"
+              class="knowledge-tab"
+              :class="{ active: item.id === activeKnowledge, planned: item.status === 'planned' }"
+              :aria-disabled="item.status === 'planned'"
+              :aria-current="item.id === activeKnowledge ? 'page' : undefined"
+              @mouseenter="showPopover(item.id, $event)"
+              @mouseleave="hidePopover(item.id)"
+              @focus="showPopover(item.id, $event)"
+              @blur="hidePopover(item.id)"
             >
-              <p class="popover-intro">{{ item.intro }}</p>
+              <span>{{ item.name }}</span>
+              <small v-if="item.status === 'planned'">规划中</small>
+            </NuxtLink>
+            <Transition name="fade">
+              <div
+                v-if="popoverVisible[item.id]"
+                class="popover-panel"
+                :class="`popover-panel-${popoverPlacement[item.id] ?? 'center'}`"
+                role="tooltip"
+              >
+                <p class="popover-intro">{{ item.intro }}</p>
+              </div>
+            </Transition>
+          </div>
+        </nav>
+        <div v-if="overflowCategories.length > 0" class="knowledge-more-wrapper">
+          <button
+            class="knowledge-more-btn"
+            @click="moreDropdownVisible = !moreDropdownVisible"
+            aria-label="更多知识类别"
+          >
+            更多 ▾
+          </button>
+          <Transition name="fade">
+            <div v-if="moreDropdownVisible" class="more-dropdown" role="menu">
+              <NuxtLink
+                v-for="item in overflowCategories"
+                :key="item.id"
+                :to="item.status === 'ready' ? item.path : '/vue'"
+                class="more-dropdown-item"
+                :class="{ active: item.id === activeKnowledge, planned: item.status === 'planned' }"
+                :aria-disabled="item.status === 'planned'"
+                :aria-current="item.id === activeKnowledge ? 'page' : undefined"
+                @click="moreDropdownVisible = false"
+              >
+                {{ item.name }}
+                <small v-if="item.status === 'planned'">规划中</small>
+              </NuxtLink>
             </div>
           </Transition>
         </div>
-      </nav>
+      </div>
     </header>
 
     <div class="app-shell" :class="{ 'sidebar-expanded': isSidebarTemporarilyExpanded }">
