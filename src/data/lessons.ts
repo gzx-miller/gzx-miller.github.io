@@ -379,6 +379,14 @@ const J23StringIntl = createDemo('J23StringIntl')
 const J23Code = createCodeLoader('js-code/J23StringIntl.js')
 const J24LogicalBitwise = createDemo('J24LogicalBitwise')
 const J24Code = createCodeLoader('js-code/J24LogicalBitwise.js')
+const J25FetchApi = createDemo('J25FetchApi')
+const J25Code = createCodeLoader('js-code/J25FetchApi.js')
+const J26WebStorage = createDemo('J26WebStorage')
+const J26Code = createCodeLoader('js-code/J26WebStorage.js')
+const J27WebSocket = createDemo('J27WebSocket')
+const J27Code = createCodeLoader('js-code/J27WebSocket.js')
+const J28AbortController = createDemo('J28AbortController')
+const J28Code = createCodeLoader('js-code/J28AbortController.js')
 const D01ModuleSystem = createDemo('D01ModuleSystem')
 const D01Code = createCodeLoader('D01ModuleSystem.vue')
 const D02PathUrl = createDemo('D02PathUrl')
@@ -547,6 +555,14 @@ const C19BEM = createDemo('C19BEM')
 const C19Code = createCodeLoader('C19BEM.vue')
 const C20Performance = createDemo('C20Performance')
 const C20Code = createCodeLoader('C20Performance.vue')
+const C21CascadeLayers = createDemo('C21CascadeLayers')
+const C21Code = createCodeLoader('C21CascadeLayers.vue')
+const C22HasSelector = createDemo('C22HasSelector')
+const C22Code = createCodeLoader('C22HasSelector.vue')
+const C23ScrollSnap = createDemo('C23ScrollSnap')
+const C23Code = createCodeLoader('C23ScrollSnap.vue')
+const C24AspectRatio = createDemo('C24AspectRatio')
+const C24Code = createCodeLoader('C24AspectRatio.vue')
 const V01Core = createDemo('V01Core')
 const V01Code = createCodeLoader('V01Core.vue')
 const V02Config = createDemo('V02Config')
@@ -3729,6 +3745,42 @@ export const lessons: Lesson[] = [
     problem: '解决"如何用位运算实现高效的权限和状态管理"的问题。',
   },
   {
+    id: 'J_25', title: 'Fetch API 与网络请求', navTitle: 'Fetch API', category: '网络与通信',
+    path: '/javascript/j-25/fetch-api', summary: '用 Fetch API 替代 XMLHttpRequest，掌握请求配置、响应处理和错误处理。',
+    demo: J25FetchApi, code: J25Code, language: 'javascript',
+    principle: 'fetch() 返回 Promise，默认 GET 请求；通过 Request 对象可复用配置；响应需通过 .json()/.text() 等方法读取，且只能读取一次。',
+    flow: ['配置 method、headers、body 发起请求。', '检查 res.ok 判断状态码。', '用 .json() 解析响应体。'],
+    notes: ['fetch 默认不携带 Cookie，需设置 credentials: "include"。', 'fetch 不会因 HTTP 错误状态码 reject，需手动检查 res.ok。'],
+    problem: '解决"如何以现代、简洁的方式发起网络请求并处理响应"的问题。',
+  },
+  {
+    id: 'J_26', title: 'Web Storage 与 IndexedDB', navTitle: 'Web Storage', category: '存储',
+    path: '/javascript/j-26/web-storage', summary: '用 localStorage/sessionStorage 存储简单键值，用 IndexedDB 存储大量结构化数据。',
+    demo: J26WebStorage, code: J26Code, language: 'javascript',
+    principle: 'localStorage 持久化存储（跨会话），sessionStorage 会话级存储（关闭标签页清除）；两者只能存字符串，对象需 JSON 序列化；IndexedDB 支持大容量结构化存储和索引查询。',
+    flow: ['用 localStorage 持久化用户偏好。', '用 sessionStorage 暂存表单进度。', '用 IndexedDB 存储离线数据。'],
+    notes: ['Storage 事件可监听其他标签页的变更（同源）。', 'IndexedDB 操作是异步的，基于事务和对象仓库。'],
+    problem: '解决"浏览器端如何持久化用户数据，以及不同存储方案的适用场景"的问题。',
+  },
+  {
+    id: 'J_27', title: 'WebSocket 与实时通信', navTitle: 'WebSocket', category: '网络与通信',
+    path: '/javascript/j-27/websocket', summary: '用 WebSocket 建立持久双向连接，理解与服务端推送（SSE）的差异。',
+    demo: J27WebSocket, code: J27Code, language: 'javascript',
+    principle: 'WebSocket 建立后，客户端和服务端可随时互相发送数据；SSE（Server-Sent Events）是单向的（服务端→客户端）；两者都基于 HTTP 升级，但用途不同。',
+    flow: ['创建 WebSocket 连接并监听事件。', '通过 ws.send() 发送消息。', '对比 WebSocket 与 SSE 的适用场景。'],
+    notes: ['WebSocket 协议以 ws:// 或 wss:// 开头。', '生产环境需要处理重连、心跳和消息队列。'],
+    problem: '解决"如何实现服务端主动向客户端推送数据，以及实时双向通信"的问题。',
+  },
+  {
+    id: 'J_28', title: 'AbortController 与可中断操作', navTitle: 'AbortController', category: '异步控制',
+    path: '/javascript/j-28/abort-controller', summary: '用 AbortController 取消进行中的 Fetch 请求、事件监听和其他可中断操作。',
+    demo: J28AbortController, code: J28Code, language: 'javascript',
+    principle: 'AbortController 通过 signal 与异步操作关联；调用 abort() 会触发 signal 的 abort 事件；Fetch、addEventListener 等 API 已原生支持 signal。',
+    flow: ['创建 AbortController 并获取 signal。', '将 signal 传入 fetch 配置。', '在需要时调用 controller.abort() 取消请求。'],
+    notes: ['一个 signal 可同时关联多个操作（如多个并发请求）。', 'abort() 只能调用一次，调用后 signal.aborted 变为 true。'],
+    problem: '解决"如何取消进行中的网络请求或事件监听，避免不必要的等待和资源浪费"的问题。',
+  },
+  {
     id: 'D_01', title: 'Node.js 运行时与模块系统', navTitle: '模块系统', category: '运行时与模块',
     path: '/nodejs/d-1/module-system', summary: '理解 Node.js 运行时、ES Modules 与 CommonJS 的边界和互操作。',
     demo: D01ModuleSystem, code: D01Code, language: 'vue',
@@ -4612,6 +4664,42 @@ export const lessons: Lesson[] = [
     flow: ['理解 will-change 与图层提升的关系。', '学习 content-visibility 跳过离屏渲染。', '掌握 CSS 性能最佳实践。'],
     notes: ['动画优先用 transform 和 opacity（合成层，不触发重排/重绘）。', 'will-change 不要滥用，会增加 GPU 内存占用。', 'content-visibility: auto 可大幅提升长列表渲染性能。'],
     problem: '解决"页面滚动卡顿、动画不流畅、首次渲染慢"等 CSS 性能问题。',
+  },
+  {
+    id: 'C_21', title: 'CSS 层叠层（@layer）', navTitle: '层叠层', category: '层叠与架构',
+    path: '/css/c-21/cascade-layers', summary: '用 @layer 显式控制样式优先级，解决第三方样式覆盖和复杂项目的层叠管理问题。',
+    demo: C21CascadeLayers, code: C21Code, language: 'vue',
+    principle: '@layer 允许开发者声明多个层，并指定层的优先级顺序（靠后声明的层优先级更高）；未分层的样式优先级高于所有 @layer；通过 @import 可将第三方样式归入特定层。',
+    flow: ['声明层顺序：@layer reset, components, utilities。', '在不同层中定义同一选择器的样式。', '观察层顺序如何决定最终样式。'],
+    notes: ['@layer 是现代 CSS 架构的重要工具，可替代 !important  hack。', '未分层的样式（如组件内 style）优先级最高。'],
+    problem: '解决"多来源样式（重置样式、组件样式、工具类）如何有序管理优先级"的问题。',
+  },
+  {
+    id: 'C_22', title: 'CSS :has() 选择器', navTitle: ':has() 选择器', category: '选择器进阶',
+    path: '/css/c-22/has-selector', summary: '用 :has() 实现"父元素选择器"效果，根据子元素状态样式化容器。',
+    demo: C22HasSelector, code: C22Code, language: 'vue',
+    principle: ':has() 是 CSS 选择器的一部分，用于选择"包含某些后代"的元素；它打破了 CSS 只能向下选择（不能向上选择父元素）的限制；支持与其他选择器组合使用。',
+    flow: ['用 :has(.error) 选择含有错误提示的表单。', '用 :has(img) 选择含有图片的文章。', '结合 :not() 实现更复杂的选择逻辑。'],
+    notes: [':has() 目前主流浏览器均已支持（2023+）。', ':has() 不仅可选择父元素，还可选择前面的兄弟元素。'],
+    problem: '解决"如何根据子元素状态样式化父容器，而不依赖 JavaScript"的问题。',
+  },
+  {
+    id: 'C_23', title: 'Scroll Snap 滚动定位', navTitle: 'Scroll Snap', category: '滚动与交互',
+    path: '/css/c-23/scroll-snap', summary: '用 scroll-snap 实现精准的滚动定位，适合轮播、图片画廊和分页滚动。',
+    demo: C23ScrollSnap, code: C23Code, language: 'vue',
+    principle: 'scroll-snap-type 在容器上声明滚动方向和对齐严格度；scroll-snap-align 在子项上声明对齐点（start/center/end）；mandatory 强制对齐，proximity 只在接近时对齐。',
+    flow: ['在容器设置 scroll-snap-type: x mandatory。', '在子项设置 scroll-snap-align: center。', '滚动时观察自动对齐效果。'],
+    notes: ['scroll-snap 不会创建滚动容器，需配合 overflow 使用。', 'scroll-padding 可处理固定导航栏遮挡问题。'],
+    problem: '解决"如何实现原生、流畅的滚动定位效果（如轮播、分页），而不依赖 JavaScript"的问题。',
+  },
+  {
+    id: 'C_24', title: 'aspect-ratio 与 object-fit', navTitle: '宽高比与填充', category: '尺寸与媒体',
+    path: '/css/c-24/aspect-ratio', summary: '用 aspect-ratio 控制元素宽高比防止布局偏移，用 object-fit 控制图片/视频的填充方式。',
+    demo: C24AspectRatio, code: C24Code, language: 'vue',
+    principle: 'aspect-ratio 指定元素的理想宽高比（如 16/9），浏览器会自动计算高度防止布局偏移；object-fit 控制替换元素（img/video）在其容器内的填充方式（cover/contain/fill 等）。',
+    flow: ['用 aspect-ratio 固定卡片封面比例。', '用 object-fit: cover 裁剪图片填满容器。', '用 object-fit: contain 完整显示图片（可能留白）。'],
+    notes: ['aspect-ratio 是防止 CLS（布局偏移）的关键属性。', 'img 需设置 width:100%; height:100% 后 object-fit 才生效。'],
+    problem: '解决"图片/视频如何在不同尺寸容器中正确显示，以及如何在加载前预留正确空间"的问题。',
   },
 
   /***** Vite 核心知识 *****/
