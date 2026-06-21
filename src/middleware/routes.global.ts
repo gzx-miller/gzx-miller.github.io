@@ -1,6 +1,8 @@
-import { lessons } from '../data/lessons'
+import { knowledgeCategories, lessons } from '../data/lessons'
 
-const categoryIds = ['vue', 'element-plus', 'react', 'langchain', 'nuxt']
+const categoryIds = knowledgeCategories
+  .filter((category) => category.status === 'ready')
+  .map((category) => category.id)
 const fallbackPath = lessons.find((lesson) => lesson.path.startsWith('/vue/'))?.path ?? '/vue/k-1/app-entry'
 
 function firstLessonPath(category: string) {

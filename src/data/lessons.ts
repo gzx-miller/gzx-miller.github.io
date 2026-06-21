@@ -1,208 +1,267 @@
 import type { Component } from 'vue'
-import K01AppEntry from '../demos/K01AppEntry.vue'
-import K01Code from '../demos/K01AppEntry.vue?raw'
-import K02TemplateSyntax from '../demos/K02TemplateSyntax.vue'
-import K02Code from '../demos/K02TemplateSyntax.vue?raw'
-import K03Reactivity from '../demos/K03Reactivity.vue'
-import K03Code from '../demos/K03Reactivity.vue?raw'
-import K04ComputedWatch from '../demos/K04ComputedWatch.vue'
-import K04Code from '../demos/K04ComputedWatch.vue?raw'
-import K05ConditionList from '../demos/K05ConditionList.vue'
-import K05Code from '../demos/K05ConditionList.vue?raw'
-import K06FormModel from '../demos/K06FormModel.vue'
-import K06Code from '../demos/K06FormModel.vue?raw'
-import K07ComponentBasics from '../demos/K07ComponentBasics.vue'
-import K07Code from '../demos/K07ComponentBasics.vue?raw'
-import K08Slots from '../demos/K08Slots.vue'
-import K08Code from '../demos/K08Slots.vue?raw'
-import K09Communication from '../demos/K09Communication.vue'
-import K09Code from '../demos/K09Communication.vue?raw'
-import K10LifecycleRef from '../demos/K10LifecycleRef.vue'
-import K10Code from '../demos/K10LifecycleRef.vue?raw'
-import K11Composable from '../demos/K11Composable.vue'
-import K11Code from '../demos/K11Composable.vue?raw'
-import K12Routing from '../demos/K12Routing.vue'
-import K12Code from '../demos/K12Routing.vue?raw'
-import K13Pinia from '../demos/K13Pinia.vue'
-import K13Code from '../demos/K13Pinia.vue?raw'
-import K14AsyncState from '../demos/K14AsyncState.vue'
-import K14Code from '../demos/K14AsyncState.vue?raw'
-import K15DynamicKeepAlive from '../demos/K15DynamicKeepAlive.vue'
-import K15Code from '../demos/K15DynamicKeepAlive.vue?raw'
-import K16Transition from '../demos/K16Transition.vue'
-import K16Code from '../demos/K16Transition.vue?raw'
-import K17Directive from '../demos/K17Directive.vue'
-import K17Code from '../demos/K17Directive.vue?raw'
-import K18Teleport from '../demos/K18Teleport.vue'
-import K18Code from '../demos/K18Teleport.vue?raw'
-import K19Suspense from '../demos/K19Suspense.vue'
-import K19Code from '../demos/K19Suspense.vue?raw'
-import K20Performance from '../demos/K20Performance.vue'
-import K20Code from '../demos/K20Performance.vue?raw'
-import K21TestingMaintainability from '../demos/K21TestingMaintainability.vue'
-import K21Code from '../demos/K21TestingMaintainability.vue?raw'
-import K22CustomVModel from '../demos/K22CustomVModel.vue'
-import K22Code from '../demos/K22CustomVModel.vue?raw'
-import K23ErrorHandling from '../demos/K23ErrorHandling.vue'
-import K23Code from '../demos/K23ErrorHandling.vue?raw'
-import K24PluginDev from '../demos/K24PluginDev.vue'
-import K24Code from '../demos/K24PluginDev.vue?raw'
-import K25ShallowReactivity from '../demos/K25ShallowReactivity.vue'
-import K25Code from '../demos/K25ShallowReactivity.vue?raw'
-import K26EffectScope from '../demos/K26EffectScope.vue'
-import K26Code from '../demos/K26EffectScope.vue?raw'
-import K27AttributeForwarding from '../demos/K27AttributeForwarding.vue'
-import K27Code from '../demos/K27AttributeForwarding.vue?raw'
-import K28ComponentExpose from '../demos/K28ComponentExpose.vue'
-import K28Code from '../demos/K28ComponentExpose.vue?raw'
-import E01Button from '../demos/E01Button.vue'
-import E01Code from '../demos/E01Button.vue?raw'
-import E02Form from '../demos/E02Form.vue'
-import E02Code from '../demos/E02Form.vue?raw'
-import E03Table from '../demos/E03Table.vue'
-import E03Code from '../demos/E03Table.vue?raw'
-import E04Dialog from '../demos/E04Dialog.vue'
-import E04Code from '../demos/E04Dialog.vue?raw'
-import E05Message from '../demos/E05Message.vue'
-import E05Code from '../demos/E05Message.vue?raw'
-import E06Popover from '../demos/E06Popover.vue'
-import E06Code from '../demos/E06Popover.vue?raw'
-import E07Dropdown from '../demos/E07Dropdown.vue'
-import E07Code from '../demos/E07Dropdown.vue?raw'
-import E08Tabs from '../demos/E08Tabs.vue'
-import E08Code from '../demos/E08Tabs.vue?raw'
-import E09Pagination from '../demos/E09Pagination.vue'
-import E09Code from '../demos/E09Pagination.vue?raw'
-import E10Upload from '../demos/E10Upload.vue'
-import E10Code from '../demos/E10Upload.vue?raw'
-import E11Cascader from '../demos/E11Cascader.vue'
-import E11Code from '../demos/E11Cascader.vue?raw'
-import E12Tooltip from '../demos/E12Tooltip.vue'
-import E12Code from '../demos/E12Tooltip.vue?raw'
-import E13DatePicker from '../demos/E13DatePicker.vue'
-import E13Code from '../demos/E13DatePicker.vue?raw'
-import E14Tree from '../demos/E14Tree.vue'
-import E14Code from '../demos/E14Tree.vue?raw'
-import E15Drawer from '../demos/E15Drawer.vue'
-import E15Code from '../demos/E15Drawer.vue?raw'
-import E16Steps from '../demos/E16Steps.vue'
-import E16Code from '../demos/E16Steps.vue?raw'
-import R01ComponentProps from '../demos/R01ComponentProps.vue'
-import R01Code from '../demos/react-jsx/R01ComponentProps.jsx?raw'
-import R02StateUpdates from '../demos/R02StateUpdates.vue'
-import R02Code from '../demos/react-jsx/R02StateUpdates.jsx?raw'
-import R03ListsKeys from '../demos/R03ListsKeys.vue'
-import R03Code from '../demos/react-jsx/R03ListsKeys.jsx?raw'
-import R04ControlledForm from '../demos/R04ControlledForm.vue'
-import R04Code from '../demos/react-jsx/R04ControlledForm.jsx?raw'
-import R05EffectSync from '../demos/R05EffectSync.vue'
-import R05Code from '../demos/react-jsx/R05EffectSync.jsx?raw'
-import R06Reducer from '../demos/R06Reducer.vue'
-import R06Code from '../demos/react-jsx/R06Reducer.jsx?raw'
-import R07Context from '../demos/R07Context.vue'
-import R07Code from '../demos/react-jsx/R07Context.jsx?raw'
-import R08CustomHook from '../demos/R08CustomHook.vue'
-import R08Code from '../demos/react-jsx/R08CustomHook.jsx?raw'
-import R09RefDom from '../demos/R09RefDom.vue'
-import R09Code from '../demos/react-jsx/R09RefDom.jsx?raw'
-import R10Memoization from '../demos/R10Memoization.vue'
-import R10Code from '../demos/react-jsx/R10Memoization.jsx?raw'
-import R11DeferredValue from '../demos/R11DeferredValue.vue'
-import R11Code from '../demos/react-jsx/R11DeferredValue.jsx?raw'
-import R12ExternalStore from '../demos/R12ExternalStore.vue'
-import R12Code from '../demos/react-jsx/R12ExternalStore.jsx?raw'
-import R13Portal from '../demos/R13Portal.vue'
-import R13Code from '../demos/react-jsx/R13Portal.jsx?raw'
-import R14LazySuspense from '../demos/R14LazySuspense.vue'
-import R14Code from '../demos/react-jsx/R14LazySuspense.jsx?raw'
-import R15ErrorBoundary from '../demos/R15ErrorBoundary.vue'
-import R15Code from '../demos/react-jsx/R15ErrorBoundary.jsx?raw'
-import R16AccessibleId from '../demos/R16AccessibleId.vue'
-import R16Code from '../demos/react-jsx/R16AccessibleId.jsx?raw'
-import R17EventHandler from '../demos/R17EventHandler.vue'
-import R17Code from '../demos/react-jsx/R17EventHandler.jsx?raw'
-import R18ConditionalRender from '../demos/R18ConditionalRender.vue'
-import R18Code from '../demos/react-jsx/R18ConditionalRender.jsx?raw'
-import R19Composition from '../demos/R19Composition.vue'
-import R19Code from '../demos/react-jsx/R19Composition.jsx?raw'
-import R20Transition from '../demos/R20Transition.vue'
-import R20Code from '../demos/react-jsx/R20Transition.jsx?raw'
-import R21ImperativeHandle from '../demos/R21ImperativeHandle.vue'
-import R21Code from '../demos/react-jsx/R21ImperativeHandle.jsx?raw'
-import R22ForwardRef from '../demos/R22ForwardRef.vue'
-import R22Code from '../demos/react-jsx/R22ForwardRef.jsx?raw'
-import R23StrictMode from '../demos/R23StrictMode.vue'
-import R23Code from '../demos/react-jsx/R23StrictMode.jsx?raw'
-import R24EffectLifecycle from '../demos/R24EffectLifecycle.vue'
-import R24Code from '../demos/react-jsx/R24EffectLifecycle.jsx?raw'
-import L01LLMCall from '../demos/L01LLMCall.vue'
-import L01Code from '../demos/L01LLMCall.vue?raw'
-import L02PromptTemplate from '../demos/L02PromptTemplate.vue'
-import L02Code from '../demos/L02PromptTemplate.vue?raw'
-import L03OutputParser from '../demos/L03OutputParser.vue'
-import L03Code from '../demos/L03OutputParser.vue?raw'
-import L04LCEL from '../demos/L04LCEL.vue'
-import L04Code from '../demos/L04LCEL.vue?raw'
-import L05Chains from '../demos/L05Chains.vue'
-import L05Code from '../demos/L05Chains.vue?raw'
-import L06DocSplitter from '../demos/L06DocSplitter.vue'
-import L06Code from '../demos/L06DocSplitter.vue?raw'
-import L07VectorRetrieval from '../demos/L07VectorRetrieval.vue'
-import L07Code from '../demos/L07VectorRetrieval.vue?raw'
-import L08Agent from '../demos/L08Agent.vue'
-import L08Code from '../demos/L08Agent.vue?raw'
-import L09Tools from '../demos/L09Tools.vue'
-import L09Code from '../demos/L09Tools.vue?raw'
-import L10Memory from '../demos/L10Memory.vue'
-import L10Code from '../demos/L10Memory.vue?raw'
-import L11Callbacks from '../demos/L11Callbacks.vue'
-import L11Code from '../demos/L11Callbacks.vue?raw'
-import L12QABot from '../demos/L12QABot.vue'
-import L12Code from '../demos/L12QABot.vue?raw'
-import L13Streaming from '../demos/L13Streaming.vue'
-import L13Code from '../demos/L13Streaming.vue?raw'
-import L14Evaluation from '../demos/L14Evaluation.vue'
-import L14Code from '../demos/L14Evaluation.vue?raw'
-import N01ProjectStructure from '../demos/N01ProjectStructure.vue'
-import N01Code from '../demos/N01ProjectStructure.vue?raw'
-import N02FileRouting from '../demos/N02FileRouting.vue'
-import N02Code from '../demos/N02FileRouting.vue?raw'
-import N03DynamicRoute from '../demos/N03DynamicRoute.vue'
-import N03Code from '../demos/N03DynamicRoute.vue?raw'
-import N04Layouts from '../demos/N04Layouts.vue'
-import N04Code from '../demos/N04Layouts.vue?raw'
-import N05AutoImport from '../demos/N05AutoImport.vue'
-import N05Code from '../demos/N05AutoImport.vue?raw'
-import N06Composables from '../demos/N06Composables.vue'
-import N06Code from '../demos/N06Composables.vue?raw'
-import N07UseFetch from '../demos/N07UseFetch.vue'
-import N07Code from '../demos/N07UseFetch.vue?raw'
-import N08UseAsyncData from '../demos/N08UseAsyncData.vue'
-import N08Code from '../demos/N08UseAsyncData.vue?raw'
-import N09SSR from '../demos/N09SSR.vue'
-import N09Code from '../demos/N09SSR.vue?raw'
-import N10ClientOnly from '../demos/N10ClientOnly.vue'
-import N10Code from '../demos/N10ClientOnly.vue?raw'
-import N11Middleware from '../demos/N11Middleware.vue'
-import N11Code from '../demos/N11Middleware.vue?raw'
-import N12Plugins from '../demos/N12Plugins.vue'
-import N12Code from '../demos/N12Plugins.vue?raw'
-import N13UseState from '../demos/N13UseState.vue'
-import N13Code from '../demos/N13UseState.vue?raw'
-import N14SEO from '../demos/N14SEO.vue'
-import N14Code from '../demos/N14SEO.vue?raw'
-import N15Nitro from '../demos/N15Nitro.vue'
-import N15Code from '../demos/N15Nitro.vue?raw'
-import N16ApiRoutes from '../demos/N16ApiRoutes.vue'
-import N16Code from '../demos/N16ApiRoutes.vue?raw'
-import N17SSG from '../demos/N17SSG.vue'
-import N17Code from '../demos/N17SSG.vue?raw'
-import N18RuntimeConfig from '../demos/N18RuntimeConfig.vue'
-import N18Code from '../demos/N18RuntimeConfig.vue?raw'
-import N19ErrorHandling from '../demos/N19ErrorHandling.vue'
-import N19Code from '../demos/N19ErrorHandling.vue?raw'
-import N20Modules from '../demos/N20Modules.vue'
-import N20Code from '../demos/N20Modules.vue?raw'
+import { defineAsyncComponent } from 'vue'
+
+const demoModules = import.meta.glob<Component>('../demos/*.vue', { import: 'default' })
+const vueCodeModules = import.meta.glob<string>('../demos/*.vue', { query: '?raw', import: 'default' })
+const jsxCodeModules = import.meta.glob<string>('../demos/react-jsx/*.jsx', { query: '?raw', import: 'default' })
+
+function createDemo(name: string) {
+  const loader = demoModules[`../demos/${name}.vue`]
+
+  if (!loader) {
+    throw new Error(`未找到案例组件：${name}`)
+  }
+
+  return defineAsyncComponent(loader)
+}
+
+function createCodeLoader(path: string) {
+  const modules = path.startsWith('react-jsx/') ? jsxCodeModules : vueCodeModules
+  const loader = modules[`../demos/${path}`]
+
+  if (!loader) {
+    throw new Error(`未找到案例源码：${path}`)
+  }
+
+  return loader
+}
+
+const K01AppEntry = createDemo('K01AppEntry')
+const K01Code = createCodeLoader('K01AppEntry.vue')
+const K02TemplateSyntax = createDemo('K02TemplateSyntax')
+const K02Code = createCodeLoader('K02TemplateSyntax.vue')
+const K03Reactivity = createDemo('K03Reactivity')
+const K03Code = createCodeLoader('K03Reactivity.vue')
+const K04ComputedWatch = createDemo('K04ComputedWatch')
+const K04Code = createCodeLoader('K04ComputedWatch.vue')
+const K05ConditionList = createDemo('K05ConditionList')
+const K05Code = createCodeLoader('K05ConditionList.vue')
+const K06FormModel = createDemo('K06FormModel')
+const K06Code = createCodeLoader('K06FormModel.vue')
+const K07ComponentBasics = createDemo('K07ComponentBasics')
+const K07Code = createCodeLoader('K07ComponentBasics.vue')
+const K08Slots = createDemo('K08Slots')
+const K08Code = createCodeLoader('K08Slots.vue')
+const K09Communication = createDemo('K09Communication')
+const K09Code = createCodeLoader('K09Communication.vue')
+const K10LifecycleRef = createDemo('K10LifecycleRef')
+const K10Code = createCodeLoader('K10LifecycleRef.vue')
+const K11Composable = createDemo('K11Composable')
+const K11Code = createCodeLoader('K11Composable.vue')
+const K12Routing = createDemo('K12Routing')
+const K12Code = createCodeLoader('K12Routing.vue')
+const K13Pinia = createDemo('K13Pinia')
+const K13Code = createCodeLoader('K13Pinia.vue')
+const K14AsyncState = createDemo('K14AsyncState')
+const K14Code = createCodeLoader('K14AsyncState.vue')
+const K15DynamicKeepAlive = createDemo('K15DynamicKeepAlive')
+const K15Code = createCodeLoader('K15DynamicKeepAlive.vue')
+const K16Transition = createDemo('K16Transition')
+const K16Code = createCodeLoader('K16Transition.vue')
+const K17Directive = createDemo('K17Directive')
+const K17Code = createCodeLoader('K17Directive.vue')
+const K18Teleport = createDemo('K18Teleport')
+const K18Code = createCodeLoader('K18Teleport.vue')
+const K19Suspense = createDemo('K19Suspense')
+const K19Code = createCodeLoader('K19Suspense.vue')
+const K20Performance = createDemo('K20Performance')
+const K20Code = createCodeLoader('K20Performance.vue')
+const K21TestingMaintainability = createDemo('K21TestingMaintainability')
+const K21Code = createCodeLoader('K21TestingMaintainability.vue')
+const K22CustomVModel = createDemo('K22CustomVModel')
+const K22Code = createCodeLoader('K22CustomVModel.vue')
+const K23ErrorHandling = createDemo('K23ErrorHandling')
+const K23Code = createCodeLoader('K23ErrorHandling.vue')
+const K24PluginDev = createDemo('K24PluginDev')
+const K24Code = createCodeLoader('K24PluginDev.vue')
+const K25ShallowReactivity = createDemo('K25ShallowReactivity')
+const K25Code = createCodeLoader('K25ShallowReactivity.vue')
+const K26EffectScope = createDemo('K26EffectScope')
+const K26Code = createCodeLoader('K26EffectScope.vue')
+const K27AttributeForwarding = createDemo('K27AttributeForwarding')
+const K27Code = createCodeLoader('K27AttributeForwarding.vue')
+const K28ComponentExpose = createDemo('K28ComponentExpose')
+const K28Code = createCodeLoader('K28ComponentExpose.vue')
+const E01Button = createDemo('E01Button')
+const E01Code = createCodeLoader('E01Button.vue')
+const E02Form = createDemo('E02Form')
+const E02Code = createCodeLoader('E02Form.vue')
+const E03Table = createDemo('E03Table')
+const E03Code = createCodeLoader('E03Table.vue')
+const E04Dialog = createDemo('E04Dialog')
+const E04Code = createCodeLoader('E04Dialog.vue')
+const E05Message = createDemo('E05Message')
+const E05Code = createCodeLoader('E05Message.vue')
+const E06Popover = createDemo('E06Popover')
+const E06Code = createCodeLoader('E06Popover.vue')
+const E07Dropdown = createDemo('E07Dropdown')
+const E07Code = createCodeLoader('E07Dropdown.vue')
+const E08Tabs = createDemo('E08Tabs')
+const E08Code = createCodeLoader('E08Tabs.vue')
+const E09Pagination = createDemo('E09Pagination')
+const E09Code = createCodeLoader('E09Pagination.vue')
+const E10Upload = createDemo('E10Upload')
+const E10Code = createCodeLoader('E10Upload.vue')
+const E11Cascader = createDemo('E11Cascader')
+const E11Code = createCodeLoader('E11Cascader.vue')
+const E12Tooltip = createDemo('E12Tooltip')
+const E12Code = createCodeLoader('E12Tooltip.vue')
+const E13DatePicker = createDemo('E13DatePicker')
+const E13Code = createCodeLoader('E13DatePicker.vue')
+const E14Tree = createDemo('E14Tree')
+const E14Code = createCodeLoader('E14Tree.vue')
+const E15Drawer = createDemo('E15Drawer')
+const E15Code = createCodeLoader('E15Drawer.vue')
+const E16Steps = createDemo('E16Steps')
+const E16Code = createCodeLoader('E16Steps.vue')
+const R01ComponentProps = createDemo('R01ComponentProps')
+const R01Code = createCodeLoader('react-jsx/R01ComponentProps.jsx')
+const R02StateUpdates = createDemo('R02StateUpdates')
+const R02Code = createCodeLoader('react-jsx/R02StateUpdates.jsx')
+const R03ListsKeys = createDemo('R03ListsKeys')
+const R03Code = createCodeLoader('react-jsx/R03ListsKeys.jsx')
+const R04ControlledForm = createDemo('R04ControlledForm')
+const R04Code = createCodeLoader('react-jsx/R04ControlledForm.jsx')
+const R05EffectSync = createDemo('R05EffectSync')
+const R05Code = createCodeLoader('react-jsx/R05EffectSync.jsx')
+const R06Reducer = createDemo('R06Reducer')
+const R06Code = createCodeLoader('react-jsx/R06Reducer.jsx')
+const R07Context = createDemo('R07Context')
+const R07Code = createCodeLoader('react-jsx/R07Context.jsx')
+const R08CustomHook = createDemo('R08CustomHook')
+const R08Code = createCodeLoader('react-jsx/R08CustomHook.jsx')
+const R09RefDom = createDemo('R09RefDom')
+const R09Code = createCodeLoader('react-jsx/R09RefDom.jsx')
+const R10Memoization = createDemo('R10Memoization')
+const R10Code = createCodeLoader('react-jsx/R10Memoization.jsx')
+const R11DeferredValue = createDemo('R11DeferredValue')
+const R11Code = createCodeLoader('react-jsx/R11DeferredValue.jsx')
+const R12ExternalStore = createDemo('R12ExternalStore')
+const R12Code = createCodeLoader('react-jsx/R12ExternalStore.jsx')
+const R13Portal = createDemo('R13Portal')
+const R13Code = createCodeLoader('react-jsx/R13Portal.jsx')
+const R14LazySuspense = createDemo('R14LazySuspense')
+const R14Code = createCodeLoader('react-jsx/R14LazySuspense.jsx')
+const R15ErrorBoundary = createDemo('R15ErrorBoundary')
+const R15Code = createCodeLoader('react-jsx/R15ErrorBoundary.jsx')
+const R16AccessibleId = createDemo('R16AccessibleId')
+const R16Code = createCodeLoader('react-jsx/R16AccessibleId.jsx')
+const R17EventHandler = createDemo('R17EventHandler')
+const R17Code = createCodeLoader('react-jsx/R17EventHandler.jsx')
+const R18ConditionalRender = createDemo('R18ConditionalRender')
+const R18Code = createCodeLoader('react-jsx/R18ConditionalRender.jsx')
+const R19Composition = createDemo('R19Composition')
+const R19Code = createCodeLoader('react-jsx/R19Composition.jsx')
+const R20Transition = createDemo('R20Transition')
+const R20Code = createCodeLoader('react-jsx/R20Transition.jsx')
+const R21ImperativeHandle = createDemo('R21ImperativeHandle')
+const R21Code = createCodeLoader('react-jsx/R21ImperativeHandle.jsx')
+const R22ForwardRef = createDemo('R22ForwardRef')
+const R22Code = createCodeLoader('react-jsx/R22ForwardRef.jsx')
+const R23StrictMode = createDemo('R23StrictMode')
+const R23Code = createCodeLoader('react-jsx/R23StrictMode.jsx')
+const R24EffectLifecycle = createDemo('R24EffectLifecycle')
+const R24Code = createCodeLoader('react-jsx/R24EffectLifecycle.jsx')
+const L01LLMCall = createDemo('L01LLMCall')
+const L01Code = createCodeLoader('L01LLMCall.vue')
+const L02PromptTemplate = createDemo('L02PromptTemplate')
+const L02Code = createCodeLoader('L02PromptTemplate.vue')
+const L03OutputParser = createDemo('L03OutputParser')
+const L03Code = createCodeLoader('L03OutputParser.vue')
+const L04LCEL = createDemo('L04LCEL')
+const L04Code = createCodeLoader('L04LCEL.vue')
+const L05Chains = createDemo('L05Chains')
+const L05Code = createCodeLoader('L05Chains.vue')
+const L06DocSplitter = createDemo('L06DocSplitter')
+const L06Code = createCodeLoader('L06DocSplitter.vue')
+const L07VectorRetrieval = createDemo('L07VectorRetrieval')
+const L07Code = createCodeLoader('L07VectorRetrieval.vue')
+const L08Agent = createDemo('L08Agent')
+const L08Code = createCodeLoader('L08Agent.vue')
+const L09Tools = createDemo('L09Tools')
+const L09Code = createCodeLoader('L09Tools.vue')
+const L10Memory = createDemo('L10Memory')
+const L10Code = createCodeLoader('L10Memory.vue')
+const L11Callbacks = createDemo('L11Callbacks')
+const L11Code = createCodeLoader('L11Callbacks.vue')
+const L12QABot = createDemo('L12QABot')
+const L12Code = createCodeLoader('L12QABot.vue')
+const L13Streaming = createDemo('L13Streaming')
+const L13Code = createCodeLoader('L13Streaming.vue')
+const L14Evaluation = createDemo('L14Evaluation')
+const L14Code = createCodeLoader('L14Evaluation.vue')
+const N01ProjectStructure = createDemo('N01ProjectStructure')
+const N01Code = createCodeLoader('N01ProjectStructure.vue')
+const N02FileRouting = createDemo('N02FileRouting')
+const N02Code = createCodeLoader('N02FileRouting.vue')
+const N03DynamicRoute = createDemo('N03DynamicRoute')
+const N03Code = createCodeLoader('N03DynamicRoute.vue')
+const N04Layouts = createDemo('N04Layouts')
+const N04Code = createCodeLoader('N04Layouts.vue')
+const N05AutoImport = createDemo('N05AutoImport')
+const N05Code = createCodeLoader('N05AutoImport.vue')
+const N06Composables = createDemo('N06Composables')
+const N06Code = createCodeLoader('N06Composables.vue')
+const N07UseFetch = createDemo('N07UseFetch')
+const N07Code = createCodeLoader('N07UseFetch.vue')
+const N08UseAsyncData = createDemo('N08UseAsyncData')
+const N08Code = createCodeLoader('N08UseAsyncData.vue')
+const N09SSR = createDemo('N09SSR')
+const N09Code = createCodeLoader('N09SSR.vue')
+const N10ClientOnly = createDemo('N10ClientOnly')
+const N10Code = createCodeLoader('N10ClientOnly.vue')
+const N11Middleware = createDemo('N11Middleware')
+const N11Code = createCodeLoader('N11Middleware.vue')
+const N12Plugins = createDemo('N12Plugins')
+const N12Code = createCodeLoader('N12Plugins.vue')
+const N13UseState = createDemo('N13UseState')
+const N13Code = createCodeLoader('N13UseState.vue')
+const N14SEO = createDemo('N14SEO')
+const N14Code = createCodeLoader('N14SEO.vue')
+const N15Nitro = createDemo('N15Nitro')
+const N15Code = createCodeLoader('N15Nitro.vue')
+const N16ApiRoutes = createDemo('N16ApiRoutes')
+const N16Code = createCodeLoader('N16ApiRoutes.vue')
+const N17SSG = createDemo('N17SSG')
+const N17Code = createCodeLoader('N17SSG.vue')
+const N18RuntimeConfig = createDemo('N18RuntimeConfig')
+const N18Code = createCodeLoader('N18RuntimeConfig.vue')
+const N19ErrorHandling = createDemo('N19ErrorHandling')
+const N19Code = createCodeLoader('N19ErrorHandling.vue')
+const N20Modules = createDemo('N20Modules')
+const N20Code = createCodeLoader('N20Modules.vue')
+const T01TypeInference = createDemo('T01TypeInference')
+const T01Code = createCodeLoader('T01TypeInference.vue')
+const T02UnionNarrowing = createDemo('T02UnionNarrowing')
+const T02Code = createCodeLoader('T02UnionNarrowing.vue')
+const T03ObjectModeling = createDemo('T03ObjectModeling')
+const T03Code = createCodeLoader('T03ObjectModeling.vue')
+const T04Generics = createDemo('T04Generics')
+const T04Code = createCodeLoader('T04Generics.vue')
+const T05Keyof = createDemo('T05Keyof')
+const T05Code = createCodeLoader('T05Keyof.vue')
+const T06UtilityTypes = createDemo('T06UtilityTypes')
+const T06Code = createCodeLoader('T06UtilityTypes.vue')
+const T07UnknownGuard = createDemo('T07UnknownGuard')
+const T07Code = createCodeLoader('T07UnknownGuard.vue')
+const T08VueTyping = createDemo('T08VueTyping')
+const T08Code = createCodeLoader('T08VueTyping.vue')
+const G01EnvironmentConfig = createDemo('G01EnvironmentConfig')
+const G01Code = createCodeLoader('G01EnvironmentConfig.vue')
+const G02CodeQuality = createDemo('G02CodeQuality')
+const G02Code = createCodeLoader('G02CodeQuality.vue')
+const G03UnitTesting = createDemo('G03UnitTesting')
+const G03Code = createCodeLoader('G03UnitTesting.vue')
+const G04ComponentTesting = createDemo('G04ComponentTesting')
+const G04Code = createCodeLoader('G04ComponentTesting.vue')
+const G05CIPipeline = createDemo('G05CIPipeline')
+const G05Code = createCodeLoader('G05CIPipeline.vue')
+const G06PerformanceBudget = createDemo('G06PerformanceBudget')
+const G06Code = createCodeLoader('G06PerformanceBudget.vue')
+const G07Accessibility = createDemo('G07Accessibility')
+const G07Code = createCodeLoader('G07Accessibility.vue')
+const G08SecurityDelivery = createDemo('G08SecurityDelivery')
+const G08Code = createCodeLoader('G08SecurityDelivery.vue')
 
 export interface KnowledgeCategory {
   id: string
@@ -221,7 +280,7 @@ export interface Lesson {
   path: string
   summary: string
   demo: Component
-  code: string
+  code: () => Promise<string>
   language: string
   principle: string
   flow: string[]
@@ -232,9 +291,9 @@ export interface Lesson {
 export const knowledgeCategories: KnowledgeCategory[] = [
   { id: 'vue', name: 'Vue3', path: '/vue', status: 'ready' },
   { id: 'element-plus', name: 'Element Plus', path: '/element-plus', status: 'ready', intro: 'Element Plus 是基于 Vue 3 的组件库，提供丰富的企业级 UI 组件，覆盖表格、表单、弹窗、导航等常见场景。', officialUrl: 'https://element-plus.org/' },
-  { id: 'typescript', name: 'TypeScript', path: '/typescript', status: 'planned' },
+  { id: 'typescript', name: 'TypeScript', path: '/typescript', status: 'ready', intro: 'TypeScript 为 JavaScript 增加可渐进采用的静态类型系统。本分类以 Vue 3 真实业务数据为背景，覆盖建模、收窄、泛型、类型操作与组件类型实践。', officialUrl: 'https://www.typescriptlang.org/' },
   { id: 'react', name: 'React', path: '/react', status: 'ready', intro: 'React 以组件和声明式渲染组织用户界面。本分类基于 React 19.2，通过浏览器 ES Module 直接引用 React，不向当前 Vue3 工程安装 React 依赖。', officialUrl: 'https://react.dev/' },
-  { id: 'engineering', name: '工程化', path: '/engineering', status: 'planned' },
+  { id: 'engineering', name: '工程化', path: '/engineering', status: 'ready', intro: '工程化把代码质量、自动化测试、持续集成、性能、无障碍与安全发布串成可重复的交付流程，让项目在规模增长后仍然可靠。', officialUrl: 'https://vite.dev/' },
   { id: 'langchain', name: 'LangChain', path: '/langchain', status: 'ready', intro: 'LangChain.js 是构建 LLM 应用的开源框架，提供模型调用、提示模板、链式调用、RAG 检索增强生成等核心能力，帮助开发者快速搭建智能应用。', officialUrl: 'https://js.langchain.com/' },
   { id: 'nuxt', name: 'Nuxt', path: '/nuxt', status: 'ready', intro: 'Nuxt 是基于 Vue 3 的全栈框架，内置文件路由、自动导入、SSR/SSG、服务端 API 等能力，让 Vue 项目从单页应用升级为全栈应用。', officialUrl: 'https://nuxt.com/' },
 ]
@@ -2722,5 +2781,149 @@ export const lessons: Lesson[] = [
       '模块配置通过 nuxt.config.ts 中与模块 configKey 同名的键设置。',
     ],
     problem: '解决"如何安装和配置 Nuxt 模块、如何开发自己的模块、生态中有哪些常用模块"的问题。',
+  },
+  {
+    id: 'T_01', title: '类型推导与显式标注', navTitle: '类型推导', category: '类型基础',
+    path: '/typescript/t-1/type-inference', summary: '从课程表单理解 TypeScript 如何推导类型，以及何时需要显式标注。',
+    demo: T01TypeInference, code: T01Code, language: 'vue',
+    principle: 'TypeScript 会根据初始值推导变量类型；当值可能为空、类型会变化或公共 API 需要稳定契约时，应补充显式类型标注。',
+    flow: ['先让编译器从确定的初始值推导类型。', '遇到联合状态或空值时显式声明。', '在编辑器和类型检查阶段发现不合法赋值。'],
+    notes: ['避免给所有局部变量重复写显而易见的类型。', '不要用 any 绕过建模问题。'],
+    problem: '解决“哪些类型可以交给编译器推导、哪些边界必须显式声明”的问题。',
+  },
+  {
+    id: 'T_02', title: '联合类型与控制流收窄', navTitle: '联合与收窄', category: '类型基础',
+    path: '/typescript/t-2/union-narrowing', summary: '用订单状态机掌握字面量联合类型和条件分支收窄。',
+    demo: T02UnionNarrowing, code: T02Code, language: 'vue',
+    principle: '联合类型列出值的有限可能，TypeScript 会根据相等判断、typeof、in 等运行时检查逐步收窄到具体成员。',
+    flow: ['用字面量联合定义合法状态。', '在条件分支中判断当前状态。', '收窄后执行该状态专属的业务逻辑。'],
+    notes: ['状态值应来自一个统一类型。', '穷尽检查能在新增状态时提醒遗漏分支。'],
+    problem: '解决“如何让非法业务状态无法被创建，并安全处理不同分支”的问题。',
+  },
+  {
+    id: 'T_03', title: '对象类型与领域建模', navTitle: '对象建模', category: '类型基础',
+    path: '/typescript/t-3/object-modeling', summary: '通过会员资料区分 interface、type 与对象结构约束。',
+    demo: T03ObjectModeling, code: T03Code, language: 'vue',
+    principle: 'interface 适合表达可扩展的对象契约，type 能组合联合、交叉和其他类型表达式；两者都遵循结构化类型系统。',
+    flow: ['识别领域对象的稳定字段。', '声明字段类型和有限枚举值。', '让响应式状态遵守同一份业务契约。'],
+    notes: ['公共模型应使用业务语言命名。', '可选字段只用于数据确实可能缺失的场景。'],
+    problem: '解决“如何把接口返回和业务对象建模成可维护类型”的问题。',
+  },
+  {
+    id: 'T_04', title: '泛型：复用类型关系', navTitle: '泛型', category: '类型进阶',
+    path: '/typescript/t-4/generics', summary: '用通用 API 响应保留课程列表的精确数据类型。',
+    demo: T04Generics, code: T04Code, language: 'vue',
+    principle: '泛型把类型作为参数传递，使函数和容器既能复用实现，又能保留输入与输出之间的精确关系。',
+    flow: ['找出实现中需要变化的类型。', '用类型参数表达输入输出关系。', '调用时由实参推导具体类型。'],
+    notes: ['类型参数名应表达角色。', '仅使用一次且没有关系的类型参数通常没有价值。'],
+    problem: '解决“如何复用 API、列表和工具函数而不丢失类型信息”的问题。',
+  },
+  {
+    id: 'T_05', title: 'keyof 与索引访问类型', navTitle: 'keyof', category: '类型进阶',
+    path: '/typescript/t-5/keyof', summary: '构建只能读取合法配置键的设置面板。',
+    demo: T05Keyof, code: T05Code, language: 'vue',
+    principle: 'keyof 从对象类型得到键的联合，T[K] 根据键取得对应值类型，两者结合可编写安全的动态属性访问。',
+    flow: ['从对象模型提取合法键。', '让函数参数受键联合约束。', '通过索引访问获得匹配的值类型。'],
+    notes: ['Object.keys 默认返回 string[]，必要时需要安全封装。', '不要用宽泛 string 索引绕过键约束。'],
+    problem: '解决“动态访问对象属性时如何避免键名拼写错误”的问题。',
+  },
+  {
+    id: 'T_06', title: '工具类型与更新模型', navTitle: '工具类型', category: '类型进阶',
+    path: '/typescript/t-6/utility-types', summary: '用 Partial、Pick 和 Omit 表达课程的局部更新。',
+    demo: T06UtilityTypes, code: T06Code, language: 'vue',
+    principle: '内置工具类型通过映射和条件类型从已有模型派生新契约，减少新增、详情、更新模型之间的重复。',
+    flow: ['先定义完整领域模型。', '按操作语义挑选或排除字段。', '用 Partial 将更新字段变为可选。'],
+    notes: ['派生类型应保持来源清晰。', '深层对象的 Partial 不会自动递归。'],
+    problem: '解决“创建、编辑和接口响应类型重复且容易漂移”的问题。',
+  },
+  {
+    id: 'T_07', title: 'unknown 与自定义类型守卫', navTitle: '安全边界', category: '安全边界',
+    path: '/typescript/t-7/unknown-guard', summary: '安全解析用户导入的 JSON，在使用前验证未知数据。',
+    demo: T07UnknownGuard, code: T07Code, language: 'vue',
+    principle: '外部输入在验证前应视为 unknown；类型守卫同时执行运行时检查，并向编译器证明检查后的精确类型。',
+    flow: ['把网络或用户输入接收为 unknown。', '检查对象、字段与基本类型。', '守卫通过后再进入业务逻辑。'],
+    notes: ['类型断言不会产生运行时校验。', '复杂结构可使用 schema 校验库。'],
+    problem: '解决“接口或本地数据不可信时，如何避免错误断言导致运行时崩溃”的问题。',
+  },
+  {
+    id: 'T_08', title: 'Vue 3 组件类型实践', navTitle: 'Vue 类型', category: '框架实践',
+    path: '/typescript/t-8/vue-typing', summary: '掌握响应式状态、模板引用、Props 与 Emits 的类型边界。',
+    demo: T08VueTyping, code: T08Code, language: 'vue',
+    principle: 'Vue 3 的宏和组合式 API 能从泛型声明推导模板类型；DOM 模板引用还需要处理挂载前的 null 状态。',
+    flow: ['为业务状态声明接口。', '用泛型约束 Props、Emits 或模板引用。', '在访问 DOM 或子组件前处理空值。'],
+    notes: ['优先使用类型化的 defineProps 和 defineEmits。', '避免把组件实例直接声明为 any。'],
+    problem: '解决“如何让 Vue 组件的输入、输出和模板引用获得完整类型检查”的问题。',
+  },
+  {
+    id: 'G_01', title: '环境变量与运行配置', navTitle: '环境配置', category: '构建基础',
+    path: '/engineering/g-1/environment-config', summary: '区分构建时环境变量、公开配置和服务端密钥。',
+    demo: G01EnvironmentConfig, code: G01Code, language: 'vue',
+    principle: '环境配置把同一份代码连接到不同服务；任何进入客户端产物的变量都可被用户读取，密钥必须留在服务端。',
+    flow: ['定义开发、测试和生产环境差异。', '只暴露客户端确实需要的公开值。', '在构建和部署阶段注入配置。'],
+    notes: ['不要把 .env 当作权限边界。', '环境变量名和默认值应形成文档。'],
+    problem: '解决“多环境地址如何切换，以及密钥应该放在哪里”的问题。',
+  },
+  {
+    id: 'G_02', title: '代码规范与自动检查', navTitle: '代码质量', category: '质量保障',
+    path: '/engineering/g-2/code-quality', summary: '用格式化、Lint 和类型检查建立提交前质量门。',
+    demo: G02CodeQuality, code: G02Code, language: 'vue',
+    principle: '格式化统一外观，Lint 发现可疑模式，类型检查验证契约；三者职责不同，应在本地和 CI 中使用同一命令。',
+    flow: ['编辑器保存时快速格式化。', '提交前运行静态检查。', 'CI 再执行一次并阻止不合格变更。'],
+    notes: ['规则应服务于缺陷预防。', '不要让本地配置与 CI 配置分叉。'],
+    problem: '解决“团队如何稳定保持一致风格并提前发现低级错误”的问题。',
+  },
+  {
+    id: 'G_03', title: '单元测试与边界用例', navTitle: '单元测试', category: '质量保障',
+    path: '/engineering/g-3/unit-testing', summary: '以折扣计算为例设计快速、确定且可读的单元测试。',
+    demo: G03UnitTesting, code: G03Code, language: 'vue',
+    principle: '单元测试隔离验证一个纯逻辑单元，重点覆盖正常值、边界值和错误输入，而不是复制实现细节。',
+    flow: ['安排输入与依赖。', '执行一个明确行为。', '断言公开结果并覆盖边界。'],
+    notes: ['测试名称应描述行为。', '时间和随机数需要可控替身。'],
+    problem: '解决“哪些逻辑值得单测，以及怎样写出稳定断言”的问题。',
+  },
+  {
+    id: 'G_04', title: '组件交互测试', navTitle: '组件测试', category: '质量保障',
+    path: '/engineering/g-4/component-testing', summary: '从用户视角验证按钮、提示和可访问状态。',
+    demo: G04ComponentTesting, code: G04Code, language: 'vue',
+    principle: '组件测试应通过用户可见文本、角色和交互观察行为，避免依赖内部 ref、方法名或脆弱 DOM 层级。',
+    flow: ['按角色或标签找到控件。', '触发真实点击或输入。', '断言页面呈现的结果。'],
+    notes: ['优先断言可访问查询。', '只在边界处模拟网络和外部服务。'],
+    problem: '解决“如何验证组件交互而不把测试绑死在实现细节上”的问题。',
+  },
+  {
+    id: 'G_05', title: '持续集成与发布流水线', navTitle: 'CI 流水线', category: '自动化交付',
+    path: '/engineering/g-5/ci-pipeline', summary: '把安装、检查、构建和发布组织成可重复流水线。',
+    demo: G05CIPipeline, code: G05Code, language: 'vue',
+    principle: 'CI 在干净环境重现项目验证过程，只有全部质量门通过的不可变产物才能进入发布阶段。',
+    flow: ['锁定依赖并恢复缓存。', '并行运行类型检查和测试。', '构建一次并发布同一份产物。'],
+    notes: ['流水线密钥使用平台 Secret。', '失败步骤应保留日志和测试报告。'],
+    problem: '解决“如何让每次提交都经过一致验证并可靠发布”的问题。',
+  },
+  {
+    id: 'G_06', title: '性能预算与持续度量', navTitle: '性能预算', category: '用户体验',
+    path: '/engineering/g-6/performance-budget', summary: '给脚本、图片和总体积设置可执行的性能预算。',
+    demo: G06PerformanceBudget, code: G06Code, language: 'vue',
+    principle: '性能预算把“页面要快”转为可自动判断的上限，并结合真实用户指标持续观察回归。',
+    flow: ['按网络和设备目标制定预算。', '构建时测量资源体积。', '超出阈值时阻止合并并定位增量。'],
+    notes: ['压缩后体积和执行成本都要关注。', '实验室指标应与真实用户数据互补。'],
+    problem: '解决“如何防止依赖和资源在迭代中悄悄拖慢页面”的问题。',
+  },
+  {
+    id: 'G_07', title: '无障碍作为工程质量门', navTitle: '无障碍', category: '用户体验',
+    path: '/engineering/g-7/accessibility', summary: '把语义、键盘、对比度和状态播报纳入开发流程。',
+    demo: G07Accessibility, code: G07Code, language: 'vue',
+    principle: '无障碍首先依赖正确 HTML 语义，再用自动扫描发现常见问题，并通过键盘与读屏人工验证关键流程。',
+    flow: ['使用原生语义和关联标签。', '运行自动规则扫描。', '用键盘和读屏完成核心任务。'],
+    notes: ['ARIA 不能替代原生语义。', '不要只靠颜色传递状态。'],
+    problem: '解决“如何让更多用户可用，并把无障碍从补丁变成日常质量要求”的问题。',
+  },
+  {
+    id: 'G_08', title: 'Web 安全与静态发布', navTitle: '安全发布', category: '自动化交付',
+    path: '/engineering/g-8/security-delivery', summary: '检查安全响应头、依赖风险与静态资源缓存策略。',
+    demo: G08SecurityDelivery, code: G08Code, language: 'vue',
+    principle: '安全发布需要最小化客户端暴露、限制资源来源、持续修复依赖漏洞，并为带内容哈希的静态资源设置长期缓存。',
+    flow: ['构建前扫描依赖和公开配置。', '部署时配置安全响应头。', 'HTML 短缓存、哈希资源长期不可变缓存。'],
+    notes: ['CSP 应先报告再逐步收紧。', '前端校验不能替代服务端授权。'],
+    problem: '解决“静态站点发布时如何兼顾安全策略与缓存性能”的问题。',
   },
 ]

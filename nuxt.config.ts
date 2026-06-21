@@ -1,9 +1,11 @@
 import { readFileSync } from 'node:fs'
+import Components from 'unplugin-vue-components/vite'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 const lessonSource = readFileSync(new URL('./src/data/lessons.ts', import.meta.url), 'utf8')
 const lessonRoutes = Array.from(
   new Set(
-    Array.from(lessonSource.matchAll(/\bpath:\s*'(\/(?:vue|element-plus|react|langchain|nuxt)\/[^']+)'/g))
+    Array.from(lessonSource.matchAll(/\bpath:\s*'(\/[a-z-]+\/[^']+)'/g))
       .map((match) => match[1]),
   ),
 )
@@ -14,10 +16,14 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   modules: ['@pinia/nuxt'],
   css: [
-    'element-plus/dist/index.css',
     'highlight.js/styles/github.css',
     '~/style.css',
   ],
+  vite: {
+    plugins: [
+      Components({ dts: false, resolvers: [ElementPlusResolver()] }),
+    ],
+  },
   app: {
     baseURL: process.env.NUXT_APP_BASE_URL || '/',
     head: {
