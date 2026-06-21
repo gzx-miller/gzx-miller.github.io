@@ -9,6 +9,9 @@ import { createLessonOrderMap, flattenLessonGroups, groupLessons } from '../util
 const route = useRoute()
 const { isDark, toggleTheme } = useTheme()
 
+const readyCategoryCount = computed(() => knowledgeCategories.filter((c) => c.status === 'ready').length)
+const totalLessonCount = lessons.length
+
 const isSidebarTemporarilyExpanded = useState('sidebarExpanded', () => true)
 const lessonPageRef = ref<HTMLElement | null>(null)
 const lessonSearchInput = useTemplateRef<HTMLInputElement>('lessonSearchInput')
@@ -296,12 +299,19 @@ useSeoMeta({
       <div class="top-bar">
         <NuxtLink class="top-brand" to="/vue" aria-label="回到 Vue3 学习首页">
           <img class="brand-avatar" :src="squirrelHero" alt="小松鼠举着栗子" />
-          <div>
+          <div class="brand-text">
             <strong>小松鼠举栗子</strong>
-            <span >gzx_miller@foxmail.com</span>
+            <span class="brand-tagline">中文前端知识案例库</span>
+            <span class="brand-email">gzx_miller@foxmail.com</span>
           </div>
         </NuxtLink>
-        <p class="site-intro">中文前端知识案例库 · 通过独立真实案例学习前端核心技术</p>
+        <div class="site-intro-group">
+          <p class="site-intro">通过独立真实案例学习前端核心技术</p>
+          <p class="site-stats">
+            <span class="stat-pill">{{ readyCategoryCount }} 大知识分类</span>
+            <span class="stat-pill">{{ totalLessonCount }} 颗栗子</span>
+          </p>
+        </div>
         <button
           class="theme-toggle"
           :aria-label="isDark ? '切换浅色主题' : '切换深色主题'"

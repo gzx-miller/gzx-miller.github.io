@@ -17,15 +17,19 @@ function applyTheme(theme: Theme) {
   document.documentElement.setAttribute('data-theme', theme)
 }
 
+// 模块级守卫：确保客户端监听只注册一次
+let clientInitialized = false
+
 export function useTheme() {
-  const theme = useState<Theme>('theme', () => {
-    return getStoredPreference() ?? getSystemPreference()
-  })
+  // 服务端无 localStorage，默认 light；客户端挂载后会同步真实偏好
+  const theme = useState<Theme>('theme', () => 'light')
 
   function setTheme(newTheme: Theme) {
     theme.value = newTheme
-    localStorage.setItem(STORAGE_KEY, newTheme)
-    applyTheme(newTheme)
+    if (import.meta.client) {
+      localStorage.setItem(STORAGE_KEY, newTheme)
+      applyTheme(newTheme)
+    }
   }
 
   function toggleTheme() {
@@ -34,8 +38,17 @@ export function useTheme() {
 
   const isDark = computed(() => theme.value === 'dark')
 
-  // 初始化 & 监听系统主题变化
-  if (import.meta.client) {
+  // 客户端挂载后：用真实偏好（localStorage / 系统偏好）同步状态并应用
+  if (import.meta.client && !clientInitialized) {
+    clientInitialized = true
+
+    onMounted(() => {
+      const stored = getStoredPreference()
+      const realTheme = stored ?? getSystemPreference()
+      theme.value = realTheme
+      applyTheme(realTheme)
+    })
+
     applyTheme(theme.value)
 
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')

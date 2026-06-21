@@ -38,6 +38,12 @@ export default defineNuxtConfig({
         },
       ],
       link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
+      script: [
+        {
+          innerHTML: `(function(){try{var t=localStorage.getItem('theme-preference');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();`,
+          tagPosition: 'head',
+        },
+      ],
     },
   },
   nitro: {
@@ -50,6 +56,7 @@ export default defineNuxtConfig({
         '/react',
         '/langchain',
         '/nuxt',
+        '/nextjs',
         '/total-vue',
         '/total-vue/vue/k-1/app-entry',
         '/vue/k-12/routing/lee',
