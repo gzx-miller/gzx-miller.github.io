@@ -66,6 +66,7 @@ Object.is(-0, +0)       <span style="color:#8a8a3a">// false（=== 是 true）</
         <h4>相等性对比（点击切换）</h4>
         <div class="pair-list">
           <button
+            class="pair-btn"
             v-for="(p, i) in pairs"
             :key="i"
             :class="{ active: selectedPair === i }"
@@ -114,8 +115,8 @@ Object.is(-0, +0)       <span style="color:#8a8a3a">// false（=== 是 true）</
 
 <style scoped>
 .pair-list { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
-.pair-list button { padding: 4px 10px; border: 1px solid #e0a06a; border-radius: 4px; background: #fff; cursor: pointer; font-size: 12px; font-family: monospace; }
-.pair-list button.active { background: #e85d04; color: #fff; border-color: #e85d04; }
+.pair-list .pair-btn { padding: 4px 10px; border: 1px solid #e0a06a !important; border-radius: 4px; background: #fff !important; color: var(--text) !important; cursor: pointer; font-size: 12px; font-family: monospace; }
+.pair-list .pair-btn.active { background: #e85d04 !important; color: #fff !important; border-color: #e85d04 !important; }
 .result-box { background: #fff8f0; padding: 10px; border-radius: 6px; border-left: 3px solid #e85d04; }
 .result { font-size: 18px; font-weight: bold; }
 .result.true { color: #65a30d; }

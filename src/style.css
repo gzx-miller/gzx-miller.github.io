@@ -1536,6 +1536,92 @@ li + li {
   background: linear-gradient(90deg, transparent, rgba(246, 193, 90, 0.08), transparent);
 }
 
+/* demo 通用元素深色主题适配 */
+[data-theme='dark'] .demo-card table th,
+[data-theme='dark'] table th {
+  background: rgba(74, 52, 40, 0.5);
+  border-color: rgba(74, 52, 40, 0.6);
+  color: var(--text);
+}
+
+[data-theme='dark'] .demo-card table td,
+[data-theme='dark'] table td {
+  border-color: rgba(74, 52, 40, 0.5);
+  color: var(--text);
+}
+
+[data-theme='dark'] .demo-card code,
+[data-theme='dark'] .demo-card-table code {
+  background: rgba(246, 193, 90, 0.1);
+  color: var(--chestnut);
+}
+
+[data-theme='dark'] .demo-card small {
+  color: var(--muted);
+}
+
+[data-theme='dark'] .detail-box,
+[data-theme='dark'] .result-box,
+[data-theme='dark'] .tips-box,
+[data-theme='dark'] .feat-card,
+[data-theme='dark'] .cache-card,
+[data-theme='dark'] .conv-card,
+[data-theme='dark'] .render-card,
+[data-theme='dark'] .concept-card,
+[data-theme='dark'] .strat-card,
+[data-theme='dark'] .env-card,
+[data-theme='dark'] .target-card,
+[data-theme='dark'] .step-card,
+[data-theme='dark'] .flow-item,
+[data-theme='dark'] .pipeline-stage,
+[data-theme='dark'] .nest-layer {
+  background: rgba(42, 30, 24, 0.6) !important;
+  border-color: rgba(246, 193, 90, 0.15) !important;
+  color: var(--text);
+}
+
+[data-theme='dark'] .tips-box {
+  background: rgba(8, 60, 80, 0.25) !important;
+  border-left-color: #0891b2 !important;
+}
+
+[data-theme='dark'] .nest-layer.root {
+  background: rgba(232, 93, 4, 0.15) !important;
+  border-color: #e85d04 !important;
+}
+
+[data-theme='dark'] .nest-layer.nested {
+  background: rgba(217, 119, 6, 0.12) !important;
+  border-color: #d97706 !important;
+}
+
+[data-theme='dark'] .nest-layer.page {
+  background: rgba(202, 138, 4, 0.1) !important;
+  border-color: #ca8a04 !important;
+}
+
+/* demo 内按钮：确保非 active 状态有可辨识底色 */
+[data-theme='dark'] .demo-card button:not(.active):not([class*='el-']):not(.btn) {
+  background: rgba(55, 40, 32, 0.9) !important;
+  color: var(--muted) !important;
+  border-color: rgba(246, 193, 90, 0.2) !important;
+}
+
+[data-theme='dark'] .demo-card button:not(.active):not([class*='el-']):not(.btn):hover {
+  background: rgba(74, 52, 40, 0.95) !important;
+  color: var(--chestnut) !important;
+  border-color: var(--leaf-gold) !important;
+}
+
+[data-theme='dark'] .demo-card .btn {
+  background: var(--accent);
+  color: #fff;
+}
+
+[data-theme='dark'] .demo-card input[type='color'] {
+  background: transparent;
+}
+
 /* highlight.js dark theme override */
 [data-theme='dark'] .hljs {
   background: #2a1e18;

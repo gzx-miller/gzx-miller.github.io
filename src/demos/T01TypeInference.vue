@@ -59,9 +59,9 @@ function process(x: string | number) {
     <h3>类型推导与显式标注</h3>
 
     <div style="display:flex;gap:8px;margin-bottom:12px;">
-      <button :class="{ active: activeTab === 'infer' }" @click="activeTab = 'infer'">自动推导</button>
-      <button :class="{ active: activeTab === 'annotate' }" @click="activeTab = 'annotate'">何时标注</button>
-      <button :class="{ active: activeTab === 'narrow' }" @click="activeTab = 'narrow'">类型收窄</button>
+      <button class="tab-btn" :class="{ active: activeTab === 'infer' }" @click="activeTab = 'infer'">自动推导</button>
+      <button class="tab-btn" :class="{ active: activeTab === 'annotate' }" @click="activeTab = 'annotate'">何时标注</button>
+      <button class="tab-btn" :class="{ active: activeTab === 'narrow' }" @click="activeTab = 'narrow'">类型收窄</button>
     </div>
 
     <div v-if="activeTab === 'infer'">
@@ -132,8 +132,8 @@ function process(x: string | number) {
 .mini-code.small { font-size: 11px; padding: 6px; margin: 0; }
 .result-box { background: #fff8f0; padding: 10px; border-radius: 6px; border-left: 3px solid #e85d04; }
 .tips-box { background: #f0f7ff; padding: 10px; border-radius: 6px; border-left: 3px solid #0891b2; margin-top: 10px; }
-button { padding: 5px 14px; border: 1px solid #e0a06a; border-radius: 4px; background: #fff; cursor: pointer; font-size: 13px; }
-button.active { background: #e85d04; color: #fff; border-color: #e85d04; }
+.tab-btn { padding: 5px 14px; border: 1px solid #e0a06a !important; border-radius: 4px; background: #fff !important; color: var(--text) !important; cursor: pointer; font-size: 13px; }
+.tab-btn.active { background: #e85d04 !important; color: #fff !important; border-color: #e85d04 !important; }
 input { padding: 4px 8px; border: 1px solid #e0a06a; border-radius: 4px; width: 140px; }
 table { width: 100%; border-collapse: collapse; font-size: 12px; }
 th, td { padding: 6px 8px; border: 1px solid #ddd; text-align: left; vertical-align: top; }

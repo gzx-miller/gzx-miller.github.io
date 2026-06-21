@@ -64,9 +64,9 @@ console.log(add(1, 2))   <span style="color:#8a8a3a">// 3</span>`
     <h3>模块系统：ESM 与 CommonJS</h3>
 
     <div style="display:flex;gap:8px;margin-bottom:12px;">
-      <button :class="{ active: activeTab === 'compare' }" @click="activeTab = 'compare'">ESM vs CJS</button>
-      <button :class="{ active: activeTab === 'exports' }" @click="activeTab = 'exports'">导出方式</button>
-      <button :class="{ active: activeTab === 'interop' }" @click="activeTab = 'interop'">互操作</button>
+      <button class="tab-btn" :class="{ active: activeTab === 'compare' }" @click="activeTab = 'compare'">ESM vs CJS</button>
+      <button class="tab-btn" :class="{ active: activeTab === 'exports' }" @click="activeTab = 'exports'">导出方式</button>
+      <button class="tab-btn" :class="{ active: activeTab === 'interop' }" @click="activeTab = 'interop'">互操作</button>
     </div>
 
     <div v-if="activeTab === 'compare'">
@@ -132,8 +132,8 @@ console.log(add(1, 2))   <span style="color:#8a8a3a">// 3</span>`
 .mini-code { background: #1e1e2e; color: #e0e0e0; padding: 10px; border-radius: 6px; font-size: 12px; overflow-x: auto; line-height: 1.5; white-space: pre-wrap; }
 .mini-code.small { font-size: 11px; padding: 6px; margin: 0; }
 .tips-box { background: #f0f7ff; padding: 10px; border-radius: 6px; border-left: 3px solid #0891b2; margin-top: 10px; }
-button { padding: 5px 14px; border: 1px solid #e0a06a; border-radius: 4px; background: #fff; cursor: pointer; font-size: 13px; }
-button.active { background: #e85d04; color: #fff; border-color: #e85d04; }
+.tab-btn { padding: 5px 14px; border: 1px solid #e0a06a !important; border-radius: 4px; background: #fff !important; color: var(--text) !important; cursor: pointer; font-size: 13px; }
+.tab-btn.active { background: #e85d04 !important; color: #fff !important; border-color: #e85d04 !important; }
 table { width: 100%; border-collapse: collapse; font-size: 12px; }
 th, td { padding: 6px 8px; border: 1px solid #ddd; text-align: left; vertical-align: top; }
 th { background: #fff3e0; }

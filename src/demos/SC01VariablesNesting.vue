@@ -78,9 +78,9 @@ const cardStyle = computed(() => ({
     <h3>Sass 变量、嵌套与 Mixin</h3>
 
     <div style="display:flex;gap:8px;margin-bottom:12px;">
-      <button :class="{ active: activeTab === 'vars' }" @click="activeTab = 'vars'">变量</button>
-      <button :class="{ active: activeTab === 'nest' }" @click="activeTab = 'nest'">嵌套</button>
-      <button :class="{ active: activeTab === 'mixin' }" @click="activeTab = 'mixin'">Mixin/函数</button>
+      <button class="tab-btn" :class="{ active: activeTab === 'vars' }" @click="activeTab = 'vars'">变量</button>
+      <button class="tab-btn" :class="{ active: activeTab === 'nest' }" @click="activeTab = 'nest'">嵌套</button>
+      <button class="tab-btn" :class="{ active: activeTab === 'mixin' }" @click="activeTab = 'mixin'">Mixin/函数</button>
     </div>
 
     <div style="display:flex;gap:16px;">
@@ -139,8 +139,8 @@ const cardStyle = computed(() => ({
 .course button:hover { background: var(--accent); color: #fff; }
 .mini-code { background: #1e1e2e; color: #e0e0e0; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; line-height: 1.5; white-space: pre-wrap; }
 .tips-box { background: #f0f7ff; padding: 10px; border-radius: 6px; border-left: 3px solid #0891b2; }
-button { padding: 5px 14px; border: 1px solid #e0a06a; border-radius: 4px; background: #fff; cursor: pointer; font-size: 13px; }
-button.active { background: #e85d04; color: #fff; border-color: #e85d04; }
+.tab-btn { padding: 5px 14px; border: 1px solid #e0a06a !important; border-radius: 4px; background: #fff !important; color: var(--text) !important; cursor: pointer; font-size: 13px; }
+.tab-btn.active { background: #e85d04 !important; color: #fff !important; border-color: #e85d04 !important; }
 code { background: #f5f0eb; padding: 1px 4px; border-radius: 3px; font-size: 12px; }
 ul { padding-left: 18px; font-size: 12px; }
 </style>

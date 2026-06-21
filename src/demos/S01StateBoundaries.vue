@@ -53,6 +53,7 @@ const theme = useStorage('theme', 'light')`
         <h4>业务场景（点击切换）</h4>
         <div class="scenario-list">
           <button
+            class="scenario-btn"
             v-for="s in scenarios"
             :key="s.id"
             :class="{ active: activeScenario === s.id }"
@@ -98,8 +99,8 @@ const theme = useStorage('theme', 'light')`
 .result-box { background: #fff8f0; padding: 10px; border-radius: 6px; border-left: 3px solid #e85d04; margin-top: 8px; }
 .tips-box { background: #f0f7ff; padding: 10px; border-radius: 6px; border-left: 3px solid #0891b2; margin-top: 10px; }
 .scenario-list { display: flex; flex-wrap: wrap; gap: 6px; }
-.scenario-list button { padding: 4px 10px; border: 1px solid #e0a06a; border-radius: 4px; background: #fff; cursor: pointer; font-size: 12px; }
-.scenario-list button.active { background: #e85d04; color: #fff; border-color: #e85d04; }
+.scenario-list .scenario-btn { padding: 4px 10px; border: 1px solid #e0a06a !important; border-radius: 4px; background: #fff !important; color: var(--text) !important; cursor: pointer; font-size: 12px; }
+.scenario-list .scenario-btn.active { background: #e85d04 !important; color: #fff !important; border-color: #e85d04 !important; }
 .flow-list { display: flex; flex-direction: column; gap: 6px; }
 .flow-item { display: flex; gap: 8px; background: #fff8f0; padding: 8px; border-radius: 6px; border-left: 3px solid #e85d04; }
 .flow-num { width: 22px; height: 22px; line-height: 22px; text-align: center; background: #e85d04; color: #fff; border-radius: 50%; font-size: 12px; flex-shrink: 0; }

@@ -74,14 +74,14 @@ const utilityCode = `<span style="color:#7c7c99">// 传统 CSS 写法</span>
     <h3>Utility-First：工具类优先</h3>
 
     <div style="display:flex;gap:8px;margin-bottom:12px;">
-      <button :class="{ active: activeTab === 'demo' }" @click="activeTab = 'demo'">实时演示</button>
-      <button :class="{ active: activeTab === 'mapping' }" @click="activeTab = 'mapping'">类名映射</button>
-      <button :class="{ active: activeTab === 'extract' }" @click="activeTab = 'extract'">何时抽取组件</button>
+      <button class="tab-btn" :class="{ active: activeTab === 'demo' }" @click="activeTab = 'demo'">实时演示</button>
+      <button class="tab-btn" :class="{ active: activeTab === 'mapping' }" @click="activeTab = 'mapping'">类名映射</button>
+      <button class="tab-btn" :class="{ active: activeTab === 'extract' }" @click="activeTab = 'extract'">何时抽取组件</button>
     </div>
 
     <div v-if="activeTab === 'demo'">
       <div class="toolbar">
-        <button @click="compact = !compact">切换{{ compact ? '舒展' : '紧凑' }}密度</button>
+        <button class="compact-btn" @click="compact = !compact">切换{{ compact ? '舒展' : '紧凑' }}密度</button>
       </div>
       <div class="course-card" :class="{ compact }">
         <span class="chestnut">🌰</span>
@@ -133,10 +133,10 @@ const utilityCode = `<span style="color:#7c7c99">// 传统 CSS 写法</span>
 .mini-code { background: #1e1e2e; color: #e0e0e0; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; line-height: 1.5; white-space: pre-wrap; }
 .tips-box { background: #f0f7ff; padding: 10px; border-radius: 6px; border-left: 3px solid #0891b2; margin-top: 10px; }
 .toolbar { margin-bottom: 0.8rem; }
-.toolbar button { padding: 5px 14px; border: 1px solid #e0a06a; border-radius: 4px; background: #fff; cursor: pointer; font-size: 13px; }
-.toolbar button:hover { background: #fff3e0; }
-button.active { background: #e85d04; color: #fff; border-color: #e85d04; }
-button { padding: 5px 14px; border: 1px solid #e0a06a; border-radius: 4px; background: #fff; cursor: pointer; font-size: 13px; }
+.compact-btn { padding: 5px 14px; border: 1px solid #e0a06a !important; border-radius: 4px; background: #fff !important; color: var(--text) !important; cursor: pointer; font-size: 13px; }
+.compact-btn:hover { background: #fff3e0 !important; }
+.tab-btn.active { background: #e85d04 !important; color: #fff !important; border-color: #e85d04 !important; }
+.tab-btn { padding: 5px 14px; border: 1px solid #e0a06a !important; border-radius: 4px; background: #fff !important; color: var(--text) !important; cursor: pointer; font-size: 13px; }
 .course-card { display: flex; align-items: center; gap: 1rem; padding: 1.25rem; border: 1px solid #f0c38e; border-radius: 1rem; background: linear-gradient(135deg, #fffaf1, #fff0dc); box-shadow: 0 12px 28px rgba(155,75,29,0.09); transition: all 0.2s; }
 .course-card.compact { gap: 0.5rem; padding: 0.75rem; border-radius: 0.7rem; box-shadow: 0 4px 12px rgba(155,75,29,0.07); }
 .course-card p { margin: 0.25rem 0 0; color: #805d46; }

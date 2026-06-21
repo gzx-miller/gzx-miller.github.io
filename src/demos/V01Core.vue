@@ -73,9 +73,9 @@ const lifecycleCode = `<span style="color:#7c7c99">// Vite 两大阶段</span>
     <h3>Vite 核心：开发与构建双引擎</h3>
 
     <div style="display:flex;gap:8px;margin-bottom:12px;">
-      <button :class="{ active: activeTab === 'concept' }" @click="activeTab = 'concept'">核心概念</button>
-      <button :class="{ active: activeTab === 'compare' }" @click="activeTab = 'compare'">对比 Webpack</button>
-      <button :class="{ active: activeTab === 'config' }" @click="activeTab = 'config'">配置示例</button>
+      <button class="tab-btn" :class="{ active: activeTab === 'concept' }" @click="activeTab = 'concept'">核心概念</button>
+      <button class="tab-btn" :class="{ active: activeTab === 'compare' }" @click="activeTab = 'compare'">对比 Webpack</button>
+      <button class="tab-btn" :class="{ active: activeTab === 'config' }" @click="activeTab = 'config'">配置示例</button>
     </div>
 
     <div v-if="activeTab === 'concept'">
@@ -124,8 +124,8 @@ npm run build</pre>
 <style scoped>
 .mini-code { background: #1e1e2e; color: #e0e0e0; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; line-height: 1.5; white-space: pre-wrap; }
 .tips-box { background: #f0f7ff; padding: 10px; border-radius: 6px; border-left: 3px solid #0891b2; margin-top: 10px; }
-button { padding: 5px 14px; border: 1px solid #e0a06a; border-radius: 4px; background: #fff; cursor: pointer; font-size: 13px; }
-button.active { background: #e85d04; color: #fff; border-color: #e85d04; }
+.tab-btn { padding: 5px 14px; border: 1px solid #e0a06a !important; border-radius: 4px; background: #fff !important; color: var(--text) !important; cursor: pointer; font-size: 13px; }
+.tab-btn.active { background: #e85d04 !important; color: #fff !important; border-color: #e85d04 !important; }
 .concept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .concept-card { background: #fff8f0; padding: 10px; border-radius: 6px; border-left: 3px solid #e85d04; }
 .concept-icon { font-size: 20px; }

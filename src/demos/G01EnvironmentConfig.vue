@@ -55,9 +55,9 @@ const dbUrl = process.env.DATABASE_URL`
     <h3>环境配置与多环境管理</h3>
 
     <div style="display:flex;gap:8px;margin-bottom:12px;">
-      <button :class="{ active: activeTab === 'env' }" @click="activeTab = 'env'">环境变量</button>
-      <button :class="{ active: activeTab === 'config' }" @click="activeTab = 'config'">配置文件</button>
-      <button :class="{ active: activeTab === 'pipeline' }" @click="activeTab = 'pipeline'">交付流程</button>
+      <button class="tab-btn" :class="{ active: activeTab === 'env' }" @click="activeTab = 'env'">环境变量</button>
+      <button class="tab-btn" :class="{ active: activeTab === 'config' }" @click="activeTab = 'config'">配置文件</button>
+      <button class="tab-btn" :class="{ active: activeTab === 'pipeline' }" @click="activeTab = 'pipeline'">交付流程</button>
     </div>
 
     <div v-if="activeTab === 'env'">
@@ -116,8 +116,8 @@ const dbUrl = process.env.DATABASE_URL`
 <style scoped>
 .mini-code { background: #1e1e2e; color: #e0e0e0; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; line-height: 1.5; white-space: pre-wrap; }
 .tips-box { background: #f0f7ff; padding: 10px; border-radius: 6px; border-left: 3px solid #0891b2; margin-top: 10px; }
-button { padding: 5px 14px; border: 1px solid #e0a06a; border-radius: 4px; background: #fff; cursor: pointer; font-size: 13px; }
-button.active { background: #e85d04; color: #fff; border-color: #e85d04; }
+.tab-btn { padding: 5px 14px; border: 1px solid #e0a06a !important; border-radius: 4px; background: #fff !important; color: var(--text) !important; cursor: pointer; font-size: 13px; }
+.tab-btn.active { background: #e85d04 !important; color: #fff !important; border-color: #e85d04 !important; }
 table { width: 100%; border-collapse: collapse; font-size: 12px; }
 th, td { padding: 6px 8px; border: 1px solid #ddd; text-align: left; vertical-align: top; }
 th { background: #fff3e0; }
