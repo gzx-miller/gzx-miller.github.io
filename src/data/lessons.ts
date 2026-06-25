@@ -223,6 +223,16 @@ const L17VectorStore = createDemo('L17VectorStore')
 const L17Code = createCodeLoader('L17VectorStore.vue')
 const L18Deploy = createDemo('L18Deploy')
 const L18Code = createCodeLoader('L18Deploy.vue')
+const L19RagPipeline = createDemo('L19RagPipeline')
+const L19Code = createCodeLoader('L19RagPipeline.vue')
+const L20MultiModal = createDemo('L20MultiModal')
+const L20Code = createCodeLoader('L20MultiModal.vue')
+const L21FunctionCalling = createDemo('L21FunctionCalling')
+const L21Code = createCodeLoader('L21FunctionCalling.vue')
+const L22PromptEngineering = createDemo('L22PromptEngineering')
+const L22Code = createCodeLoader('L22PromptEngineering.vue')
+const L23Guardrails = createDemo('L23Guardrails')
+const L23Code = createCodeLoader('L23Guardrails.vue')
 const N01ProjectStructure = createDemo('N01ProjectStructure')
 const N01Code = createCodeLoader('N01ProjectStructure.vue')
 const N02FileRouting = createDemo('N02FileRouting')
@@ -299,6 +309,18 @@ const T17DeclarationFiles = createDemo('T17DeclarationFiles')
 const T17Code = createCodeLoader('T17DeclarationFiles.vue')
 const T18Namespace = createDemo('T18Namespace')
 const T18Code = createCodeLoader('T18Namespace.vue')
+const T19BrandedTypes = createDemo('T19BrandedTypes')
+const T19Code = createCodeLoader('T19BrandedTypes.vue')
+const T20DiscriminatedUnion = createDemo('T20DiscriminatedUnion')
+const T20Code = createCodeLoader('T20DiscriminatedUnion.vue')
+const T21InferKeyword = createDemo('T21InferKeyword')
+const T21Code = createCodeLoader('T21InferKeyword.vue')
+const T22RecursiveTypes = createDemo('T22RecursiveTypes')
+const T22Code = createCodeLoader('T22RecursiveTypes.vue')
+const T23TypeLevelProgramming = createDemo('T23TypeLevelProgramming')
+const T23Code = createCodeLoader('T23TypeLevelProgramming.vue')
+const T24AsyncReturnType = createDemo('T24AsyncReturnType')
+const T24Code = createCodeLoader('T24AsyncReturnType.vue')
 const G01EnvironmentConfig = createDemo('G01EnvironmentConfig')
 const G01Code = createCodeLoader('G01EnvironmentConfig.vue')
 const G02CodeQuality = createDemo('G02CodeQuality')
@@ -331,6 +353,26 @@ const G15I18n = createDemo('G15I18n')
 const G15Code = createCodeLoader('G15I18n.vue')
 const G16MicroFrontend = createDemo('G16MicroFrontend')
 const G16Code = createCodeLoader('G16MicroFrontend.vue')
+const G17PnpmWorkspaces = createDemo('G17PnpmWorkspaces')
+const G17Code = createCodeLoader('G17PnpmWorkspaces.vue')
+const G18Turborepo = createDemo('G18Turborepo')
+const G18Code = createCodeLoader('G18Turborepo.vue')
+const G19Changesets = createDemo('G19Changesets')
+const G19Code = createCodeLoader('G19Changesets.vue')
+const G20Storybook = createDemo('G20Storybook')
+const G20Code = createCodeLoader('G20Storybook.vue')
+const G21Chromatic = createDemo('G21Chromatic')
+const G21Code = createCodeLoader('G21Chromatic.vue')
+const G22Playwright = createDemo('G22Playwright')
+const G22Code = createCodeLoader('G22Playwright.vue')
+const G23VitestConfig = createDemo('G23VitestConfig')
+const G23Code = createCodeLoader('G23VitestConfig.vue')
+const G24NxWorkspace = createDemo('G24NxWorkspace')
+const G24Code = createCodeLoader('G24NxWorkspace.vue')
+const G25BundleAnalyzer = createDemo('G25BundleAnalyzer')
+const G25Code = createCodeLoader('G25BundleAnalyzer.vue')
+const G26Pwa = createDemo('G26Pwa')
+const G26Code = createCodeLoader('G26Pwa.vue')
 const J01TypesEquality = createDemo('J01TypesEquality')
 const J01Code = createCodeLoader('js-code/J01TypesEquality.js')
 const J02Closure = createDemo('J02Closure')
@@ -451,6 +493,22 @@ const S15Persistence = createDemo('S15Persistence')
 const S15Code = createCodeLoader('S15Persistence.vue')
 const S16Comparison = createDemo('S16Comparison')
 const S16Code = createCodeLoader('S16Comparison.vue')
+const S17PiniaPlugin = createDemo('S17PiniaPlugin')
+const S17Code = createCodeLoader('S17PiniaPlugin.vue')
+const S18PiniaGetters = createDemo('S18PiniaGetters')
+const S18Code = createCodeLoader('S18PiniaGetters.vue')
+const S19PiniaActions = createDemo('S19PiniaActions')
+const S19Code = createCodeLoader('S19PiniaActions.vue')
+const S20PiniaDevtools = createDemo('S20PiniaDevtools')
+const S20Code = createCodeLoader('S20PiniaDevtools.vue')
+const S21PiniaTesting = createDemo('S21PiniaTesting')
+const S21Code = createCodeLoader('S21PiniaTesting.vue')
+const S22Recoil = createDemo('S22Recoil')
+const S22Code = createCodeLoader('S22Recoil.vue')
+const S23Mobx = createDemo('S23Mobx')
+const S23Code = createCodeLoader('S23Mobx.vue')
+const S24Overmind = createDemo('S24Overmind')
+const S24Code = createCodeLoader('S24Overmind.vue')
 const TW01UtilityFirst = createDemo('TW01UtilityFirst')
 const TW01Code = createCodeLoader('style-code/TW01UtilityFirst.html')
 const TW02Responsive = createDemo('TW02Responsive')
@@ -483,6 +541,22 @@ const TW15CustomUtilities = createDemo('TW15CustomUtilities')
 const TW15Code = createCodeLoader('style-code/TW15CustomUtilities.css.txt')
 const TW16Production = createDemo('TW16Production')
 const TW16Code = createCodeLoader('style-code/TW16Production.css.txt')
+const TW17GridLayout = createDemo('TW17GridLayout')
+const TW17Code = createCodeLoader('TW17GridLayout.vue')
+const TW18FlexGrid = createDemo('TW18FlexGrid')
+const TW18Code = createCodeLoader('TW18FlexGrid.vue')
+const TW19Interactivity = createDemo('TW19Interactivity')
+const TW19Code = createCodeLoader('TW19Interactivity.vue')
+const TW20Transform = createDemo('TW20Transform')
+const TW20Code = createCodeLoader('TW20Transform.vue')
+const TW21Filters = createDemo('TW21Filters')
+const TW21Code = createCodeLoader('TW21Filters.vue')
+const TW22SvgIcons = createDemo('TW22SVGIcons')
+const TW22Code = createCodeLoader('TW22SVGIcons.vue')
+const TW23Plugins = createDemo('TW23Plugins')
+const TW23Code = createCodeLoader('TW23Plugins.vue')
+const TW24Preset = createDemo('TW24Preset')
+const TW24Code = createCodeLoader('TW24Preset.vue')
 const SC01VariablesNesting = createDemo('SC01VariablesNesting')
 const SC01Code = createCodeLoader('style-code/SC01VariablesNesting.scss.txt')
 const SC02Modules = createDemo('SC02Modules')
@@ -515,6 +589,22 @@ const SC15CustomProperties = createDemo('SC15CustomProperties')
 const SC15Code = createCodeLoader('style-code/SC15CustomProperties.scss.txt')
 const SC16Diagnostics = createDemo('SC16Diagnostics')
 const SC16Code = createCodeLoader('style-code/SC16Diagnostics.scss.txt')
+const SC17Interpolation = createDemo('SC17Interpolation')
+const SC17Code = createCodeLoader('SC17Interpolation.vue')
+const SC18Placeholders = createDemo('SC18Placeholders')
+const SC18Code = createCodeLoader('SC18Placeholders.vue')
+const SC19ErrorHandling = createDemo('SC19ErrorHandling')
+const SC19Code = createCodeLoader('SC19ErrorHandling.vue')
+const SC20ContentBlocks = createDemo('SC20ContentBlocks')
+const SC20Code = createCodeLoader('SC20ContentBlocks.vue')
+const SC21ControlFlow = createDemo('SC21ControlFlow')
+const SC21Code = createCodeLoader('SC21ControlFlow.vue')
+const SC22MapFunctions = createDemo('SC22MapFunctions')
+const SC22Code = createCodeLoader('SC22MapFunctions.vue')
+const SC23ListFunctions = createDemo('SC23ListFunctions')
+const SC23Code = createCodeLoader('SC23ListFunctions.vue')
+const SC24ModuleSystem = createDemo('SC24ModuleSystem')
+const SC24Code = createCodeLoader('SC24ModuleSystem.vue')
 const C01Selectors = createDemo('C01Selectors')
 const C01Code = createCodeLoader('C01Selectors.vue')
 const C02BoxModel = createDemo('C02BoxModel')
@@ -595,6 +685,16 @@ const V15Perf = createDemo('V15Perf')
 const V15Code = createCodeLoader('V15Perf.vue')
 const V16PluginDev = createDemo('V16PluginDev')
 const V16Code = createCodeLoader('V16PluginDev.vue')
+const V17DependencyPrebundle = createDemo('V17DependencyPrebundle')
+const V17Code = createCodeLoader('V17DependencyPrebundle.vue')
+const V18Esbuild = createDemo('V18Esbuild')
+const V18Code = createCodeLoader('V18Esbuild.vue')
+const V19RollupPlugin = createDemo('V19RollupPlugin')
+const V19Code = createCodeLoader('V19RollupPlugin.vue')
+const V20LibraryMode = createDemo('V20LibraryMode')
+const V20Code = createCodeLoader('V20LibraryMode.vue')
+const V21MultiPage = createDemo('V21MultiPage')
+const V21Code = createCodeLoader('V21MultiPage.vue')
 const D17EventLoop = createDemo('D17EventLoop')
 const D17Code = createCodeLoader('D17EventLoop.vue')
 const D18Buffer = createDemo('D18Buffer')
@@ -2216,6 +2316,51 @@ export const lessons: Lesson[] = [
     problem: '解决"LLM 应用如何优化延迟、控制成本并保证生产可靠性"的问题。',
   },
   {
+    id: 'L_19', title: 'RAG 完整流水线实现', navTitle: 'RAG 流水线', category: 'RAG',
+    path: '/langchain/l-19/rag-pipeline', summary: '端到端实现文档加载、切分、向量化、存储、检索、重排、生成的完整 RAG 流水线。',
+    demo: L19RagPipeline, code: L19Code, language: 'vue',
+    principle: 'RAG（检索增强生成）完整流水线包括文档加载、切分、向量化、存储、检索、重排、生成七个环节，每个环节的质量都会影响最终回答效果，需要端到端优化。',
+    flow: ['文档加载和清洗，去除无效内容', '按语义切分文档块，控制大小和重叠', '向量化后存入向量数据库', '用户提问时检索相关文档，重排后送给 LLM 生成回答'],
+    notes: ['文档切分策略对检索质量影响很大', '检索结果不是越多越好，要精准', '加入重排（rerank）可以显著提升相关性'],
+    problem: '解决 LLM 知识过时、无法访问私有数据、回答不准确的问题。',
+  },
+  {
+    id: 'L_20', title: '多模态模型与视觉理解', navTitle: '多模态', category: '模型能力',
+    path: '/langchain/l-20/multi-modal', summary: '使用多模态模型同时理解文本和图像，实现图像描述、图表分析、OCR 等视觉任务。',
+    demo: L20MultiModal, code: L20Code, language: 'vue',
+    principle: '多模态模型可以同时理解文本和图像，LangChain 通过 ChatMessage 中的 image_url 内容类型支持视觉理解，适合图像描述、图表分析、OCR 等场景。',
+    flow: ['使用支持多模态的模型（如 GPT-4V、Claude 3）', '构建包含 text 和 image_url 的消息内容', '模型理解图像后返回文本描述或分析结果'],
+    notes: ['图像可以是 URL 或 base64 编码', '图像清晰度和提示词质量影响理解效果', '适合截图分析、图表解读、照片描述等场景'],
+    problem: '解决传统 LLM 只能处理文本、无法理解视觉信息的问题。',
+  },
+  {
+    id: 'L_21', title: '函数调用与工具扩展', navTitle: '函数调用', category: '工具与代理',
+    path: '/langchain/l-21/function-calling', summary: '通过 Function Calling 让 LLM 调用外部工具，扩展实时数据获取和操作执行能力。',
+    demo: L21FunctionCalling, code: L21Code, language: 'vue',
+    principle: '函数调用（Function Calling）让 LLM 可以调用外部工具获取实时数据或执行操作，LangChain 通过 Tool 抽象统一管理工具，Agent 自动决定何时调用哪个工具。',
+    flow: ['定义工具的名称、描述和参数 schema', '将工具注册给模型或 Agent', '模型判断需要调用工具时返回工具调用指令', '执行工具后将结果返回给模型继续生成'],
+    notes: ['工具描述的清晰度直接影响模型调用的准确性', '工具参数用 Zod schema 定义可以做运行时校验', '常用工具：搜索、计算器、数据库查询、API 调用'],
+    problem: '解决 LLM 知识有截止日期、无法访问实时数据和外部系统的问题。',
+  },
+  {
+    id: 'L_22', title: '提示词工程最佳实践', navTitle: '提示词工程', category: '提示工程',
+    path: '/langchain/l-22/prompt-engineering', summary: '掌握角色设定、清晰指令、示例引导、思维链、结构化输出等提示词工程核心技巧。',
+    demo: L22PromptEngineering, code: L22Code, language: 'vue',
+    principle: '提示词工程是通过设计高质量输入来引导 LLM 产出更好结果的技术，核心原则包括：角色设定、清晰指令、示例引导、思维链、结构化输出等。',
+    flow: ['明确角色定位，让模型进入对应领域专家状态', '给出清晰的任务描述和输出格式要求', '提供少量示例（Few-shot）帮助模型理解意图', '用思维链（CoT）引导模型分步推理'],
+    notes: ['提示词需要迭代优化，不要期望一次就完美', '好的提示词应该具体、可评估、可复用', '温度参数控制随机性，事实类任务调低温度'],
+    problem: '解决模型输出质量不稳定、回答不符合预期、格式不统一的问题。',
+  },
+  {
+    id: 'L_23', title: '输出护栏与安全验证', navTitle: '输出护栏', category: '安全与治理',
+    path: '/langchain/l-23/guardrails', summary: '在 LLM 输出前后进行验证和修正，确保输出符合业务规则、格式要求和安全政策。',
+    demo: L23Guardrails, code: L23Code, language: 'vue',
+    principle: '输出护栏（Guardrails）在 LLM 输出前后进行验证和修正，确保输出符合业务规则、格式要求和安全政策，避免有害内容、格式错误和越权回答。',
+    flow: ['定义验证规则：格式校验、内容安全、业务约束', '输入护栏检查用户提问是否合法', '输出护栏校验模型回答，不通过则重试或修正', '记录所有拦截和修正用于审计'],
+    notes: ['护栏不是越多越好，平衡安全和用户体验', '结构化输出配合 Zod 校验是最常用的护栏', '敏感领域（医疗、法律）需要更严格的护栏'],
+    problem: '解决 LLM 输出不可控、格式不稳定、可能产生有害内容的安全风险问题。',
+  },
+  {
     id: 'R_1',
     title: 'createRoot、函数组件与 Props',
     navTitle: '组件与 Props',
@@ -3434,6 +3579,60 @@ export const lessons: Lesson[] = [
     problem: '解决"何时使用 namespace、何时使用 ES Module 来组织类型"的问题。',
   },
   {
+    id: 'T_19', title: '品牌类型(Branded Types)与名义类型', navTitle: '品牌类型', category: '类型进阶',
+    path: '/typescript/t-19/branded-types', summary: '通过品牌类型模拟名义类型，让结构相同但语义不同的类型不能互相赋值。',
+    demo: T19BrandedTypes, code: T19Code, language: 'vue',
+    principle: 'TypeScript 默认是结构化类型系统，但通过品牌类型（Branded Types）可以模拟名义类型，让结构相同但语义不同的类型（如 UserId 和 OrderId）不能互相赋值，提升类型安全。',
+    flow: ['使用交叉类型 & { readonly __brand: \'TypeName\' } 创建品牌类型', '通过类型断言或构造函数创建品牌类型的值', '函数参数使用品牌类型，传参时自动校验身份'],
+    notes: ['品牌类型在运行时没有额外开销', '__brand 是约定俗成的属性名，也可以用 symbol', '适合 ID、金额、邮箱等有业务语义的原始类型'],
+    problem: '解决结构相同但语义不同的类型无法区分、传参错误难以发现的问题。',
+  },
+  {
+    id: 'T_20', title: '可辨识联合类型与穷尽性检查', navTitle: '可辨识联合', category: '类型进阶',
+    path: '/typescript/t-20/discriminated-union', summary: '通过共同的判别属性区分联合类型成员，配合穷尽性检查安全处理所有分支。',
+    demo: T20DiscriminatedUnion, code: T20Code, language: 'vue',
+    principle: '可辨识联合（Discriminated Union）通过一个共同的字面量类型属性（tag）区分联合类型的成员，配合类型收窄和穷尽性检查，可以安全地处理所有可能的分支。',
+    flow: ['为每种状态定义接口，添加相同名字的判别属性（如 type）', '将所有状态类型组成联合类型', '在 switch/case 中根据判别属性收窄类型'],
+    notes: ['判别属性应该是字面量类型，便于 TypeScript 区分', 'default 分支用 never 类型做穷尽性检查', '适合状态机、订单状态、消息类型等场景'],
+    problem: '解决联合类型分支处理不全、状态转换不清晰的问题。',
+  },
+  {
+    id: 'T_21', title: 'infer 关键字与类型推断', navTitle: 'infer 关键字', category: '类型进阶',
+    path: '/typescript/t-21/infer-keyword', summary: '在条件类型中使用 infer 声明待推断的类型变量，从上下文提取函数返回类型、参数类型等。',
+    demo: T21InferKeyword, code: T21Code, language: 'vue',
+    principle: 'infer 关键字在条件类型中声明一个待推断的类型变量，让 TypeScript 从上下文推断出类型，常用于提取函数返回类型、参数类型、Promise 内部类型等。',
+    flow: ['在条件类型的 extends 子句中使用 infer 声明类型变量', 'TypeScript 根据实际类型推断 infer 变量的值', '在条件为 true 的分支中使用推断出的类型'],
+    notes: ['ReturnType、Parameters 等工具类型内部都用 infer 实现', 'infer 只能在条件类型中使用', '同一位置可以有多个 infer 变量'],
+    problem: '解决需要从已有类型中提取部分类型但无法直接访问的问题。',
+  },
+  {
+    id: 'T_22', title: '递归类型与深嵌套对象', navTitle: '递归类型', category: '类型进阶',
+    path: '/typescript/t-22/recursive-types', summary: '利用递归类型描述树形结构和深嵌套对象，实现 DeepReadonly、DeepPartial 等深度转换。',
+    demo: T22RecursiveTypes, code: T22Code, language: 'vue',
+    principle: '递归类型是在类型定义中引用自身的类型，常用于描述树形结构、深嵌套对象（如 DeepReadonly、DeepPartial），TypeScript 4.1+ 对递归类型有更好的支持。',
+    flow: ['定义接口或类型别名时在内部引用自身', '配合条件类型和映射类型实现深度转换', '用递归类型描述目录树、JSON 等嵌套结构'],
+    notes: ['递归类型要注意终止条件，避免无限递归', '深度映射类型可以统一处理嵌套对象', 'TypeScript 有递归深度限制，过深会报错'],
+    problem: '解决嵌套结构类型描述复杂、深度转换需要逐层手写的问题。',
+  },
+  {
+    id: 'T_23', title: '类型级编程与类型体操', navTitle: '类型级编程', category: '类型进阶',
+    path: '/typescript/t-23/type-level-programming', summary: '利用条件类型、映射类型、模板字面量类型等在类型层面实现计算和逻辑。',
+    demo: T23TypeLevelProgramming, code: T23Code, language: 'vue',
+    principle: '类型级编程利用 TypeScript 的条件类型、映射类型、模板字面量类型、递归类型等能力，在类型层面实现计算和逻辑，让类型系统表达更丰富的约束和推导。',
+    flow: ['使用条件类型实现类型层面的 if-else', '用映射类型遍历键并转换值类型', '结合模板字面量类型操作字符串类型'],
+    notes: ['类型体操是手段不是目的，优先考虑可读性', '业务代码中适度使用，库代码可以更激进', '复杂类型建议加注释说明意图'],
+    problem: '解决类型系统表达能力不足、需要运行时校验才能保证安全的问题。',
+  },
+  {
+    id: 'T_24', title: '异步返回类型与 Awaited', navTitle: '异步返回类型', category: '类型进阶',
+    path: '/typescript/t-24/async-return-type', summary: '使用 Awaited 解包 Promise 嵌套，精确获取异步函数的返回值类型。',
+    demo: T24AsyncReturnType, code: T24Code, language: 'vue',
+    principle: 'TypeScript 的 Awaited 工具类型用于解包 Promise 嵌套，获取最终的 resolve 值类型，配合 ReturnType 等可以精确获取异步函数的返回值类型。',
+    flow: ['使用 Awaited<T> 解包 Promise 类型', 'ReturnType<typeof fn> 获取函数返回类型', '组合 Awaited<ReturnType<typeof fn>> 获取异步函数 resolve 类型'],
+    notes: ['Awaited 会递归解包嵌套的 Promise', 'async 函数返回值自动包装为 Promise', '处理 Promise.all 等并发组合时很有用'],
+    problem: '解决 Promise 嵌套类型难以解包、异步函数返回值类型不清晰的问题。',
+  },
+  {
     id: 'G_01', title: '环境变量与运行配置', navTitle: '环境配置', category: '构建基础',
     path: '/engineering/g-1/environment-config', summary: '区分构建时环境变量、公开配置和服务端密钥。',
     demo: G01EnvironmentConfig, code: G01Code, language: 'vue',
@@ -3576,6 +3775,96 @@ export const lessons: Lesson[] = [
     flow: ['评估团队和应用的拆分需求。', '选择合适的微前端方案。', '配置路由协调和依赖共享策略。'],
     notes: ['微前端引入复杂度，仅在团队和应用确实需要独立部署时采用。', '共享依赖版本冲突是最常见的运行时问题。'],
     problem: '解决"大型前端应用如何拆分为可独立开发和部署的子应用"的问题。',
+  },
+  {
+    id: 'G_17', title: 'pnpm workspace 工作区与依赖管理', navTitle: 'pnpm workspace', category: '构建基础',
+    path: '/engineering/g-17/pnpm-workspaces', summary: '使用 pnpm workspace 管理 Monorepo 多包项目依赖。',
+    demo: G17PnpmWorkspaces, code: G17Code, language: 'vue',
+    principle: 'pnpm workspace 通过 pnpm-workspace.yaml 定义多包项目结构，所有包共享同一个 node_modules 和 lockfile，提升安装速度并保证依赖一致性。',
+    flow: ['在根目录创建 pnpm-workspace.yaml 声明工作区范围', '各包在 package.json 中使用 workspace: 协议引用内部包', 'pnpm install 自动建立软链接并提升公共依赖'],
+    notes: ['避免幽灵依赖，pnpm 默认使用严格的 node_modules 结构', '使用 pnpm -r 递归执行各包的脚本', 'pnpm publish 时会自动将 workspace: 转换为真实版本号'],
+    problem: '解决多包 Monorepo 项目中依赖安装慢、版本不一致、幽灵依赖等问题。',
+  },
+  {
+    id: 'G_18', title: 'Turborepo 构建缓存与任务编排', navTitle: 'Turborepo', category: '构建基础',
+    path: '/engineering/g-18/turborepo', summary: '使用 Turborepo 加速 Monorepo 构建并编排任务依赖。',
+    demo: G18Turborepo, code: G18Code, language: 'vue',
+    principle: 'Turborepo 通过任务依赖图和远程缓存加速 Monorepo 构建，它记录每个任务的输入输出哈希，相同输入直接复用缓存结果。',
+    flow: ['在 turbo.json 中定义任务及其依赖关系', '运行 turbo build 时自动按拓扑顺序执行任务', '命中缓存的任务直接跳过，未命中的执行并缓存结果'],
+    notes: ['远程缓存可在 CI 和团队成员间共享构建结果', '使用 --filter 只运行受影响包的任务', '合理配置 inputs/outputs 才能保证缓存正确性'],
+    problem: '解决 Monorepo 中重复构建、构建顺序复杂、CI 速度慢的问题。',
+  },
+  {
+    id: 'G_19', title: 'Changesets 版本管理与发布流程', navTitle: 'Changesets', category: '质量保障',
+    path: '/engineering/g-19/changesets', summary: '使用 Changesets 管理 Monorepo 多包版本和 CHANGELOG。',
+    demo: G19Changesets, code: G19Code, language: 'vue',
+    principle: 'Changesets 是一套版本管理工具，每个功能变更生成一个独立的 changeset 文件记录变更类型和说明，发布时自动汇总并更新版本号和 CHANGELOG。',
+    flow: ['开发者运行 changeset add 创建变更记录文件', 'changeset version 汇总所有变更并更新版本号', 'changeset publish 发布更新后的包并生成 CHANGELOG'],
+    notes: ['changeset 文件应与功能代码一起提交到版本库', '支持 major/minor/patch 三级语义化版本', '可与 GitHub Actions 集成实现自动化发布'],
+    problem: '解决 Monorepo 多包版本管理混乱、CHANGELOG 维护困难的问题。',
+  },
+  {
+    id: 'G_20', title: 'Storybook 组件文档与可视化测试', navTitle: 'Storybook', category: '质量保障',
+    path: '/engineering/g-20/storybook', summary: '使用 Storybook 构建组件文档和可视化测试环境。',
+    demo: G20Storybook, code: G20Code, language: 'vue',
+    principle: 'Storybook 是一个组件开发和文档工具，通过 Stories 展示组件的各种状态，支持交互测试、可访问性检查和视觉回归测试。',
+    flow: ['为每个组件编写 .stories.ts 文件定义不同状态', '在 Storybook UI 中浏览和交互测试组件', '使用 addon 扩展文档、可访问性、设计稿对比等能力'],
+    notes: ['Stories 也是组件使用示例的活文档', '支持与 Figma 设计稿对比验证实现一致性', '可通过 Chromatic 进行云端视觉回归测试'],
+    problem: '解决组件文档缺失、状态覆盖不全、视觉回归难以检测的问题。',
+  },
+  {
+    id: 'G_21', title: 'Chromatic 视觉回归测试与 UI 审查', navTitle: 'Chromatic', category: '质量保障',
+    path: '/engineering/g-21/chromatic', summary: '使用 Chromatic 进行视觉回归测试和团队 UI 审查。',
+    demo: G21Chromatic, code: G21Code, language: 'vue',
+    principle: 'Chromatic 是 Storybook 官方的视觉回归测试服务，通过像素级对比检测 UI 变化，并提供在线 UI 审查流程让团队确认设计变更。',
+    flow: ['每次 CI 构建时 Chromatic 抓取所有 Story 的快照', '与基准快照对比，自动检测视觉差异', '团队成员在 Chromatic 平台上审查并接受/拒绝变更'],
+    notes: ['可以检测到肉眼容易忽略的细微样式变化', '支持多浏览器和视口尺寸的快照测试', '与 GitHub PR 集成，UI 变更直接在 PR 中审查'],
+    problem: '解决 UI 样式变更难以通过单元测试检测、设计走查效率低的问题。',
+  },
+  {
+    id: 'G_22', title: 'Playwright E2E 测试与元素定位', navTitle: 'Playwright', category: '质量保障',
+    path: '/engineering/g-22/playwright', summary: '使用 Playwright 编写稳定可靠的端到端测试。',
+    demo: G22Playwright, code: G22Code, language: 'vue',
+    principle: 'Playwright 是微软推出的端到端测试框架，支持多浏览器并行测试，提供自动等待、网络拦截、追踪录制等高级能力。',
+    flow: ['编写测试脚本，使用 page.goto 访问页面', '通过 getByRole/getByLabel 等定位器找到元素', '执行交互操作并断言页面状态符合预期'],
+    notes: ['优先使用角色定位器（getByRole），最接近用户使用方式', 'Playwright 自动等待元素可交互，不需要手动 sleep', 'trace viewer 可以回放完整测试过程用于调试'],
+    problem: '解决 E2E 测试不稳定、调试困难、多浏览器兼容性测试成本高的问题。',
+  },
+  {
+    id: 'G_23', title: 'Vitest 高级配置与覆盖率报告', navTitle: 'Vitest 高级配置', category: '质量保障',
+    path: '/engineering/g-23/vitest-config', summary: '深入配置 Vitest 提升测试速度和报告质量。',
+    demo: G23VitestConfig, code: G23Code, language: 'vue',
+    principle: 'Vitest 支持丰富的配置项来定制测试环境、覆盖率、Mock 行为等，合理的配置可以提升测试速度和报告质量。',
+    flow: ['在 vitest.config.ts 中配置测试环境、覆盖率阈值、别名等', '使用 --coverage 参数运行测试并生成报告', '根据报告优化测试用例，确保核心逻辑被充分覆盖'],
+    notes: ['覆盖率不是越高越好，重点关注核心业务逻辑', '使用 --watch 模式配合 UI 界面提升调试效率', '合理设置 test.include/exclude 避免运行不必要的文件'],
+    problem: '解决测试配置不合理导致速度慢、覆盖率统计不准确、报告不直观的问题。',
+  },
+  {
+    id: 'G_24', title: 'Nx 工作区与受影响项目检测', navTitle: 'Nx 工作区', category: '构建基础',
+    path: '/engineering/g-24/nx-workspace', summary: '使用 Nx 智能构建系统管理大型 Monorepo。',
+    demo: G24NxWorkspace, code: G24Code, language: 'vue',
+    principle: 'Nx 是一个智能构建系统，通过项目图分析和计算缓存加速 Monorepo 任务执行，它能自动检测受变更影响的项目，只运行必要的任务。',
+    flow: ['Nx 自动构建项目依赖图（project graph）', 'nx affected:build 根据 Git 变更计算受影响项目', '只构建和测试受影响的包，大幅节省时间'],
+    notes: ['Nx Cloud 提供分布式任务执行和远程缓存', 'Nx 插件为不同框架提供预设和生成器', '模块边界约束防止架构腐化'],
+    problem: '解决大型 Monorepo 中全量构建慢、依赖关系不清晰、架构约束缺失的问题。',
+  },
+  {
+    id: 'G_25', title: '打包体积分析与代码分割策略', navTitle: '体积分析', category: '用户体验',
+    path: '/engineering/g-25/bundle-analyzer', summary: '分析打包体积并优化代码分割策略。',
+    demo: G25BundleAnalyzer, code: G25Code, language: 'vue',
+    principle: '构建产物分析工具将打包后的模块按大小可视化，帮助识别体积过大的依赖和可优化的代码分割点，配合路由懒加载和按需导入减小首屏体积。',
+    flow: ['使用 rollup-plugin-visualizer 生成体积分析报告', '识别大体积依赖，考虑替换或按需导入', '配合动态 import 实现路由级和组件级代码分割'],
+    notes: ['第三方库是常见的体积大户，优先检查', 'Tree Shaking 依赖 ES Module，避免全量导入', 'gzip/br 压缩后体积才是实际传输大小'],
+    problem: '解决首屏加载慢、白屏时间长、打包体积失控的性能问题。',
+  },
+  {
+    id: 'G_26', title: 'PWA 离线应用与 Service Worker', navTitle: 'PWA 离线应用', category: '用户体验',
+    path: '/engineering/g-26/pwa', summary: '使用 Service Worker 和 manifest 构建 PWA 离线应用。',
+    demo: G26Pwa, code: G26Code, language: 'vue',
+    principle: 'PWA（渐进式 Web 应用）通过 Service Worker 实现离线访问、后台同步和推送通知，结合 manifest.json 让网页可以安装到桌面。',
+    flow: ['注册 Service Worker 并定义缓存策略', 'manifest.json 配置应用名称、图标、启动 URL', '用户访问时提示安装，离线时从缓存提供服务'],
+    notes: ['注意缓存更新策略，避免用户永远看到旧版本', 'Workbox 库可以简化 Service Worker 编写', 'PWA 不是要替代原生应用，而是增强 Web 体验'],
+    problem: '解决弱网环境下页面无法访问、用户留存低、无法像原生应用一样安装的问题。',
   },
   {
     id: 'J_01', title: '原始类型、引用类型与类型转换', navTitle: '类型与相等', category: '语言基础',
@@ -4245,6 +4534,88 @@ export const lessons: Lesson[] = [
     problem: '解决"面对众多状态管理方案如何系统化地做出最优选择"的问题。',
   },
   {
+    id: 'S_17', title: 'Pinia 插件：统一扩展所有 Store', navTitle: 'Pinia 插件', category: 'Pinia',
+    path: '/state-management/s-17/pinia-plugin',
+    summary: '用登录日志和错误追踪场景展示如何编写 Pinia 插件，统一拦截 actions 和状态变化。',
+    demo: S17PiniaPlugin, code: S17Code, language: 'vue',
+    principle:
+      'Pinia 插件是一个接收 pinia 实例的函数，通过 $subscribe 监听状态变化、通过 $onAction 拦截 actions 调用，可以在插件内部为所有 store 统一添加持久化、日志、错误上报等横切关注点。',
+    flow: [
+      '创建插件函数，接收 pinia 实例参数。',
+      '在插件内部使用 store.$subscribe 监听状态变化，使用 store.$onAction 拦截 action 调用。',
+      '通过 pinia.use() 注册插件，所有后续创建的 store 自动获得插件能力。',
+    ],
+    notes: [
+      '插件在 store 创建时执行，可以为每个 store 添加自定义属性或方法。',
+      '$onAction 的 after 回调可以获取 action 返回值，适合做结果日志或错误处理。',
+      '持久化插件通常结合 $subscribe 监听变化并写入 localStorage，结合 SSR 需要处理好水合时机。',
+    ],
+    problem: '解决"如何为多个 store 统一添加日志、持久化、错误处理等横切关注点"的问题。',
+  },
+  {
+    id: 'S_18', title: 'Pinia Getters 与派生状态', navTitle: 'Pinia Getters', category: 'Pinia',
+    path: '/state-management/s-18/pinia-getters', summary: '理解 Pinia Getter 的计算属性本质，掌握派生状态的定义和缓存机制。',
+    demo: S18PiniaGetters, code: S18Code, language: 'vue',
+    principle: 'Pinia Getter 是基于 store 状态的计算属性，使用 computed 实现，会自动缓存结果，只有依赖变化时才重新计算。Setup Store 中直接用 computed 定义。',
+    flow: ['在 Setup Store 中用 computed 定义 getter。', '组件中通过 store.getterName 读取，自动追踪依赖。', 'getter 可以依赖其他 getter，形成派生状态链。'],
+    notes: ['getter 默认缓存，多次读取相同输入只计算一次。', 'getter 不应有副作用，保持纯函数。', '需要传参的 getter 可以返回函数，但会失去缓存。'],
+    problem: '解决从 store 状态派生出复杂计算结果并自动更新的问题。',
+  },
+  {
+    id: 'S_19', title: 'Pinia Actions 与异步操作', navTitle: 'Pinia Actions', category: 'Pinia',
+    path: '/state-management/s-19/pinia-actions', summary: '掌握 Pinia 中修改状态的主要方式，理解同步异步 action 与 $onAction 拦截。',
+    demo: S19PiniaActions, code: S19Code, language: 'vue',
+    principle: 'Actions 是 Pinia 中修改状态的主要方式，支持同步和异步操作，可以直接修改状态而不需要 mutations，配合 $onAction 可以拦截 action 调用。',
+    flow: ['在 store 中定义 action 函数，直接修改 state。', '组件中调用 store.actionName() 触发。', '异步 action 返回 Promise，可以 await 等待完成。'],
+    notes: ['Action 中可以调用其他 action 或外部 API。', '$onAction 可以在 action 前后执行钩子。', '复杂异步流程考虑拆分多个 action 组合使用。'],
+    problem: '解决状态修改逻辑分散、异步操作难以追踪和复用的问题。',
+  },
+  {
+    id: 'S_20', title: 'Pinia DevTools 与时间旅行调试', navTitle: 'Pinia DevTools', category: 'Pinia',
+    path: '/state-management/s-20/pinia-devtools', summary: '使用 Vue DevTools 查看 Pinia 状态、提交历史和时间旅行调试。',
+    demo: S20PiniaDevtools, code: S20Code, language: 'vue',
+    principle: 'Pinia 深度集成 Vue DevTools，支持查看 store 状态、提交历史、时间旅行调试，可以回退到任意历史状态并追踪状态变化来源。',
+    flow: ['安装 Vue DevTools 浏览器扩展。', '在 Pinia 标签页查看所有 store 的当前状态。', '在时间线中选择历史状态，点击回退进行调试。'],
+    notes: ['DevTools 只在开发环境启用，生产环境自动关闭。', '可以给 action 命名方便在 DevTools 中识别。', '支持导入/导出状态，便于复现 bug。'],
+    problem: '解决状态变化难以追踪、bug 复现困难、调试效率低的问题。',
+  },
+  {
+    id: 'S_21', title: 'Pinia Store 单元测试', navTitle: 'Pinia 测试', category: 'Pinia',
+    path: '/state-management/s-21/pinia-testing', summary: '学习如何为 Pinia Store 编写单元测试，使用独立 Pinia 实例避免状态污染。',
+    demo: S21PiniaTesting, code: S21Code, language: 'vue',
+    principle: 'Pinia Store 天然易于测试，Setup Store 就是普通函数，可以在测试中创建独立的 Pinia 实例并注入，使用 setActivePinia 激活后直接测试 action 和 getter。',
+    flow: ['在测试中创建独立的 Pinia 实例。', '调用 setActivePinia 激活，然后创建 store。', '调用 action 修改状态，断言状态和 getter 符合预期。'],
+    notes: ['每个测试用独立的 Pinia 实例，避免状态污染。', '可以用 vi.mock 模拟 API 调用测试异步 action。', '测试关注行为而非实现细节。'],
+    problem: '解决状态管理逻辑难以单元测试、测试间状态互相污染的问题。',
+  },
+  {
+    id: 'S_22', title: 'Recoil 原子状态与 Selector', navTitle: 'Recoil', category: '原子化状态',
+    path: '/state-management/s-22/recoil', summary: '了解 Recoil 的 Atom 与 Selector 模型，理解原子化状态管理的细粒度更新。',
+    demo: S22Recoil, code: S22Code, language: 'vue',
+    principle: 'Recoil 是 Facebook 推出的 React 状态管理库，以 Atom 为最小状态单元，Selector 作为派生状态，通过 atom 依赖图实现精确的组件级重渲染。',
+    flow: ['使用 atom 定义原子状态并指定唯一 key。', '使用 selector 定义派生状态，依赖其他 atom/selector。', '组件通过 useRecoilState/useRecoilValue 读取状态。'],
+    notes: ['Recoil 的状态图支持异步 selector 和 Suspense。', '每个 atom 独立追踪订阅，更新粒度更细。', 'Recoil 目前主要适用于 React 生态。'],
+    problem: '解决大型应用中状态更新粒度过粗、不必要重渲染多的问题。',
+  },
+  {
+    id: 'S_23', title: 'MobX 响应式状态与 Observable', navTitle: 'MobX', category: '结构化状态',
+    path: '/state-management/s-23/mobx', summary: '理解 MobX 的 Observable 响应式模型，掌握 action、computed 和 observer 的协作方式。',
+    demo: S23Mobx, code: S23Code, language: 'vue',
+    principle: 'MobX 通过可观察对象（Observable）实现透明的响应式更新，使用 action 修改状态，computed 计算派生值，自动追踪依赖并触发视图更新。',
+    flow: ['使用 makeAutoObservable 把普通对象变成可观察的。', '在 action 中修改 observable 状态。', 'observer 包裹的组件自动追踪依赖并响应更新。'],
+    notes: ['MobX 的响应式是隐式的，代码更简洁但需要理解其追踪机制。', '严格模式下必须在 action 中修改状态。', '适合中大型应用的复杂领域模型。'],
+    problem: '解决状态更新逻辑分散、视图与状态同步复杂的问题。',
+  },
+  {
+    id: 'S_24', title: 'Overmind 分形状态管理', navTitle: 'Overmind', category: '结构化状态',
+    path: '/state-management/s-24/overmind', summary: '了解 Overmind 的分形架构，掌握命名空间组织状态与 effects 隔离副作用。',
+    demo: S24Overmind, code: S24Code, language: 'vue',
+    principle: 'Overmind 是一个分形状态管理库，将状态、动作、派生值组织在命名空间中，支持状态追踪、DevTools 和效果（effects）隔离副作用。',
+    flow: ['使用 createOvermind 创建 store，按命名空间组织 state/actions/effects。', '组件通过 useOvermind 获取状态和 actions。', 'actions 修改状态，effects 处理 API、存储等副作用。'],
+    notes: ['Overmind 支持 Vue 和 React 等多个框架。', '状态变更追踪到具体的 action 调用。', 'effects 模式便于测试时替换副作用。'],
+    problem: '解决状态管理中副作用耦合、调试困难、跨框架复用成本高的问题。',
+  },
+  {
     id: 'TW_01', title: '工具优先与原子类组合', navTitle: '工具优先', category: '核心理念',
     path: '/tailwind-css/tw-1/utility-first', summary: '用课程卡片理解工具类如何映射声明，以及何时抽取组件。',
     demo: TW01UtilityFirst, code: TW01Code, language: 'xml',
@@ -4461,6 +4832,78 @@ export const lessons: Lesson[] = [
     problem: '解决"生产环境类名缺失或 CSS 过大时如何系统定位"的问题。',
   },
   {
+    id: 'TW_17', title: 'Grid 网格布局与 Grid Template', navTitle: 'Grid 布局', category: '布局与栅格',
+    path: '/tailwind-css/tw-17/grid-layout', summary: '通过 grid-cols、grid-rows、gap 等工具类快速构建二维网格布局，配合 col-span、row-span 实现跨列跨行。',
+    demo: TW17GridLayout, code: TW17Code, language: 'vue',
+    principle: 'Tailwind 的 Grid 布局通过 grid-cols、grid-rows、gap 等工具类快速构建二维网格布局，配合 col-span、row-span 实现跨列跨行，比写 CSS Grid 更简洁高效。',
+    flow: ['使用 grid 类启用 Grid 布局', '用 grid-cols-n 定义列数，gap 设置间距', '用 col-span-n 控制子元素跨列，place-items 对齐'],
+    notes: ['grid-cols-12 是最常用的 12 栅格系统', '响应式断点前缀可在不同尺寸下切换列数', '配合 place-content/place-items 快速对齐'],
+    problem: '解决复杂二维布局手写 CSS Grid 繁琐、响应式切换困难的问题。',
+  },
+  {
+    id: 'TW_18', title: 'Flexbox 与 Grid 布局对比选择', navTitle: 'Flex vs Grid', category: '布局与栅格',
+    path: '/tailwind-css/tw-18/flex-grid', summary: '理解 Flexbox 与 Grid 的适用场景，一维布局用 Flex，二维布局用 Grid，两者可组合使用。',
+    demo: TW18FlexGrid, code: TW18Code, language: 'vue',
+    principle: 'Flexbox 适合一维布局（行或列），Grid 适合二维布局（行和列同时控制），两者可以组合使用，根据布局需求选择最合适的工具。',
+    flow: ['一维内容流优先用 Flex（导航、列表、卡片行）', '二维网格布局用 Grid（仪表板、图片墙、表单布局）', 'Flex 做容器内对齐，Grid 做整体骨架，组合使用'],
+    notes: ['Flex 内容优先，Grid 布局优先', '两者不互斥，Grid 容器内可以有 Flex 子项', '选择标准：一维 vs 二维、内容驱动 vs 布局驱动'],
+    problem: '解决布局选择困难、不知道何时用 Flex 何时用 Grid 的问题。',
+  },
+  {
+    id: 'TW_19', title: '交互状态与组(Group)状态', navTitle: '交互状态', category: '响应与状态',
+    path: '/tailwind-css/tw-19/interactivity', summary: '使用 hover、focus、active 等状态变体，配合 group 类实现父元素状态触发子元素样式变化。',
+    demo: TW19Interactivity, code: TW19Code, language: 'vue',
+    principle: 'Tailwind 通过 hover、focus、active 等状态变体描述元素交互状态，group 类可以让父元素状态触发子元素样式变化，适合卡片悬停、菜单展开等场景。',
+    flow: ['使用 hover:bg-* 定义悬停样式', '用 focus:ring-* 定义聚焦状态', '父元素加 group，子元素用 group-hover: 触发'],
+    notes: ['状态变体可以叠加响应式前缀', 'group 支持嵌套，但要注意层级', 'peer 类可以实现兄弟元素状态联动'],
+    problem: '解决交互状态 CSS 重复书写、父子联动样式复杂的问题。',
+  },
+  {
+    id: 'TW_20', title: '变换、过渡与动画', navTitle: '变换动画', category: '动效与过渡',
+    path: '/tailwind-css/tw-20/transform', summary: '使用 transform、transition 和 animate 工具类，配合状态变体实现丰富的交互动效。',
+    demo: TW20Transform, code: TW20Code, language: 'vue',
+    principle: 'Tailwind 提供 transform（缩放、旋转、位移、倾斜）、transition（过渡属性）和 animate（关键帧动画）工具类，配合状态变体实现丰富的交互动效。',
+    flow: ['使用 scale/rotate/translate/skew 工具类定义变换', '用 transition-all 或 transition-* 控制过渡属性', 'hover:scale-105 配合 transition 实现悬停放大效果'],
+    notes: ['动画性能优先使用 transform 和 opacity', 'transition 配合 duration/ease 控制过渡曲线', 'animate 内置常用动画如 spin、ping、bounce、pulse'],
+    problem: '解决手写动画 CSS 繁琐、过渡效果不统一的问题。',
+  },
+  {
+    id: 'TW_21', title: '滤镜与混合模式', navTitle: '滤镜混合', category: '视觉效果',
+    path: '/tailwind-css/tw-21/filters', summary: '使用 CSS filter 和 backdrop-filter 工具类，实现模糊、亮度、对比度等滤镜效果与毛玻璃背景。',
+    demo: TW21Filters, code: TW21Code, language: 'vue',
+    principle: 'Tailwind 提供 CSS filter 和 backdrop-filter 工具类，支持模糊、亮度、对比度、饱和度等滤镜效果，mix-blend-* 实现元素混合模式。',
+    flow: ['使用 blur-*、brightness-* 等工具类应用滤镜', 'backdrop-blur-* 实现毛玻璃背景效果', 'mix-blend-* 控制元素与下层内容的混合'],
+    notes: ['滤镜可以组合使用，空格分隔', 'backdrop-filter 影响元素后面的内容', '合理使用可以提升视觉层次感'],
+    problem: '解决图片处理、毛玻璃效果、视觉特效需要额外图片资源的问题。',
+  },
+  {
+    id: 'TW_22', title: 'SVG 图标与当前颜色', navTitle: 'SVG 图标', category: '视觉效果',
+    path: '/tailwind-css/tw-22/svg-icons', summary: '通过 currentColor 让 SVG 继承父元素文字颜色，配合 text-* 工具类统一控制颜色和大小。',
+    demo: TW22SvgIcons, code: TW22Code, language: 'vue',
+    principle: 'Tailwind 配合 SVG 使用时，通过 currentColor 让 SVG 继承父元素文字颜色，实现图标颜色与文字一致，配合 text-* 工具类统一控制颜色和大小。',
+    flow: ['SVG 中 fill 或 stroke 设置为 currentColor', '用 text-* 工具类同时控制文字和图标颜色', '用 w-* 和 h-* 控制图标尺寸'],
+    notes: ['currentColor 让图标颜色跟随上下文', '推荐使用 stroke 的线性图标更灵活', '可以配合 Heroicons 等图标库直接使用'],
+    problem: '解决图标颜色与文字不一致、图标库体积大的问题。',
+  },
+  {
+    id: 'TW_23', title: '插件系统与自定义插件开发', navTitle: '插件系统', category: '工程与定制',
+    path: '/tailwind-css/tw-23/plugins', summary: '使用官方插件扩展能力，以及通过 plugin() API 开发自定义工具类和组件。',
+    demo: TW23Plugins, code: TW23Code, language: 'vue',
+    principle: 'Tailwind 插件可以扩展工具类、组件、基础样式和主题，官方提供 typography、forms、aspect-ratio 等插件，也可以编写自定义插件满足项目特定需求。',
+    flow: ['在 tailwind.config.js 的 plugins 数组中添加插件', '使用 plugin() API 添加自定义工具类或组件', '用 matchUtilities 生成动态值的工具类'],
+    notes: ['官方插件覆盖大多数常见需求', '自定义插件优先考虑能否用 CSS 变量或 theme 扩展解决', '插件发布为 npm 包可以在多项目复用'],
+    problem: '解决内置工具类不够用、重复模式需要抽象复用的问题。',
+  },
+  {
+    id: 'TW_24', title: '主题预设与设计系统配置', navTitle: '主题预设', category: '工程与定制',
+    path: '/tailwind-css/tw-24/preset', summary: '通过 presets 机制将设计系统配置抽成可复用的预设包，多项目共享统一的视觉规范。',
+    demo: TW24Preset, code: TW24Code, language: 'vue',
+    principle: 'Tailwind 的 presets 机制可以将设计系统配置抽成可复用的预设包，包含颜色、字号、间距、断点等设计令牌，多项目共享统一的视觉规范。',
+    flow: ['创建预设文件，导出 theme、plugins 等配置', '在项目 tailwind.config.js 中通过 presets 引用', '项目可以覆盖或扩展预设中的配置'],
+    notes: ['预设可以嵌套引用其他预设', '设计令牌应该与设计师共同定义', '版本化的预设包便于设计系统迭代'],
+    problem: '解决多项目设计不统一、样式配置重复维护的问题。',
+  },
+  {
     id: 'SC_09', title: '值类型、单位与编译期计算', navTitle: '值与单位', category: '语言基础',
     path: '/sass/sc-9/values-units', summary: '理解数字、字符串、颜色、List、Map 与单位代数的行为。',
     demo: SC09ValuesUnits, code: SC09Code, language: 'scss',
@@ -4531,6 +4974,78 @@ export const lessons: Lesson[] = [
     flow: ['在公共函数与 Mixin 边界验证参数。', '保留带调用栈的弃用警告。', '用 Migrator 机械迁移后审查模块 API 和产物。'],
     notes: ['不要在正常构建中制造高噪声 debug。', '自动迁移后仍需测试视觉回归与 CSS 体积。'],
     problem: '解决"Sass 代码如何在错误时快速失败，并持续摆脱已弃用语法"的问题。',
+  },
+  {
+    id: 'SC_17', title: '插值语法与动态选择器', navTitle: '插值语法', category: '进阶语法',
+    path: '/sass/sc-17/interpolation', summary: '使用 #{} 插值语法在选择器、属性名、字符串等位置插入变量值，实现动态生成的 CSS 规则。',
+    demo: SC17Interpolation, code: SC17Code, language: 'vue',
+    principle: 'Sass 的 #{} 插值语法可以在选择器、属性名、字符串、URL 等位置插入变量值，实现动态生成的 CSS 规则，常用于主题切换和批量生成类名。',
+    flow: ['使用 #{$variable} 在选择器或属性中插入变量', '配合 @each 循环批量生成一系列相似的类', '插值在 mixin 中可以根据参数动态生成选择器'],
+    notes: ['插值结果不会进行计算，是纯文本替换', '属性名中的插值要放在冒号前面', '大多数情况用变量就够了，不要过度使用插值'],
+    problem: '解决选择器和属性名不能使用变量、重复模式难以抽象的问题。',
+  },
+  {
+    id: 'SC_18', title: '占位符选择器与 @extend 进阶', navTitle: '占位符选择器', category: '进阶语法',
+    path: '/sass/sc-18/placeholders', summary: '使用 % 前缀的占位符选择器配合 @extend 继承，避免产生无用的 CSS 规则，让样式复用更干净。',
+    demo: SC18Placeholders, code: SC18Code, language: 'vue',
+    principle: '占位符选择器（%前缀）是一种不会被编译输出的选择器，专门用于 @extend 继承，比普通选择器的 @extend 更干净，避免产生无用的 CSS 规则。',
+    flow: ['用 %placeholder-name 定义占位符选择器', '在需要的选择器中使用 @extend %placeholder-name', '编译后只有使用了 extend 的选择器会输出'],
+    notes: ['占位符不会单独出现在 CSS 输出中', '比 mixin 更适合静态样式的复用', '过度使用 @extend 会导致选择器膨胀'],
+    problem: '解决 @extend 产生多余选择器、样式复用不够干净的问题。',
+  },
+  {
+    id: 'SC_19', title: '错误处理与调试指令', navTitle: '调试指令', category: '进阶语法',
+    path: '/sass/sc-19/error-handling', summary: '使用 @debug、@warn、@error 三个调试指令输出日志、警告和抛出错误，帮助在 mixin 和函数中校验参数和排查问题。',
+    demo: SC19ErrorHandling, code: SC19Code, language: 'vue',
+    principle: 'Sass 提供 @debug、@warn、@error 三个调试指令，分别用于输出日志、警告和抛出错误，帮助在 mixin 和函数中校验参数和排查问题。',
+    flow: ['@debug 在编译控制台输出调试信息', '@warn 输出警告但不中断编译', '@error 抛出错误并中断编译，用于参数校验'],
+    notes: ['公共 mixin 和函数应该加参数校验', '@warn 和 @error 可以帮助使用者正确使用 API', '生产构建时注意过滤调试输出'],
+    problem: '解决 Sass 代码调试困难、参数错误不易发现的问题。',
+  },
+  {
+    id: 'SC_20', title: '@content 与 Mixin 内容块', navTitle: '内容块', category: '进阶语法',
+    path: '/sass/sc-20/content-blocks', summary: '使用 @content 指令在 mixin 中预留内容位置，调用时通过 {} 传入额外样式内容，让 mixin 更灵活。',
+    demo: SC20ContentBlocks, code: SC20Code, language: 'vue',
+    principle: '@content 指令可以在 mixin 中预留内容位置，调用时通过 {} 传入额外的样式内容，让 mixin 更灵活，适合媒体查询封装和主题定制。',
+    flow: ['在 @mixin 中使用 @content 标记内容插入点', '调用 mixin 时在大括号中写入额外样式', '额外样式会替换 @content 的位置输出'],
+    notes: ['@content 可以接收参数（@content(...)）', '适合封装媒体查询、作用域上下文等模式', '比单纯的属性 mixin 更灵活'],
+    problem: '解决 mixin 只能插入固定属性、无法灵活扩展内容的问题。',
+  },
+  {
+    id: 'SC_21', title: '控制流：@if/@for/@each/@while', navTitle: '控制流语句', category: '进阶语法',
+    path: '/sass/sc-21/control-flow', summary: '使用 @if 条件判断、@for 数字循环、@each 列表/Map 遍历、@while 条件循环四种控制流批量生成样式。',
+    demo: SC21ControlFlow, code: SC21Code, language: 'vue',
+    principle: 'Sass 提供 @if 条件判断、@for 数字循环、@each 列表/Map 遍历、@while 条件循环四种控制流，用于批量生成样式和条件性输出。',
+    flow: ['@if/@else 根据条件输出不同样式', '@for $i from 1 through n 生成序号类名', '@each 遍历列表或 Map 批量生成规则'],
+    notes: ['优先用 @each，可读性比 @for 好', '@while 用得少，通常 @for/@each 可以替代', '循环不要嵌套过深，否则编译变慢且难维护'],
+    problem: '解决相似样式重复书写、批量生成规则效率低的问题。',
+  },
+  {
+    id: 'SC_22', title: 'Map 数据结构与函数', navTitle: 'Map 数据结构', category: '数据与函数',
+    path: '/sass/sc-22/map-functions', summary: '使用 Sass Map 键值对数据结构，配合 map-get、map-merge、map-keys 等函数管理设计令牌、色阶系统等结构化数据。',
+    demo: SC22MapFunctions, code: SC22Code, language: 'vue',
+    principle: 'Sass Map 是键值对数据结构，类似 JavaScript 对象，配合 map-get、map-merge、map-keys 等函数可以管理设计令牌、色阶系统等结构化数据。',
+    flow: ['用 (key1: value1, key2: value2) 语法定义 Map', 'map-get($map, $key) 获取值，map-keys 获取所有键', 'map-merge 合并两个 Map，适合主题扩展'],
+    notes: ['Map 适合组织颜色、字号等设计令牌', '嵌套 Map 可以表示层级结构', '用 @each 遍历 Map 批量生成样式'],
+    problem: '解决设计变量分散、难以结构化管理和遍历的问题。',
+  },
+  {
+    id: 'SC_23', title: 'List 数据结构与函数', navTitle: 'List 数据结构', category: '数据与函数',
+    path: '/sass/sc-23/list-functions', summary: '使用 Sass List 有序序列，配合 nth、length、append、join、index 等函数操作，管理间距序列、断点列表、字体栈等有序数据。',
+    demo: SC23ListFunctions, code: SC23Code, language: 'vue',
+    principle: 'Sass List 是有序序列，用空格或逗号分隔，配合 nth、length、append、join、index 等函数操作，适合管理间距序列、断点列表、字体栈等有序数据。',
+    flow: ['用 nth($list, $n) 按索引取值', 'length($list) 获取长度，append 添加元素', 'join($list1, $list2) 合并两个列表'],
+    notes: ['List 索引从 1 开始，不是 0', '空格分隔和逗号分隔都是 List', '比 Map 轻量，适合简单的有序集合'],
+    problem: '解决有序数据序列难以操作、重复索引的问题。',
+  },
+  {
+    id: 'SC_24', title: '现代模块系统与 @use/@forward', navTitle: '现代模块系统', category: '工程架构',
+    path: '/sass/sc-24/module-system', summary: '使用 Sass 现代模块系统 @use 替代 @import，避免命名冲突和重复加载，配合 @forward 转发成员构建清晰的分层样式架构。',
+    demo: SC24ModuleSystem, code: SC24Code, language: 'vue',
+    principle: 'Sass 现代模块系统用 @use 替代 @import，避免命名冲突和重复加载，配合 @forward 转发成员，可以构建清晰的分层样式架构。',
+    flow: ["用 @use 'path' 加载模块，默认使用命名空间", "@use 'path' as * 可以取消命名空间", '@forward 转发其他模块的成员，构建入口文件'],
+    notes: ['@import 已被官方标记为弃用', '模块只会加载一次，不会重复', '私有成员用 - 或 _ 前缀，外部不可访问'],
+    problem: '解决 @import 全局污染、命名冲突、加载冗余的问题。',
   },
 
   /***** CSS 核心知识 *****/
@@ -4895,6 +5410,51 @@ export const lessons: Lesson[] = [
     flow: ['理解 Vite 插件的结构和钩子。', '学习自定义插件开发示例。', '掌握发布 Vite 插件到 npm 的流程。'],
     notes: ['插件命名规范：vite-plugin-xxx。', 'Vite 独有钩子以 config、configureServer 等命名。'],
     problem: '解决"现有插件无法满足需求，需要为项目定制构建行为"的问题。',
+  },
+  {
+    id: 'V_17', title: '依赖预构建与缓存优化', navTitle: '依赖预构建', category: '性能',
+    path: '/vite/v-17/dependency-prebundle', summary: '理解 Vite 使用 esbuild 预构建依赖的原理，掌握缓存优化和配置。',
+    demo: V17DependencyPrebundle, code: V17Code, language: 'vue',
+    principle: 'Vite 在首次启动时使用 esbuild 预构建 node_modules 中的依赖，将 CommonJS/UMD 转换为 ESM，并缓存到磁盘，避免重复构建提升启动速度。',
+    flow: ['首次启动 Vite 时扫描依赖并预构建。', '构建结果缓存到 node_modules/.vite。', '后续启动直接读取缓存，依赖变化时重新构建。'],
+    notes: ['预构建只处理第三方依赖，源码不预构建。', 'optimizeDeps.include 可以强制预构建某些包。', '缓存失效会自动检测并重新构建。'],
+    problem: '解决大量依赖下启动慢、CommonJS 模块无法直接在浏览器运行的问题。',
+  },
+  {
+    id: 'V_18', title: 'esbuild 转换与 JSX/TS 处理', navTitle: 'esbuild 转换', category: '基础',
+    path: '/vite/v-18/esbuild', summary: '了解 Vite 使用 esbuild 进行极速语法转换的机制，以及 TypeScript 和 JSX 的处理策略。',
+    demo: V18Esbuild, code: V18Code, language: 'vue',
+    principle: 'Vite 使用 esbuild 处理 TypeScript 和 JSX 转换，esbuild 用 Go 编写比传统 JS 工具快 10-100 倍，开发环境下跳过类型检查只做语法转换。',
+    flow: ['源码中的 .ts/.tsx 文件请求到达 Vite 开发服务器。', 'esbuild 进行语法转换，输出纯 JS。', '浏览器直接运行转换后的 ESM 模块。'],
+    notes: ['开发环境只做语法转换，类型检查由 IDE 和构建时负责。', 'esbuild 不支持某些 TS 特性如 const enum（需配置）。', '构建时由 Rollup + TS 插件做完整的类型检查。'],
+    problem: '解决传统构建工具 TS/JSX 编译速度慢、开发体验差的问题。',
+  },
+  {
+    id: 'V_19', title: 'Rollup 插件兼容与构建钩子', navTitle: 'Rollup 插件', category: '插件',
+    path: '/vite/v-19/rollup-plugin', summary: '理解 Vite 与 Rollup 插件的兼容性，掌握 Vite 特有钩子和插件使用方式。',
+    demo: V19RollupPlugin, code: V19Code, language: 'vue',
+    principle: 'Vite 构建时基于 Rollup，兼容大部分 Rollup 插件，同时扩展了 Vite 特有的钩子如 config、configureServer、transformIndexHtml 等。',
+    flow: ['在 vite.config.ts 的 plugins 数组中添加 Rollup 插件。', '开发和构建时 Vite 调用插件的不同钩子。', '使用 Vite 特有钩子扩展开发服务器等能力。'],
+    notes: ['并非所有 Rollup 插件都能在开发模式下工作。', 'Vite 插件可以只在开发或构建阶段生效。', '插件执行顺序与数组顺序相关，enforce 可以调整。'],
+    problem: '解决构建工具生态碎片化、需要学习多套插件 API 的问题。',
+  },
+  {
+    id: 'V_20', title: '库模式与组件打包发布', navTitle: '库模式', category: '构建',
+    path: '/vite/v-20/library-mode', summary: '使用 Vite 库模式打包组件库或工具库，支持多格式输出和发布到 npm。',
+    demo: V20LibraryMode, code: V20Code, language: 'vue',
+    principle: 'Vite 的库模式（Library Mode）可以把项目打包成可发布的 npm 包，支持 ESM、CommonJS、UMD 等多种输出格式，并自动处理 CSS 和类型声明。',
+    flow: ['在 vite.config.ts 中配置 build.lib 选项。', '指定入口文件、输出格式和包名。', '运行 vite build 生成可发布的 dist 目录。'],
+    notes: ['库模式下外部化 Vue 等 peer dependencies。', '需要单独配置 d.ts 生成或使用 vite-plugin-dts。', '注意输出格式兼容性和 Tree Shaking 支持。'],
+    problem: '解决组件库/工具库打包配置复杂、输出格式不统一的问题。',
+  },
+  {
+    id: 'V_21', title: '多页面应用配置与入口管理', navTitle: '多页面应用', category: '构建',
+    path: '/vite/v-21/multi-page', summary: '配置 Vite 多页面应用，管理多个 HTML 入口和共享资源。',
+    demo: V21MultiPage, code: V21Code, language: 'vue',
+    principle: 'Vite 支持多页面应用（MPA），通过 build.rollupOptions.input 配置多个 HTML 入口，每个页面可以有独立的脚本和样式，开发服务器也支持多页面路由。',
+    flow: ['在项目根目录创建多个 HTML 入口文件。', '在 vite.config.ts 中配置 build.rollupOptions.input。', '开发服务器通过路径访问不同页面，构建时输出多个 HTML。'],
+    notes: ['多页面可以共享公共依赖和代码分割。', '每个页面有独立的 Vite 模块图。', '适合后台管理系统等多入口场景。'],
+    problem: '解决传统 MPA 构建配置复杂、公共资源管理困难的问题。',
   },
   {
     id: 'X_1', title: '项目结构与 App Router 目录约定', navTitle: '项目结构', category: '起步',
