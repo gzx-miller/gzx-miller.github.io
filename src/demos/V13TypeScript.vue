@@ -15,23 +15,23 @@ export default defineConfig({
 
 // TypeScript 类型检查由 IDE 或单独运行 tsc --noEmit 完成
 // Vite 不负责类型检查（保证开发服务器速度）`,
-  vue: `<!-- Vue SFC 中使用 TypeScript -->
-<script lang="ts" setup>
-import { ref } from 'vue'
+  vue: `<span class="cm">&lt;!-- Vue SFC 中使用 TypeScript --&gt;</span>
+<span class="tag">&lt;script</span> <span class="attr">lang</span>=<span class="str">"ts"</span> <span class="attr">setup</span><span class="tag">&gt;</span>
+<span class="keyword">import</span> { ref } <span class="keyword">from</span> <span class="str">'vue'</span>
 
-interface User {
+<span class="keyword">interface</span> <span class="type">User</span> {
   name: string
   age: number
 }
 
-const user = ref<User>({ name: '张三', age: 25 })
-</script>
+<span class="keyword">const</span> user = ref(<span class="type">User</span>)({ name: <span class="str">'张三'</span>, age: 25 })
+<span class="tag">&lt;/script&gt;</span>
 
-<!-- 如果需要类型推导，建议使用 <script setup lang="ts"> -->
-<script setup lang="ts">
-// 更好的类型推导和 IDE 支持
-const count = ref(0) // 自动推导为 Ref<number>
-</script>`,
+<span class="cm">&lt;!-- 如果需要类型推导，建议使用 &lt;script setup lang="ts"&gt; --&gt;</span>
+<span class="tag">&lt;script</span> <span class="attr">lang</span>=<span class="str">"ts"</span> <span class="attr">setup</span><span class="tag">&gt;</span>
+<span class="cm">// 更好的类型推导和 IDE 支持</span>
+<span class="keyword">const</span> count = ref(<span class="num">0</span>) <span class="cm">// 自动推导为 Ref&lt;number&gt;</span>
+<span class="tag">&lt;/script&gt;</span>`,
   check: `// 类型检查方案
 // 1. IDE 实时检查（推荐）
 // VS Code + Volar 扩展
@@ -66,10 +66,17 @@ export default defineConfig({
 
 <style scoped>
 .v13 { display: flex; flex-direction: column; gap: 10px; }
-.intro { font-size: 13px; color: #64748b; }
-.intro code { background: #f1f5f9; padding: 1px 5px; border-radius: 3px; font-size: 12px; }
-.tabs { display: flex; gap: 6px; }
-.tabs button { padding: 4px 12px; border: 1px solid #e2e8f0; border-radius: 4px; background: #fff; cursor: pointer; font-size: 13px; }
-.tabs .active { background: #3b82f6; color: #fff; border-color: #3b82f6; }
-.code-block { background: #1e1e2e; color: #cdd6f4; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; white-space: pre-wrap; }
+.intro { font-size: 13px; color: var(--muted); }
+.intro code { background: rgba(246, 193, 90, 0.2); padding: 1px 5px; border-radius: 3px; font-size: 12px; }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.tabs button { padding: 4px 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); cursor: pointer; font-size: 13px; }
+.tabs .active { background: linear-gradient(135deg, var(--leaf-red), var(--leaf-orange)); color: #fff; border-color: transparent; }
+.code-block { background: linear-gradient(180deg, #2a1e18, #231a16); color: #e0c8a8; padding: 14px; border-radius: 8px; font-size: 12px; overflow-x: auto; white-space: pre-wrap; line-height: 1.6; }
+.code-block .tag { color: #e8784a; }
+.code-block .attr { color: #f5a040; }
+.code-block .str { color: #7ab556; }
+.code-block .keyword { color: #e8623a; }
+.code-block .type { color: #f09060; }
+.code-block .num { color: #f6c15a; }
+.code-block .cm { color: #8a7060; }
 </style>

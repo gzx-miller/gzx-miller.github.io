@@ -226,7 +226,7 @@ const selectedTrick = ref(0)
         <p><strong>典型应用：</strong>自动生成事件名、CSS 属性名、路由路径等批量字符串类型。</p>
         <pre class="mini-code small"><span style="color:#7c7c99">// 批量生成事件处理器类型</span>
 type Events = 'click' | 'change' | 'submit'
-type HandlerNames = \`on\${Capitalize<Events>}\`
+type HandlerNames = `on${Capitalize&lt;Events&gt;}`
 <span style="color:#8a8a3a">// → 'onClick' | 'onChange' | 'onSubmit'</span></pre>
       </div>
     </div>

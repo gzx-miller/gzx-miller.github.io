@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
-const tab = ref('config')
+const tab = ref<'config' | 'structure' | 'compare'>('config')
 
-const contents = {
+const contents: Record<string, string> = {
   config: `// vite.config.ts - 多页面应用配置
 export default defineConfig({
   build: {
@@ -29,8 +29,8 @@ export default defineConfig({
 │   └── shared/     # 共享代码
 └── vite.config.ts
 
-// 每个 HTML 文件直接使用 <script type="module">
-// <script type="module" src="/src/main.ts"></script>`,
+// 每个 HTML 文件直接使用
+// &lt;script type="module" src="/src/main.ts"&gt;&lt;/script&gt;`,
   compare: `// MPA vs SPA
 // MPA：每个页面独立 HTML，适合 SEO 要求高的场景
 // SPA：单 HTML + 前端路由，适合 Web App
@@ -39,15 +39,23 @@ export default defineConfig({
 // MPA：配置多个入口
 // SPA：默认行为，一个 index.html`,
 }
+
+const currentContent = computed(() => contents[tab.value] || '')
+
+const setTab = (key: string) => {
+  if (key === 'config' || key === 'structure' || key === 'compare') {
+    tab.value = key
+  }
+}
 </script>
 
 <template>
   <div class="v09">
     <p class="intro">Vite 支持多页面应用（MPA），每个 HTML 文件都是独立入口，共享依赖自动提取。</p>
     <div class="tabs">
-      <button v-for="(v,k) in contents" :key="k" :class="{active: tab===k}" @click="tab=k">{{ k }}</button>
+      <button v-for="(v,k) in contents" :key="k" :class="{active: tab===k}" @click="setTab(k)">{{ k }}</button>
     </div>
-    <pre class="code-block"><code>{{ contents[tab as keyof typeof contents] }}</code></pre>
+    <pre class="code-block"><code>{{ currentContent }}</code></pre>
   </div>
 </template>
 

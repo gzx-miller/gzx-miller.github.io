@@ -445,4 +445,8 @@ export default {
         <li><strong>派生状态</strong>：getters 支持同步/异步，可依赖其他 getters</li>
         <li><strong>动作追踪</strong>：内置 devtools，支持时间旅行和动作重放</li>
         <li><strong>框架无关</strong>：核心独立，可适配 React / Vue / Angular 等</li>
-        <li><strong>效果系统</strong>：effects 层处理副作用（API、路由、存储
+        <li><strong>效果系统</strong>：effects 层处理副作用（API、路由、存储等），逻辑更清晰</li>
+      </ul>
+    </div>
+  </div>
+</template>
