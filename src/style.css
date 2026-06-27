@@ -1903,3 +1903,34 @@ li + li {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ── NProgress 路由进度条 ── */
+
+#nprogress .bar {
+  height: 3px;
+  background: linear-gradient(90deg, var(--leaf-red), var(--leaf-orange), var(--leaf-gold));
+  box-shadow: 0 0 10px rgba(240, 138, 36, 0.6), 0 0 5px rgba(217, 75, 38, 0.4);
+}
+
+#nprogress .peg {
+  box-shadow: 0 0 12px rgba(240, 138, 36, 0.8), 0 0 6px rgba(217, 75, 38, 0.6);
+}
+
+#nprogress .spinner-icon {
+  border-top-color: var(--leaf-orange);
+  border-left-color: var(--leaf-red);
+}
+
+[data-theme='dark'] #nprogress .bar {
+  background: linear-gradient(90deg, #e8623a, #f5a040, #f6c15a);
+  box-shadow: 0 0 10px rgba(232, 120, 74, 0.5), 0 0 5px rgba(246, 193, 90, 0.3);
+}
+
+[data-theme='dark'] #nprogress .peg {
+  box-shadow: 0 0 12px rgba(246, 193, 90, 0.6), 0 0 6px rgba(232, 120, 74, 0.4);
+}
+
+[data-theme='dark'] #nprogress .spinner-icon {
+  border-top-color: #f5a040;
+  border-left-color: #e8623a;
+}

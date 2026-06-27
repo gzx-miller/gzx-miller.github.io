@@ -17,6 +17,7 @@ export default defineNuxtConfig({
   modules: ['@pinia/nuxt'],
   css: [
     'highlight.js/styles/github.css',
+    'nprogress/nprogress.css',
     '~/style.css',
   ],
   vite: {
