@@ -337,11 +337,9 @@ watch(
           </Transition>
         </div>
       </div>
+      <!-- 进度条轨道：绝对定位悬浮在顶部导航下边缘，不占布局空间 -->
+      <div class="nprogress-rail" aria-hidden="true"></div>
     </header>
-
-    <!-- NProgress 进度条轨道：贴在顶部导航下边缘，与顶部导航物理隔离。
-         NProgress 通过 parent 配置把 .bar 注入到这里，出现/消失不影响顶部。 -->
-    <div class="nprogress-rail" aria-hidden="true"></div>
 
     <div class="app-shell" :class="{ 'sidebar-expanded': isSidebarTemporarilyExpanded }">
       <aside class="sidebar" :class="{ 'sidebar-temporarily-expanded': isSidebarTemporarilyExpanded }" :aria-label="`${activeCategoryName} 知识点导航`">

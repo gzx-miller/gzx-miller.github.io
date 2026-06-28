@@ -288,12 +288,13 @@ li + li {
 
 .app-frame {
   display: grid;
-  grid-template-rows: auto auto minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
   height: 100vh;
   min-height: 0;
 }
 
 .top-nav {
+  position: relative;
   z-index: 10;
   display: flex;
   flex-direction: column;
@@ -1905,15 +1906,19 @@ li + li {
 }
 
 /* ── NProgress 路由进度条 ── */
-/* 进度条挂到 layout 的 .nprogress-rail 轨道里，贴在顶部导航下边缘。
+/* 进度条悬浮在顶部导航下边缘，绝对定位不占布局空间，不会产生缝隙。
    出现/消失与顶部导航物理隔离，互不干扰。 */
 
 .nprogress-rail {
-  position: relative;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
   height: 3px;
   overflow: hidden;
   z-index: 20;
   background: transparent;
+  pointer-events: none;
 }
 
 #nprogress .bar {
