@@ -436,7 +436,7 @@ li + li {
 
 .knowledge-tabs {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   flex: 1 1 0;
   min-width: 0;
   gap: 8px;

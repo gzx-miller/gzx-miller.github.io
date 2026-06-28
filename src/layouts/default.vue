@@ -29,7 +29,8 @@ const visibleCount = ref(knowledgeCategories.length)
 const moreDropdownVisible = ref(false)
 let moreDropdownCloseTimer: ReturnType<typeof setTimeout> | undefined
 let tabsRowResizeObserver: ResizeObserver | undefined
-let isCalculatingOverflow = false
+let overflowRafId: number | undefined
+let overflowScheduled = false
 
 // 与 CSS 中 .knowledge-more-btn 的 max-width 保持一致，预留固定空间
 // 避免活动分类名称过长时“更多”按钮被挤出视口
@@ -119,26 +120,29 @@ function toggleSidebar() {
   isSidebarTemporarilyExpanded.value = !isSidebarTemporarilyExpanded.value
 }
 
-async function calculateOverflow() {
-  if (isCalculatingOverflow) return
-  isCalculatingOverflow = true
+// 用 requestAnimationFrame 把多次 resize 事件合并为每帧一次。
+// 既能保证窗口连续缩窄时持续重算，又避免在单帧内重复触发 DOM 写入。
+function scheduleOverflow() {
+  if (overflowScheduled) return
+  overflowScheduled = true
+  overflowRafId = requestAnimationFrame(() => {
+    overflowScheduled = false
+    overflowRafId = undefined
+    void calculateOverflow()
+  })
+}
 
+async function calculateOverflow() {
   await nextTick()
   const container = tabsRowRef.value
-  if (!container) {
-    isCalculatingOverflow = false
-    return
-  }
+  if (!container) return
 
   // 先显示全部以获取真实宽度
   visibleCount.value = knowledgeCategories.length
   await nextTick()
 
   const nav = container.querySelector('.knowledge-tabs') as HTMLElement | null
-  if (!nav) {
-    isCalculatingOverflow = false
-    return
-  }
+  if (!nav) return
 
   const containerWidth = container.clientWidth
   const items = nav.querySelectorAll('.knowledge-tab-wrapper')
@@ -175,8 +179,6 @@ async function calculateOverflow() {
     // 则显示 0 个，所有类别收入"更多"下拉菜单
     visibleCount.value = Math.max(0, count)
   }
-
-  isCalculatingOverflow = false
 }
 
 async function handleGlobalKeydown(event: KeyboardEvent) {
@@ -200,17 +202,17 @@ async function handleGlobalKeydown(event: KeyboardEvent) {
 }
 
 function handleResize() {
-  calculateOverflow()
+  scheduleOverflow()
 }
 
 onMounted(() => {
   window.addEventListener('keydown', handleGlobalKeydown)
   window.addEventListener('resize', handleResize)
-  calculateOverflow()
+  scheduleOverflow()
 
   if (typeof ResizeObserver !== 'undefined' && tabsRowRef.value) {
     tabsRowResizeObserver = new ResizeObserver(() => {
-      calculateOverflow()
+      scheduleOverflow()
     })
     tabsRowResizeObserver.observe(tabsRowRef.value)
   }
@@ -224,11 +226,16 @@ onUnmounted(() => {
     tabsRowResizeObserver.disconnect()
     tabsRowResizeObserver = undefined
   }
+  if (overflowRafId !== undefined) {
+    cancelAnimationFrame(overflowRafId)
+    overflowRafId = undefined
+    overflowScheduled = false
+  }
 })
 
 watch(activeKnowledge, () => {
   searchQuery.value = ''
-  calculateOverflow()
+  scheduleOverflow()
 })
 
 // 路由切换时关闭"更多"下拉，避免残留。滚动复位由 page 自行处理。
