@@ -1045,7 +1045,7 @@ export const lessons: Lesson[] = [
     code: K10Code,
     language: 'vue',
     principle:
-      '生命周期钩子描述组件进入页面、更新和离开页面的时机；template ref 让组件在必要时访问真实 DOM 或子组件实例。onBeforeUnmount 适合提前清理副作用，onUnmounted 确认组件已完全卸载。',
+      '生命周期钩子描述组件进入页面、更新和离开页面的时机；template ref 让组件在必要时访问真实 DOM 或子组件实例。onBeforeUnmount 适合在组件完全卸载前清理副作用，onUnmounted 确认组件已完全卸载。',
     flow: [
       '组件挂载后，inputRef 才能拿到真实输入框并执行 focus。',
       'onMounted 中启动计时器，页面持续更新停留时间。',
@@ -1175,7 +1175,7 @@ export const lessons: Lesson[] = [
       '不要把所有动态组件都缓存，缓存越多内存占用越高。',
       '需要感知进入和离开缓存状态时，可以使用 activated 和 deactivated。',
       '动态组件适合工作台、标签页、配置化局部区域等场景。',
-      '使用 include/exclude 按组件名控制缓存范围，max 限制最大缓存实例数避免内存泄漏。',
+      '使用 include/exclude 按组件名控制缓存范围，max 限制最大缓存实例数，避免缓存无限增长。',
     ],
     problem: '解决"多个面板共用同一位置渲染，并且切换回来希望保留状态"的问题。',
   },
@@ -1263,7 +1263,7 @@ export const lessons: Lesson[] = [
     code: K19Code,
     language: 'vue',
     principle:
-      '异步组件把某些组件的加载延后，Suspense 为等待中的异步依赖提供统一 fallback。用户先看到占位反馈，加载完成后再看到真实内容。',
+      '异步组件把某些组件的加载延迟，Suspense 为等待中的异步依赖提供统一 fallback。用户先看到占位反馈，加载完成后再看到真实内容。',
     flow: [
       'defineAsyncComponent 返回一个延迟解析的组件。',
       'Suspense 捕获异步等待阶段并展示 fallback 插槽。',
@@ -1291,7 +1291,7 @@ export const lessons: Lesson[] = [
     flow: [
       '用户输入关键词，keyword 变化触发 visibleCourses 重新计算。',
       'computed 避免无关状态变化时重复执行过滤逻辑。',
-      '列表项使用 v-memo，根据版本号判断是否需要重新更新。',
+      '列表项使用 v-memo，根据版本号判断是否需要重新渲染。',
     ],
     notes: [
       '先用浏览器性能工具或实际指标定位瓶颈，再决定优化手段。',
