@@ -5673,3 +5673,15 @@ export const lessons: Lesson[] = [
     problem: '解决"Next.js 项目能部署到哪里、各部署方式有什么限制"的问题。',
   },
 ]
+
+export const lessonIdMap: ReadonlyMap<string, Lesson> = new Map(
+  lessons.map((lesson) => [lesson.id, lesson]),
+)
+
+export const lessonPathMap: ReadonlyMap<string, Lesson> = new Map(
+  lessons.map((lesson) => [lesson.path, lesson]),
+)
+
+export const knowledgeCategoryMap: ReadonlyMap<string, KnowledgeCategory> = new Map(
+  knowledgeCategories.map((category) => [category.id, category]),
+)

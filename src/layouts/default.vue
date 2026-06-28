@@ -231,7 +231,7 @@ watch(
     <header class="top-nav">
       <div class="top-bar">
         <NuxtLink class="top-brand" to="/vue" aria-label="回到 Vue3 学习首页">
-          <img class="brand-avatar" :src="squirrelHero" alt="小松鼠举着栗子" />
+          <img class="brand-avatar" :src="squirrelHero" alt="小松鼠举着栗子" width="48" height="48" fetchpriority="high" />
           <div class="brand-text">
             <strong>小松鼠举栗子 </strong>
             <span class="brand-tagline">gzx_miller@foxmail.com </span>

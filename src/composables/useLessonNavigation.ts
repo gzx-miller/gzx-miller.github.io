@@ -1,5 +1,5 @@
 import { computed } from 'vue'
-import { knowledgeCategories, lessons } from '../data/lessons'
+import { knowledgeCategories, lessons, lessonIdMap, lessonPathMap, knowledgeCategoryMap } from '../data/lessons'
 import { createLessonOrderMap, flattenLessonGroups, groupLessons } from '../utils/lessonNavigation'
 
 /**
@@ -12,11 +12,11 @@ export function useLessonNavigation() {
 
   const activeKnowledge = computed(() => {
     const category = route.path.split('/').filter(Boolean)[0]
-    return knowledgeCategories.some((item) => item.id === category) ? category : 'vue'
+    return knowledgeCategoryMap.has(category) ? category : 'vue'
   })
 
   const activeCategory = computed(() =>
-    knowledgeCategories.find((category) => category.id === activeKnowledge.value),
+    knowledgeCategoryMap.get(activeKnowledge.value),
   )
   const activeCategoryName = computed(() => activeCategory.value?.name ?? activeKnowledge.value)
 
@@ -30,9 +30,9 @@ export function useLessonNavigation() {
 
   const currentLesson = computed(() => {
     if (route.path.startsWith('/vue/k-12/routing/')) {
-      return lessons.find((lesson) => lesson.id === 'K_12') ?? lessons[0]
+      return lessonIdMap.get('K_12') ?? lessons[0]
     }
-    return lessons.find((lesson) => lesson.path === route.path) ?? lessons[0]
+    return lessonPathMap.get(route.path) ?? lessons[0]
   })
 
   function getLessonGroupIndex(lessonId: string): number {

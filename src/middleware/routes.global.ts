@@ -1,4 +1,4 @@
-import { knowledgeCategories, lessons } from '../data/lessons'
+import { knowledgeCategories, lessons, lessonPathMap } from '../data/lessons'
 
 const categoryIds = knowledgeCategories
   .filter((category) => category.status === 'ready')
@@ -28,7 +28,7 @@ export default defineNuxtRouteMiddleware((to) => {
     return navigateTo(firstLessonPath(category), { redirectCode: 301 })
   }
 
-  const isLesson = lessons.some((lesson) => lesson.path === to.path)
+  const isLesson = lessonPathMap.has(to.path)
   const isRoutingDemo = to.path.startsWith('/vue/k-12/routing/')
 
   if (!isLesson && !isRoutingDemo) {

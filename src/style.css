@@ -774,6 +774,8 @@ li + li {
 .lesson-group {
   display: grid;
   gap: 4px;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 200px;
 }
 
 .lesson-group + .lesson-group {
