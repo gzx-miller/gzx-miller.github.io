@@ -1789,7 +1789,7 @@ li + li {
   }
 
   .app-shell {
-    grid-template-columns: 64px minmax(0, 1fr);
+    grid-template-columns: 230px minmax(0, 1fr);
   }
 
   .app-shell.sidebar-expanded {
@@ -1808,7 +1808,9 @@ li + li {
 
   .sidebar-heading {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
     margin: 0 0 8px;
   }
 
@@ -1864,7 +1866,7 @@ li + li {
 
 @media (max-width: 520px) {
   .app-shell {
-    grid-template-columns: 58px minmax(0, 1fr);
+    grid-template-columns: 200px minmax(0, 1fr);
   }
 
   .sidebar.sidebar-temporarily-expanded .sidebar-heading {
@@ -1873,7 +1875,7 @@ li + li {
   }
 
   .app-shell.sidebar-expanded {
-    grid-template-columns: 58px minmax(0, 1fr);
+    grid-template-columns: 200px minmax(0, 1fr);
   }
 
   .top-bar {
@@ -1925,16 +1927,7 @@ li + li {
   }
 
   .sidebar {
-    padding: 8px 6px;
-  }
-
-  .sidebar.sidebar-temporarily-expanded {
-    position: absolute;
-    inset: 0 auto 0 0;
-    z-index: 9;
-    width: min(280px, calc(100vw - 24px));
-    box-shadow: 20px 0 48px rgba(49, 24, 13, 0.24);
-    background: rgba(255, 250, 242, 0.98);
+    padding: 8px 8px;
   }
 
   .lesson-link {
