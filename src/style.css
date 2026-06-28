@@ -313,16 +313,19 @@ li + li {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  flex-wrap: nowrap;
+  min-width: 0;
 }
 
 .top-brand {
   display: flex;
   align-items: center;
-  min-width: 270px;
+  min-width: 0;
   gap: 14px;
   color: var(--text);
   text-decoration: none;
   transition: opacity 0.2s ease;
+  flex: 0 1 auto;
 }
 
 .top-brand:hover {
@@ -349,12 +352,19 @@ li + li {
 .top-brand strong,
 .top-brand span {
   display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .brand-text {
   display: flex;
   flex-direction: column;
   gap: 1px;
+  min-width: 0;
+  overflow: hidden;
+  flex: 0 1 auto;
 }
 
 .top-brand strong {
@@ -380,6 +390,9 @@ li + li {
   flex-direction: column;
   gap: 3px;
   align-items: center;
+  min-width: 0;
+  overflow: hidden;
+  flex: 0 1 auto;
 }
 
 .site-intro {
@@ -387,6 +400,9 @@ li + li {
   color: var(--muted);
   font-size: 13px;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .site-stats {
@@ -421,15 +437,15 @@ li + li {
 .knowledge-tabs {
   display: flex;
   flex-wrap: nowrap;
-  flex-shrink: 0;
-  gap: 8px;
-  overflow: visible;
+  flex: 1 1 0;
   min-width: 0;
+  gap: 8px;
   padding: 4px 0;
 }
 
 .knowledge-tab-wrapper {
   position: relative;
+  flex: 0 0 auto;
 }
 
 .knowledge-tab,
@@ -489,6 +505,17 @@ li + li {
 .knowledge-more-wrapper {
   position: relative;
   flex-shrink: 0;
+}
+
+.knowledge-more-btn {
+  max-width: 140px;
+}
+
+.knowledge-more-btn span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 
 .knowledge-more-wrapper::after {
@@ -1745,17 +1772,16 @@ li + li {
 
 @media (max-width: 920px) {
   .top-bar {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    gap: 12px;
   }
 
   .site-intro-group {
-    order: 1;
-    width: 100%;
     align-items: flex-start;
   }
 
   .site-intro {
-    font-size: 12px;
+    display: none;
   }
 
   .knowledge-tab {
@@ -1850,8 +1876,52 @@ li + li {
     grid-template-columns: 58px minmax(0, 1fr);
   }
 
+  .top-bar {
+    gap: 8px;
+  }
+
+  .top-nav {
+    padding: 10px 16px;
+  }
+
   .top-brand {
     min-width: 0;
+    gap: 10px;
+  }
+
+  .top-brand strong {
+    font-size: 17px;
+  }
+
+  .brand-tagline {
+    display: none;
+  }
+
+  .site-stats {
+    gap: 4px;
+  }
+
+  .stat-pill {
+    padding: 1px 6px;
+    font-size: 10px;
+  }
+
+  .tabs-row {
+    gap: 6px;
+  }
+
+  .knowledge-tabs {
+    gap: 6px;
+  }
+
+  .knowledge-tab,
+  .knowledge-more-btn {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .knowledge-more-btn {
+    max-width: 120px;
   }
 
   .sidebar {
@@ -1893,6 +1963,12 @@ li + li {
   .category-complete {
     width: 100%;
     justify-content: space-between;
+  }
+}
+
+@media (max-width: 420px) {
+  .site-stats {
+    display: none;
   }
 }
 

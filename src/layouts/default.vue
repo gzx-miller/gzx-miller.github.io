@@ -28,6 +28,12 @@ const tabsRowRef = useTemplateRef<HTMLElement>('tabsRow')
 const visibleCount = ref(knowledgeCategories.length)
 const moreDropdownVisible = ref(false)
 let moreDropdownCloseTimer: ReturnType<typeof setTimeout> | undefined
+let tabsRowResizeObserver: ResizeObserver | undefined
+let isCalculatingOverflow = false
+
+// 与 CSS 中 .knowledge-more-btn 的 max-width 保持一致，预留固定空间
+// 避免活动分类名称过长时“更多”按钮被挤出视口
+const MORE_BUTTON_MAX_WIDTH = 140
 
 const visibleCategories = computed(() => knowledgeCategories.slice(0, visibleCount.value))
 const overflowCategories = computed(() => knowledgeCategories.slice(visibleCount.value))
@@ -114,65 +120,63 @@ function toggleSidebar() {
 }
 
 async function calculateOverflow() {
+  if (isCalculatingOverflow) return
+  isCalculatingOverflow = true
+
   await nextTick()
   const container = tabsRowRef.value
-  if (!container) return
+  if (!container) {
+    isCalculatingOverflow = false
+    return
+  }
 
   // 先显示全部以获取真实宽度
   visibleCount.value = knowledgeCategories.length
   await nextTick()
 
   const nav = container.querySelector('.knowledge-tabs') as HTMLElement | null
-  if (!nav) return
-
-  // 防止 nav 在测量期间被 flex 压缩，导致子元素宽度不准
-  const prevFlexShrink = nav.style.flexShrink
-  nav.style.flexShrink = '0'
+  if (!nav) {
+    isCalculatingOverflow = false
+    return
+  }
 
   const containerWidth = container.clientWidth
   const items = nav.querySelectorAll('.knowledge-tab-wrapper')
-  const gap = parseFloat(getComputedStyle(nav).gap) || 8
+  const navGap = parseFloat(getComputedStyle(nav).gap) || 8
+  const tabsRowGap = parseFloat(getComputedStyle(container).gap) || 8
 
-  // 始终先为"更多"按钮预留空间（有溢出时一定需要它）
-  const activeCategoryIndex = knowledgeCategories.findIndex(
-    (category) => category.id === activeKnowledge.value,
-  )
+  // 固定预留“更多”按钮宽度。CSS 已将其最大宽度限制为 140px，
+  // 因此无论按钮标签是“更多”还是活动分类名称，都不会超出此空间。
+  const moreBtnWidth = MORE_BUTTON_MAX_WIDTH
 
-  let moreBtnWidth = 80
-  if (activeCategoryIndex >= 0) {
-    const activeItem = items[activeCategoryIndex] as HTMLElement | undefined
-    if (activeItem) {
-      // 当活动类别在溢出菜单中时，按钮显示其名称，需要更宽
-      moreBtnWidth = Math.max(80, activeItem.offsetWidth + 18)
-    }
-  }
+  // 分类导航实际可用的宽度 = tabs-row 宽度 - “更多”按钮宽度 - 两者之间的 gap
+  const availableNavWidth = containerWidth - moreBtnWidth - tabsRowGap
 
-  // 计算可容纳的 tab 数量（为"更多"按钮 + gap 预留空间）
-  let totalWidth = 0
+  let navWidth = 0
   let count = 0
 
   for (const [index, item] of Array.from(items).entries()) {
-    const itemWidth = (item as HTMLElement).offsetWidth + (index > 0 ? gap : 0)
+    const itemWidth = (item as HTMLElement).offsetWidth
+    const newNavWidth = navWidth + itemWidth + (index > 0 ? navGap : 0)
 
-    if (totalWidth + itemWidth + gap + moreBtnWidth <= containerWidth) {
-      totalWidth += itemWidth
+    if (newNavWidth <= availableNavWidth) {
+      navWidth = newNavWidth
       count = index + 1
     } else {
       break
     }
   }
 
-  nav.style.flexShrink = prevFlexShrink
-
   // 全部放得下 → 不需要"更多"按钮
   if (count >= knowledgeCategories.length) {
     visibleCount.value = knowledgeCategories.length
-    return
+  } else {
+    // 至少尝试显示 1 个 tab；如果连 1 个都放不下（极窄宽度），
+    // 则显示 0 个，所有类别收入"更多"下拉菜单
+    visibleCount.value = Math.max(0, count)
   }
 
-  // 至少尝试显示 1 个 tab；如果连 1 个都放不下（极窄宽度），
-  // 则显示 0 个，所有类别收入"更多"下拉菜单
-  visibleCount.value = Math.max(0, count)
+  isCalculatingOverflow = false
 }
 
 async function handleGlobalKeydown(event: KeyboardEvent) {
@@ -203,12 +207,23 @@ onMounted(() => {
   window.addEventListener('keydown', handleGlobalKeydown)
   window.addEventListener('resize', handleResize)
   calculateOverflow()
+
+  if (typeof ResizeObserver !== 'undefined' && tabsRowRef.value) {
+    tabsRowResizeObserver = new ResizeObserver(() => {
+      calculateOverflow()
+    })
+    tabsRowResizeObserver.observe(tabsRowRef.value)
+  }
 })
 
 onUnmounted(() => {
   window.removeEventListener('keydown', handleGlobalKeydown)
   window.removeEventListener('resize', handleResize)
   if (moreDropdownCloseTimer) clearTimeout(moreDropdownCloseTimer)
+  if (tabsRowResizeObserver) {
+    tabsRowResizeObserver.disconnect()
+    tabsRowResizeObserver = undefined
+  }
 })
 
 watch(activeKnowledge, () => {
