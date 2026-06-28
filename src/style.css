@@ -288,7 +288,7 @@ li + li {
 
 .app-frame {
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-rows: auto auto minmax(0, 1fr);
   height: 100vh;
   min-height: 0;
 }
@@ -1905,9 +1905,22 @@ li + li {
 }
 
 /* ── NProgress 路由进度条 ── */
+/* 进度条挂到 layout 的 .nprogress-rail 轨道里，贴在顶部导航下边缘。
+   出现/消失与顶部导航物理隔离，互不干扰。 */
+
+.nprogress-rail {
+  position: relative;
+  height: 3px;
+  overflow: hidden;
+  z-index: 20;
+  background: transparent;
+}
 
 #nprogress .bar {
-  height: 3px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
   background: linear-gradient(90deg, var(--leaf-red), var(--leaf-orange), var(--leaf-gold));
   box-shadow: 0 0 10px rgba(240, 138, 36, 0.6), 0 0 5px rgba(217, 75, 38, 0.4);
 }
