@@ -1855,6 +1855,47 @@ pre.code-block > code.hljs,
   flex-shrink: 0;
 }
 
+/* Top bar right actions group */
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* GitHub link */
+.github-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--muted);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+}
+
+[data-theme='dark'] .github-link {
+  border-color: rgba(246, 193, 90, 0.12);
+  background: rgba(42, 30, 24, 0.6);
+  color: var(--muted);
+}
+
+.github-link:hover {
+  border-color: var(--leaf-gold);
+  color: var(--chestnut);
+  background: rgba(246, 193, 90, 0.1);
+  transform: translateY(-1px);
+}
+
+.github-link:focus-visible {
+  outline: 2px solid var(--leaf-gold);
+  outline-offset: 2px;
+}
+
 @media (max-width: 920px) {
   .top-bar {
     flex-wrap: nowrap;
