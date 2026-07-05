@@ -55,19 +55,13 @@ const S08Code = createCodeLoader('state-react/S08ReduxToolkit.js')
 const S09XStateMachine = createDemo('S09XStateMachine')
 const S09Code = createCodeLoader('state-react/S09XStateMachine.js')
 const S10StoreSelection = createDemo('S10StoreSelection')
-const S10Code = createCodeLoader('S10StoreSelection.vue')
 const S11VuexMigration = createDemo('S11VuexMigration')
 const S11Code = createCodeLoader('S11VuexMigration.vue')
 const S12Valtio = createDemo('S12Valtio')
-const S12Code = createCodeLoader('S12Valtio.vue')
 const S13TanStackQuery = createDemo('S13TanStackQuery')
-const S13Code = createCodeLoader('S13TanStackQuery.vue')
 const S14Signals = createDemo('S14Signals')
-const S14Code = createCodeLoader('S14Signals.vue')
 const S15Persistence = createDemo('S15Persistence')
-const S15Code = createCodeLoader('S15Persistence.vue')
 const S16Comparison = createDemo('S16Comparison')
-const S16Code = createCodeLoader('S16Comparison.vue')
 const S17PiniaPlugin = createDemo('S17PiniaPlugin')
 const S17Code = createCodeLoader('S17PiniaPlugin.vue')
 const S18PiniaGetters = createDemo('S18PiniaGetters')
@@ -79,11 +73,8 @@ const S20Code = createCodeLoader('S20PiniaDevtools.vue')
 const S21PiniaTesting = createDemo('S21PiniaTesting')
 const S21Code = createCodeLoader('S21PiniaTesting.vue')
 const S22Recoil = createDemo('S22Recoil')
-const S22Code = createCodeLoader('S22Recoil.vue')
 const S23Mobx = createDemo('S23Mobx')
-const S23Code = createCodeLoader('S23Mobx.vue')
 const S24Overmind = createDemo('S24Overmind')
-const S24Code = createCodeLoader('S24Overmind.vue')
 
 
 export const lessons: Lesson[] = [
@@ -171,7 +162,96 @@ export const lessons: Lesson[] = [
 {
     id: 'S_10', title: '状态管理方案选型矩阵', navTitle: '方案选型', category: '选型与架构',
     path: '/state-management/s-10/store-selection', summary: '按框架、状态粒度、流程复杂度和团队约束比较常见方案。',
-    demo: S10StoreSelection, code: S10Code, language: 'vue',
+    demo: S10StoreSelection, code: () => Promise.resolve(`// 状态选择器模式 - 按维度选择合适的状态管理方案
+
+interface StateSolution {
+  name: string
+  framework: 'react' | 'vue' | 'agnostic'
+  granularity: 'coarse' | 'fine' | 'atomic'
+  flowStyle: 'unstructured' | 'unidirectional' | 'state-machine'
+  devTools: boolean
+  typescript: 'excellent' | 'good' | 'fair'
+  learningCurve: 'low' | 'medium' | 'high'
+}
+
+const solutions: StateSolution[] = [
+  {
+    name: 'Pinia',
+    framework: 'vue',
+    granularity: 'coarse',
+    flowStyle: 'unstructured',
+    devTools: true,
+    typescript: 'excellent',
+    learningCurve: 'low',
+  },
+  {
+    name: 'Zustand',
+    framework: 'react',
+    granularity: 'fine',
+    flowStyle: 'unstructured',
+    devTools: true,
+    typescript: 'excellent',
+    learningCurve: 'low',
+  },
+  {
+    name: 'Jotai',
+    framework: 'react',
+    granularity: 'atomic',
+    flowStyle: 'unstructured',
+    devTools: true,
+    typescript: 'excellent',
+    learningCurve: 'medium',
+  },
+  {
+    name: 'Redux Toolkit',
+    framework: 'react',
+    granularity: 'coarse',
+    flowStyle: 'unidirectional',
+    devTools: true,
+    typescript: 'excellent',
+    learningCurve: 'high',
+  },
+  {
+    name: 'XState',
+    framework: 'agnostic',
+    granularity: 'fine',
+    flowStyle: 'state-machine',
+    devTools: true,
+    typescript: 'excellent',
+    learningCurve: 'high',
+  },
+]
+
+interface SelectionCriteria {
+  framework?: 'react' | 'vue'
+  needAtomicUpdates?: boolean
+  complexFlows?: boolean
+  teamSize: 'small' | 'medium' | 'large'
+}
+
+function selectSolutions(criteria: SelectionCriteria): StateSolution[] {
+  return solutions.filter((s) => {
+    if (criteria.framework && s.framework !== criteria.framework && s.framework !== 'agnostic') {
+      return false
+    }
+    if (criteria.needAtomicUpdates && s.granularity !== 'atomic') {
+      return false
+    }
+    if (criteria.complexFlows && s.flowStyle === 'unstructured') {
+      return false
+    }
+    return true
+  })
+}
+
+// 使用示例
+const reactSmallTeam = selectSolutions({
+  framework: 'react',
+  teamSize: 'small',
+})
+
+console.log('React 小团队推荐:', reactSmallTeam.map((s) => s.name))
+`), language: 'typescript',
     principle: 'Pinia、Zustand、Jotai、Redux Toolkit 与 XState 解决的问题模型不同；选型应从事实来源、更新粒度、流程约束和调试需求出发。',
     flow: ['先区分客户端状态与服务端状态。', '评估框架、共享范围和更新频率。', '用最小原型验证 DevTools、SSR 和测试体验。'],
     notes: ['不要仅以包体积决定架构。', '迁移成本通常高于初始接入成本。'],
@@ -189,7 +269,76 @@ export const lessons: Lesson[] = [
 {
     id: 'S_12', title: 'Valtio 与 Proxy 响应式状态', navTitle: 'Valtio', category: '轻量 React Store',
     path: '/state-management/s-12/valtio', summary: '用 Valtio 的 proxy/snapshot 模式管理 React 状态，理解 Proxy 响应式原理。',
-    demo: S12Valtio, code: S12Code, language: 'jsx',
+    demo: S12Valtio, code: () => Promise.resolve(`import React from 'react'
+import { createRoot } from 'react-dom/client'
+import { proxy, useSnapshot } from 'valtio'
+
+const state = proxy({
+  count: 0,
+  text: '',
+  user: {
+    name: 'Alice',
+    age: 25,
+  },
+})
+
+function inc() {
+  state.count++
+}
+
+function setText(text) {
+  state.text = text
+}
+
+function birthday() {
+  state.user.age++
+}
+
+function Counter() {
+  const snap = useSnapshot(state)
+  return (
+    <section className="panel">
+      <p className="metric">计数: {snap.count}</p>
+      <button onClick={inc}>增加</button>
+    </section>
+  )
+}
+
+function TextInput() {
+  const snap = useSnapshot(state)
+  return (
+    <label className="field">
+      <span>输入文本（不影响计数组件）</span>
+      <input value={snap.text} onChange={(e) => setText(e.target.value)} />
+    </label>
+  )
+}
+
+function UserProfile() {
+  const snap = useSnapshot(state.user)
+  return (
+    <section className="panel">
+      <p>{snap.name}, {snap.age} 岁</p>
+      <button onClick={birthday}>过生日</button>
+    </section>
+  )
+}
+
+function App() {
+  return (
+    <main className="app">
+      <p className="kicker">Valtio Proxy 响应式</p>
+      <div className="grid">
+        <Counter />
+        <TextInput />
+        <UserProfile />
+      </div>
+    </main>
+  )
+}
+
+createRoot(document.getElementById('root')).render(<App />)
+`), language: 'jsx',
     principle: 'Valtio 用 Proxy 包裹状态对象，直接修改即触发更新；snapshot 获取不可变快照用于渲染，自动追踪依赖关系避免不必要的重渲染。',
     flow: ['用 proxy 创建响应式状态。', '直接修改 proxy 对象的属性。', '用 useSnapshot 在组件中读取并追踪依赖。'],
     notes: ['Valtio 的 subscribe 可以监听任意路径变化。', 'proxy 对象不适合放在 React context 中。'],
@@ -198,7 +347,103 @@ export const lessons: Lesson[] = [
 {
     id: 'S_13', title: 'TanStack Query 服务端状态', navTitle: 'TanStack Query', category: '服务端状态',
     path: '/state-management/s-13/tanstack-query', summary: '用缓存策略、乐观更新和后台同步管理服务端数据状态。',
-    demo: S13TanStackQuery, code: S13Code, language: 'jsx',
+    demo: S13TanStackQuery, code: () => Promise.resolve(`import React from 'react'
+import { createRoot } from 'react-dom/client'
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query'
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000,
+      cacheTime: 10 * 60 * 1000,
+      refetchOnWindowFocus: false,
+    },
+  },
+})
+
+// 模拟 API
+const fetchCourses = () =>
+  new Promise((resolve) =>
+    setTimeout(() => resolve([
+      { id: 1, title: 'Vue 3 进阶', students: 120 },
+      { id: 2, title: 'React Hooks 实战', students: 85 },
+    ]), 500)
+  )
+
+const addCourse = (course) =>
+  new Promise((resolve) =>
+    setTimeout(() => resolve({ id: Date.now(), ...course }), 300)
+  )
+
+function CourseList() {
+  const queryClient = useQueryClient()
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['courses'],
+    queryFn: fetchCourses,
+  })
+
+  const mutation = useMutation({
+    mutationFn: addCourse,
+    onMutate: async (newCourse) => {
+      await queryClient.cancelQueries({ queryKey: ['courses'] })
+      const previousCourses = queryClient.getQueryData(['courses'])
+      queryClient.setQueryData(['courses'], (old) => [
+        ...old,
+        { id: Date.now(), ...newCourse },
+      ])
+      return { previousCourses }
+    },
+    onError: (err, newCourse, context) => {
+      queryClient.setQueryData(['courses'], context.previousCourses)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['courses'] })
+    },
+  })
+
+  if (isLoading) return <div>加载中...</div>
+  if (isError) return <div>错误: {error.message}</div>
+
+  return (
+    <section className="panel">
+      <h3>课程列表</h3>
+      <ul>
+        {data.map((course) => (
+          <li key={course.id}>
+            {course.title} - {course.students} 人
+          </li>
+        ))}
+      </ul>
+      <button
+        onClick={() =>
+          mutation.mutate({ title: '新课程', students: 0 })
+        }
+      >
+        {mutation.isLoading ? '添加中...' : '添加课程（乐观更新）'}
+      </button>
+    </section>
+  )
+}
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <main className="app">
+        <p className="kicker">TanStack Query 服务端状态</p>
+        <CourseList />
+      </main>
+    </QueryClientProvider>
+  )
+}
+
+createRoot(document.getElementById('root')).render(<App />)
+`), language: 'jsx',
     principle: 'TanStack Query 把服务端数据视为缓存而非状态；staleTime 和 cacheTime 控制新鲜度，useMutation 处理写入，optimistic update 提供即时反馈。',
     flow: ['用 useQuery 获取和缓存服务端数据。', '用 useMutation 处理创建和更新操作。', '配置乐观更新和回滚策略。'],
     notes: ['服务端状态和客户端状态应分开管理。', 'Query Key 的设计直接影响缓存命中率。'],
@@ -207,7 +452,63 @@ export const lessons: Lesson[] = [
 {
     id: 'S_14', title: 'Signals 信号响应式模式', navTitle: 'Signals', category: '设计原则',
     path: '/state-management/s-14/signals', summary: '理解 Signal 的自动追踪和细粒度更新，对比 ref 和 computed。',
-    demo: S14Signals, code: S14Code, language: 'vue',
+    demo: S14Signals, code: () => Promise.resolve(`// Signals 基础实现 - 响应式信号模式
+
+function createSignal(initialValue) {
+  let value = initialValue
+  const subscribers = new Set()
+
+  const read = () => {
+    if (currentEffect) {
+      subscribers.add(currentEffect)
+    }
+    return value
+  }
+
+  const write = (newValue) => {
+    value = newValue
+    subscribers.forEach((effect) => effect())
+  }
+
+  return [read, write]
+}
+
+let currentEffect = null
+
+function createEffect(fn) {
+  const effect = () => {
+    currentEffect = effect
+    try {
+      fn()
+    } finally {
+      currentEffect = null
+    }
+  }
+  effect()
+}
+
+function createComputed(fn) {
+  const [value, setValue] = createSignal()
+  createEffect(() => setValue(fn()))
+  return value
+}
+
+// 使用示例
+const [count, setCount] = createSignal(0)
+const [price, setPrice] = createSignal(100)
+
+const total = createComputed(() => count() * price())
+
+createEffect(() => {
+  console.log('总价变化:', total())
+})
+
+console.log('初始总价:', total())
+
+setCount(2)
+setPrice(150)
+setCount(5)
+`), language: 'javascript',
     principle: 'Signals 是响应式的基础原语：信号值变化时自动通知依赖者更新，无需手动订阅；computed 派生新信号，effect 执行副作用，三者构成完整的响应式图。',
     flow: ['创建基础信号存储原始值。', '用 computed 派生计算信号。', '用 effect 响应信号变化执行副作用。'],
     notes: ['Angular、Solid、Preact 等都采用了 Signals 模式。', 'Vue 的 ref/computed/watchEffect 本质上就是 Signals。'],
@@ -216,7 +517,106 @@ export const lessons: Lesson[] = [
 {
     id: 'S_15', title: '状态持久化与水合策略', navTitle: '持久化水合', category: '设计原则',
     path: '/state-management/s-15/persistence', summary: '设计 localStorage 同步、SSR 水合和版本迁移的可靠策略。',
-    demo: S15Persistence, code: S15Code, language: 'vue',
+    demo: S15Persistence, code: () => Promise.resolve(`// 状态持久化方案对比 - 各库持久化配置
+
+// 1. Pinia + pinia-plugin-persistedstate
+import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
+
+export const useUserStore = defineStore('user', () => {
+  const name = ref('')
+  const token = ref('')
+
+  return { name, token }
+}, {
+  persist: {
+    key: 'app-user',
+    storage: localStorage,
+    paths: ['name'],
+  },
+})
+
+// 2. Zustand + persist middleware
+import { create } from 'zustand'
+import { persist, createJSONStorage } from 'zustand/middleware'
+
+const useCartStore = create(
+  persist(
+    (set, get) => ({
+      items: [],
+      addItem: (item) => set({ items: [...get().items, item] }),
+    }),
+    {
+      name: 'cart-storage',
+      storage: createJSONStorage(() => localStorage),
+      version: 1,
+      migrate: (persistedState, version) => {
+        if (version === 0) {
+          // 迁移逻辑
+        }
+        return persistedState
+      },
+    }
+  )
+)
+
+// 3. Redux Toolkit + redux-persist
+import { configureStore } from '@reduxjs/toolkit'
+import { persistStore, persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
+import rootReducer from './reducers'
+
+const persistConfig = {
+  key: 'root',
+  storage,
+  whitelist: ['user', 'settings'],
+  version: 2,
+}
+
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+
+export const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
+      },
+    }),
+})
+
+export const persistor = persistStore(store)
+
+// 4. 通用版本迁移工具
+interface PersistedState<T> {
+  version: number
+  data: T
+}
+
+function createMigrations<T>(migrations: Record<number, (state: any) => T>) {
+  return function migrate(persisted: any): T {
+    let state = persisted
+    const targetVersion = Math.max(...Object.keys(migrations).map(Number))
+
+    for (let v = (persisted?.version ?? 0) + 1; v <= targetVersion; v++) {
+      if (migrations[v]) {
+        state = migrations[v](state)
+      }
+    }
+
+    return state
+  }
+}
+
+// 使用迁移
+const migrate = createMigrations({
+  1: (state) => ({ ...state, newField: 'default' }),
+  2: (state) => ({ ...state, renamedField: state.oldField }),
+})
+`), language: 'typescript',
     principle: '状态持久化需要在应用启动时从存储恢复状态；SSR 场景下水合阶段必须保证服务端和客户端状态一致；版本迁移处理数据结构随时间变化的兼容性。',
     flow: ['序列化状态到 localStorage 或 IndexedDB。', '启动时恢复状态并处理水合不匹配。', '检测版本差异并执行迁移逻辑。'],
     notes: ['敏感数据不应存入 localStorage。', 'SSR 水合不匹配会导致 UI 闪烁或功能异常。'],
@@ -225,7 +625,93 @@ export const lessons: Lesson[] = [
 {
     id: 'S_16', title: '状态管理全景对比与选型', navTitle: '全景对比', category: '选型与架构',
     path: '/state-management/s-16/comparison', summary: '从包体积、学习曲线、SSR、TypeScript 等维度对比所有主流方案。',
-    demo: S16Comparison, code: S16Code, language: 'vue',
+    demo: S16Comparison, code: () => Promise.resolve(`// 状态管理库对比 - 相同功能的不同实现
+
+// ========== Pinia (Vue) ==========
+import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
+
+export const useCounterStore = defineStore('counter', () => {
+  const count = ref(0)
+  const doubleCount = computed(() => count.value * 2)
+  function increment() {
+    count.value++
+  }
+  return { count, doubleCount, increment }
+})
+
+// ========== Zustand (React) ==========
+import { create } from 'zustand'
+
+const useCounterStore = create((set, get) => ({
+  count: 0,
+  doubleCount: () => get().count * 2,
+  increment: () => set((state) => ({ count: state.count + 1 })),
+}))
+
+// ========== Jotai (React) ==========
+import { atom, useAtom } from 'jotai'
+
+const countAtom = atom(0)
+const doubleCountAtom = atom((get) => get(countAtom) * 2)
+
+function Counter() {
+  const [count, setCount] = useAtom(countAtom)
+  const [doubleCount] = useAtom(doubleCountAtom)
+  return <button onClick={() => setCount((c) => c + 1)}>{count}</button>
+}
+
+// ========== Redux Toolkit (React) ==========
+import { createSlice, configureStore } from '@reduxjs/toolkit'
+
+const counterSlice = createSlice({
+  name: 'counter',
+  initialState: { value: 0 },
+  reducers: {
+    increment: (state) => {
+      state.value += 1
+    },
+  },
+})
+
+export const { increment } = counterSlice.actions
+export const selectDoubleCount = (state) => state.counter.value * 2
+
+export const store = configureStore({
+  reducer: { counter: counterSlice.reducer },
+})
+
+// ========== MobX (React/框架无关) ==========
+import { makeAutoObservable } from 'mobx'
+
+class CounterStore {
+  count = 0
+
+  constructor() {
+    makeAutoObservable(this)
+  }
+
+  get doubleCount() {
+    return this.count * 2
+  }
+
+  increment() {
+    this.count++
+  }
+}
+
+const counterStore = new CounterStore()
+
+// ========== 对比总结 ==========
+// | 特性         | Pinia  | Zustand | Jotai  | Redux Toolkit | MobX   |
+// |------------|--------|---------|--------|---------------|--------|
+// | 学习曲线     | 低     | 低      | 中     | 高            | 中     |
+// | 包体积       | ~2KB   | ~1KB    | ~3KB   | ~10KB         | ~15KB  |
+// | TypeScript   | 优秀   | 优秀    | 优秀   | 优秀          | 优秀   |
+// | DevTools     | 优秀   | 良好    | 良好   | 优秀          | 良好   |
+// | SSR 支持     | 优秀   | 良好    | 良好   | 优秀          | 良好   |
+// | 更新粒度     | 粗     | 中      | 细     | 中            | 细     |
+`), language: 'javascript',
     principle: '没有万能的状态管理方案；选择应基于框架生态、状态模型复杂度、团队熟悉度和运维需求；评分矩阵帮助量化比较，但最终需要用最小原型验证。',
     flow: ['列出评估维度和权重。', '对每个方案在各维度打分。', '用加权总分辅助决策并用原型验证。'],
     notes: ['评估维度应包括包体积、TypeScript、SSR、DevTools 和学习曲线。', '技术选型不应只看当前需求，还要考虑未来扩展。'],
@@ -289,7 +775,98 @@ export const lessons: Lesson[] = [
 {
     id: 'S_22', title: 'Recoil 原子状态与 Selector', navTitle: 'Recoil', category: '原子化状态',
     path: '/state-management/s-22/recoil', summary: '了解 Recoil 的 Atom 与 Selector 模型，理解原子化状态管理的细粒度更新。',
-    demo: S22Recoil, code: S22Code, language: 'vue',
+    demo: S22Recoil, code: () => Promise.resolve(`import React from 'react'
+import { createRoot } from 'react-dom/client'
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+  useSetRecoilState,
+} from 'recoil'
+
+const textState = atom({
+  key: 'textState',
+  default: '',
+})
+
+const charCountState = selector({
+  key: 'charCountState',
+  get: ({ get }) => {
+    const text = get(textState)
+    return text.length
+  },
+})
+
+const todoListState = atom({
+  key: 'todoListState',
+  default: [
+    { id: 1, text: '学习 Recoil', isComplete: false },
+    { id: 2, text: '理解 Atom', isComplete: true },
+  ],
+})
+
+const todoListStatsState = selector({
+  key: 'todoListStatsState',
+  get: ({ get }) => {
+    const todoList = get(todoListState)
+    const totalNum = todoList.length
+    const totalCompletedNum = todoList.filter((item) => item.isComplete).length
+    const totalUncompletedNum = totalNum - totalCompletedNum
+    const percentCompleted = totalNum === 0 ? 0 : (totalCompletedNum / totalNum) * 100
+    return {
+      totalNum,
+      totalCompletedNum,
+      totalUncompletedNum,
+      percentCompleted,
+    }
+  },
+})
+
+function TextInput() {
+  const [text, setText] = useRecoilState(textState)
+  const count = useRecoilValue(charCountState)
+
+  return (
+    <section className="panel">
+      <label className="field">
+        <span>输入文本</span>
+        <input value={text} onChange={(e) => setText(e.target.value)} />
+      </label>
+      <p>字符数: {count}</p>
+    </section>
+  )
+}
+
+function TodoListStats() {
+  const stats = useRecoilValue(todoListStatsState)
+  return (
+    <section className="panel">
+      <p>总数: {stats.totalNum}</p>
+      <p>已完成: {stats.totalCompletedNum}</p>
+      <p>未完成: {stats.totalUncompletedNum}</p>
+      <p>完成率: {stats.percentCompleted.toFixed(1)}%</p>
+    </section>
+  )
+}
+
+function App() {
+  return (
+    <RecoilRoot>
+      <main className="app">
+        <p className="kicker">Recoil 原子状态</p>
+        <div className="grid">
+          <TextInput />
+          <TodoListStats />
+        </div>
+      </main>
+    </RecoilRoot>
+  )
+}
+
+createRoot(document.getElementById('root')).render(<App />)
+`), language: 'jsx',
     principle: 'Recoil 是 Facebook 推出的 React 状态管理库，以 Atom 为最小状态单元，Selector 作为派生状态，通过 atom 依赖图实现精确的组件级重渲染。',
     flow: ['使用 atom 定义原子状态并指定唯一 key。', '使用 selector 定义派生状态，依赖其他 atom/selector。', '组件通过 useRecoilState/useRecoilValue 读取状态。'],
     notes: ['Recoil 的状态图支持异步 selector 和 Suspense。', '每个 atom 独立追踪订阅，更新粒度更细。', 'Recoil 目前主要适用于 React 生态。'],
@@ -298,7 +875,97 @@ export const lessons: Lesson[] = [
 {
     id: 'S_23', title: 'MobX 响应式状态与 Observable', navTitle: 'MobX', category: '结构化状态',
     path: '/state-management/s-23/mobx', summary: '理解 MobX 的 Observable 响应式模型，掌握 action、computed 和 observer 的协作方式。',
-    demo: S23Mobx, code: S23Code, language: 'vue',
+    demo: S23Mobx, code: () => Promise.resolve(`import { makeAutoObservable, runInAction, configure } from 'mobx'
+
+configure({ enforceActions: 'always' })
+
+// Store 定义
+class TodoStore {
+  todos = []
+  filter = 'all'
+
+  constructor() {
+    makeAutoObservable(this, {}, { autoBind: true })
+  }
+
+  get completedTodos() {
+    return this.todos.filter((todo) => todo.completed)
+  }
+
+  get activeTodos() {
+    return this.todos.filter((todo) => !todo.completed)
+  }
+
+  get filteredTodos() {
+    switch (this.filter) {
+      case 'active':
+        return this.activeTodos
+      case 'completed':
+        return this.completedTodos
+      default:
+        return this.todos
+    }
+  }
+
+  get completedCount() {
+    return this.completedTodos.length
+  }
+
+  addTodo(text) {
+    this.todos.push({
+      id: Date.now(),
+      text,
+      completed: false,
+    })
+  }
+
+  toggleTodo(id) {
+    const todo = this.todos.find((t) => t.id === id)
+    if (todo) {
+      todo.completed = !todo.completed
+    }
+  }
+
+  setFilter(filter) {
+    this.filter = filter
+  }
+
+  async loadTodos() {
+    const response = await fetch('/api/todos')
+    const data = await response.json()
+    runInAction(() => {
+      this.todos = data
+    })
+  }
+}
+
+// 使用示例
+const store = new TodoStore()
+
+console.log('初始 todos:', store.todos.length)
+
+store.addTodo('学习 MobX')
+store.addTodo('理解 Observable')
+
+console.log('添加后 todos:', store.todos.length)
+console.log('已完成数量:', store.completedCount)
+
+store.toggleTodo(store.todos[0].id)
+console.log('切换后已完成数量:', store.completedCount)
+
+store.setFilter('active')
+console.log('活跃 todos:', store.filteredTodos.length)
+
+// autorun 示例
+import { autorun } from 'mobx'
+
+autorun(() => {
+  console.log('当前已完成:', store.completedCount, '/', store.todos.length)
+})
+
+store.addTodo('autorun 测试')
+store.toggleTodo(store.todos[2].id)
+`), language: 'javascript',
     principle: 'MobX 通过 Observable 把普通对象包装为可观察的图谱，action 修改状态、computed 派生只读值、observer 组件自动追踪依赖并响应式渲染；这种"透明反应"心智模型贴近面向对象领域建模，适合复杂业务状态和大型应用。',
     flow: ['用 makeAutoObservable 把领域对象转为可观察状态。', '在 action 内统一修改状态，触发依赖收集。', 'observer 包裹的组件订阅用到的 observable 字段并自动重渲染。'],
     notes: ['MobX 响应式是隐式的，代码更简洁但需理解追踪机制。', '严格模式（configure({ enforceActions: "always" })）保证只能在 action 中修改状态。', '复杂领域模型优先用 class + makeAutoObservable 表达。'],
@@ -307,7 +974,138 @@ export const lessons: Lesson[] = [
 {
     id: 'S_24', title: 'Overmind 分形状态管理', navTitle: 'Overmind', category: '结构化状态',
     path: '/state-management/s-24/overmind', summary: '了解 Overmind 的分形架构，掌握命名空间组织状态与 effects 隔离副作用。',
-    demo: S24Overmind, code: S24Code, language: 'vue',
+    demo: S24Overmind, code: () => Promise.resolve(`// Overmind 状态管理 - 分形架构
+
+import { createOvermind } from 'overmind'
+import { createHook } from 'overmind-react'
+
+// 定义状态、动作和 effects
+const config = {
+  state: {
+    user: {
+      isLoggedIn: false,
+      name: '',
+      token: '',
+    },
+    todos: [],
+    filter: 'all',
+  },
+  actions: {
+    setUser: ({ state }, user) => {
+      state.user = { ...user, isLoggedIn: true }
+    },
+    logout: ({ state }) => {
+      state.user = {
+        isLoggedIn: false,
+        name: '',
+        token: '',
+      }
+    },
+    addTodo: ({ state }, text) => {
+      state.todos.push({
+        id: Date.now(),
+        text,
+        completed: false,
+      })
+    },
+    toggleTodo: ({ state }, id) => {
+      const todo = state.todos.find((t) => t.id === id)
+      if (todo) {
+        todo.completed = !todo.completed
+      }
+    },
+    setFilter: ({ state }, filter) => {
+      state.filter = filter
+    },
+    async loadTodos({ state, effects }) {
+      const todos = await effects.api.getTodos()
+      state.todos = todos
+    },
+  },
+  effects: {
+    api: {
+      async getTodos() {
+        const response = await fetch('/api/todos')
+        return response.json()
+      },
+      async addTodo(text) {
+        const response = await fetch('/api/todos', {
+          method: 'POST',
+          body: JSON.stringify({ text }),
+        })
+        return response.json()
+      },
+    },
+    storage: {
+      saveToken(token) {
+        localStorage.setItem('token', token)
+      },
+      getToken() {
+        return localStorage.getItem('token')
+      },
+    },
+  },
+  // 派生值 (getters)
+  derived: {
+    completedTodos: ({ state }) =>
+      state.todos.filter((todo) => todo.completed),
+    activeTodos: ({ state }) =>
+      state.todos.filter((todo) => !todo.completed),
+    filteredTodos: ({ state }) => {
+      switch (state.filter) {
+        case 'active':
+          return state.activeTodos
+        case 'completed':
+          return state.completedTodos
+        default:
+          return state.todos
+      }
+    },
+  },
+}
+
+// 创建 Overmind 实例
+export const overmind = createOvermind(config)
+
+// React Hook
+export const useOvermind = createHook()
+
+// 使用示例
+import React from 'react'
+import { createRoot } from 'react-dom/client'
+import { Provider } from 'overmind-react'
+
+function TodoList() {
+  const { state, actions } = useOvermind()
+
+  return (
+    <section className="panel">
+      <h3>Todo 列表</h3>
+      <ul>
+        {state.filteredTodos.map((todo) => (
+          <li key={todo.id} onClick={() => actions.toggleTodo(todo.id)}>
+            {todo.completed ? '✓ ' : '○ '}{todo.text}
+          </li>
+        ))}
+      </ul>
+      <button onClick={() => actions.addTodo('新任务')}>添加</button>
+    </section>
+  )
+}
+
+function App() {
+  return (
+    <Provider value={overmind}>
+      <main className="app">
+        <p className="kicker">Overmind 分形状态</p>
+        <TodoList />
+      </main>
+    </Provider>
+  )
+}
+
+createRoot(document.getElementById('root')).render(<App />)
+`), language: 'javascript',
     principle: 'Overmind 是一个分形状态管理库，将状态、动作、派生值组织在命名空间中，支持状态追踪、DevTools 和效果（effects）隔离副作用。',
     flow: ['使用 createOvermind 创建 store，按命名空间组织 state/actions/effects。', '组件通过 useOvermind 获取状态和 actions。', 'actions 修改状态，effects 处理 API、存储等副作用。'],
     notes: ['Overmind 支持 Vue 和 React 等多个框架。', '状态变更追踪到具体的 action 调用。', 'effects 模式便于测试时替换副作用。'],
