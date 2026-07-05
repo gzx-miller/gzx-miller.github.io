@@ -127,13 +127,13 @@ useSeoMeta({
         <h2>原理</h2>
         <p>{{ currentLesson.principle }}</p>
       </article>
-      <article v-if="currentLesson.flow.length">
+      <article v-if="currentLesson.flow?.length">
         <h2>处理流程</h2>
         <ol>
           <li v-for="step in currentLesson.flow" :key="step">{{ step }}</li>
         </ol>
       </article>
-      <article v-if="currentLesson.notes.length">
+      <article v-if="currentLesson.notes?.length">
         <h2>注意事项</h2>
         <ul>
           <li v-for="note in currentLesson.notes" :key="note">{{ note }}</li>

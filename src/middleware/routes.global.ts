@@ -1,19 +1,34 @@
-import { knowledgeCategories, lessonPathMap, getLessonsByCategory } from '../data/lessons'
+import { knowledgeCategories, getLessonsByCategory, getLessonByPath } from '../data/lessons'
 
 const categoryIds = knowledgeCategories
   .filter((category) => category.status === 'ready')
   .map((category) => category.id)
 
-// 从 lessonPathMap 获取 fallback（lessonPathMap 包含所有路径，但它是静态导出的）
-const allPaths = [...lessonPathMap.keys()]
-const fallbackPath = allPaths.find((p) => p.startsWith('/vue/')) ?? '/vue/k-1/app-entry'
+// 默认 fallback 路径
+const DEFAULT_FALLBACK = '/vue/k-1/app-entry'
 
-function firstLessonPath(category: string) {
-  const catLessons = getLessonsByCategory(category)
-  return catLessons[0]?.path ?? fallbackPath
+async function firstLessonPath(category: string): Promise<string> {
+  const catLessons = await getLessonsByCategory(category)
+  return catLessons[0]?.path ?? DEFAULT_FALLBACK
 }
 
-export default defineNuxtRouteMiddleware((to) => {
+export default defineNuxtRouteMiddleware(async (to) => {
+  // 确保当前路径相关的分类数据已加载
+  const pathCategory = to.path.split('/').filter(Boolean)[0]
+  if (pathCategory) {
+    await getLessonsByCategory(pathCategory)
+  }
+
+  // 使用同步函数检查路径（仅检查已加载的）
+  const isLesson = getLessonByPath(to.path) !== undefined
+
+  // 确定 fallback 路径（从已加载的数据中获取）
+  let fallbackPath = DEFAULT_FALLBACK
+  const vueLessons = await getLessonsByCategory('vue')
+  if (vueLessons.length > 0) {
+    fallbackPath = vueLessons[0].path
+  }
+
   if (to.path === '/') {
     return navigateTo(fallbackPath, { redirectCode: 301 })
   }
@@ -29,10 +44,10 @@ export default defineNuxtRouteMiddleware((to) => {
 
   const category = categoryIds.find((id) => to.path === `/${id}`)
   if (category) {
-    return navigateTo(firstLessonPath(category), { redirectCode: 301 })
+    const firstPath = await firstLessonPath(category)
+    return navigateTo(firstPath, { redirectCode: 301 })
   }
 
-  const isLesson = lessonPathMap.has(to.path)
   const isRoutingDemo = to.path.startsWith('/vue/k-12/routing/')
 
   if (!isLesson && !isRoutingDemo) {

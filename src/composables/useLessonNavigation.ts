@@ -1,5 +1,5 @@
-import { computed, ref, watch } from 'vue'
-import { knowledgeCategories, lessonIdMap, lessonPathMap, knowledgeCategoryMap, getLessonsByCategory } from '../data/lessons'
+import { computed, ref, watch, onMounted } from 'vue'
+import { knowledgeCategories, knowledgeCategoryMap, getLessonsByCategory, getLoadedLessonsByCategory, getLessonByPath, getLessonById } from '../data/lessons'
 import { createLessonOrderMap, flattenLessonGroups, groupLessons } from '../utils/lessonNavigation'
 
 /**
@@ -20,9 +20,18 @@ export function useLessonNavigation() {
   )
   const activeCategoryName = computed(() => activeCategory.value?.name ?? activeKnowledge.value)
 
-  // 按分类动态加载课程（性能优化：只加载当前分类的课程）
+  // 触发异步加载当前分类的课程
+  onMounted(async () => {
+    await getLessonsByCategory(activeKnowledge.value)
+  })
+
+  watch(activeKnowledge, async (newCategory) => {
+    await getLessonsByCategory(newCategory)
+  })
+
+  // 按分类动态加载课程（使用已缓存的数据）
   const filteredLessons = computed(() =>
-    getLessonsByCategory(activeKnowledge.value),
+    getLoadedLessonsByCategory(activeKnowledge.value),
   )
 
   const allLessonGroups = computed(() => groupLessons(filteredLessons.value))
@@ -31,9 +40,9 @@ export function useLessonNavigation() {
 
   const currentLesson = computed(() => {
     if (route.path.startsWith('/vue/k-12/routing/')) {
-      return lessonIdMap.get('K_12') ?? filteredLessons.value[0]
+      return getLessonById('K_12') ?? filteredLessons.value[0]
     }
-    return lessonPathMap.get(route.path) ?? filteredLessons.value[0]
+    return getLessonByPath(route.path) ?? filteredLessons.value[0]
   })
 
   function getLessonGroupIndex(lessonId: string): number {

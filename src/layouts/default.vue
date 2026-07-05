@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, useTemplateRef, watch } from 'vue'
 import squirrelHero from '../assets/squirrel-chestnut-avatar.webp'
-import { knowledgeCategories, lessonPathMap } from '../data/lessons'
+import { knowledgeCategories } from '../data/lessons'
 import { useTheme } from '../composables/useTheme'
 import { useLessonNavigation } from '../composables/useLessonNavigation'
 
@@ -10,6 +10,7 @@ const { isDark, toggleTheme } = useTheme()
 const {
   activeKnowledge,
   activeCategoryName,
+  filteredLessons,
   allLessonGroups,
   currentLesson,
   getLessonGroupIndex,
@@ -17,9 +18,9 @@ const {
 } = useLessonNavigation()
 
 const readyCategoryCount = computed(() => knowledgeCategories.filter((c) => c.status === 'ready').length)
+// 使用当前分类的课程数（动态加载，性能更优）
 const totalLessonCount = computed(() => {
-  // 计算所有分类的课程总数（从 lessonPathMap 获取，它包含所有路径）
-  return lessonPathMap ? lessonPathMap.size : 0
+  return filteredLessons.value.length
 })
 
 const isSidebarTemporarilyExpanded = useState('sidebarExpanded', () => true)
