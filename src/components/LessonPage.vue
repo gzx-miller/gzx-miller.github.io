@@ -22,7 +22,7 @@ const {
   error: lessonCodeError,
 } = await useAsyncData(
   () => `lesson-code-${currentLesson.value.id}`,
-  () => currentLesson.value.code(),
+  () => currentLesson.value.code ? currentLesson.value.code() : Promise.resolve(null),
   { watch: [() => currentLesson.value.id] },
 )
 
@@ -97,7 +97,7 @@ useSeoMeta({
       </div>
     </header>
 
-    <section class="lesson-section">
+    <section v-if="currentLesson.demo" class="lesson-section">
       <h2>案例演示</h2>
       <ClientOnly>
         <component :is="currentLesson.demo" />
@@ -107,12 +107,12 @@ useSeoMeta({
       </ClientOnly>
     </section>
 
-    <section class="lesson-section">
+    <section v-if="currentLesson.code" class="lesson-section">
       <h2>关键代码</h2>
       <CodeBlock
         v-if="lessonCode"
         :code="lessonCode"
-        :language="currentLesson.language"
+        :language="currentLesson.language || 'typescript'"
       />
       <div v-else-if="lessonCodeStatus === 'pending'" class="code-loading" role="status">
         正在加载当前案例源码…

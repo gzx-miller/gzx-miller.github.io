@@ -50,7 +50,9 @@ describe('课程注册表', () => {
       expect(lesson.summary.trim()).not.toBe('')
     }
 
-    const sources = await Promise.all(lessons.map((lesson) => lesson.code()))
+    const sources = await Promise.all(
+      lessons.map((lesson) => (lesson.code ? lesson.code() : Promise.resolve('')))
+    )
 
     for (const [index, source] of sources.entries()) {
       expect(source.trim().length, `${lessons[index].id} 的源码为空或过短`).toBeGreaterThan(80)
