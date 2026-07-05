@@ -52,7 +52,7 @@ const E15Code = createCodeLoader('E15MultiWindow.vue')
 
 export const lessons: Lesson[] = [
   {
-    id: 'E_01', title: 'Electron 架构与进程模型', navTitle: '架构模型', category: '基础架构',
+    id: 'EL_01', title: 'Electron 架构与进程模型', navTitle: '架构模型', category: '基础架构',
     path: '/electron/e-1/architecture', summary: '理解 Electron 的主进程、渲染进程、预加载脚本三角色，以及 Chromium 多进程架构与 Node.js 的融合方式。',
     demo: E01Architecture, code: E01Code, language: 'vue',
     principle: 'Electron 融合 Chromium 渲染引擎与 Node.js 运行时：主进程（Main）管理应用生命周期与原生能力，渲染进程（Renderer）运行 Web 页面，预加载脚本（Preload）在上下文桥接中安全暴露 API。',
@@ -62,7 +62,7 @@ export const lessons: Lesson[] = [
     officialUrl: 'https://www.electronjs.org/docs/latest/tutorial/process-model',
   },
   {
-    id: 'E_02', title: '主进程与 BrowserWindow', navTitle: '窗口管理', category: '基础架构',
+    id: 'EL_02', title: '主进程与 BrowserWindow', navTitle: '窗口管理', category: '基础架构',
     path: '/electron/e-2/main-window', summary: '使用 BrowserWindow 创建、配置和管理应用窗口，掌握窗口生命周期与 webPreferences 安全配置。',
     demo: E02MainWindow, code: E02Code, language: 'vue',
     principle: 'BrowserWindow 是主进程创建原生窗口的构造函数；webPreferences 控制渲染进程能力（Node.js 集成、上下文隔离、预加载脚本）；窗口生命周期事件（ready-to-show、closed）用于管理应用状态。',
@@ -72,7 +72,7 @@ export const lessons: Lesson[] = [
     officialUrl: 'https://www.electronjs.org/docs/latest/api/browser-window',
   },
   {
-    id: 'E_03', title: 'IPC 进程间通信', navTitle: 'IPC 通信', category: '进程通信',
+    id: 'EL_03', title: 'IPC 进程间通信', navTitle: 'IPC 通信', category: '进程通信',
     path: '/electron/e-3/ipc', summary: '掌握 ipcMain、ipcRenderer 与 invoke/handle 模式，实现主进程与渲染进程的安全双向通信。',
     demo: E03IPC, code: E03Code, language: 'vue',
     principle: 'IPC（Inter-Process Communication）是 Electron 进程间通信机制：主进程通过 ipcMain.handle 暴露方法，渲染进程（通过预加载脚本）使用 ipcRenderer.invoke 调用；这种模式支持 Promise，适合请求-响应场景。',
@@ -82,7 +82,7 @@ export const lessons: Lesson[] = [
     officialUrl: 'https://www.electronjs.org/docs/latest/tutorial/ipc',
   },
   {
-    id: 'E_04', title: '预加载脚本与安全桥接', navTitle: '预加载脚本', category: '进程通信',
+    id: 'EL_04', title: '预加载脚本与安全桥接', navTitle: '预加载脚本', category: '进程通信',
     path: '/electron/e-4/preload', summary: '编写预加载脚本，使用 contextBridge 安全暴露 API，理解上下文隔离的工作原理。',
     demo: E04Preload, code: E04Code, language: 'vue',
     principle: '预加载脚本在渲染进程加载前运行，可同时访问 Node.js 和 Electron API；contextBridge.exposeInMainWorld 将指定 API 注入渲染进程的 window 对象，且只暴露白名单方法，是 Electron 安全模型的核心。',
@@ -92,7 +92,7 @@ export const lessons: Lesson[] = [
     officialUrl: 'https://www.electronjs.org/docs/latest/tutorial/context-isolation',
   },
   {
-    id: 'E_05', title: '应用生命周期与事件', navTitle: '应用生命周期', category: '应用管理',
+    id: 'EL_05', title: '应用生命周期与事件', navTitle: '应用生命周期', category: '应用管理',
     path: '/electron/e-5/app-lifecycle', summary: '掌握 app 模块的生命周期事件，实现启动初始化、单例锁定、协议处理和优雅退出。',
     demo: E05AppLifecycle, code: E05Code, language: 'vue',
     principle: 'app 模块控制应用生命周期：ready 事件后创建窗口，second-instance 事件实现单例应用，open-url/open-file 处理深层链接，before-quit 和 will-quit 实现优雅退出。',
@@ -102,7 +102,7 @@ export const lessons: Lesson[] = [
     officialUrl: 'https://www.electronjs.org/docs/latest/api/app',
   },
   {
-    id: 'E_06', title: '原生菜单与上下文菜单', navTitle: '原生菜单', category: '原生能力',
+    id: 'EL_06', title: '原生菜单与上下文菜单', navTitle: '原生菜单', category: '原生能力',
     path: '/electron/e-6/native-menu', summary: '使用 Menu 和 MenuItem 构建应用菜单、右键菜单和托盘菜单，掌握快捷键与角色（role）系统。',
     demo: E06NativeMenu, code: E06Code, language: 'vue',
     principle: 'Menu 模块构建原生菜单：应用菜单（setApplicationMenu）、上下文菜单（popup）、托盘菜单；role 属性自动绑定标准行为（undo、redo、copy、paste 等）；accelerator 定义快捷键。',
@@ -112,7 +112,7 @@ export const lessons: Lesson[] = [
     officialUrl: 'https://www.electronjs.org/docs/latest/api/menu',
   },
   {
-    id: 'E_07', title: '系统托盘与通知', navTitle: '系统托盘', category: '原生能力',
+    id: 'EL_07', title: '系统托盘与通知', navTitle: '系统托盘', category: '原生能力',
     path: '/electron/e-7/tray-notification', summary: '创建系统托盘图标，实现托盘菜单、气泡通知和点击交互，掌握后台运行模式。',
     demo: E07Tray, code: E07Code, language: 'vue',
     principle: 'Tray 模块在系统托盘区创建图标；配合 Menu 实现右键菜单；Notification 模块发送系统通知；托盘应用通常隐藏 Dock 图标（macOS），通过托盘图标管理窗口显示。',
@@ -122,7 +122,7 @@ export const lessons: Lesson[] = [
     officialUrl: 'https://www.electronjs.org/docs/latest/api/tray',
   },
   {
-    id: 'E_08', title: '文件对话框与系统对话框', navTitle: '文件对话框', category: '原生能力',
+    id: 'EL_08', title: '文件对话框与系统对话框', navTitle: '文件对话框', category: '原生能力',
     path: '/electron/e-8/dialog', summary: '使用 dialog 模块打开文件选择、保存对话框和消息框，掌握异步 API 与返回值处理。',
     demo: E08Dialog, code: E08Code, language: 'vue',
     principle: 'dialog 模块提供原生系统对话框：showOpenDialog 选择文件/目录，showSaveDialog 保存文件，showMessageBox 显示消息；主进程直接使用，渲染进程通过 IPC 调用。',
@@ -132,7 +132,7 @@ export const lessons: Lesson[] = [
     officialUrl: 'https://www.electronjs.org/docs/latest/api/dialog',
   },
   {
-    id: 'E_09', title: '全局快捷键与菜单快捷键', navTitle: '快捷键', category: '原生能力',
+    id: 'EL_09', title: '全局快捷键与菜单快捷键', navTitle: '快捷键', category: '原生能力',
     path: '/electron/e-9/shortcuts', summary: '注册全局快捷键（即使应用未聚焦）和菜单快捷键，掌握快捷键冲突处理与动态注册。',
     demo: E09Shortcuts, code: E09Code, language: 'vue',
     principle: 'globalShortcut 模块注册系统级快捷键（应用未聚焦时也可触发）；MenuItem 的 accelerator 属性定义菜单快捷键；快捷键格式为平台无关的字符串（如 CmdOrCtrl+Shift+K）。',
@@ -142,7 +142,7 @@ export const lessons: Lesson[] = [
     officialUrl: 'https://www.electronjs.org/docs/latest/api/global-shortcut',
   },
   {
-    id: 'E_10', title: '自动更新机制', navTitle: '自动更新', category: '分发部署',
+    id: 'EL_10', title: '自动更新机制', navTitle: '自动更新', category: '分发部署',
     path: '/electron/e-10/auto-update', summary: '使用 autoUpdater 模块实现应用自动更新，掌握更新服务器配置、签名验证和更新事件处理。',
     demo: E10AutoUpdate, code: E10Code, language: 'vue',
     principle: 'autoUpdater 模块支持应用自动更新：主进程监听更新事件（checking-for-update、update-available、update-downloaded 等）；更新服务器需提供符合规范的更新元数据和签名文件；生产环境推荐使用 electron-updater（electron-builder 内置）。',
@@ -152,7 +152,7 @@ export const lessons: Lesson[] = [
     officialUrl: 'https://www.electronjs.org/docs/latest/api/auto-updater',
   },
   {
-    id: 'E_11', title: '打包与分发', navTitle: '打包分发', category: '分发部署',
+    id: 'EL_11', title: '打包与分发', navTitle: '打包分发', category: '分发部署',
     path: '/electron/e-11/packaging', summary: '使用 electron-builder 或 electron-forge 打包跨平台应用，掌握配置、代码签名、平台差异和发布流程。',
     demo: E11Packaging, code: E11Code, language: 'vue',
     principle: 'electron-builder 是主流打包工具：配置打包目标（dmg、exe、AppImage）、代码签名、自动更新和发布；不同平台有不同打包要求和依赖（如 Windows 需要 wine 打包 Windows 应用）。',
@@ -162,7 +162,7 @@ export const lessons: Lesson[] = [
     officialUrl: 'https://www.electron.build/',
   },
   {
-    id: 'E_12', title: '安全最佳实践', navTitle: '安全实践', category: '安全与性能',
+    id: 'EL_12', title: '安全最佳实践', navTitle: '安全实践', category: '安全与性能',
     path: '/electron/e-12/security', summary: '理解 Electron 安全模型，掌握上下文隔离、内容安全策略（CSP）、权限管理和依赖审计。',
     demo: E12Security, code: E12Code, language: 'vue',
     principle: 'Electron 安全核心原则：关闭 nodeIntegration、开启 contextIsolation、使用预加载脚本、设置 CSP、限制 webSecurity: false、审计依赖（npm audit）、启用沙箱（sandbox）。',
@@ -172,7 +172,7 @@ export const lessons: Lesson[] = [
     officialUrl: 'https://www.electronjs.org/docs/latest/tutorial/security',
   },
   {
-    id: 'E_13', title: '性能优化', navTitle: '性能优化', category: '安全与性能',
+    id: 'EL_13', title: '性能优化', navTitle: '性能优化', category: '安全与性能',
     path: '/electron/e-13/performance', summary: '优化 Electron 应用启动速度、内存占用和渲染性能，掌握 V8 堆内存调优与性能分析工具。',
     demo: E13Performance, code: E13Code, language: 'vue',
     principle: 'Electron 性能优化从三方面入手：启动优化（延迟加载、骨架屏）、内存优化（限制渲染进程数量、及时释放引用）、渲染优化（Web 性能最佳实践）；主进程可通过 --max-old-space-size 调整 V8 堆内存。',
@@ -182,7 +182,7 @@ export const lessons: Lesson[] = [
     officialUrl: 'https://www.electronjs.org/docs/latest/tutorial/performance',
   },
   {
-    id: 'E_14', title: '本地数据存储', navTitle: '数据存储', category: '数据管理',
+    id: 'EL_14', title: '本地数据存储', navTitle: '数据存储', category: '数据管理',
     path: '/electron/e-14/storage', summary: '对比 electron-store、IndexedDB、localStorage 和 SQLite，掌握 Electron 应用的本地数据存储方案。',
     demo: E14Storage, code: E14Code, language: 'vue',
     principle: 'Electron 应用有多种数据存储选择：electron-store（基于 JSON，适合配置）、IndexedDB（浏览器标准，适合结构化数据）、SQLite（关系型，适合复杂查询）；主进程可直接读写文件，渲染进程通过 IPC 调用。',
@@ -192,7 +192,7 @@ export const lessons: Lesson[] = [
     officialUrl: 'https://github.com/sindresorhus/electron-store',
   },
   {
-    id: 'E_15', title: '多窗口管理与通信', navTitle: '多窗口管理', category: '数据管理',
+    id: 'EL_15', title: '多窗口管理与通信', navTitle: '多窗口管理', category: '数据管理',
     path: '/electron/e-15/multi-window', summary: '管理多个应用窗口，实现窗口间通信、数据共享和状态同步，掌握窗口引用管理和内存泄漏预防。',
     demo: E15MultiWindow, code: E15Code, language: 'vue',
     principle: '多窗口应用需维护窗口引用数组；窗口间通信可通过主进程中转（ipcMain 转发）或共享存储（electron-store）；窗口关闭时必须释放引用（delete windowMap[id]）防止内存泄漏。',
