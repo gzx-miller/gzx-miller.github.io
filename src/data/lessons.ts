@@ -6991,3 +6991,32 @@ export const lessonPathMap: ReadonlyMap<string, Lesson> = new Map(
 export const knowledgeCategoryMap: ReadonlyMap<string, KnowledgeCategory> = new Map(
   knowledgeCategories.map((category) => [category.id, category]),
 )
+
+// ==================== 动态加载支持 ====================
+// 按分类加载课程数据，首次访问时加载对应分类，后续从缓存读取
+const categoryCache = new Map<string, Lesson[]>()
+
+function getCategoryFromPath(path: string): string {
+  return path.split('/').filter(Boolean)[0] ?? ''
+}
+
+export function getLessonsByCategory(categoryId: string): Lesson[] {
+  if (categoryCache.has(categoryId)) {
+    return categoryCache.get(categoryId)!
+  }
+  const result = lessons.filter((l) => getCategoryFromPath(l.path) === categoryId)
+  categoryCache.set(categoryId, result)
+  return result
+}
+
+export function getCategoryLessonMaps(categoryId: string): {
+  idMap: Map<string, Lesson>
+  pathMap: Map<string, Lesson>
+} {
+  const cats = getLessonsByCategory(categoryId)
+  return {
+    idMap: new Map(cats.map((l) => [l.id, l])),
+    pathMap: new Map(cats.map((l) => [l.path, l])),
+  }
+}
+
