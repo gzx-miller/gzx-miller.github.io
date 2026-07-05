@@ -256,7 +256,7 @@ watch(
   <div class="app-frame">
     <header class="top-nav">
       <div class="top-bar">
-        <NuxtLink class="top-brand" to="/vue" aria-label="回到 Vue3 学习首页">
+        <NuxtLink class="top-brand" to="/vue" no-prefetch aria-label="回到 Vue3 学习首页">
           <img class="brand-avatar" :src="squirrelHero" alt="小松鼠举着栗子" width="48" height="48" fetchpriority="high" />
           <div class="brand-text">
             <strong>小松鼠举栗子 </strong>
@@ -296,6 +296,7 @@ watch(
           >
             <NuxtLink
               :to="item.status === 'ready' ? item.path : '/vue'"
+              no-prefetch
               class="knowledge-tab"
               :class="{ active: item.id === activeKnowledge, planned: item.status === 'planned' }"
               :aria-disabled="item.status === 'planned'"
@@ -349,6 +350,7 @@ watch(
                 v-for="item in overflowCategories"
                 :key="item.id"
                 :to="item.status === 'ready' ? item.path : '/vue'"
+                no-prefetch
                 class="more-dropdown-item"
                 role="menuitem"
                 :class="{ active: item.id === activeKnowledge, planned: item.status === 'planned' }"

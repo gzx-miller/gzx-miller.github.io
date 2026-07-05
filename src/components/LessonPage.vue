@@ -74,7 +74,7 @@ useSeoMeta({
     tabindex="-1"
   >
     <nav class="breadcrumb" aria-label="面包屑">
-      <NuxtLink :to="`/${activeKnowledge}`">{{ activeCategoryName }}</NuxtLink>
+      <NuxtLink :to="`/${activeKnowledge}`" no-prefetch>{{ activeCategoryName }}</NuxtLink>
       <span aria-hidden="true">/</span>
       <span aria-current="page">{{ currentLesson.navTitle }}</span>
       <small>{{ currentLessonIndex + 1 }} / {{ orderedLessons.length }}</small>
