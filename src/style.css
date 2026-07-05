@@ -1287,6 +1287,58 @@ li + li {
   font-size: 13px;
 }
 
+/* demo 内 <pre class="code-block"><code> 纯文本代码块：
+   清除 scoped 样式给内联 code 加的浅色底与内边距，避免在深色容器里
+   按行绘制浅色行底，导致字色与行底接近看不清（如 C++ 分类案例）。
+   pre.code-block code 特异性 (0,1,2) 高于 scoped 的 code[data-v-xxx] (0,1,1) */
+pre.code-block code {
+  background: transparent;
+  padding: 0;
+}
+
+/* 确保 highlight.js 代码块内文字有足够对比度 */
+pre.code-block code.hljs,
+pre.code-block > code.hljs,
+.code-block .hljs {
+  background: transparent !important;
+  color: var(--chestnut) !important;
+}
+
+/* 覆盖 github.css 中可能存在的行背景样式 */
+.code-block .hljs::before,
+.code-block .hljs::after {
+  background: none;
+}
+
+/* 确保各种 token 类型在浅色背景上有足够对比度 */
+.code-block .hljs-comment,
+.code-block .hljs-quote { color: #8b6f47; font-style: italic; }
+.code-block .hljs-keyword,
+.code-block .hljs-selector-tag { color: #b7431f; font-weight: 600; }
+.code-block .hljs-string,
+.code-block .hljs-attr { color: #2e7d32; }
+.code-block .hljs-number,
+.code-block .hljs-literal { color: #e65100; }
+.code-block .hljs-built_in,
+.code-block .hljs-builtin-name { color: #1565c0; }
+.code-block .hljs-function .hljs-title,
+.code-block .hljs-title.function_ { color: #6a1b9a; }
+.code-block .hljs-type,
+.code-block .hljs-class .hljs-title { color: #00695c; }
+.code-block .hljs-variable,
+.code-block .hljs-template-variable { color: var(--chestnut); }
+.code-block .hljs-deletion { background: rgba(183, 67, 31, 0.1); color: #b7431f; }
+.code-block .hljs-addition { background: rgba(46, 125, 50, 0.1); color: #2e7d32; }
+.code-block .hljs-attribute { color: #e65100; }
+.code-block .hljs-meta { color: #8b6f47; }
+.code-block .hljs-symbol,
+.code-block .hljs-bullet { color: #6a1b9a; }
+.code-block .hljs-selector-id,
+.code-block .hljs-selector-class { color: #b7431f; }
+.code-block .hljs-emphasis { font-style: italic; }
+.code-block .hljs-strong { font-weight: bold; }
+.code-block .hljs-params { color: var(--chestnut); }
+
 .mini-code {
   overflow: auto;
   margin: 0;
@@ -1657,6 +1709,39 @@ li + li {
   background: #2a1e18;
   color: #e0c8a8;
 }
+
+/* 确保 .code-block 内的 highlight.js 样式在深色模式下有足够对比度 */
+[data-theme='dark'] pre.code-block code.hljs,
+[data-theme='dark'] pre.code-block > code.hljs,
+[data-theme='dark'] .code-block .hljs {
+  background: transparent !important;
+  color: #f0e6dc !important;
+}
+
+[data-theme='dark'] .code-block .hljs-comment,
+[data-theme='dark'] .code-block .hljs-quote { color: #8a7060; font-style: italic; }
+[data-theme='dark'] .code-block .hljs-keyword,
+[data-theme='dark'] .code-block .hljs-selector-tag,
+[data-theme='dark'] .code-block .hljs-type { color: #e8784a; font-weight: 600; }
+[data-theme='dark'] .code-block .hljs-string,
+[data-theme='dark'] .code-block .hljs-attr { color: #7ab556; }
+[data-theme='dark'] .code-block .hljs-number,
+[data-theme='dark'] .code-block .hljs-literal { color: #f6c15a; }
+[data-theme='dark'] .code-block .hljs-built_in { color: #7ab556; }
+[data-theme='dark'] .code-block .hljs-function .hljs-title { color: #f09060; }
+[data-theme='dark'] .code-block .hljs-title.function_ { color: #f09060; }
+[data-theme='dark'] .code-block .hljs-class .hljs-title { color: #7ab556; }
+[data-theme='dark'] .code-block .hljs-variable,
+[data-theme='dark'] .code-block .hljs-template-variable { color: #f0c090; }
+[data-theme='dark'] .code-block .hljs-deletion { background: rgba(232, 98, 58, 0.15); color: #e8623a; }
+[data-theme='dark'] .code-block .hljs-addition { background: rgba(122, 181, 86, 0.15); color: #7ab556; }
+[data-theme='dark'] .code-block .hljs-attribute { color: #f5a040; }
+[data-theme='dark'] .code-block .hljs-meta { color: #8a7060; }
+[data-theme='dark'] .code-block .hljs-symbol,
+[data-theme='dark'] .code-block .hljs-bullet { color: #f09060; }
+[data-theme='dark'] .code-block .hljs-selector-id { color: #e8623a; }
+[data-theme='dark'] .code-block .hljs-selector-class { color: #f5a040; }
+[data-theme='dark'] .code-block .hljs-params { color: #f0e6dc; }
 
 [data-theme='dark'] .hljs-comment,
 [data-theme='dark'] .hljs-quote {

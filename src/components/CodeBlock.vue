@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import hljs from 'highlight.js/lib/core'
 import css from 'highlight.js/lib/languages/css'
+import cpp from 'highlight.js/lib/languages/cpp'
 import javascript from 'highlight.js/lib/languages/javascript'
 import scss from 'highlight.js/lib/languages/scss'
 import typescript from 'highlight.js/lib/languages/typescript'
@@ -8,6 +9,8 @@ import xml from 'highlight.js/lib/languages/xml'
 import { computed } from 'vue'
 
 hljs.registerLanguage('css', css)
+hljs.registerLanguage('cpp', cpp)
+hljs.registerLanguage('c++', cpp)
 hljs.registerLanguage('javascript', javascript)
 hljs.registerLanguage('jsx', javascript)
 hljs.registerLanguage('scss', scss)
