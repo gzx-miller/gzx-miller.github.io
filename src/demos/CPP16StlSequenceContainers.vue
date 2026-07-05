@@ -43,26 +43,18 @@ int main() {
     <div class="tips-box">
       <p><strong>容器选择：</strong></p>
       <table>
-        <tr><th>容器</th><th>随机访问</th><th>头部插入</th><th>中间插入</th><th>内存</th></tr>
-        <tr><td>vector</td><td>✅ O(1)</td><td>❌ O(n)</td><td>❌ O(n)</td><td>连续</td></tr>
-        <tr><td>deque</td><td>✅ O(1)</td><td>✅ O(1)</td><td>❌ O(n)</td><td>分页</td></tr>
-        <tr><td>list</td><td>❌</td><td>✅ O(1)</td><td>✅ O(1)</td><td>不连续</td></tr>
+        <thead><tr><th>容器</th><th>随机访问</th><th>头部插入</th><th>中间插入</th><th>内存</th></tr></thead>
+        <tbody>
+          <tr><td>vector</td><td>✅ O(1)</td><td>❌ O(n)</td><td>❌ O(n)</td><td>连续</td></tr>
+          <tr><td>deque</td><td>✅ O(1)</td><td>✅ O(1)</td><td>❌ O(n)</td><td>分页</td></tr>
+          <tr><td>list</td><td>❌</td><td>✅ O(1)</td><td>✅ O(1)</td><td>不连续</td></tr>
+        </tbody>
       </table>
     </div>
   </div>
 </template>
 
 <style scoped>
-.code-block {
-  background: #1e1e2e;
-  color: #e0e0e0;
-  padding: 12px;
-  border-radius: 6px;
-  font-size: 13px;
-  overflow-x: auto;
-  line-height: 1.6;
-  margin-bottom: 12px;
-}
 .tips-box {
   background: #f0f7ff;
   padding: 10px;

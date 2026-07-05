@@ -47,8 +47,10 @@ const sharedDeps = [
   </div>
   <strong>共享依赖策略</strong>
   <table class="route-table">
-    <tr><th>包名</th><th>Host</th><th>Remote</th><th>策略</th></tr>
-    <tr v-for="d in sharedDeps" :key="d.name"><td>{{ d.name }}</td><td>{{ d.host }}</td><td>{{ d.remote }}</td><td>{{ d.strategy }}</td></tr>
+    <thead><tr><th>包名</th><th>Host</th><th>Remote</th><th>策略</th></tr></thead>
+    <tbody>
+      <tr v-for="d in sharedDeps" :key="d.name"><td>{{ d.name }}</td><td>{{ d.host }}</td><td>{{ d.remote }}</td><td>{{ d.strategy }}</td></tr>
+    </tbody>
   </table>
   <small>选择方案时需权衡隔离程度、集成成本与团队自治需求。</small>
 </div></template>
@@ -60,4 +62,38 @@ const sharedDeps = [
 .pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin: 0.6rem 0; font-size: 0.9rem; }
 .pros-cons ul { margin: 0.3rem 0; padding-left: 1.2rem; }
 .pros-cons li { margin: 0.15rem 0; }
+.route-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: 10px;
+}
+.route-table th,
+.route-table td {
+  padding: 6px 8px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+.route-table th {
+  background: #fff3e0;
+}
+.toggle-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.toggle-row button {
+  padding: 5px 14px;
+  border: 1px solid #e0a06a;
+  border-radius: 4px;
+  background: #fff;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 13px;
+}
+.toggle-row button.active {
+  background: #e85d04;
+  color: #fff;
+  border-color: #e85d04;
+}
 </style>

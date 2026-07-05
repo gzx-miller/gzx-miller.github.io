@@ -43,27 +43,19 @@ int main() {
     <div class="tips-box">
       <p><strong>指针 vs 引用：</strong></p>
       <table>
-        <tr><th>特性</th><th>指针</th><th>引用</th></tr>
-        <tr><td>初始化</td><td>可以不初始化</td><td>必须初始化</td></tr>
-        <tr><td>空值</td><td>可以为 nullptr</td><td>不能有空引用</td></tr>
-        <tr><td>重新绑定</td><td>可以指向其他对象</td><td>不能重新绑定</td></tr>
-        <tr><td>使用</td><td>需要解引用 *p</td><td>直接使用（像变量）</td></tr>
+        <thead><tr><th>特性</th><th>指针</th><th>引用</th></tr></thead>
+        <tbody>
+          <tr><td>初始化</td><td>可以不初始化</td><td>必须初始化</td></tr>
+          <tr><td>空值</td><td>可以为 nullptr</td><td>不能有空引用</td></tr>
+          <tr><td>重新绑定</td><td>可以指向其他对象</td><td>不能重新绑定</td></tr>
+          <tr><td>使用</td><td>需要解引用 *p</td><td>直接使用（像变量）</td></tr>
+        </tbody>
       </table>
     </div>
   </div>
 </template>
 
 <style scoped>
-.code-block {
-  background: #1e1e2e;
-  color: #e0e0e0;
-  padding: 12px;
-  border-radius: 6px;
-  font-size: 13px;
-  overflow-x: auto;
-  line-height: 1.6;
-  margin-bottom: 12px;
-}
 .tips-box {
   background: #f0f7ff;
   padding: 10px;

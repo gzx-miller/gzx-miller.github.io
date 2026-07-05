@@ -42,8 +42,47 @@ app.get('/api/users', {
     <button :class="{ active: mode === 'fastify' }" @click="mode = 'fastify'">Fastify</button>
   </div>
   <table class="route-table">
-    <tr v-for="r in routes" :key="r.method + r.path"><td><code>{{ r.method }}</code></td><td>{{ r.path }}</td><td>{{ r.desc }}</td></tr>
+    <tbody>
+      <tr v-for="r in routes" :key="r.method + r.path"><td><code>{{ r.method }}</code></td><td>{{ r.path }}</td><td>{{ r.desc }}</td></tr>
+    </tbody>
   </table>
   <pre class="mini-code"><code>{{ mode === 'express' ? expressCode : fastifyCode }}</code></pre>
   <small>{{ mode === 'express' ? '中间件按注册顺序执行，每个可修改 req/res 或调用 next()。' : 'Schema 自动验证请求与响应，序列化速度比 JSON.stringify 更快。' }}</small>
 </div></template>
+
+<style scoped>
+.route-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: 10px;
+}
+.route-table th,
+.route-table td {
+  padding: 6px 8px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+.route-table th {
+  background: #fff3e0;
+}
+.toggle-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.toggle-row button {
+  padding: 5px 14px;
+  border: 1px solid #e0a06a;
+  border-radius: 4px;
+  background: #fff;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 13px;
+}
+.toggle-row button.active {
+  background: #e85d04;
+  color: #fff;
+  border-color: #e85d04;
+}
+</style>
