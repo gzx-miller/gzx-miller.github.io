@@ -264,7 +264,7 @@ watch(
           </div>
         </NuxtLink>
         <div class="site-intro-group">
-          <p class="site-intro">通过独立真实案例学习前端核心技术</p>
+          <p class="site-intro">通过独立真实案例学习软件技术</p>
           <p class="site-stats">
             <span class="stat-pill">{{ readyCategoryCount }} 大知识分类</span>
             <span class="stat-pill">400+栗子</span>

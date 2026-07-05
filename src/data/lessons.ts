@@ -42,6 +42,7 @@ export const knowledgeCategories: KnowledgeCategory[] = [
   { id: 'langchain', name: 'LangChain', path: '/langchain', status: 'ready', intro: 'LangChain.js 是构建 LLM 应用的开源框架，提供模型调用、提示模板、链式调用、RAG 检索增强生成等核心能力，帮助开发者快速搭建智能应用。', officialUrl: 'https://js.langchain.com/' },
   { id: 'cpp', name: 'C++', path: '/cpp', status: 'ready', intro: 'C++ 是高效、灵活的系统级编程语言，兼具面向对象与泛型编程能力。本分类从基础语法出发，逐步覆盖内存管理、面向对象、模板、STL、现代 C++（C++11/14/17/20/23）核心特性与工程实践，帮助开发者建立完整的 C++ 知识体系。', officialUrl: 'https://en.cppreference.com/' },
   { id: 'electron', name: 'Electron', path: '/electron', status: 'ready', intro: 'Electron 使用 Web 技术构建跨平台桌面应用。本分类覆盖主进程与渲染进程、IPC 通信、窗口管理、原生菜单、系统托盘、自动更新、打包分发与安全最佳实践。', officialUrl: 'https://www.electronjs.org/' },
+  { id: 'ffmpeg', name: 'FFmpeg', path: '/ffmpeg', status: 'ready', intro: 'FFmpeg 是领先的多媒体框架，支持视频/音频的录制、转换、流化和编辑。本分类从容器与编解码器基础出发，覆盖格式转换、视频/音频处理、滤镜效果、字幕、流媒体、硬件加速与批量处理，帮助开发者掌握命令行多媒体处理的核心能力。', officialUrl: 'https://ffmpeg.org/' },
 ]
 
 // 创建分类 ID 到分类对象的映射（用于快速查找）

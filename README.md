@@ -1,6 +1,6 @@
 # 🐿️ 小松鼠举栗子
 
-> 中文前端知识案例库 — 通过独立真实案例学习前端核心技术
+> 中文前端知识案例库 — 通过独立真实案例学习软件技术
 
 **在线浏览：[https://gzx-miller.github.io](https://gzx-miller.github.io)**
 
