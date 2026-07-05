@@ -1,6 +1,6 @@
 # 🐿️ 小松鼠举栗子
 
-> 中文前端知识案例库 — 通过独立真实案例学习软件技术
+> 中文软件技术知识案例库 — 通过独立真实案例学习前端、多媒体、系统编程与 AI 技术
 
 **在线浏览：[https://gzx-miller.github.io](https://gzx-miller.github.io)**
 
@@ -8,9 +8,9 @@
 
 ## 特性
 
-- **252 个独立案例**，覆盖 13 个前端核心知识分类
+- **300+ 个独立案例**，覆盖 18 个软件技术知识分类
 - **交互式演示** — 每个案例包含可运行的 Demo、关键代码、原理说明、处理流程和注意事项
-- **纯静态部署** — `nuxt generate` 预渲染全部 252 条路由，零服务端依赖
+- **纯静态部署** — `nuxt generate` 预渲染全部路由，零服务端依赖
 - **类型安全** — 全项目 TypeScript strict mode，Vitest 单元测试覆盖核心逻辑
 - **秋日森林主题** — 红橙枫叶暖光配色，小松鼠抱栗子的视觉风格
 
@@ -34,6 +34,7 @@
 |---|---|---|---|
 | [Vue3](https://gzx-miller.github.io/vue) | 28 | 13 | 组合式 API、组件、路由、状态管理、过渡动画、插件开发 |
 | [React](https://gzx-miller.github.io/react) | 24 | 18 | Hooks、并发渲染、错误边界、Portal、自定义 Hook |
+| [Next.js](https://gzx-miller.github.io/nextjs) | 24 | 12 | App Router、服务端组件、数据获取、Server Actions、部署优化 |
 | [JavaScript](https://gzx-miller.github.io/javascript) | 24 | 6 | 类型系统、闭包、原型链、异步机制、迭代器、Proxy |
 | [CSS](https://gzx-miller.github.io/css) | 20 | 17 | 选择器、盒模型、Flexbox/Grid、定位、动画、容器查询 |
 | [Nuxt](https://gzx-miller.github.io/nuxt) | 20 | 10 | 文件路由、中间件、Nitro、SSR/SSG、模块生态 |
@@ -45,6 +46,10 @@
 | [工程化](https://gzx-miller.github.io/engineering) | 16 | 5 | CI/CD、E2E 测试、性能预算、Docker、微前端、i18n |
 | [Node.js](https://gzx-miller.github.io/nodejs) | 16 | 8 | 模块系统、流、HTTP、Worker 线程、WebSocket、数据库 |
 | [状态管理](https://gzx-miller.github.io/state-management) | 16 | 8 | Pinia、Zustand、Jotai、Redux Toolkit、XState、Signals |
+| [Vite](https://gzx-miller.github.io/vite) | 16 | 10 | 配置、插件、HMR、环境变量、构建优化、库模式、SSR |
+| [C++](https://gzx-miller.github.io/cpp) | 24 | 12 | 内存管理、面向对象、模板、STL、现代 C++ 核心特性 |
+| [Electron](https://gzx-miller.github.io/electron) | 20 | 8 | 主进程与渲染进程、IPC 通信、窗口管理、原生菜单、系统托盘 |
+| [FFmpeg](https://gzx-miller.github.io/ffmpeg) | 24 | 24 | 格式转换、视频/音频处理、滤镜效果、字幕、流媒体、硬件加速 |
 
 ## 快速开始
 
