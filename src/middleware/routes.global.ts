@@ -29,10 +29,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
     fallbackPath = vueLessons[0].path
   }
 
-  if (to.path === '/') {
-    return navigateTo(fallbackPath, { redirectCode: 301 })
-  }
-
   if (to.path === '/total-vue' || to.path === '/total-vue/') {
     return navigateTo('/vue', { redirectCode: 301 })
   }
@@ -47,6 +43,9 @@ export default defineNuxtRouteMiddleware(async (to) => {
     const firstPath = await firstLessonPath(category)
     return navigateTo(firstPath, { redirectCode: 301 })
   }
+
+  // 首页由 pages/index.vue 正常渲染，不参与课程路由兜底
+  if (to.path === '/') return
 
   const isRoutingDemo = to.path.startsWith('/vue/k-12/routing/')
 

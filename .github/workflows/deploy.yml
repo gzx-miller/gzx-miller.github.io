@@ -39,6 +39,8 @@ jobs:
         run: pnpm test
 
       - name: Build
+        env:
+          NUXT_PUBLIC_ZHIPU_API_KEY: ${{ secrets.ZHIPU_API_KEY }}
         run: pnpm build
 
       - name: Prepare GitHub Pages output

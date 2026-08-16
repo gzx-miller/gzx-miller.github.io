@@ -85,6 +85,9 @@ dist
 dist-ssr
 .output
 
+# 构建时自动生成的 sitemap（nuxt.config 的 build:before 钩子写入）
+public/sitemap.xml
+
 # Gatsby files
 .cache/
 # Comment in the public line in if your project uses Gatsby and not Next.js

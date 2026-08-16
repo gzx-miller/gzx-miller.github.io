@@ -7,7 +7,9 @@ import process from 'node:process'
 // ───────── 环境变量 process.env ─────────
 
 // 读取环境变量
-const nodeEnv = process.env.NODE_ENV || 'development'
+// 注：写作 process.env['NODE_ENV'] 而非点号写法，是因为本文件会以 ?raw 方式内联进构建产物，
+// 点号写法会被构建工具误替换导致产物语法错误；两种写法在 Node.js 中完全等价。
+const nodeEnv = process.env['NODE_ENV'] || 'development'
 const port = process.env.PORT || 3000
 const apiKey = process.env.API_KEY
 
