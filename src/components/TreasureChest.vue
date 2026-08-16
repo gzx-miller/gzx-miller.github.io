@@ -194,18 +194,19 @@ function onItemPointerUp(event: PointerEvent, item: Collectible) {
 onMounted(() => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return
-    const saved: unknown = JSON.parse(raw)
-    if (!Array.isArray(saved)) return
-    const valid = saved.filter((id): id is CollectibleId =>
-      typeof id === 'string' && COLLECTIBLES.some((c) => c.id === id),
-    )
-    if (valid.length === COLLECTIBLES.length) {
-      // 上次正好集齐（开箱动画被刷新打断），重新开始
-      collected.value = []
-      persist()
-    } else {
-      collected.value = valid
+    if (raw) {
+      const saved: unknown = JSON.parse(raw)
+      if (Array.isArray(saved)) {
+        const valid = saved.filter((id): id is CollectibleId =>
+          typeof id === 'string' && COLLECTIBLES.some((c) => c.id === id),
+        )
+        if (valid.length === COLLECTIBLES.length) {
+          collected.value = []
+          persist()
+        } else {
+          collected.value = valid
+        }
+      }
     }
   } catch {
     /* 忽略损坏的存储数据 */
