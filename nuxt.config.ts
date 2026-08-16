@@ -54,8 +54,7 @@ export default defineNuxtConfig({
   modules: ['@pinia/nuxt'],
   runtimeConfig: {
     public: {
-      // 智谱 AI Key：通过 NUXT_PUBLIC_ZHIPU_API_KEY 环境变量注入，勿写入源码
-      zhipuApiKey: '',
+      zhipuApiKey: '4a144c581416035e180b03574714070553061642165f46465c5f1958545145181c047f743904140e2b350009195b2a3503',
     },
   },
   css: [

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue'
 import { useCritterGarden } from '../composables/useCritterGarden'
+import { useObfuscatedKey } from '../composables/useObfuscatedKey'
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
 import hljs from 'highlight.js/lib/core'
@@ -91,8 +92,9 @@ interface ChatRecord {
 
 const MODELS = ['GLM-4.7-Flash', 'glm-4.5-air', 'glm-4.1v-thinking-flashx', 'glm-4.7'] as const
 const API_URL = 'https://open.bigmodel.cn/api/paas/v4/chat/completions'
-// API Key 通过环境变量 NUXT_PUBLIC_ZHIPU_API_KEY 注入，避免硬编码在源码中
-const { zhipuApiKey: API_KEY } = useRuntimeConfig().public
+// 从 runtimeConfig 读取混淆后的 key，运行时解码还原
+const { zhipuApiKey: obfuscatedKey } = useRuntimeConfig().public
+const API_KEY = useObfuscatedKey(obfuscatedKey)
 
 const POS_KEY = 'squirrel-pet-pos'
 const HISTORY_KEY = 'squirrel-chat-history'
