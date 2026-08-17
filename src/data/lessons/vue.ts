@@ -92,6 +92,24 @@ const K27AttributeForwarding = createDemo('K27AttributeForwarding')
 const K27Code = createCodeLoader('K27AttributeForwarding.vue')
 const K28ComponentExpose = createDemo('K28ComponentExpose')
 const K28Code = createCodeLoader('K28ComponentExpose.vue')
+const K29StateBoundaries = createDemo('S01StateBoundaries')
+const K29Code = createCodeLoader('S01StateBoundaries.vue')
+const K30PiniaSetupStore = createDemo('S02PiniaSetupStore')
+const K30Code = createCodeLoader('S02PiniaSetupStore.vue')
+const K31PiniaSubscriptions = createDemo('S03PiniaSubscriptions')
+const K31Code = createCodeLoader('S03PiniaSubscriptions.vue')
+const K32VuexMigration = createDemo('S11VuexMigration')
+const K32Code = createCodeLoader('S11VuexMigration.vue')
+const K33PiniaPlugin = createDemo('S17PiniaPlugin')
+const K33Code = createCodeLoader('S17PiniaPlugin.vue')
+const K34PiniaGetters = createDemo('S18PiniaGetters')
+const K34Code = createCodeLoader('S18PiniaGetters.vue')
+const K35PiniaActions = createDemo('S19PiniaActions')
+const K35Code = createCodeLoader('S19PiniaActions.vue')
+const K36PiniaDevtools = createDemo('S20PiniaDevtools')
+const K36Code = createCodeLoader('S20PiniaDevtools.vue')
+const K37PiniaTesting = createDemo('S21PiniaTesting')
+const K37Code = createCodeLoader('S21PiniaTesting.vue')
 
 export const lessons: Lesson[] = [
 {
@@ -778,5 +796,96 @@ export const lessons: Lesson[] = [
       'useTemplateRef 是 Vue 3.5 提供的模板引用 API，引用值在组件挂载前为 null。',
     ],
     problem: '解决"父组件确实需要调用子组件命令时，如何保持类型安全和封装边界"的问题。',
+  },
+{
+    id: 'K_29', title: '先判断状态归属，再选择 Store', navTitle: '状态边界', category: '状态设计',
+    path: '/vue/k-29/state-boundaries', summary: '区分组件状态、URL 状态、客户端共享状态和服务端缓存状态。',
+    demo: K29StateBoundaries, code: K29Code, language: 'vue',
+    principle: 'Store 只应承载需要跨组件共享、具有业务生命周期的客户端状态；表单瞬时输入、URL 参数、组件私有 UI 状态和远程缓存各有更合适的归属——把它们一股脑塞进 Pinia 会让状态臃肿、不可维护，正确做法是先画"状态归属图"再选工具。',
+    flow: ['明确每段状态的唯一事实来源（组件、URL、Store、远程）。', '判断共享范围与生命周期。', '选择最小且匹配语义的状态工具。'],
+    notes: ['全局可访问不等于应该全局存储，组件状态用 ref 即可。', '远程数据需要缓存失效、请求去重和重试策略，交给 Vue Query 更合适。', 'URL 状态属于"可分享的视图"，应通过 query 表达。'],
+    problem: '解决"什么状态应该进入 Store，以及什么时候根本不需要 Store"的问题。',
+  },
+{
+    id: 'K_30', title: 'Pinia Setup Store 与 storeToRefs', navTitle: 'Pinia Setup Store', category: 'Pinia 进阶',
+    path: '/vue/k-30/pinia-setup-store', summary: '用学习计划实现组合式 Store、派生值、Action 和响应式解构。',
+    demo: K30PiniaSetupStore, code: K30Code, language: 'vue',
+    principle: 'Setup Store 以 ref、computed 和函数分别表达 state、getter 与 action；storeToRefs 在解构时保留响应性，方法则直接从 Store 读取。',
+    flow: ['在 defineStore 回调中声明响应式状态。', '用 computed 创建派生数据。', '组件通过 storeToRefs 安全解构状态。'],
+    notes: ['不要直接解构 Store 的响应式属性。', '业务修改流程应封装为 action。'],
+    problem: '解决"如何用组合式 API 组织 Pinia Store 并避免解构失去响应性"的问题。',
+  },
+{
+    id: 'K_31', title: 'Pinia 批量更新、订阅与副作用', navTitle: 'Pinia 订阅', category: 'Pinia 进阶',
+    path: '/vue/k-31/pinia-subscriptions', summary: '通过 $patch 和 $subscribe 记录批量状态变更。',
+    demo: K31PiniaSubscriptions, code: K31Code, language: 'vue',
+    principle: '$patch 可把同一业务动作中的多个修改合并表达，$subscribe 观察状态提交，适合持久化、审计和同步等基础设施副作用。',
+    flow: ['用 action 或 $patch 完成一组原子修改。', '$subscribe 接收 mutation 与新状态。', '组件卸载时取消临时订阅。'],
+    notes: ['订阅回调不应再次无条件修改同一状态。', 'SSR 持久化需要区分服务端和客户端。'],
+    problem: '解决"如何观察 Pinia 变化并接入持久化或审计"的问题。',
+  },
+{
+    id: 'K_32', title: 'Vuex 到 Pinia 迁移指南', navTitle: 'Vuex 迁移', category: 'Pinia 进阶',
+    path: '/vue/k-32/vuex-migration', summary: '对比 Vuex 模块与 Pinia Store 的模式差异，制定渐进迁移策略。',
+    demo: K32VuexMigration, code: K32Code, language: 'vue',
+    principle: 'Vuex 的 mutations/actions/getters 在 Pinia 中简化为直接的 state/action/getter；Pinia 支持多个独立 Store，无需嵌套模块，TypeScript 推导更好。',
+    flow: ['先理解 Vuex 和 Pinia 的 API 映射关系。', '从最独立的模块开始逐步迁移。', '最终移除 Vuex 依赖，完成切换。'],
+    notes: ['Pinia 没有 mutations，所有修改都在 action 中完成。', '可以使用 pinia-compat 在迁移期间兼容旧代码。'],
+    problem: '解决"Vuex 项目如何安全地渐进迁移到 Pinia"的问题。',
+  },
+{
+    id: 'K_33', title: 'Pinia 插件：统一扩展所有 Store', navTitle: 'Pinia 插件', category: 'Pinia 进阶',
+    path: '/vue/k-33/pinia-plugin',
+    summary: '用登录日志和错误追踪场景展示如何编写 Pinia 插件，统一拦截 actions 和状态变化。',
+    demo: K33PiniaPlugin, code: K33Code, language: 'vue',
+    principle:
+      'Pinia 插件是一个接收 pinia 实例的函数，通过 $subscribe 监听状态变化、通过 $onAction 拦截 actions 调用，可以在插件内部为所有 store 统一添加持久化、日志、错误上报等横切关注点。',
+    flow: [
+      '创建插件函数，接收 pinia 实例参数。',
+      '在插件内部使用 store.$subscribe 监听状态变化，使用 store.$onAction 拦截 action 调用。',
+      '通过 pinia.use() 注册插件，所有后续创建的 store 自动获得插件能力。',
+    ],
+    notes: [
+      '插件在 store 创建时执行，可以为每个 store 添加自定义属性或方法。',
+      '$onAction 的 after 回调可以获取 action 返回值，适合做结果日志或错误处理。',
+      '持久化插件通常结合 $subscribe 监听变化并写入 localStorage，结合 SSR 需要处理好水合时机。',
+    ],
+    problem: '解决"如何为多个 store 统一添加日志、持久化、错误处理等横切关注点"的问题。',
+  },
+{
+    id: 'K_34', title: 'Pinia Getters 与派生状态', navTitle: 'Pinia Getters', category: 'Pinia 进阶',
+    path: '/vue/k-34/pinia-getters', summary: '理解 Pinia Getter 的计算属性本质，掌握派生状态的定义和缓存机制。',
+    demo: K34PiniaGetters, code: K34Code, language: 'vue',
+    principle: 'Pinia Getter 是基于 store 状态的计算属性，使用 computed 实现，会自动缓存结果，只有依赖变化时才重新计算。Setup Store 中直接用 computed 定义。',
+    flow: ['在 Setup Store 中用 computed 定义 getter。', '组件中通过 store.getterName 读取，自动追踪依赖。', 'getter 可以依赖其他 getter，形成派生状态链。'],
+    notes: ['getter 默认缓存，多次读取相同输入只计算一次。', 'getter 不应有副作用，保持纯函数。', '需要传参的 getter 可以返回函数，但会失去缓存。'],
+    problem: '解决从 store 状态派生出复杂计算结果并自动更新的问题。',
+  },
+{
+    id: 'K_35', title: 'Pinia Actions 与异步操作', navTitle: 'Pinia Actions', category: 'Pinia 进阶',
+    path: '/vue/k-35/pinia-actions', summary: '掌握 Pinia 中修改状态的主要方式，理解同步异步 action 与 $onAction 拦截。',
+    demo: K35PiniaActions, code: K35Code, language: 'vue',
+    principle: 'Actions 是 Pinia 中修改状态的主要方式，支持同步和异步操作，可以直接修改状态而不需要 mutations，配合 $onAction 可以拦截 action 调用。',
+    flow: ['在 store 中定义 action 函数，直接修改 state。', '组件中调用 store.actionName() 触发。', '异步 action 返回 Promise，可以 await 等待完成。'],
+    notes: ['Action 中可以调用其他 action 或外部 API。', '$onAction 可以在 action 前后执行钩子。', '复杂异步流程考虑拆分多个 action 组合使用。'],
+    problem: '解决状态修改逻辑分散、异步操作难以追踪和复用的问题。',
+  },
+{
+    id: 'K_36', title: 'Pinia DevTools 与时间旅行调试', navTitle: 'Pinia DevTools', category: 'Pinia 进阶',
+    path: '/vue/k-36/pinia-devtools', summary: '使用 Vue DevTools 查看 Pinia 状态、提交历史和时间旅行调试。',
+    demo: K36PiniaDevtools, code: K36Code, language: 'vue',
+    principle: 'Pinia 深度集成 Vue DevTools，支持查看 store 状态、提交历史、时间旅行调试，可以回退到任意历史状态并追踪状态变化来源。',
+    flow: ['安装 Vue DevTools 浏览器扩展。', '在 Pinia 标签页查看所有 store 的当前状态。', '在时间线中选择历史状态，点击回退进行调试。'],
+    notes: ['DevTools 只在开发环境启用，生产环境自动关闭。', '可以给 action 命名方便在 DevTools 中识别。', '支持导入/导出状态，便于复现 bug。'],
+    problem: '解决状态变化难以追踪、bug 复现困难、调试效率低的问题。',
+  },
+{
+    id: 'K_37', title: 'Pinia Store 单元测试', navTitle: 'Pinia 测试', category: 'Pinia 进阶',
+    path: '/vue/k-37/pinia-testing', summary: '学习如何为 Pinia Store 编写单元测试，使用独立 Pinia 实例避免状态污染。',
+    demo: K37PiniaTesting, code: K37Code, language: 'vue',
+    principle: 'Pinia Store 天然易于测试，Setup Store 就是普通函数，可以在测试中创建独立的 Pinia 实例并注入，使用 setActivePinia 激活后直接测试 action 和 getter。',
+    flow: ['在测试中创建独立的 Pinia 实例。', '调用 setActivePinia 激活，然后创建 store。', '调用 action 修改状态，断言状态和 getter 符合预期。'],
+    notes: ['每个测试用独立的 Pinia 实例，避免状态污染。', '可以用 vi.mock 模拟 API 调用测试异步 action。', '测试关注行为而非实现细节。'],
+    problem: '解决状态管理逻辑难以单元测试、测试间状态互相污染的问题。',
   }
 ]

@@ -1216,4 +1216,370 @@ export default defineConfig({
     notes: ['注意缓存更新策略，避免用户永远看到旧版本', 'Workbox 库可以简化 Service Worker 编写', 'PWA 不是要替代原生应用，而是增强 Web 体验'],
     problem: '解决弱网环境下页面无法访问、用户留存低、无法像原生应用一样安装的问题。',
   },
+  {
+    id: 'E_27', title: '状态管理方案选型矩阵', navTitle: '方案选型', category: '架构决策',
+    path: '/engineering/e-27/state-selection', summary: '按框架、状态粒度、流程复杂度和团队约束比较常见方案。',
+    code: () => Promise.resolve(`// 状态选择器模式 - 按维度选择合适的状态管理方案
+
+interface StateSolution {
+  name: string
+  framework: 'react' | 'vue' | 'agnostic'
+  granularity: 'coarse' | 'fine' | 'atomic'
+  flowStyle: 'unstructured' | 'unidirectional' | 'state-machine'
+  devTools: boolean
+  typescript: 'excellent' | 'good' | 'fair'
+  learningCurve: 'low' | 'medium' | 'high'
+}
+
+const solutions: StateSolution[] = [
+  {
+    name: 'Pinia',
+    framework: 'vue',
+    granularity: 'coarse',
+    flowStyle: 'unstructured',
+    devTools: true,
+    typescript: 'excellent',
+    learningCurve: 'low',
+  },
+  {
+    name: 'Zustand',
+    framework: 'react',
+    granularity: 'fine',
+    flowStyle: 'unstructured',
+    devTools: true,
+    typescript: 'excellent',
+    learningCurve: 'low',
+  },
+  {
+    name: 'Jotai',
+    framework: 'react',
+    granularity: 'atomic',
+    flowStyle: 'unstructured',
+    devTools: true,
+    typescript: 'excellent',
+    learningCurve: 'medium',
+  },
+  {
+    name: 'Redux Toolkit',
+    framework: 'react',
+    granularity: 'coarse',
+    flowStyle: 'unidirectional',
+    devTools: true,
+    typescript: 'excellent',
+    learningCurve: 'high',
+  },
+  {
+    name: 'XState',
+    framework: 'agnostic',
+    granularity: 'fine',
+    flowStyle: 'state-machine',
+    devTools: true,
+    typescript: 'excellent',
+    learningCurve: 'high',
+  },
+]
+
+interface SelectionCriteria {
+  framework?: 'react' | 'vue'
+  needAtomicUpdates?: boolean
+  complexFlows?: boolean
+  teamSize: 'small' | 'medium' | 'large'
+}
+
+function selectSolutions(criteria: SelectionCriteria): StateSolution[] {
+  return solutions.filter((s) => {
+    if (criteria.framework && s.framework !== criteria.framework && s.framework !== 'agnostic') {
+      return false
+    }
+    if (criteria.needAtomicUpdates && s.granularity !== 'atomic') {
+      return false
+    }
+    if (criteria.complexFlows && s.flowStyle === 'unstructured') {
+      return false
+    }
+    return true
+  })
+}
+
+// 使用示例
+const reactSmallTeam = selectSolutions({
+  framework: 'react',
+  teamSize: 'small',
+})
+
+console.log('React 小团队推荐:', reactSmallTeam.map((s) => s.name))
+`), language: 'typescript',
+    principle: 'Pinia、Zustand、Jotai、Redux Toolkit 与 XState 解决的问题模型不同；选型应从事实来源、更新粒度、流程约束和调试需求出发。',
+    flow: ['先区分客户端状态与服务端状态。', '评估框架、共享范围和更新频率。', '用最小原型验证 DevTools、SSR 和测试体验。'],
+    notes: ['不要仅以包体积决定架构。', '迁移成本通常高于初始接入成本。'],
+    problem: '解决"Pinia、Zustand、Jotai、Redux Toolkit 和 XState 到底如何选择"的问题。',
+  },
+  {
+    id: 'E_28', title: 'Signals 信号响应式模式', navTitle: 'Signals', category: '响应式原理',
+    path: '/engineering/e-28/signals', summary: '理解 Signal 的自动追踪和细粒度更新，对比 ref 和 computed。',
+    code: () => Promise.resolve(`// Signals 基础实现 - 响应式信号模式
+
+function createSignal(initialValue) {
+  let value = initialValue
+  const subscribers = new Set()
+
+  const read = () => {
+    if (currentEffect) {
+      subscribers.add(currentEffect)
+    }
+    return value
+  }
+
+  const write = (newValue) => {
+    value = newValue
+    subscribers.forEach((effect) => effect())
+  }
+
+  return [read, write]
+}
+
+let currentEffect = null
+
+function createEffect(fn) {
+  const effect = () => {
+    currentEffect = effect
+    try {
+      fn()
+    } finally {
+      currentEffect = null
+    }
+  }
+  effect()
+}
+
+function createComputed(fn) {
+  const [value, setValue] = createSignal()
+  createEffect(() => setValue(fn()))
+  return value
+}
+
+// 使用示例
+const [count, setCount] = createSignal(0)
+const [price, setPrice] = createSignal(100)
+
+const total = createComputed(() => count() * price())
+
+createEffect(() => {
+  console.log('总价变化:', total())
+})
+
+console.log('初始总价:', total())
+
+setCount(2)
+setPrice(150)
+setCount(5)
+`), language: 'javascript',
+    principle: 'Signals 是响应式的基础原语：信号值变化时自动通知依赖者更新，无需手动订阅；computed 派生新信号，effect 执行副作用，三者构成完整的响应式图。',
+    flow: ['创建基础信号存储原始值。', '用 computed 派生计算信号。', '用 effect 响应信号变化执行副作用。'],
+    notes: ['Angular、Solid、Preact 等都采用了 Signals 模式。', 'Vue 的 ref/computed/watchEffect 本质上就是 Signals。'],
+    problem: '解决"什么是 Signals 以及它与传统状态管理有何不同"的问题。',
+  },
+  {
+    id: 'E_29', title: '状态持久化与水合策略', navTitle: '持久化水合', category: '状态架构',
+    path: '/engineering/e-29/persistence-hydration', summary: '设计 localStorage 同步、SSR 水合和版本迁移的可靠策略。',
+    code: () => Promise.resolve(`// 状态持久化方案对比 - 各库持久化配置
+
+// 1. Pinia + pinia-plugin-persistedstate
+import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
+
+export const useUserStore = defineStore('user', () => {
+  const name = ref('')
+  const token = ref('')
+
+  return { name, token }
+}, {
+  persist: {
+    key: 'app-user',
+    storage: localStorage,
+    paths: ['name'],
+  },
+})
+
+// 2. Zustand + persist middleware
+import { create } from 'zustand'
+import { persist, createJSONStorage } from 'zustand/middleware'
+
+const useCartStore = create(
+  persist(
+    (set, get) => ({
+      items: [],
+      addItem: (item) => set({ items: [...get().items, item] }),
+    }),
+    {
+      name: 'cart-storage',
+      storage: createJSONStorage(() => localStorage),
+      version: 1,
+      migrate: (persistedState, version) => {
+        if (version === 0) {
+          // 迁移逻辑
+        }
+        return persistedState
+      },
+    }
+  )
+)
+
+// 3. Redux Toolkit + redux-persist
+import { configureStore } from '@reduxjs/toolkit'
+import { persistStore, persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
+import rootReducer from './reducers'
+
+const persistConfig = {
+  key: 'root',
+  storage,
+  whitelist: ['user', 'settings'],
+  version: 2,
+}
+
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+
+export const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
+      },
+    }),
+})
+
+export const persistor = persistStore(store)
+
+// 4. 通用版本迁移工具
+interface PersistedState<T> {
+  version: number
+  data: T
+}
+
+function createMigrations<T>(migrations: Record<number, (state: any) => T>) {
+  return function migrate(persisted: any): T {
+    let state = persisted
+    const targetVersion = Math.max(...Object.keys(migrations).map(Number))
+
+    for (let v = (persisted?.version ?? 0) + 1; v <= targetVersion; v++) {
+      if (migrations[v]) {
+        state = migrations[v](state)
+      }
+    }
+
+    return state
+  }
+}
+
+// 使用迁移
+const migrate = createMigrations({
+  1: (state) => ({ ...state, newField: 'default' }),
+  2: (state) => ({ ...state, renamedField: state.oldField }),
+})
+`), language: 'typescript',
+    principle: '状态持久化需要在应用启动时从存储恢复状态；SSR 场景下水合阶段必须保证服务端和客户端状态一致；版本迁移处理数据结构随时间变化的兼容性。',
+    flow: ['序列化状态到 localStorage 或 IndexedDB。', '启动时恢复状态并处理水合不匹配。', '检测版本差异并执行迁移逻辑。'],
+    notes: ['敏感数据不应存入 localStorage。', 'SSR 水合不匹配会导致 UI 闪烁或功能异常。'],
+    problem: '解决"如何让状态在刷新、SSR 和版本升级后正确恢复"的问题。',
+  },
+  {
+    id: 'E_30', title: '状态管理全景对比与选型', navTitle: '全景对比', category: '架构决策',
+    path: '/engineering/e-30/state-comparison', summary: '从包体积、学习曲线、SSR、TypeScript 等维度对比所有主流方案。',
+    code: () => Promise.resolve(`// 状态管理库对比 - 相同功能的不同实现
+
+// ========== Pinia (Vue) ==========
+import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
+
+export const useCounterStore = defineStore('counter', () => {
+  const count = ref(0)
+  const doubleCount = computed(() => count.value * 2)
+  function increment() {
+    count.value++
+  }
+  return { count, doubleCount, increment }
+})
+
+// ========== Zustand (React) ==========
+import { create } from 'zustand'
+
+const useCounterStore = create((set, get) => ({
+  count: 0,
+  doubleCount: () => get().count * 2,
+  increment: () => set((state) => ({ count: state.count + 1 })),
+}))
+
+// ========== Jotai (React) ==========
+import { atom, useAtom } from 'jotai'
+
+const countAtom = atom(0)
+const doubleCountAtom = atom((get) => get(countAtom) * 2)
+
+function Counter() {
+  const [count, setCount] = useAtom(countAtom)
+  const [doubleCount] = useAtom(doubleCountAtom)
+  return <button onClick={() => setCount((c) => c + 1)}>{count}</button>
+}
+
+// ========== Redux Toolkit (React) ==========
+import { createSlice, configureStore } from '@reduxjs/toolkit'
+
+const counterSlice = createSlice({
+  name: 'counter',
+  initialState: { value: 0 },
+  reducers: {
+    increment: (state) => {
+      state.value += 1
+    },
+  },
+})
+
+export const { increment } = counterSlice.actions
+export const selectDoubleCount = (state) => state.counter.value * 2
+
+export const store = configureStore({
+  reducer: { counter: counterSlice.reducer },
+})
+
+// ========== MobX (React/框架无关) ==========
+import { makeAutoObservable } from 'mobx'
+
+class CounterStore {
+  count = 0
+
+  constructor() {
+    makeAutoObservable(this)
+  }
+
+  get doubleCount() {
+    return this.count * 2
+  }
+
+  increment() {
+    this.count++
+  }
+}
+
+const counterStore = new CounterStore()
+
+// ========== 对比总结 ==========
+// | 特性         | Pinia  | Zustand | Jotai  | Redux Toolkit | MobX   |
+// |------------|--------|---------|--------|---------------|--------|
+// | 学习曲线     | 低     | 低      | 中     | 高            | 中     |
+// | 包体积       | ~2KB   | ~1KB    | ~3KB   | ~10KB         | ~15KB  |
+// | TypeScript   | 优秀   | 优秀    | 优秀   | 优秀          | 优秀   |
+// | DevTools     | 优秀   | 良好    | 良好   | 优秀          | 良好   |
+// | SSR 支持     | 优秀   | 良好    | 良好   | 优秀          | 良好   |
+// | 更新粒度     | 粗     | 中      | 细     | 中            | 细     |
+`), language: 'javascript',
+    principle: '没有万能的状态管理方案；选择应基于框架生态、状态模型复杂度、团队熟悉度和运维需求；评分矩阵帮助量化比较，但最终需要用最小原型验证。',
+    flow: ['列出评估维度和权重。', '对每个方案在各维度打分。', '用加权总分辅助决策并用原型验证。'],
+    notes: ['评估维度应包括包体积、TypeScript、SSR、DevTools 和学习曲线。', '技术选型不应只看当前需求，还要考虑未来扩展。'],
+    problem: '解决"面对众多状态管理方案如何系统化地做出最优选择"的问题。',
+  },
 ]

@@ -12,7 +12,6 @@ const PREFIX_TO_CATEGORY = {
   'L': 'langchain',
   'N': 'nuxt',
   'X': 'nextjs',
-  'S': 'state-management',
   'J': 'javascript',
   'T': 'typescript',
   'C': 'css',

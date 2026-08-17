@@ -84,6 +84,23 @@ const R23StrictMode = createDemo('R23StrictMode')
 const R23Code = createCodeLoader('react-jsx/R23StrictMode.jsx')
 const R24EffectLifecycle = createDemo('R24EffectLifecycle')
 const R24Code = createCodeLoader('react-jsx/R24EffectLifecycle.jsx')
+const R25ZustandSelectors = createDemo('S04ZustandSelectors')
+const R25Code = createCodeLoader('state-react/S04ZustandSelectors.js')
+const R26ZustandMiddleware = createDemo('S05ZustandMiddleware')
+const R26Code = createCodeLoader('state-react/S05ZustandMiddleware.js')
+const R27JotaiAtoms = createDemo('S06JotaiAtoms')
+const R27Code = createCodeLoader('state-react/S06JotaiAtoms.js')
+const R28JotaiAsyncAtoms = createDemo('S07JotaiAsyncAtoms')
+const R28Code = createCodeLoader('state-react/S07JotaiAsyncAtoms.js')
+const R29ReduxToolkit = createDemo('S08ReduxToolkit')
+const R29Code = createCodeLoader('state-react/S08ReduxToolkit.js')
+const R30XStateMachine = createDemo('S09XStateMachine')
+const R30Code = createCodeLoader('state-react/S09XStateMachine.js')
+const R31Valtio = createDemo('S12Valtio')
+const R32TanStackQuery = createDemo('S13TanStackQuery')
+const R33Recoil = createDemo('S22Recoil')
+const R34Mobx = createDemo('S23Mobx')
+const R35Overmind = createDemo('S24Overmind')
 
 
 export const lessons: Lesson[] = [
@@ -662,5 +679,581 @@ export const lessons: Lesson[] = [
       '多个不相关的副作用应拆分为独立 Effect，而不是合并到一个中。',
     ],
     problem: '解决"Effect 在组件生命周期各阶段如何正确同步外部系统"的问题。',
+  },
+{
+    id: 'R_25', title: 'Zustand Store 与细粒度 Selector', navTitle: 'Zustand Selector', category: '轻量 Store',
+    path: '/react/r-25/zustand-selectors', summary: '用购物车 Store 展示 Hook API、Action 和 selector 订阅。',
+    demo: R25ZustandSelectors, code: R25Code, language: 'jsx',
+    principle: 'Zustand 创建独立于 React 树的外部 Store，组件通过 selector 订阅所需切片；切片结果不变时可以避免无关重渲染。',
+    flow: ['create 定义状态和修改函数。', '组件用 selector 读取最小切片。', 'Action 通过 set 基于前一状态更新。'],
+    notes: ['返回新对象的 selector 要关注相等比较。', 'Store 可以在 React 外通过 getState 使用。'],
+    problem: '解决"React 中如何以很少样板代码共享状态并控制重渲染"的问题。',
+  },
+{
+    id: 'R_26', title: 'Zustand Middleware 与选择性订阅', navTitle: 'Zustand Middleware', category: '轻量 Store',
+    path: '/react/r-26/zustand-middleware', summary: '使用 subscribeWithSelector 只监听课程进度变化。',
+    demo: R26ZustandMiddleware, code: R26Code, language: 'jsx',
+    principle: 'Zustand middleware 包装 Store 创建器以增加持久化、DevTools、Immer 或选择性订阅等横切能力，而不改变组件消费方式。',
+    flow: ['用 middleware 包装状态创建器。', '订阅特定 selector 的前后值。', '在 effect 清理阶段取消订阅。'],
+    notes: ['middleware 组合顺序会影响类型和行为。', '持久化前要设计版本迁移策略。'],
+    problem: '解决"如何扩展 Zustand 并监听特定状态变化"的问题。',
+  },
+{
+    id: 'R_27', title: 'Jotai 原子状态与派生图', navTitle: 'Jotai Atom', category: '原子化状态',
+    path: '/react/r-27/jotai-atoms', summary: '用数量、价格和总价 Atom 理解原子组合与依赖追踪。',
+    demo: R27JotaiAtoms, code: R27Code, language: 'jsx',
+    principle: 'Jotai 以 atom 为最小状态单位，派生 atom 通过读取其他 atom 自动形成依赖图，只有受影响的消费者更新。',
+    flow: ['创建可写基础 atom。', '读取基础 atom 构造派生 atom。', '组件用 useAtom 或专用读写 Hook 消费。'],
+    notes: ['atom 配置应在组件外保持引用稳定。', '大量动态 atom 可使用 atomFamily 管理。'],
+    problem: '解决"复杂页面如何把状态拆成可组合的细粒度单元"的问题。',
+  },
+{
+    id: 'R_28', title: 'Jotai 异步 Atom 与 Suspense', navTitle: 'Jotai 异步 Atom', category: '原子化状态',
+    path: '/react/r-28/jotai-async-atoms', summary: '通过异步课程 Atom 展示依赖刷新、Suspense 和加载状态。',
+    demo: R28JotaiAsyncAtoms, code: R28Code, language: 'jsx',
+    principle: '异步 atom 的读取函数可以返回 Promise，并依赖其他 atom 触发重新计算；React Suspense 负责等待期间的界面边界。',
+    flow: ['异步 atom 读取刷新依赖。', '组件读取时进入 Suspense。', '更新刷新 atom 使异步数据失效并重算。'],
+    notes: ['异步 atom 适合原子依赖场景。', '复杂服务端缓存仍需专门请求库。'],
+    problem: '解决"原子化状态如何表达异步依赖和重新加载"的问题。',
+  },
+{
+    id: 'R_29', title: 'Redux Toolkit 的 Slice 与单向数据流', navTitle: 'Redux Toolkit', category: '结构化状态',
+    path: '/react/r-29/redux-toolkit', summary: '用报名 Slice 展示 reducer、action、selector 与 Provider。',
+    demo: R29ReduxToolkit, code: R29Code, language: 'jsx',
+    principle: 'Redux Toolkit 用 createSlice 同时生成 reducer 和 action，所有变更经过可追踪的 dispatch 流程，适合需要严格约束和强大工具链的团队。',
+    flow: ['Slice 定义初始状态和 reducer。', 'configureStore 组合业务 Slice。', '组件通过 selector 读取并 dispatch action。'],
+    notes: ['Reducer 中看似直接修改由 Immer 转为不可变更新。', '避免把所有临时 UI 状态放进 Redux。'],
+    problem: '解决"大型 React 项目如何获得可预测状态流和统一调试工具"的问题。',
+  },
+{
+    id: 'R_30', title: 'XState 有限状态机与合法转换', navTitle: 'XState 状态机', category: '结构化状态',
+    path: '/react/r-30/xstate-machine', summary: '用结算流程限制 editing、submitting、failure 与 success 的转换。',
+    demo: R30XStateMachine, code: R30Code, language: 'jsx',
+    principle: '状态机显式列举有限状态和可接受事件，让不合法转换在定义阶段就被禁掉；XState 通过 createMachine 描述状态图，支持守卫、副作用（actor/invoke）、并行状态和可视化编辑，适合结算、审批、多步骤流程等业务关键路径。',
+    flow: ['列出业务上互斥的状态和它们之间允许的转换。', '为每个状态声明可处理事件和守卫条件。', '组件订阅 state 快照并通过 send 触发事件。'],
+    notes: ['简单布尔值用 ref 即可，不需要引入状态机。', '副作用通过 invoke 建模，组件通过 useActor 订阅快照。', '状态图可与团队业务画等号，便于产品、测试对齐认知。'],
+    problem: '解决"多个布尔值或字段自由组合出现非法流程状态"的问题。',
+  },
+{
+    id: 'R_31', title: 'Valtio 与 Proxy 响应式状态', navTitle: 'Valtio', category: '轻量 Store',
+    path: '/react/r-31/valtio', summary: '用 Valtio 的 proxy/snapshot 模式管理 React 状态，理解 Proxy 响应式原理。',
+    demo: R31Valtio, code: () => Promise.resolve(`import React from 'react'
+import { createRoot } from 'react-dom/client'
+import { proxy, useSnapshot } from 'valtio'
+
+const state = proxy({
+  count: 0,
+  text: '',
+  user: {
+    name: 'Alice',
+    age: 25,
+  },
+})
+
+function inc() {
+  state.count++
+}
+
+function setText(text) {
+  state.text = text
+}
+
+function birthday() {
+  state.user.age++
+}
+
+function Counter() {
+  const snap = useSnapshot(state)
+  return (
+    <section className="panel">
+      <p className="metric">计数: {snap.count}</p>
+      <button onClick={inc}>增加</button>
+    </section>
+  )
+}
+
+function TextInput() {
+  const snap = useSnapshot(state)
+  return (
+    <label className="field">
+      <span>输入文本（不影响计数组件）</span>
+      <input value={snap.text} onChange={(e) => setText(e.target.value)} />
+    </label>
+  )
+}
+
+function UserProfile() {
+  const snap = useSnapshot(state.user)
+  return (
+    <section className="panel">
+      <p>{snap.name}, {snap.age} 岁</p>
+      <button onClick={birthday}>过生日</button>
+    </section>
+  )
+}
+
+function App() {
+  return (
+    <main className="app">
+      <p className="kicker">Valtio Proxy 响应式</p>
+      <div className="grid">
+        <Counter />
+        <TextInput />
+        <UserProfile />
+      </div>
+    </main>
+  )
+}
+
+createRoot(document.getElementById('root')).render(<App />)
+`), language: 'jsx',
+    principle: 'Valtio 用 Proxy 包裹状态对象，直接修改即触发更新；snapshot 获取不可变快照用于渲染，自动追踪依赖关系避免不必要的重渲染。',
+    flow: ['用 proxy 创建响应式状态。', '直接修改 proxy 对象的属性。', '用 useSnapshot 在组件中读取并追踪依赖。'],
+    notes: ['Valtio 的 subscribe 可以监听任意路径变化。', 'proxy 对象不适合放在 React context 中。'],
+    problem: '解决"如何用最少的样板代码实现 React 的响应式状态管理"的问题。',
+  },
+{
+    id: 'R_32', title: 'TanStack Query 服务端状态', navTitle: 'TanStack Query', category: '服务端状态',
+    path: '/react/r-32/tanstack-query', summary: '用缓存策略、乐观更新和后台同步管理服务端数据状态。',
+    demo: R32TanStackQuery, code: () => Promise.resolve(`import React from 'react'
+import { createRoot } from 'react-dom/client'
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query'
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000,
+      cacheTime: 10 * 60 * 1000,
+      refetchOnWindowFocus: false,
+    },
+  },
+})
+
+// 模拟 API
+const fetchCourses = () =>
+  new Promise((resolve) =>
+    setTimeout(() => resolve([
+      { id: 1, title: 'Vue 3 进阶', students: 120 },
+      { id: 2, title: 'React Hooks 实战', students: 85 },
+    ]), 500)
+  )
+
+const addCourse = (course) =>
+  new Promise((resolve) =>
+    setTimeout(() => resolve({ id: Date.now(), ...course }), 300)
+  )
+
+function CourseList() {
+  const queryClient = useQueryClient()
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['courses'],
+    queryFn: fetchCourses,
+  })
+
+  const mutation = useMutation({
+    mutationFn: addCourse,
+    onMutate: async (newCourse) => {
+      await queryClient.cancelQueries({ queryKey: ['courses'] })
+      const previousCourses = queryClient.getQueryData(['courses'])
+      queryClient.setQueryData(['courses'], (old) => [
+        ...old,
+        { id: Date.now(), ...newCourse },
+      ])
+      return { previousCourses }
+    },
+    onError: (err, newCourse, context) => {
+      queryClient.setQueryData(['courses'], context.previousCourses)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['courses'] })
+    },
+  })
+
+  if (isLoading) return <div>加载中...</div>
+  if (isError) return <div>错误: {error.message}</div>
+
+  return (
+    <section className="panel">
+      <h3>课程列表</h3>
+      <ul>
+        {data.map((course) => (
+          <li key={course.id}>
+            {course.title} - {course.students} 人
+          </li>
+        ))}
+      </ul>
+      <button
+        onClick={() =>
+          mutation.mutate({ title: '新课程', students: 0 })
+        }
+      >
+        {mutation.isLoading ? '添加中...' : '添加课程（乐观更新）'}
+      </button>
+    </section>
+  )
+}
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <main className="app">
+        <p className="kicker">TanStack Query 服务端状态</p>
+        <CourseList />
+      </main>
+    </QueryClientProvider>
+  )
+}
+
+createRoot(document.getElementById('root')).render(<App />)
+`), language: 'jsx',
+    principle: 'TanStack Query 把服务端数据视为缓存而非状态；staleTime 和 cacheTime 控制新鲜度，useMutation 处理写入，optimistic update 提供即时反馈。',
+    flow: ['用 useQuery 获取和缓存服务端数据。', '用 useMutation 处理创建和更新操作。', '配置乐观更新和回滚策略。'],
+    notes: ['服务端状态和客户端状态应分开管理。', 'Query Key 的设计直接影响缓存命中率。'],
+    problem: '解决"如何高效管理服务端数据的缓存、同步和乐观更新"的问题。',
+  },
+{
+    id: 'R_33', title: 'Recoil 原子状态与 Selector', navTitle: 'Recoil', category: '原子化状态',
+    path: '/react/r-33/recoil', summary: '了解 Recoil 的 Atom 与 Selector 模型，理解原子化状态管理的细粒度更新。',
+    demo: R33Recoil, code: () => Promise.resolve(`import React from 'react'
+import { createRoot } from 'react-dom/client'
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+  useSetRecoilState,
+} from 'recoil'
+
+const textState = atom({
+  key: 'textState',
+  default: '',
+})
+
+const charCountState = selector({
+  key: 'charCountState',
+  get: ({ get }) => {
+    const text = get(textState)
+    return text.length
+  },
+})
+
+const todoListState = atom({
+  key: 'todoListState',
+  default: [
+    { id: 1, text: '学习 Recoil', isComplete: false },
+    { id: 2, text: '理解 Atom', isComplete: true },
+  ],
+})
+
+const todoListStatsState = selector({
+  key: 'todoListStatsState',
+  get: ({ get }) => {
+    const todoList = get(todoListState)
+    const totalNum = todoList.length
+    const totalCompletedNum = todoList.filter((item) => item.isComplete).length
+    const totalUncompletedNum = totalNum - totalCompletedNum
+    const percentCompleted = totalNum === 0 ? 0 : (totalCompletedNum / totalNum) * 100
+    return {
+      totalNum,
+      totalCompletedNum,
+      totalUncompletedNum,
+      percentCompleted,
+    }
+  },
+})
+
+function TextInput() {
+  const [text, setText] = useRecoilState(textState)
+  const count = useRecoilValue(charCountState)
+
+  return (
+    <section className="panel">
+      <label className="field">
+        <span>输入文本</span>
+        <input value={text} onChange={(e) => setText(e.target.value)} />
+      </label>
+      <p>字符数: {count}</p>
+    </section>
+  )
+}
+
+function TodoListStats() {
+  const stats = useRecoilValue(todoListStatsState)
+  return (
+    <section className="panel">
+      <p>总数: {stats.totalNum}</p>
+      <p>已完成: {stats.totalCompletedNum}</p>
+      <p>未完成: {stats.totalUncompletedNum}</p>
+      <p>完成率: {stats.percentCompleted.toFixed(1)}%</p>
+    </section>
+  )
+}
+
+function App() {
+  return (
+    <RecoilRoot>
+      <main className="app">
+        <p className="kicker">Recoil 原子状态</p>
+        <div className="grid">
+          <TextInput />
+          <TodoListStats />
+        </div>
+      </main>
+    </RecoilRoot>
+  )
+}
+
+createRoot(document.getElementById('root')).render(<App />)
+`), language: 'jsx',
+    principle: 'Recoil 是 Facebook 推出的 React 状态管理库，以 Atom 为最小状态单元，Selector 作为派生状态，通过 atom 依赖图实现精确的组件级重渲染。',
+    flow: ['使用 atom 定义原子状态并指定唯一 key。', '使用 selector 定义派生状态，依赖其他 atom/selector。', '组件通过 useRecoilState/useRecoilValue 读取状态。'],
+    notes: ['Recoil 的状态图支持异步 selector 和 Suspense。', '每个 atom 独立追踪订阅，更新粒度更细。', 'Recoil 目前主要适用于 React 生态。'],
+    problem: '解决大型应用中状态更新粒度过粗、不必要重渲染多的问题。',
+  },
+{
+    id: 'R_34', title: 'MobX 响应式状态与 Observable', navTitle: 'MobX', category: '结构化状态',
+    path: '/react/r-34/mobx', summary: '理解 MobX 的 Observable 响应式模型，掌握 action、computed 和 observer 的协作方式。',
+    demo: R34Mobx, code: () => Promise.resolve(`import { makeAutoObservable, runInAction, configure } from 'mobx'
+
+configure({ enforceActions: 'always' })
+
+// Store 定义
+class TodoStore {
+  todos = []
+  filter = 'all'
+
+  constructor() {
+    makeAutoObservable(this, {}, { autoBind: true })
+  }
+
+  get completedTodos() {
+    return this.todos.filter((todo) => todo.completed)
+  }
+
+  get activeTodos() {
+    return this.todos.filter((todo) => !todo.completed)
+  }
+
+  get filteredTodos() {
+    switch (this.filter) {
+      case 'active':
+        return this.activeTodos
+      case 'completed':
+        return this.completedTodos
+      default:
+        return this.todos
+    }
+  }
+
+  get completedCount() {
+    return this.completedTodos.length
+  }
+
+  addTodo(text) {
+    this.todos.push({
+      id: Date.now(),
+      text,
+      completed: false,
+    })
+  }
+
+  toggleTodo(id) {
+    const todo = this.todos.find((t) => t.id === id)
+    if (todo) {
+      todo.completed = !todo.completed
+    }
+  }
+
+  setFilter(filter) {
+    this.filter = filter
+  }
+
+  async loadTodos() {
+    const response = await fetch('/api/todos')
+    const data = await response.json()
+    runInAction(() => {
+      this.todos = data
+    })
+  }
+}
+
+// 使用示例
+const store = new TodoStore()
+
+console.log('初始 todos:', store.todos.length)
+
+store.addTodo('学习 MobX')
+store.addTodo('理解 Observable')
+
+console.log('添加后 todos:', store.todos.length)
+console.log('已完成数量:', store.completedCount)
+
+store.toggleTodo(store.todos[0].id)
+console.log('切换后已完成数量:', store.completedCount)
+
+store.setFilter('active')
+console.log('活跃 todos:', store.filteredTodos.length)
+
+// autorun 示例
+import { autorun } from 'mobx'
+
+autorun(() => {
+  console.log('当前已完成:', store.completedCount, '/', store.todos.length)
+})
+
+store.addTodo('autorun 测试')
+store.toggleTodo(store.todos[2].id)
+`), language: 'javascript',
+    principle: 'MobX 通过 Observable 把普通对象包装为可观察的图谱，action 修改状态、computed 派生只读值、observer 组件自动追踪依赖并响应式渲染；这种"透明反应"心智模型贴近面向对象领域建模，适合复杂业务状态和大型应用。',
+    flow: ['用 makeAutoObservable 把领域对象转为可观察状态。', '在 action 内统一修改状态，触发依赖收集。', 'observer 包裹的组件订阅用到的 observable 字段并自动重渲染。'],
+    notes: ['MobX 响应式是隐式的，代码更简洁但需理解追踪机制。', '严格模式（configure({ enforceActions: "always" })）保证只能在 action 中修改状态。', '复杂领域模型优先用 class + makeAutoObservable 表达。'],
+    problem: '解决"状态更新逻辑分散、视图与状态同步复杂"的问题。',
+  },
+{
+    id: 'R_35', title: 'Overmind 分形状态管理', navTitle: 'Overmind', category: '结构化状态',
+    path: '/react/r-35/overmind', summary: '了解 Overmind 的分形架构，掌握命名空间组织状态与 effects 隔离副作用。',
+    demo: R35Overmind, code: () => Promise.resolve(`// Overmind 状态管理 - 分形架构
+
+import { createOvermind } from 'overmind'
+import { createHook } from 'overmind-react'
+
+// 定义状态、动作和 effects
+const config = {
+  state: {
+    user: {
+      isLoggedIn: false,
+      name: '',
+      token: '',
+    },
+    todos: [],
+    filter: 'all',
+  },
+  actions: {
+    setUser: ({ state }, user) => {
+      state.user = { ...user, isLoggedIn: true }
+    },
+    logout: ({ state }) => {
+      state.user = {
+        isLoggedIn: false,
+        name: '',
+        token: '',
+      }
+    },
+    addTodo: ({ state }, text) => {
+      state.todos.push({
+        id: Date.now(),
+        text,
+        completed: false,
+      })
+    },
+    toggleTodo: ({ state }, id) => {
+      const todo = state.todos.find((t) => t.id === id)
+      if (todo) {
+        todo.completed = !todo.completed
+      }
+    },
+    setFilter: ({ state }, filter) => {
+      state.filter = filter
+    },
+    async loadTodos({ state, effects }) {
+      const todos = await effects.api.getTodos()
+      state.todos = todos
+    },
+  },
+  effects: {
+    api: {
+      async getTodos() {
+        const response = await fetch('/api/todos')
+        return response.json()
+      },
+      async addTodo(text) {
+        const response = await fetch('/api/todos', {
+          method: 'POST',
+          body: JSON.stringify({ text }),
+        })
+        return response.json()
+      },
+    },
+    storage: {
+      saveToken(token) {
+        localStorage.setItem('token', token)
+      },
+      getToken() {
+        return localStorage.getItem('token')
+      },
+    },
+  },
+  // 派生值 (getters)
+  derived: {
+    completedTodos: ({ state }) =>
+      state.todos.filter((todo) => todo.completed),
+    activeTodos: ({ state }) =>
+      state.todos.filter((todo) => !todo.completed),
+    filteredTodos: ({ state }) => {
+      switch (state.filter) {
+        case 'active':
+          return state.activeTodos
+        case 'completed':
+          return state.completedTodos
+        default:
+          return state.todos
+      }
+    },
+  },
+}
+
+// 创建 Overmind 实例
+export const overmind = createOvermind(config)
+
+// React Hook
+export const useOvermind = createHook()
+
+// 使用示例
+import React from 'react'
+import { createRoot } from 'react-dom/client'
+import { Provider } from 'overmind-react'
+
+function TodoList() {
+  const { state, actions } = useOvermind()
+
+  return (
+    <section className="panel">
+      <h3>Todo 列表</h3>
+      <ul>
+        {state.filteredTodos.map((todo) => (
+          <li key={todo.id} onClick={() => actions.toggleTodo(todo.id)}>
+            {todo.completed ? '✓ ' : '○ '}{todo.text}
+          </li>
+        ))}
+      </ul>
+      <button onClick={() => actions.addTodo('新任务')}>添加</button>
+    </section>
+  )
+}
+
+function App() {
+  return (
+    <Provider value={overmind}>
+      <main className="app">
+        <p className="kicker">Overmind 分形状态</p>
+        <TodoList />
+      </main>
+    </Provider>
+  )
+}
+
+createRoot(document.getElementById('root')).render(<App />)
+`), language: 'javascript',
+    principle: 'Overmind 是一个分形状态管理库，将状态、动作、派生值组织在命名空间中，支持状态追踪、DevTools 和效果（effects）隔离副作用。',
+    flow: ['使用 createOvermind 创建 store，按命名空间组织 state/actions/effects。', '组件通过 useOvermind 获取状态和 actions。', 'actions 修改状态，effects 处理 API、存储等副作用。'],
+    notes: ['Overmind 支持 Vue 和 React 等多个框架。', '状态变更追踪到具体的 action 调用。', 'effects 模式便于测试时替换副作用。'],
+    problem: '解决状态管理中副作用耦合、调试困难、跨框架复用成本高的问题。',
   }
 ]

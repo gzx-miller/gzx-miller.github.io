@@ -35,7 +35,6 @@ const categoryEmojis: Record<string, string> = {
   cpp: '⚙️',
   electron: '🪟',
   ffmpeg: '🎬',
-  'state-management': '🗃️',
 }
 
 // 构建期统计各分类栗子数与总数（结果进入 payload，客户端无需重复加载）

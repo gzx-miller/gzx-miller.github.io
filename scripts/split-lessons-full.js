@@ -88,7 +88,6 @@ const demoPatterns = {
   'nuxt': /^NUXT\d+/,
   'nodejs': /^NODE\d+/,
   'engineering': /^ENG\d+/,
-  'state-management': /^STATE\d+/,
   'nextjs': /^NEXT\d+/,
 };
 

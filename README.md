@@ -45,7 +45,6 @@
 | [Sass](https://gzx-miller.github.io/sass) | 16 | 7 | 模块系统、Mixin、函数、内置模块、选择器进阶 |
 | [工程化](https://gzx-miller.github.io/engineering) | 16 | 5 | CI/CD、E2E 测试、性能预算、Docker、微前端、i18n |
 | [Node.js](https://gzx-miller.github.io/nodejs) | 16 | 8 | 模块系统、流、HTTP、Worker 线程、WebSocket、数据库 |
-| [状态管理](https://gzx-miller.github.io/state-management) | 16 | 8 | Pinia、Zustand、Jotai、Redux Toolkit、XState、Signals |
 | [Vite](https://gzx-miller.github.io/vite) | 16 | 10 | 配置、插件、HMR、环境变量、构建优化、库模式、SSR |
 | [C++](https://gzx-miller.github.io/cpp) | 24 | 12 | 内存管理、面向对象、模板、STL、现代 C++ 核心特性 |
 | [Electron](https://gzx-miller.github.io/electron) | 20 | 8 | 主进程与渲染进程、IPC 通信、窗口管理、原生菜单、系统托盘 |
