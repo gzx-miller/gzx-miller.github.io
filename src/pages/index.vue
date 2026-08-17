@@ -24,7 +24,6 @@ const categoryEmojis: Record<string, string> = {
   nestjs: '🦁',
   nuxt: '🌲',
   nodejs: '🍃',
-  engineering: '🛠️',
   css: '🎨',
   'tailwind-css': '💨',
   sass: '💗',

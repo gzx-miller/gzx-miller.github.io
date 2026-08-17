@@ -19,7 +19,6 @@ const PREFIX_TO_CATEGORY = {
   'SC': 'sass',
   'V': 'vite',
   'CPP': 'cpp',
-  'D': 'engineering',
   'G': 'nodejs',
 };
 

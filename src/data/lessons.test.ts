@@ -9,7 +9,6 @@ describe('课程注册表', () => {
       { id: 'nodejs', lessonCount: 30, groupCount: 16 },
       { id: 'vue', lessonCount: 37, groupCount: 15 },
       { id: 'react', lessonCount: 35, groupCount: 22 },
-      { id: 'engineering', lessonCount: 30, groupCount: 8 },
       { id: 'langchain', lessonCount: 23, groupCount: 14 },
       { id: 'element-plus', lessonCount: 20, groupCount: 7 },
       { id: 'tailwind-css', lessonCount: 24, groupCount: 12 },

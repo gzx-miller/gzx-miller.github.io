@@ -87,7 +87,6 @@ const demoPatterns = {
   'vite': /^VITE\d+/,
   'nuxt': /^NUXT\d+/,
   'nodejs': /^NODE\d+/,
-  'engineering': /^ENG\d+/,
   'nextjs': /^NEXT\d+/,
 };
 

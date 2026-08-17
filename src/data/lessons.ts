@@ -32,7 +32,6 @@ export const knowledgeCategories: KnowledgeCategory[] = [
   { id: 'nestjs', name: 'Nest.js', path: '/nestjs', status: 'ready', intro: 'NestJS 是构建高效、可扩展 Node.js 服务端应用的企业级框架。本分类从模块化架构出发，覆盖依赖注入、控制器与路由、管道校验、守卫鉴权、拦截器、中间件、异常过滤器、TypeORM 数据库、WebSocket 网关、定时任务、配置管理与微服务。', officialUrl: 'https://docs.nestjs.com/' },
   { id: 'nuxt', name: 'Nuxt', path: '/nuxt', status: 'ready', intro: 'Nuxt 是基于 Vue 3 的全栈框架，内置文件路由、自动导入、SSR/SSG、服务端 API 等能力，让 Vue 项目从单页应用升级为全栈应用。', officialUrl: 'https://nuxt.com/' },
   { id: 'nodejs', name: 'Node.js', path: '/nodejs', status: 'ready', intro: 'Node.js 让 JavaScript 运行在服务端和工具链中。本分类覆盖模块、文件、事件、流、HTTP、进程、测试、安全与依赖管理。', officialUrl: 'https://nodejs.org/docs/latest/api/' },
-  { id: 'engineering', name: 'Engineering', path: '/engineering', status: 'ready', intro: '工程化把代码质量、自动化测试、持续集成、性能、无障碍与安全发布串成可重复的交付流程，让项目在规模增长后仍然可靠。', officialUrl: 'https://vite.dev/' },
   { id: 'css', name: 'CSS', path: '/css', status: 'ready', intro: 'CSS 是 Web 样式的核心语言。本分类从选择器、盒模型、布局系统出发，逐步覆盖定位、层叠、变量、动画、响应式、裁剪、逻辑属性、容器查询与性能优化。', officialUrl: 'https://developer.mozilla.org/zh-CN/docs/Web/CSS' },
   { id: 'tailwind-css', name: 'Tailwind CSS', path: '/tailwind-css', status: 'ready', intro: 'Tailwind CSS 以原子化工具类直接组合界面。本分类基于 v4 的 CSS-first 模型，覆盖响应式、状态变体、主题令牌、暗色模式、任意值与容器查询。', officialUrl: 'https://tailwindcss.com/docs' },
   { id: 'sass', name: 'Sass', path: '/sass', status: 'ready', intro: 'Sass 为 CSS 增加模块、变量、嵌套、Mixin、函数与集合操作。本分类使用现代模块系统组织可维护样式，避开已弃用的 @import 工作流。', officialUrl: 'https://sass-lang.com/documentation/' },

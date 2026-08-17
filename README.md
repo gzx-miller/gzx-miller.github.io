@@ -43,7 +43,6 @@
 | [TypeScript](https://gzx-miller.github.io/typescript) | 18 | 4 | 泛型、条件类型、映射类型、声明文件、编译器配置 |
 | [Tailwind CSS](https://gzx-miller.github.io/tailwind-css) | 16 | 8 | 原子化类、响应式变体、暗色模式、容器查询、v4 CSS-first |
 | [Sass](https://gzx-miller.github.io/sass) | 16 | 7 | 模块系统、Mixin、函数、内置模块、选择器进阶 |
-| [工程化](https://gzx-miller.github.io/engineering) | 16 | 5 | CI/CD、E2E 测试、性能预算、Docker、微前端、i18n |
 | [Node.js](https://gzx-miller.github.io/nodejs) | 16 | 8 | 模块系统、流、HTTP、Worker 线程、WebSocket、数据库 |
 | [Vite](https://gzx-miller.github.io/vite) | 16 | 10 | 配置、插件、HMR、环境变量、构建优化、库模式、SSR |
 | [C++](https://gzx-miller.github.io/cpp) | 24 | 12 | 内存管理、面向对象、模板、STL、现代 C++ 核心特性 |
