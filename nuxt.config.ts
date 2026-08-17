@@ -40,12 +40,9 @@ function buildSitemapXml(): string {
 }
 
 const lessonSource = readFileSync(new URL('./src/data/lessons.ts', import.meta.url), 'utf8')
-const lessonRoutes = Array.from(
-  new Set(
-    Array.from(lessonSource.matchAll(/\bpath:\s*'(\/[a-z-]+\/[^']+)'/g))
-      .map((match) => match[1]),
-  ),
-)
+
+// 预渲染路径：收集所有分类路径和课程路径
+const prerenderRoutes = collectSitePaths()
 
 export default defineNuxtConfig({
   srcDir: 'src/',
@@ -104,19 +101,10 @@ export default defineNuxtConfig({
     prerender: {
       crawlLinks: true,
       routes: [
-        '/',
-        '/vue',
-        '/element-plus',
-        '/nestjs',
-        '/react',
-        '/langchain',
-        '/nuxt',
-        '/nextjs',
-        '/total-vue',
+        ...prerenderRoutes,
         '/total-vue/vue/k-1/app-entry',
         '/vue/k-12/routing/lee',
         '/vue/k-12/routing/ming',
-        ...lessonRoutes,
       ],
     },
   },
