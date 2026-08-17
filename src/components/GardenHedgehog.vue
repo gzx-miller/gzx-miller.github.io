@@ -9,7 +9,6 @@ const HOG_H = 46
 
 const dragging = ref(false)
 const crawling = ref(false)
-const crawlLeft = ref(false)
 const pinned = ref(false)
 const hogRef = useTemplateRef<HTMLButtonElement>('hogRef')
 
@@ -97,10 +96,8 @@ function startCrawl() {
     scheduleWander()
     return
   }
-  const dx = (60 + Math.random() * 120) * (Math.random() > 0.5 ? 1 : -1)
-  const dy = (Math.random() - 0.5) * 80
-  const target = clampPos(garden.hedgehogPos.value.x + dx, garden.hedgehogPos.value.y + dy)
-  crawlLeft.value = target.x < garden.hedgehogPos.value.x
+  const dy = (60 + Math.random() * 120) * (Math.random() > 0.5 ? 1 : -1)
+  const target = clampPos(garden.hedgehogPos.value.x, garden.hedgehogPos.value.y + dy)
   crawling.value = true
   garden.hedgehogMode.value = 'crawl'
   garden.hedgehogPos.value = target
@@ -157,7 +154,7 @@ onUnmounted(() => {
       ref="hogRef"
       type="button"
       class="garden-hedgehog"
-      :class="{ dragging, crawling, 'crawl-left': crawlLeft }"
+      :class="{ dragging, crawling }"
       :style="hogStyle"
       aria-label="小刺猬：浑身是刺，可以拖拽移动"
       title="小刺猬"
@@ -238,13 +235,8 @@ onUnmounted(() => {
   transition: filter 0.2s ease;
 }
 
-.hog-flip,
 .hog-wobble {
   display: block;
-}
-
-.garden-hedgehog.crawl-left .hog-flip {
-  transform: scaleX(-1);
 }
 
 .garden-hedgehog.crawling .hog-wobble {

@@ -191,7 +191,6 @@ function handleWindowResize() {
 
 // ---------- 空闲爬动 ----------
 const crawling = ref(false)
-const crawlLeft = ref(false)
 const petRef = useTemplateRef<HTMLButtonElement>('petRef')
 let wanderTimer = 0
 let crawlEndTimer = 0
@@ -219,10 +218,8 @@ function startCrawl() {
     const rect = petEl.getBoundingClientRect()
     pos.value = { x: rect.left, y: rect.top }
   }
-  const dx = (70 + Math.random() * 130) * (Math.random() > 0.5 ? 1 : -1)
-  const dy = (Math.random() - 0.5) * 90
-  const target = clampPos(pos.value.x + dx, pos.value.y + dy)
-  crawlLeft.value = target.x < pos.value.x
+  const dy = (60 + Math.random() * 120) * (Math.random() > 0.5 ? 1 : -1)
+  const target = clampPos(pos.value.x, pos.value.y + dy)
   crawling.value = true
   pos.value = target
   savePos()
@@ -597,7 +594,7 @@ onUnmounted(() => {
     ref="petRef"
     type="button"
     class="squirrel-pet"
-    :class="{ dragging, crawling, 'crawl-left': crawlLeft, waving: greeting, pricked, 'hint-on-right': hintOnRight }"
+    :class="{ dragging, crawling, waving: greeting, pricked, 'hint-on-right': hintOnRight }"
     :style="petStyle"
     aria-label="松鼠小助手：点击提问，拖拽移动"
     title="点我提问，拖拽移动"
@@ -1003,14 +1000,9 @@ onUnmounted(() => {
   }
 }
 
-/* 爬行：朝向翻转 + 身体左右摇摆 */
-.pet-flip,
+/* 爬行：身体左右摇摆 */
 .pet-wobble {
   display: block;
-}
-
-.squirrel-pet.crawl-left .pet-flip {
-  transform: scaleX(-1);
 }
 
 .squirrel-pet.crawling .pet-wobble {

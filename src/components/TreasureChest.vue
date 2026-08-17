@@ -85,18 +85,27 @@ function pointDist(a: { x: number; y: number }, b: { x: number; y: number }) {
 }
 
 /**
- * 拒绝采样生成随机位置：要求与所有参考点（原位置、其他宝物新位置）至少相距 minGap，
+ * 拒绝采样生成随机位置：沿页面两侧 25~75px 范围分布，
+ * 既不贴边也不远离屏幕边缘，避免遮挡中心内容。
+ * 两侧交替分配，保证与所有参考点至少相距 minGap，
  * 空间不足时退回离参考点最远的候选，保证每次撒落都真正换位且彼此错开。
  */
 function randomItemPos(refs: { x: number; y: number }[], minGap: number) {
   const vw = window.innerWidth
   const vh = window.innerHeight
-  const spanX = Math.max(60, vw - 190)
-  const spanY = Math.max(60, vh - 300)
-  let best = { x: 70 + Math.random() * spanX, y: 120 + Math.random() * spanY }
+  const spanY = Math.max(60, vh - 240)
+
+  const pickSideX = (side: 'left' | 'right') => {
+    if (side === 'left') return 25 + Math.random() * 50
+    return vw - 75 + Math.random() * 50
+  }
+
+  const bestX = pickSideX(Math.random() > 0.5 ? 'left' : 'right')
+  let best = { x: bestX, y: 140 + Math.random() * spanY }
   let bestDist = -1
   for (let i = 0; i < 28; i++) {
-    const cand = { x: 70 + Math.random() * spanX, y: 120 + Math.random() * spanY }
+    const side: 'left' | 'right' = Math.random() > 0.5 ? 'left' : 'right'
+    const cand = { x: pickSideX(side), y: 140 + Math.random() * spanY }
     let nearest = Infinity
     for (const r of refs) nearest = Math.min(nearest, pointDist(cand, r))
     if (nearest >= minGap) return cand
