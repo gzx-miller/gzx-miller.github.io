@@ -123,6 +123,11 @@ const petStyle = computed(() => {
   }
 })
 
+const hintOnRight = computed(() => {
+  if (pos.value.x < 0) return false
+  return pos.value.x + PET_SIZE / 2 < window.innerWidth / 2
+})
+
 function clampPos(x: number, y: number) {
   const maxX = Math.max(8, window.innerWidth - PET_SIZE - 8)
   const maxY = Math.max(8, window.innerHeight - PET_SIZE - 8)
@@ -592,7 +597,7 @@ onUnmounted(() => {
     ref="petRef"
     type="button"
     class="squirrel-pet"
-    :class="{ dragging, crawling, 'crawl-left': crawlLeft, waving: greeting, pricked }"
+    :class="{ dragging, crawling, 'crawl-left': crawlLeft, waving: greeting, pricked, 'hint-on-right': hintOnRight }"
     :style="petStyle"
     aria-label="松鼠小助手：点击提问，拖拽移动"
     title="点我提问，拖拽移动"
@@ -622,14 +627,6 @@ onUnmounted(() => {
                 d="M58 96 C96 106 122 86 122 50 C121.5 30 112 13 97 8 C83 3.5 72.5 9 71.5 17.5 C70.8 24 74.5 28.5 76.5 33.5 C63 44 58 66 56.5 86 C56 92 57 95 58 96 Z"
                 fill="url(#sq-tail)"
               />
-              <g stroke="#f6c15a" stroke-width="1.6" stroke-linecap="round" opacity="0.75" fill="none">
-                <path d="M114 93 L121 99" />
-                <path d="M124 70 L132 72" />
-                <path d="M126 45 L134 44" />
-                <path d="M119 22 L126 16" />
-                <path d="M105 8 L109 1" />
-                <path d="M91 4 L93 -2" />
-              </g>
               <path d="M76 88 C96 80 106 58 99 40 C105 58 98 80 82 90 Z" fill="#f6c15a" opacity="0.5" />
             </g>
             <!-- 后脚（爬行时交替迈步） -->
@@ -1117,6 +1114,26 @@ onUnmounted(() => {
 
 .pet-hint-text {
   display: inline-block;
+}
+
+/* 松鼠在屏幕左侧时，气泡改到右侧 */
+.squirrel-pet.hint-on-right .pet-hint {
+  right: auto;
+  left: calc(100% + 10px);
+  transform-origin: 0% 70%;
+  transform: translateX(-8px) scale(0.9);
+}
+
+.squirrel-pet.hint-on-right .pet-hint.show {
+  transform: translateX(0) scale(1);
+}
+
+.squirrel-pet.hint-on-right .pet-hint::after {
+  left: auto;
+  right: 100%;
+  border: 5px solid transparent;
+  border-right: 7px solid #e0652f;
+  border-left: none;
 }
 
 /* 讲话时文字轻轻起伏，模拟说话的节奏 */
