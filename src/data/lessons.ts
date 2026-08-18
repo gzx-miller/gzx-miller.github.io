@@ -29,6 +29,7 @@ export const knowledgeCategories: KnowledgeCategory[] = [
   { id: 'typescript', name: 'TypeScript', path: '/typescript', status: 'ready', intro: 'TypeScript 为 JavaScript 增加可渐进采用的静态类型系统。本分类以 Vue 3 真实业务数据为背景，覆盖建模、收窄、泛型、类型操作与组件类型实践。', officialUrl: 'https://www.typescriptlang.org/' },
   { id: 'vue', name: 'Vue3', path: '/vue', status: 'ready', intro: 'Vue3 是渐进式 JavaScript 框架。本分类用真实小业务场景拆解组合式 API、组件、路由、状态管理和工程实践。', officialUrl: 'https://vuejs.org/' },
   { id: 'element-plus', name: 'Element Plus', path: '/element-plus', status: 'ready', intro: 'Element Plus 是基于 Vue 3 的组件库，提供丰富的企业级 UI 组件，覆盖表格、表单、弹窗、导航等常见场景。', officialUrl: 'https://element-plus.org/' },
+  { id: 'vue-flow', name: 'Vue Flow', path: '/vue-flow', status: 'ready', intro: 'Vue Flow 是基于 Vue 3 的流程图与节点编辑器。本分类从数据模型与内置节点出发，覆盖连接桩校验、连线定制、交互编排、useVueFlow 状态管理、拖拽搭建、自动布局、只读展示与双主题适配。', officialUrl: 'https://vueflow.dev/' },
   { id: 'nestjs', name: 'Nest.js', path: '/nestjs', status: 'ready', intro: 'NestJS 是构建高效、可扩展 Node.js 服务端应用的企业级框架。本分类从模块化架构出发，覆盖依赖注入、控制器与路由、管道校验、守卫鉴权、拦截器、中间件、异常过滤器、TypeORM 数据库、WebSocket 网关、定时任务、配置管理与微服务。', officialUrl: 'https://docs.nestjs.com/' },
   { id: 'nuxt', name: 'Nuxt', path: '/nuxt', status: 'ready', intro: 'Nuxt 是基于 Vue 3 的全栈框架，内置文件路由、自动导入、SSR/SSG、服务端 API 等能力，让 Vue 项目从单页应用升级为全栈应用。', officialUrl: 'https://nuxt.com/' },
   { id: 'nodejs', name: 'Node.js', path: '/nodejs', status: 'ready', intro: 'Node.js 让 JavaScript 运行在服务端和工具链中。本分类覆盖模块、文件、事件、流、HTTP、进程、测试、安全与依赖管理。', officialUrl: 'https://nodejs.org/docs/latest/api/' },

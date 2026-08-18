@@ -1,0 +1,85 @@
+/*
+ * Vue Flow 双主题适配（秋日森林风格）
+ * 站点通过 <html data-theme="light|dark"> 切换主题，这里把 Vue Flow 的
+ * 官方默认配色映射到站点 CSS 变量，使画布在两种主题下都自然融入。
+ */
+
+.vue-flow {
+  --vf-node-bg: var(--surface);
+  --vf-node-text: var(--text);
+  --vf-connection-path: var(--accent);
+  --vf-handle: var(--leaf-orange);
+  /* 自定义变量：边线描边与控制条 */
+  --vf-edge: #c98a55;
+  --vf-edge-selected: var(--accent);
+}
+
+/* 内置三种节点类型的主色：入口=森林绿、过程=栗棕、出口=枫叶红 */
+.vue-flow__node-input {
+  --vf-node-color: var(--forest);
+}
+
+.vue-flow__node-default {
+  --vf-node-color: var(--chestnut);
+}
+
+.vue-flow__node-output {
+  --vf-node-color: var(--leaf-red);
+}
+
+/* 连接桩描边跟随卡片底色，避免浅色描边在暗色主题下突兀 */
+.vue-flow__handle {
+  border-color: var(--surface);
+}
+
+/* 官方样式把边线描边写死为灰色，这里改走变量 */
+.vue-flow .vue-flow__edge-path {
+  stroke: var(--vf-edge);
+}
+
+.vue-flow .vue-flow__edge.selected .vue-flow__edge-path,
+.vue-flow .vue-flow__edge:focus,
+.vue-flow .vue-flow__edge:focus-visible {
+  stroke: var(--vf-edge-selected);
+}
+
+/* 框选矩形与默认蓝色保持距离，换成站点强调色 */
+.vue-flow .vue-flow__selection,
+.vue-flow .vue-flow__nodesselection-rect {
+  background: rgba(217, 75, 38, 0.08);
+  border: 1px dotted var(--leaf-red);
+}
+
+/* 连线文字底色 */
+.vue-flow .vue-flow__edge-textbg {
+  fill: var(--surface);
+}
+
+.vue-flow .vue-flow__edge-text {
+  fill: var(--muted);
+}
+
+/* 控制条：浅色默认即可，深色主题下反色 */
+[data-theme='dark'] .vue-flow .vue-flow__controls {
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme='dark'] .vue-flow .vue-flow__controls-button {
+  background: var(--surface-soft);
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+
+[data-theme='dark'] .vue-flow .vue-flow__controls-button:hover {
+  background: var(--border);
+}
+
+[data-theme='dark'] .vue-flow .vue-flow__controls-button svg {
+  fill: currentColor;
+}
+
+/* 小地图 */
+.vue-flow .vue-flow__minimap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
