@@ -1,8 +1,13 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, useTemplateRef } from 'vue'
+import { computed, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue'
 import { useCritterGarden } from '../composables/useCritterGarden'
+import { useTheme } from '../composables/useTheme'
 
 const garden = useCritterGarden()
+const { isDark } = useTheme()
+
+// 暗主题下小刺猬入睡：停走、闭眼、冒 zzz
+const sleeping = computed(() => isDark.value)
 
 const HOG_W = 62
 const HOG_H = 46
@@ -88,12 +93,13 @@ function wiggle() {
 
 function scheduleWander() {
   window.clearTimeout(wanderTimer)
+  if (sleeping.value) return
   wanderTimer = window.setTimeout(startCrawl, 6000 + Math.random() * 5000)
 }
 
 function startCrawl() {
-  if (pinned.value || dragging.value || document.hidden || prefersReducedMotion()) {
-    scheduleWander()
+  if (sleeping.value || pinned.value || dragging.value || document.hidden || prefersReducedMotion()) {
+    if (!sleeping.value) scheduleWander()
     return
   }
   const dy = (60 + Math.random() * 120) * (Math.random() > 0.5 ? 1 : -1)
@@ -119,6 +125,18 @@ function circlesOverlap(a: DOMRect, b: DOMRect, slack: number) {
   const rb = Math.min(b.width, b.height) / 2
   return Math.hypot(ax - bx, ay - by) < ra + rb - slack
 }
+
+// 入睡/苏醒：暗主题停走，切回浅色主题恢复爬动
+watch(isDark, (dark) => {
+  if (dark) {
+    window.clearTimeout(wanderTimer)
+    window.clearTimeout(crawlEndTimer)
+    crawling.value = false
+    garden.hedgehogMode.value = 'idle'
+  } else {
+    scheduleWander()
+  }
+})
 
 onMounted(() => {
   garden.hedgehogPos.value = clampPos(garden.hedgehogPos.value.x, garden.hedgehogPos.value.y)
@@ -154,7 +172,7 @@ onUnmounted(() => {
       ref="hogRef"
       type="button"
       class="garden-hedgehog"
-      :class="{ dragging, crawling }"
+      :class="{ dragging, crawling, sleeping }"
       :style="hogStyle"
       aria-label="小刺猬：浑身是刺，可以拖拽移动"
       title="小刺猬"
@@ -163,6 +181,7 @@ onUnmounted(() => {
       @pointerup="onHogPointerUp"
       @pointercancel="onHogPointerUp"
     >
+      <span class="hog-zzz" aria-hidden="true">z<span>z</span><span>z</span></span>
       <span class="hog-flip">
         <span class="hog-wobble">
           <svg viewBox="0 0 64 48" width="60" height="45" aria-hidden="true">
@@ -187,8 +206,13 @@ onUnmounted(() => {
             <!-- 小脸 + 尖鼻子 -->
             <path d="M42 19 C50 18 57 23 60.5 29.5 C57 35 50 38 44 37 C40 33 39 25 42 19 Z" fill="#ecc9a0" />
             <circle cx="59.3" cy="29.5" r="2.1" fill="#3a2415" />
-            <circle cx="47" cy="26" r="1.9" fill="#32190f" />
-            <circle cx="47.6" cy="25.4" r="0.6" fill="#fffaf2" />
+            <g class="hog-eye-open">
+              <circle cx="47" cy="26" r="1.9" fill="#32190f" />
+              <circle cx="47.6" cy="25.4" r="0.6" fill="#fffaf2" />
+            </g>
+            <g class="hog-eye-sleep">
+              <path d="M44 26 Q47 28 50 26" fill="none" stroke="#32190f" stroke-width="1.5" stroke-linecap="round" />
+            </g>
             <circle cx="43.5" cy="18.5" r="2.2" fill="#d9a066" />
             <!-- 小脚 -->
             <ellipse class="hog-foot hog-foot-l" cx="26" cy="42" rx="4" ry="2.4" fill="#8a5a36" />
@@ -279,6 +303,72 @@ onUnmounted(() => {
   .garden-hedgehog.crawling .hog-foot-l,
   .garden-hedgehog.crawling .hog-foot-r {
     animation: none;
+  }
+}
+
+/* ---------- 睡觉状态 ---------- */
+.hog-eye-sleep {
+  opacity: 0;
+}
+
+.garden-hedgehog.sleeping .hog-eye-open {
+  opacity: 0;
+}
+
+.garden-hedgehog.sleeping .hog-eye-sleep {
+  opacity: 1;
+}
+
+.hog-zzz {
+  position: absolute;
+  top: -6px;
+  right: -2px;
+  display: inline-flex;
+  gap: 3px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  line-height: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.garden-hedgehog.sleeping .hog-zzz {
+  opacity: 1;
+}
+
+.hog-zzz span {
+  display: inline-block;
+  animation: hog-zzz-float 2.4s ease-in-out infinite;
+}
+
+.hog-zzz span:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+.hog-zzz span:nth-child(3) {
+  animation-delay: 0.8s;
+}
+
+@keyframes hog-zzz-float {
+  0% {
+    transform: translateY(0) scale(0.6);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-14px) scale(1.15);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .garden-hedgehog.sleeping .hog-zzz span {
+    animation: none;
+    opacity: 1;
   }
 }
 </style>

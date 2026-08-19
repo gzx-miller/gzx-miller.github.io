@@ -97,7 +97,8 @@ function randomItemPos(refs: { x: number; y: number }[], minGap: number) {
 
   const pickSideX = (side: 'left' | 'right') => {
     if (side === 'left') return 25 + Math.random() * 50
-    return vw - 75 + Math.random() * 50
+    // 右侧需扣除宝物宽度，保证右边缘至少距边界 15px
+    return vw - ITEM_SIZE - 15 - Math.random() * 60
   }
 
   const bestX = pickSideX(Math.random() > 0.5 ? 'left' : 'right')
@@ -118,10 +119,10 @@ function randomItemPos(refs: { x: number; y: number }[], minGap: number) {
 }
 
 function clampItemPos(x: number, y: number) {
-  const maxX = Math.max(8, window.innerWidth - ITEM_SIZE - 10)
+  const maxX = Math.max(15, window.innerWidth - ITEM_SIZE - 15)
   const maxY = Math.max(104, window.innerHeight - ITEM_SIZE - 66)
   return {
-    x: Math.min(Math.max(8, x), maxX),
+    x: Math.min(Math.max(15, x), maxX),
     y: Math.min(Math.max(104, y), maxY),
   }
 }
@@ -665,6 +666,11 @@ function handleChestClick() {
     top 2.4s cubic-bezier(0.45, 0.05, 0.55, 0.95),
     transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
     filter 0.25s ease;
+}
+
+/* 被粘住后不再自行上下浮动，与刺猬保持相对静止 */
+.harvest-item.stuck .harvest-item-ico {
+  animation: none;
 }
 
 /* 刺猬被拖拽时立即贴附，不使用过渡 */

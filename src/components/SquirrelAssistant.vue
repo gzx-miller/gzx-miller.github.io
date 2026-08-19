@@ -2,6 +2,7 @@
 import { computed, nextTick, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue'
 import { useCritterGarden } from '../composables/useCritterGarden'
 import { useObfuscatedKey } from '../composables/useObfuscatedKey'
+import { useTheme } from '../composables/useTheme'
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
 import hljs from 'highlight.js/lib/core'
@@ -189,6 +190,30 @@ function handleWindowResize() {
   }
 }
 
+// ---------- 睡眠状态：暗主题入睡，点击 AI 或切回浅色主题苏醒 ----------
+const { isDark } = useTheme()
+const aiWoken = ref(false)
+const sleeping = computed(() => isDark.value && !aiWoken.value)
+
+// 再次进入暗主题时清除 AI 唤醒标记，让松鼠重新入睡
+watch(isDark, (dark) => {
+  if (dark) aiWoken.value = false
+})
+
+watch(sleeping, (asleep) => {
+  if (asleep) {
+    window.clearTimeout(wanderTimer)
+    window.clearTimeout(crawlEndTimer)
+    crawling.value = false
+    pauseTip()
+  } else {
+    window.clearTimeout(wanderTimer)
+    window.clearTimeout(crawlEndTimer)
+    if (!dragging.value && !open.value) scheduleWander()
+    scheduleTip(2600)
+  }
+})
+
 // ---------- 空闲爬动 ----------
 const crawling = ref(false)
 const petRef = useTemplateRef<HTMLButtonElement>('petRef')
@@ -201,10 +226,12 @@ function prefersReducedMotion() {
 
 function scheduleWander() {
   window.clearTimeout(wanderTimer)
+  if (sleeping.value) return
   wanderTimer = window.setTimeout(startCrawl, 9000 + Math.random() * 7000)
 }
 
 function startCrawl() {
+  if (sleeping.value) return
   if (dragging.value || open.value || document.hidden || prefersReducedMotion()) {
     scheduleWander()
     return
@@ -286,12 +313,13 @@ let lastTipIndex = -1
 
 function scheduleTip(delay: number) {
   window.clearTimeout(tipShowTimer)
+  if (sleeping.value) return
   tipShowTimer = window.setTimeout(showTip, delay)
 }
 
 function showTip() {
-  // 拖拽 / 开面板 / 标签页隐藏时先不出声，稍后再试
-  if (dragging.value || open.value || document.hidden) {
+  // 拖拽 / 开面板 / 睡眠 / 标签页隐藏时先不出声，稍后再试
+  if (sleeping.value || dragging.value || open.value || document.hidden) {
     scheduleTip(2600)
     return
   }
@@ -355,6 +383,7 @@ const hasConversation = computed(
 )
 
 function openPanel() {
+  aiWoken.value = true // 点击 AI 让睡眠中的松鼠苏醒
   open.value = true
   historyOpen.value = false
   void nextTick(() => inputRef.value?.focus())
@@ -594,7 +623,7 @@ onUnmounted(() => {
     ref="petRef"
     type="button"
     class="squirrel-pet"
-    :class="{ dragging, crawling, waving: greeting, pricked, 'hint-on-right': hintOnRight }"
+    :class="{ dragging, crawling, waving: greeting, pricked, sleeping, 'hint-on-right': hintOnRight }"
     :style="petStyle"
     aria-label="松鼠小助手：点击提问，拖拽移动"
     title="点我提问，拖拽移动"
@@ -605,6 +634,7 @@ onUnmounted(() => {
   >
     <span class="pet-inner" aria-hidden="true">
       <span class="pet-ai-badge">AI</span>
+      <span class="pet-zzz" aria-hidden="true">z<span>z</span><span>z</span></span>
       <span class="pet-flip">
         <span class="pet-wobble">
           <svg viewBox="0 0 136 120" width="68" height="60">
@@ -664,6 +694,11 @@ onUnmounted(() => {
               <path d="M56.5 44.5 Q60 40.5 63.5 44.5" fill="none" stroke="#32190f" stroke-width="2" stroke-linecap="round" />
               <circle cx="36" cy="50.5" r="2.8" fill="#f0806e" opacity="0.6" />
               <circle cx="68" cy="50.5" r="2.8" fill="#f0806e" opacity="0.6" />
+            </g>
+            <!-- 睡觉表情：闭眼 -->
+            <g class="pet-face-sleep">
+              <path d="M40.5 45 Q44 47.5 47.5 45" fill="none" stroke="#32190f" stroke-width="2" stroke-linecap="round" />
+              <path d="M56.5 45 Q60 47.5 63.5 45" fill="none" stroke="#32190f" stroke-width="2" stroke-linecap="round" />
             </g>
             <!-- 口鼻：浅色吻部 + 鼻子 + 门牙 -->
             <ellipse cx="52" cy="55" rx="9" ry="7" fill="#ffe3c2" />
@@ -1052,6 +1087,81 @@ onUnmounted(() => {
 
 .squirrel-pet.waving .pet-eyes {
   opacity: 0;
+}
+
+/* ---------- 睡觉状态：闭眼、停止浮动与摇尾、冒 zzz ---------- */
+.pet-face-sleep {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.squirrel-pet.sleeping .pet-eyes,
+.squirrel-pet.sleeping .pet-face-happy {
+  opacity: 0;
+}
+
+.squirrel-pet.sleeping .pet-face-sleep {
+  opacity: 1;
+}
+
+.squirrel-pet.sleeping .pet-inner,
+.squirrel-pet.sleeping .pet-tail,
+.squirrel-pet.sleeping .pet-eyes {
+  animation: none;
+}
+
+.pet-zzz {
+  position: absolute;
+  top: -16px;
+  right: -14px;
+  z-index: 3;
+  display: inline-flex;
+  gap: 3px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  line-height: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.squirrel-pet.sleeping .pet-zzz {
+  opacity: 1;
+}
+
+.pet-zzz span {
+  display: inline-block;
+  animation: pet-zzz-float 2.4s ease-in-out infinite;
+}
+
+.pet-zzz span:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+.pet-zzz span:nth-child(3) {
+  animation-delay: 0.8s;
+}
+
+@keyframes pet-zzz-float {
+  0% {
+    transform: translateY(0) scale(0.6);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-14px) scale(1.15);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .squirrel-pet.sleeping .pet-zzz span {
+    animation: none;
+    opacity: 1;
+  }
 }
 
 .pet-tail {
