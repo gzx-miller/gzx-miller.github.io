@@ -1,0 +1,187 @@
+<template>
+  <article class="llm-article">
+    <slot />
+  </article>
+</template>
+
+<style>
+/* LLM 原理长文通用排版：贴合秋日森林 / 红橙枫叶 / 暖光 / 小松鼠的视觉基调 */
+.llm-article {
+  --llm-primary: #e8590c;
+  --llm-primary-deep: #c0392b;
+  --llm-bg: #fff7ed;
+  --llm-border: #f0c28a;
+  --llm-text: #3b3b3b;
+  --llm-muted: #8a6d55;
+  --llm-leaf: #f4a261;
+  line-height: 1.9;
+  font-size: 15.5px;
+  color: var(--llm-text);
+  padding: 4px 2px;
+}
+
+/* 开场问题高亮卡 */
+.llm-question {
+  background: linear-gradient(135deg, #fff4e6, #ffe8d6);
+  border: 1px solid var(--llm-border);
+  border-left: 4px solid var(--llm-primary);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 20px 0;
+  font-size: 15px;
+  color: #5b3a1e;
+}
+.llm-question strong {
+  color: var(--llm-primary-deep);
+}
+
+/* 章节标题 */
+.llm-article h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--llm-primary-deep);
+  margin: 34px 0 12px;
+  padding-left: 10px;
+  border-left: 4px solid var(--llm-primary);
+  line-height: 1.4;
+}
+.llm-article h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #a3410a;
+  margin: 22px 0 8px;
+}
+
+/* 段落与列表 */
+.llm-article p {
+  margin: 12px 0;
+}
+.llm-article strong {
+  color: #a3410a;
+  font-weight: 700;
+}
+.llm-article ul,
+.llm-article ol {
+  margin: 10px 0 10px 22px;
+  padding-left: 6px;
+}
+.llm-article li {
+  margin: 6px 0;
+}
+.llm-article li::marker {
+  color: var(--llm-leaf);
+  font-weight: 700;
+}
+
+/* 内联代码 */
+.llm-article code {
+  background: #fdeedd;
+  border: 1px solid var(--llm-border);
+  padding: 1px 6px;
+  border-radius: 5px;
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  font-size: 0.9em;
+  color: #c0392b;
+}
+
+/* 公式 / 术语卡片 */
+.llm-term {
+  background: #1d1f27;
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin: 16px 0;
+  color: #e8e3d8;
+  font-size: 14.5px;
+}
+.llm-term .term-name {
+  color: #ffce9f;
+  font-weight: 700;
+  font-size: 15.5px;
+}
+.llm-term code {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #ffce9f;
+}
+
+/* 通用信息框 */
+.llm-box {
+  border: 1px solid var(--llm-border);
+  background: #fffaf2;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin: 14px 0;
+}
+.llm-box.warn {
+  border-left: 4px solid #e8590c;
+  background: #fff1e6;
+}
+.llm-box.hint {
+  border-left: 4px solid #6f9e37;
+  background: #f6fbea;
+}
+
+/* 数字推导 / 步骤列表 */
+.llm-steps {
+  counter-reset: llmstep;
+  list-style: none !important;
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+}
+.llm-steps > li {
+  counter-increment: llmstep;
+  position: relative;
+  padding-left: 44px;
+  margin: 14px 0;
+}
+.llm-steps > li::before {
+  content: counter(llmstep);
+  position: absolute;
+  left: 0;
+  top: 2px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--llm-primary), #d9480f);
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 表格 */
+.llm-article table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0;
+  font-size: 14px;
+}
+.llm-article th,
+.llm-article td {
+  border: 1px solid var(--llm-border);
+  padding: 8px 12px;
+  text-align: left;
+}
+.llm-article th {
+  background: #fbe6ce;
+  color: #8c3a08;
+  font-weight: 700;
+}
+.llm-article tr:nth-child(even) td {
+  background: #fff8f0;
+}
+
+/* 高亮 ob，用于强调 key 数值 */
+.llm-kv {
+  display: inline-block;
+  background: #fbe6b4;
+  border: 1px solid #e8c76a;
+  color: #7a4f00;
+  border-radius: 6px;
+  padding: 1px 8px;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.9em;
+}
+</style>
