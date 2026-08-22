@@ -4,6 +4,7 @@ import type { Lesson } from '../lessons'
 
 const demoModules = import.meta.glob<Component>('../../demos/*.vue', { import: 'default' })
 const vueCodeModules = import.meta.glob<string>('../../demos/*.vue', { query: '?raw', import: 'default' })
+const glslCodeModules = import.meta.glob<string>('../../demos/glsl-code/*.glsl', { query: '?raw', import: 'default' })
 
 function createDemo(name: string) {
   const loader = demoModules[`../../demos/${name}.vue`]
@@ -12,51 +13,54 @@ function createDemo(name: string) {
 }
 
 function createCodeLoader(path: string) {
-  const loader = vueCodeModules[`../../demos/${path}`]
+  const modules = path.startsWith('glsl-code/')
+    ? glslCodeModules
+    : vueCodeModules
+  const loader = modules[`../../demos/${path}`]
   if (!loader) throw new Error(`未找到案例源码：${path}`)
   return loader
 }
 
 const W01WebGLContext = createDemo('W01WebGLContext')
-const W01Code = createCodeLoader('W01WebGLContext.vue')
+const W01Code = createCodeLoader('glsl-code/W01WebGLContext.glsl')
 const W02Shaders = createDemo('W02Shaders')
-const W02Code = createCodeLoader('W02Shaders.vue')
+const W02Code = createCodeLoader('glsl-code/W02Shaders.glsl')
 const W03Buffers = createDemo('W03Buffers')
-const W03Code = createCodeLoader('W03Buffers.vue')
+const W03Code = createCodeLoader('glsl-code/W03Buffers.glsl')
 const W04Attributes = createDemo('W04Attributes')
-const W04Code = createCodeLoader('W04Attributes.vue')
+const W04Code = createCodeLoader('glsl-code/W04Attributes.glsl')
 const W05Matrices = createDemo('W05Matrices')
-const W05Code = createCodeLoader('W05Matrices.vue')
+const W05Code = createCodeLoader('glsl-code/W05Matrices.glsl')
 const W06MVP = createDemo('W06MVP')
-const W06Code = createCodeLoader('W06MVP.vue')
+const W06Code = createCodeLoader('glsl-code/W06MVP.glsl')
 const W07Camera = createDemo('W07Camera')
-const W07Code = createCodeLoader('W07Camera.vue')
+const W07Code = createCodeLoader('glsl-code/W07Camera.glsl')
 const W08Textures = createDemo('W08Textures')
-const W08Code = createCodeLoader('W08Textures.vue')
+const W08Code = createCodeLoader('glsl-code/W08Textures.glsl')
 const W09TextureFilter = createDemo('W09TextureFilter')
-const W09Code = createCodeLoader('W09TextureFilter.vue')
+const W09Code = createCodeLoader('glsl-code/W09TextureFilter.glsl')
 const W10MultiTexture = createDemo('W10MultiTexture')
-const W10Code = createCodeLoader('W10MultiTexture.vue')
+const W10Code = createCodeLoader('glsl-code/W10MultiTexture.glsl')
 const W11Lighting = createDemo('W11Lighting')
-const W11Code = createCodeLoader('W11Lighting.vue')
+const W11Code = createCodeLoader('glsl-code/W11Lighting.glsl')
 const W12Phong = createDemo('W12Phong')
-const W12Code = createCodeLoader('W12Phong.vue')
+const W12Code = createCodeLoader('glsl-code/W12Phong.glsl')
 const W13Normals = createDemo('W13Normals')
-const W13Code = createCodeLoader('W13Normals.vue')
+const W13Code = createCodeLoader('glsl-code/W13Normals.glsl')
 const W14FBO = createDemo('W14FBO')
-const W14Code = createCodeLoader('W14FBO.vue')
+const W14Code = createCodeLoader('glsl-code/W14FBO.glsl')
 const W15Shadows = createDemo('W15Shadows')
-const W15Code = createCodeLoader('W15Shadows.vue')
+const W15Code = createCodeLoader('glsl-code/W15Shadows.glsl')
 const W16PostProcess = createDemo('W16PostProcess')
-const W16Code = createCodeLoader('W16PostProcess.vue')
+const W16Code = createCodeLoader('glsl-code/W16PostProcess.glsl')
 const W17WebGL2 = createDemo('W17WebGL2')
-const W17Code = createCodeLoader('W17WebGL2.vue')
+const W17Code = createCodeLoader('glsl-code/W17WebGL2.glsl')
 const W18Instancing = createDemo('W18Instancing')
-const W18Code = createCodeLoader('W18Instancing.vue')
+const W18Code = createCodeLoader('glsl-code/W18Instancing.glsl')
 const W19Particles = createDemo('W19Particles')
-const W19Code = createCodeLoader('W19Particles.vue')
+const W19Code = createCodeLoader('glsl-code/W19Particles.glsl')
 const W20Performance = createDemo('W20Performance')
-const W20Code = createCodeLoader('W20Performance.vue')
+const W20Code = createCodeLoader('glsl-code/W20Performance.glsl')
 
 export const lessons: Lesson[] = [
   {
@@ -68,7 +72,7 @@ export const lessons: Lesson[] = [
     summary: '从 Canvas 获取 WebGL 上下文，理解图形管线的顶点处理与片段处理流程。',
     demo: W01WebGLContext,
     code: W01Code,
-    language: 'vue',
+    language: 'glsl',
     principle:
       'WebGL 基于 OpenGL ES，通过 canvas.getContext("webgl") 获取上下文。渲染管线分为 CPU 端的顶点准备与 GPU 端的顶点着色→图元装配→光栅化→片段着色四个阶段。开发者通过编写 GLSL 着色器来控制 GPU 行为。',
     flow: [
@@ -94,7 +98,7 @@ export const lessons: Lesson[] = [
     summary: '用一个旋转三角形展示顶点着色器与片段着色器的协作与数据传递。',
     demo: W02Shaders,
     code: W02Code,
-    language: 'vue',
+    language: 'glsl',
     principle:
       '顶点着色器处理每个顶点的位置变换，必须输出 gl_Position。片段着色器处理每个像素的颜色，必须输出 gl_FragColor。两者通过 varying 变量传递数据，顶点着色器输出、片段着色器读取。',
     flow: [
@@ -120,7 +124,7 @@ export const lessons: Lesson[] = [
     summary: '用 VBO、VAO 和 drawArrays/drawElements 展示不同绘制模式。',
     demo: W03Buffers,
     code: W03Code,
-    language: 'vue',
+    language: 'glsl',
     principle:
       '缓冲区对象 (Buffer) 将顶点数据上传到 GPU 显存。顶点数组对象 (VAO) 保存属性指针配置。drawArrays 按连续顶点绘制，drawElements 使用索引缓冲区 (EBO) 复用顶点。',
     flow: [
@@ -146,7 +150,7 @@ export const lessons: Lesson[] = [
     summary: '用动态彩色方块展示三种着色器变量类型的不同使用场景。',
     demo: W04Attributes,
     code: W04Code,
-    language: 'vue',
+    language: 'glsl',
     principle:
       'attribute 是逐顶点输入（位置、法线等），由 CPU 在绘制前指定；uniform 是全局变量（时间、矩阵等），在单次 draw call 中对所有顶点/片段共享；varying 是顶点到片段的插值传递。',
     flow: [
@@ -172,7 +176,7 @@ export const lessons: Lesson[] = [
     summary: '用矩阵库实现平移、旋转、缩放的组合变换。',
     demo: W05Matrices,
     code: W05Code,
-    language: 'vue',
+    language: 'glsl',
     principle:
       '变换矩阵把顶点坐标从局部空间映射到裁剪空间。平移用 4x4 矩阵的 translation 分量，旋转用三角函数矩阵，缩放用对角矩阵。矩阵乘法从右到左，通常顺序是缩放→旋转→平移。',
     flow: [
@@ -198,7 +202,7 @@ export const lessons: Lesson[] = [
     summary: '用 3D 立方体展示模型、视图、投影三种矩阵的协作。',
     demo: W06MVP,
     code: W06Code,
-    language: 'vue',
+    language: 'glsl',
     principle:
       'Model 矩阵把顶点从局部空间变到世界空间；View 矩阵把世界空间变到相机空间；Projection 矩阵把相机空间变到裁剪空间。三者相乘 MVP 是顶点着色器的核心运算。',
     flow: [
@@ -224,7 +228,7 @@ export const lessons: Lesson[] = [
     summary: '用轨道相机展示视角移动、缩放和旋转的交互控制。',
     demo: W07Camera,
     code: W07Code,
-    language: 'vue',
+    language: 'glsl',
     principle:
       '相机控制通过维护相机位置、观察点和上方向向量来构建 View 矩阵。轨道相机允许围绕目标点旋转，通过球坐标 (球面坐标) 计算相机位置。',
     flow: [
@@ -250,7 +254,7 @@ export const lessons: Lesson[] = [
     summary: '用纹理图片展示 UV 坐标到网格的映射过程。',
     demo: W08Textures,
     code: W08Code,
-    language: 'vue',
+    language: 'glsl',
     principle:
       '纹理是一张图片数据，通过 UV 坐标 (0,0)~(1,1) 映射到几何体表面。顶点存储 UV 坐标，顶点着色器传递给片段着色器，片段着色器用 texture2D 采样颜色。',
     flow: [
@@ -276,7 +280,7 @@ export const lessons: Lesson[] = [
     summary: '对比不同过滤模式和 Mipmap 层级的渲染效果。',
     demo: W09TextureFilter,
     code: W09Code,
-    language: 'vue',
+    language: 'glsl',
     principle:
       '纹理过滤决定像素采样方式：NEAREST 取最近像素，LINEAR 取邻近 4 像素平均。Mipmap 是预计算的缩小版本，当纹理在屏幕上变小时使用，减少锯齿和闪烁。',
     flow: [
@@ -302,7 +306,7 @@ export const lessons: Lesson[] = [
     summary: '展示如何同时使用多张纹理并在着色器中混合。',
     demo: W10MultiTexture,
     code: W10Code,
-    language: 'vue',
+    language: 'glsl',
     principle:
       '多个纹理通过不同的 sampler 绑定到不同纹理单元 (TEXTURE0, TEXTURE1, ...)。片段着色器中对多张纹理的颜色进行加权混合。混合 (Blending) 控制源和目标颜色的合成方式。',
     flow: [
@@ -328,7 +332,7 @@ export const lessons: Lesson[] = [
     summary: '展示环境光和 Lambert 漫反射光照模型的实现。',
     demo: W11Lighting,
     code: W11Code,
-    language: 'vue',
+    language: 'glsl',
     principle:
       '环境光 (Ambient) 模拟物体受到的整体环境照射，与方向无关。漫反射 (Diffuse) 基于 Lambert 定律：表面越正对光源越亮，使用 N·L 点积计算。最终颜色 = ambient + diffuse。',
     flow: [
@@ -354,7 +358,7 @@ export const lessons: Lesson[] = [
     summary: '展示环境光+漫反射+镜面高光的完整 Phong 光照模型。',
     demo: W12Phong,
     code: W12Code,
-    language: 'vue',
+    language: 'glsl',
     principle:
       'Phong 模型在漫反射基础上增加镜面高光 (Specular)。计算反射向量 R 与视线向量 V 的点积，高光强度 = (R·V)^shininess。shininess 控制高光范围，值越大高光越集中。',
     flow: [
@@ -380,7 +384,7 @@ export const lessons: Lesson[] = [
     summary: '展示顶点法线、法线矩阵与光照方向的正确变换。',
     demo: W13Normals,
     code: W13Code,
-    language: 'vue',
+    language: 'glsl',
     principle:
       '法线是描述表面朝向的向量，用于光照计算。法线需要用模型矩阵的逆转置矩阵变换到世界空间，以正确应对非等比缩放。光照方向应与法线在同一空间中计算。',
     flow: [
@@ -406,7 +410,7 @@ export const lessons: Lesson[] = [
     summary: '用离屏渲染展示 FBO 的创建、绑定与纹理附件。',
     demo: W14FBO,
     code: W14Code,
-    language: 'vue',
+    language: 'glsl',
     principle:
       '帧缓冲对象 (FBO) 允许渲染到离屏目标而非屏幕。FBO 绑定颜色附件 (纹理) 作为输出，可用于后处理、G-Buffer 等技术。渲染后可把 FBO 纹理作为输入进行二次渲染。',
     flow: [
@@ -433,7 +437,7 @@ export const lessons: Lesson[] = [
     summary: '展示 shadow map 的生成与 PCF 软阴影采样。',
     demo: W15Shadows,
     code: W15Code,
-    language: 'vue',
+    language: 'glsl',
     principle:
       '阴影映射分两步：1) 从光源视角渲染场景深度到深度纹理；2) 从相机视角渲染场景，将各像素的光空间坐标与深度纹理对比判断是否在阴影中。PCF 过滤减少阴影边缘锯齿。',
     flow: [
@@ -459,7 +463,7 @@ export const lessons: Lesson[] = [
     summary: '用全屏四边形展示 Bloom、模糊、灰度等后处理效果。',
     demo: W16PostProcess,
     code: W16Code,
-    language: 'vue',
+    language: 'glsl',
     principle:
       '后处理将场景渲染到 FBO 纹理，再用全屏四边形 (Fullscreen Quad) 覆盖屏幕，在片段着色器中对纹理进行卷积或采样运算实现各种效果。每个效果是一个 pass，可链式组合。',
     flow: [
@@ -485,7 +489,7 @@ export const lessons: Lesson[] = [
     summary: '展示 WebGL2 的 Uniform Buffer、Texture 3D、浮点纹理等新能力。',
     demo: W17WebGL2,
     code: W17Code,
-    language: 'vue',
+    language: 'glsl',
     principle:
       'WebGL2 基于 OpenGL ES 3.0，新增 Uniform Buffer Objects (UBO)、纹理数组、3D 纹理、浮点渲染 (if supported)、Transform Feedback、多目标渲染等特性，显著提升性能和能力。',
     flow: [
@@ -511,7 +515,7 @@ export const lessons: Lesson[] = [
     summary: '用实例化渲染展示大量几何体的高效绘制。',
     demo: W18Instancing,
     code: W18Code,
-    language: 'vue',
+    language: 'glsl',
     principle:
       '实例化渲染通过一次 draw call 绘制多个相同几何体。每个实例通过 gl_InstanceID 获取索引，从实例缓冲区读取位置/颜色等属性。相比逐个 draw call，大幅减少 CPU→GPU 开销。',
     flow: [
@@ -537,7 +541,7 @@ export const lessons: Lesson[] = [
     summary: '展示基于 GPU 的粒子系统，包括位置更新和渲染。',
     demo: W19Particles,
     code: W19Code,
-    language: 'vue',
+    language: 'glsl',
     principle:
       '粒子系统将粒子位置存储在纹理或 VBO 中，每帧通过 ping-pong FBO 在 GPU 端更新位置 (碰撞、力场等)，然后渲染为点精灵。WebGL2 可用 Transform Feedback 直接在 GPU 更新缓冲区。',
     flow: [
@@ -563,7 +567,7 @@ export const lessons: Lesson[] = [
     summary: '展示 WebGL 性能分析、常见瓶颈与优化手段。',
     demo: W20Performance,
     code: W20Code,
-    language: 'vue',
+    language: 'glsl',
     principle:
       'WebGL 性能优化从 CPU→GPU 数据流、draw call 数量、GPU 显存使用三方面入手。使用 RAF 驱动、Instancing 减少 draw call、VAO 状态缓存、纹理压缩 (ETC2/S3TC)、避免每帧重建缓冲区。',
     flow: [

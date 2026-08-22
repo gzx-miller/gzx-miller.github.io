@@ -4,6 +4,7 @@ import type { Lesson } from '../lessons'
 
 const demoModules = import.meta.glob<Component>('../../demos/*.vue', { import: 'default' })
 const vueCodeModules = import.meta.glob<string>('../../demos/*.vue', { query: '?raw', import: 'default' })
+const wasmCodeModules = import.meta.glob<string>('../../demos/wasm-code/*', { query: '?raw', import: 'default' })
 
 function createDemo(name: string) {
   const loader = demoModules[`../../demos/${name}.vue`]
@@ -12,51 +13,54 @@ function createDemo(name: string) {
 }
 
 function createCodeLoader(path: string) {
-  const loader = vueCodeModules[`../../demos/${path}`]
+  const modules = path.startsWith('wasm-code/')
+    ? wasmCodeModules
+    : vueCodeModules
+  const loader = modules[`../../demos/${path}`]
   if (!loader) throw new Error(`未找到案例源码：${path}`)
   return loader
 }
 
 const WB01WhatIsWasm = createDemo('WB01WhatIsWasm')
-const WB01Code = createCodeLoader('WB01WhatIsWasm.vue')
+const WB01Code = createCodeLoader('wasm-code/WB01WhatIsWasm.wat')
 const WB02WatBinary = createDemo('WB02WatBinary')
-const WB02Code = createCodeLoader('WB02WatBinary.vue')
+const WB02Code = createCodeLoader('wasm-code/WB02WatBinary.wat')
 const WB03ValueTypes = createDemo('WB03ValueTypes')
-const WB03Code = createCodeLoader('WB03ValueTypes.vue')
+const WB03Code = createCodeLoader('wasm-code/WB03ValueTypes.wat')
 const WB04Operators = createDemo('WB04Operators')
-const WB04Code = createCodeLoader('WB04Operators.vue')
+const WB04Code = createCodeLoader('wasm-code/WB04Operators.wat')
 const WB05LinearMemory = createDemo('WB05LinearMemory')
-const WB05Code = createCodeLoader('WB05LinearMemory.vue')
+const WB05Code = createCodeLoader('wasm-code/WB05LinearMemory.wat')
 const WB06StringsInterop = createDemo('WB06StringsInterop')
-const WB06Code = createCodeLoader('WB06StringsInterop.vue')
+const WB06Code = createCodeLoader('wasm-code/WB06StringsInterop.wat')
 const WB07FunctionsLocals = createDemo('WB07FunctionsLocals')
-const WB07Code = createCodeLoader('WB07FunctionsLocals.vue')
+const WB07Code = createCodeLoader('wasm-code/WB07FunctionsLocals.wat')
 const WB08ImportExportGlobals = createDemo('WB08ImportExportGlobals')
-const WB08Code = createCodeLoader('WB08ImportExportGlobals.vue')
+const WB08Code = createCodeLoader('wasm-code/WB08ImportExportGlobals.wat')
 const WB09JsInteropNumbers = createDemo('WB09JsInteropNumbers')
-const WB09Code = createCodeLoader('WB09JsInteropNumbers.vue')
+const WB09Code = createCodeLoader('wasm-code/WB09JsInteropNumbers.js')
 const WB10FunctionTable = createDemo('WB10FunctionTable')
-const WB10Code = createCodeLoader('WB10FunctionTable.vue')
+const WB10Code = createCodeLoader('wasm-code/WB10FunctionTable.wat')
 const WB11ControlFlow = createDemo('WB11ControlFlow')
-const WB11Code = createCodeLoader('WB11ControlFlow.vue')
+const WB11Code = createCodeLoader('wasm-code/WB11ControlFlow.wat')
 const WB12MemoryArrays = createDemo('WB12MemoryArrays')
-const WB12Code = createCodeLoader('WB12MemoryArrays.vue')
+const WB12Code = createCodeLoader('wasm-code/WB12MemoryArrays.wat')
 const WB13ImportCallbacks = createDemo('WB13ImportCallbacks')
-const WB13Code = createCodeLoader('WB13ImportCallbacks.vue')
+const WB13Code = createCodeLoader('wasm-code/WB13ImportCallbacks.js')
 const WB14ReferenceTypes = createDemo('WB14ReferenceTypes')
-const WB14Code = createCodeLoader('WB14ReferenceTypes.vue')
+const WB14Code = createCodeLoader('wasm-code/WB14ReferenceTypes.wat')
 const WB15SharedMemoryAtomics = createDemo('WB15SharedMemoryAtomics')
-const WB15Code = createCodeLoader('WB15SharedMemoryAtomics.vue')
+const WB15Code = createCodeLoader('wasm-code/WB15SharedMemoryAtomics.wat')
 const WB16MultiThreading = createDemo('WB16MultiThreading')
-const WB16Code = createCodeLoader('WB16MultiThreading.vue')
+const WB16Code = createCodeLoader('wasm-code/WB16MultiThreading.js')
 const WB17Simd = createDemo('WB17Simd')
-const WB17Code = createCodeLoader('WB17Simd.vue')
+const WB17Code = createCodeLoader('wasm-code/WB17Simd.wat')
 const WB18ExceptionHandling = createDemo('WB18ExceptionHandling')
-const WB18Code = createCodeLoader('WB18ExceptionHandling.vue')
+const WB18Code = createCodeLoader('wasm-code/WB18ExceptionHandling.wat')
 const WB19Performance = createDemo('WB19Performance')
-const WB19Code = createCodeLoader('WB19Performance.vue')
+const WB19Code = createCodeLoader('wasm-code/WB19Performance.js')
 const WB20ToolchainDeploy = createDemo('WB20ToolchainDeploy')
-const WB20Code = createCodeLoader('WB20ToolchainDeploy.vue')
+const WB20Code = createCodeLoader('wasm-code/WB20ToolchainDeploy.js')
 
 export const lessons: Lesson[] = [
   {
@@ -68,7 +72,7 @@ export const lessons: Lesson[] = [
     summary: '从十六进制读懂 .wasm 文件的魔数、版本与各段结构，并完成首次实例化调用。',
     demo: WB01WhatIsWasm,
     code: WB01Code,
-    language: 'vue',
+    language: 'wat',
     principle:
       'WebAssembly 是一种可移植的字节码格式。模块由若干"段"组成（类型段、导入段、导出段、代码段等），以魔数 \\0asm 与版本号开头。浏览器通过 WebAssembly.instantiate 将字节码编译为可调用对象。',
     flow: [
@@ -94,7 +98,7 @@ export const lessons: Lesson[] = [
     summary: '用可读的 WAT 文本对照每条指令的二进制操作码，建立"文本即图纸"的映射。',
     demo: WB02WatBinary,
     code: WB02Code,
-    language: 'vue',
+    language: 'wat',
     principle:
       'WAT 是 WebAssembly 的可读文本格式，与二进制一一对应。wat2wasm 工具负责把文本编译成二进制。栈式指令用 local.get 压栈、i32.add 弹两数压一数，理解指令栈是读懂 WAT 的关键。',
     flow: [
@@ -120,7 +124,7 @@ export const lessons: Lesson[] = [
     summary: '认识 i32、i64、f32、f64 四种数值类型，以及类型在签名与内存中的强制约束。',
     demo: WB03ValueTypes,
     code: WB03Code,
-    language: 'vue',
+    language: 'wat',
     principle:
       'WebAssembly 只有四种数值类型。所有函数签名、局部变量、内存读写都必须声明类型。i64 与 JS 交互需使用 BigInt，f32 精度低于 f64。类型系统让模块可被快速验证和高效编译。',
     flow: [
@@ -146,7 +150,7 @@ export const lessons: Lesson[] = [
     summary: '以折扣计算场景体验整数、位运算与浮点指令，理解栈式运算。',
     demo: WB04Operators,
     code: WB04Code,
-    language: 'vue',
+    language: 'wat',
     principle:
       'Wasm 指令操作一个显式栈：local.get 压栈，运算符从栈顶弹出操作数、压入结果。整数指令（add/mul/div/xor/shl）与浮点指令（f32.add 等）使用不同操作码。',
     flow: [
@@ -172,7 +176,7 @@ export const lessons: Lesson[] = [
     summary: '用货架可视化展示内存字节视图，体验 store8/load8 读写。',
     demo: WB05LinearMemory,
     code: WB05Code,
-    language: 'vue',
+    language: 'wat',
     principle:
       '线性内存是一块连续的字节数组，地址从 0 编号。JS 与 Wasm 通过 memory.buffer 共享同一块存储：JS 写后 Wasm 能读，Wasm 写后 JS 也能读。store8 写字节、load8 读字节，越界会抛 RuntimeError。',
     flow: [
@@ -198,7 +202,7 @@ export const lessons: Lesson[] = [
     summary: '把收货地址写入内存，交给 Wasm 求长度并原地转大写。',
     demo: WB06StringsInterop,
     code: WB06Code,
-    language: 'vue',
+    language: 'wat',
     principle:
       'Wasm 没有字符串类型，用"内存地址 + 结束符"表达 C 风格字符串。JS 用 TextEncoder 编码写入内存、TextDecoder 从内存解码读回。strlen 数到 \\0 为止，toupper 原地修改字节。',
     flow: [
@@ -224,7 +228,7 @@ export const lessons: Lesson[] = [
     summary: '用购物车结算函数 sum 剖析参数、局部变量与循环累加。',
     demo: WB07FunctionsLocals,
     code: WB07Code,
-    language: 'vue',
+    language: 'wat',
     principle:
       'Wasm 函数由签名、参数、局部变量与指令体组成。参数与局部变量共享"函数局部索引空间"，用 local.get/set 按索引访问。sum(ptr, n) 用两个局部变量（结束地址、累加器）完成数组求和。',
     flow: [
@@ -250,7 +254,7 @@ export const lessons: Lesson[] = [
     summary: '用库存计数器展示模块如何导入宿主函数、导出全局变量与函数。',
     demo: WB08ImportExportGlobals,
     code: WB08Code,
-    language: 'vue',
+    language: 'wat',
     principle:
       'Wasm 通过导入段声明对宿主（JS）能力的依赖，实例化时由 JS 注入实现；通过导出段把函数、内存、表格、全局变量暴露出去。全局变量需声明是否可变（mut）。',
     flow: [
@@ -276,7 +280,7 @@ export const lessons: Lesson[] = [
     summary: '模拟下单数量取整，观察 JS 数值跨 i32 边界时的截断行为。',
     demo: WB09JsInteropNumbers,
     code: WB09Code,
-    language: 'vue',
+    language: 'javascript',
     principle:
       'JS number 传给 Wasm 时按签名做类型转换：i32 会经 ToInt32 截断（丢弃小数、取低 32 位）；f32 做精度降级；i64 必须用 BigInt 一对一传输。理解这些转换能避免隐蔽的精度 bug。',
     flow: [
@@ -302,7 +306,7 @@ export const lessons: Lesson[] = [
     summary: '用促销计价切换演示函数表与动态分发，JS 还能改写表项。',
     demo: WB10FunctionTable,
     code: WB10Code,
-    language: 'vue',
+    language: 'wat',
     principle:
       '函数表按索引存放函数引用，Wasm 用 call_indirect 在运行时按索引调用并校验签名。JS 可通过 table.get/set 直接读写表项，实现热替换与插件机制。dispatch(op, a, b) 是典型的动态分发入口。',
     flow: [
@@ -328,7 +332,7 @@ export const lessons: Lesson[] = [
     summary: '用递归斐波那契认识 if/else 分支，并梳理 block、loop、br 跳转。',
     demo: WB11ControlFlow,
     code: WB11Code,
-    language: 'vue',
+    language: 'wat',
     principle:
       'Wasm 只有 block、loop、if/else 三种结构化控制流，配合 br 跳转实现分支与循环。递归函数通过 call 调用自身，每次调用占用独立栈帧。fib 用 if 判断基线条件，else 分支递归求和。',
     flow: [
@@ -354,7 +358,7 @@ export const lessons: Lesson[] = [
     summary: '把购物车价格按 4 字节对齐写入内存，可视化数组并求和。',
     demo: WB12MemoryArrays,
     code: WB12Code,
-    language: 'vue',
+    language: 'wat',
     principle:
       'Wasm 没有数组类型，用"起始地址 + 元素个数"表达：元素按固定步长连续排列，i32 对齐到 4 字节。JS 用 DataView 按小端读写 int32，Wasm 用 sum 函数循环累加。',
     flow: [
@@ -380,7 +384,7 @@ export const lessons: Lesson[] = [
     summary: '用同一份 counter 二进制注入两种回调，演示导入驱动的可复用设计。',
     demo: WB13ImportCallbacks,
     code: WB13Code,
-    language: 'vue',
+    language: 'javascript',
     principle:
       '模块只声明依赖的导入函数与签名，不关心实现。同一二进制可用不同 JS 实现实例化多次，得到不同行为。这是依赖注入思想在 Wasm 里的体现，让业务逻辑与宿主能力解耦。',
     flow: [
@@ -406,7 +410,7 @@ export const lessons: Lesson[] = [
     summary: '把会员对象作为 externref 传入 Wasm 再原样返回，理解引用不复制。',
     demo: WB14ReferenceTypes,
     code: WB14Code,
-    language: 'vue',
+    language: 'wat',
     principle:
       'externref 允许 Wasm 持有并传回一个 JS 对象的引用而不复制，适合传 DOM 节点、缓存句柄等。funcref 只能引用函数，是函数表元素的类型。引用类型补足了 Wasm 与宿主对象互操作的能力。',
     flow: [
@@ -432,7 +436,7 @@ export const lessons: Lesson[] = [
     summary: '用点赞计数器体验 SharedArrayBuffer 与 atomicAdd 的并发安全。',
     demo: WB15SharedMemoryAtomics,
     code: WB15Code,
-    language: 'vue',
+    language: 'wat',
     principle:
       '共享内存（SharedArrayBuffer）可被多个线程同时读写，普通读写会"丢更新"。原子指令（atomicAdd 等）保证读-改-写一气呵成。共享内存需在模块声明 shared，且页面启用跨源隔离。',
     flow: [
@@ -458,7 +462,7 @@ export const lessons: Lesson[] = [
     summary: '启动多个 Worker 并发补货，验证共享内存 + 原子操作的正确性。',
     demo: WB16MultiThreading,
     code: WB16Code,
-    language: 'vue',
+    language: 'javascript',
     principle:
       'Wasm 本身单线程，但可配合 Web Worker 与共享内存利用多核。每个 Worker 实例化同一模块，对共享内存执行原子自增。若用普通读写，结果会因竞态小于预期；原子指令保证结果精确等于 N×K。',
     flow: [
@@ -484,7 +488,7 @@ export const lessons: Lesson[] = [
     summary: '用一次 i32x4.add 同时给四个元素调价，理解单指令多数据。',
     demo: WB17Simd,
     code: WB17Code,
-    language: 'vue',
+    language: 'wat',
     principle:
       'SIMD 用 v128 类型打包 4 个 i32（或 8 个 i16、16 个 i8、4 个 f32），一条指令同时处理多个通道。适合图像处理、音频、矩阵运算等数据并行场景，通常能带来数倍加速。',
     flow: [
@@ -510,7 +514,7 @@ export const lessons: Lesson[] = [
     summary: '用除零保护演示 Wasm 抛出携带负载的异常并由 JS 捕获。',
     demo: WB18ExceptionHandling,
     code: WB18Code,
-    language: 'vue',
+    language: 'wat',
     principle:
       '异常处理提案让 Wasm 用 tag 定义异常类型、throw 抛出携带 payload 的异常。JS 侧捕获 WebAssembly.Exception，用 e.is(tag) 判断来源、getArg 取出负载。异常可跨 Wasm/JS 边界传递。',
     flow: [
@@ -536,7 +540,7 @@ export const lessons: Lesson[] = [
     summary: '对同一递归算法实测 Wasm 与 JS 耗时，理解各自的性能特性。',
     demo: WB19Performance,
     code: WB19Code,
-    language: 'vue',
+    language: 'javascript',
     principle:
       'Wasm 是预编译字节码，执行路径接近机器码、更可预测；JS 依赖 JIT 预热。取多次运行的最小值可排除 JIT 波动。跨边界调用有开销，小函数频繁调用反而更慢，应让计算尽量留在模块内。',
     flow: [
@@ -562,7 +566,7 @@ export const lessons: Lesson[] = [
     summary: '走通从源码到线上的完整流程，用 instantiateStreaming 演示流式加载。',
     demo: WB20ToolchainDeploy,
     code: WB20Code,
-    language: 'vue',
+    language: 'javascript',
     principle:
       'Wasm 应用生命周期：源码（C/Rust/AssemblyScript/WAT）→ 编译器输出 .wasm → WebAssembly.compile 得到不可变 Module → instantiate 注入导入生成实例 → 随静态资源部署。instantiateStreaming 可边下载边编译。',
     flow: [

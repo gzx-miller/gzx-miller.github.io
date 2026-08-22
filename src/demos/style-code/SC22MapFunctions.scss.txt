@@ -1,0 +1,102 @@
+// ========== 基础用法（basicCode） ==========
+// Map 基本定义 — 键值对数据结构
+$colors: (
+  primary: #e85d04,
+  secondary: #8b4513,
+  success: #16a34a,
+  warning: #f59e0b,
+  danger: #dc2626
+);
+
+$breakpoints: (
+  sm: 480px,
+  md: 768px,
+  lg: 1024px,
+  xl: 1280px
+);
+
+// 获取值 — map-get()
+.btn-primary {
+  background: map-get($colors, primary);  // #e85d04
+}
+
+// 配合 @each 批量生成
+@each $name, $color in $colors {
+  .text-#{$name} { color: $color; }
+  .bg-#{$name} { background-color: $color; }
+  .border-#{$name} { border-color: $color; }
+}
+
+// ========== Map 函数（functionsCode） ==========
+// Map 常用函数
+
+// 1. map-get($map, $key) — 获取值
+$value: map-get($colors, primary);  // #e85d04
+
+// 2. map-has-key($map, $key) — 检查键是否存在
+@function get-color($name) {
+  @if not map-has-key($colors, $name) {
+    @error "颜色 '#{$name}' 不存在";
+  }
+  @return map-get($colors, $name);
+}
+
+// 3. map-keys($map) — 获取所有键
+$color-names: map-keys($colors);
+// (primary, secondary, success, warning, danger)
+
+// 4. map-values($map) — 获取所有值
+$color-values: map-values($colors);
+// (#e85d04, #8b4513, #16a34a, #f59e0b, #dc2626)
+
+// 5. map-merge($map1, $map2) — 合并 Map
+$more-colors: (info: #3b82f6, muted: #6b7280);
+$all-colors: map-merge($colors, $more-colors);
+
+// 6. map-remove($map, $keys...) — 删除键
+$basic-colors: map-remove($colors, warning, danger);
+
+// 7. map.set($map, $key, $value) — 设置值（Sass 1.23+）
+$colors: map.set($colors, primary, #f97316);
+
+// ========== 嵌套 Map（nestedCode） ==========
+// 嵌套 Map — 组织更复杂的数据
+$theme-colors: (
+  primary: (
+    main: #e85d04,
+    light: #f4a261,
+    dark: #c45125,
+    contrast: #ffffff
+  ),
+  secondary: (
+    main: #8b4513,
+    light: #cd853f,
+    dark: #654321,
+    contrast: #ffffff
+  )
+);
+
+// 深度获取 — map-get 嵌套调用
+@function theme-color($name, $shade: main) {
+  $color-group: map-get($theme-colors, $name);
+  @if $color-group == null {
+    @error "颜色组 '#{$name}' 不存在";
+  }
+  $color: map-get($color-group, $shade);
+  @if $color == null {
+    @error "色阶 '#{$shade}' 不存在于 #{$name}";
+  }
+  @return $color;
+}
+
+// 使用
+.btn {
+  background: theme-color(primary, main);
+  color: theme-color(primary, contrast);
+  
+  &:hover { background: theme-color(primary, dark); }
+  &:disabled { background: theme-color(primary, light); }
+}
+
+// Sass 1.23+ 可用 map.get 深度获取
+$color: map.get($theme-colors, primary, light);

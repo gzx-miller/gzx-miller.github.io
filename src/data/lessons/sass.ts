@@ -69,21 +69,21 @@ const SC15Code = createCodeLoader('style-code/SC15CustomProperties.scss.txt')
 const SC16Diagnostics = createDemo('SC16Diagnostics')
 const SC16Code = createCodeLoader('style-code/SC16Diagnostics.scss.txt')
 const SC17Interpolation = createDemo('SC17Interpolation')
-const SC17Code = createCodeLoader('SC17Interpolation.vue')
+const SC17Code = createCodeLoader('style-code/SC17Interpolation.scss.txt')
 const SC18Placeholders = createDemo('SC18Placeholders')
-const SC18Code = createCodeLoader('SC18Placeholders.vue')
+const SC18Code = createCodeLoader('style-code/SC18Placeholders.scss.txt')
 const SC19ErrorHandling = createDemo('SC19ErrorHandling')
-const SC19Code = createCodeLoader('SC19ErrorHandling.vue')
+const SC19Code = createCodeLoader('style-code/SC19ErrorHandling.scss.txt')
 const SC20ContentBlocks = createDemo('SC20ContentBlocks')
-const SC20Code = createCodeLoader('SC20ContentBlocks.vue')
+const SC20Code = createCodeLoader('style-code/SC20ContentBlocks.scss.txt')
 const SC21ControlFlow = createDemo('SC21ControlFlow')
-const SC21Code = createCodeLoader('SC21ControlFlow.vue')
+const SC21Code = createCodeLoader('style-code/SC21ControlFlow.scss.txt')
 const SC22MapFunctions = createDemo('SC22MapFunctions')
-const SC22Code = createCodeLoader('SC22MapFunctions.vue')
+const SC22Code = createCodeLoader('style-code/SC22MapFunctions.scss.txt')
 const SC23ListFunctions = createDemo('SC23ListFunctions')
-const SC23Code = createCodeLoader('SC23ListFunctions.vue')
+const SC23Code = createCodeLoader('style-code/SC23ListFunctions.scss.txt')
 const SC24ModuleSystem = createDemo('SC24ModuleSystem')
-const SC24Code = createCodeLoader('SC24ModuleSystem.vue')
+const SC24Code = createCodeLoader('style-code/SC24ModuleSystem.scss.txt')
 
 
 export const lessons: Lesson[] = [
@@ -234,7 +234,7 @@ export const lessons: Lesson[] = [
 {
     id: 'SC_17', title: '插值语法与动态选择器', navTitle: '插值语法', category: '进阶语法',
     path: '/sass/sc-17/interpolation', summary: '使用 #{} 插值语法在选择器、属性名、字符串等位置插入变量值，实现动态生成的 CSS 规则。',
-    demo: SC17Interpolation, code: SC17Code, language: 'vue',
+    demo: SC17Interpolation, code: SC17Code, language: 'scss',
     principle: 'Sass 的 #{} 插值语法可以在选择器、属性名、字符串、URL 等位置插入变量值，实现动态生成的 CSS 规则，常用于主题切换和批量生成类名。',
     flow: ['使用 #{$variable} 在选择器或属性中插入变量', '配合 @each 循环批量生成一系列相似的类', '插值在 mixin 中可以根据参数动态生成选择器'],
     notes: ['插值结果不会进行计算，是纯文本替换', '属性名中的插值要放在冒号前面', '大多数情况用变量就够了，不要过度使用插值'],
@@ -243,7 +243,7 @@ export const lessons: Lesson[] = [
 {
     id: 'SC_18', title: '占位符选择器与 @extend 进阶', navTitle: '占位符选择器', category: '进阶语法',
     path: '/sass/sc-18/placeholders', summary: '使用 % 前缀的占位符选择器配合 @extend 继承，避免产生无用的 CSS 规则，让样式复用更干净。',
-    demo: SC18Placeholders, code: SC18Code, language: 'vue',
+    demo: SC18Placeholders, code: SC18Code, language: 'scss',
     principle: '占位符选择器（%前缀）是一种不会被编译输出的选择器，专门用于 @extend 继承，比普通选择器的 @extend 更干净，避免产生无用的 CSS 规则。',
     flow: ['用 %placeholder-name 定义占位符选择器', '在需要的选择器中使用 @extend %placeholder-name', '编译后只有使用了 extend 的选择器会输出'],
     notes: ['占位符不会单独出现在 CSS 输出中', '比 mixin 更适合静态样式的复用', '过度使用 @extend 会导致选择器膨胀'],
@@ -252,7 +252,7 @@ export const lessons: Lesson[] = [
 {
     id: 'SC_19', title: '错误处理与调试指令', navTitle: '调试指令', category: '进阶语法',
     path: '/sass/sc-19/error-handling', summary: '使用 @debug、@warn、@error 三个调试指令输出日志、警告和抛出错误，帮助在 mixin 和函数中校验参数和排查问题。',
-    demo: SC19ErrorHandling, code: SC19Code, language: 'vue',
+    demo: SC19ErrorHandling, code: SC19Code, language: 'scss',
     principle: 'Sass 提供 @debug、@warn、@error 三个调试指令，分别用于输出日志、警告和抛出错误，帮助在 mixin 和函数中校验参数和排查问题。',
     flow: ['@debug 在编译控制台输出调试信息', '@warn 输出警告但不中断编译', '@error 抛出错误并中断编译，用于参数校验'],
     notes: ['公共 mixin 和函数应该加参数校验', '@warn 和 @error 可以帮助使用者正确使用 API', '生产构建时注意过滤调试输出'],
@@ -261,7 +261,7 @@ export const lessons: Lesson[] = [
 {
     id: 'SC_20', title: '@content 与 Mixin 内容块', navTitle: '内容块', category: '进阶语法',
     path: '/sass/sc-20/content-blocks', summary: '使用 @content 指令在 mixin 中预留内容位置，调用时通过 {} 传入额外样式内容，让 mixin 更灵活。',
-    demo: SC20ContentBlocks, code: SC20Code, language: 'vue',
+    demo: SC20ContentBlocks, code: SC20Code, language: 'scss',
     principle: '@content 指令可以在 mixin 中预留内容位置，调用时通过 {} 传入额外的样式内容，让 mixin 更灵活，适合媒体查询封装和主题定制。',
     flow: ['在 @mixin 中使用 @content 标记内容插入点', '调用 mixin 时在大括号中写入额外样式', '额外样式会替换 @content 的位置输出'],
     notes: ['@content 可以接收参数（@content(...)）', '适合封装媒体查询、作用域上下文等模式', '比单纯的属性 mixin 更灵活'],
@@ -270,7 +270,7 @@ export const lessons: Lesson[] = [
 {
     id: 'SC_21', title: '控制流：@if/@for/@each/@while', navTitle: '控制流语句', category: '进阶语法',
     path: '/sass/sc-21/control-flow', summary: '使用 @if 条件判断、@for 数字循环、@each 列表/Map 遍历、@while 条件循环四种控制流批量生成样式。',
-    demo: SC21ControlFlow, code: SC21Code, language: 'vue',
+    demo: SC21ControlFlow, code: SC21Code, language: 'scss',
     principle: 'Sass 提供四种控制流：@if/@else 条件判断、@for 数字范围循环、@each 列表/Map 遍历、@while 条件循环；它们把模板化的 CSS 变成可编程的样式系统，让"机械重复"由编译器完成，从而避免手抄错误并保持代码可维护。',
     flow: ['用 @if/@else 决定是否输出某段样式。', '用 @for $i from 1 through n 生成序号类名。', '用 @each 遍历列表或 Map 批量生成规则。'],
     notes: ['优先使用 @each，可读性和可扩展性比 @for 更好。', '@while 较少使用，通常 @for 或 @each 都可以替代。', '循环不要嵌套过深，否则编译变慢且难以维护。'],
@@ -279,7 +279,7 @@ export const lessons: Lesson[] = [
 {
     id: 'SC_22', title: 'Map 数据结构与函数', navTitle: 'Map 数据结构', category: '数据与函数',
     path: '/sass/sc-22/map-functions', summary: '使用 Sass Map 键值对数据结构，配合 map-get、map-merge、map-keys 等函数管理设计令牌、色阶系统等结构化数据。',
-    demo: SC22MapFunctions, code: SC22Code, language: 'vue',
+    demo: SC22MapFunctions, code: SC22Code, language: 'scss',
     principle: 'Sass Map 是键值对数据结构（类似 JS 对象），使用 map.get、map.merge、map.keys 等模块函数管理设计令牌、色阶、断点等结构化数据；它让"配置"和"使用"分离，配合 @each 即可批量生成样式，也支持主题扩展和深合并。',
     flow: ['用 (key1: value1, key2: value2) 语法定义 Map。', 'map.get($map, $key) 取值，map.keys 列出所有键。', 'map.merge 合并两个 Map，实现主题扩展。'],
     notes: ['Map 适合组织颜色、字号、间距等设计令牌。', '嵌套 Map 可以表达层级结构（如 color.brand.primary）。', '用 @each 遍历 Map 批量生成样式，是设计与代码同步的常用做法。'],
@@ -288,7 +288,7 @@ export const lessons: Lesson[] = [
 {
     id: 'SC_23', title: 'List 数据结构与函数', navTitle: 'List 数据结构', category: '数据与函数',
     path: '/sass/sc-23/list-functions', summary: '使用 Sass List 有序序列，配合 nth、length、append、join、index 等函数操作，管理间距序列、断点列表、字体栈等有序数据。',
-    demo: SC23ListFunctions, code: SC23Code, language: 'vue',
+    demo: SC23ListFunctions, code: SC23Code, language: 'scss',
     principle: 'Sass List 是有序序列（用空格或逗号分隔），通过 list.nth、list.length、list.append、list.join、list.index 等模块函数进行操作；适合管理间距序列、断点列表、字体栈等"按顺序有意义"的数据，比 Map 轻量、可读性更高。',
     flow: ['用 list.nth($list, $n) 按索引取值（索引从 1 开始）。', 'list.length 取得长度，list.append 追加新元素。', 'list.join 合并两个列表并指定分隔符。'],
     notes: ['List 索引从 1 开始，与数组常见的 0 不同，需要特别注意。', '空格分隔和逗号分隔都属于 List，调用函数时根据需要明确分隔符。', '复杂关联关系优先用 Map，List 适合简单的有序集合。'],
@@ -297,7 +297,7 @@ export const lessons: Lesson[] = [
 {
     id: 'SC_24', title: '现代模块系统与 @use/@forward', navTitle: '现代模块系统', category: '工程架构',
     path: '/sass/sc-24/module-system', summary: '使用 Sass 现代模块系统 @use 替代 @import，避免命名冲突和重复加载，配合 @forward 转发成员构建清晰的分层样式架构。',
-    demo: SC24ModuleSystem, code: SC24Code, language: 'vue',
+    demo: SC24ModuleSystem, code: SC24Code, language: 'scss',
     principle: 'Sass 现代模块系统用 @use 替代 @import，避免命名冲突和重复加载，配合 @forward 转发成员，可以构建清晰的分层样式架构。',
     flow: ["用 @use 'path' 加载模块，默认使用命名空间", "@use 'path' as * 可以取消命名空间", '@forward 转发其他模块的成员，构建入口文件'],
     notes: ['@import 已被官方标记为弃用', '模块只会加载一次，不会重复', '私有成员用 - 或 _ 前缀，外部不可访问'],

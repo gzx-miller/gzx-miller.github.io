@@ -1,0 +1,73 @@
+// ========== 选择器插值（selectorCode） ==========
+// 使用 #{} 插值语法生成动态选择器
+$themes: autumn, forest, sunset;
+
+@each $theme in $themes {
+  .theme-#{$theme} {
+    --primary: #{map-get($theme-colors, $theme, primary)};
+    --bg: #{map-get($theme-colors, $theme, bg)};
+    background: var(--bg);
+    color: var(--primary);
+  }
+}
+
+// 编译结果：
+.theme-autumn { --primary: #e85d04; --bg: #fff3df; ... }
+.theme-forest { --primary: #2d6a4f; --bg: #e8f5e9; ... }
+.theme-sunset { --primary: #d62828; --bg: #fff0e6; ... }
+
+// ========== 属性名插值（propertyCode） ==========
+// 动态属性名插值
+@mixin position($prop, $value) {
+  #{$prop}: $value;
+}
+
+.element {
+  @include position(top, 20px);
+  @include position(border-left, 3px solid #e85d04);
+}
+
+// 编译结果：
+.element {
+  top: 20px;
+  border-left: 3px solid #e85d04;
+}
+
+// 与变量结合的高级用法
+$properties: (
+  margin: 16px,
+  padding: 12px,
+  border-radius: 8px
+);
+
+.card {
+  @each $prop, $val in $properties {
+    #{$prop}: $val;
+  }
+}
+
+// ========== 路径与 URL 插值（urlCode） ==========
+// 路径与 URL 插值
+$asset-path: '../assets/images';
+$cdn-url: 'https://cdn.example.com';
+
+.logo {
+  background-image: url('#{$asset-path}/logo.png');
+}
+
+.banner {
+  background-image: url('#{$cdn-url}/banners/autumn.jpg');
+}
+
+// 与 @for 结合生成精灵图
+@for $i from 1 through 5 {
+  .icon-#{$i} {
+    background-position: 0 (-$i * 32px);
+  }
+}
+
+// 编译结果：
+.icon-1 { background-position: 0 -32px; }
+.icon-2 { background-position: 0 -64px; }
+.icon-3 { background-position: 0 -96px; }
+...

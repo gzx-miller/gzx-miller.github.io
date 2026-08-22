@@ -1,0 +1,87 @@
+// ========== 占位符定义（placeholderCode） ==========
+// 定义占位符选择器 — 以 % 开头
+%button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+%card-base {
+  padding: 16px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+// 占位符本身不产生 CSS 输出
+// 只有被 @extend 引用时才会生成样式
+
+// ========== @extend 使用（extendCode） ==========
+// 使用 @extend 继承占位符
+.btn-primary {
+  @extend %button-base;
+  background: #e85d04;
+  color: #fff;
+  
+  &:hover { background: #c45125; }
+}
+
+.btn-secondary {
+  @extend %button-base;
+  background: #fff;
+  color: #8b4513;
+  border-color: #e0a06a;
+  
+  &:hover { background: #fff3df; }
+}
+
+.btn-danger {
+  @extend %button-base;
+  background: #dc2626;
+  color: #fff;
+}
+
+// 编译后的 CSS — 合并选择器
+.btn-primary, .btn-secondary, .btn-danger {
+  display: inline-flex;
+  align-items: center;
+  ...
+}
+.btn-primary { background: #e85d04; ... }
+.btn-secondary { background: #fff; ... }
+
+// ========== Mixin vs 占位符（compareCode） ==========
+// Mixin 方式 — 每次 include 都复制
+@mixin button-base {
+  display: inline-flex; padding: 8px 20px; ...
+}
+.btn-a { @include button-base; }
+.btn-b { @include button-base; }
+
+// 编译结果：重复代码
+.btn-a { display: inline-flex; padding: 8px 20px; ... }
+.btn-b { display: inline-flex; padding: 8px 20px; ... }
+
+---
+
+// Placeholder 方式 — 选择器合并
+%button-base { display: inline-flex; padding: 8px 20px; ... }
+.btn-a { @extend %button-base; }
+.btn-b { @extend %button-base; }
+
+// 编译结果：共享代码
+.btn-a, .btn-b { display: inline-flex; padding: 8px 20px; ... }
+
+---
+
+// 选择场景
+• 需要传参 → Mixin
+• 纯静态复用 → Placeholder
+• 交叉组合多 → Mixin
+• 选择器越少越好 → Placeholder

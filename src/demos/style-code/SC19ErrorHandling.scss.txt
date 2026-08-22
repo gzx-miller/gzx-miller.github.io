@@ -1,0 +1,79 @@
+// ========== @debug（debugCode） ==========
+// @debug — 输出变量值到控制台（开发调试）
+@mixin fluid-type($min, $max) {
+  $diff: $max - $min;
+  @debug "差值计算: #{$diff}";
+  font-size: clamp(#{$min}px, 1rem + #{$diff}vw, #{$max}px);
+}
+
+.title {
+  @include fluid-type(16, 24);
+}
+
+// 控制台输出：
+Debug: 差值计算: 8
+
+// 调试复杂计算
+@function calculate-gutter($cols) {
+  $result: (100% / $cols) * 0.1;
+  @debug "Gutter for #{$cols} cols: #{$result}";
+  @return $result;
+}
+
+// ========== @warn（warnCode） ==========
+// @warn — 发出警告但继续编译
+@mixin spacing($value) {
+  @if $value % 8 != 0 {
+    @warn "间距 #{$value}px 不在 8px 网格系统上";
+  }
+  margin-bottom: $value + px;
+}
+
+.card {
+  @include spacing(20); // 触发警告
+}
+
+// 常见使用场景：
+• 弃用 API 提示
+• 设计系统规范校验
+• 性能问题预警
+• 可访问性问题提醒
+
+// 命令行输出：
+Warning: 间距 20px 不在 8px 网格系统上
+    ╷
+  3 │   @warn "间距 #{$value}px 不在 8px 网格系统上";
+    │   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ╵
+
+// ========== @error（errorCode） ==========
+// @error — 抛出错误并终止编译
+@function get-color($name) {
+  $colors: (
+    primary: #e85d04,
+    secondary: #f4a261,
+    danger: #dc2626
+  );
+  
+  @if not map-has-key($colors, $name) {
+    @error "颜色 '#{$name}' 不存在。可用值：#{map-keys($colors)}";
+  }
+  
+  @return map-get($colors, $name);
+}
+
+.btn {
+  background: get-color(prinary); // 拼写错误，编译终止
+}
+
+// 编译错误输出：
+Error: 颜色 'prinary' 不存在。可用值：primary, secondary, danger
+  ╷
+5 │     @error "颜色 '#{$name}' 不存在...";
+  │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  ╵
+
+// 适用场景：
+• 参数必填校验
+• 枚举值合法性检查
+• 关键配置缺失

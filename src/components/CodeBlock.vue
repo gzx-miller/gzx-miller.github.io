@@ -2,20 +2,25 @@
 import hljs from 'highlight.js/lib/core'
 import css from 'highlight.js/lib/languages/css'
 import cpp from 'highlight.js/lib/languages/cpp'
+import glsl from 'highlight.js/lib/languages/glsl'
 import javascript from 'highlight.js/lib/languages/javascript'
 import scss from 'highlight.js/lib/languages/scss'
 import typescript from 'highlight.js/lib/languages/typescript'
+import wasm from 'highlight.js/lib/languages/wasm'
 import xml from 'highlight.js/lib/languages/xml'
 import { computed, ref } from 'vue'
 
 hljs.registerLanguage('css', css)
 hljs.registerLanguage('cpp', cpp)
 hljs.registerLanguage('c++', cpp)
+hljs.registerLanguage('glsl', glsl)
 hljs.registerLanguage('javascript', javascript)
 hljs.registerLanguage('jsx', javascript)
 hljs.registerLanguage('scss', scss)
 hljs.registerLanguage('typescript', typescript)
 hljs.registerLanguage('vue', xml)
+hljs.registerLanguage('wat', wasm)
+hljs.registerLanguage('wasm', wasm)
 hljs.registerLanguage('xml', xml)
 
 const props = defineProps<{
@@ -42,6 +47,9 @@ const languageLabel = computed(() => {
     typescript: 'TypeScript',
     ts: 'TypeScript',
     scss: 'SCSS',
+    glsl: 'GLSL',
+    wat: 'WAT',
+    wasm: 'WAT',
     cpp: 'C++',
     'c++': 'C++',
   }
