@@ -14,6 +14,7 @@ describe('课程注册表', () => {
       { id: 'tailwind-css', lessonCount: 24, groupCount: 12 },
       { id: 'sass', lessonCount: 24, groupCount: 9 },
       { id: 'webgl', lessonCount: 20, groupCount: 7 },
+      { id: 'webassembly', lessonCount: 20, groupCount: 8 },
     ]
 
     for (const expected of expectedCurriculum) {
