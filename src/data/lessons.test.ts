@@ -7,7 +7,7 @@ describe('课程注册表', () => {
       { id: 'javascript', lessonCount: 28, groupCount: 9 },
       { id: 'typescript', lessonCount: 24, groupCount: 4 },
       { id: 'nodejs', lessonCount: 30, groupCount: 16 },
-      { id: 'vue', lessonCount: 37, groupCount: 15 },
+      { id: 'vue', lessonCount: 38, groupCount: 15 },
       { id: 'react', lessonCount: 35, groupCount: 22 },
       { id: 'langchain', lessonCount: 23, groupCount: 14 },
       { id: 'element-plus', lessonCount: 20, groupCount: 7 },

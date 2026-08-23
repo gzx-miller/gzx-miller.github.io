@@ -110,6 +110,8 @@ const K36PiniaDevtools = createDemo('S20PiniaDevtools')
 const K36Code = createCodeLoader('S20PiniaDevtools.vue')
 const K37PiniaTesting = createDemo('S21PiniaTesting')
 const K37Code = createCodeLoader('S21PiniaTesting.vue')
+const K38DefineModel = createDemo('K38DefineModel')
+const K38Code = createCodeLoader('K38DefineModel.vue')
 
 export const lessons: Lesson[] = [
 {
@@ -807,31 +809,82 @@ export const lessons: Lesson[] = [
     problem: '解决"什么状态应该进入 Store，以及什么时候根本不需要 Store"的问题。',
   },
 {
-    id: 'K_30', title: 'Pinia Setup Store 与 storeToRefs', navTitle: 'Pinia Setup Store', category: 'Pinia 进阶',
-    path: '/vue/k-30/pinia-setup-store', summary: '用学习计划实现组合式 Store、派生值、Action 和响应式解构。',
-    demo: K30PiniaSetupStore, code: K30Code, language: 'vue',
-    principle: 'Setup Store 以 ref、computed 和函数分别表达 state、getter 与 action；storeToRefs 在解构时保留响应性，方法则直接从 Store 读取。',
-    flow: ['在 defineStore 回调中声明响应式状态。', '用 computed 创建派生数据。', '组件通过 storeToRefs 安全解构状态。'],
-    notes: ['不要直接解构 Store 的响应式属性。', '业务修改流程应封装为 action。'],
-    problem: '解决"如何用组合式 API 组织 Pinia Store 并避免解构失去响应性"的问题。',
+    id: 'K_30',
+    title: 'Pinia Setup Store 与 storeToRefs',
+    navTitle: 'Pinia Setup Store',
+    category: 'Pinia 进阶',
+    path: '/vue/k-30/pinia-setup-store',
+    summary: '用学习计划实现组合式 Store：state、getter、action 与 storeToRefs 的安全解构。',
+    demo: K30PiniaSetupStore,
+    code: K30Code,
+    language: 'vue',
+    principle:
+      'Setup Store 用组合式 API 组织状态：ref 表达 state，computed 表达 getter，普通函数表达 action，name 参数称为 store id。Store 实例本身是响应式的，直接读取 store.courses 没问题，但解构时响应性会被切断；storeToRefs 能把 state 和 getter 解构成保留响应性的 ref，而 action 不需要也不应该用 storeToRefs 包裹。',
+    flow: [
+      'defineStore(\'learning\', () => {...}) 的回调返回 state、getter 和 action。',
+      '组件调用 useLearningStore() 拿到同一个 store 实例（按 id 单例）。',
+      '用 storeToRefs 解构 courses、totalMinutes、completionRate，保留模板响应性。',
+      'enroll、toggleCompleted 等方法直接从 store 解构调用，无需 storeToRefs。',
+    ],
+    notes: [
+      'storeToRefs 只包裹 state 和 getter；action 直接解构即可，方法不需要响应式代理。',
+      '反例：const { courses } = store 会得到一次性快照，后续变更不再触发重渲染。',
+      'Setup Store 可直接复用现有组合式函数，逻辑组织更接近组件，推荐新代码使用。',
+      'store id 在应用内唯一，重复调用 useLearningStore() 返回同一个实例。',
+    ],
+    problem: '解决"如何用组合式 API 组织 Pinia Store，并在组件里解构时保留响应性"的问题。',
   },
 {
-    id: 'K_31', title: 'Pinia 批量更新、订阅与副作用', navTitle: 'Pinia 订阅', category: 'Pinia 进阶',
-    path: '/vue/k-31/pinia-subscriptions', summary: '通过 $patch 和 $subscribe 记录批量状态变更。',
-    demo: K31PiniaSubscriptions, code: K31Code, language: 'vue',
-    principle: '$patch 可把同一业务动作中的多个修改合并表达，$subscribe 观察状态提交，适合持久化、审计和同步等基础设施副作用。',
-    flow: ['用 action 或 $patch 完成一组原子修改。', '$subscribe 接收 mutation 与新状态。', '组件卸载时取消临时订阅。'],
-    notes: ['订阅回调不应再次无条件修改同一状态。', 'SSR 持久化需要区分服务端和客户端。'],
-    problem: '解决"如何观察 Pinia 变化并接入持久化或审计"的问题。',
+    id: 'K_31',
+    title: 'Pinia 批量更新、订阅与副作用',
+    navTitle: 'Pinia 订阅',
+    category: 'Pinia 进阶',
+    path: '/vue/k-31/pinia-subscriptions',
+    summary: '通过 $patch 合并多个修改，用 $subscribe 观察状态变更并驱动持久化等基础设施副作用。',
+    demo: K31PiniaSubscriptions,
+    code: K31Code,
+    language: 'vue',
+    principle:
+      '$patch 把同一业务动作中的多个修改合并成一次提交，支持对象形式和基于旧状态的函数形式；$subscribe 像 watch 一样观察 store 的每次状态变更，回调收到 mutation（含 type、storeId、payload）和最新 state，mutation.type 区分 direct、patch object 与 patch function。它返回一个取消函数，组件销毁时必须调用，避免订阅泄漏。',
+    flow: [
+      'store.$subscribe(...) 注册观察者，并保存返回的 unsubscribe 函数。',
+      '通过 store.$patch(函数形式) 完成一组互相依赖的修改，例如向数组 push 新课程。',
+      '订阅回调读取 mutation.type 与最新 state，追加到事件列表用于展示或持久化。',
+      '组件 onUnmounted 时调用 unsubscribe，避免离开后仍触发回调。',
+    ],
+    notes: [
+      '订阅回调不应再次无条件修改同一状态，否则会形成无限循环提交。',
+      '$patch 对象形式适合覆盖，含 push/splice 等需参考旧值的操作应使用函数形式。',
+      '需要脱离组件生命周期时，可传 { detached: true } 由调用方手动清理订阅。',
+      'SSR 下的持久化要区分服务端与客户端，水合后再读取并回填本地状态。',
+    ],
+    problem: '解决"如何观察 Pinia 状态变化，并把持久化或审计等副作用统一接入"的问题。',
   },
 {
-    id: 'K_32', title: 'Vuex 到 Pinia 迁移指南', navTitle: 'Vuex 迁移', category: 'Pinia 进阶',
-    path: '/vue/k-32/vuex-migration', summary: '对比 Vuex 模块与 Pinia Store 的模式差异，制定渐进迁移策略。',
-    demo: K32VuexMigration, code: K32Code, language: 'vue',
-    principle: 'Vuex 的 mutations/actions/getters 在 Pinia 中简化为直接的 state/action/getter；Pinia 支持多个独立 Store，无需嵌套模块，TypeScript 推导更好。',
-    flow: ['先理解 Vuex 和 Pinia 的 API 映射关系。', '从最独立的模块开始逐步迁移。', '最终移除 Vuex 依赖，完成切换。'],
-    notes: ['Pinia 没有 mutations，所有修改都在 action 中完成。', '可以使用 pinia-compat 在迁移期间兼容旧代码。'],
-    problem: '解决"Vuex 项目如何安全地渐进迁移到 Pinia"的问题。',
+    id: 'K_32',
+    title: 'Vuex 到 Pinia 迁移指南',
+    navTitle: 'Vuex 迁移',
+    category: 'Pinia 进阶',
+    path: '/vue/k-32/vuex-migration',
+    summary: '对比 Vuex 模块与 Pinia Store 的模式差异，制定可回滚的渐进迁移策略。',
+    demo: K32VuexMigration,
+    code: K32Code,
+    language: 'vue',
+    principle:
+      'Vuex 把改动拆成 state、mutations（同步）、actions（可异步）、getters，并用 modules + namespaced 组织大项目；Pinia 去掉 mutations，直接用 action 修改 state，用多个独立 store 替代嵌套模块，store id 天然提供命名隔离，TypeScript 推导也更完整。迁移的核心不是重写，而是做 API 映射后按模块逐个切换。',
+    flow: [
+      '把每个 Vuex module 映射为一个独立 Pinia store，store 之间通过 useXxxStore 互相引用。',
+      '将 mutations 里的同步改动并入对应 action，保留 getter 的派生语义。',
+      '从最独立、依赖最少的模块开始逐步迁移，其余模块暂用 pinia-compat 兼容。',
+      '全部迁移完成后移除 Vuex 与 pinia-compat 依赖，完成收尾。',
+    ],
+    notes: [
+      'Pinia 没有 mutations，所有状态修改都应在 action 中完成，同步修改也不例外。',
+      '命名空间由 store id 承担；Vuex 里的 namespaced: true 和模块内引用在 Pinia 中不再需要。',
+      '迁移期间新旧可并行运行，但要避免同一状态被 Vuex 和 Pinia 两边同时写入。',
+      '危险改动应分小步提交并通过测试验证，保证任何一步都能安全回滚。',
+    ],
+    problem: '解决"存量 Vuex 项目如何以低风险方式逐步切换到 Pinia"的问题。',
   },
 {
     id: 'K_33', title: 'Pinia 插件：统一扩展所有 Store', navTitle: 'Pinia 插件', category: 'Pinia 进阶',
@@ -859,7 +912,7 @@ export const lessons: Lesson[] = [
     principle: 'Pinia Getter 是基于 store 状态的计算属性，使用 computed 实现，会自动缓存结果，只有依赖变化时才重新计算。Setup Store 中直接用 computed 定义。',
     flow: ['在 Setup Store 中用 computed 定义 getter。', '组件中通过 store.getterName 读取，自动追踪依赖。', 'getter 可以依赖其他 getter，形成派生状态链。'],
     notes: ['getter 默认缓存，多次读取相同输入只计算一次。', 'getter 不应有副作用，保持纯函数。', '需要传参的 getter 可以返回函数，但会失去缓存。'],
-    problem: '解决从 store 状态派生出复杂计算结果并自动更新的问题。',
+    problem: '解决"如何从 store 状态派生出复杂计算结果并自动缓存更新"的问题。',
   },
 {
     id: 'K_35', title: 'Pinia Actions 与异步操作', navTitle: 'Pinia Actions', category: 'Pinia 进阶',
@@ -868,7 +921,7 @@ export const lessons: Lesson[] = [
     principle: 'Actions 是 Pinia 中修改状态的主要方式，支持同步和异步操作，可以直接修改状态而不需要 mutations，配合 $onAction 可以拦截 action 调用。',
     flow: ['在 store 中定义 action 函数，直接修改 state。', '组件中调用 store.actionName() 触发。', '异步 action 返回 Promise，可以 await 等待完成。'],
     notes: ['Action 中可以调用其他 action 或外部 API。', '$onAction 可以在 action 前后执行钩子。', '复杂异步流程考虑拆分多个 action 组合使用。'],
-    problem: '解决状态修改逻辑分散、异步操作难以追踪和复用的问题。',
+    problem: '解决"状态修改逻辑分散、异步操作难以追踪和复用"的问题。',
   },
 {
     id: 'K_36', title: 'Pinia DevTools 与时间旅行调试', navTitle: 'Pinia DevTools', category: 'Pinia 进阶',
@@ -877,7 +930,7 @@ export const lessons: Lesson[] = [
     principle: 'Pinia 深度集成 Vue DevTools，支持查看 store 状态、提交历史、时间旅行调试，可以回退到任意历史状态并追踪状态变化来源。',
     flow: ['安装 Vue DevTools 浏览器扩展。', '在 Pinia 标签页查看所有 store 的当前状态。', '在时间线中选择历史状态，点击回退进行调试。'],
     notes: ['DevTools 只在开发环境启用，生产环境自动关闭。', '可以给 action 命名方便在 DevTools 中识别。', '支持导入/导出状态，便于复现 bug。'],
-    problem: '解决状态变化难以追踪、bug 复现困难、调试效率低的问题。',
+    problem: '解决"状态变化难以追踪、bug 复现困难、调试效率低"的问题。',
   },
 {
     id: 'K_37', title: 'Pinia Store 单元测试', navTitle: 'Pinia 测试', category: 'Pinia 进阶',
@@ -886,6 +939,32 @@ export const lessons: Lesson[] = [
     principle: 'Pinia Store 天然易于测试，Setup Store 就是普通函数，可以在测试中创建独立的 Pinia 实例并注入，使用 setActivePinia 激活后直接测试 action 和 getter。',
     flow: ['在测试中创建独立的 Pinia 实例。', '调用 setActivePinia 激活，然后创建 store。', '调用 action 修改状态，断言状态和 getter 符合预期。'],
     notes: ['每个测试用独立的 Pinia 实例，避免状态污染。', '可以用 vi.mock 模拟 API 调用测试异步 action。', '测试关注行为而非实现细节。'],
-    problem: '解决状态管理逻辑难以单元测试、测试间状态互相污染的问题。',
+    problem: '解决"状态管理逻辑难以单元测试、测试间状态互相污染"的问题。',
+  },
+{
+    id: 'K_38',
+    title: 'defineModel：组件 v-model 的现代化写法',
+    navTitle: 'defineModel',
+    category: '组件进阶',
+    path: '/vue/k-38/define-model',
+    summary: '用课程提醒设置对比 defineModel 宏与手写 props/emits，展示 Vue 3.4 起组件级 v-model 的简化写法。',
+    demo: K38DefineModel,
+    code: K38Code,
+    language: 'vue',
+    principle:
+      'defineModel 是 Vue 3.4 起提供的编译器宏，把「modelValue prop + update:modelValue 事件」这套样板代码收敛成一行声明。defineModel() 返回一个可读写的 ref，内部赋值既更新本地状态又自动触发 update 事件；命名 model（defineModel(\'frequency\')）对应 v-model:frequency，解构第二个返回值还能读取修饰符。',
+    flow: [
+      '父组件用 v-model:enabled、v-model:frequency、v-model:label.trim 绑定子组件。',
+      '子组件用 defineModel 声明同名模型，无需手写 props 和 emits。',
+      '用户交互时直接给返回的 ref 赋值，Vue 自动向父组件派发 update 事件。',
+      '对带修饰符的字段，从解构出的修饰符对象读取 trim 决定是否清洗输入。',
+    ],
+    notes: [
+      'defineModel 仅在 <script setup> 中可用，且 Vue 版本需为 3.4 及以上。',
+      '一个组件可声明多个 defineModel，命名须与 v-model:xxx 后缀保持一致。',
+      '需要默认值、必填或本地 transform 时，通过第二个参数 options 配置。',
+      '旧的 modelValue + emit 写法仍被支持，但新代码优先用 defineModel 减少样板。',
+    ],
+    problem: '解决"自定义组件要支持 v-model 却需手写一堆 prop 与事件样板"的问题。',
   }
 ]

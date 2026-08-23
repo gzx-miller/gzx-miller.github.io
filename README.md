@@ -8,7 +8,7 @@
 
 ## 特性
 
-- **300+ 个独立案例**，覆盖 18 个软件技术知识分类
+- **490+ 个独立案例**，覆盖 21 个软件技术知识分类
 - **交互式演示** — 每个案例包含可运行的 Demo、关键代码、原理说明、处理流程和注意事项
 - **纯静态部署** — `nuxt generate` 预渲染全部路由，零服务端依赖
 - **类型安全** — 全项目 TypeScript strict mode，Vitest 单元测试覆盖核心逻辑
@@ -32,22 +32,27 @@
 
 | 分类 | 课程数 | 章节数 | 说明 |
 |---|---|---|---|
-| [Vue3](https://gzx-miller.github.io/vue) | 28 | 13 | 组合式 API、组件、路由、状态管理、过渡动画、插件开发 |
-| [React](https://gzx-miller.github.io/react) | 24 | 18 | Hooks、并发渲染、错误边界、Portal、自定义 Hook |
-| [Next.js](https://gzx-miller.github.io/nextjs) | 24 | 12 | App Router、服务端组件、数据获取、Server Actions、部署优化 |
-| [JavaScript](https://gzx-miller.github.io/javascript) | 24 | 6 | 类型系统、闭包、原型链、异步机制、迭代器、Proxy |
-| [CSS](https://gzx-miller.github.io/css) | 20 | 17 | 选择器、盒模型、Flexbox/Grid、定位、动画、容器查询 |
-| [Nuxt](https://gzx-miller.github.io/nuxt) | 20 | 10 | 文件路由、中间件、Nitro、SSR/SSG、模块生态 |
-| [Element Plus](https://gzx-miller.github.io/element-plus) | 20 | 7 | 表单、表格、弹窗、导航、数据展示、反馈组件 |
-| [LangChain](https://gzx-miller.github.io/langchain) | 18 | 11 | LLM 调用、RAG、Agent、LangGraph、流式输出、部署优化 |
-| [TypeScript](https://gzx-miller.github.io/typescript) | 18 | 4 | 泛型、条件类型、映射类型、声明文件、编译器配置 |
-| [Tailwind CSS](https://gzx-miller.github.io/tailwind-css) | 16 | 8 | 原子化类、响应式变体、暗色模式、容器查询、v4 CSS-first |
-| [Sass](https://gzx-miller.github.io/sass) | 16 | 7 | 模块系统、Mixin、函数、内置模块、选择器进阶 |
-| [Node.js](https://gzx-miller.github.io/nodejs) | 16 | 8 | 模块系统、流、HTTP、Worker 线程、WebSocket、数据库 |
-| [Vite](https://gzx-miller.github.io/vite) | 16 | 10 | 配置、插件、HMR、环境变量、构建优化、库模式、SSR |
-| [C++](https://gzx-miller.github.io/cpp) | 24 | 12 | 内存管理、面向对象、模板、STL、现代 C++ 核心特性 |
-| [Electron](https://gzx-miller.github.io/electron) | 20 | 8 | 主进程与渲染进程、IPC 通信、窗口管理、原生菜单、系统托盘 |
-| [FFmpeg](https://gzx-miller.github.io/ffmpeg) | 24 | 24 | 格式转换、视频/音频处理、滤镜效果、字幕、流媒体、硬件加速 |
+| [JavaScript](https://gzx-miller.github.io/javascript) | 28 | 9 | 类型与对象模型、原型链、异步机制、模块化与浏览器事件 |
+| [TypeScript](https://gzx-miller.github.io/typescript) | 24 | 4 | 类型建模、类型收窄、泛型、类型操作与 Vue 组件类型实践 |
+| [Vue3](https://gzx-miller.github.io/vue) | 37 | 15 | 组合式 API、组件、路由、Pinia、过渡动画、插件开发与工程实践 |
+| [Element Plus](https://gzx-miller.github.io/element-plus) | 20 | 7 | 表格、表单、弹窗、导航、数据展示与反馈等企业级组件 |
+| [Vue Flow](https://gzx-miller.github.io/vue-flow) | 12 | 4 | 流程图与节点编辑器：连线校验、useVueFlow、拖拽搭建与自动布局 |
+| [Nest.js](https://gzx-miller.github.io/nestjs) | 12 | 4 | 模块化架构、依赖注入、守卫鉴权、管道校验与 TypeORM |
+| [Nuxt](https://gzx-miller.github.io/nuxt) | 20 | 10 | 文件路由、自动导入、SSR/SSG、Nitro 服务端 API 与模块生态 |
+| [Node.js](https://gzx-miller.github.io/nodejs) | 30 | 16 | 模块、文件、事件、流、HTTP、进程、测试、安全与依赖管理 |
+| [CSS](https://gzx-miller.github.io/css) | 24 | 21 | 选择器、盒模型、布局、层叠、变量、动画、容器查询与性能 |
+| [Tailwind CSS](https://gzx-miller.github.io/tailwind-css) | 24 | 12 | v4 CSS-first、响应式变体、主题令牌、暗色模式与容器查询 |
+| [Sass](https://gzx-miller.github.io/sass) | 24 | 9 | 模块系统、变量、嵌套、Mixin、函数与集合操作 |
+| [Vite](https://gzx-miller.github.io/vite) | 21 | 10 | 配置、插件、HMR、依赖预构建、构建优化、库模式与 SSR |
+| [React](https://gzx-miller.github.io/react) | 35 | 22 | Hooks、并发渲染、错误边界、逻辑复用、状态集成与性能优化 |
+| [Next.js](https://gzx-miller.github.io/nextjs) | 24 | 6 | App Router、服务端组件、数据获取、Server Actions 与部署 |
+| [LangChain](https://gzx-miller.github.io/langchain) | 23 | 14 | 模型调用、提示模板、链式调用、RAG 与 Agent |
+| [LLM 原理](https://gzx-miller.github.io/llm-principles) | 32 | 5 | 向量、神经网络、注意力机制与 Transformer 预训练范式 |
+| [C++](https://gzx-miller.github.io/cpp) | 30 | 12 | 内存管理、面向对象、模板、STL 与现代 C++ 核心特性 |
+| [Electron](https://gzx-miller.github.io/electron) | 15 | 7 | 主进程与渲染进程、IPC 通信、窗口管理、系统托盘与打包分发 |
+| [FFmpeg](https://gzx-miller.github.io/ffmpeg) | 24 | 1 | 格式转换、音视频处理、滤镜效果、字幕、流媒体与硬件加速 |
+| [WebGL](https://gzx-miller.github.io/webgl) | 20 | 7 | 着色器、缓冲区、矩阵变换、纹理贴图、光照模型与后处理 |
+| [WebAssembly](https://gzx-miller.github.io/webassembly) | 20 | 8 | WAT 指令、线性内存、JS 互操作、SIMD、多线程与工具链 |
 
 ## 快速开始
 

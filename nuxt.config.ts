@@ -83,7 +83,7 @@ export default defineNuxtConfig({
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         {
           name: 'description',
-          content: '小松鼠举栗子中文前端知识案例库：Vue3、TypeScript、React、Node.js、CSS 等 19 大分类 400+ 真实案例，通过独立小案例学透前端技术。',
+          content: '小松鼠举栗子中文技术知识案例库：Vue3、TypeScript、React、Node.js、CSS、WebGL、C++ 等 21 大分类 490+ 真实案例，通过独立小案例学懂软件技术。',
         },
         { name: 'theme-color', media: '(prefers-color-scheme: light)', content: '#f8b369' },
         { name: 'theme-color', media: '(prefers-color-scheme: dark)', content: '#1a1210' },

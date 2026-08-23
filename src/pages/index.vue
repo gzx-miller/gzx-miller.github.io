@@ -8,9 +8,9 @@ useHead({
 })
 
 useSeoMeta({
-  description: '小松鼠举栗子中文技术知识案例库：Vue3、TypeScript、React、Node.js、CSS 等 19 大分类 400+ 真实案例，每个栗子只讲一个知识点。',
+  description: '小松鼠举栗子中文技术知识案例库：Vue3、TypeScript、React、Node.js、CSS、WebGL、C++ 等 21 大分类 490+ 真实案例，每个栗子只讲一个知识点。',
   ogTitle: '小松鼠举栗子',
-  ogDescription: '通过独立真实案例学习软件技术，400+ 颗栗子等你来摘。',
+  ogDescription: '通过独立真实案例学习软件技术，490+ 颗栗子等你来摘。',
   ogType: 'website',
   twitterCard: 'summary',
 })
@@ -21,6 +21,7 @@ const categoryEmojis: Record<string, string> = {
   typescript: '📘',
   vue: '💚',
   'element-plus': '🧩',
+  'vue-flow': '🕸️',
   nestjs: '🦁',
   nuxt: '🌲',
   nodejs: '🍃',
@@ -31,10 +32,12 @@ const categoryEmojis: Record<string, string> = {
   react: '⚛️',
   nextjs: '▲',
   langchain: '🦜',
+  'llm-principles': '🧠',
   cpp: '⚙️',
   electron: '🪟',
   ffmpeg: '🎬',
   webgl: '🎮',
+  webassembly: '🧬',
 }
 
 // 构建期统计各分类栗子数与总数（结果进入 payload，客户端无需重复加载）
