@@ -1,0 +1,57 @@
+<template>
+  <view class="page">
+    <button @tap="toast">轻提示</button>
+    <button @tap="confirmDelete">删除确认</button>
+    <button @tap="withLoading">提交订单</button>
+    <button @tap="showSheet">更多操作</button>
+  </view>
+</template>
+
+<script>
+export default {
+  methods: {
+    toast() {
+      // 轻提示：自动消失，icon 可选 success/error/loading/none
+      uni.showToast({ title: '报名成功', icon: 'success' })
+    },
+
+    confirmDelete() {
+      // 模态框：有确认/取消两个按钮，弹框内不关闭
+      uni.showModal({
+        title: '删除课程',
+        content: '删除后不可恢复，确定吗？',
+        success(res) {
+          if (res.confirm) uni.showToast({ title: '已删除', icon: 'none' })
+        },
+      })
+    },
+
+    async withLoading() {
+      // 加载中：阻止误操作，完成后必须手动 hideLoading
+      uni.showLoading({ title: '提交中…', mask: true })
+      await new Promise((resolve) => setTimeout(resolve, 1200))
+      uni.hideLoading()
+      uni.showToast({ title: '已完成' })
+    },
+
+    showSheet() {
+      // 操作菜单：底部弹出选项列表，返回 tapIndex
+      uni.showActionSheet({
+        itemList: ['分享海报', '复制链接', '举报'],
+        success(res) {
+          console.log('点击了第', res.tapIndex, '项')
+        },
+      })
+    },
+  },
+}
+</script>
+
+<style scoped>
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+  padding: 24rpx;
+}
+</style>

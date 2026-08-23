@@ -43,6 +43,16 @@ const U09Easycom = createDemo('U09Easycom')
 const U09Code = createCodeLoader('uni-code/U09Easycom.vue.txt')
 const U10RequestStorage = createDemo('U10RequestStorage')
 const U10Code = createCodeLoader('uni-code/U10RequestStorage.vue.txt')
+const U11PullRefresh = createDemo('U11PullRefresh')
+const U11Code = createCodeLoader('uni-code/U11PullRefresh.vue.txt')
+const U12UiFeedback = createDemo('U12UiFeedback')
+const U12Code = createCodeLoader('uni-code/U12UiFeedback.vue.txt')
+const U13AppLifecycle = createDemo('U13AppLifecycle')
+const U13Code = createCodeLoader('uni-code/U13AppLifecycle.vue.txt')
+const U14CompositionApi = createDemo('U14CompositionApi')
+const U14Code = createCodeLoader('uni-code/U14CompositionApi.vue.txt')
+const U15Subpackages = createDemo('U15Subpackages')
+const U15Code = createCodeLoader('uni-code/U15Subpackages.vue.txt')
 
 export const lessons: Lesson[] = [
   {
@@ -134,5 +144,50 @@ export const lessons: Lesson[] = [
     flow: ['封装 request 返回 Promise，统一注入 token 与 baseURL。', '拦截 401 等状态码并跳转登录或清理缓存。', '用 uni.setStorageSync 保存登录态与轻量数据。', '进入页面先展示缓存，再请求新数据覆盖。'],
     notes: ['uni.request 默认超时需按业务设 timeout 并处理失败。', '同步存储接口在大数据量下会阻塞，改为异步版本更稳。', '敏感数据不宜明文入缓存，登录态建议配合过期时间。', '跨端网络层需遵循各平台域名白名单等安全限制。'],
     problem: '解决"网络请求如何统一管理，登录态与轻量数据如何跨页面持久化"的问题。',
+  },
+  {
+    id: 'U_11', title: '下拉刷新与触底加载', navTitle: '下拉刷新', category: '页面与生命周期',
+    path: '/uni-app/u-11/pull-refresh', summary: '用 onPullDownRefresh 实现下拉刷新、onReachBottom 实现触底加载，理解分页策略与刷新动画收尾。',
+    demo: U11PullRefresh, code: U11Code, language: 'vue',
+    principle: '列表页最常见的数据更新有两种：下拉刷新对应页面事件 onPullDownRefresh，触底加载对应 onReachBottom。前者需先在 pages.json 对应页面开启 enablePullDownRefresh，并在完成后调用 uni.stopPullDownRefresh 收起动画；后者在内容滚动到底部时自动触发，通常用「页码 +1 追加」的分页策略，并在数据耗尽时给出「没有更多了」的终止提示。',
+    flow: ['在 pages.json 页面 style 中开启 enablePullDownRefresh。', 'onPullDownRefresh 里重置页码并请求第一页。', 'onReachBottom 里页码递增并追加下一页。', '刷新收尾调用 uni.stopPullDownRefresh 结束动画。'],
+    notes: ['onReachBottom 需页面内容超出屏幕才会触发滚动。', '刷新中避免重复请求，用 loading 标志位防抖。', '分页要维护当前页码与「没有更多了」的终止状态。', '需要局部滚动时改用 scroll-view 的 @scrolltolower 触底。'],
+    problem: '解决"列表页如何下拉刷新、滚动到底自动加载更多数据"的问题。',
+  },
+  {
+    id: 'U_12', title: '交互反馈 showToast 与 showModal', navTitle: '交互反馈', category: '交互反馈',
+    path: '/uni-app/u-12/ui-feedback', summary: '掌握 showToast、showModal、showLoading、showActionSheet 四类原生反馈的用法与适用场景。',
+    demo: U12UiFeedback, code: U12Code, language: 'vue',
+    principle: 'uni-app 提供一套跨端交互反馈 API：showToast 用于轻量提示并自动消失；showModal 用于需要用户确认/取消的模态框；showLoading 配合 hideLoading 表达进行中的阻断状态；showActionSheet 用于底部多选项操作菜单。这些 API 在小程序、H5、App 上被映射到各自原生控件，比手写弹窗更统一、也更省事。',
+    flow: ['成功/失败提示用 showToast，指定 icon 与 title。', '危险操作前用 showModal 让用户确认，读取 res.confirm。', '耗时操作前 showLoading，完成后必须 hideLoading。', '多选项操作用 showActionSheet，通过 tapIndex 区分。'],
+    notes: ['showToast 的 title 长度受限，过长会被截断。', 'showLoading 必须手动 hideLoading，否则会一直遮挡。', 'showModal 可同屏展示 title 与 content 两行文案。', 'showActionSheet 最多 6 项，超出会自动转列表形式。'],
+    problem: '解决"如何用统一的跨端方式给用户即时、明确的交互反馈"的问题。',
+  },
+  {
+    id: 'U_13', title: '应用生命周期与全局数据', navTitle: '应用生命周期', category: '工程基础',
+    path: '/uni-app/u-13/app-lifecycle', summary: '理解 App.vue 的 onLaunch、onShow、onHide、onError 与 globalData，用 getApp 跨页面共享全局状态。',
+    demo: U13AppLifecycle, code: U13Code, language: 'vue',
+    principle: 'App.vue 是应用入口，承载应用级生命周期：onLaunch 仅在启动时执行一次（适合读缓存、初始化全局状态、检测版本更新），onShow/onHide 表示应用进出前台，onError 全局兜底异常。globalData 挂在应用实例上，任意页面通过 getApp().globalData 读写，适合存放用户信息、登录态等跨页面共享但非响应式的数据。',
+    flow: ['onLaunch 中读取本地缓存并初始化 globalData。', 'onShow/onHide 处理切前台/后台的收尾工作。', 'onError 统一捕获未处理异常并上报。', '页面侧用 getApp().globalData 读写共享数据。'],
+    notes: ['onLaunch 只执行一次，适合做一次性初始化。', 'globalData 不是响应式的，改动不会自动刷新视图。', '跨页面的高频共享状态建议用 Pinia 或全局 store。', 'appid 等应用配置在 manifest.json 中声明，而非 App.vue。'],
+    problem: '解决"应用启动、进出前台该在哪处理，以及如何跨页面共享全局数据"的问题。',
+  },
+  {
+    id: 'U_14', title: '组合式 API 与 script setup', navTitle: '组合式 API', category: '语法基础',
+    path: '/uni-app/u-14/composition-api', summary: '用 Vue3 组合式 API 写 uni-app 页面，理解如何从 @dcloudio/uni-app 导入 onLoad、onShow 等页面生命周期。',
+    demo: U14CompositionApi, code: U14Code, language: 'vue',
+    principle: 'uni-app 支持 Vue3 组合式写法：用 `<script setup>` 组织 ref/reactive/computed，页面生命周期不再是 options 里的方法，而是从 `@dcloudio/uni-app` 导入的 onLoad、onShow、onUnload、onReachBottom 等函数，传入回调即可。它让逻辑更聚合、类型推断更好，也便于把可复用逻辑抽成 composable 在多页面间共享。',
+    flow: ['用 <script setup lang="ts"> 声明响应式状态。', '从 @dcloudio/uni-app 导入所需页面生命周期。', '在回调里读取 onLoad 传入的路由参数。', '把可复用逻辑抽成 composable，供多页面调用。'],
+    notes: ['组合式页面生命周期与 options 写法二选一，不要混用。', 'onLoad 回调参数为路由 options，需解构使用。', '组件实例的 onMounted 等来自 Vue，无需额外 import。', '搭配 Pinia 时直接在 setup 里 useStore 即可。'],
+    problem: '解决"如何用 Vue3 组合式 API 而不是 options 来组织 uni-app 页面逻辑"的问题。',
+  },
+  {
+    id: 'U_15', title: '分包与按需加载', navTitle: '分包加载', category: '工程基础',
+    path: '/uni-app/u-15/subpackages', summary: '用 pages.json 的 subPackages 把低频页面下沉到分包，理解 preloadRule 预下载对首屏体积的优化。',
+    demo: U15Subpackages, code: U15Code, language: 'json',
+    principle: '当页面变多，主包体积会成为启动瓶颈。subPackages 允许把部分页面拆到独立分包，打包时与主包分开、按需下载；preloadRule 可配置在进入某页后预下载指定分包，在空闲时静默拉取，用户真正使用时已就绪。主包只保留首页与高优路径页面，能显著降低首屏加载时间。',
+    flow: ['在 pages.json 用 subPackages 声明分包 root 与页面。', '分包页面路径相对 root 写，无需加根前缀。', '用 preloadRule 配置进入主包页后预下载指定分包。', '主包只保留首页与关键路径，其余下沉分包。'],
+    notes: ['subPackages 与 subpackages 两种字段名均被识别。', '主包与分包不能重复声明同一个页面。', '跨分包跳转前需确保目标分包已加载。', '单个分包过大仍会卡顿，需合理拆分粒度。'],
+    problem: '解决"页面较多时如何压缩首屏体积、实现按需加载分包"的问题。',
   },
 ]

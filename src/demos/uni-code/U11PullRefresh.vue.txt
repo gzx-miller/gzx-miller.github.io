@@ -1,0 +1,55 @@
+<template>
+  <view class="list">
+    <view v-for="c in courses" :key="c.id" class="row">{{ c.title }}</view>
+    <text class="status">{{ loading ? '加载中…' : '没有更多了' }}</text>
+  </view>
+</template>
+
+<script>
+export default {
+  data() {
+    return { courses: [], page: 1, loading: false }
+  },
+
+  // 需在 pages.json 对应页开启 "style": { "enablePullDownRefresh": true }
+  onPullDownRefresh() {
+    // 下拉刷新：重置页码，重拉第一页
+    this.page = 1
+    this.fetchCourses(true)
+  },
+
+  onReachBottom() {
+    // 触底加载：页码 +1，追加下一页
+    this.page += 1
+    this.fetchCourses(false)
+  },
+
+  methods: {
+    async fetchCourses(reset) {
+      this.loading = true
+      const res = await uni.request({ url: `/courses?page=${this.page}` })
+      this.courses = reset ? res.data : this.courses.concat(res.data)
+      this.loading = false
+      // 刷新完成后手动收起下拉动画
+      if (reset) uni.stopPullDownRefresh()
+    },
+  },
+}
+</script>
+
+<style scoped>
+.list {
+  padding: 24rpx;
+}
+.row {
+  padding: 20rpx;
+  border-bottom: 1rpx solid #efc48d;
+  color: #32190f;
+}
+.status {
+  display: block;
+  padding: 20rpx;
+  text-align: center;
+  color: #7c563f;
+}
+</style>

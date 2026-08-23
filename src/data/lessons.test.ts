@@ -15,7 +15,7 @@ describe('课程注册表', () => {
       { id: 'sass', lessonCount: 16, groupCount: 7 },
       { id: 'webgl', lessonCount: 20, groupCount: 7 },
       { id: 'webassembly', lessonCount: 20, groupCount: 8 },
-      { id: 'uni-app', lessonCount: 10, groupCount: 9 },
+      { id: 'uni-app', lessonCount: 15, groupCount: 10 },
     ]
 
     for (const expected of expectedCurriculum) {

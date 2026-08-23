@@ -53,7 +53,7 @@
 | [FFmpeg](https://gzx-miller.github.io/ffmpeg) | 24 | 1 | 格式转换、音视频处理、滤镜效果、字幕、流媒体与硬件加速 |
 | [WebGL](https://gzx-miller.github.io/webgl) | 20 | 7 | 着色器、缓冲区、矩阵变换、纹理贴图、光照模型与后处理 |
 | [WebAssembly](https://gzx-miller.github.io/webassembly) | 20 | 8 | WAT 指令、线性内存、JS 互操作、SIMD、多线程与工具链 |
-| [uni-app](https://gzx-miller.github.io/uni-app) | 10 | 9 | 项目结构、条件编译、页面生命周期、内置组件、路由跳转、rpx 适配与数据请求 |
+| [uni-app](https://gzx-miller.github.io/uni-app) | 15 | 10 | 项目结构、条件编译、页面/应用生命周期、内置组件、路由与分包、rpx 适配、easycom、组合式 API 与请求存储 |
 
 ## 快速开始
 
