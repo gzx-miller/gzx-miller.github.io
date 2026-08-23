@@ -1810,7 +1810,7 @@ optimizeDeps: {
     principle: 'Vite 在首次启动时使用 esbuild 预构建 node_modules 中的依赖，将 CommonJS/UMD 转换为 ESM，并缓存到磁盘，避免重复构建提升启动速度。',
     flow: ['首次启动 Vite 时扫描依赖并预构建。', '构建结果缓存到 node_modules/.vite。', '后续启动直接读取缓存，依赖变化时重新构建。'],
     notes: ['预构建只处理第三方依赖，源码不预构建。', 'optimizeDeps.include 可以强制预构建某些包。', '缓存失效会自动检测并重新构建。'],
-    problem: '解决大量依赖下启动慢、CommonJS 模块无法直接在浏览器运行的问题。',
+    problem: '解决"大量依赖下启动慢、CommonJS 模块无法直接在浏览器运行"的问题。',
   },
 {
     id: 'V_18', title: 'esbuild 转换与 JSX/TS 处理', navTitle: 'esbuild 转换', category: '基础',
@@ -1951,7 +1951,7 @@ await esbuild.build({
     principle: 'Vite 使用 esbuild 处理 TypeScript 和 JSX 转换，esbuild 用 Go 编写比传统 JS 工具快 10-100 倍，开发环境下跳过类型检查只做语法转换。',
     flow: ['源码中的 .ts/.tsx 文件请求到达 Vite 开发服务器。', 'esbuild 进行语法转换，输出纯 JS。', '浏览器直接运行转换后的 ESM 模块。'],
     notes: ['开发环境只做语法转换，类型检查由 IDE 和构建时负责。', 'esbuild 不支持某些 TS 特性如 const enum（需配置）。', '构建时由 Rollup + TS 插件做完整的类型检查。'],
-    problem: '解决传统构建工具 TS/JSX 编译速度慢、开发体验差的问题。',
+    problem: '解决"传统构建工具 TS/JSX 编译速度慢、开发体验差"的问题。',
   },
 {
     id: 'V_19', title: 'Rollup 插件兼容与构建钩子', navTitle: 'Rollup 插件', category: '插件',
@@ -2111,7 +2111,7 @@ function transformCustomCode(code: string): string {
     principle: 'Vite 构建时基于 Rollup，兼容大部分 Rollup 插件，同时扩展了 Vite 特有的钩子如 config、configureServer、transformIndexHtml 等。',
     flow: ['在 vite.config.ts 的 plugins 数组中添加 Rollup 插件。', '开发和构建时 Vite 调用插件的不同钩子。', '使用 Vite 特有钩子扩展开发服务器等能力。'],
     notes: ['并非所有 Rollup 插件都能在开发模式下工作。', 'Vite 插件可以只在开发或构建阶段生效。', '插件执行顺序与数组顺序相关，enforce 可以调整。'],
-    problem: '解决构建工具生态碎片化、需要学习多套插件 API 的问题。',
+    problem: '解决"构建工具生态碎片化、需要学习多套插件 API"的问题。',
   },
 {
     id: 'V_20', title: '库模式与组件打包发布', navTitle: '库模式', category: '构建',
@@ -2298,7 +2298,7 @@ import './styles/index.scss'
     principle: 'Vite 的库模式（Library Mode）可以把项目打包成可发布的 npm 包，支持 ESM、CommonJS、UMD 等多种输出格式，并自动处理 CSS 和类型声明。',
     flow: ['在 vite.config.ts 中配置 build.lib 选项。', '指定入口文件、输出格式和包名。', '运行 vite build 生成可发布的 dist 目录。'],
     notes: ['库模式下外部化 Vue 等 peer dependencies。', '需要单独配置 d.ts 生成或使用 vite-plugin-dts。', '注意输出格式兼容性和 Tree Shaking 支持。'],
-    problem: '解决组件库/工具库打包配置复杂、输出格式不统一的问题。',
+    problem: '解决"组件库/工具库打包配置复杂、输出格式不统一"的问题。',
   },
 {
     id: 'V_21', title: '多页面应用配置与入口管理', navTitle: '多页面应用', category: '构建',
@@ -2490,6 +2490,6 @@ export default defineConfig(async () => {
     principle: 'Vite 支持多页面应用（MPA），通过 build.rollupOptions.input 配置多个 HTML 入口，每个页面可以有独立的脚本和样式，开发服务器也支持多页面路由。',
     flow: ['在项目根目录创建多个 HTML 入口文件。', '在 vite.config.ts 中配置 build.rollupOptions.input。', '开发服务器通过路径访问不同页面，构建时输出多个 HTML。'],
     notes: ['多页面可以共享公共依赖和代码分割。', '每个页面有独立的 Vite 模块图。', '适合后台管理系统等多入口场景。'],
-    problem: '解决传统 MPA 构建配置复杂、公共资源管理困难的问题。',
+    problem: '解决"传统 MPA 构建配置复杂、公共资源管理困难"的问题。',
   }
 ]

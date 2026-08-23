@@ -271,7 +271,7 @@ export const lessons: Lesson[] = [
     principle: 'Tailwind 的 Grid 布局通过 grid-cols、grid-rows、gap 等工具类快速构建二维网格布局，配合 col-span、row-span 实现跨列跨行，比写 CSS Grid 更简洁高效。',
     flow: ['使用 grid 类启用 Grid 布局', '用 grid-cols-n 定义列数，gap 设置间距', '用 col-span-n 控制子元素跨列，place-items 对齐'],
     notes: ['grid-cols-12 是最常用的 12 栅格系统', '响应式断点前缀可在不同尺寸下切换列数', '配合 place-content/place-items 快速对齐'],
-    problem: '解决复杂二维布局手写 CSS Grid 繁琐、响应式切换困难的问题。',
+    problem: '解决"复杂二维布局手写 CSS Grid 繁琐、响应式切换困难"的问题。',
   },
 {
     id: 'TW_18', title: 'Flexbox 与 Grid 布局对比选择', navTitle: 'Flex vs Grid', category: '布局与栅格',
@@ -316,7 +316,7 @@ export const lessons: Lesson[] = [
     principle: 'Flexbox 适合一维布局（行或列），Grid 适合二维布局（行和列同时控制），两者可以组合使用，根据布局需求选择最合适的工具。',
     flow: ['一维内容流优先用 Flex（导航、列表、卡片行）', '二维网格布局用 Grid（仪表板、图片墙、表单布局）', 'Flex 做容器内对齐，Grid 做整体骨架，组合使用'],
     notes: ['Flex 内容优先，Grid 布局优先', '两者不互斥，Grid 容器内可以有 Flex 子项', '选择标准：一维 vs 二维、内容驱动 vs 布局驱动'],
-    problem: '解决布局选择困难、不知道何时用 Flex 何时用 Grid 的问题。',
+    problem: '解决"布局选择困难、不知道何时用 Flex 何时用 Grid"的问题。',
   },
 {
     id: 'TW_19', title: '交互状态与组(Group)状态', navTitle: '交互状态', category: '响应与状态',
@@ -362,7 +362,7 @@ export const lessons: Lesson[] = [
     principle: 'Tailwind 通过 hover、focus、active 等状态变体描述元素交互状态，group 类可以让父元素状态触发子元素样式变化，适合卡片悬停、菜单展开等场景。',
     flow: ['使用 hover:bg-* 定义悬停样式', '用 focus:ring-* 定义聚焦状态', '父元素加 group，子元素用 group-hover: 触发'],
     notes: ['状态变体可以叠加响应式前缀', 'group 支持嵌套，但要注意层级', 'peer 类可以实现兄弟元素状态联动'],
-    problem: '解决交互状态 CSS 重复书写、父子联动样式复杂的问题。',
+    problem: '解决"交互状态 CSS 重复书写、父子联动样式复杂"的问题。',
   },
 {
     id: 'TW_20', title: '变换、过渡与动画', navTitle: '变换动画', category: '动效与过渡',
@@ -407,7 +407,7 @@ export const lessons: Lesson[] = [
     principle: 'Tailwind 提供 transform（缩放、旋转、位移、倾斜）、transition（过渡属性）和 animate（关键帧动画）工具类，配合状态变体实现丰富的交互动效。',
     flow: ['使用 scale/rotate/translate/skew 工具类定义变换', '用 transition-all 或 transition-* 控制过渡属性', 'hover:scale-105 配合 transition 实现悬停放大效果'],
     notes: ['动画性能优先使用 transform 和 opacity', 'transition 配合 duration/ease 控制过渡曲线', 'animate 内置常用动画如 spin、ping、bounce、pulse'],
-    problem: '解决手写动画 CSS 繁琐、过渡效果不统一的问题。',
+    problem: '解决"手写动画 CSS 繁琐、过渡效果不统一"的问题。',
   },
 {
     id: 'TW_21', title: '滤镜与混合模式', navTitle: '滤镜混合', category: '视觉效果',
@@ -462,7 +462,7 @@ export const lessons: Lesson[] = [
     principle: 'Tailwind 提供 CSS filter 和 backdrop-filter 工具类，支持模糊、亮度、对比度、饱和度等滤镜效果，mix-blend-* 实现元素混合模式。',
     flow: ['使用 blur-*、brightness-* 等工具类应用滤镜', 'backdrop-blur-* 实现毛玻璃背景效果', 'mix-blend-* 控制元素与下层内容的混合'],
     notes: ['滤镜可以组合使用，空格分隔', 'backdrop-filter 影响元素后面的内容', '合理使用可以提升视觉层次感'],
-    problem: '解决图片处理、毛玻璃效果、视觉特效需要额外图片资源的问题。',
+    problem: '解决"图片处理、毛玻璃效果、视觉特效需要额外图片资源"的问题。',
   },
 {
     id: 'TW_22', title: 'SVG 图标与当前颜色', navTitle: 'SVG 图标', category: '视觉效果',
@@ -601,7 +601,7 @@ export default {
     principle: 'Tailwind 插件可以扩展工具类、组件、基础样式和主题，官方提供 typography、forms、aspect-ratio 等插件，也可以编写自定义插件满足项目特定需求。',
     flow: ['在 tailwind.config.js 的 plugins 数组中添加插件', '使用 plugin() API 添加自定义工具类或组件', '用 matchUtilities 生成动态值的工具类'],
     notes: ['官方插件覆盖大多数常见需求', '自定义插件优先考虑能否用 CSS 变量或 theme 扩展解决', '插件发布为 npm 包可以在多项目复用'],
-    problem: '解决内置工具类不够用、重复模式需要抽象复用的问题。',
+    problem: '解决"内置工具类不够用、重复模式需要抽象复用"的问题。',
   },
 {
     id: 'TW_24', title: '主题预设与设计系统配置', navTitle: '主题预设', category: '工程与定制',

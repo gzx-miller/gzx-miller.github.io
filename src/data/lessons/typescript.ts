@@ -888,7 +888,7 @@ console.log('品牌类型演示完成')
     principle: 'TypeScript 默认是结构化类型系统，但通过品牌类型（Branded Types）可以模拟名义类型，让结构相同但语义不同的类型（如 UserId 和 OrderId）不能互相赋值，提升类型安全。',
     flow: ['使用交叉类型 & { readonly __brand: \'TypeName\' } 创建品牌类型', '通过类型断言或构造函数创建品牌类型的值', '函数参数使用品牌类型，传参时自动校验身份'],
     notes: ['品牌类型在运行时没有额外开销', '__brand 是约定俗成的属性名，也可以用 symbol', '适合 ID、金额、邮箱等有业务语义的原始类型'],
-    problem: '解决结构相同但语义不同的类型无法区分、传参错误难以发现的问题。',
+    problem: '解决"结构相同但语义不同的类型无法区分、传参错误难以发现"的问题。',
   },
 {
     id: 'T_20', title: '可辨识联合类型与穷尽性检查', navTitle: '可辨识联合', category: '类型进阶',
@@ -1262,7 +1262,7 @@ console.log('infer 关键字演示完成')
     principle: 'infer 关键字在条件类型中声明一个待推断的类型变量，让 TypeScript 从上下文推断出类型，常用于提取函数返回类型、参数类型、Promise 内部类型等。',
     flow: ['在条件类型的 extends 子句中使用 infer 声明类型变量', 'TypeScript 根据实际类型推断 infer 变量的值', '在条件为 true 的分支中使用推断出的类型'],
     notes: ['ReturnType、Parameters 等工具类型内部都用 infer 实现', 'infer 只能在条件类型中使用', '同一位置可以有多个 infer 变量'],
-    problem: '解决需要从已有类型中提取部分类型但无法直接访问的问题。',
+    problem: '解决"需要从已有类型中提取部分类型但无法直接访问"的问题。',
   },
 {
     id: 'T_22', title: '递归类型与深嵌套对象', navTitle: '递归类型', category: '类型进阶',
@@ -1534,7 +1534,7 @@ console.log('递归类型演示完成')
     principle: '递归类型是在类型定义中引用自身的类型，常用于描述树形结构、深嵌套对象（如 DeepReadonly、DeepPartial），TypeScript 4.1+ 对递归类型有更好的支持。',
     flow: ['定义接口或类型别名时在内部引用自身', '配合条件类型和映射类型实现深度转换', '用递归类型描述目录树、JSON 等嵌套结构'],
     notes: ['递归类型要注意终止条件，避免无限递归', '深度映射类型可以统一处理嵌套对象', 'TypeScript 有递归深度限制，过深会报错'],
-    problem: '解决嵌套结构类型描述复杂、深度转换需要逐层手写的问题。',
+    problem: '解决"嵌套结构类型描述复杂、深度转换需要逐层手写"的问题。',
   },
 {
     id: 'T_23', title: '类型级编程与类型体操', navTitle: '类型级编程', category: '类型进阶',
@@ -1737,7 +1737,7 @@ console.log('类型级编程演示完成')
     principle: '类型级编程利用 TypeScript 的条件类型、映射类型、模板字面量类型、递归类型等能力，在类型层面实现计算和逻辑，让类型系统表达更丰富的约束和推导。',
     flow: ['使用条件类型实现类型层面的 if-else', '用映射类型遍历键并转换值类型', '结合模板字面量类型操作字符串类型'],
     notes: ['类型体操是手段不是目的，优先考虑可读性', '业务代码中适度使用，库代码可以更激进', '复杂类型建议加注释说明意图'],
-    problem: '解决类型系统表达能力不足、需要运行时校验才能保证安全的问题。',
+    problem: '解决"类型系统表达能力不足、需要运行时校验才能保证安全"的问题。',
   },
 {
     id: 'T_24', title: '异步返回类型与 Awaited', navTitle: '异步返回类型', category: '类型进阶',
@@ -1930,6 +1930,6 @@ console.log('异步返回类型演示完成')
     principle: 'TypeScript 的 Awaited 工具类型用于解包 Promise 嵌套，获取最终的 resolve 值类型，配合 ReturnType 等可以精确获取异步函数的返回值类型。',
     flow: ['使用 Awaited<T> 解包 Promise 类型', 'ReturnType<typeof fn> 获取函数返回类型', '组合 Awaited<ReturnType<typeof fn>> 获取异步函数 resolve 类型'],
     notes: ['Awaited 会递归解包嵌套的 Promise', 'async 函数返回值自动包装为 Promise', '处理 Promise.all 等并发组合时很有用'],
-    problem: '解决 Promise 嵌套类型难以解包、异步函数返回值类型不清晰的问题。',
+    problem: '解决"Promise 嵌套类型难以解包、异步函数返回值类型不清晰"的问题。',
   }
 ]

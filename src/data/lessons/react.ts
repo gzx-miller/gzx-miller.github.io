@@ -1015,7 +1015,7 @@ createRoot(document.getElementById('root')).render(<App />)
     principle: 'Recoil 是 Facebook 推出的 React 状态管理库，以 Atom 为最小状态单元，Selector 作为派生状态，通过 atom 依赖图实现精确的组件级重渲染。',
     flow: ['使用 atom 定义原子状态并指定唯一 key。', '使用 selector 定义派生状态，依赖其他 atom/selector。', '组件通过 useRecoilState/useRecoilValue 读取状态。'],
     notes: ['Recoil 的状态图支持异步 selector 和 Suspense。', '每个 atom 独立追踪订阅，更新粒度更细。', 'Recoil 目前主要适用于 React 生态。'],
-    problem: '解决大型应用中状态更新粒度过粗、不必要重渲染多的问题。',
+    problem: '解决"大型应用中状态更新粒度过粗、不必要重渲染多"的问题。',
   },
 {
     id: 'R_34', title: 'MobX 响应式状态与 Observable', navTitle: 'MobX', category: '结构化状态',
@@ -1254,6 +1254,6 @@ createRoot(document.getElementById('root')).render(<App />)
     principle: 'Overmind 是一个分形状态管理库，将状态、动作、派生值组织在命名空间中，支持状态追踪、DevTools 和效果（effects）隔离副作用。',
     flow: ['使用 createOvermind 创建 store，按命名空间组织 state/actions/effects。', '组件通过 useOvermind 获取状态和 actions。', 'actions 修改状态，effects 处理 API、存储等副作用。'],
     notes: ['Overmind 支持 Vue 和 React 等多个框架。', '状态变更追踪到具体的 action 调用。', 'effects 模式便于测试时替换副作用。'],
-    problem: '解决状态管理中副作用耦合、调试困难、跨框架复用成本高的问题。',
+    problem: '解决"状态管理中副作用耦合、调试困难、跨框架复用成本高"的问题。',
   }
 ]
