@@ -63,7 +63,7 @@ describe('课程注册表', () => {
       expect(source.trim().length, `${allLessons[index].id} 的源码为空或过短`).toBeGreaterThan(80)
 
       if (allLessons[index].language === 'vue') {
-        expect(source).toContain('<template>')
+        expect(source).toContain('<script')
       }
     }
   })

@@ -2,13 +2,14 @@
 export default {
   data() {
     return {
-      title: '松果学习',
       // #ifdef MP-WEIXIN
       platform: '微信小程序',
       // #endif
+
       // #ifdef H5
       platform: 'H5 网页',
       // #endif
+
       // #ifdef APP-PLUS
       platform: '原生 App',
       // #endif
@@ -19,30 +20,14 @@ export default {
 
 <template>
   <view class="course">
-    <text class="title">{{ title }}</text>
-    <text class="badge">当前运行在：{{ platform }}</text>
+    <text>{{ platform }}</text>
 
     <!-- #ifdef MP-WEIXIN -->
-    <button open-type="share">分享给好友</button>
+    <button open-type="share" @tap="onShare">分享给好友</button>
     <!-- #endif -->
 
     <!-- #ifndef H5 -->
-    <button @tap="saveToAlbum">保存海报到相册</button>
+    <button @tap="savePoster">保存海报到相册</button>
     <!-- #endif -->
   </view>
 </template>
-
-<style scoped>
-.course {
-  padding: 24rpx;
-}
-.title {
-  font-size: 36rpx;
-  font-weight: 600;
-}
-.badge {
-  display: block;
-  margin: 12rpx 0;
-  color: #b7431f;
-}
-</style>

@@ -1,46 +1,26 @@
-<template>
-  <view class="page">
-    <button type="primary" :loading="loading" @tap="fetchCourses">加载课程</button>
-
-    <view v-if="courses.length" class="list">
-      <view v-for="course in courses" :key="course.id" class="row">
-        <text class="title">{{ course.title }}</text>
-        <text class="tag">{{ course.tag }}</text>
-      </view>
-    </view>
-    <text v-else class="empty">暂无课程数据</text>
-  </view>
-</template>
-
 <script>
 export default {
   data() {
-    return {
-      courses: [],
-      loading: false,
-    }
+    return { courses: [] }
   },
 
   onLoad() {
-    // 先读缓存，让页面秒开，再异步刷新
+    // 先读缓存让页面秒开，再异步刷新覆盖
     const cached = uni.getStorageSync('courses')
     if (cached) this.courses = cached
     this.fetchCourses()
   },
 
   methods: {
-    // 把 uni.request 封装成返回 Promise 的请求，统一处理 token 与错误
+    // 把 uni.request 封装成 Promise，统一注入 token 与错误处理
     request(options) {
       return new Promise((resolve, reject) => {
         const token = uni.getStorageSync('token')
         uni.request({
-          url: 'https://api.squirrel-demo.cn' + options.url,
+          url: options.url,
           method: options.method || 'GET',
           data: options.data,
-          header: {
-            'Content-Type': 'application/json',
-            Authorization: token ? `Bearer ${token}` : '',
-          },
+          header: { Authorization: token ? `Bearer ${token}` : '' },
           timeout: 10000,
           success(res) {
             if (res.statusCode === 401) {
@@ -59,7 +39,6 @@ export default {
     },
 
     async fetchCourses() {
-      this.loading = true
       try {
         const list = await this.request({ url: '/courses' })
         this.courses = list
@@ -67,36 +46,8 @@ export default {
         uni.setStorageSync('courses', list)
       } catch (e) {
         uni.showToast({ title: e.message, icon: 'none' })
-      } finally {
-        this.loading = false
       }
     },
   },
 }
 </script>
-
-<style scoped>
-.page {
-  padding: 24rpx;
-}
-.list {
-  margin-top: 24rpx;
-}
-.row {
-  display: flex;
-  justify-content: space-between;
-  padding: 20rpx;
-  border-bottom: 1rpx solid #efc48d;
-}
-.title {
-  font-size: 30rpx;
-  color: #32190f;
-}
-.tag {
-  color: #b7431f;
-}
-.empty {
-  margin-top: 24rpx;
-  color: #7c563f;
-}
-</style>

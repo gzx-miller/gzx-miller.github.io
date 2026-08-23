@@ -1,55 +1,33 @@
-<template>
-  <view class="list">
-    <view v-for="c in courses" :key="c.id" class="row">{{ c.title }}</view>
-    <text class="status">{{ loading ? '加载中…' : '没有更多了' }}</text>
-  </view>
-</template>
-
 <script>
 export default {
   data() {
-    return { courses: [], page: 1, loading: false }
+    return { courses: [], page: 1, hasMore: true }
   },
 
-  // 需在 pages.json 对应页开启 "style": { "enablePullDownRefresh": true }
+  // 需在 pages.json 对应页面开启 "style": { "enablePullDownRefresh": true }
   onPullDownRefresh() {
-    // 下拉刷新：重置页码，重拉第一页
+    // 下拉刷新：重置页码，重拉第一页，完成后手动收起动画
     this.page = 1
+    this.hasMore = true
     this.fetchCourses(true)
   },
 
   onReachBottom() {
-    // 触底加载：页码 +1，追加下一页
+    // 触底加载：页码 +1 追加下一页；数据耗尽则终止
+    if (!this.hasMore) return
     this.page += 1
     this.fetchCourses(false)
   },
 
   methods: {
     async fetchCourses(reset) {
-      this.loading = true
       const res = await uni.request({ url: `/courses?page=${this.page}` })
-      this.courses = reset ? res.data : this.courses.concat(res.data)
-      this.loading = false
-      // 刷新完成后手动收起下拉动画
+      const list = res.data || []
+      this.courses = reset ? list : this.courses.concat(list)
+      this.hasMore = list.length > 0
+      // 下拉刷新动画需手动调用 stopPullDownRefresh 收起
       if (reset) uni.stopPullDownRefresh()
     },
   },
 }
 </script>
-
-<style scoped>
-.list {
-  padding: 24rpx;
-}
-.row {
-  padding: 20rpx;
-  border-bottom: 1rpx solid #efc48d;
-  color: #32190f;
-}
-.status {
-  display: block;
-  padding: 20rpx;
-  text-align: center;
-  color: #7c563f;
-}
-</style>
