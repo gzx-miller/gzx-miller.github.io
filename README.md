@@ -8,7 +8,7 @@
 
 ## 特性
 
-- **490+ 个独立案例**，覆盖 21 个软件技术知识分类
+- **500+ 个独立案例**，覆盖 22 个软件技术知识分类
 - **交互式演示** — 每个案例包含可运行的 Demo、关键代码、原理说明、处理流程和注意事项
 - **纯静态部署** — `nuxt generate` 预渲染全部路由，零服务端依赖
 - **类型安全** — 全项目 TypeScript strict mode，Vitest 单元测试覆盖核心逻辑
@@ -53,6 +53,7 @@
 | [FFmpeg](https://gzx-miller.github.io/ffmpeg) | 24 | 1 | 格式转换、音视频处理、滤镜效果、字幕、流媒体与硬件加速 |
 | [WebGL](https://gzx-miller.github.io/webgl) | 20 | 7 | 着色器、缓冲区、矩阵变换、纹理贴图、光照模型与后处理 |
 | [WebAssembly](https://gzx-miller.github.io/webassembly) | 20 | 8 | WAT 指令、线性内存、JS 互操作、SIMD、多线程与工具链 |
+| [uni-app](https://gzx-miller.github.io/uni-app) | 10 | 9 | 项目结构、条件编译、页面生命周期、内置组件、路由跳转、rpx 适配与数据请求 |
 
 ## 快速开始
 

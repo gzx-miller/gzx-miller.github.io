@@ -1,0 +1,39 @@
+<template>
+  <view class="card">
+    <view class="head">
+      <image class="cover" src="/static/cover.png" mode="aspectFill" />
+      <text class="name">Vue3 组合式 API 实战</text>
+    </view>
+
+    <text class="desc">用一个真实小业务场景搞懂 setup、ref 与 computed。</text>
+
+    <button size="mini" type="primary" @tap="join">立即报名</button>
+
+    <text class="hint" selectable>支持长按复制这段文字</text>
+  </view>
+</template>
+
+<script>
+export default {
+  methods: {
+    join() {
+      uni.showToast({ title: '报名成功', icon: 'success' })
+    },
+  },
+}
+</script>
+
+<style scoped>
+.card {
+  padding: 24rpx;
+  background: #fffaf2;
+}
+.cover {
+  width: 160rpx;
+  height: 160rpx;
+}
+.name {
+  font-size: 32rpx;
+  font-weight: 600;
+}
+</style>

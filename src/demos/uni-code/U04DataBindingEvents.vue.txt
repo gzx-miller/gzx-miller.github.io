@@ -1,0 +1,40 @@
+<script>
+export default {
+  data() {
+    return {
+      keyword: '',
+      courses: [
+        { id: 1, title: 'Vue3 组合式 API' },
+        { id: 2, title: 'Pinia 状态管理' },
+      ],
+    }
+  },
+
+  computed: {
+    filtered() {
+      return this.courses.filter((c) => c.title.includes(this.keyword))
+    },
+  },
+
+  methods: {
+    openCourse(id) {
+      uni.navigateTo({ url: `/pages/course/course?id=${id}` })
+    },
+
+    onSearchTap() {
+      console.log('搜索：', this.keyword)
+    },
+  },
+}
+</script>
+
+<template>
+  <view class="search">
+    <input v-model="keyword" placeholder="搜索课程" @input="onInput" />
+    <button @tap="onSearchTap">搜索</button>
+
+    <view v-for="course in filtered" :key="course.id" class="item" @tap.stop="openCourse(course.id)">
+      <text>{{ course.title }}</text>
+    </view>
+  </view>
+</template>

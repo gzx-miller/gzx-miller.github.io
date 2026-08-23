@@ -4,6 +4,7 @@ import css from 'highlight.js/lib/languages/css'
 import cpp from 'highlight.js/lib/languages/cpp'
 import glsl from 'highlight.js/lib/languages/glsl'
 import javascript from 'highlight.js/lib/languages/javascript'
+import json from 'highlight.js/lib/languages/json'
 import scss from 'highlight.js/lib/languages/scss'
 import typescript from 'highlight.js/lib/languages/typescript'
 import wasm from 'highlight.js/lib/languages/wasm'
@@ -16,6 +17,7 @@ hljs.registerLanguage('c++', cpp)
 hljs.registerLanguage('glsl', glsl)
 hljs.registerLanguage('javascript', javascript)
 hljs.registerLanguage('jsx', javascript)
+hljs.registerLanguage('json', json)
 hljs.registerLanguage('scss', scss)
 hljs.registerLanguage('typescript', typescript)
 hljs.registerLanguage('vue', xml)

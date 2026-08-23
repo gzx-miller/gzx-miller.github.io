@@ -46,6 +46,7 @@ export const knowledgeCategories: KnowledgeCategory[] = [
   { id: 'ffmpeg', name: 'FFmpeg', path: '/ffmpeg', status: 'ready', intro: 'FFmpeg 是领先的多媒体框架，支持视频/音频的录制、转换、流化和编辑。本分类从容器与编解码器基础出发，覆盖格式转换、视频/音频处理、滤镜效果、字幕、流媒体、硬件加速与批量处理，帮助开发者掌握命令行多媒体处理的核心能力。', officialUrl: 'https://ffmpeg.org/' },
   { id: 'webgl', name: 'WebGL', path: '/webgl', status: 'ready', intro: 'WebGL 是浏览器中的 GPU 3D 图形 API，基于 OpenGL ES。本分类从着色器编程和缓冲区基础出发，覆盖矩阵变换、纹理贴图、光照模型、阴影映射、后处理、WebGL2 新特性、实例化渲染、粒子系统与性能优化。', officialUrl: 'https://developer.mozilla.org/zh-CN/docs/Web/API/WebGL_API' },
   { id: 'webassembly', name: 'WebAssembly', path: '/webassembly', status: 'ready', intro: 'WebAssembly 是浏览器中的高性能字节码标准。本分类从二进制格式与 WAT 文本出发，覆盖值类型与指令集、线性内存、函数与局部变量、函数表、导入导出与 JS 互操作、共享内存与原子、多线程 Worker、SIMD、异常处理、性能对比与工具链部署。', officialUrl: 'https://webassembly.org/' },
+  { id: 'uni-app', name: 'uni-app', path: '/uni-app', status: 'ready', intro: 'uni-app 是使用 Vue.js 语法开发多端应用的框架，一套代码可发布到 H5、微信/支付宝等小程序与 App。本分类从项目结构、条件编译、页面生命周期、内置组件、路由跳转、rpx 适配与数据请求出发，覆盖跨端开发的核心能力。', officialUrl: 'https://uniapp.dcloud.net.cn/' },
 ]
 
 // 创建分类 ID 到分类对象的映射（用于快速查找）

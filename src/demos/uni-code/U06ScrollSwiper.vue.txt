@@ -1,0 +1,46 @@
+<template>
+  <view class="page">
+    <swiper class="banner" circular autoplay indicator-dots>
+      <swiper-item v-for="b in banners" :key="b">
+        <image class="banner-img" :src="b.cover" mode="aspectFill" />
+      </swiper-item>
+    </swiper>
+
+    <scroll-view class="list" scroll-y @scrolltolower="loadMore">
+      <view v-for="course in courses" :key="course.id" class="row">
+        <text>{{ course.title }}</text>
+      </view>
+      <text class="loading">{{ loading ? '加载中…' : '没有更多了' }}</text>
+    </scroll-view>
+  </view>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      banners: [],
+      courses: [],
+      loading: false,
+    }
+  },
+  methods: {
+    loadMore() {
+      this.loading = true
+    },
+  },
+}
+</script>
+
+<style scoped>
+.banner {
+  height: 300rpx;
+}
+.list {
+  height: 600rpx;
+}
+.row {
+  padding: 24rpx;
+  border-bottom: 1rpx solid #efc48d;
+}
+</style>
