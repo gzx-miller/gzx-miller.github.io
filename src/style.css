@@ -186,7 +186,7 @@ select:not([class*='el-']) {
   font: inherit;
 }
 
-button:not([class*='el-']):not(.knowledge-more-btn):not(.squirrel-pet):not(.harvest-item):not(.treasure-chest):not(.garden-hedgehog):not(.assistant-panel button),
+button:not([class*='el-']):not(.search-submit):not(.knowledge-more-btn):not(.squirrel-pet):not(.harvest-item):not(.treasure-chest):not(.garden-hedgehog):not(.assistant-panel button),
 .button-row a {
   border: 1px solid var(--accent);
   border-radius: 6px;
@@ -197,7 +197,7 @@ button:not([class*='el-']):not(.knowledge-more-btn):not(.squirrel-pet):not(.harv
   text-decoration: none;
 }
 
-button:not([class*='el-']):not(.sidebar-toggle):not(.knowledge-more-btn):not(.theme-toggle):not(.squirrel-pet):not(.harvest-item):not(.treasure-chest):not(.garden-hedgehog):not(.assistant-panel button):hover,
+button:not([class*='el-']):not(.sidebar-toggle):not(.search-submit):not(.knowledge-more-btn):not(.theme-toggle):not(.squirrel-pet):not(.harvest-item):not(.treasure-chest):not(.garden-hedgehog):not(.assistant-panel button):hover,
 .button-row a:hover {
   background: var(--accent-strong);
 }
@@ -2340,19 +2340,49 @@ pre.code-block > code.hljs,
   align-items: center;
 }
 
-.search-box svg {
+.search-submit {
   position: absolute;
-  left: 16px;
+  right: 7px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--leaf-red), var(--leaf-orange));
+  color: #fff;
+  cursor: pointer;
+  padding: 0;
+  box-shadow: 0 4px 12px rgba(217, 75, 38, 0.24);
+  transition: filter 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-submit:hover {
+  filter: brightness(1.08);
+  box-shadow: 0 6px 16px rgba(217, 75, 38, 0.34);
+}
+
+.search-submit:active {
+  transform: translateY(-50%) scale(0.96);
+}
+
+.search-submit:focus-visible {
+  outline: 2px solid var(--leaf-gold);
+  outline-offset: 2px;
+}
+
+.search-submit svg {
   width: 18px;
   height: 18px;
-  color: var(--muted);
-  pointer-events: none;
 }
 
 .search-box input {
   width: 100%;
   height: 52px;
-  padding: 0 18px 0 46px;
+  padding: 0 54px 0 18px;
   border: 1px solid var(--border);
   border-radius: 999px;
   background: var(--surface);
@@ -2366,6 +2396,11 @@ pre.code-block > code.hljs,
   border-color: var(--leaf-gold);
   box-shadow: 0 0 0 4px rgba(246, 193, 90, 0.18), 0 8px 24px rgba(98, 42, 18, 0.1);
   outline: none;
+}
+
+.search-box input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .search-results {
@@ -2401,6 +2436,10 @@ pre.code-block > code.hljs,
 
 .search-results a:hover {
   background: rgba(246, 193, 90, 0.22);
+}
+
+.search-results li.active a {
+  background: rgba(246, 193, 90, 0.34);
 }
 
 .search-cat {
@@ -2519,6 +2558,10 @@ pre.code-block > code.hljs,
 
 [data-theme='dark'] .search-results a:hover {
   background: rgba(246, 193, 90, 0.12);
+}
+
+[data-theme='dark'] .search-results li.active a {
+  background: rgba(246, 193, 90, 0.18);
 }
 
 [data-theme='dark'] .featured-card {
