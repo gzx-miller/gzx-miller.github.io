@@ -10,6 +10,8 @@ interface LessonMeta {
   category: string
   path: string
   summary: string
+  // 预计算的小写检索键，运行时搜索无需重复 toLocaleLowerCase
+  searchKey: string
 }
 
 definePageMeta({ layout: 'home' })
@@ -54,14 +56,17 @@ const categoryEmojis: Record<string, string> = {
   'uni-app': '📱',
 }
 
-// 首页精选：横跨前端框架 / 类型 / 后端 / AI 的代表性内容
+// 首页精选：横跨前端框架 / 类型 / 后端 / 图形 / AI / 系统的代表性内容
 const featuredPaths = [
   '/vue/k-3/reactivity',
   '/typescript/t-4/generics',
   '/react/r-2/state-updates',
   '/css/c-3/flexbox',
   '/nestjs/n-1/modules-di',
+  '/nodejs/d-5/streams',
   '/langchain/l-1/llm-call',
+  '/webgl/w-1/context-pipeline',
+  '/webassembly/wb-1/what-is-wasm',
 ]
 
 // 构建期统计分类栗子数与总数、并加载全站课程元数据用于搜索与精选
@@ -81,6 +86,9 @@ const { data } = await useAsyncData('home-overview', async () => {
         category: lesson.category,
         path: lesson.path,
         summary: lesson.summary,
+        searchKey: [lesson.navTitle, lesson.title, lesson.category, lesson.summary]
+          .join(' ')
+          .toLocaleLowerCase('zh-CN'),
       })
     }
   }
@@ -125,11 +133,7 @@ const searchResults = computed(() => {
   const query = searchQuery.value.trim().toLocaleLowerCase('zh-CN')
   if (!query) return []
   return (data.value?.allLessons ?? [])
-    .filter((lesson) =>
-      [lesson.navTitle, lesson.title, lesson.category, lesson.summary].some((value) =>
-        value.toLocaleLowerCase('zh-CN').includes(query),
-      ),
-    )
+    .filter((lesson) => lesson.searchKey.includes(query))
     .slice(0, 8)
 })
 

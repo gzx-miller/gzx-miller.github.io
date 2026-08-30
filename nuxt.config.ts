@@ -27,8 +27,13 @@ function collectSitePaths(): string[] {
 }
 
 function buildSitemapXml(): string {
+  const lastmod = new Date().toISOString().slice(0, 10)
   const urls = collectSitePaths()
-    .map((path) => `  <url><loc>${SITE_URL}${path}</loc></url>`)
+    .map((path) => {
+      const segments = path.split('/').filter(Boolean)
+      const priority = path === '/' ? '1.0' : segments.length === 1 ? '0.7' : '0.5'
+      return `  <url><loc>${SITE_URL}${path}</loc><lastmod>${lastmod}</lastmod><priority>${priority}</priority></url>`
+    })
     .join('\n')
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
