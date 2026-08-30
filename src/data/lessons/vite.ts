@@ -92,9 +92,9 @@ async function buildForProduction() {
 }
 
 buildForProduction()`), language: 'typescript',
-    principle: 'Vite 在开发阶段基于浏览器原生 ESM 直接按需加载源文件，省去完整打包；HMR 沿着模块依赖图精确替换变更模块，做到"编辑即反馈"。生产阶段则切换到 Rollup，对依赖预构建、代码分割、压缩和按需 polyfill 等做深度优化，兼顾开发速度与产物质量。',
-    flow: ['理解原生 ESM 开发服务器的优势。', '对比 Vite 与传统打包器（Webpack）的差异。', '了解 Vite 的插件系统与运行时能力。'],
-    notes: ['Vite 冷启动时间与项目规模解耦，主要受依赖预构建影响。', 'HMR 只更新变化的模块，状态可由插件精细保持。', '生产构建的产物经过 Rollup 多轮优化，需要为慢路径做拆分。'],
+    principle: 'Vite 把工程分为开发与构建两个阶段：开发阶段利用浏览器原生 ESM 对源码做按需即时编译，无需打包成 bundle，HMR 只更新发生变化的模块；生产阶段切换 Rollup 打包，做 Tree Shaking、代码分割与压缩，输出高度优化的静态产物。',
+    flow: ['通过核心概念卡片理解原生 ESM、Rollup 构建、HMR 与插件系统。', '对比 Vite 与传统打包器（Webpack）的差异。', '查看常用配置示例，了解 dev server、代理、别名与分包。'],
+    notes: ['冷启动不受项目规模影响，代价是一次性的依赖预构建。', 'HMR 基于原生 ESM，只精确实时更新发生变化的模块。', '开发阶段按需加载源文件本身，生产阶段才做打包压缩优化。'],
     problem: '解决"传统打包器冷启动慢、HMR 更新延迟、依赖图膨胀"的问题。',
   },
 {
@@ -180,9 +180,9 @@ export default defineConfig(({ mode }) => {
   
   return { plugins }
 })`), language: 'typescript',
-    principle: 'vite.config.ts 使用 defineConfig 包装以获得类型推导；支持通过 VITE_ 前缀的环境变量动态配置。',
-    flow: ['查看基础配置示例。', '查看高级配置（别名、CSS、构建选项）。', '理解环境变量在不同模式下的加载。'],
-    notes: ['使用 defineConfig 可获得完整的类型提示。', '配置文件支持导出函数，接收 { mode, command } 参数。'],
+    principle: 'vite.config.ts 使用 defineConfig 包装以获得类型推导与提示；既可导出静态对象，也可导出接收 { mode, command } 的函数来按环境切换配置。',
+    flow: ['查看基础配置示例（server、build）。', '查看高级配置：resolve.alias 别名、css 预处理器、rollupOptions 分包。', '了解导出函数按 mode 切换不同配置。'],
+    notes: ['使用 defineConfig 可获得完整的类型提示。', 'resolve.alias 设置路径别名，css.preprocessorOptions 可注入全局样式。', '配置文件也可导出函数，按 mode 与 command 返回不同配置。'],
     problem: '解决"如何组织 Vite 配置，以及不同环境下如何切换配置"的问题。',
   },
 {
@@ -275,9 +275,9 @@ export default defineConfig(({ command }) => {
   
   return { plugins }
 })`), language: 'typescript',
-    principle: 'Vite 插件兼容 Rollup 插件接口，同时提供 Vite 独有钩子（config、configureServer、transformIndexHtml 等）。',
+    principle: '在 vite.config.ts 的 plugins 数组中注册即可扩展 Vite 功能；常用插件覆盖 Vue 支持、Vue JSX、组件与 API 自动按需引入、PWA 等，社区插件多以 vite-plugin 或 unplugin 前缀分发。',
     flow: ['浏览常用插件列表。', '理解插件在 vite.config.ts 中的注册方式。', '了解插件执行顺序。'],
-    notes: ['插件按数组顺序执行。', 'Vite 独有钩子以 config、configureServer 等命名。'],
+    notes: ['插件在 plugins 数组中按声明顺序执行，配合 enforce: pre/post 可调整先后。', 'unplugin-vue-components 与 unplugin-auto-import 可自动按需引入组件与 API。'],
     problem: '解决"如何扩展 Vite 功能，以及选择合适的插件"的问题。',
   },
 {
@@ -1551,7 +1551,7 @@ export default defineConfig({
     })
   ]
 })`), language: 'typescript',
-    principle: 'Vite 构建产物分析可使用 rollup-plugin-visualizer 可视化；性能优化包括减少依赖体积、使用 CDN、启用压缩等。',
+    principle: '用 rollup-plugin-visualizer 生成可视化的构建产物报告来分析体积；优化手段包括按需引入以减小依赖体积、将大型库外部化交给 CDN、合理代码分包与设置 chunk 大小阈值。',
     flow: ['学习使用 rollup-plugin-visualizer 分析产物。', '掌握 Vite 性能优化清单。', '了解如何监控构建和运行时的性能指标。'],
     notes: ['定期分析 bundle 大小，及时发现体积膨胀。', '大型库（如 lodash-es）应使用按需引入。'],
     problem: '解决"构建产物过大，或希望找到体积膨胀的原因"的问题。',
@@ -1692,9 +1692,9 @@ export default defineConfig({
 // 导出函数: xxxPlugin() 或 default
 // name 字段: 'vite-plugin-xxx'
 // 提供 TypeScript 类型支持`), language: 'typescript',
-    principle: 'Vite 插件是一个函数，返回一个包含钩子的对象；钩子分为 Vite 独有钩子（config、configureServer 等）和 Rollup 兼容钩子（resolveId、load、transform 等）。',
+    principle: '自定义插件是返回插件对象（含 name 与各钩子）的函数：既有 Rollup 兼容的 resolveId、load、transform，也有 Vite 独有的 config、configureServer、transformIndexHtml、handleHotUpdate，以此参与开发与构建流程。',
     flow: ['理解 Vite 插件的结构和钩子。', '学习自定义插件开发示例。', '掌握发布 Vite 插件到 npm 的流程。'],
-    notes: ['插件命名规范：vite-plugin-xxx。', 'Vite 独有钩子以 config、configureServer 等命名。'],
+    notes: ['插件命名规范为 vite-plugin-xxx，导出函数返回插件对象。', '可利用 transform 钩子改写模块代码，例如注入版本号等全局信息。'],
     problem: '解决"现有插件无法满足需求，需要为项目定制构建行为"的问题。',
   },
 {
@@ -1950,7 +1950,7 @@ await esbuild.build({
 })`), language: 'typescript',
     principle: 'Vite 使用 esbuild 处理 TypeScript 和 JSX 转换，esbuild 用 Go 编写比传统 JS 工具快 10-100 倍，开发环境下跳过类型检查只做语法转换。',
     flow: ['源码中的 .ts/.tsx 文件请求到达 Vite 开发服务器。', 'esbuild 进行语法转换，输出纯 JS。', '浏览器直接运行转换后的 ESM 模块。'],
-    notes: ['开发环境只做语法转换，类型检查由 IDE 和构建时负责。', 'esbuild 不支持某些 TS 特性如 const enum（需配置）。', '构建时由 Rollup + TS 插件做完整的类型检查。'],
+    notes: ['开发环境与依赖预构建都由 esbuild 快速做语法转换，不做类型检查。', 'esbuild 不支持 const enum、export = 等 TS 特性，需改用兼容写法。', '完整类型检查交给 tsc 或 vue-tsc，在构建前或 CI 中执行。'],
     problem: '解决"传统构建工具 TS/JSX 编译速度慢、开发体验差"的问题。',
   },
 {
@@ -2110,7 +2110,7 @@ function transformCustomCode(code: string): string {
 }`), language: 'typescript',
     principle: 'Vite 构建时基于 Rollup，兼容大部分 Rollup 插件，同时扩展了 Vite 特有的钩子如 config、configureServer、transformIndexHtml 等。',
     flow: ['在 vite.config.ts 的 plugins 数组中添加 Rollup 插件。', '开发和构建时 Vite 调用插件的不同钩子。', '使用 Vite 特有钩子扩展开发服务器等能力。'],
-    notes: ['并非所有 Rollup 插件都能在开发模式下工作。', 'Vite 插件可以只在开发或构建阶段生效。', '插件执行顺序与数组顺序相关，enforce 可以调整。'],
+    notes: ['并非所有 Rollup 插件都能在开发模式下工作，产物类钩子主要在构建时触发。', '插件可通过 apply: "serve" | "build" 只在开发或构建阶段生效。', 'Vite 特有钩子负责开发服务器、HTML 与 HMR，Rollup 钩子负责模块解析、加载与转换。'],
     problem: '解决"构建工具生态碎片化、需要学习多套插件 API"的问题。',
   },
 {
@@ -2487,9 +2487,9 @@ export default defineConfig(async () => {
 //           ├── main-xxx.css
 //           ├── admin-xxx.css
 //           └── ...`), language: 'typescript',
-    principle: 'Vite 支持多页面应用（MPA），通过 build.rollupOptions.input 配置多个 HTML 入口，每个页面可以有独立的脚本和样式，开发服务器也支持多页面路由。',
-    flow: ['在项目根目录创建多个 HTML 入口文件。', '在 vite.config.ts 中配置 build.rollupOptions.input。', '开发服务器通过路径访问不同页面，构建时输出多个 HTML。'],
-    notes: ['多页面可以共享公共依赖和代码分割。', '每个页面有独立的 Vite 模块图。', '适合后台管理系统等多入口场景。'],
+    principle: '多页面应用通过 build.rollupOptions.input 声明多个 HTML 入口；本课重点是动态收集入口、用 manualChunks 按页面拆分共享依赖，并规划公共目录与各页面独立模块的目录结构。',
+    flow: ['认识多页面应用在官网+后台等多入口场景中的价值。', '学习配置多个 HTML 入口并动态收集入口文件。', '通过 manualChunks 提取跨页面共享依赖，并查看构建产物。'],
+    notes: ['多页面可共享公共组件、工具与状态，Vite 会提取为公共 chunk。', '每个 HTML 入口对应各自的入口脚本，可挂载到不同 DOM 节点。', '配合 manualChunks 把 vue、UI 库等共享依赖单独分包，利于缓存复用。'],
     problem: '解决"传统 MPA 构建配置复杂、公共资源管理困难"的问题。',
   }
 ]

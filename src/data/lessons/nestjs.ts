@@ -62,7 +62,7 @@ export class CourseService {
     return this.courseRepo.find()
   }
 }`),
-    principle: 'NestJS 用模块（Module）把相关的控制器、服务、管道等聚合为内聚单元。@Module 装饰器的四个数组各司其职：controllers 负责 HTTP 路由、providers 注册可注入依赖、imports 引入其它模块、exports 决定哪些 Provider 对模块外部可见。依赖注入（DI）容器在启动时解析构造器参数，自动完成实例化与作用域管理，开发者无需手动 new。',
+    principle: 'NestJS 用模块（Module）把相关的控制器、服务、管道聚合为内聚单元。@Module 的四个数组各司其职：controllers 注册路由处理器、providers 登记可注入依赖、imports 引入其它模块、exports 决定哪些 Provider 对模块外部可见。依赖注入（DI）容器在启动时解析构造器参数并完成实例化与作用域管理；注意 @Injectable() 只是把类标记为候选，还必须出现在某个模块的 providers 里，容器才会真正托管它。',
     flow: [
       '根模块 AppModule imports 业务模块（如 CourseModule）',
       '业务模块 controllers 注册路由，providers 注册服务',
@@ -70,7 +70,7 @@ export class CourseService {
       '模块 exports 的服务可被 imports 该模块的其它模块复用',
     ],
     notes: [
-      '一个 Provider 只需注册一次即可被同一模块内任意位置注入',
+      '要注入的类必须同时带 @Injectable() 并登记到某个模块的 providers，DI 容器才能解析到它的实例',
       '模块默认是单例作用域（Singleton），共享实例提升性能',
       '循环依赖（A 模块依赖 B，B 又依赖 A）需用 forwardRef 显式处理',
       '全局模块用 @Global() 声明，其 exports 自动对所有模块可见',
@@ -116,7 +116,7 @@ export class CourseController {
     return this.courseService.remove(id)
   }
 }`),
-    principle: '控制器是请求的入口：@Controller 定义路由前缀，方法装饰器（@Get/@Post/@Patch/@Delete）绑定 HTTP 方法与路径。参数装饰器把请求数据映射到方法参数：@Param 取路径参数、@Query 取查询字符串、@Body 取请求体、@Req/@Res 直接访问原始请求对象。配合 ParseIntPipe 等管道可以就地转换与校验参数。',
+    principle: '控制器是请求的入口：@Controller 定义路由前缀，方法装饰器（@Get/@Post/@Patch/@Delete）绑定 HTTP 方法与子路径，二者拼接成最终路由（如 @Controller(\'courses\') 配合 @Get(\':id\') → GET /courses/:id）。参数装饰器把请求数据映射到方法参数：@Param 取路径参数、@Query 取查询字符串、@Body 取请求体、@Req/@Res 直接访问原始请求对象。配合 ParseIntPipe 等管道可就地转换参数类型。',
     flow: [
       '客户端请求 GET /courses/42',
       '路由匹配 CourseController 的 @Get(\':id\') 处理器',
@@ -174,7 +174,7 @@ async function bootstrap() {
     ],
     notes: [
       '校验规则写在 DTO 上，与控制器解耦，可被多个接口复用',
-      '全局 ValidationPipe 在 main.ts 注册一次即可覆盖所有接口',
+      '与 whitelist 配套的 forbidNonWhitelisted 会把多余字段直接判为 400，而 whitelist 只是静默剥离——生产加固通常两者并用',
       'transform: true 会把数字字符串自动转为 number 等目标类型',
       '自定义校验规则用 @Validate(ConstraintClass) 或自定义装饰器实现',
     ],
@@ -228,7 +228,7 @@ getProfile(@Req() req) {
       '守卫在中间件之后、管道之前执行，可访问 ExecutionContext 拿到请求元数据',
       '@Roles() 自定义装饰器 + 守卫可组合实现基于角色的授权',
       'JWT 是无状态的：服务端不存会话，密钥泄漏等于全部失效',
-      '敏感接口建议配合 ThrottlerGuard 做限流，防止暴力破解',
+      'demo 中 token 携带 iat/exp（60 秒过期），守卫在验签后还需判断是否超过 exp，过期即抛 401——体现 JWT 无状态会话的过期机制',
     ],
     problem: '把 token 放在 localStorage 并自动附加到每次请求虽然方便，但 XSS 一旦得手即可盗取 token——生产环境优先使用 HttpOnly Cookie 承载 JWT，并校验 CSRF 风险。',
     officialUrl: 'https://docs.nestjs.com/guards',
@@ -319,7 +319,7 @@ export class AppModule implements NestModule {
     ],
     notes: [
       '全局中间件用 app.use(middleware) 注册，作用于所有路由',
-      '中间件不区分模块边界，比守卫/拦截器更"低层"',
+      'MiddlewareConsumer 的 apply().forRoutes() 可用路径或 RequestMethod 精确限定生效范围，exclude() 可排除指定路由',
       'CORS、helmet 等通常作为应用级中间件在 main.ts 注册',
       'next() 不调用时请求会悬挂，务必在异步逻辑完成后放行',
     ],
@@ -426,7 +426,7 @@ export class EnrollmentService {
     notes: [
       '@InjectRepository 注入实体对应的 Repository，无需手动 new',
       '一对多/多对多用 @OneToMany/@ManyToMany + 关联选项描述',
-      '自定义 SQL 用 QueryBuilder：createQueryBuilder(\'course\')',
+      '复杂查询用 QueryBuilder 链式拼 SQL，如 createQueryBuilder(\'course\').where(\'c.capacity > :n\', { n: 0 }).getMany()',
       '迁移（Migration）管理表结构变更，避免手工改库',
     ],
     problem: '并发下"先查询再判断再写入"存在竞态：两个请求同时读到剩余 1 个名额都可能通过检查。生产环境要用 SELECT ... FOR UPDATE 悲观锁或乐观锁（@Version 列）保证一致性。',
@@ -536,7 +536,7 @@ export class ReportScheduler {
     ],
     notes: [
       'cron 第 6 位星期字段用 0-7（0/7 为周日），? 表示不指定',
-      '多个实例同时运行会重复执行，配合分布式锁或单实例部署',
+      'cron 使用服务器本地（默认）时区计算，跨时区部署需显式指定 timezone 选项，避免错点触发',
       '任务失败默认只记日志，可用 try/catch + 告警提升可观测性',
       '测试时用 @SchedulerRegistry 动态增删任务，便于 mock',
     ],
@@ -592,7 +592,7 @@ export class AppService {
       '切换环境（dev/prod）只需替换环境变量，代码不变',
     ],
     notes: [
-      'envFilePath 支持多文件，靠前的文件优先级更高',
+      '真实的系统环境变量优先级高于 .env 文件，可在部署平台通过 Secret 注入覆盖默认值',
       'isGlobal: true 后无需在每个模块重复 imports ConfigModule',
       '敏感配置（密码/密钥）只进环境变量，不进代码仓库',
       '可用 Joi/class-validator 对配置做启动校验，缺失即报错',
@@ -606,7 +606,7 @@ export class AppService {
     navTitle: '微服务',
     category: '工程实践',
     path: '/nestjs/n-12/microservices',
-    summary: '用下单场景展示微服务间的 TCP 传输：客户端代理调用、请求-响应模式与服务注册。',
+    summary: '用下单场景展示微服务间 TCP 传输：ClientProxy 代理调用与 @MessagePattern 扣库存的请求-响应式 RPC。',
     demo: N12Microservices,
     code: () => Promise.resolve(`// main.ts —— 库存服务作为 TCP 微服务启动
 const app = await NestFactory.createMicroservice<MicroserviceOptions>(

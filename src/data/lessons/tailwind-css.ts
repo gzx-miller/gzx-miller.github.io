@@ -112,7 +112,7 @@ export const lessons: Lesson[] = [
     demo: TW04DarkMode, code: TW04Code, language: 'xml',
     principle: 'dark 变体为暗色环境生成覆盖规则；可以跟随 prefers-color-scheme，也可用自定义变体绑定祖先类或 data 属性实现手动切换。',
     flow: ['为背景、文字和边框成对选色。', '决定跟随系统还是保存用户偏好。', '在首屏渲染前应用主题以避免闪烁。'],
-    notes: ['暗色主题不是简单反色。', '两套主题都要验证文本、焦点环和禁用态对比度。'],
+    notes: ['v4 里 dark 变体默认绑定 prefers-color-scheme；要按祖先类或 data 属性手动切换，需用 @custom-variant 重新定义 dark。', '两套主题都要单独验证文本、焦点环和禁用态的对比度，而不是简单反色。'],
     problem: '解决"如何构建稳定、无闪烁且可访问的明暗主题"的问题。',
   },
 {
@@ -175,7 +175,7 @@ export const lessons: Lesson[] = [
     demo: TW11SizingSpacing, code: TW11Code, language: 'xml',
     principle: '尺寸工具描述固定、流体与边界约束（w、min-w-0、max-w-screen-md），间距工具按盒模型与布局两个维度区分：p/m 作用于盒模型内/外，gap 作用于 Flex/Grid 轨道，space-x/y 在相邻子元素之间插入等距边距；统一在设计尺度上取值，避免散落魔法数字。',
     flow: ['先决定容器是固定、流体还是受最大宽度约束。', '用设计尺度（4/8/12…）建立统一间距节奏。', '在长内容与窄屏下验证 min-w-0、overflow 等边界行为。'],
-    notes: ['组件内部优先 gap，减少相邻 margin 规则带来的脆弱性。', 'min-w-0 经常被忽略，但能让 Flex/Grid 子项正确收缩避免溢出。', 'space-x-* 改为 flex+gap 是更现代的写法，可读性更高。'],
+    notes: ['同级间距优先用 gap（作用于 Flex/Grid 轨道），比叠加相邻 margin 更不易出错。', 'min-w-0 常被忽略：不设置时默认 min-width 会让 Flex/Grid 子项按内容宽度冻结而溢出。', 'size-* 同时设置 width 与 height；max-w-* 限制整体最大宽度，min-h-* 保证最小可点击/视觉高度。'],
     problem: '解决"页面尺寸与留白如何形成系统，而不是散落魔法数字"的问题。',
   },
 {
@@ -268,9 +268,9 @@ export const lessons: Lesson[] = [
   <div class="rounded bg-amber-200 px-3 py-2">对齐</div>
   <div class="rounded bg-amber-200 px-3 py-2">示例</div>
 </div>`), language: 'xml',
-    principle: 'Tailwind 的 Grid 布局通过 grid-cols、grid-rows、gap 等工具类快速构建二维网格布局，配合 col-span、row-span 实现跨列跨行，比写 CSS Grid 更简洁高效。',
-    flow: ['使用 grid 类启用 Grid 布局', '用 grid-cols-n 定义列数，gap 设置间距', '用 col-span-n 控制子元素跨列，place-items 对齐'],
-    notes: ['grid-cols-12 是最常用的 12 栅格系统', '响应式断点前缀可在不同尺寸下切换列数', '配合 place-content/place-items 快速对齐'],
+    principle: 'Grid 用 grid-cols/grid-rows 声明行与列轨道，col-span/row-span 控制子项跨列跨行，grid-template-areas + grid-area 用命名区域描述整体骨架；再用 gap 设轨道间距、place-items 控制对齐，配合响应式前缀在不同尺寸下切换列数。',
+    flow: ['先用 grid-cols-* 定列数、gap 定轨道间距搭建二维网格。', '用 col-span-*/row-span-* 控制跨列跨行，或 grid-cols-[...] 表达自定义比例。', '整页骨架用 grid-template-areas 加 grid-area 命名区域，改一处模板即可全局重排。'],
+    notes: ['grid-cols-[repeat(auto-fill,minmax(200px,1fr))] 可通过自动填充生成等宽卡片墙。', 'place-items-center 可快速让网格子项水平垂直居中。', '跨行跨列类（col-span-*、col-start-*）只对 Grid 容器直系子项生效。'],
     problem: '解决"复杂二维布局手写 CSS Grid 繁琐、响应式切换困难"的问题。',
   },
 {
@@ -313,9 +313,9 @@ export const lessons: Lesson[] = [
 </div>
 
 <!-- 选择参考：一维内容流用 Flex，二维轨道布局用 Grid -->`), language: 'xml',
-    principle: 'Flexbox 适合一维布局（行或列），Grid 适合二维布局（行和列同时控制），两者可以组合使用，根据布局需求选择最合适的工具。',
-    flow: ['一维内容流优先用 Flex（导航、列表、卡片行）', '二维网格布局用 Grid（仪表板、图片墙、表单布局）', 'Flex 做容器内对齐，Grid 做整体骨架，组合使用'],
-    notes: ['Flex 内容优先，Grid 布局优先', '两者不互斥，Grid 容器内可以有 Flex 子项', '选择标准：一维 vs 二维、内容驱动 vs 布局驱动'],
+    principle: '一维排列用 Flex（内容驱动元素宽度与换行），二维轨道用 Grid（布局驱动行列位置）；两者不互斥，页面宏观骨架用 Grid、内部细节用 Flex 组合即可。',
+    flow: ['一维流（导航、标签、居中）用 Flex，用 justify-*/items-* 控制主轴与交叉轴。', '二维网格（卡片墙、表单、页面骨架）用 Grid，用 grid-cols-* 与 col-span-* 控制轨道。', '大框架用 Grid、内部对齐用 Flex 组合，避免用一种布局硬撑所有场景。'],
+    notes: ['Flex 内容驱动：子项按内容换行伸缩；Grid 布局驱动：轨道决定子项排列。', '两者可嵌套，Grid 容器内子项仍可用 Flex 做细微对齐。', '单元素水平垂直居中用 flex + items-center + justify-center 即可，不必动用 Grid。'],
     problem: '解决"布局选择困难、不知道何时用 Flex 何时用 Grid"的问题。',
   },
 {
@@ -359,9 +359,9 @@ export const lessons: Lesson[] = [
 <p class="select-all cursor-pointer rounded bg-stone-100 p-3 text-stone-700">
   点击可选中整段文字
 </p>`), language: 'xml',
-    principle: 'Tailwind 通过 hover、focus、active 等状态变体描述元素交互状态，group 类可以让父元素状态触发子元素样式变化，适合卡片悬停、菜单展开等场景。',
-    flow: ['使用 hover:bg-* 定义悬停样式', '用 focus:ring-* 定义聚焦状态', '父元素加 group，子元素用 group-hover: 触发'],
-    notes: ['状态变体可以叠加响应式前缀', 'group 支持嵌套，但要注意层级', 'peer 类可以实现兄弟元素状态联动'],
+    principle: '状态变体把 hover/focus/active/focus-visible/disabled/checked 等伪类展开为选择器规则；group 把容器状态向下传达给后代，peer 让前置兄弟的状态影响后续兄弟；此外还有 first/last/odd/even/empty/placeholder/selection 等结构性与元素伪类变体。',
+    flow: ['用 hover:/active: 做直接反馈，用 focus-visible: 保住键盘焦点可见。', '父容器加 group，子元素用 group-hover: 联动，必要时用 group/name 命名以支持嵌套。', '列表间隔样式用 first:/last:/odd/even:，输入态用 placeholder:/selection:。'],
+    notes: ['group-hover 命中的是标记链上的祖先 group，要求目标元素在 DOM 上是其后代。', 'peer 只影响其后方的兄弟元素，这是后续兄弟选择器的固有约束。', '聚焦描边优先用 focus-visible: 而非 focus:，避免鼠标点击也出现焦点圈。'],
     problem: '解决"交互状态 CSS 重复书写、父子联动样式复杂"的问题。',
   },
 {
@@ -404,9 +404,9 @@ export const lessons: Lesson[] = [
 </div>
 
 <!-- 优先动画 transform 与 opacity，性能更好 -->`), language: 'xml',
-    principle: 'Tailwind 提供 transform（缩放、旋转、位移、倾斜）、transition（过渡属性）和 animate（关键帧动画）工具类，配合状态变体实现丰富的交互动效。',
-    flow: ['使用 scale/rotate/translate/skew 工具类定义变换', '用 transition-all 或 transition-* 控制过渡属性', 'hover:scale-105 配合 transition 实现悬停放大效果'],
-    notes: ['动画性能优先使用 transform 和 opacity', 'transition 配合 duration/ease 控制过渡曲线', 'animate 内置常用动画如 spin、ping、bounce、pulse'],
+    principle: 'scale/rotate/translate/skew 组合成单一 transform 且不改变布局占位；transition 声明参与过渡的属性、时长与缓动函数，animate 应用关键帧动画；配合 hover 等变体即可触发平滑的交互反馈。',
+    flow: ['用 scale/rotate/translate/skew 与 origin-* 定义要呈现的变换。', '加 transition 与 duration-*/ease-* 让状态变化平滑过渡，用 hover:/active: 触发。', '循环或阶段性动效用 animate-*（内置 spin/ping/pulse/bounce）或自定义 keyframes。'],
+    notes: ['优先动画 transform 与 opacity，性能最好；避免让布局属性参与昂贵动画。', '优先用 transition-transform 等明确属性，不要一律 transition-all。', 'v4 自定义动画在 CSS 里用 @theme 的 --animate-* 与 @keyframes 声明（旧式 tailwind.config 需经 @config 加载）。'],
     problem: '解决"手写动画 CSS 繁琐、过渡效果不统一"的问题。',
   },
 {
@@ -459,9 +459,9 @@ export const lessons: Lesson[] = [
     <span class="text-xs text-stone-800">mix-blend-multiply</span>
   </div>
 </div>`), language: 'xml',
-    principle: 'Tailwind 提供 CSS filter 和 backdrop-filter 工具类，支持模糊、亮度、对比度、饱和度等滤镜效果，mix-blend-* 实现元素混合模式。',
-    flow: ['使用 blur-*、brightness-* 等工具类应用滤镜', 'backdrop-blur-* 实现毛玻璃背景效果', 'mix-blend-* 控制元素与下层内容的混合'],
-    notes: ['滤镜可以组合使用，空格分隔', 'backdrop-filter 影响元素后面的内容', '合理使用可以提升视觉层次感'],
+    principle: 'filter 工具类（blur/brightness/contrast/saturate/grayscale/sepia/invert 等）作用于元素本身，backdrop-* 对其背后覆盖的内容应用滤镜，mix-blend-* 用混合模式让元素与下层背景叠加。',
+    flow: ['对元素本体用 blur-*/brightness-* 等 filter 工具类，可按需求并发叠加多个效果。', '对元素背后内容用 backdrop-blur-*，配半透明背景色实现毛玻璃质感。', '文字或图层叠放用 mix-blend-* 控制与背景的混合关系。'],
+    notes: ['多个滤镜可写进同一元素的多个类里（如 blur-sm brightness-110），会合并成一条 filter 声明。', 'backdrop-filter 需配合半透明背景色或边框，才能肉眼看到毛玻璃效果。', '像素或任意档位用 blur-[8px]、brightness-[1.2] 表达，超出默认档位即可用任意值。'],
     problem: '解决"图片处理、毛玻璃效果、视觉特效需要额外图片资源"的问题。',
   },
 {
@@ -598,9 +598,9 @@ export default {
     },
   },
 }`), language: 'javascript',
-    principle: 'Tailwind 插件可以扩展工具类、组件、基础样式和主题，官方提供 typography、forms、aspect-ratio 等插件，也可以编写自定义插件满足项目特定需求。',
-    flow: ['在 tailwind.config.js 的 plugins 数组中添加插件', '使用 plugin() API 添加自定义工具类或组件', '用 matchUtilities 生成动态值的工具类'],
-    notes: ['官方插件覆盖大多数常见需求', '自定义插件优先考虑能否用 CSS 变量或 theme 扩展解决', '插件发布为 npm 包可以在多项目复用'],
+    principle: '插件通过 JS API（addBase/addComponents/addUtilities/addVariant/matchUtilities）扩展基础样式、组件类、工具类与变体；官方插件如 typography、forms、aspect-ratio 覆盖常见能力，除此以外更推荐先用 CSS-first 的 @utility 声明简单工具，只有动态或复杂能力才落到 plugin()。',
+    flow: ['先确认是否能用内置工具、任意值或 @utility 解决，避免为简单需求引入插件。', '注册官方插件或自写 plugin() 时，按 addUtilities/addComponents/addBase/addVariant 分门别类扩展。', '需要按参数生成工具类时用 matchUtilities，配合入参和阈值生成动态值。'],
+    notes: ['line-clamp、aspect-ratio、container-queries 等已在 v4 内置，无需再安装同名插件。', 'v4 里插件属 JS 配置能力，须在 CSS 里用 @config 显式加载 tailwind.config；简单工具优先用 @utility。', '插件可发布为 npm 包跨项目复用，但应只暴露必要 API，控制启动开销。'],
     problem: '解决"内置工具类不够用、重复模式需要抽象复用"的问题。',
   },
 {
@@ -708,9 +708,9 @@ export default {
   // 内容源路径（项目级，不会被预设覆盖）
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
 }`), language: 'javascript',
-    principle: 'Tailwind 的 presets 机制可以把设计系统配置（颜色、字体、间距、断点、动画等设计令牌）抽成独立可复用的包；多个项目通过 presets 共享统一视觉规范，项目层还能针对自身需要覆盖或扩展，让"设计系统"在工程层面真正落地。',
-    flow: ['创建预设文件 export default { theme, plugins }。', '在项目 tailwind.config.js 中通过 presets 字段引用。', '项目层覆盖或扩展预设配置，确保个性与一致性并存。'],
-    notes: ['预设支持嵌套引用其他预设，方便逐层组合品牌规范。', '设计令牌应与设计师共同定义，避免"代码与设计脱节"。', '预设包使用语义化版本发布，方便在多项目间迭代。'],
+    principle: '把颜色、字体、间距、圆角、动画等设计令牌抽成可复用配置，多项目共享统一视觉规范，并允许项目层覆盖或扩展：v4 推荐用 @theme 的 CSS-first 文件配合 @import 共享，旧式 JavaScript 配置则把 theme 抽成 preset，经 presets 数组在 @config 加载的配置内引用。',
+    flow: ['把设计令牌从项目样式提炼为独立共享文件（CSS 的 @theme 文件，或 JS 的 preset 对象）。', '在项目里 import 该主题 CSS，或经 presets 数组引入；需要时发布成 npm 包做版本化迭代。', '项目层只覆盖或扩展差异项，保持全局一致与局部个性并存。'],
+    notes: ['v4 默认不再自动读取 tailwind.config.js，遗留 JS 配置须在 CSS 里用 @config 显式加载。', 'CSS-first 下更推荐把设计系统写成一个带 @theme 的共用 CSS，再用 @import 引入，不拆成多份独立 JS 配置。', '预设可嵌套与组合，设计令牌应由设计与开发共同定义，并用语义化版本发布。'],
     problem: '解决"多项目设计不统一、样式配置重复维护、设计系统难落地"的问题。',
   }
 ]

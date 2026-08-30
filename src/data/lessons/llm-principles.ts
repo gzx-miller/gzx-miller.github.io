@@ -97,7 +97,7 @@ print(cosine(a, b))  # 0.98 —— 值越接近 1 越相似
     navTitle: '矩阵',
     category: '基础数学',
     path: '/llm-principles/llm-3/matrix',
-    summary: '矩阵用一张表完成多组加权求和，理解维度规则就能看懂神经网络层的形态。',
+    summary: '矩阵把多组权重排成一张表，矩阵乘向量本质是「每行与输入做点积」、同时算多个加权求和；维度规则「内层匹配、外层定维」决定了神经网络每层的输入输出形态。',
     demo: LLM03Matrix,
     code: () => Promise.resolve(`import numpy as np
 
@@ -143,7 +143,7 @@ print(rot @ v)     # 旋转到 (-1, 2)
     navTitle: '梯度',
     category: '基础数学',
     path: '/llm-principles/llm-5/gradient',
-    summary: '从「蒙眼下山」的直觉出发，理解梯度向量如何驱动整个神经网络的参数更新。',
+    summary: '从「蒙眼下山」出发，经导数、偏导数与方向导数，把最陡的下山方向打包成梯度向量 ∇L；沿其反方向更新参数即梯度下降，正是神经网络训练的核心引擎。',
     demo: LLM05Gradient,
     code: () => Promise.resolve(`import numpy as np
 
@@ -169,7 +169,7 @@ print(w)                         # ≈ [3., -2.] 山谷最低点`),
     navTitle: '概率与信息',
     category: '基础数学',
     path: '/llm-principles/llm-6/probability',
-    summary: '从频率到交叉熵损失，理解概率分布、信息量、熵与神经网络训练损失之间的关系。',
+    summary: '非负且加和为 1 的一组数叫概率分布（模型输出因此称「概率」）；信息量与熵层层递进，当真实答案独热时交叉熵塌缩成 −log q(正确)，成为分类与语言模型天然的损失函数。',
     demo: LLM06Prob,
     code: () => Promise.resolve(`import math
 
@@ -193,7 +193,7 @@ print(cross_entropy(0.1))        # 2.30  —— 错得离谱`),
     navTitle: '神经元',
     category: '神经网络',
     path: '/llm-principles/llm-7/neuron',
-    summary: '把「加权投票 + 可调门槛」数学化，看单个神经元如何成为智能最底层的小开关。',
+    summary: '神经元 = 加权求和 w·x + 偏置 b，再经激活函数输出概率；单个神经元只能切一条（超）平面，给每种答案各配一个神经元并用 softmax 归一，就成了可训练的一层。',
     demo: LLM07Neuron,
     code: () => Promise.resolve(`import math
 
@@ -218,7 +218,7 @@ print(neuron(x, w, b))     # 0.71 —— 偏向“激活”
     navTitle: '激活函数',
     category: '神经网络',
     path: '/llm-principles/llm-8/activation',
-    summary: '为什么一百层直线叠起来还是直线，激活函数如何打破线性换来了真正的表达能力。',
+    summary: '纯线性网络叠多少层都等价于一层、只能画直线；激活函数插在层间引入「弯折」打破叠加魔咒，才让层数真正带来表达能力（Sigmoid 两端饱和，ReLU 正区间导数恒为 1 成为现代默认）。',
     demo: LLM08Activation,
     code: () => Promise.resolve(`import math
 
@@ -271,7 +271,7 @@ print(forward(x))                 # 逼近目标 y`),
     navTitle: '损失函数',
     category: '神经网络',
     path: '/llm-principles/llm-10/loss-function',
-    summary: '回归用均方误差、分类用交叉熵，理解损失如何转化为驱动梯度下降的推手。',
+    summary: '损失函数把「错得多离谱」压成一个可微的数、为梯度下降提供方向标：回归用均方误差，分类用交叉熵 −log(正确类概率)，后者对越离谱的错误给出越大的梯度推力。',
     demo: LLM10Loss,
     code: () => Promise.resolve(`import math
 
@@ -318,7 +318,7 @@ print(softmax(logits, T=2.0)) # 更高温度：更“随机平均”`),
     navTitle: '梯度下降',
     category: '神经网络',
     path: '/llm-principles/llm-12/sgd-optimizer',
-    summary: '学习率控步长，Mini-batch 折中稳快，动量与自适应学习率通向 Adam。',
+    summary: '学习率 α 控步长（太大震荡、太小太慢），全量太慢而单样本太抖，Mini-batch 是折中；动量给更新加惯性，配合每参数自适应学习率即成 Adam，是 Transformer 训练的事实标准。',
     demo: LLM12Sgd,
     code: () => Promise.resolve(`# 学习率 alpha 决定一步迈多大，太大震荡、太小太慢
 # 三种数据量策略：
@@ -340,7 +340,7 @@ def adam_step(m, v, g, t, lr=0.001, b1=0.9, b2=0.999, eps=1e-8):
     navTitle: '反向传播',
     category: '神经网络',
     path: '/llm-principles/llm-13/backpropagation',
-    summary: '用链式法则在计算图上把损失梯度从输出传回每个参数，看梯度消失如何被解决。',
+    summary: '反向传播用链式法则在计算图上从输出把梯度传回每个参数，只需一次前向（保存中间值）+ 一次反向；其连乘特性引出的梯度消失，靠 ReLU、残差连接与梯度裁剪缓解。',
     demo: LLM13Backprop,
     code: () => Promise.resolve(`import autograd.numpy as np  # 占位，示意计算图
 from autograd import grad
@@ -362,7 +362,7 @@ loss_W1 = grad(lambda W1: ((forward(W1, np.array([1.0, -1.0]), x) - 1) ** 2), 0)
     navTitle: 'N-gram',
     category: '自然语言处理',
     path: '/llm-principles/llm-14/ngram',
-    summary: '不懂语法不懂语义，光靠数近邻共现频率接出下一个词，也暴露了稀疏灾难。',
+    summary: 'N-gram 只看最近 N 个词、数共现频率查表来估计「下一个词」的条件概率，不懂语法语义；但记性短、把词当孤立符号，且词组合呈稀疏灾难。',
     demo: LLM14Ngram,
     code: () => Promise.resolve(`from collections import Counter, defaultdict
 
@@ -385,7 +385,7 @@ print(next_word("the"))                    # 接出最多的后继词
     navTitle: '词向量',
     category: '自然语言处理',
     path: '/llm-principles/llm-15/word2vec',
-    summary: '为什么「国王 − 男人 + 女人 ≈ 女王」，用遮词猜词把语义关系训练成可计算的向量。',
+    summary: '词向量把每个词表示成一串数字，靠「上下文相似的词意思相近」这条假设用遮词猜词训练，使相似词在向量空间里挨得近，语义关系（国王−男人+女人≈女王）变成了空间方向；局限是每词一个固定向量、区分不了一词多义。',
     demo: LLM15Word2Vec,
     code: () => Promise.resolve(`import numpy as np
 
@@ -408,7 +408,7 @@ def top_cosine_rank(target, exclude):
     navTitle: '前馈语言模型',
     category: '自然语言处理',
     path: '/llm-principles/llm-16/ffnn-lm',
-    summary: '把窗口词向量拼接送入全连接网络，靠向量距离对未见过的词组举一反三。',
+    summary: '前馈语言模型把最近 N 个词的词向量拼接后送入全连接网络预测下一个词；相近的词向量带来相近的输入，从而对未见过的词组举一反三、绕开 N-gram 的稀疏灾难，但仍受固定上下文窗口限制。',
     demo: LLM16Ffnn,
     code: () => Promise.resolve(`import numpy as np
 
@@ -432,7 +432,7 @@ logits = W2 @ h
     navTitle: 'RNN',
     category: '自然语言处理',
     path: '/llm-principles/llm-17/rnn',
-    summary: '用随读词更新的记忆向量挣脱固定窗口，也看清记忆逐词稀释、梯度消失的软肋。',
+    summary: 'RNN 用随读词更新的记忆向量 h = tanh(W[词, 旧记忆]+b) 挣脱固定窗口，整条序列复用同一套参数；但旧记忆随距离逐词稀释、梯度沿时间连乘消失，学不到远距离依赖。',
     demo: LLM17Rnn,
     code: () => Promise.resolve(`import numpy as np
 
@@ -456,7 +456,7 @@ for x_t in words:                              # 逐词读入
     navTitle: 'LSTM',
     category: '自然语言处理',
     path: '/llm-principles/llm-18/lstm',
-    summary: '用长期记忆与三扇门让关键信息几乎无损地传几十上百步，看懂记忆为何传得远。',
+    summary: 'LSTM 用长期记忆 C（高速公路）+ 短期记忆 h 两条线，以忘记/写入/读出三扇由 sigmoid 算出的门「有选择」地保留信息，使记忆可几乎无损地传几十上百步、大幅缓解梯度消失；代价是必须顺序读词、无法并行。',
     demo: LLM18Lstm,
     code: () => Promise.resolve(`import numpy as np
 def sig(x): return 1/(1+np.exp(-x))
@@ -479,7 +479,7 @@ def lstm_step(C, h, x, W, b):
     navTitle: '注意力机制',
     category: '大语言模型',
     path: '/llm-principles/llm-19/attention',
-    summary: '「它太累了」——用 Query 查 Key 打分、按权重混合 Value，让词义随上下文而变。',
+    summary: '注意力让每个词用自己的 Query 查所有词的 Key 打分、softmax 归一成权重，再按权重混合各词的 Value，词义随上下文而变；缩放因子 √d_k 防止 softmax 饱和，且全句并行、任意距离一次直达。',
     demo: LLM19Attention,
     code: () => Promise.resolve(`import numpy as np
 def softmax_logits(z):
@@ -502,7 +502,7 @@ def attention(Q, K, V, dk):
     navTitle: '多头注意力',
     category: '大语言模型',
     path: '/llm-principles/llm-20/multihead',
-    summary: '并排跑多套 Query/Key/Value，在每个子空间各抓一种关系，成本几乎不变。',
+    summary: '多头注意力并排跑 H 套独立的 Query/Key/Value，每个头借用 d/H 维的低维工作空间各抓一种关系，拼接后经线性层融合；总成本几乎等同单头，却能同时建模多种关系（乃至涌现归纳头等上下文能力）。',
     demo: LLM20Multihead,
     code: () => Promise.resolve(`import numpy as np
 
@@ -525,7 +525,7 @@ def cut(v, head):                       # 切出第 head 头的专属维度
     navTitle: 'Transformer',
     category: '大语言模型',
     path: '/llm-principles/llm-21/transformer',
-    summary: '把注意力、前馈网络、残差拼成一个 block，并行预测下一个词，看懂 2017 那篇论文。',
+    summary: '一个 Transformer block = 注意力（横向通信）+ 前馈网络 FFN（纵向加工），配位置编码把顺序塞回输入，可并行、可堆叠，末尾线性层 + softmax 预测下一个词；正是 GPT、BERT 等一切大模型的地基。',
     demo: LLM21Transformer,
     code: () => Promise.resolve(`# 一个 Transformer block = 注意力(横向通信) + FFN(纵向加工) + 残差 + LayerNorm
 def transformer_block(x, attn, ffn, norm):
@@ -544,7 +544,7 @@ def transformer_block(x, attn, ffn, norm):
     navTitle: 'Token 分词',
     category: '大语言模型',
     path: '/llm-principles/llm-22/tokenizer',
-    summary: '用 BPE 把文本切成有限词表可查的 token，弄懂为什么 strawberry 数不对 r 的个数。',
+    summary: 'Tokenizer 分词器把文本切成有限词表可查的子词 token 并映射成整数 ID，主流 BPE 从字符出发反复合并高频相邻对；正因模型看到的是 token 而非字符，strawberry 才数不对 r、中文也更耗 token。',
     demo: LLM22Tokenizer,
     code: () => Promise.resolve(`from collections import defaultdict, Counter
 
@@ -569,7 +569,7 @@ tokens = "strawberry"
     navTitle: '编码器与解码器',
     category: '大语言模型',
     path: '/llm-principles/llm-23/encoder-decoder',
-    summary: '同样是 Transformer，为什么 BERT 不能生成、GPT 成为主流，看懂架构取向的分野。',
+    summary: '按「当前位置能看见哪些位置」区分：双向编码器把整句读懂（BERT、适合理解），遮住未来的单向解码器自回归续写（GPT、适合生成），编码器-解码器则先读懂再生成；纯解码器因能统一改写各类任务而成为主流。',
     demo: LLM23Arch,
     code: () => Promise.resolve(`# 编码器：每个位置同时看左右 -> 双向，擅长“读懂输入”，如 BERT
 # 解码器：只能看左侧已有内容 -> 单向，擅长自回归“续写”，如 GPT
@@ -586,7 +586,7 @@ def causal_mask(i, j):
     navTitle: '残差与归一化',
     category: '大语言模型',
     path: '/llm-principles/llm-24/residual-layernorm',
-    summary: '残差的「+1」给梯度留不衰减捷径，LayerNorm 把每条向量拉回标准分布稳定训练。',
+    summary: '残差连接 y=f(x)+x 中那个「+1」给梯度留一条导数恒为 1、不衰减的捷径，缓解沿深度的梯度消失/爆炸；LayerNorm 把每个词向量拉回均值 0 标准差 1 并拦下数值漂移，配 Pre-LN 让残差主路畅通，共同撑起上百层深层模型。',
     demo: LLM24Residual,
     code: () => Promise.resolve(`import numpy as np
 
@@ -609,7 +609,7 @@ def layernorm(x, eps=1e-5):
     navTitle: '三阶段训练',
     category: '大语言模型',
     path: '/llm-principles/llm-25/training-stages',
-    summary: '从「会接话」到「会帮忙」，看懂预训练、SFT 与 RLHF 之间那道鸿沟如何被填平。',
+    summary: '从「会接话」到「会帮忙」要跨三步：预训练在海量文本上预测下一个词获得知识，SFT 用指令-回答范例且只算回答段损失学格式，RLHF 用人类两两偏好炼出奖励模型、配合 KL 缰绳拧出价值观（PPO → DPO）。',
     demo: LLM25Training,
     code: () => Promise.resolve(`# ChatGPT 的三步训练（缺一不可）
 # 1) 预训练 (Pre-train) ：海量文本预测下一个词 -> 得“知识/才华”
@@ -626,7 +626,7 @@ def layernorm(x, eps=1e-5):
     navTitle: '注意力加速',
     category: '大语言模型',
     path: '/llm-principles/llm-26/attention-speedup',
-    summary: '注意力的账单是 O(n²)，清单稀疏注意力「少算」、KV 缓存「不重算」、FlashAttention「快搬」。',
+    summary: '注意力的账单是 O(n²)：稀疏注意力只让部分 token 配对来「少算」，KV 缓存复用已算好的 K/V 来「不重算」，FlashAttention 用在线 softmax 分块在 SRAM 中计算、使大矩阵不落显存来「快搬」；三者可叠加支撑长上下文。',
     demo: LLM26Sparse,
     code: () => Promise.resolve(`# 注意力代价是 O(n²)，三套工程手段分别解决“算/存/搬”：
 # 1) 稀疏注意力：只让一部分 token 配对（滑动窗口/全局 token）-> 少算
@@ -642,7 +642,7 @@ def layernorm(x, eps=1e-5):
     navTitle: 'MoE 专家',
     category: '大语言模型',
     path: '/llm-principles/llm-27/moe',
-    summary: '个子代 token 只激活 Top-K 专家，知识容量按总参数走、算力按激活参数走。',
+    summary: 'MoE 把占 2/3 参数的 FFN 换成一群专家 + 一个路由器，每个 token 只激活 Top-K 个专家，从而知识容量按总参数走、算力按激活参数走；代价是需要负载均衡、显存常驻与跨卡通信。',
     demo: LLM27Moe,
     code: () => Promise.resolve(`import numpy as np
 
@@ -663,7 +663,7 @@ def route(x, router_weights, top_k=2):
     navTitle: '模型蒸馏',
     category: '大语言模型',
     path: '/llm-principles/llm-28/distillation',
-    summary: '让学生学习大模型输出的概率分布，温度放大软标签里藏着的「暗知识」。',
+    summary: '蒸馏让学生模型学习教师模型输出的概率分布（软标签）而非只抄正确结论；软标签里藏着「暗知识」（错误项的相对高下），靠升温 T 放大，损失 = α·KL(贴近教师) + (1−α)·交叉熵(对照真答案)。',
     demo: LLM28Distill,
     code: () => Promise.resolve(`import numpy as np
 
@@ -702,7 +702,7 @@ def softmax_t(logits, T):
     navTitle: '前沿与未来',
     category: '大语言模型',
     path: '/llm-principles/llm-30/frontier',
-    summary: '看懂当下最活跃的研究方向——推理、多模态、智能体、长上下文与几条硬墙。',
+    summary: '看懂当下最活跃的方向与几道硬墙：推理与测试时计算（多想几步）、多模态、智能体、更长上下文与更省（MoE/量化/蒸馏），以及数据、对齐与安全、架构 O(n²)、评测这四道绕不开的难题。',
     demo: LLM30Frontier,
     code: () => Promise.resolve(`# 当下最活跃的研究方向与几道硬墙：
 # 想更深 : 推理 + 测试时计算（让模型遇难题多想几步）
@@ -719,7 +719,7 @@ def softmax_t(logits, T):
     navTitle: 'Transformer 全景图',
     category: '附录',
     path: '/llm-principles/llm-31/transformer-3d',
-    summary: '把整座 Transformer 摆进可旋转的三维空间，顺着流动光点看完「一句话到下一个词」的完整旅程。',
+    summary: '把 30 课零件拼回一座可旋转的 Transformer：分词 → 词向量 → 加位置 → 自注意力 → FFN → 多层 Block → Softmax；每次「生成下一个词」都让整条流水线再从头跑一遍（自回归）。',
     demo: LLM31Transformer3D,
     code: () => Promise.resolve(`# 全景图把 30 课零件拼回原位的六站流水线：
 # ① 分词 -> ② 词向量(embedding) -> ③ 加位置(embedding + position)
@@ -734,7 +734,7 @@ def softmax_t(logits, T):
     navTitle: 'Attention 论文译文',
     category: '附录',
     path: '/llm-principles/llm-32/attention-paper',
-    summary: '按原文顺序读完那篇让一切都开始的论文：查询、缩放点积注意力、多头、位置编码与自注意力动机。',
+    summary: '按原文顺序读完《Attention Is All You Need》：缩放点积注意力除以 √d_k 防饱和、多头把 Q/K/V 投影 h 次再拼接、位置编码、残差 + LayerNorm 的 N=6 层 block，以及「为何用自注意力」的动机对比。',
     demo: LLM32AttentionPaper,
     code: () => Promise.resolve(`# 论文两大核心公式的浓缩：
 # 1) Scaled Dot-Product Attention

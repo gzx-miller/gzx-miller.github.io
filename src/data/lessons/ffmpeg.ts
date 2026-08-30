@@ -57,7 +57,7 @@ ffmpeg -encoders | grep 264
 
 # 查看支持的滤镜
 ffmpeg -filters | grep scale`), language: 'bash',
-    principle: 'FFmpeg 由三个核心概念组成：容器（Container，如 MP4、MKV）负责封装，编解码器（Codec，如 H.264、H.265）负责压缩与解压，流（Stream）是容器内的音视频轨道。FFmpeg 命令行的基本结构是 ffmpeg [全局选项] [输入选项] -i 输入 [输出选项] 输出。',
+    principle: 'FFmpeg 由三个核心概念组成：容器（Container，如 MP4、MKV）负责封装，编解码器（Codec，如 H.264、H.265）负责压缩与解压，流（Stream）是容器内的音视频轨道。此外，帧（Frame）是单张画面，码率（Bitrate）是每秒平均数据量，它们与容器/编解码器构成理解 FFmpeg 的几大核心概念；本课先建立直觉，具体的帧率与码率调节见后续课程。FFmpeg 命令行的基本结构是 ffmpeg [全局选项] [输入选项] -i 输入 [输出选项] 输出。',
     flow: ['理解容器与编解码器的关系。', '掌握 FFmpeg 命令行的基本结构。', '学习安装 FFmpeg（Windows/macOS/Linux）。'],
     notes: ['容器格式不等于编码格式，MP4 容器可以装 H.264 也可以装 H.265。', 'ffprobe 是 FFmpeg 套件中的媒体信息分析工具。', '使用 -hide_banner 可以隐藏编译信息，让输出更整洁。'],
     problem: '解决"如何理解音视频文件的结构，以及 FFmpeg 命令的基本组成"的问题。',
@@ -84,9 +84,9 @@ ffmpeg -i input.ts -c copy output.mp4
 
 # 批量转封装当前目录所有 MP4 为 MKV
 for f in *.mp4; do ffmpeg -i "$f" -c copy "\${f%.mp4}.mkv"; done`), language: 'bash',
-    principle: '格式转换有两种方式：转封装（Copy Mode，-c copy）只修改容器格式不重新编码，速度极快但受限于目标容器对编码格式的兼容性；转码（Transcoding）会重新编码，可以更换编解码器但耗时较长。',
-    flow: ['使用 -c copy 进行快速转封装。', '使用指定编码器进行格式转换。', '理解不同容器对编码格式的兼容性。'],
-    notes: ['MP4 不支持 FLAC 音频，需要转码或换用 MKV 容器。', '转封装时如果时间戳不连续可能会导致播放问题。', '-ss 和 -t 参数可以在转封装时精确裁剪。'],
+    principle: '格式转换有两种本质不同的方式：转封装（-c copy）只是按新的容器（如 MKV、MP4）重新封装原始数据包，不重新编码，速度极快，但要求目标容器兼容源流的编码格式；转码（Transcoding）会通过解码再编码更换编解码器，耗时较长但可以适配任意容器。',
+    flow: ['使用 -c copy 做快速无损转封装（不改编码）。', '使用 -c:v / -c:a 指定编码器做转码。', '根据目标容器的编码兼容性决定采用转封装还是转码。'],
+    notes: ['MP4 对音频编码兼容性有限，例如 FLAC 无损音频在 MP4 中不被广泛支持，应换用 MKV 容器或转码为 AAC。', '-c copy 只搬运数据包而非重编码，速度几乎不随编码复杂度变化，但容器不支持源编码时会直接报错。', '-c copy 搭配 -ss 裁剪依赖关键帧定位、并不精确，需要精确裁剪时应重新编码或将 -ss 放在 -i 之后。'],
     problem: '解决"如何快速转换视频格式，以及何时需要重新编码"的问题。',
   },
   {
@@ -133,7 +133,7 @@ ffmpeg -i input.mp4 -vf "scale=1280:720:force_original_aspect_ratio=decrease,pad
 
 # 使用 lanczos 算法缩放（放大时质量更好）
 ffmpeg -i input.mp4 -vf scale=1920:1080:flags=lanczos output.mp4`), language: 'bash',
-    principle: 'scale 滤镜是 FFmpeg 中最常用的视频滤镜之一，通过指定宽度和高度参数可以调整视频分辨率。使用 -1 可以保持宽高比自动计算对应维度，使用 force_original_aspect_ratio 可以在指定目标尺寸内保持原始比例并添加黑边或裁剪。',
+    principle: 'scale 滤镜通过指定输出宽高调整视频分辨率，语法为 scale=width:height。其中一维写负值时表示按原宽高比自动反推另一维：-2 会额外把结果取整为偶数，避免因色度二次采样（如 yuv420）规格导致编码器拒绝非偶数尺寸，因此等比缩放推荐使用 -2。源与目标宽高比不一致时，可用 force_original_aspect_ratio=decrease/increase 让画面在指定矩形内保持比例，并配合 pad 或 crop 得到加黑边或裁切的画面。',
     flow: ['使用 scale=width:height 指定目标分辨率。', '使用 scale=-1:720 保持宽高比只指定高度。', '使用 force_original_aspect_ratio 在目标矩形内适配。'],
     notes: ['缩放时建议使用 -2 而不是 -1，确保尺寸是偶数（兼容编码器要求）。', '上采样（小分辨率放大）会导致画质损失，应尽量避免。', '使用 lanczos 缩放算法可以获得比默认 bilinear 更好的画质。'],
     problem: '解决"如何调整视频分辨率以适应不同播放设备，以及如何保持正确的宽高比"的问题。',
@@ -185,8 +185,8 @@ ffmpeg -i input_24fps.mp4 -vf minterpolate=fps=60 output_60fps.mp4
 
 # 提取关键帧（只保留 I-frame）
 ffmpeg -i input.mp4 -vf "select=eq(pict_type\\,I)" -vsync vfr output_keyframes.mp4`), language: 'bash',
-    principle: '帧率决定视频每秒显示多少帧画面。修改帧率有两种方式：直接修改容器层帧率标签（不重新编码，用 -r 输入选项）和重新编码时指定输出帧率。fps 滤镜可以在重新编码时精确控制输出帧率，minterpolate 滤镜可以通过运动插值生成新帧。',
-    flow: ['理解帧率对视频流畅度和文件大小的影响。', '使用 -r 指定输出帧率。', '使用 fps 滤镜精确控制帧率转换。'],
+    principle: '帧率（FPS）决定视频每秒显示的画面数量。调整帧率主要是在重新编码时用 -vf fps=30 指定目标帧率：fps 滤镜基于时间戳选择并复制帧，既可抽帧（如 60→30）也可单纯补帧（如 24→30，此时只是复制已有帧，画面流畅度并不提升）。要真正生成中间过渡帧，需要 minterpolate 运动插值。输出端 -r 也能设定目标帧率，但通过丢帧/复制帧粗略对齐，控制不如 fps 滤镜精细。降低帧率会永久丢弃帧，无法恢复。',
+    flow: ['使用 fps 滤镜精确控制输出帧率（推荐）。', '了解输出端 -r 与 fps 滤镜在帧处理上的差异。', '掌握抽取关键帧（select + vsync vfr）与 minterpolate 补帧。'],
     notes: ['将高帧率视频转为低帧率会丢弃帧，无法恢复。', '使用 minterpolate 补帧效果有限，可能产生伪影。', 'NTSC 标准是 23.976/29.97 FPS，PAL 是 25/50 FPS。'],
     problem: '解决"如何统一不同来源视频的帧率，以及如何处理帧率不匹配导致的播放问题"的问题。',
   },
@@ -234,9 +234,9 @@ ffmpeg -i input_hdr.mp4 -vf "scale=1920:1080:flags=lanczos:out_color_matrix=bt20
 
 # 使用 zscale 滤镜（专业级色彩处理）
 ffmpeg -i input_hdr.mp4 -vf "zscale=w=1920:h=1080:f=lanczos:m=bt2020:p=bt2020:r=tv,format=yuv420p10le" output.mp4`), language: 'bash',
-    principle: 'FFmpeg 的 scale 滤镜支持多种缩放算法（bilinear、bicubic、lanczos、spline 等），不同算法在速度和质量间有不同取舍。处理 HDR 内容时需要指定正确的色彩空间参数（scale=w:h:flags=lanczos:out_color_matrix=bt2020nc），否则可能导致色偏。',
-    flow: ['对比不同缩放算法的效果和速度。', '掌握 HDR 内容的缩放注意事项。', '学习使用 zscale 滤镜进行专业级色彩空间转换。'],
-    notes: ['lanczos 算法在缩放质量上通常优于默认的 bilinear。', '处理 10-bit 内容时需要保持高位深，使用 out_color_matrix 和 out_range 参数。', 'zscale 滤镜基于 zimg 库，提供更专业的色彩空间转换能力。'],
+    principle: 'FFmpeg 的 scale 滤镜支持多种缩放算法（bilinear、bicubic、lanczos、spline、neighbor 等），在速度与画质间各有取舍，放大时 lanczos 与 bicubic 通常优于默认的 bilinear。缩放本身并不做色彩空间转换，因此处理 10-bit/HDR 内容时需用 -pix_fmt 保持位深，并通过 scale 的 out_color_matrix/out_range 或 zscale 滤镜设置正确的色彩元数据，避免输出端解析出错。',
+    flow: ['对比不同缩放算法的效果与速度。', '掌握 HDR 内容缩放时的位深与色彩处理。', '学习使用 zscale 滤镜在缩放同时精确控制色彩空间。'],
+    notes: ['lanczos 与 bicubic 在放大画质上优于默认 bilinear，缩小场景差异不明显。', '保持 10-bit 位深靠输出端的 -pix_fmt yuv420p10le；scale 的 out_color_matrix/out_range 只改写色彩矩阵与范围标记，真正的色彩转换需用 colorspace 或 zscale 滤镜。', 'zscale 滤镜基于 zimg 库，参数写法与 scale 不同（f=/p=/m=/r=），适合在缩放同时做精确的色彩空间处理。'],
     problem: '解决"如何在上采样/下采样时保持最佳画质，以及处理 HDR 内容时的色彩准确性"的问题。',
   },
   {
@@ -259,7 +259,7 @@ ffmpeg -i input.mp4 -vf "pad=ceil(iw/2)*2:ceil(ih/2)*2" output.mp4
 ffmpeg -i input.mp4 -vf "scale=1920:-2,pad=1920:1080:(ow-iw)/2:(oh-ih)/2" output.mp4`), language: 'bash',
     principle: 'pad 滤镜通过在视频画面周围添加填充区域来实现宽高比转换，而不裁剪或拉伸原始内容。语法为 pad=w:h:x:y:color，其中 w 和 h 是输出尺寸，x 和 y 是原始画面在新画布上的位置。常用 (ow-iw)/2:(oh-ih)/2 让原始画面居中。',
     flow: ['使用 pad 滤镜添加黑边适配 16:9 或 4:3 显示区域。', '掌握使用表达式自动计算居中位置。', '学习为竖屏视频添加左右黑边以适配横屏播放器。'],
-    notes: ['pad 滤镜的 color 参数支持颜色名称、十六进制值和表达式。', '使用 pad=ceil(iw/2)*2:ceil(ih/2)*2 可以确保输出尺寸为偶数。', '与 scale+crop 组合可以实现「填充模式」的宽高比转换（类似于 CSS 的 object-fit: cover）。'],
+    notes: ['pad 滤镜的 color 参数支持颜色名称、十六进制值和表达式。', '使用 pad=ceil(iw/2)*2:ceil(ih/2)*2 可以确保输出尺寸为偶数。', 'pad 常与 scale 组合实现「适配并加黑边」的转换（类似 CSS object-fit: contain）；与 crop 组合则得到「填满且裁切」的 cover 效果。'],
     problem: '解决"如何在不裁剪或拉伸的情况下将视频适配到不同宽高比的播放区域"的问题。',
   },
   {
@@ -282,7 +282,7 @@ ffmpeg -i input.mp4 -i watermark.png -filter_complex "overlay=W-w-20:20" output.
 ffmpeg -i input.mp4 -i logo.png -filter_complex "overlay=x=W-t*50:y=H-h-20" output.mp4`), language: 'bash',
     principle: 'overlay 滤镜需要配合复杂的滤镜图（Filter Complex，-filter_complex）使用，通过将两个视频流叠加来实现画中画效果。基本语法为 [背景][前景]overlay=x:y。可以使用 enable 选项控制叠加的时间区间，实现动态显示/隐藏。',
     flow: ['理解滤镜图（Filtergraph）的基本概念。', '使用 overlay 实现画中画效果。', '掌握添加 Logo 水印和动态水印的方法。'],
-    notes: ['overlay 的坐标 (0,0) 是左上角。', '使用 shortest=1 可以让输出在较短的输入结束时停止。', '添加透明 PNG 水印时需要确保编译时启用了 libpng 支持。'],
+    notes: ['overlay 的坐标原点 (0,0) 位于画面左上角。', '使用 shortest=1 可以让输出在较短的输入结束时停止。', '叠加透明 PNG 水印时，需先用 format=rgba（或 format=yuva420p）把前景转为带 alpha 的像素格式，overlay 才能正确完成半透明合成。'],
     problem: '解决"如何在视频上添加水印、实现画中画效果，以及制作多画面拼接视频"的问题。',
   },
   {
@@ -309,7 +309,7 @@ ffmpeg -i input.mp4 -c:a copy -vn output.aac
 
 # 转 Opus 编码（低码率优选）
 ffmpeg -i input.mp4 -c:a libopus -b:a 96k -c:v copy output.mkv`), language: 'bash',
-    principle: '音频处理的核心参数包括：采样率（Sample Rate，常用 44100Hz 或 48000Hz）、声道数（单声道/立体声/5.1 环绕声）、编码格式（AAC、MP3、Opus 等）、码率（决定音质和文件大小）。FFmpeg 使用 -ar 设置采样率，-ac 设置声道数，-b:a 设置音频码率。',
+    principle: '音频处理的核心参数包括：采样率（Sample Rate，常用 44100Hz 或 48000Hz）、声道数（单声道/立体声/5.1 环绕声）、编码格式（AAC、MP3、Opus 等）与码率（决定音质和文件大小）。FFmpeg 用 -ar 设置采样率、-ac 设置声道数、-b:a 设置音频码率；改变 -ar/-ac 会触发音频重采样并重新编码，示例中配合 -c:v copy 仅保持视频流不动。',
     flow: ['理解音频采样率、声道数、位深度的基本概念。', '掌握使用 -ar、-ac、-b:a 调整音频参数。', '学习不同音频编码格式的适用场景。'],
     notes: ['AAC 是目前最广泛支持的音频编码格式，推荐用于大多数场景。', 'Opus 编码在低码率下音质优于 AAC，适合 WebRTC 和语音通话。', '将多声道音频降级为立体声时使用 -ac 2，注意可能需要使用 pan 或 aresample 滤镜获得更好的混音效果。'],
     problem: '解决"如何统一音频参数以满足播放设备要求，以及在有限带宽下保持可接受音质"的问题。',
@@ -467,7 +467,7 @@ ffmpeg -i input.mp4 -c copy -f dash output.mpd
 ffmpeg -re -i input.mp4 -c:v libx264 -preset veryfast -b:v 3000k -c:a aac -b:a 128k -f flv rtmp://a.rtmp.youtube.com/live2/STREAM_KEY`), language: 'bash',
     principle: 'FFmpeg 可以作为流媒体生产工具，将本地视频或实时采集的画面推送到 RTMP 服务器（如 Nginx-RTMP、SRS）。HLS（HTTP Live Streaming）通过将视频切片为小 TS 片段并生成 M3U8 播放列表，实现自适应码率流式传输。DASH 是类似的开放标准，使用 MP4 片段和 MPD 描述文件。',
     flow: ['配置 RTMP 推流（输出格式为 flv，推送到 rtmp:// 地址）。', '生成 HLS 切片（使用 -hls_time 指定片段时长）。', '了解 DASH 流式传输的配置方法。'],
-    notes: ['推流时使用 -re 参数可以按原始帧率读取输入，避免推送速度过快。', 'HLS 的 #EXT-X-ENDLIST 标签表示直播结束（点播），没有此标签表示直播流。', '使用多个 -b:v 参数可以生成多码率 HLS 流，播放器根据网络状况自动切换。'],
+    notes: ['推流时使用 -re 参数可以按原始帧率读取输入，避免推送速度过快。', 'HLS 的 #EXT-X-ENDLIST 标签表示点播（直播结束），没有此标签表示直播流。', '多码率 HLS 需用 -map 将源视频拆成多路不同 -b:v 的变体分别切片，再生成引用各变体 m3u8 的 master playlist，播放器才能按带宽自动切换。'],
     problem: '解决"如何实现直播推流、搭建点播流媒体服务，以及生成自适应码率播放列表"的问题。',
   },
   {
@@ -495,8 +495,8 @@ ffmpeg -i input.mp4 -c:v h264_videotoolbox -b:v 3M output.mp4
 # 完整硬件加速（硬解 + 硬编）
 ffmpeg -hwaccel qsv -c:v h264_qsv -i input.mp4 -c:v h264_qsv output.mp4`), language: 'bash',
     principle: '硬件加速通过 GPU 专用的编码/解码电路来处理视频，速度远超 CPU 软编码，但画质通常略逊于同等码率下的 CPU 编码。NVIDIA GPU 使用 h264_nvenc/hevc_nvenc 编码器，Intel 集成显卡使用 h264_qsv/hevc_qsv，Apple 设备使用 h264_videotoolbox/hevc_videotoolbox，AMD GPU 使用 h264_amf/hevc_amf。',
-    flow: ['检测系统可用的硬件加速编码器（ffmpeg -encoders | findstr nvenc）。', '使用硬件编码器加速编码过程。', '掌握硬件解码器（cuda、qsv、videotoolbox）的使用。'],
-    notes: ['使用硬件编码器时需要指定 -gpu 参数选择 GPU 设备（多 GPU 系统）。', '硬件编码器的 CRF 参数名称可能不同（如 NVENC 使用 -cq 而不是 -crf）。', '不是所有 FFmpeg 编译版本都启用了硬件加速支持，可以通过 ffmpeg -hwaccels 查看。'],
+    flow: ['用 ffmpeg -hwaccels 与 ffmpeg -encoders 检测本机可用的硬件编解码器。', '按平台选用硬件编码器（nvenc / qsv / amf / videotoolbox）加速编码。', '配合 -hwaccel 使用硬件解码，实现边解码边编码的完整硬件链路。'],
+    notes: ['-gpu N 仅 NVIDIA NVENC 支持，用于在多 GPU 系统上指定设备，Intel/AMD/Apple 无此参数。', '硬件编码器的质量/码率参数各不相同，如 NVENC 用 -rc + -b:v / -cq，QSV 用 -global_quality，使用前以 ffmpeg -h encoder=h264_nvenc 确认。', '硬件加速依赖驱动与 FFmpeg 编译配置，可通过 ffmpeg -hwaccels 和 ffmpeg -encoders 实际确认可用性。'],
     problem: '解决"如何大幅提升视频编码速度、降低 CPU 占用，以及在实时转码场景中保持低延迟"的问题。',
   },
   {
@@ -546,9 +546,9 @@ ffmpeg -i input.mp4 -af "afade=t=in:st=0:d=3,afade=t=out:st=57:d=3" -c:v copy ou
 
 # xfade 转场（两视频之间淡入淡出）
 ffmpeg -i input1.mp4 -i input2.mp4 -filter_complex "[0:v][1:v]xfade=transition=fade:duration=1:offset=5[v]" -map "[v]" output.mp4`), language: 'bash',
-    principle: 'fade 滤镜可以对视频画面应用淡入（从黑场渐显）和淡出（渐隐到黑场）效果，也可以对音频应用淡入淡出。视频淡入淡出是通过在时间轴上调整画面亮度实现的，音频淡入淡出是通过调整音量包络实现的。对于更复杂的转场效果，可以使用 xfade 和 acrossfade 滤镜（需要较新版本的 FFmpeg）。',
+    principle: 'fade 滤镜可以对视频画面应用淡入（从黑场渐显）和淡出（渐隐到黑场）效果，也可以对音频应用淡入淡出。视频淡入淡出是对画面亮度/透明度在时间轴上的渐变，音频淡入淡出则是调整音量包络。多输入场景下，画面跨段过渡用 xfade 滤镜，音频衔接用 acrossfade 滤镜（两者都需要较新版本）。',
     flow: ['使用 fade=t=in:st=0:d=2 实现前 2 秒淡入。', '使用 fade=t=out:st=58:d=2 实现结束前 2 秒淡出。', '同时处理视频和音频的淡入淡出效果。'],
-    notes: ['fade 滤镜的 st 参数是起始时间（秒），d 参数是持续时间（秒）。', 'xfade 滤镜支持多种转场效果（fade、wipeleft、circleopen 等），但需要输入视频有相同的编码参数。', '音频淡入淡出使用 aevalsrc 或 volume 滤镜配合 enable 选项实现更精细的控制。'],
+    notes: ['fade 滤镜的 st 参数是起始时间（秒），d 参数是持续时间（秒）。', 'xfade 滤镜支持多种视频转场效果（fade、wipeleft、circleopen 等），要求两路输入时间轴对齐并由 offset 控制切换点。', '音频淡入淡出标准做法是用 afade 滤镜（afade=t=in/out），也可用 volume 的 enable 表达式做更精细的分段控制。'],
     problem: '解决"如何让视频开头和结尾过渡更自然、制作简单的视频转场效果，以及避免音频突然切断"的问题。',
   },
   {
@@ -623,7 +623,7 @@ ffmpeg -ss 00:00:10 -t 5 -i input.mp4 -vf "fps=10,scale=320:-1" output.gif
 ffmpeg -i input.mp4 -vf "fps=10,scale=320:-1" -loop 0 output.gif`), language: 'bash',
     principle: 'GIF 格式只支持 256 色，直接从视频生成 GIF 会导致严重色偏。正确方法是先生成调色板（palettegen 滤镜），然后使用调色板进行二次编码（paletteuse 滤镜）。通过指定较小的尺寸和减少颜色数可以大幅减小 GIF 文件大小。',
     flow: ['使用 palettegen 滤镜生成最优调色板。', '使用 paletteuse 滤镜配合调色板生成高质量 GIF。', '掌握尺寸、帧率、颜色数对 GIF 文件大小的影响。'],
-    notes: ['GIF 的帧率通常设为 10-15 FPS 即可，过高的帧率会大幅增加文件大小。', '使用 -loop 0 可以让 GIF 循环播放，去掉此参数则播放一次后停止。', '考虑使用 WebP 动画或 MP4 短视频替代 GIF，在同等质量下文件更小。'],
+    notes: ['GIF 的帧率通常设为 10-15 FPS 即可，过高的帧率会大幅增加文件大小。', 'FFmpeg 输出的 GIF 默认循环播放；循环次数在 GIF 内部的 Netscape 扩展里记录，若需精确控制次数需借助专门工具处理。', '考虑使用 WebP 动画或 MP4 短视频替代 GIF，在同等质量下文件更小。'],
     problem: '解决"如何从视频片段生成高质量 GIF 动图、控制 GIF 文件大小，以及优化色彩表现"的问题。',
   },
   {
@@ -652,7 +652,7 @@ ffmpeg -i input.mp4 -metadata:s:a:0 language=chi -c copy output.mp4
 ffmpeg -i input.mp4 -i chapters.txt -map_chapters 1 -c copy output.mkv`), language: 'bash',
     principle: '媒体文件的元数据存储在容器层的元数据包中，可以使用 -metadata 参数在转码时添加或修改。MP4 容器使用 moov atom 存储元数据，MKV 使用 Tags 元素。章节标记（Chapters）可以嵌入到 MKV 和 MP4 文件中，播放器可以显示章节列表并支持跳转。',
     flow: ['使用 -metadata 参数添加标题、作者等元数据。', '使用 -map_metadata 控制元数据的复制行为。', '学习为 MKV/MP4 文件添加章节标记。'],
-    notes: ['使用 -map_metadata -1 可以去除所有元数据（用于匿名化）。', 'MKV 的章节标记可以使用 mkvmerge --chapters 或 FFmpeg 的 -metadata:chapter 添加。', '某些播放器可能不显示嵌入的章节信息，需要测试目标播放器的兼容性。'],
+    notes: ['使用 -map_metadata -1 可以去除所有元数据（用于匿名化）。', '章节标记可先写成 ffmetadata 文件再用 -map_chapters 1 导入，或用 mkvmerge 的 --chapters 选项添加。', '某些播放器可能不显示嵌入的章节信息，需要测试目标播放器的兼容性。'],
     problem: '解决"如何为视频添加标题和版权信息、去除敏感元数据，以及为教学视频添加章节导航"的问题。',
   },
 ]

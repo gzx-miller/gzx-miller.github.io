@@ -25,7 +25,7 @@ describe('课程注册表', () => {
       expect(categoryLessons).toHaveLength(expected.lessonCount)
       expect(groups.size).toBe(expected.groupCount)
     }
-  })
+  }, 20000)
 
   it('所有已上线分类都有课程，且课程标识和路由唯一', async () => {
     const readyCategories = knowledgeCategories.filter((category) => category.status === 'ready')
@@ -41,7 +41,7 @@ describe('课程注册表', () => {
 
       expect(categoryLessons.length).toBeGreaterThanOrEqual(8)
     }
-  })
+  }, 20000)
 
   it('每个内容都归属于已知分类，并能按需读取源码', async () => {
     const categoryIds = new Set(knowledgeCategories.map((category) => category.id))

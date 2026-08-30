@@ -38,7 +38,7 @@ const X24Deployment = createDemo('X24Deployment')
 export const lessons: Lesson[] = [
   {
     id: 'X_1', title: '项目结构与 App Router 目录约定', navTitle: '项目结构', category: '起步',
-    path: '/nextjs/x-1/project-structure', summary: '了解 Next.js App Router 的目录约定、app/ 核心目录和 next.config.js 配置。',
+    path: '/nextjs/x-1/project-structure', summary: '了解 App Router 的目录约定、app/ 核心文件的职责，以及 public/ 与 next.config.js 在项目中的作用。',
     demo: X01ProjectStructure,
     code: () => Promise.resolve(`// app/layout.tsx - 根布局（必需）
 import './globals.css'
@@ -134,9 +134,9 @@ const nextConfig = {
 
 module.exports = nextConfig`),
     language: 'jsx',
-    principle: 'Next.js 13+ 使用 App Router（app/ 目录）组织路由：page.tsx 定义页面 UI，layout.tsx 定义共享布局，特殊文件（loading/error/not-found）约定加载、错误和 404 状态。这套约定让路由、布局和状态处理都有文件可循。',
-    flow: ['认识 app/ 目录的核心文件（page/layout/loading/error）。', '理解 public/ 静态资源与 next.config.js 配置。', '掌握 Pages Router 与 App Router 的区别。'],
-    notes: ['app/layout.tsx 是必需的根布局，必须包含 <html> 和 <body>。', 'Pages Router（pages/）仍兼容，但推荐迁移到 App Router。', 'middleware.ts 必须放在项目根或 src/ 下，不能在 app/ 内。'],
+    principle: 'Next.js App Router 以 app/ 目录组织路由：page.tsx 是唯一的路由入口，layout.tsx 定义共享布局，loading/error/not-found 分别约定加载、错误与 404 状态文件，目录层级即为 URL 层级。',
+    flow: ['认识 app/ 目录的核心文件及其职责（page/layout/loading/error/not-found）。', '理解 public/ 静态资源与 next.config.js 配置的作用。', '了解 Pages Router（pages/）与 App Router（app/）的差异。'],
+    notes: ['根 layout.tsx 是必需的，必须包含 <html> 和 <body> 标签。', '只有 page.tsx 参与路由生成，其余文件是布局或状态约定。', 'pages/ 目录仍可运行但已逐步淘汰，新项目统一使用 app/。'],
     problem: '解决"Next.js 项目怎么组织代码、App Router 目录里每个文件是干什么用的"入门问题。',
   },
   {
@@ -205,9 +205,9 @@ export function Button({ children }: { children: React.ReactNode }) {
   return <button className="btn">{children}</button>
 }`),
     language: 'jsx',
-    principle: 'App Router 基于文件系统自动生成路由：page.tsx 定义路由 UI，目录层级即 URL 层级。方括号表示动态参数，圆括号是路由组（不影响路径），@ 前缀是并行路由插槽，_ 前缀是私有文件夹（不参与路由）。',
-    flow: ['理解 page.tsx 才是路由入口，目录只是路径段。', '掌握 [param]、[...slug]、(group)、@slot、_private 命名规则。', '对比 Nuxt 的文件路由，理解 Next.js 的差异。'],
-    notes: ['只有 page.tsx 会生成路由，其他文件（layout/error 等）是辅助。', '[[...slug]] 是可选 Catch-all，零段也匹配。', '(folder) 路由组用于组织代码和切换布局，不改变 URL。'],
+    principle: 'App Router 基于文件系统生成路由：page.tsx 定义页面 UI，目录层级即 URL 层级。方括号 [param] 表示动态参数，[...slug] 捕获多段，[[...slug]] 可选捕获；圆括号 (group) 是路由组（不影响路径），@ 前缀是并行路由插槽，_ 前缀是私有文件夹（不参与路由）。',
+    flow: ['理解只有 page.tsx 会产生路由，目录仅是路径段。', '区分 [param]、[...slug]、[[...slug]] 三种动态参数写法。', '认识 (group) 路由组、@ 插槽、_ 私有文件夹的命名作用。'],
+    notes: ['page.tsx 之外的文件（layout/loading/error 等）不直接生成路由。', '[[...slug]] 是可选 Catch-all，零个路径段也会匹配。', '(group) 只影响代码组织与布局，不改变最终 URL。'],
     problem: '解决"Next.js 文件名各种括号和符号代表什么、如何用文件结构表达复杂路由"的问题。',
   },
   {
@@ -306,9 +306,9 @@ export default function BlogTemplate({
 //   └─ DashboardLayout (app/dashboard/layout.tsx)
 //        └─ DashboardPage (app/dashboard/page.tsx)`),
     language: 'jsx',
-    principle: 'layout.tsx 在导航时保持挂载状态不重新渲染，适合放 Header/Footer 等持久 UI；template.tsx 每次导航都重新创建，适合需要重置状态的场景。布局层层嵌套，子布局套在父布局内。',
-    flow: ['认识根布局（必需）与嵌套布局的层级关系。', '理解 layout 和 template 的状态保持差异。', '掌握路由组布局实现同 URL 不同布局。'],
-    notes: ['根布局必须包含 <html> 和 <body>，全局样式在这里引入。', 'layout 在导航时不重新挂载，useState 会保留；template 会重置。', '路由组 (group) 配合各自 layout 可实现同路径多套布局。'],
+    principle: 'layout.tsx 在导航时保持挂载、状态不重置，适合放 Header/Footer 等持久 UI；template.tsx 每次导航都重新创建实例、状态会重置。布局按目录层层嵌套，子布局包裹在父布局内。',
+    flow: ['识别根布局与嵌套布局的层级嵌套关系。', '厘清 layout 与 template 在状态保持上的差异。', '用路由组 (group) 为同一 URL 下的不同路径提供各自布局。'],
+    notes: ['根布局必须含 <html> 和 <body>，全局字体与样式在此引入。', 'layout 在导航时不重新挂载，useState 等状态会保留；template 会重置。', '不同路由组可各自定义 layout，实现同路径多套外壳。'],
     problem: '解决"哪些 UI 应该放 layout、layout 之间如何嵌套、什么时候用 template"的问题。',
   },
   {
@@ -401,9 +401,9 @@ export default async function PostPage({
   return <h1>文章 {id}</h1>
 }`),
     language: 'jsx',
-    principle: '动态路由用方括号 [id] 捕获单段，[...slug] 捕获多段（数组），[[...slug]] 可选捕获。page 组件通过 params prop 读取路径参数，通过 searchParams 读取 URL 查询串。Next.js 15+ 中两者都是 Promise，需 await。',
-    flow: ['掌握 [param] 单段与 [...slug] 多段动态路由。', '理解 params（路径段）与 searchParams（查询串）的区别。', '注意 Next.js 15+ params/searchParams 变为 Promise。'],
-    notes: ['Catch-all params.slug 是数组，单段 params.id 是字符串。', 'searchParams 在服务端组件中会触发动态渲染。', 'generateStaticParams() 可预生成动态路由的静态页面。'],
+    principle: '动态路由用方括号 [id] 捕获单段，[...slug] 捕获多段（得到数组），[[...slug]] 可选捕获。page 组件通过 params 读取路径参数、通过 searchParams 读取查询串；Next.js 15+ 二者都是 Promise，需 await 解包。generateStaticParams 可在构建期预生成动态路由的静态页。',
+    flow: ['掌握 [param] 单段、[...slug] 多段、[[...slug]] 可选三种写法。', '区分 params（路径段）与 searchParams（查询串）的来源。', '注意 Next.js 15+ 中 params/searchParams 是 Promise、需 await。'],
+    notes: ['Catch-all 的 params.slug 是数组，单段 params.id 是字符串。', '在 Server Component 中读取 searchParams 会使路由转为动态渲染。', 'generateStaticParams() 在构建时预生成动态路由的静态页面。'],
     problem: '解决"如何用文件名表达带参数的 URL、在组件里怎么拿到路由参数"的问题。',
   },
   {
@@ -486,9 +486,9 @@ export default async function DashboardPage() {
   )
 }`),
     language: 'jsx',
-    principle: 'App Router 中所有组件默认是 Server Component，在服务端运行，不打包进前端 bundle，可直接访问数据库、文件系统和密钥，但不能用 useState/useEffect 等客户端 Hook 和事件处理。适合数据获取和静态渲染。',
-    flow: ['认识 Server Component 的服务端运行特性。', '对比 Server 与 Client Component 的能力边界。', '理解组合规则：Server 可导入 Client，反之只能传 children。'],
-    notes: ['Server Component 不能用 onClick、useState、useEffect。', '直接 await 数据获取，无需 useEffect + 状态管理。', '把 "use client" 尽量下推，让更多组件留在服务端减小 bundle。'],
+    principle: 'App Router 中组件默认是 Server Component，在服务端运行、不进入前端 bundle，可直接访问数据库、文件系统与密钥，并能直接 await 获取数据；但不能使用 useState/useEffect 等客户端 Hook、事件处理器或浏览器 API。',
+    flow: ['认识 Server Component 在服务端运行、不进 bundle 的特性。', '对比 Server 与 Client Component 的能力边界。', '掌握组合规则：Server 可导入 Client，Client 只能把 Server 作为 children 接收。'],
+    notes: ['Server Component 不能写 onClick、useState、useEffect。', '数据直接用 async/await 获取，无需 useEffect 加状态。', '把 "use client" 尽量下推到叶子组件，让更多代码留在服务端。'],
     problem: '解决"Server Component 到底能做什么、不能做什么、和 Client Component 怎么配合"的问题。',
   },
   {
@@ -602,9 +602,9 @@ export function ProductCard({ product }: { product: any }) {
 // 只要在文件顶部声明，该文件导入的所有子组件也都是客户端组件
 // 但子文件不需要再写 "use client"（除非单独使用）`),
     language: 'jsx',
-    principle: '需要交互（事件、状态、生命周期、浏览器 API）的组件必须用 "use client" 声明为 Client Component。声明会向下传递：导入的子组件也变成客户端。Server 获取数据后可通过 props 传给 Client 组件接管交互。',
-    flow: ['判断何时需要 "use client"（事件/状态/生命周期/浏览器 API）。', '掌握 Server 获取数据 → props 传 Client 的组合模式。', '理解 "use client" 边界向下传递的特性。'],
-    notes: ['所有 React Hooks（useState/useEffect 等）只能在 Client Component 中使用。', 'Client Component 仍会在服务端预渲染 HTML，再在客户端 hydrate。', '尽量让交互组件小而独立，外层保持 Server。'],
+    principle: '需要交互的组件（事件、状态、生命周期、浏览器 API）必须在文件顶部加 "use client" 声明为 Client Component；该声明会向下传递，导入的子组件也变成 Client。Server 组件可获取数据后通过 props 传给 Client 组件接管交互。',
+    flow: ['判断何时需要 "use client"（事件/状态/生命周期/浏览器 API）。', '掌握 Server 获取数据 → props 传 Client 的组合模式。', '理解 "use client" 边界会向下传递到导入的子组件。'],
+    notes: ['useState/useEffect 等客户端 Hook 只能在 Client Component 中使用。', 'Client Component 仍会在服务端先渲染 HTML，再在客户端水合（hydrate）。', '让交互组件小而独立，把更多 UI 留在服务端以减小 bundle。'],
     problem: '解决"什么组件要加 use client、Server 和 Client 组件如何组合传数据"的问题。',
   },
   {
@@ -724,9 +724,9 @@ export default async function ProductPage({
   return <h1>{product.name}</h1>
 }`),
     language: 'jsx',
-    principle: 'Next.js 默认静态渲染（构建时生成 HTML），一旦组件树使用了动态函数（cookies/headers/searchParams）或 no-store fetch，整个路由转为动态渲染（每次请求执行）。静态路由可被 CDN 缓存，动态路由按需执行。',
-    flow: ['理解静态（构建时）与动态（请求时）渲染的时机差异。', '掌握触发动态的信号：cookies/headers/searchParams/no-store。', '用 generateStaticParams 预生成动态路由的静态页。'],
-    notes: ['只要路由树中任一组件用了动态函数，整条路由变动态。', 'fetch 默认 force-cache（静态），no-store 触发动态。', 'Partial Prerendering（PPR）实验特性允许静态壳 + 动态洞。'],
+    principle: 'Next.js 默认对不含动态 API 的页面做静态渲染（构建时生成 HTML）；一旦组件树使用 cookies()/headers()/searchParams 等动态函数或显式禁用缓存，整条路由转为动态渲染（每次请求执行）。静态路由可被 CDN 缓存，动态路由按需执行。',
+    flow: ['理解静态（构建时）与动态（请求时）渲染的时机差异。', '掌握让路由变动态的信号：cookies/headers/searchParams/禁用缓存。', '用 generateStaticParams 或 export const revalidate/dynamic 控制预生成与刷新。'],
+    notes: ['只要组件树中任一组件用了动态函数，整条路由就变动态。', '较新版本 fetch 默认不缓存，显式缓存选项会影响路由的静态/动态判定。', 'Next.js 16 的 Cache Components（use cache）实现"静态壳 + 动态内容"。'],
     problem: '解决"页面是构建时生成还是请求时执行、什么操作会让页面变动态"的问题。',
   },
   {
@@ -848,9 +848,9 @@ export default function DashboardPage() {
 // 三个组件独立加载，互不阻塞
 // 哪个先准备好就先显示哪个`),
     language: 'jsx',
-    principle: 'Streaming 把服务端渲染的 HTML 分块发送：遇到 Suspense 边界先返回 fallback，慢组件数据就绪后流式替换。用户无需等最慢组件就能看到骨架，loading.tsx 是路由级 Suspense 的语法糖。',
-    flow: ['理解流式渲染：先返回 fallback，数据就绪后流式替换。', '用 <Suspense> 包裹慢组件，或用 loading.tsx 自动包裹。', '多个 Suspense 可并行流式，互不阻塞。'],
-    notes: ['loading.tsx 等价于路由级 <Suspense>，自动包裹 page。', '流式渲染需要配合 async Server Component + await。', '首屏 LCP 优化：把慢组件用 Suspense 隔离，快速部分先出。'],
+    principle: 'Streaming 把服务端渲染的 HTML 分块发送：遇到 <Suspense> 边界先返回 fallback，慢组件数据就绪后流式替换。用户无需等待最慢的组件即可看到骨架内容；loading.tsx 是路由级 Suspense 的语法糖。',
+    flow: ['理解流式渲染：先返回 fallback，数据就绪后流式替换。', '用 <Suspense> 包裹 async Server Component 慢组件，或加载中显示 loading.tsx。', '多个 Suspense 边界可并行流式，互不阻塞。'],
+    notes: ['loading.tsx 等价于路由级 <Suspense>，自动包裹同目录 page。', '流式渲染需要配合 async Server Component + await。', 'LCP 优化：把慢组件用 Suspense 隔离，让快速部分优先输出。'],
     problem: '解决"页面里有慢请求，用户要等很久才看到内容、如何渐进式展示"的问题。',
   },
   {
@@ -962,9 +962,9 @@ export default async function BlogPage() {
   return <h1>博客列表 ({posts.length})</h1>
 }`),
     language: 'jsx',
-    principle: 'Next.js 扩展了原生 fetch：默认 force-cache（构建时缓存）、no-store（不缓存）、revalidate（ISR 定时刷新）、tags（按标签缓存可主动失效）。同渲染周期内相同 URL 自动去重，Server Component 直接 await 即可。',
-    flow: ['在 Server Component 中直接 await fetch（无需 useEffect）。', '掌握 force-cache/no-store/revalidate/tags 四种缓存策略。', '用 revalidateTag/revalidatePath 主动失效缓存。'],
-    notes: ['fetch 默认缓存（force-cache），no-store 才不缓存。', 'Request Memoization：同一次渲染内相同 fetch 只执行一次。', '缓存存储在服务端跨请求共享，不是浏览器缓存。'],
+    principle: 'Next.js 扩展了原生 fetch 用于服务端数据获取：可配置 no-store（不缓存，新版默认）、force-cache（持久缓存）、next.revalidate（ISR 定时刷新）或 next.tags（按标签缓存，用 revalidateTag/revalidatePath 主动失效）。同一次渲染中相同 URL 的请求自动去重，Server Component 中直接 await 即可。',
+    flow: ['在 Server Component 中直接 await fetch（无需 useEffect）。', '掌握 no-store/force-cache/revalidate/tags 等缓存选项。', '用 revalidateTag/revalidatePath 在数据变更后主动失效缓存。'],
+    notes: ['较新版本（15+）fetch 默认不缓存，需要缓存时显式指定缓存项。', 'Request Memoization：同一次渲染内相同 URL 的 fetch 只执行一次。', 'Data Cache 存在服务端并跨请求共享，不是浏览器缓存。'],
     problem: '解决"在 Next.js 里怎么请求数据、fetch 的缓存怎么控制"的问题。',
   },
   {
@@ -1103,9 +1103,9 @@ export function UserProfile() {
   return <button onClick={handleClick}>更新资料</button>
 }`),
     language: 'jsx',
-    principle: 'Server Action 用 "use server" 声明，函数在服务端运行，前端通过 POST 调用。配合 form action 属性原生支持，自动处理 CSRF。执行后用 revalidatePath/revalidateTag 刷新缓存，页面自动更新，无需手动 refetch。',
-    flow: ['用 "use server" 定义服务端函数。', '通过 form action 或编程式调用触发。', '执行后 revalidatePath 刷新缓存，页面自动更新。'],
-    notes: ['Server Action 自动 CSRF 防护，参数自动序列化。', 'useFormState 跟踪返回值，useFormStatus 跟踪提交状态。', 'useOptimistic 实现乐观更新，提升交互体验。'],
+    principle: 'Server Action 用 "use server" 声明，函数在服务端运行，前端通过 POST 调用。可配合 form action 属性实现无 JavaScript 的表单提交，并自动处理 CSRF 防护；执行后用 revalidatePath/revalidateTag 刷新缓存，页面自动更新，无需手动 refetch。',
+    flow: ['用 "use server" 声明服务端函数。', '通过 form action 或程序式调用触发执行。', '执行后 revalidatePath/revalidateTag 刷新缓存，页面自动更新。'],
+    notes: ['Server Action 自动做 CSRF 防护，参数会被自动序列化。', 'React 19 用 useActionState 取代 useFormState 跟踪返回值，useFormStatus 跟踪提交状态。', 'useOptimistic 可先乐观更新界面，再等待真实执行结果。'],
     problem: '解决"表单提交/数据变更需要写 API 吗、怎么在 Next.js 里做增删改"的问题。',
   },
   {
@@ -1252,9 +1252,9 @@ export async function GET() {
   })
 }`),
     language: 'jsx',
-    principle: 'Route Handler 在 app/api/ 下用 route.ts 定义，每个导出的 HTTP 方法（GET/POST/PUT/DELETE）对应一个处理函数，返回 NextResponse。适合构建 REST API、Webhook、第三方 API 代理，可运行在 Node 或 Edge Runtime。',
-    flow: ['在 app/api/xxx/route.ts 导出 HTTP 方法。', '用 NextResponse.json 返回 JSON。', '通过 params 获取动态路由参数。'],
-    notes: ['文件名固定为 route.ts，目录层级即 API 路径。', 'GET 可缓存，POST/PUT/DELETE 默认不缓存。', '与 Server Action 区别：Route Handler 是 REST API，Server Action 是表单提交。'],
+    principle: 'Route Handler 在 app/api/ 目录下用 route.ts 定义，每个导出的 HTTP 方法（GET/POST/PUT/DELETE/PATCH）对应一个处理函数，返回 NextResponse。适合构建 REST API、Webhook、第三方 API 代理，可运行在 Node 或 Edge Runtime。',
+    flow: ['在 app/api/xxx/route.ts 中导出对应 HTTP 方法。', '用 NextResponse.json 返回 JSON 响应。', '通过函数第二参数 params 获取动态路由参数。'],
+    notes: ['文件名固定为 route.ts，目录层级即 API 路径。', 'GET 在满足静态条件时可被缓存，POST/PUT/DELETE 等写操作默认不缓存。', 'Route Handler 适合 REST API/代理，与表单场景的 Server Action 定位不同。'],
     problem: '解决"Next.js 怎么写后端 API、Route Handler 和 Server Action 该用哪个"的问题。',
   },
   {
@@ -1375,9 +1375,9 @@ export function Navigation() {
 // 失效 Data Cache 会级联刷新：
 // Data Cache 失效 → Full Route Cache 重新生成 → Router Cache 失效`),
     language: 'jsx',
-    principle: 'Next.js 有四层缓存：Request Memoization（单次请求去重）、Data Cache（fetch 结果持久缓存）、Full Route Cache（路由 HTML/RSC 缓存）、Router Cache（客户端已访问路由缓存）。失效 Data Cache 会级联刷新上层。',
-    flow: ['认识四层缓存的作用范围与生命周期。', '掌握 revalidatePath/revalidateTag 主动失效。', '理解定时 revalidate（ISR）与 no-store 跳过缓存。'],
-    notes: ['Data Cache 是基础，失效它会级联刷新 Full Route 和 Router Cache。', 'Router Cache 在客户端会话内有效（30s~5min），router.refresh() 可清除。', '路由级可用 export const revalidate / dynamic 配置。'],
+    principle: 'Next.js 有多个缓存层：Request Memoization（单次渲染内请求去重）、Data Cache（fetch 结果的持久缓存）、Full Route Cache（静态渲染的 HTML 与 RSC payload）、Router Cache（客户端会话内已访问的路由缓存）。按需失效 Data Cache 会级联刷新上层缓存。',
+    flow: ['认识各缓存层的作用范围与生命周期。', '掌握 revalidatePath/revalidateTag 主动失效。', '理解定时 revalidate（ISR）与 no-store 跳过缓存。'],
+    notes: ['Data Cache 是基础，失效它会级联刷新 Full Route 与 Router Cache。', 'Router Cache 在客户端会话内有效（约 30s~5min），router.refresh() 可清除。', 'Next.js 16 引入 Cache Components（use cache），让缓存更显式可控。'],
     problem: '解决"Next.js 到底有几层缓存、数据更新后怎么让缓存失效"的问题。',
   },
   {
@@ -1502,9 +1502,9 @@ export default function Layout({
   )
 }`),
     language: 'jsx',
-    principle: 'Parallel Routes 用 @ 前缀目录定义插槽，插槽作为 props 传入 layout，可并行渲染多个独立子路由。每个插槽有独立的加载和错误状态，default.tsx 提供未匹配时的默认内容，适合仪表盘多面板布局。',
-    flow: ['用 @folder 定义插槽，在 layout 中接收对应 prop。', '理解 default.tsx 在插槽未匹配时的兜底作用。', '配合 Intercepting Routes 实现模态框。'],
-    notes: ['插槽名即 prop 名：@sidebar → layout 的 sidebar prop。', '每个插槽可独立流式加载（各自的 loading.tsx）。', '插槽不参与 URL 路径，只影响布局渲染。'],
+    principle: 'Parallel Routes 用 @ 前缀目录定义插槽，插槽作为 props 传入 layout，可在同一布局中并行渲染多个独立子路由。每个插槽有自己的加载、错误与 default 状态，default.tsx 提供插槽未匹配时的默认内容，适合仪表盘等多面板布局。',
+    flow: ['用 @folder 定义插槽，在 layout 中接收同名 prop。', '理解 default.tsx 在插槽未匹配时的兜底作用。', '配合 Intercepting Routes 实现模态框。'],
+    notes: ['插槽名即 prop 名：@sidebar → layout 的 sidebar prop。', '每个插槽可独立流式加载（各自的 loading.tsx）。', '插槽不参与 URL 路径，只决定布局内的并行渲染区域。'],
     problem: '解决"一个布局里要同时展示多个独立数据块、怎么并行渲染"的问题。',
   },
   {
@@ -1643,9 +1643,9 @@ export default async function PhotosPage() {
   )
 }`),
     language: 'jsx',
-    principle: 'Intercepting Routes 用 (.) (..) (...) 前缀拦截其他路由：客户端导航时命中拦截版（如弹窗），直接访问 URL 时命中真实版（如全屏）。同一 URL 两种体验，既流畅又可分享，常配合 Parallel Routes 的 Modal 插槽。',
-    flow: ['理解 (.) (..) (...) 拦截符号的层级含义。', '在子目录创建拦截版页面（如弹窗）。', '配合 Parallel Routes Modal 插槽实现弹窗。'],
-    notes: ['(.) 同级、(..) 上级、(...) 根级拦截。', '拦截路由的 URL 与真实路由相同，刷新命中真实版。', '浏览器后退回到来源页，弹窗自动关闭。'],
+    principle: 'Intercepting Routes 用 (.) (..) (..)(..) (...) 前缀拦截其他路由：客户端导航时命中拦截版（如模态框弹窗），直接访问或刷新 URL 时命中真实版（如全屏页）。同一 URL 提供两种体验，既流畅又可分享，常配合 Parallel Routes 的 Modal 插槽。',
+    flow: ['理解 (.) (..) (...) 拦截符号的层级含义。', '在插槽或子目录创建拦截版页面（如弹窗）。', '配合 Parallel Routes 的 Modal 插槽叠加在布局上实现弹窗。'],
+    notes: ['(.) 同级、(..) 上级、(..)(..) 上两级、(...) 根级拦截。', '拦截版与真实版共享同一 URL，直接访问/刷新命中真实版。', '浏览器后退回到来源页，弹窗随之关闭。'],
     problem: '解决"点击图片想弹窗展示、直接访问又要是全屏页、怎么兼顾"的问题。',
   },
   {
@@ -1784,9 +1784,9 @@ export default function HomePage() {
 // _folder     - 私有文件夹（不参与路由）
 // (.)folder   - 同级拦截路由`),
     language: 'jsx',
-    principle: 'Route Groups 用 (folder) 圆括号目录组织代码而不影响 URL，可为一组路由指定独立 layout；私有文件夹用 _folder 下划线前缀，完全不参与路由，适合存放内部组件和工具函数。',
-    flow: ['用 (group) 组织代码、切换布局且不影响 URL。', '用 _folder 存放不参与路由的内部组件/工具。', '区分 [param] 动态、@slot 并行、(group) 路由组、_private 私有。'],
-    notes: ['路由组可让同一 URL 有不同布局（如营销页 vs 后台）。', '私有文件夹内的 page.tsx 不会生成路由。', '路由组不能与同名路由组冲突（会报 URL 冲突错误）。'],
+    principle: 'Route Groups 用 (folder) 圆括号目录组织代码而不影响 URL，可为一组路由指定独立 layout；私有文件夹用 _folder 下划线前缀，完全不参与路由生成，适合存放内部组件和工具函数。',
+    flow: ['用 (group) 组织代码、切换布局且不影响 URL。', '用 _folder 存放不参与路由的内部组件/工具。', '区分 [param] 动态、@slot 并行、(group) 路由组、_private 私有的命名作用。'],
+    notes: ['路由组可让同一 URL 的不同路径使用不同布局（如营销页 vs 后台）。', '私有文件夹不生成路由，_components/_lib 等内部内容不入 URL。', '两个路由组解析到同一 URL 但 layout 不相容时会报冲突错误。'],
     problem: '解决"怎么给一组路由单独布局而不改 URL、内部组件怎么放才不会误生成路由"的问题。',
   },
   {
@@ -1938,14 +1938,14 @@ export default function GlobalError({
 // 注意：global-error.tsx 必须自带 html 和 body 标签
 // 因为根布局可能已经出错了`),
     language: 'jsx',
-    principle: 'loading.tsx 自动创建 Suspense 边界包裹 page；error.tsx 捕获子组件错误（必须是 Client Component，提供 reset 重试）；not-found.tsx 处理 404；global-error.tsx 是根 layout 出错时的兜底，需自带 html/body。错误就近匹配、向上冒泡。',
-    flow: ['用 loading.tsx 自动包裹路由级 Suspense。', '用 error.tsx 捕获错误并提供 reset 重试。', '理解 global-error 兜底根 layout 错误。'],
-    notes: ['error.tsx 必须是 Client Component（需要 reset 交互）。', 'error.tsx 不捕获同级 layout 的错误，需 global-error.tsx。', 'not-found() 函数可主动触发 404 页面。'],
+    principle: 'loading.tsx 自动为页面创建 Suspense 边界；error.tsx 捕获子组件错误（必须是 Client Component，提供 reset 重试）；not-found.tsx 处理 404；global-error.tsx 是根 layout 出错时的兜底，需自带 html/body。错误就近匹配、逐层向上冒泡。',
+    flow: ['用 loading.tsx 自动包裹路由级 Suspense，导航时显示。', '用 error.tsx 捕获错误并提供 reset 重试。', '用 not-found.tsx 与 global-error.tsx 兜底 404 与根布局错误。'],
+    notes: ['error.tsx 必须是 Client Component（需 reset 做交互）。', 'error.tsx 不捕获同级 layout 的错误，根布局错误需 global-error.tsx。', '用 notFound() 可在数据不存在时主动渲染最近的 404 页面。'],
     problem: '解决"页面加载中、出错、404 时分别该显示什么、怎么用文件约定处理"的问题。',
   },
   {
     id: 'X_17', title: 'next/image 图片优化', navTitle: '图片优化', category: '优化',
-    path: '/nextjs/x-17/next-image', summary: '用 next/Image 自动优化图片格式、尺寸、懒加载，消除布局抖动。',
+    path: '/nextjs/x-17/next-image', summary: '用 next/image 自动优化图片格式、尺寸、懒加载，消除布局抖动（CLS）。',
     demo: X17NextImage,
     code: () => Promise.resolve(`// 基础用法 - 本地图片
 // app/page.tsx
@@ -2085,9 +2085,9 @@ export default function PhotoCard() {
 
 // 本地图片导入会自动生成 blurDataURL`),
     language: 'jsx',
-    principle: 'next/image 自动按设备生成合适尺寸的 WebP/AVIF，默认懒加载，通过 width/height 或 fill 防止 CLS。本地图片需 import（自带尺寸），远程图片需在 next.config.js 配置域名白名单。priority 属性用于首屏 LCP 图片预加载。',
-    flow: ['本地图片用 import 引入，远程图片配置域名白名单。', '指定 width/height 或用 fill 防止布局抖动。', '首屏图片加 priority 预加载。'],
-    notes: ['sizes 属性配合 srcset 生成响应式多档图片。', 'placeholder="blur" 生成低质量模糊占位符。', '远程图片不配域名会报错，需 remotePatterns。'],
+    principle: 'next/image 的 <Image> 组件自动按设备生成合适尺寸的 AVIF/WebP，默认懒加载，通过指定 width/height 或 fill 防止 CLS。本地图片需 import（自带尺寸），远程图片需在 next.config.js 配置域名白名单；priority 用于首屏 LCP 图片预加载。',
+    flow: ['本地图片用 import 引入，远程图片配置域名白名单。', '指定 width/height 或用 fill 让父容器决定尺寸，防止布局抖动。', '首屏图片加 priority 预加载提升 LCP。'],
+    notes: ['sizes 属性配合 srcset 为不同视口生成多档图片。', 'placeholder="blur" 生成低质量模糊占位，减少加载突兀。', '远程图片不配置域名白名单会在运行时报错，需 remotePatterns。'],
     problem: '解决"图片加载慢、格式大、会抖动、怎么自动优化"的问题。',
   },
   {
@@ -2221,9 +2221,9 @@ const notoSans = Noto_Sans_SC({
 // 2. 使用 latin 子集 + 系统中文字体 fallback
 // 3. 用第三方字体服务（如阿里巴巴普惠体）配合 next/font/local`),
     language: 'jsx',
-    principle: 'next/font 在构建时下载字体并自托管，无第三方请求，用 size-adjust 消除 FOUT/FOIT 布局抖动。支持 Google Fonts 和本地字体，生成 CSS 变量方便引用，display: swap 先用 fallback 再平滑切换。',
-    flow: ['用 next/font/google 或 next/font/local 加载字体。', '通过 variable 生成 CSS 变量。', '在 globals.css 中引用变量。'],
-    notes: ['字体文件构建时下载自托管，不向 Google 发请求（隐私友好）。', 'display: swap 先显示 fallback 再切换，避免文字不可见。', '自动 subset 减小字体文件体积。'],
+    principle: 'next/font 在构建时下载字体并自托管，避免第三方 CDN 请求，用 size-adjust 消除换字体时的布局抖动。支持 next/font/google 和 next/font/local，通过 variable 生成 CSS 变量方便引用；display: swap 先用 fallback 显示再平滑切换。',
+    flow: ['用 next/font/google 或 next/font/local 加载字体。', '通过 variable 生成 CSS 变量并在布局上引用。', '用 display: swap 先在文本可用时用 fallback 兜底。'],
+    notes: ['字体在构建时下载自托管，不向 Google 发请求（隐私友好）。', 'display: swap 先显示 fallback 再切换，避免文字不可见。', '通过 subsets 与 weight 限定子集/字重，减小字体体积。'],
     problem: '解决"用 Google 字体向第三方泄露用户信息、字体切换导致布局抖动"的问题。',
   },
   {
@@ -2397,9 +2397,9 @@ export default function OldPage() {
   permanentRedirect('/new-page')
 }`),
     language: 'jsx',
-    principle: 'Link 实现客户端导航并自动预取目标路由 RSC payload；useRouter 提供 push/replace/back/refresh 编程式导航；redirect 在服务端重定向。App Router 的导航 API 从 next/navigation 导入（非 next/router）。',
-    flow: ['用 Link 实现客户端导航 + 自动预取。', '用 useRouter 编程式跳转（需 Client Component）。', '用 redirect 服务端重定向。'],
-    notes: ['Link 默认 prefetch：静态路由进视口即预取，动态路由点击时预取。', 'usePathname/useSearchParams 从 next/navigation 导入。', 'redirect 在 Server Component / Server Action / Route Handler 中可用。'],
+    principle: 'next/link 的 <Link> 实现客户端导航并自动预取目标路由的 RSC payload；useRouter 提供 push/replace/back/refresh 等程序式导航；redirect/permanentRedirect 在服务端重定向。App Router 的导航 API 一律从 next/navigation 导入（而非 next/router）。',
+    flow: ['用 <Link> 实现客户端导航与自动预取。', '用 useRouter（Client Component 内）做程序式跳转。', '用 redirect 在服务端重定向（Server Component/Action/Route Handler）。'],
+    notes: ['Link 默认 prefetch：静态路由进视口时预取，动态路由点击时才预取。', 'usePathname/useSearchParams 从 next/navigation 导入。', 'redirect 抛出一个特殊异常终止渲染，应放在数据校验之后。'],
     problem: '解决"怎么在 Next.js 里做页面跳转、编程式导航和服务端重定向"的问题。',
   },
   {
@@ -2589,9 +2589,9 @@ export default async function Image({
   )
 }`),
     language: 'jsx',
-    principle: 'App Router 用 Metadata API 取代 Pages Router 的 next/head：导出 metadata 对象（静态）或 generateMetadata 函数（动态）。还支持文件约定（favicon/icon/opengraph-image）和 sitemap.ts/robots.ts 动态生成，子页面 metadata 覆盖父级。',
-    flow: ['用 metadata 对象设置静态 title/description。', '用 generateMetadata 按参数动态生成。', '用 sitemap.ts/robots.ts 动态生成站点地图和爬虫规则。'],
-    notes: ['title.template 让子页标题自动拼接父模板（如 "%s | 小松鼠"）。', 'opengraph-image.tsx 用 ImageResponse 动态生成 OG 图。', 'metadata 自动去重，子页面同名字段覆盖父级。'],
+    principle: 'App Router 用 Metadata API 取代 Pages Router 的 next/head：可导出静态 metadata 对象或动态 generateMetadata 函数生成 title/description/openGraph 等元信息。还支持文件约定（favicon/icon/opengraph-image）和 sitemap.ts/robots.ts 动态生成，子页面 metadata 覆盖父级。',
+    flow: ['用 metadata 对象设置静态 title/description 等。', '用 generateMetadata 按路由参数动态生成元信息。', '用 sitemap.ts/robots.ts 动态生成站点地图与爬虫规则。'],
+    notes: ['title.template 让子页标题自动拼接父模板（如 "%s | 小松鼠"）。', 'opengraph-image.tsx 可用 ImageResponse 动态生成分享图。', '派生并返回的 metadata 会按字段自动去重，子页面覆盖父级同名字段。'],
     problem: '解决"App Router 怎么管理 SEO 元信息、动态页面怎么设置 title"的问题。',
   },
   {
@@ -2748,9 +2748,9 @@ export const config = {
   // matcher: '/((?!_next/static|_next/image|favicon.ico).*)',
 }`),
     language: 'jsx',
-    principle: 'Middleware 在每个请求、缓存前运行（Edge Runtime），可重写、重定向、改请求头/响应头。文件放在项目根或 src/ 下的 middleware.ts。用 matcher 限定匹配路径提升性能，适合认证鉴权、i18n、A/B 测试、灰度发布。',
-    flow: ['在项目根创建 middleware.ts。', '用 NextResponse.redirect/next 重定向或放行。', '用 matcher 限定执行路径。'],
-    notes: ['Middleware 运行在 Edge Runtime，不能用 Node API，依赖需兼容 Edge。', 'matcher 排除静态资源避免无谓执行。', '可注入请求头供下游 Server Component 读取。'],
+    principle: 'Middleware 在每个请求、路由渲染前运行，可重写、重定向、修改请求/响应头，适合认证鉴权、i18n 语言检测、A/B 测试、灰度发布。文件放在项目根或 src/ 下，用 config.matcher 限定匹配路径以提升性能。',
+    flow: ['在项目根或 src/ 下创建 middleware.ts。', '用 NextResponse.redirect/next/rewrite 重定向或放行。', '用 config.matcher 限定中间件执行路径以提升性能。'],
+    notes: ['中间件运行在独立运行时，不能直接使用 Node 专有 API，依赖需与之兼容。', 'Next.js 16 起 middleware 已更名为 proxy.ts（原文件仍可用但已弃用）。', 'matcher 需排除 _next/static、_next/image 等静态资源避免无谓执行。', '可注入请求头供下游 Server Component 读取。'],
     problem: '解决"如何在路由执行前统一做鉴权、重定向、A/B 测试"的问题。',
   },
   {
@@ -2901,9 +2901,9 @@ const nextConfig = {
 // 更推荐的方式：用 .env.local 文件管理敏感配置
 // .env.local 会被 git 忽略，不要提交到仓库`),
     language: 'jsx',
-    principle: '环境变量加 NEXT_PUBLIC_ 前缀则客户端可见（打包进 bundle），无前缀仅服务端可用。env 文件优先级：.env.local > .env.[环境] > .env。next.config.js 集中配置 reactStrictMode、images、rewrites、redirects、output 等。',
-    flow: ['用 NEXT_PUBLIC_ 前缀区分客户端/服务端环境变量。', '理解 .env.local 覆盖优先级。', '在 next.config.js 配置图片域名、重写、导出模式。'],
-    notes: ['密钥绝不加 NEXT_PUBLIC_，否则泄露到前端 bundle。', '.env.local 被 gitignore，放本地敏感配置。', 'output: "standalone" 生成独立部署包，"export" 纯静态导出。'],
+    principle: '环境变量加 NEXT_PUBLIC_ 前缀会被内联进前端 bundle（客户端可见），无前缀则仅在服务端可读。env 文件优先级：.env.local > .env.[环境] > .env。next.config.js 集中配置 reactStrictMode、images、rewrites、redirects、output 等。',
+    flow: ['用 NEXT_PUBLIC_ 前缀区分客户端/服务端环境变量。', '理解 .env.local > .env.[环境] > .env 的覆盖优先级。', '在 next.config.js 配置图片域名、重写、重定向、导出模式。'],
+    notes: ['密钥绝不加 NEXT_PUBLIC_ 前缀，否则会泄露到前端 bundle。', '.env.local 通常被 gitignore，用于存放本地敏感配置。', 'output: "standalone" 生成独立部署产物，"export" 做纯静态导出。'],
     problem: '解决"环境变量怎么分客户端和服务端、next.config.js 能配什么"的问题。',
   },
   {
@@ -3119,9 +3119,9 @@ export const config = {
   matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 }`),
     language: 'jsx',
-    principle: 'App Router 推荐用 [lang] 动态路由实现 i18n：每种语言独立 URL（SEO 友好），middleware 根据 Accept-Language 自动检测重定向，字典按需 import 加载。配合 hreflang 标签和 Intl API 处理复数/日期格式。',
-    flow: ['用 [lang] 动态路由为每种语言生成独立 URL。', 'middleware 根据 Accept-Language 自动重定向。', '按需 import 字典，用 Context 下发翻译函数。'],
-    notes: ['每种语言独立 URL 利于 SEO，配合 hreflang 标签。', '字典按需 import 避免全量打包。', 'next-intl 是社区流行的 App Router i18n 方案。'],
+    principle: 'App Router 推荐用 [lang] 动态路由实现 i18n：每种语言拥有独立 URL，利于 SEO；middleware 根据 Accept-Language 或 Cookie 自动检测并重定向到对应语言前缀；字典按语言拆分并按需 import。可配合 hreflang 标签与 Intl API 处理复数、日期等本地化。',
+    flow: ['用 [lang] 动态路由为每种语言生成独立 URL。', '用 middleware 根据 Accept-Language/Cookie 自动重定向。', '按需 import 字典，用 Context 下发翻译函数供组件使用。'],
+    notes: ['每种语言独立 URL 利于 SEO，配合 hreflang 标签声明语言版本。', '字典按语言拆分 import，避免把所有语言全量打进 bundle。', '也可选用 next-intl 等社区方案封装 App Router 的 i18n。'],
     problem: '解决"App Router 怎么做多语言、怎么自动检测用户语言"的问题。',
   },
   {
@@ -3285,9 +3285,9 @@ SECRET_KEY=your-production-secret-key
 // 6. 优化图片和静态资源
 // 7. 配置 robots.txt 和 sitemap.xml`),
     language: 'jsx',
-    principle: 'Next.js 支持多种部署目标：Vercel（全托管零配置）、Node Server（output: standalone 自托管）、Docker（基于 standalone 构建镜像）、Static Export（output: export 纯静态）。静态导出有限制：不支持 Server Actions/Middleware/动态图片优化。',
-    flow: ['根据需求选择部署目标（Vercel/Node/Docker/静态）。', '配置 output 模式和环境变量。', '设置 CDN、域名、HTTPS 和监控。'],
-    notes: ['Vercel 是官方平台，零配置支持所有特性。', 'standalone 不含 node_modules，需 COPY 静态资源。', '静态导出不支持 Server Actions、Middleware、Image Optimization。'],
+    principle: 'Next.js 支持多种部署目标：Vercel（官方全托管、零配置，支持全部特性）、Node Server（output: standalone 自托管）、Docker（基于 standalone 产物构建镜像）、Static Export（output: export 纯静态）。静态导出有限制：不支持 Server Actions、Middleware、Image 优化等动态能力。',
+    flow: ['根据需求选择部署目标（Vercel/Node/Docker/静态）。', '配置 output 模式与生产环境变量。', '设置域名、HTTPS、CDN 缓存与监控告警。'],
+    notes: ['Vercel 是官方平台，零配置支持所有 Next.js 特性。', 'standalone 产物不含 node_modules，需自行 COPY 静态资源与 public。', '静态导出不支持 Server Actions、Middleware、Image 优化与动态渲染。'],
     problem: '解决"Next.js 项目能部署到哪里、各部署方式有什么限制"的问题。',
   },
 ]

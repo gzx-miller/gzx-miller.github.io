@@ -41,7 +41,7 @@ const C24AspectRatio = createDemo('C24AspectRatio')
 export const lessons: Lesson[] = [
 {
     id: 'C_01', title: '选择器详解', navTitle: '选择器', category: '选择器',
-    path: '/css/c-1/selectors', summary: '理解通配、类型、类、ID、属性、伪类、伪元素与组合器的匹配规则与优先级。',
+    path: '/css/c-1/selectors', summary: '理解通配、类型、类、ID、属性、伪类、伪元素与组合器的匹配差异与特异性。',
     demo: C01Selectors,
     code: () => Promise.resolve(`/* 通配选择器：匹配所有元素 */
 * {
@@ -95,9 +95,9 @@ p::first-letter {
   margin: 0 8px;
 }`),
     language: 'css',
-    principle: 'CSS 选择器按"内联 > ID > 类/属性/伪类 > 类型/伪元素 > 通配 + :where"的优先级决定哪条规则生效；组合器（后代、>、+、~）表达 DOM 关系，伪类基于状态，伪元素基于"虚拟子节点"，三者一起决定能多精细地匹配元素。',
-    flow: ['用课程标签筛选理解各类选择器。', '观察不同选择器的生效范围。', '理解优先级计算规则（specificity）。'],
-    notes: ['!important 会破坏优先级规则，应尽量避免。', '选择器过深会影响性能与可维护性。', ':where() 优先级为 0，:is() 沿用参数最高者；用好它们能显著降低复杂度。'],
+    principle: '选择器决定匹配对象：通配匹配全部、类型匹配标签名、类/ID 匹配 class/id、属性匹配特性、伪类匹配状态、伪元素匹配元素的"虚拟部分"，组合器（后代、>、+、~）则表达元素间的结构关系。它们各具特异性（specificity），命中同一元素时以特异性大小决定胜负。',
+    flow: ['点击标签按钮逐类查看对应选择器命中了哪些元素。', '观察每类选择器的生效范围与遗漏。', '结合特异性规律理解样式覆盖顺序。'],
+    notes: ['特异性大致为 ID > 类/属性/伪类 > 类型/伪元素，是覆盖顺序的关键。', '伪元素以 ::before、::first-letter 等命中盒子上的"虚拟位置"，可插入内容或局部排版。', '选择器不宜嵌套过深，否则可维护性与匹配效率都会下降。'],
     problem: '解决"如何精准选中目标元素，并理解样式覆盖顺序"的问题。',
   },
 {
@@ -151,9 +151,9 @@ p::first-letter {
   border-left: 4px solid #e8590c;
 }`),
     language: 'css',
-    principle: 'box-sizing 决定 width/height 是否包含 padding 和 border；border-box 更符合直觉。外边距折叠发生在垂直相邻的块级元素之间。',
-    flow: ['切换 box-sizing 观察总宽度变化。', '查看尺寸计算表。', '切换外边距折叠演示。'],
-    notes: ['全局设置 * { box-sizing: border-box } 是常见做法。', '外边距折叠只发生在垂直方向，且只影响普通文档流。'],
+    principle: 'box-sizing 决定 width 是否计入 padding 与 border：content-box 的 width 只含内容区，实际总宽要另加 padding 与 border；border-box 把内容区压缩以包含二者，width 即最终外围宽度。外边距折叠指普通文档流中垂直相邻的块级盒，外边距合并取较大值。',
+    flow: ['切换 content-box / border-box 观察内容区与总宽度的变化。', '对照尺寸计算表看 content/padding/border 三者如何分摊。', '切换外边距折叠，确认 30px 与 20px 合并为 30px。'],
+    notes: ['全局统一 * { box-sizing: border-box } 可避免"设了宽度实际更宽"的困扰，是通用做法。', '外边距折叠仅发生在垂直方向、相邻块级盒之间，不进子元素内部。'],
     problem: '解决"设置 width: 200px 但元素实际更宽，以及相邻元素间距不符合预期"的问题。',
   },
 {
@@ -218,14 +218,14 @@ p::first-letter {
   /* 常用简写：可伸缩 */
 }`),
     language: 'css',
-    principle: 'Flexbox 是一维布局模型：主轴由 flex-direction 决定，交叉轴垂直于主轴；justify-content 控制主轴对齐，align-items 控制交叉轴对齐。',
-    flow: ['调整主轴对齐方式。', '调整交叉轴对齐方式。', '观察 order 属性对排列顺序的影响。'],
-    notes: ['Flexbox 适合组件内或一维排列。', 'flex: 1 是 flex-grow:1 flex-shrink:1 flex-basis:0% 的简写。'],
+    principle: 'Flexbox 是一维布局模型：主轴由 flex-direction 决定（row/column），交叉轴垂直于主轴；justify-content 负责主轴对齐，align-items 负责交叉轴对齐，flex-wrap 决定超宽时是否换行，gap 设置项目间距，order 调整显示顺序。',
+    flow: ['切换 flex-direction 观察主轴方向如何改变排列。', '分别调整 justify-content 与 align-items 对比两轴对齐。', '拖动 gap 滑块并选择 flex-wrap 观察间距与换行。'],
+    notes: ['justify-content 管主轴、align-items 管交叉轴，二者不可混用。', 'flex: 1 是 flex-grow:1 flex-shrink:1 flex-basis:0% 的简写，用于均分剩余空间。', 'Flexbox 适合一维组件内部排列，二维整体布局交给 Grid。'],
     problem: '解决"如何让子元素在主轴/交叉轴上灵活对齐，并处理空间分配"的问题。',
   },
 {
     id: 'C_04', title: 'Grid 二维网格布局', navTitle: 'Grid', category: '布局系统',
-    path: '/css/c-4/grid', summary: '用课程仪表盘理解轨道定义、区域命名与网格线放置。',
+    path: '/css/c-4/grid', summary: '用课程仪表盘理解列轨道定义、gap 与 grid-template-areas 区域布局。',
     demo: C04Grid,
     code: () => Promise.resolve(`/* Grid 容器：启用网格布局 */
 .grid-container {
@@ -275,9 +275,9 @@ p::first-letter {
   /* 自动填充，每列至少 200px */
 }`),
     language: 'css',
-    principle: 'Grid 是二维布局模型：通过 grid-template-columns/rows 定义轨道，通过 grid-area 或 grid-column/row 放置项目；还支持 grid-template-areas 语义化布局。',
-    flow: ['切换列轨道定义方式。', '启用 grid-area 区域布局。', '观察网格线编号规律。'],
-    notes: ['Grid 适合整体页面布局；Flexbox 适合一维排列。', 'fr 单位表示可用空间的分配比例。'],
+    principle: 'Grid 是二维布局模型：grid-template-columns/rows 定义轨道，fr 分配可用空间比例，repeat() 简化重复、auto-fill+minmax() 实现自动填充；grid-template-areas 通过命名区域语义化描述页面骨架，子元素用 grid-area 归位。',
+    flow: ['切换列轨道（等列/固定弹性固定/自动填充）观察列数变化。', '拖动 gap 滑块查看轨道间距。', '开启 grid-area 查看"页头/侧栏/内容/页脚"区域布局。'],
+    notes: ['1fr 表示占据剩余可用空间的一份，可和固定像素轨道混用。', 'repeat(auto-fill, minmax(120px, 1fr)) 让列数随宽度自动增减。', 'Grid 负责二维整体布局，一维的组件内部仍交给 Flexbox。'],
     problem: '解决"如何同时控制行和列的布局，并用语义化方式描述页面结构"的问题。',
   },
 {
@@ -333,14 +333,14 @@ p::first-letter {
   background: #fff;
 }`),
     language: 'css',
-    principle: 'position 决定元素的定位参考系：static（默认）、relative（相对原位置）、absolute（相对最近定位祖先）、fixed（相对视口）、sticky（滚动时切换 fixed）。',
-    flow: ['切换五种定位值。', '观察是否脱离文档流。', '理解 sticky 的阈值触发条件。'],
-    notes: ['absolute 定位需要最近的非 static 祖先作为参考。', 'sticky 必须指定 top/bottom/left/right 才会生效。'],
+    principle: 'position 决定偏移参考系与是否脱离文档流：static 不定位；relative 相对自身原位置偏移且保留占位；absolute 脱离文档流、相对最近的非 static 祖先定位；fixed 脱离文档流、相对视口固定；sticky 越过阈值前保留原位、越过阈值后像 fixed 一样吸顶（须给定 top/bottom/left/right）。',
+    flow: ['依次切换五种定位值观察盒子位置与占位的变化。', '对照表格确认每种取值是否脱离文档流。', '滚动容器观察 sticky 的阈值吸顶与 fixed 的始终固定。'],
+    notes: ['absolute 必须依托一个非 static 祖先作参考，否则会一路向上到视口/格式化上下文。', 'sticky 需要同时设置 top/bottom/left/right 之一才会触发。', 'fixed 默认相对视口，但会被祖先的 transform/filter 等属性当作包含块限制。'],
     problem: '解决"元素应该相对谁偏移，以及是否应脱离正常文档流"的问题。',
   },
 {
     id: 'C_06', title: '层叠与继承', navTitle: '层叠', category: '层叠与继承',
-    path: '/css/c-6/cascade', summary: '理解 CSS 层叠优先级（!important > 内联 > ID > 类 > 元素）与属性继承规则。',
+    path: '/css/c-6/cascade', summary: '理解选择器特异性的高低排序，以及继承与 initial、unset 的作用。',
     demo: C06Cascade,
     code: () => Promise.resolve(`/* 优先级从低到高 */
 
@@ -395,14 +395,14 @@ p {
   /* 可继承则继承，否则初始值 */
 }`),
     language: 'css',
-    principle: '层叠通过来源（作者/用户/浏览器）、重要性（!important）、专用性（#id > .class > 元素）和出现顺序决定最终值；继承让某些属性自动从父元素获取值。',
-    flow: ['观察不同专用性选择器的覆盖关系。', '理解 !important 的破坏力。', '区分可继承与不可继承属性。'],
-    notes: ['专用性计算：内联 1000，ID 100，类 10，元素 1。', 'inherit、initial、unset、revert 可精细控制继承行为。'],
+    principle: '命中同一元素的多个规则按特异性比较：ID > 类 > 元素（及伪元素），同特异性时后声明的覆盖；!important 能越过所有普通声明。另一个维度是继承——color 等大部分文本类属性默认向下继承，margin/padding/border 不继承。',
+    flow: ['在"层叠优先级"页看元素/类/ID 三条规则谁胜出。', '切到 !important 页理解其对优先级的越权行为。', '在继承页验证可继承与不可继承属性，并用 initial/unset 显式重置。'],
+    notes: ['特异性可写成三元组（ID、类/属性/伪类、类型/伪元素），逐位比较大者胜。', 'inherit 强制继承、initial 取初始值、unset 按"可继承则继承、否则初始值"二选一。', '!important 会打乱全部优先级，应仅作兜底谨慎使用。'],
     problem: '解决"为什么写的样式不生效（被覆盖），以及如何正确控制优先级"的问题。',
   },
 {
     id: 'C_07', title: 'CSS 变量（自定义属性）', navTitle: 'CSS 变量', category: '变量与主题',
-    path: '/css/c-7/variables', summary: '用主题切换理解自定义属性的声明、读取、继承与动态更新。',
+    path: '/css/c-7/variables', summary: '用暖/冷主题与间距滑块理解自定义属性的声明、读取、继承与运行时更新。',
     demo: C07Variables,
     code: () => Promise.resolve(`/* 在 :root 声明全局变量 */
 :root {
@@ -456,14 +456,14 @@ p {
 /* JavaScript 动态修改变量 */
 /* element.style.setProperty('--primary-color', '#000'); */`),
     language: 'css',
-    principle: '自定义属性以 --name 声明，用 var(--name, fallback) 读取；它们可继承，可在运行时通过 JS 修改，是实现主题切换的核心机制。',
-    flow: ['切换暖色/冷色主题观察变量变化。', '拖动滑块改变间距变量。', '理解 fallback 的作用。'],
-    notes: ['自定义属性有继承性，与普通 CSS 属性不同。', ':root 上声明的变量全局可用，组件内声明则局部覆盖。'],
+    principle: '自定义属性以 --name 声明、var(--name, fallback) 读取；它可继承，运行时可通过 element.style.setProperty() 动态改写，从而驱动整套主题切换与间距调整。',
+    flow: ['切换暖/冷主题观察 var(--primary) 驱动的配色整体变化。', '拖动滑块通过 JS 更新 --spacing，观察间距即时生效。', '对照表格理解声明、读取、JS 访问、继承四种用法。'],
+    notes: ['自定义属性不能直接参与动画插值，须配合 var() 在 calc() 或具体属性的值中使用。', 'fallback 只在变量未定义或无效时生效。', '把色板、间距、圆角等"设计令牌"集中在 :root 便于统一维护与替换主题。'],
     problem: '解决"如何在运行时动态切换主题，并让多个属性共享同一设计令牌"的问题。',
   },
 {
     id: 'C_08', title: '过渡与动画', navTitle: '过渡动画', category: '动画与过渡',
-    path: '/css/c-8/transition-animation', summary: '用课程卡片交互动效理解 transition 与 animation 的差异与适用场景。',
+    path: '/css/c-8/transition-animation', summary: '用卡片交互动效对比 transition 与 animation 的触发方式与适用场景。',
     demo: C08Transition,
     code: () => Promise.resolve(`/* transition 过渡：需要状态变化触发 */
 .btn {
@@ -528,14 +528,14 @@ p {
   }
 }`),
     language: 'css',
-    principle: 'transition 需要状态变化触发，适合简单过渡；animation 通过 @keyframes 定义关键帧，可自动播放、循环、暂停，适合复杂动画。',
-    flow: ['对比 transition 与 animation 的触发方式。', '调整动画时长观察效果。', '理解 @keyframes 的关键帧定义。'],
-    notes: ['优先使用 transform 和 opacity 做动画（由 GPU 合成，不触发重排）。', 'animation-fill-mode 可控制动画前后的样式保持。'],
+    principle: 'transition 只能响应状态变化（如 :hover），在两个状态值之间补间过渡；animation 通过 @keyframes 定义关键帧，可自动播放、循环（infinite）、反向（alternate）与中途暂停，适合无需用户触发的持续动效。',
+    flow: ['切换 transition / animation 观察触发方式的差别。', '下拉选择要过渡的属性，或拖动时长滑块感受缓动节奏。', '对照表格对比关键帧、循环、暂停等能力差异。'],
+    notes: ['优先过渡 transform 与 opacity，它们走合成器、开销低且不触发重排。', 'transition 只做两个状态的渐变，多阶段关键帧需用 @keyframes 动画。', '动画时长与缓动函数（ease/linear 等）决定观感的流畅与节奏。'],
     problem: '解决"哪种动画方式更适合当前交互场景，以及如何避免动画性能问题"的问题。',
   },
 {
     id: 'C_09', title: '媒体查询与响应式', navTitle: '媒体查询', category: '响应式',
-    path: '/css/c-9/media-query', summary: '用课程卡片列表理解移动优先（mobile-first）的断点与媒体查询写法。',
+    path: '/css/c-9/media-query', summary: '拖动滑块模拟视口宽度，理解移动优先的断点与 min-width 写法。',
     demo: C09MediaQuery,
     code: () => Promise.resolve(`/* 移动优先：先写小屏样式 */
 .card-list {
@@ -603,9 +603,9 @@ p {
   }
 }`),
     language: 'css',
-    principle: '媒体查询通过 @media 根据视口尺寸、设备特性等条件应用不同样式；移动优先指先写小屏样式，再用 min-width 逐步增强大屏。',
-    flow: ['拖动滑块模拟不同视口宽度。', '观察课程卡片列数的响应式变化。', '理解移动优先的断点编写顺序。'],
-    notes: ['移动优先的断点用 min-width（从小屏开始写）。', 'prefers-color-scheme、prefers-reduced-motion 等媒体特性可实现无障碍适配。'],
+    principle: '@media 依据视口尺寸与设备特性条件性地应用规则；移动优先指先写小屏默认样式，再用 @media (min-width: …) 逐级增强，让手机优先并渐进升级到平板、桌面，避免桌面优先的 max-width 反复覆盖。',
+    flow: ['拖动滑块放大视口宽度，观察卡片列数从 1 → 2 → 4。', '对照代码块理解 min-width 断点（640/1024）的递增写法。', '参考断点表 sm/md/lg/xl 的典型取值与用途。'],
+    notes: ['移动优先统一用 min-width，从已写好的小屏样式向上增强。', '可叠加 prefers-color-scheme、prefers-reduced-motion 等媒体特性做暗色与无障碍适配。'],
     problem: '解决"同一套 HTML 如何在手机、平板、桌面上呈现不同布局"的问题。',
   },
 {
@@ -669,9 +669,9 @@ p {
   /* 颜色 图片 重复 位置 / 尺寸 */
 }`),
     language: 'css',
-    principle: 'CSS 渐变是 image 类型：linear-gradient 沿直线过渡，radial-gradient 沿半径过渡，conic-gradient 沿角度过渡；色标可指定位置百分比。',
-    flow: ['切换三种渐变类型。', '调整线性渐变角度。', '观察预设渐变效果。'],
-    notes: ['渐变可叠加（逗号分隔多个 gradient）。', 'background-size 可控制背景图的尺寸，实现平铺渐变。'],
+    principle: '渐变色属于 CSS <image> 类型：linear-gradient 沿指定角度或 to 方向过渡，radial-gradient 从中心沿半径向外辐射，conic-gradient 绕中心沿角度渐变；每个色标可指定位置（如 50%），多个渐变用逗号叠加成多重背景。',
+    flow: ['切换三种渐变类型观察过渡形态的差异。', '拖动角度滑块调整 linear-gradient 的方向。', '从预设区看渐变在卡片、遮罩、色轮中的典型应用。'],
+    notes: ['角度 0deg 垂直向上并随角度顺时针旋转，也可以用 to right 等方向关键字。', '相邻两个色标位置相同时会形成硬边（条纹），可用于分段色块。', '背景叠加时先写的渐变位于上层，可做出多层渐变效果。'],
     problem: '解决"如何用纯 CSS 实现丰富的背景效果，避免切图"的问题。',
   },
 {
@@ -752,14 +752,14 @@ p {
   background: rgba(255, 255, 255, 0.7);
 }`),
     language: 'css',
-    principle: 'filter 对元素整体应用模糊、灰度等视觉效果；mix-blend-mode 决定元素与背景（或兄弟元素）的色彩混合方式；backdrop-filter 只对元素后方区域应用滤镜。',
-    flow: ['切换不同滤镜效果。', '切换混合模式观察色彩变化。', '理解 backdrop-filter 与 filter 的区别。'],
-    notes: ['filter 可能影响性能，动画中需谨慎使用。', 'mix-blend-mode 在重叠元素间生效，需注意可读性。'],
+    principle: 'filter 对元素整体施加模糊、灰度、亮度、饱和度、色相、反相与阴影等效果，可多个叠加；mix-blend-mode 决定元素与下方内容之间的像素色彩混合；backdrop-filter 则只对元素后方区域做滤镜，常用于毛玻璃。',
+    flow: ['下拉切换不同 filter 观察图片的视觉变化。', '切换 mix-blend-mode 看文字如何与渐变背景融合。', '对照属性表区分 filter / backdrop-filter / mix-blend-mode 的作用对象。'],
+    notes: ['filter 会创建新的层叠上下文与包含块，可能影响内部的 fixed 定位。', 'mix-blend-mode 依赖下方不透明内容来体现混色，注意文字可读性。', 'backdrop-filter 仅作用于元素后方的背景，不改变元素自身。'],
     problem: '解决"如何为图片添加视觉效果，或让文字与背景图片产生自然的色彩融合"的问题。',
   },
 {
     id: 'C_12', title: 'CSS 数学函数', navTitle: '数学函数', category: '函数与计算',
-    path: '/css/c-12/math-functions', summary: '用课程卡片自适应宽度理解 calc / min / max / clamp 的语法与典型场景。',
+    path: '/css/c-12/math-functions', summary: '用卡片宽度动态计算理解 calc / min / max / clamp 的语法与典型场景。',
     demo: C12MathFunctions,
     code: () => Promise.resolve(`/* calc()：四则运算，支持混合单位 */
 .calc-width {
@@ -813,9 +813,9 @@ p {
   margin-inline: auto;
 }`),
     language: 'css',
-    principle: 'calc() 支持混合单位的四则运算；min() 取最小值（适合 max-width）；max() 取最大值（适合响应式字体）；clamp() 提供最小值-理想值-最大值的区间限制。',
-    flow: ['切换四种数学函数。', '观察容器宽度的动态计算。', '理解 clamp 在响应式排版中的价值。'],
-    notes: ['clamp(min, val, max) 的 val 通常用相对单位（如 2vw）。', '这些函数可嵌套使用，非常灵活。'],
+    principle: 'calc() 支持混合单位的四则运算，常用于"100% 减去固定值"；min() 取所有参数的较小者，天然担任容器的宽度上限；max() 取较大者，实现最小值的响应式字号；clamp(min, ideal, max) 本质是上下界约束，把理想值限定在区间内。',
+    flow: ['切换四种函数观察盒子宽度如何随参数变化。', '拖动滑块对比 calc 的"相减"与 clamp 的"区间"差异。', '对照表格记住每类函数的典型场景。'],
+    notes: ['calc() 中 + - 两侧必须留空格，* / 则没有此项限制。', 'clamp 的理想值通常用视口单位（如 vw），上下界用固定值。', '这些函数可与 CSS 变量组合，写出更灵活的自适应尺寸。'],
     problem: '解决"如何让尺寸在不同屏幕下自适应，同时限制最小和最大值"的问题。',
   },
 {
@@ -893,14 +893,14 @@ p {
   height: 2ex;
 }`),
     language: 'css',
-    principle: 'vw/vh 相对于视口尺寸；dvh 会在移动端工具栏收起/展开时动态调整（比 vh 更准确）；cqw/cqh 相对于容器尺寸（配合容器查询）；rem 相对于根字号；ch 相当于字符 0 的宽度。',
-    flow: ['切换不同 CSS 单位观察效果。', '理解各单位的参考基准。', '对比 vh 与 dvh 在移动端的差异。'],
-    notes: ['移动端推荐用 dvh 替代 vh 避免工具栏问题。', 'rem 适合可缩放的全局间距/字号；px 适合边框等固定值。'],
+    principle: 'vw/vh 以视口宽/高为基准（各占 1%）；dvh 是动态视口高度，跟随移动端工具栏的收起/展开而变化，比固定的 vh 更贴近可见区域；cqw 以最近的容器查询容器为基准；rem 相对根字号，ch 约等于字符 0 的宽度，二者分别适合可缩放的全局尺寸与定字符宽的输入框。',
+    flow: ['逐项切换单位按钮观察盒子的实际尺寸。', '对比 vw 与 cqw 的基准差异（视口 vs 容器）。', '对照基准表记住每个单位的参考对象与典型用途。'],
+    notes: ['移动端全屏建议用 dvh 代替 vh，避免被地址栏/工具条遮挡。', 'rem 依赖于根元素 font-size，改 :root 即可整体缩放。', '用 ch 做输入框宽度可恰好容纳指定字符数。'],
     problem: '解决"如何选择最合适的 CSS 单位，让布局在不同设备和容器中都能自适应"的问题。',
   },
 {
     id: 'C_14', title: '形状与裁剪', navTitle: '裁剪形状', category: '视觉效果',
-    path: '/css/c-14/clip-path-mask', summary: '用课程封面图理解 clip-path 裁剪区域与 mask 遮罩的差异。',
+    path: '/css/c-14/clip-path-mask', summary: '用封面裁剪理解 clip-path 的几何形状与 mask 的透明度遮罩。',
     demo: C14ClipPath,
     code: () => Promise.resolve(`/* clip-path：圆形裁剪 */
 .clip-circle {
@@ -957,9 +957,9 @@ p {
 /* 注意：clip-path 裁剪区域无法接收点击事件 */
 /* mask 需要 -webkit-mask 前缀兼容 Safari */`),
     language: 'css',
-    principle: 'clip-path 通过几何形状裁剪元素的可见区域（保留布局空间）；mask 通过图像或渐变的透明度决定可见性；两者都可做动画。',
-    flow: ['切换 clip-path 形状（圆形、椭圆、三角形等）。', '对比 mask 遮罩效果。', '理解两者是否保留交互区域。'],
-    notes: ['clip-path 裁剪的区域无法接收点击事件。', 'mask 需要 -webkit-mask 前缀以兼容 Safari。'],
+    principle: 'clip-path 用 circle/ellipse/polygon/inset/path 等几何形状把元素的可渲染区域裁剪成非矩形，保留布局空间但只裁剪可见与可交互部分；mask 则依据图片或渐变的 alpha 通道决定可见性，实现按透明度渐隐。',
+    flow: ['切换圆形/椭圆/三角形/内嵌矩形/路径观察裁剪外形。', '切到 mask 遮罩，理解它按透明度渐隐而非按几何裁剪。', '对照表格确认 clip-path/mask/border-radius/overflow 各自保留布局空间。'],
+    notes: ['clip-path 会创建新的层叠上下文，被裁剪区域之外的点击不可达。', 'mask 已获得主流浏览器无前缀支持，-webkit-mask 仅作旧版兼容。', 'clip-path 可配合 transition 做形状动效，各顶点需保持可补间的数量与顺序。'],
     problem: '解决"如何把元素裁剪成非矩形，或用渐变实现复杂的图片遮罩效果"的问题。',
   },
 {
@@ -1035,14 +1035,14 @@ p {
   /* LTR: left，RTL: right */
 }`),
     language: 'css',
-    principle: '逻辑属性用 start/end 替代物理方向（left/right/top/bottom），自动适配 LTR/RTL 书写模式；inline 对应文本流向，block 对应块流向。',
-    flow: ['切换 LTR/RTL 书写方向。', '对比物理属性与逻辑属性的表现。', '理解 inline-size 替代 width 的意义。'],
-    notes: ['逻辑属性是国际化（i18n）适配的最佳实践。', 'inset-inline-start 等价于 LTR 下的 left 或 RTL 下的 right。'],
+    principle: '物理属性（left/right/top/bottom）固定方向，RTL 下不会自动翻转；逻辑属性用 start/end 描述文本流向——inline 对应行内走向、block 对应块向——inline-start/end 与 block-start/end 会随 LTR/RTL 及书写模式自动换向，一套代码即可适配多种语言。',
+    flow: ['切换 LTR/RTL 观察"热门"角标与文本间距的镜像变化。', '对比左右两张卡片：物理属性固定、逻辑属性自动翻转。', '对照映射表记住常见物理→逻辑属性的对应关系。'],
+    notes: ['margin-inline-start 在 LTR 中是 margin-left，在 RTL 中是 margin-right。', 'width 对应 inline-size、height 对应 block-size，会随书写方向换向。', '面向多语言（含阿拉伯语 RTL）的国际化项目应优先采用逻辑属性。'],
     problem: '解决"如何让布局自动适配不同书写方向（如阿拉伯语 RTL），而不用手动切换 left/right"的问题。',
   },
 {
     id: 'C_16', title: '容器查询', navTitle: '容器查询', category: '响应式进阶',
-    path: '/css/c-16/container-query', summary: '用课程卡片理解基于容器尺寸（而非视口）的响应式布局。',
+    path: '/css/c-16/container-query', summary: '拖动滑块改变容器宽度，理解基于容器尺寸（而非视口）的响应式布局。',
     demo: C16ContainerQuery,
     code: () => Promise.resolve(`/* 声明容器：允许查询内联尺寸（宽度） */
 .card-container {
@@ -1109,9 +1109,9 @@ p {
    @media 基于视口，适合页面级布局
    @container 基于祖先容器，适合组件级响应式 */`),
     language: 'css',
-    principle: '容器查询通过 @container 根据祖先容器的尺寸应用样式（而非视口尺寸）；需要先通过 container-type 声明容器；cqw/cqh 是相对于容器尺寸的单位。',
-    flow: ['拖动滑块改变容器宽度。', '观察卡片内部布局如何响应容器变化。', '理解 @container 与 @media 的区别。'],
-    notes: ['容器查询适合组件级响应式（卡片、侧边栏等）。', '@media 仍适合页面级响应式（整体布局断点）。'],
+    principle: '容器查询先在生产容器上用 container-type: inline-size（必要时 container-name 命名）声明，再用 @container (min-width: …) 依据"祖先容器"的尺寸应用样式；它与以视口为基准的 @media 互补，让同一组件在任意宽度宿主中都能自适应。',
+    flow: ['拖动滑块改变容器宽度，观察卡片内部布局的切换。', '注意断点发生在容器宽度 400px 而非视口。', '对照表格理清 container-type / container-name / @container / cqw-cqh。'],
+    notes: ['container-type: inline-size 只追踪宽度，查询高度需用 size 并给容器定高。', '@container 适合组件级响应式，@media 仍负责页面级整体断点。', 'cqw/cqh 是以命名容器宽/高为基准的容器查询单位。'],
     problem: '解决"组件在不同宽度的容器中应如何自适应，而不是只根据视口宽度响应"的问题。',
   },
 {
@@ -1191,9 +1191,9 @@ p {
   /* 兄弟元素 z-index 更高，child 再高也没用 */
 }`),
     language: 'css',
-    principle: '层叠上下文是一个独立的渲染层级；子元素的 z-index 只在当前上下文内比较；当父元素创建了新上下文，子元素再高的 z-index 也无法覆盖上下文外的元素。',
-    flow: ['观察默认情况下 z-index 的生效方式。', '触发 opacity < 1 创建新层叠上下文。', '触发 transform 创建新层叠上下文。'],
-    notes: ['常见创建层叠上下文的属性：opacity<1、transform≠none、filter≠none、isolation:isolate。', 'isolation: isolate 可专门创建上下文而不影响视觉。'],
+    principle: 'z-index 只在定位元素上生效，且比较范围被限定在同一个层叠上下文内；opacity<1、transform≠none、filter≠none、isolation:isolate、flex/grid 子项带 z-index 等都会创建新的层叠上下文。父元素创建上下文后，子元素再大的 z-index 也无法越过上下文边界与外部元素比较。',
+    flow: ['先在默认模式确认 z-index 999 > 2 > 1 的正常排序。', '给 B 的父元素加 opacity<1 或 transform，观察其内部层级与外界隔离。', '对照创建条件表记住常见的层叠上下文触发属性。'],
+    notes: ['isolation: isolate 是最干净的"主动建上下文"手段，无视觉副作用。', 'transform/filter/opacity 在动画中很常见，极易无意引入层级 bug。', '比较 z-index 时只应比较同一上下文内的兄弟及其后代。'],
     problem: '解决"为什么设置了很高的 z-index 仍然被其他元素覆盖"的问题。',
   },
 {
@@ -1277,9 +1277,9 @@ p {
   /* 创建 GFC */
 }`),
     language: 'css',
-    principle: '格式化上下文决定浏览器如何布局子元素：BFC（块级）隔离浮动、防止外边距折叠；IFC（行内级）控制行盒排列与基线对齐；FFC/GFC 分别对应 Flex/Grid 布局。',
-    flow: ['对比 BFC 创建前后的浮动包裹行为。', '观察 IFC 内行内元素的基线对齐。', '理解外边距折叠与 BFC 的关系。'],
-    notes: ['overflow≠visible、float≠none、display:flow-root 都可创建 BFC。', 'display:flow-root 是创建 BFC 且不副作用的最佳方式。'],
+    principle: '格式化上下文规定盒子内部元素的布局规则：BFC（块格式化上下文）可包裹浮动、阻断外边距折叠；IFC（行内格式化上下文）决定一行内 inline 元素的排列与基线对齐；display:flex / grid 分别建立 FFC 与 GFC，各自接管主轴与网格布局。',
+    flow: ['对比"有 BFC"与"无 BFC"两个盒子里浮动的包裹差异。', '在 IFC 演示中观察行内元素在同一行内按基线排列。', '在外边距折叠页确认 BFC 可阻止相邻盒的 margin 合并。'],
+    notes: ['创建 BFC 的常见方式：overflow 非 visible、display:flow-root、float 非 none、绝对定位、flex/grid 容器。', 'display:flow-root 是建立 BFC 又无副作用的首选。', 'FFC/GFC 本质就是 flex/grid 容器内部默认建立的格式化上下文。'],
     problem: '解决"浮动元素溢出容器、外边距异常折叠"等经典 CSS 布局问题。',
   },
 {
@@ -1388,14 +1388,14 @@ a { color: #e8590c; }
 /* Theme：主题 */
 /* .theme-dark { ... } */`),
     language: 'css',
-    principle: 'BEM（Block__Element--Modifier）通过严格的命名约定实现组件化；OOCSS 分离结构与皮肤；SMACSS 按角色（布局/模块/状态/主题）分类选择器；现代项目多用 CSS Modules 或 CSS-in-JS 实现局部作用域。',
-    flow: ['对比三种方法论的命名方式。', '理解各自适用场景。', '结合现代工程化工具选择方案。'],
-    notes: ['BEM 类名较长但在大型项目中可预测性强。', '现代构建工具（Vite/webpack）的 CSS Modules 可自动哈希类名，实现真正的局部作用域。'],
+    principle: 'BEM 用 Block__Element--Modifier 约束命名，类名语义化、可预测且不嵌套；OOCSS 主张把"结构"（布局类）与"皮肤"（视觉类）拆成可复用的小类；SMACSS 按 Base/Layout/Module/State/Theme 角色分类选择器；在现代工程中还可结合 CSS Modules 的哈希局部作用域从机制上隔离冲突。',
+    flow: ['在 BEM 页看"块-元素-修饰符"如何为一个组件命名。', '切到 OOCSS 页观察结构与皮肤类如何组合复用。', '在 SMACSS 页对照按角色前缀的命名约定，并理解 CSS Modules 局部作用域。'],
+    notes: ['BEM 类名偏长、HTML 略重，但换来大型项目的可预测性。', 'OOCSS 通过组合细粒度类避免重复声明。', '现代工程多用 CSS Modules 让类名哈希化，从根本上隔离样式冲突。'],
     problem: '解决"大型项目中 CSS 如何组织，才能避免样式冲突、提高可维护性"的问题。',
   },
 {
     id: 'C_20', title: 'CSS 性能优化', navTitle: 'CSS 性能', category: '性能优化',
-    path: '/css/c-20/performance', summary: '理解渲染阻塞、图层提升、动画性能与 content-visibility 等优化手段。',
+    path: '/css/c-20/performance', summary: '理解图层提升、content-visibility、渲染阻塞与动画性能的优化手段。',
     demo: C20Performance,
     code: () => Promise.resolve(`/* 动画性能：优先使用 GPU 加速属性 */
 
@@ -1479,14 +1479,14 @@ a { color: #e8590c; }
 }
 */`),
     language: 'css',
-    principle: 'CSS 性能优化核心：减少阻塞渲染（尽早加载关键 CSS）、使用 GPU 加速属性（transform/opacity）、避免强制同步布局、利用 content-visibility 跳过离屏渲染、控制选择器复杂度。',
-    flow: ['理解 will-change 与图层提升的关系。', '学习 content-visibility 跳过离屏渲染。', '掌握 CSS 性能最佳实践。'],
-    notes: ['动画优先用 transform 和 opacity（合成层，不触发重排/重绘）。', 'will-change 不要滥用，会增加 GPU 内存占用。', 'content-visibility: auto 可大幅提升长列表渲染性能。'],
+    principle: 'CSS 性能的抓手是减少重排/重绘与渲染阻塞：动画尽量只用合成层友好的 transform/opacity；will-change 可提前声明将变化的属性以提升图层；content-visibility:auto 配合 contain-intrinsic-size 跳过离屏元素的渲染；同时避免 @import 与过度嵌套选择器以降低阻塞与匹配成本。',
+    flow: ['在 will-change 与图层提升页理解"提升图层 vs 滥用"的取舍。', '在 content-visibility 页看离屏跳过渲染与预留尺寸的配合。', '在最佳实践页对照高性能与低性能的动画/选择器写法。'],
+    notes: ['will-change 不要大面积滥用，会浪费 GPU 内存。', 'content-visibility:auto 需配 contain-intrinsic-size，避免滚动条跳动。', '避免动画 width/height/margin 等触发重排的属性，也避免频繁读写布局属性（强同步布局）。'],
     problem: '解决"页面滚动卡顿、动画不流畅、首次渲染慢"等 CSS 性能问题。',
   },
 {
     id: 'C_21', title: 'CSS 层叠层（@layer）', navTitle: '层叠层', category: '层叠与架构',
-    path: '/css/c-21/cascade-layers', summary: '用 @layer 显式控制样式优先级，解决第三方样式覆盖和复杂项目的层叠管理问题。',
+    path: '/css/c-21/cascade-layers', summary: '用 @layer 显式声明层顺序，解决多来源样式的优先级管理。',
     demo: C21CascadeLayers,
     code: () => Promise.resolve(`/* 声明层顺序：越靠后优先级越高 */
 @layer reset, base, components, utilities;
@@ -1574,9 +1574,9 @@ a { color: #e8590c; }
 /* 层内的 !important 仍会提升优先级 */
 /* 但层间优先级仍按声明顺序 */`),
     language: 'css',
-    principle: '@layer 允许开发者声明多个层，并指定层的优先级顺序（靠后声明的层优先级更高）；未分层的样式优先级高于所有 @layer；通过 @import 可将第三方样式归入特定层。',
-    flow: ['声明层顺序：@layer reset, components, utilities。', '在不同层中定义同一选择器的样式。', '观察层顺序如何决定最终样式。'],
-    notes: ['@layer 是现代 CSS 架构的重要工具，可替代 !important  hack。', '未分层的样式（如组件内 style）优先级最高。'],
+    principle: '普通规则只靠书写顺序难以掌控后续升级与第三方样式的覆盖；@layer 先统一声明层顺序（靠后声明的层优先级更高），使 reset < base < components < utilities 的层级始终成立——只要把工具类放进 utilities 层，就能稳定压过前置层，与书写先后无关。',
+    flow: ['先对照默认模式看无 @layer 时多条规则的覆盖。', '启用 @layer 后观察 utilities 层的颜色始终胜出。', '对照特性表理解层声明顺序、跨文件引用与未分层样式优先级。'],
+    notes: ['未被纳入任何 @layer 的样式优先级高于所有分层样式，常被组件内样式利用。', '@import url(...) layer(name) 可把第三方库归入指定层。', '层内的 !important 仍会提升优先级，须谨慎使用。'],
     problem: '解决"多来源样式（重置样式、组件样式、工具类）如何有序管理优先级"的问题。',
   },
 {
@@ -1642,9 +1642,9 @@ a { color: #e8590c; }
 /* 注意：:has() 不能在 :has() 内部使用（浏览器限制）*/
 /* 注意：性能考虑，避免过度使用复杂的 :has() 选择器 */`),
     language: 'css',
-    principle: ':has() 是 CSS 选择器的一部分，用于选择"包含某些后代"的元素；它打破了 CSS 只能向下选择（不能向上选择父元素）的限制；支持与其他选择器组合使用。',
-    flow: ['用 :has(.error) 选择含有错误提示的表单。', '用 :has(img) 选择含有图片的文章。', '结合 :not() 实现更复杂的选择逻辑。'],
-    notes: [':has() 目前主流浏览器均已支持（2023+）。', ':has() 不仅可选择父元素，还可选择前面的兄弟元素。'],
+    principle: ':has() 让一条选择器以"当前元素是否包含某些后代/符合条件的兄弟"为条件来匹配，从而能根据子元素状态（.error、:checked、:focus 等）反选父容器；它支持与 :not()、嵌套及相邻兄弟组合器搭配，把过去需要 JS 判断的逻辑收敛到纯 CSS。',
+    flow: ['点"启用 :has() 高亮"，观察含 .error 徽章的卡片被高亮。', '对照内嵌样式理解 :has(.error) 选中含错误的容器范围。', '从选择器表了解 :not(:has())、:has(+ p) 等扩展用法。'],
+    notes: [':has() 已获得主流浏览器基线支持（2023 年起）。', '它不仅能按子元素选中父级，还能通过 :has(+ 兄弟) 影响前面的元素。', '尽量避免大量嵌套的 :has()，这类选择器相对昂贵。'],
     problem: '解决"如何根据子元素状态样式化父容器，而不依赖 JavaScript"的问题。',
   },
 {
@@ -1732,9 +1732,9 @@ a { color: #e8590c; }
 /* 注意：scroll-snap 不会创建滚动容器，需配合 overflow 使用 */
 /* 注意：mandatory 强制对齐可能导致内容无法停留，需谨慎使用 */`),
     language: 'css',
-    principle: 'scroll-snap-type 在容器上声明滚动方向和对齐严格度；scroll-snap-align 在子项上声明对齐点（start/center/end）；mandatory 强制对齐，proximity 只在接近时对齐。',
-    flow: ['在容器设置 scroll-snap-type: x mandatory。', '在子项设置 scroll-snap-align: center。', '滚动时观察自动对齐效果。'],
-    notes: ['scroll-snap 不会创建滚动容器，需配合 overflow 使用。', 'scroll-padding 可处理固定导航栏遮挡问题。'],
+    principle: 'scroll-snap-type 在滚动容器上声明滚动轴与对齐严格度（x/y + mandatory/proximity），scroll-snap-align 在子项上设置对齐点（start/center/end）；mandatory 强制停靠各对齐点、proximity 仅在接近时吸附，用于构建无需 JS 的原生轮播、画廊与分页。',
+    flow: ['依次切换水平强制/水平接近/垂直强制观察滚动吸附的差异。', '注意子项的 scroll-snap-align:center 决定停靠点。', '对照属性表了解 scroll-snap-stop、scroll-padding 的用途。'],
+    notes: ['scroll-snap 不会自行创建滚动容器，需配合 overflow:auto/scroll 才有滚动。', 'mandatory 会让内容强停靠，若某子项比容器高可能无法停留，需斟酌。', 'scroll-padding 可为吸顶导航预留偏移，避免对齐的子项被遮挡。'],
     problem: '解决"如何实现原生、流畅的滚动定位效果（如轮播、分页），而不依赖 JavaScript"的问题。',
   },
 {
@@ -1839,9 +1839,9 @@ a { color: #e8590c; }
   /* 图片加载前就预留好空间 */
 }`),
     language: 'css',
-    principle: 'aspect-ratio 指定元素的理想宽高比（如 16/9），浏览器会自动计算高度防止布局偏移；object-fit 控制替换元素（img/video）在其容器内的填充方式（cover/contain/fill 等）。',
-    flow: ['用 aspect-ratio 固定卡片封面比例。', '用 object-fit: cover 裁剪图片填满容器。', '用 object-fit: contain 完整显示图片（可能留白）。'],
-    notes: ['aspect-ratio 是防止 CLS（布局偏移）的关键属性。', 'img 需设置 width:100%; height:100% 后 object-fit 才生效。'],
+    principle: 'aspect-ratio 直接由宽度推导高度（如 16/9），浏览器在布局阶段即确定尺寸，避免图片未就绪引发布局偏移（CLS）；object-fit 决定替换元素在给定盒内的填充方式——cover 裁剪铺满、contain 完整保留留白、fill 拉伸改比例、none 不缩放、scale-down 取 none/contain 的较小者。',
+    flow: ['点"显示比值演示"看各宽高比在固定宽度下的高度推导。', '切换 fill/contain/cover/none/scale-down 观察图片在盒内的填充。', '留意 object-position 与固定容器尺寸对显示位置的影响。'],
+    notes: ['为图片预留 aspect-ratio（如 16/9）可显著降低 CLS。', 'object-fit 需给 img 设定明确的 width/height 才生效，通常给 width/height 100%。', 'fill 是默认值，能铺满但可能拉伸变形；常用 cover 兼顾裁剪与比例。'],
     problem: '解决"图片/视频如何在不同尺寸容器中正确显示，以及如何在加载前预留正确空间"的问题。',
   }
 ]
