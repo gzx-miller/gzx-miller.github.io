@@ -53,8 +53,25 @@ watch(
   },
 )
 
+const siteUrl = 'https://gzx-miller.github.io'
+
 useHead(() => ({
   title: `${currentLesson.value.navTitle} - 小松鼠举栗子`,
+  link: [{ rel: 'canonical', href: `${siteUrl}${route.path}` }],
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: '首页', item: `${siteUrl}/` },
+          { '@type': 'ListItem', position: 2, name: activeCategoryName.value, item: `${siteUrl}/${activeKnowledge.value}` },
+          { '@type': 'ListItem', position: 3, name: currentLesson.value.navTitle, item: `${siteUrl}${route.path}` },
+        ],
+      }),
+    },
+  ],
 }))
 
 useSeoMeta({
@@ -62,7 +79,9 @@ useSeoMeta({
   ogTitle: () => `${currentLesson.value.title} - 小松鼠举栗子`,
   ogDescription: () => currentLesson.value.summary,
   ogType: 'article',
-  twitterCard: 'summary',
+  ogImage: `${siteUrl}/og-image.jpg`,
+  twitterCard: 'summary_large_image',
+  twitterImage: `${siteUrl}/og-image.jpg`,
 })
 </script>
 
@@ -98,11 +117,11 @@ useSeoMeta({
     </header>
 
     <section v-if="currentLesson.demo" class="lesson-section">
-      <h2>案例演示</h2>
+      <h2>内容演示</h2>
       <ClientOnly>
         <component :is="currentLesson.demo" />
         <template #fallback>
-          <div class="demo-card">案例交互加载中...</div>
+          <div class="demo-card">内容交互加载中...</div>
         </template>
       </ClientOnly>
     </section>
@@ -115,7 +134,7 @@ useSeoMeta({
         :language="currentLesson.language || 'typescript'"
       />
       <div v-else-if="lessonCodeStatus === 'pending'" class="code-loading" role="status">
-        正在加载当前案例源码…
+        正在加载当前内容源码…
       </div>
       <div v-else class="code-loading code-loading-error" role="alert">
         源码加载失败，请刷新后重试。{{ lessonCodeError?.message }}

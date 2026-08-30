@@ -13,7 +13,7 @@ export function createDemo(name: string) {
   const loader = demoModules[`../demos/${name}.vue`]
 
   if (!loader) {
-    throw new Error(`未找到案例组件：${name}`)
+    throw new Error(`未找到内容组件：${name}`)
   }
 
   return defineAsyncComponent(async () => {
@@ -37,7 +37,7 @@ export function createCodeLoader(path: string) {
   const loader = modules[`../demos/${path}`]
 
   if (!loader) {
-    throw new Error(`未找到案例源码：${path}`)
+    throw new Error(`未找到内容源码：${path}`)
   }
 
   return loader

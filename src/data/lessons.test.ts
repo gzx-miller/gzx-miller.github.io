@@ -43,7 +43,7 @@ describe('课程注册表', () => {
     }
   })
 
-  it('每个案例都归属于已知分类，并能按需读取源码', async () => {
+  it('每个内容都归属于已知分类，并能按需读取源码', async () => {
     const categoryIds = new Set(knowledgeCategories.map((category) => category.id))
     const allLessons = await getAllLessons()
 

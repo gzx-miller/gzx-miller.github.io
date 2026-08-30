@@ -1,15 +1,15 @@
 # 🐿️ 小松鼠举栗子
 
-> 中文软件技术知识案例库 — 通过独立真实案例学习前端、多媒体、系统编程与 AI 技术
+> 中文软件技术知识内容库 — 通过独立真实内容学习前端、多媒体、系统编程与 AI 技术
 
 **在线浏览：[https://gzx-miller.github.io](https://gzx-miller.github.io)**
 
-基于 **Nuxt 4 + Vue 3 + TypeScript + Pinia + Element Plus** 构建，采用静态站点生成（SSG），每个知识点都是一个可独立访问的交互式案例页面。
+基于 **Nuxt 4 + Vue 3 + TypeScript + Pinia + Element Plus** 构建，采用静态站点生成（SSG），每个知识点都是一个可独立访问的交互式内容页面。
 
 ## 特性
 
-- **500+ 个独立案例**，覆盖 22 个软件技术知识分类
-- **交互式演示** — 每个案例包含可运行的 Demo、关键代码、原理说明、处理流程和注意事项
+- **500+ 个独立内容**，覆盖 22 个软件技术知识分类
+- **交互式演示** — 每个内容包含可运行的 Demo、关键代码、原理说明、处理流程和注意事项
 - **纯静态部署** — `nuxt generate` 预渲染全部路由，零服务端依赖
 - **类型安全** — 全项目 TypeScript strict mode，Vitest 单元测试覆盖核心逻辑
 - **秋日森林主题** — 红橙枫叶暖光配色，小松鼠抱栗子的视觉风格
@@ -94,12 +94,12 @@ pnpm dev
 │   ├── data/
 │   │   ├── lessons.ts       # 课程注册表（所有分类与课程定义）
 │   │   └── lessons.test.ts  # 课程注册完整性测试
-│   ├── demos/               # 案例演示组件
-│   │   ├── *.vue            # Vue/Element/CSS/Nuxt 等案例
-│   │   ├── js-code/         # JavaScript 纯代码案例
-│   │   ├── ts-code/         # TypeScript 纯代码案例
-│   │   ├── react-jsx/       # React JSX 案例
-│   │   └── state-react/     # React 状态管理案例
+│   ├── demos/               # 内容演示组件
+│   │   ├── *.vue            # Vue/Element/CSS/Nuxt 等内容
+│   │   ├── js-code/         # JavaScript 纯代码内容
+│   │   ├── ts-code/         # TypeScript 纯代码内容
+│   │   ├── react-jsx/       # React JSX 内容
+│   │   └── state-react/     # React 状态管理内容
 │   ├── pages/               # Nuxt 文件路由
 │   │   ├── index.vue        # 首页
 │   │   └── [...slug].vue    # 动态课程路由
@@ -145,7 +145,7 @@ pnpm build
 pnpm preview
 ```
 
-## 新增案例
+## 新增内容
 
 1. 在 `src/demos/` 对应子目录下新建演示组件
 2. 在 `src/data/lessons.ts` 中注册课程（序号、标题、分类路由、说明和代码片段）
@@ -157,7 +157,7 @@ pnpm preview
 
 - UI 文案和章节说明使用中文，变量名和文件名使用英文
 - 路由保留知识类别层级（如 Vue3 使用 `/vue/...`）
-- 每个案例只覆盖一个核心知识点，避免重复
+- 每个内容只覆盖一个核心知识点，避免重复
 - 视觉风格贴合秋日森林、红橙枫叶、暖光主题
 - 提交前确保无无关生成物进入 Git
 

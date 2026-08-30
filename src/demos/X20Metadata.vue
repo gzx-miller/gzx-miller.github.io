@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     default: '小松鼠举栗子',       <span style="color:#7c7c99">// 默认</span>
     template: '%s | 小松鼠'        <span style="color:#7c7c99">// 子页拼接</span>
   },
-  description: '前端知识案例库',
+  description: '前端知识内容库',
 }
 
 <span style="color:#8a8a3a">// 动态 Metadata — app/blog/[slug]/page.tsx</span>

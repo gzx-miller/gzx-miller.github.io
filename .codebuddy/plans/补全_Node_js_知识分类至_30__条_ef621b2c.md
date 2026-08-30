@@ -1,6 +1,6 @@
 ---
 name: 补全 Node.js 知识分类至 30+ 条
-overview: 为 Node.js 分类新增 14 个案例（D_17 ~ D_30），覆盖事件循环、Buffer、child_process、crypto、perf_hooks、https、CLI、cluster、timers、net、zlib、os 等重要知识点，使总案例数达到 30+ 条。
+overview: 为 Node.js 分类新增 14 个内容（D_17 ~ D_30），覆盖事件循环、Buffer、child_process、crypto、perf_hooks、https、CLI、cluster、timers、net、zlib、os 等重要知识点，使总内容数达到 30+ 条。
 design:
   architecture:
     framework: vue
@@ -54,7 +54,7 @@ todos:
     dependencies:
       - create-d25-d28
   - id: register-lessons
-    content: 在 lessons.ts 中添加 14 个案例的加载器声明和案例数据
+    content: 在 lessons.ts 中添加 14 个内容的加载器声明和内容数据
     status: completed
     dependencies:
       - create-d29-d30
@@ -64,7 +64,7 @@ todos:
     dependencies:
       - register-lessons
   - id: commit
-    content: 提交补全的 Node.js 分类案例
+    content: 提交补全的 Node.js 分类内容
     status: completed
     dependencies:
       - type-check-and-build
@@ -72,14 +72,14 @@ todos:
 
 ## 产品概述
 
-为 Node.js 知识分类补全案例，从现有 16 条（D_01 ~ D_16）扩充至 30+ 条，覆盖事件循环、Buffer、子进程、加密、性能分析等重要但未覆盖的知识点。
+为 Node.js 知识分类补全内容，从现有 16 条（D_01 ~ D_16）扩充至 30+ 条，覆盖事件循环、Buffer、子进程、加密、性能分析等重要但未覆盖的知识点。
 
 ## 核心功能
 
-- 新增 14 个 Node.js 案例 demo 组件（D17 ~ D30）
+- 新增 14 个 Node.js 内容 demo 组件（D17 ~ D30）
 - 在每个 demo 中通过浏览器端交互模拟 Node.js 核心概念
-- 在 `lessons.ts` 中注册所有新案例（加载器声明 + lessons 数组条目）
-- 每个案例包含：交互演示、原理说明、学习流程、注意事项、问题场景
+- 在 `lessons.ts` 中注册所有新内容（加载器声明 + lessons 数组条目）
+- 每个内容包含：交互演示、原理说明、学习流程、注意事项、问题场景
 
 ## 技术栈
 
@@ -90,7 +90,7 @@ todos:
 
 ## 实现方案
 
-### 新增案例清单（D17 ~ D30，共 14 个）
+### 新增内容清单（D17 ~ D30，共 14 个）
 
 | 编号 | 标题 | 子分类 | 核心交互 |
 | --- | --- | --- | --- |
@@ -134,7 +134,7 @@ src/demos/D27Zlib.vue           [NEW] zlib 压缩
 src/demos/D28Os.vue             [NEW] os 系统信息
 src/demos/D29Dns.vue            [NEW] dns 域名解析
 src/demos/D30Readline.vue       [NEW] readline 交互式输入
-src/data/lessons.ts             [MODIFY] 添加加载器声明和 14 条案例数据
+src/data/lessons.ts             [MODIFY] 添加加载器声明和 14 条内容数据
 ```
 
 ## 设计风格

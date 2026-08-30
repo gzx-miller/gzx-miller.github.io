@@ -205,7 +205,7 @@ onUnmounted(() => {
 attribute vec3 aColor;
 // 绑定
 gl.vertexAttribPointer(loc, 3, gl.FLOAT, false, stride, offset);</code></pre>
-          <div class="var-example">本案例中：<strong>每个顶点的颜色</strong></div>
+          <div class="var-example">本内容中：<strong>每个顶点的颜色</strong></div>
         </div>
 
         <div class="compare-card uniform-card">
@@ -219,7 +219,7 @@ uniform float uTime;
 uniform float uUseAttributeColor;
 // 设置
 gl.uniform1f(timeLoc, value);</code></pre>
-          <div class="var-example">本案例中：<strong>uTime 控制波形变形</strong></div>
+          <div class="var-example">本内容中：<strong>uTime 控制波形变形</strong></div>
         </div>
 
         <div class="compare-card varying-card">
@@ -234,7 +234,7 @@ varying vec3 vColor;
 vColor = aColor;
 // 片段着色器读取
 gl_FragColor = vec4(vColor, 1.0);</code></pre>
-          <div class="var-example">本案例中：<strong>颜色在三角形内平滑过渡</strong></div>
+          <div class="var-example">本内容中：<strong>颜色在三角形内平滑过渡</strong></div>
         </div>
       </div>
     </div>

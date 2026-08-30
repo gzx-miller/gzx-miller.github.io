@@ -75,7 +75,7 @@ const evalPrompt = \`评估以下回答的质量：
 
     <div class="case-tabs">
       <button v-for="(_, i) in cases" :key="i" :class="{ active: activeCase === i }" @click="activeCase = i; userScores = {}">
-        案例 {{ i + 1 }}
+        内容 {{ i + 1 }}
       </button>
     </div>
 

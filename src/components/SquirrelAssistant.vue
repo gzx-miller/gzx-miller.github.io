@@ -487,7 +487,7 @@ async function send() {
           {
             role: 'system',
             content:
-              '你是「小松鼠举栗子」中文技术知识案例库网站的 AI 小助手，擅长 Vue3、Nuxt、TypeScript、Node.js 等前后端技术。请用简洁清晰的中文回答，代码示例保持简短可读。',
+              '你是「小松鼠举栗子」中文技术知识内容库网站的 AI 小助手，擅长 Vue3、Nuxt、TypeScript、Node.js 等前后端技术。请用简洁清晰的中文回答，代码示例保持简短可读。',
           },
           ...contextMessages,
           { role: 'user', content: question },

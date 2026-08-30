@@ -8,7 +8,7 @@ const glslCodeModules = import.meta.glob<string>('../../demos/glsl-code/*.glsl',
 
 function createDemo(name: string) {
   const loader = demoModules[`../../demos/${name}.vue`]
-  if (!loader) throw new Error(`未找到案例组件：${name}`)
+  if (!loader) throw new Error(`未找到内容组件：${name}`)
   return defineAsyncComponent(async () => loader())
 }
 
@@ -17,7 +17,7 @@ function createCodeLoader(path: string) {
     ? glslCodeModules
     : vueCodeModules
   const loader = modules[`../../demos/${path}`]
-  if (!loader) throw new Error(`未找到案例源码：${path}`)
+  if (!loader) throw new Error(`未找到内容源码：${path}`)
   return loader
 }
 

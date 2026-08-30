@@ -207,11 +207,11 @@ watch(
         <img class="brand-avatar" :src="squirrelHero" alt="小松鼠举着栗子" width="48" height="48" fetchpriority="high" />
         <div class="brand-text">
           <strong>小松鼠举栗子 </strong>
-          <span class="brand-tagline">中文技术知识案例库</span>
+          <span class="brand-tagline">中文技术知识内容库</span>
         </div>
       </NuxtLink>
       <div class="site-intro-group">
-        <p class="site-intro">记录与分享可复用的软件技术案例</p>
+        <p class="site-intro">记录与分享可复用的软件技术内容</p>
         <p class="site-stats">
           <span class="stat-pill">免费开源</span>
           <span class="stat-pill">持续更新</span>

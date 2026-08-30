@@ -12,7 +12,7 @@ const styleCodeModules = import.meta.glob<string>('../../demos/style-code/*', { 
 
 function createDemo(name: string) {
   const loader = demoModules[`../../demos/${name}.vue`]
-  if (!loader) throw new Error(`未找到案例组件：${name}`)
+  if (!loader) throw new Error(`未找到内容组件：${name}`)
   return defineAsyncComponent(async () => {
     if (name.startsWith('E')) await import('../../element-plus/styles')
     return loader()
@@ -32,7 +32,7 @@ function createCodeLoader(path: string) {
             ? styleCodeModules
             : vueCodeModules
   const loader = modules[`../../demos/${path}`]
-  if (!loader) throw new Error(`未找到案例源码：${path}`)
+  if (!loader) throw new Error(`未找到内容源码：${path}`)
   return loader
 }
 
@@ -570,7 +570,7 @@ export const lessons: Lesson[] = [
     notes: [
       '异步边界要控制粒度，过细会增加复杂度，过粗会拖慢可见内容。',
       '关键首屏内容不宜全部异步化，否则用户会长时间只看到占位。',
-      '异步失败时应提供错误兜底，本案例聚焦成功路径和等待态。',
+      '异步失败时应提供错误兜底，本内容聚焦成功路径和等待态。',
     ],
     problem: '解决"重组件或远程依赖加载期间页面空白、不知道是否还在加载"的问题。',
   },
@@ -620,7 +620,7 @@ export const lessons: Lesson[] = [
       '测试名称要像规格说明，让以后的人能理解为什么要保留它。',
       '高风险逻辑优先测试，低价值快照不要大量堆积。',
     ],
-    problem: '解决"项目变大后修改缺少信心、回归难以及时发现、知识案例难以长期维护"的问题。',
+    problem: '解决"项目变大后修改缺少信心、回归难以及时发现、知识内容难以长期维护"的问题。',
   },
 {
     id: 'K_22',

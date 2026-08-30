@@ -8,7 +8,7 @@ const uniCodeModules = import.meta.glob<string>('../../demos/uni-code/*', { quer
 
 function createDemo(name: string) {
   const loader = demoModules[`../../demos/${name}.vue`]
-  if (!loader) throw new Error(`未找到案例组件：${name}`)
+  if (!loader) throw new Error(`未找到内容组件：${name}`)
   return defineAsyncComponent(async () => {
     if (name.startsWith('E')) await import('../../element-plus/styles')
     return loader()
@@ -19,7 +19,7 @@ function createCodeLoader(path: string) {
   const loader = path.startsWith('uni-code/')
     ? uniCodeModules[`../../demos/${path}`]
     : vueCodeModules[`../../demos/${path}`]
-  if (!loader) throw new Error(`未找到案例源码：${path}`)
+  if (!loader) throw new Error(`未找到内容源码：${path}`)
   return loader
 }
 

@@ -1,5 +1,5 @@
 // useWasm.ts
-// WebAssembly 案例共享工具：内置 11 个已构建并验证的二进制模块（来自 scripts/build-wasm-modules.mjs），
+// WebAssembly 内容共享工具：内置 11 个已构建并验证的二进制模块（来自 scripts/build-wasm-modules.mjs），
 // 提供 base64 解码、实例化、内存字符串读取与十六进制查看等能力，供各 WB 系列演示组件复用。
 
 export type WasmModuleName =

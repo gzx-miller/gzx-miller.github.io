@@ -13,7 +13,7 @@ const nodejsCodeModules = import.meta.glob<string>('../../demos/nodejs-code/*.js
 
 function createDemo(name: string) {
   const loader = demoModules[`../../demos/${name}.vue`]
-  if (!loader) throw new Error(`未找到案例组件：${name}`)
+  if (!loader) throw new Error(`未找到内容组件：${name}`)
   return defineAsyncComponent(async () => {
     if (name.startsWith('E')) await import('../../element-plus/styles')
     return loader()
@@ -35,7 +35,7 @@ function createCodeLoader(path: string) {
               ? nodejsCodeModules
               : vueCodeModules
   const loader = modules[`../../demos/${path}`]
-  if (!loader) throw new Error(`未找到案例源码：${path}`)
+  if (!loader) throw new Error(`未找到内容源码：${path}`)
   return loader
 }
 

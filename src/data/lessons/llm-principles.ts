@@ -6,7 +6,7 @@ const demoModules = import.meta.glob<Component>('../../demos/*.vue', { import: '
 
 function createDemo(name: string) {
   const loader = demoModules[`../../demos/${name}.vue`]
-  if (!loader) throw new Error(`未找到案例组件：${name}`)
+  if (!loader) throw new Error(`未找到内容组件：${name}`)
   return defineAsyncComponent(() => loader())
 }
 

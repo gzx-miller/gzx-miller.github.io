@@ -7,9 +7,9 @@ const vueCodeModules = import.meta.glob<string>('../../demos/*.vue', { query: '?
 
 function createDemo(name: string) {
   const loader = demoModules[`../../demos/${name}.vue`]
-  if (!loader) throw new Error(`未找到案例组件：${name}`)
+  if (!loader) throw new Error(`未找到内容组件：${name}`)
   return defineAsyncComponent(async () => {
-    // VF 系列案例统一加载 Vue Flow 官方样式与站点双主题适配
+    // VF 系列内容统一加载 Vue Flow 官方样式与站点双主题适配
     if (name.startsWith('VF')) await import('../../vue-flow/styles')
     return loader()
   })
@@ -17,7 +17,7 @@ function createDemo(name: string) {
 
 function createCodeLoader(path: string) {
   const loader = vueCodeModules[`../../demos/${path}`]
-  if (!loader) throw new Error(`未找到案例源码：${path}`)
+  if (!loader) throw new Error(`未找到内容源码：${path}`)
   return loader
 }
 

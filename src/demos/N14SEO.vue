@@ -47,7 +47,7 @@ export default defineNuxtConfig({
     head: {
       title: '小松鼠举栗子',
       meta: [
-        { name: 'description', content: '中文前端知识案例库' },
+        { name: 'description', content: '中文前端知识内容库' },
         { name: 'keywords', content: 'Vue3, Nuxt, 前端' },
       ],
     },

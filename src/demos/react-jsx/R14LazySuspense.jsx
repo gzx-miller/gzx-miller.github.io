@@ -7,7 +7,7 @@ const CourseReport = lazy(() => new Promise((resolve) => {
       return (
         <section className="panel">
           <strong>学习报告已加载</strong>
-          <p className="muted">本周完成 6 个案例，连续学习 4 天。</p>
+          <p className="muted">本周完成 6 个内容，连续学习 4 天。</p>
         </section>
       )
     },

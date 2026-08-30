@@ -34,7 +34,7 @@ const practicalExamples = [
     <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
       <button class="tab-btn" :class="{ active: activeTab === 'basic' }" @click="activeTab = 'basic'">基础用法</button>
       <button class="tab-btn" :class="{ active: activeTab === 'aspect' }" @click="activeTab = 'aspect'">宽高比转换</button>
-      <button class="tab-btn" :class="{ active: activeTab === 'examples' }" @click="activeTab = 'examples'">实战案例</button>
+      <button class="tab-btn" :class="{ active: activeTab === 'examples' }" @click="activeTab = 'examples'">实战内容</button>
     </div>
 
     <div v-if="activeTab === 'basic'" class="basic-section">
@@ -67,7 +67,7 @@ const practicalExamples = [
     </div>
 
     <div v-if="activeTab === 'examples'" class="examples-section">
-      <h4>实战案例</h4>
+      <h4>实战内容</h4>
       <table>
         <thead><tr><th>用途</th><th>命令/说明</th></tr></thead>
         <tbody>
