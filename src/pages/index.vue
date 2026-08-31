@@ -105,12 +105,23 @@ function categoryCount(id: string): number | null {
   return data.value?.counts?.[id] ?? null
 }
 
-// 分类内已探索课程数：依据本地学习进度统计
-function categoryVisitedCount(id: string): number {
-  const count = categoryCount(id)
-  if (!count) return 0
+// 一次性统计每个分类的已探索课程数，避免逐卡片对全量课程做线性过滤。
+// 依赖 visitedPaths（响应式），首页浏览进度变化时自动重算。
+const visitedByCategory = computed(() => {
   const lessons = data.value?.allLessons ?? []
-  return lessons.filter((lesson) =>categoryIdOf(lesson) === id && isVisited(lesson.path)).length
+  const map = new Map<string, number>()
+  for (const lesson of lessons) {
+    if (isVisited(lesson.path)) {
+      const id = categoryIdOf(lesson)
+      map.set(id, (map.get(id) ?? 0) + 1)
+    }
+  }
+  return map
+})
+
+// 分类内已探索课程数
+function categoryVisitedCount(id: string): number {
+  return visitedByCategory.value.get(id) ?? 0
 }
 
 // 分类完成度：已探索 / 总课程，供卡片进度条展示
@@ -217,7 +228,7 @@ function clearSearch() {
       <div class="hero-decors" aria-hidden="true">
         <span class="hero-decor hero-decor-leaf leaf-one">🍁</span>
         <span class="hero-decor hero-decor-leaf leaf-two">🍂</span>
-        <span class="hero-decor hero-decor-squirrel">🌰</span>
+        <span class="hero-decor hero-decor-squirrel">🐿️</span>
       </div>
       <div class="hero-inner">
         <h1 class="hero-title">小松鼠举栗子 🌰</h1>

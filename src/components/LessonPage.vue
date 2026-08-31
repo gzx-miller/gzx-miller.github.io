@@ -62,6 +62,23 @@ onMounted(() => {
   markVisited(currentLesson.value.path)
 })
 
+// 估算阅读时长：把正文级文案（摘要/原理/流程/注意/解决的问题）按中文阅读速度
+// 换算成分钟数；代码含量高的内容以 1 分钟起底，避免显示「0 分钟」。
+const readingMinutes = computed(() => {
+  const lesson = currentLesson.value
+  const prose = [
+    lesson.summary,
+    lesson.principle,
+    ...(lesson.flow ?? []),
+    ...(lesson.notes ?? []),
+    lesson.problem,
+  ]
+    .filter(Boolean)
+    .join('')
+  if (!prose) return 0
+  return Math.max(1, Math.round(prose.length / 500))
+})
+
 const siteUrl = 'https://gzx-miller.github.io'
 
 useHead(() => ({
@@ -144,7 +161,10 @@ useSeoMeta({
     </div>
     <header class="lesson-header">
       <div class="lesson-copy">
-        <p class="eyebrow">{{ formatLessonId(getLessonGroupIndex(currentLesson.id)) }} · {{ currentLesson.category }}</p>
+        <p class="eyebrow">
+          {{ formatLessonId(getLessonGroupIndex(currentLesson.id)) }} · {{ currentLesson.category }}
+          <span v-if="readingMinutes" class="reading-time">约 {{ readingMinutes }} 分钟读完</span>
+        </p>
         <h1>{{ currentLesson.title }}</h1>
         <p>{{ currentLesson.summary }}</p>
       </div>
