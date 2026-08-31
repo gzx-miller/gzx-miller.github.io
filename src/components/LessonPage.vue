@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import CodeBlock from './CodeBlock.vue'
 import { useLessonNavigation } from '../composables/useLessonNavigation'
+import { useLearningProgress } from '../composables/useLearningProgress'
+
+const { markVisited } = useLearningProgress()
 
 const route = useRoute()
 const {
@@ -50,14 +53,23 @@ watch(
     await nextTick()
     lessonPageRef.value?.scrollTo({ top: 0, left: 0 })
     lessonPageRef.value?.focus({ preventScroll: true })
+    // 记录本页已探索，供首页展示学习进度
+    markVisited(currentLesson.value.path)
   },
 )
+
+onMounted(() => {
+  markVisited(currentLesson.value.path)
+})
 
 const siteUrl = 'https://gzx-miller.github.io'
 
 useHead(() => ({
   title: `${currentLesson.value.navTitle} - 小松鼠举栗子`,
   link: [{ rel: 'canonical', href: `${siteUrl}${route.path}` }],
+  meta: [
+    { name: 'og:image:alt', content: currentLesson.value.summary },
+  ],
   script: [
     {
       type: 'application/ld+json',
@@ -69,6 +81,28 @@ useHead(() => ({
           { '@type': 'ListItem', position: 2, name: activeCategoryName.value, item: `${siteUrl}/${activeKnowledge.value}` },
           { '@type': 'ListItem', position: 3, name: currentLesson.value.navTitle, item: `${siteUrl}${route.path}` },
         ],
+      }),
+    },
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'LearningResource',
+        name: currentLesson.value.title,
+        description: currentLesson.value.summary,
+        url: `${siteUrl}${route.path}`,
+        inLanguage: 'zh-CN',
+        learningResourceType: 'CourseContent',
+        about: {
+          '@type': 'WebSite',
+          name: activeCategoryName.value,
+          url: `${siteUrl}/${activeKnowledge.value}`,
+        },
+        isPartOf: {
+          '@type': 'WebSite',
+          name: '小松鼠举栗子',
+          url: `${siteUrl}/`,
+        },
       }),
     },
   ],
@@ -175,11 +209,11 @@ useSeoMeta({
           {{ activeCategoryName }} 官网 →
         </a>
         <div class="lesson-pager">
-          <NuxtLink v-if="previousLesson" class="previous-lesson-link" :to="previousLesson.path">
+          <NuxtLink v-if="previousLesson" prefetch class="previous-lesson-link" :to="previousLesson.path">
             <span>上一颗</span>
             <strong>{{ formatLessonId(getLessonGroupIndex(previousLesson.id)) }} {{ previousLesson.navTitle }}</strong>
           </NuxtLink>
-          <NuxtLink v-if="nextLesson" class="next-lesson-link" :to="nextLesson.path">
+          <NuxtLink v-if="nextLesson" prefetch class="next-lesson-link" :to="nextLesson.path">
             <span>下一颗</span>
             <strong>{{ formatLessonId(getLessonGroupIndex(nextLesson.id)) }} {{ nextLesson.navTitle }}</strong>
           </NuxtLink>

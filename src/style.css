@@ -81,6 +81,24 @@
   100% { background-position: 200% 0; }
 }
 
+@keyframes leafFloat {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(6px, -10px) rotate(12deg);
+  }
+}
+
+@keyframes chesnutWiggle {
+  0%, 100% {
+    transform: rotate(-6deg);
+  }
+  50% {
+    transform: rotate(8deg);
+  }
+}
+
 * {
   box-sizing: border-box;
 }
@@ -2287,6 +2305,59 @@ pre.code-block > code.hljs,
   width: min(760px, 100%);
   margin: 0 auto;
   text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-decors {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-decor {
+  position: absolute;
+  line-height: 1;
+  opacity: 0.16;
+  filter: saturate(1.1);
+}
+
+.hero-decor-leaf {
+  font-size: 40px;
+  animation: leafFloat 5s ease-in-out infinite;
+}
+
+.hero-decor-leaf.leaf-one {
+  top: 22%;
+  left: 9%;
+  animation-delay: 0s;
+}
+
+.hero-decor-leaf.leaf-two {
+  top: 30%;
+  right: 9%;
+  animation-delay: 1.6s;
+}
+
+.hero-decor-squirrel {
+  font-size: 34px;
+  opacity: 0.14;
+  bottom: 14%;
+  right: 16%;
+  animation: chesnutWiggle 3.4s ease-in-out infinite;
+}
+
+@media (max-width: 640px) {
+  .hero-decor-leaf {
+    display: none;
+  }
+
+  .hero-decor-squirrel {
+    bottom: 4%;
+    right: 6%;
+    font-size: 26px;
+  }
 }
 
 .hero-title {
@@ -2613,6 +2684,30 @@ pre.code-block > code.hljs,
   padding: 20px;
   text-decoration: none;
   transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.category-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  transform: translateX(-160%);
+  pointer-events: none;
+}
+
+.category-card:hover::after {
+  animation: cardShine 0.9s ease forwards;
+}
+
+@keyframes cardShine {
+  to {
+    transform: translateX(220%);
+  }
 }
 
 .category-card:hover {
@@ -2682,6 +2777,40 @@ pre.code-block > code.hljs,
   color: var(--leaf-red);
 }
 
+.category-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.category-progress-bar {
+  display: block;
+  height: 7px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--leaf-red), var(--leaf-orange), var(--leaf-gold));
+  box-shadow: 0 0 8px rgba(240, 138, 36, 0.35);
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.category-progress-track {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(123, 53, 29, 0.08);
+}
+
+.category-progress-text {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+[data-theme='dark'] .category-progress-track {
+  background: rgba(246, 193, 90, 0.1);
+}
+
 .home-footer {
   border-top: 1px solid rgba(123, 53, 29, 0.1);
   padding: 18px 24px 22px;
@@ -2708,6 +2837,10 @@ pre.code-block > code.hljs,
   border-color: rgba(74, 52, 40, 0.4);
   background: linear-gradient(180deg, rgba(42, 30, 24, 0.96) 0%, rgba(35, 26, 22, 0.92) 100%);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme='dark'] .category-card::after {
+  background: linear-gradient(105deg, transparent, rgba(246, 193, 90, 0.14), transparent);
 }
 
 [data-theme='dark'] .category-card:hover {

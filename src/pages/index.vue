@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { computed, ref, useTemplateRef, watch } from 'vue'
 import { knowledgeCategories, knowledgeCategoryMap, getLessonsByCategory } from '../data/lessons'
+import { useLearningProgress } from '../composables/useLearningProgress'
+
+const { isVisited } = useLearningProgress()
 
 // 仅保留可序列化的课程元数据，避免把 demo 组件 / code 加载函数塞进预渲染 payload
 interface LessonMeta {
@@ -102,6 +105,22 @@ function categoryCount(id: string): number | null {
   return data.value?.counts?.[id] ?? null
 }
 
+// 分类内已探索课程数：依据本地学习进度统计
+function categoryVisitedCount(id: string): number {
+  const count = categoryCount(id)
+  if (!count) return 0
+  const lessons = data.value?.allLessons ?? []
+  return lessons.filter((lesson) =>categoryIdOf(lesson) === id && isVisited(lesson.path)).length
+}
+
+// 分类完成度：已探索 / 总课程，供卡片进度条展示
+function categoryProgress(id: string): number {
+  const count = categoryCount(id)
+  if (!count) return 0
+  const visited = categoryVisitedCount(id)
+  return Math.round((visited / count) * 100)
+}
+
 // 从课程路径首段推断所属知识分类（lesson.category 是分类内的子分组标签）
 function categoryIdOf(lesson: LessonMeta): string {
   return lesson.path.split('/')[1] ?? ''
@@ -195,6 +214,11 @@ function clearSearch() {
 <template>
   <main id="main-content" class="home-page" tabindex="-1">
     <section class="hero">
+      <div class="hero-decors" aria-hidden="true">
+        <span class="hero-decor hero-decor-leaf leaf-one">🍁</span>
+        <span class="hero-decor hero-decor-leaf leaf-two">🍂</span>
+        <span class="hero-decor hero-decor-squirrel">🌰</span>
+      </div>
       <div class="hero-inner">
         <h1 class="hero-title">小松鼠举栗子 🌰</h1>
         <p class="hero-subtitle">
@@ -281,6 +305,10 @@ function clearSearch() {
             <span v-if="categoryCount(item.id) !== null" class="category-count">{{ categoryCount(item.id) }} 颗</span>
           </div>
           <p class="category-intro">{{ item.intro }}</p>
+          <div v-if="categoryCount(item.id) !== null" class="category-progress" role="progressbar" :aria-label="`${item.name} 学习进度`" :aria-valuenow="categoryProgress(item.id)" aria-valuemin="0" aria-valuemax="100">
+            <span class="category-progress-track"><span class="category-progress-bar" :style="{ width: `${categoryProgress(item.id)}%` }"></span></span>
+            <span class="category-progress-text">{{ categoryVisitedCount(item.id) }} / {{ categoryCount(item.id) }} 已探索</span>
+          </div>
           <span class="category-go">进入学习 →</span>
         </NuxtLink>
       </div>
