@@ -1,0 +1,1 @@
+import{R as e}from"./Hhvd03iW.js";import o from"./D-o2Hdf5.js";import{d as t,B as a,y as r,o as n}from"./DutfXOOr.js";const l=t({__name:"S05ZustandMiddleware",setup(s){return(c,d)=>(n(),a(e,{title:"Zustand middleware 演示",code:r(o)},null,8,["code"]))}});export{l as default};

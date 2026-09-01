@@ -1,0 +1,15 @@
+const n=`@use "sass:map";
+$status-colors: (
+  "success": #397a45,
+  "warning": #d17b24,
+  "danger": #b93f35,
+);
+
+@each $name, $color in $status-colors {
+  .notice-#{$name} {
+    border-color: $color;
+    color: $color;
+  }
+}
+$warning: map.get($status-colors, "warning");
+`;export{n as default};

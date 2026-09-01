@@ -1,0 +1,1 @@
+[{"data":1,"prerenderedAt":4},["ShallowReactive",2],{"lesson-code-SC_07":3},"%notice-base {\n  padding: 0.75rem;\n  border: 1px solid;\n  border-radius: 0.5rem;\n}\n\n.notice-info {\n  @extend %notice-base;\n  color: #225b88;\n  background: #e5f0fb;\n}\n\u002F\u002F @extend 表示“是同一种语义类型”，Mixin 表示“复制一组声明”。\n",1788269096098]

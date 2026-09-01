@@ -1,0 +1,3 @@
+import{d as l,b as a,e as s,f as n,r as t,o as u,I as r}from"./DutfXOOr.js";const d={class:"demo-card sass-demo"},c=l({__name:"SC02Modules",setup(p){const o=t(!0);return(m,e)=>(u(),a("div",d,[s("button",{onClick:e[0]||(e[0]=_=>o.value=!o.value)},n(o.value?"使用命名空间":"全局展开（谨慎）"),1),e[1]||(e[1]=s("div",{class:"module-flow"},[s("code",null,"_tokens.scss"),s("span",null,"→ @use →"),s("code",null,"card.scss"),s("span",null,"→ CSS")],-1)),s("pre",null,n(o.value?`@use "tokens";
+color: tokens.$brand;`:`@use "tokens" as *;
+color: $brand;`),1),e[2]||(e[2]=s("small",null,"@use 每个模块只加载一次且成员默认带命名空间；私有成员以 - 或 _ 开头，不暴露给使用方。",-1))]))}}),f=r(c,[["__scopeId","data-v-5ab96683"]]);export{f as default};

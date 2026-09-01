@@ -1,0 +1,1 @@
+[{"data":1,"prerenderedAt":4},["ShallowReactive",2],{"lesson-code-W_1":3},"\u002F\u002F ===== 顶点着色器 Vertex Shader =====\nattribute vec2 aPosition;\nvoid main() {\n  gl_Position = vec4(aPosition, 0.0, 1.0);\n}\n\n\u002F\u002F ===== 片段着色器 Fragment Shader =====\nprecision mediump float;\nuniform vec4 uColor;\nvoid main() {\n  gl_FragColor = uColor;\n}\n",1788269097844]

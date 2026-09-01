@@ -1,0 +1,1 @@
+[{"data":1,"prerenderedAt":4},["ShallowReactive",2],{"lesson-code-SC_02":3},"\u002F\u002F _tokens.scss\n$brand: #c45125;\n$space-unit: 0.25rem;\n$-internal-debug-color: magenta;\n\n\u002F\u002F card.scss\n@use \"tokens\";\n.card {\n  color: tokens.$brand;\n  padding: tokens.$space-unit * 4;\n}\n\u002F\u002F 一个模块无论被 @use 多少次，都只执行并输出一次。\n",1788269096049]

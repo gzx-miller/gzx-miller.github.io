@@ -1,0 +1,7 @@
+import{p as v,q as h,r as $,t as g,v as E,x as j}from"./D9Wr7_iM.js";import{i as m,y as f,R as y,ag as p,k as F,U as L,r as c,g as N,ap as w}from"./DutfXOOr.js";const J=({from:r,replacement:e,scope:a,version:s,ref:o,type:d="API"},t)=>{m(()=>f(t),u=>{u&&v(a,`[${d}] ${r} is about to be deprecated in version ${s}, please use ${e} instead.
+For more detail, please visit: ${o}
+`)},{immediate:!0})},l={prefix:Math.floor(Math.random()*1e4),current:0},D=Symbol("elIdInjection"),K=()=>y()?p(D,l):l,_=r=>{const e=K();!h&&e===l&&v("IdInjection",`Looks like you are using server rendering, you must provide a id provider to ensure the hydration process to be succeed
+usage: app.provide(ID_INJECTION_KEY, {
+  prefix: number,
+  current: number,
+})`);const a=$();return g(()=>f(r)||`${a.value}-id-${e.prefix}-${e.current++}`)},O=()=>({form:p(j,void 0),formItem:p(E,void 0)}),R=(r,{formItemContext:e,disableIdGeneration:a,disableIdManagement:s})=>{a||(a=c(!1)),s||(s=c(!1));const o=y(),d=()=>{let n=o?.parent;for(;n;){if(n.type.name==="ElFormItem")return!1;if(n.type.name==="ElLabelWrap")return!0;n=n.parent}return!1},t=c();let u;const b=N(()=>!!(!(r.label||r.ariaLabel)&&e&&e.inputIds&&e.inputIds?.length<=1));return F(()=>{u=m([w(r,"id"),a],([n,I])=>{const i=n??(I?void 0:_().value);i!==t.value&&(e?.removeInputId&&!d()&&(t.value&&e.removeInputId(t.value),!s?.value&&!I&&i&&e.addInputId(i)),t.value=i)},{immediate:!0})}),L(()=>{u&&u(),e?.removeInputId&&t.value&&e.removeInputId(t.value)}),{isLabeledByFormItem:b,inputId:t}};export{O as a,_ as b,R as c,K as d,J as u};

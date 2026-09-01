@@ -1,0 +1,4 @@
+import{d,b as p,e as t,v as s,K as u,L as r,f as n,z as m,r as i,o as v,I as f}from"./DutfXOOr.js";const x={class:"demo-card config-demo"},b=d({__name:"SC12Configuration",setup(_){const a=i(12),l=i("forest");return(c,e)=>(v(),p("div",x,[t("label",null,[e[2]||(e[2]=s("命名前缀 ",-1)),u(t("input",{"onUpdate:modelValue":e[0]||(e[0]=o=>l.value=o)},null,512),[[r,l.value]])]),t("label",null,[s("圆角 "+n(a.value)+"px ",1),u(t("input",{"onUpdate:modelValue":e[1]||(e[1]=o=>a.value=o),type:"range",min:"0",max:"24"},null,512),[[r,a.value,void 0,{number:!0}]])]),t("button",{style:m({borderRadius:`${a.value}px`})},n(l.value)+"-button",5),t("pre",null,`@use "library" with (
+  $prefix: "`+n(l.value)+`",
+  $radius: `+n(a.value)+`px
+);`,1),e[3]||(e[3]=t("small",null,"库变量以 !default 声明后可在首次 @use 时通过 with 配置；配置发生在模块加载前，不能在多个调用方反复改写。",-1))]))}}),y=f(b,[["__scopeId","data-v-121e3c20"]]);export{y as default};

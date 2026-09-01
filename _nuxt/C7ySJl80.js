@@ -1,0 +1,1 @@
+import{R as e}from"./Hhvd03iW.js";import o from"./JbU5L3Or.js";import{d as t,B as a,y as r,o as c}from"./DutfXOOr.js";const i=t({__name:"S09XStateMachine",setup(n){return(s,m)=>(c(),a(e,{title:"XState 状态机演示",code:r(o)},null,8,["code"]))}});export{i as default};

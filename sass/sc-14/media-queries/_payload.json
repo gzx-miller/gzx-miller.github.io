@@ -1,0 +1,1 @@
+[{"data":1,"prerenderedAt":4},["ShallowReactive",2],{"lesson-code-SC_14":3},"$content-breakpoint: 35rem;\n\n.layout {\n  display: grid;\n  gap: 1rem;\n\n  @media (width >= $content-breakpoint) {\n    grid-template-columns: 12rem minmax(0, 1fr);\n  }\n}\n\u002F\u002F Sass 会将嵌套媒体查询提升，并与外层查询合并。\n",1788269096028]

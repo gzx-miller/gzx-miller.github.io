@@ -1,0 +1,3 @@
+import{d as s,b as l,e as t,K as r,a2 as d,v as n,f as i,r as p,o as u,I as m}from"./DutfXOOr.js";const c={class:"demo-card root-demo"},v={class:"selector"},_=s({__name:"SC13AtRoot",setup(b){const o=p(!0);return(f,e)=>(u(),l("div",c,[t("label",null,[r(t("input",{"onUpdate:modelValue":e[0]||(e[0]=a=>o.value=a),type:"checkbox"},null,512),[[d,o.value]]),e[1]||(e[1]=n("使用 @at-root 跳出嵌套",-1))]),t("div",v,[t("code",null,i(o.value?".theme-dark .widget":".dashboard .panel .theme-dark .widget"),1)]),e[2]||(e[2]=t("pre",null,`.dashboard .panel {
+  @at-root .theme-dark .widget { ... }
+}`,-1)),e[3]||(e[3]=t("small",null,"@at-root 把规则移出当前嵌套，可通过 with/without 控制保留哪些 at-rule；它是处理生成器上下文的工具，不是修补过深嵌套的常规手段。",-1))]))}}),w=m(_,[["__scopeId","data-v-05242bad"]]);export{w as default};

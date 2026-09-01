@@ -1,0 +1,1 @@
+[{"data":1,"prerenderedAt":4},["ShallowReactive",2],{"lesson-code-SC_05":3},"@use \"sass:map\";\n$status-colors: (\n  \"success\": #397a45,\n  \"warning\": #d17b24,\n  \"danger\": #b93f35,\n);\n\n@each $name, $color in $status-colors {\n  .notice-#{$name} {\n    border-color: $color;\n    color: $color;\n  }\n}\n$warning: map.get($status-colors, \"warning\");\n",1788269096081]

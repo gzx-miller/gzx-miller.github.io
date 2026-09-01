@@ -1,0 +1,4 @@
+import{d as l,b as r,e,v as d,f as n,K as u,L as m,z as p,r as i,g as v,o as b,I as f}from"./DutfXOOr.js";const T=l({__name:"TW05ThemeTokens",setup(c){const s=i(24),t=v(()=>`hsl(${s.value} 72% 46%)`);return(x,a)=>(b(),r("div",{class:"demo-card tw-demo",style:p({"--brand":t.value})},[e("label",null,[d("品牌色相 "+n(s.value)+"° ",1),u(e("input",{"onUpdate:modelValue":a[0]||(a[0]=o=>s.value=o),type:"range",min:"0",max:"60"},null,512),[[m,s.value,void 0,{number:!0}]])]),a[1]||(a[1]=e("div",{class:"swatches"},[e("span"),e("span"),e("span")],-1)),a[2]||(a[2]=e("button",{class:"brand-button"},"保存主题",-1)),e("pre",null,`@theme {
+  --color-brand-500: `+n(t.value)+`;
+  --font-display: "Noto Serif SC", serif;
+}`,1),a[3]||(a[3]=e("small",null,"v4 使用 @theme 把设计令牌映射为工具类；令牌命名应表达系统角色，避免把一次性数值包装成“变量”。",-1))],4))}}),k=f(T,[["__scopeId","data-v-b050a006"]]);export{k as default};

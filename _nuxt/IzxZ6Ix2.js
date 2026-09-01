@@ -1,0 +1,3475 @@
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["./BR9hmdAY.js","./DutfXOOr.js","./entry.B53vWA-H.css","./C01Selectors.CdKKOfFT.css","./CaAnWONc.js","./C02BoxModel.BSeu1vYU.css","./C-qyS75N.js","./C03Flexbox.BnazAK9d.css","./DktlRRmE.js","./C04Grid.B7vkKeqX.css","./CvtiX-OO.js","./C05Position.BBeIbxOi.css","./BWofwJwR.js","./C06Cascade.RqeyV35m.css","./b-vrB7i4.js","./C07Variables.BXaSYUlF.css","./Brswrlh3.js","./C08Transition.DgMDxEcy.css","./Di0XS_HO.js","./C09MediaQuery.BPYcyU9o.css","./ipBspGG5.js","./C10Gradient.Ba0K8rr6.css","./CnM8q2li.js","./C11Filter.Da7Pn6yV.css","./BAjK1tXP.js","./C12MathFunctions.0atGoeul.css","./d6p-aFx9.js","./C13ViewportUnits.qxQev6OC.css","./ClAdvi6v.js","./C14ClipPath.Ia-rPrmJ.css","./B8HW5dCZ.js","./C15LogicalProperties.CUxayFQ4.css","./DHkx7q0j.js","./C16ContainerQuery.B067tUum.css","./Cs_uJgCN.js","./C17StackingContext.CJB-pzfB.css","./CZbDTfd8.js","./C18FormattingContext.DJjWDRTJ.css","./Cl_7g2zF.js","./C19BEM.DEw2Dwc8.css","./BrEsjHHX.js","./C20Performance.CtCYpX9m.css","./DeRHUSrD.js","./C21CascadeLayers.B60h_keN.css","./KX_pNtia.js","./C22HasSelector.Dhi9HCW3.css","./arcQRiAd.js","./C23ScrollSnap.DY357zCi.css","./B7-pNAzp.js","./C24AspectRatio.O1f56X2J.css","./DaoS20Oj.js","./CPP01ProgramStructure.CuytSg14.css","./ZvB_GaPi.js","./CPP02VariablesTypes.Cm0v5fUo.css","./BuuLUBm6.js","./CPP03OperatorsExpressions.Da4dqm4r.css","./DqWNVJn8.js","./CPP04ControlFlow.BUID_VZB.css","./CNiRp707.js","./CPP05Functions.DpoXGWT8.css","./vphfGHuB.js","./CPP06ArraysStrings.VoBn_tO-.css","./K4goH_T4.js","./CPP07PointersReferences.DECVxZ7n.css","./C8aAMQme.js","./CPP08DynamicMemory.Ct15h4Qi.css","./srNbv2WN.js","./CPP09ClassesObjects.BI8XuDZ6.css","./B_Jq9Tic.js","./CPP10CtorDtor.rNa7Mkv4.css","./BEkwHjSV.js","./CPP11CopyControl.Bd3NrWoj.css","./ByPbC804.js","./CPP12Inheritance.1GBTyfW-.css","./B-2LteSz.js","./CPP13Polymorphism.B-dLubzB.css","./BNkraXJD.js","./CPP14OperatorOverloading.BqV-Wpg4.css","./DjalBuZE.js","./CPP15TemplatesBasics.sS5wS4JE.css","./CGPQi0fC.js","./CPP16StlSequenceContainers.CyOpEqJj.css","./BKJ90ZGi.js","./CPP17StlAssociativeContainers.D1sN7oM2.css","./-5NCpWPa.js","./CPP18IteratorsAlgorithms.C3uLXopz.css","./SfP-CdIG.js","./CPP19LambdaExpressions.BdEUgyPh.css","./BgSkVTvF.js","./CPP20SmartPointers.D8KQql0g.css","./CSEAWZjg.js","./CPP21MoveSemantics.BVUdgJLd.css","./Bs39W6Wh.js","./CPP22RAII.MhXXjGCc.css","./wG4ya3_1.js","./CPP23ExceptionHandling.DvdvXtsc.css","./BqprBnJI.js","./CPP24FileIO.CTw5P765.css","./DdBA6tHG.js","./CPP25Concurrency.Djl7agfg.css","./dfuSWW0i.js","./CPP26ModernCppCore.CSK1LFJ8.css","./BP8Aw-Nf.js","./CPP27CompileTimeComputation.JbbZ_okJ.css","./1pJ9YRdC.js","./CPP28Modules.C4GQYcO2.css","./Cbio5Jbz.js","./CPP29DesignPatterns.BsHQB1pE.css","./Ct0sN3hq.js","./CPP30CodingStandards.BRRxU3Dd.css","./Ci6L-oj5.js","./D01ModuleSystem.BYinx28G.css","./BKhPTlc0.js","./CzjJbWZ0.js","./CpJ17y3z.js","./DyCyQ-Hi.js","./BTwgOdzx.js","./CdvfUa_0.js","./D5agyPog.js","./B5UcUlUh.js","./DAKX18aN.js","./94SuwFxz.js","./BOEaSxL8.js","./DFGJsbSF.js","./D13ExpressFastify.AEKAo_Mi.css","./CHdh8Cct.js","./CLeGk598.js","./D14WebSocket.D3fyk0Rf.css","./DCNa3kYb.js","./DcWkPD4q.js","./D16WorkerThreads.dHQGQt3f.css","./DzdFUU7v.js","./D17EventLoop.BJdlOkTd.css","./CaNpCc_x.js","./D18Buffer.BnAv7T20.css","./B3rga3gC.js","./D19ChildProcess.dqr0i7AF.css","./DVqG6udf.js","./D20Cluster.BG7ebe6J.css","./DHJxVKQf.js","./D21Crypto.MAEXAyLf.css","./CPrIbf7g.js","./D22PerfHooks.CxafFsxg.css","./B_K9HZ0K.js","./D23Https.el80TVvc.css","./DJa6mWsh.js","./D24Cli.rwySSVA-.css","./BhttZz2_.js","./D25Timers.DPOZfro3.css","./BntqxfUT.js","./D26NetTcp.bq8ehCu8.css","./Qfn-AYfh.js","./D27Zlib.dOUN9Rfy.css","./6TeVMW8H.js","./D28Os.CFL7lG6U.css","./CIj564XD.js","./D29Dns.C-lgPhnv.css","./C8s6noZz.js","./D30Readline.DEZ5yOUs.css","./DZC4_CZS.js","./D9Wr7_iM.js","./DGJd1Aqu.js","./DHVfMpi6.js","./DR0Edt-E.js","./IKbbVouS.js","./53xhp10y.js","./ctq_5_2Z.js","./n66r_EI0.js","./-WEsXp6q.js","./C8fXM7kb.js","./CglwqySu.js","./BB_Ol6Sd.js","./wj8I72PR.js","./Bp3YSIOJ.js","./BsnBu67b.js","./CqPcjWQ5.js","./CzjZooK7.js","./BBvcQwod.js","./BCwF_14x.js","./BgWvGVqa.js","./BIj4yoEM.js","./BK7kFwQP.js","./Bbje_1GQ.js","./DCTLXrZ8.js","./Ct-B6Pog.js","./CXlhhiiX.js","./BuM7jWYP.js","./Bgk4KK1z.js","./CX0rUER6.js","./D8mtDLtE.js","./kZ0LWtn8.js","./x4t479FR.js","./Bqynn5y_.js","./fEHyG1u7.js","./Caz77feQ.js","./Cpnq_uSR.js","./ZK1g5SpQ.js","./BrWUIokz.js","./CZjxwmZ0.js","./B_c3L_Kz.js","./RYD2hqIv.js","./D6FW0B1r.js","./B5N3-P4-.js","./B8_yYXKJ.js","./B_tMiSmO.js","./_w-q7jwz.js","./IwAZNaYB.js","./CIIhMn5T.js","./Dr3BUCIA.js","./BBwD9Q6F.js","./Cwg6LWHi.js","./Cq4UVnHj.js","./CBDDh-tc.js","./C974duk5.js","./BFho3yyi.js","./CfysQ-G-.js","./mMEkiGLZ.js","./3v1yLvPz.js","./tKUil6v-.js","./DT-4xNc4.js","./DxBp2RfT.js","./CenVIcOe.js","./DVNb_scd.js","./U6xjNNjh.js","./F01Basics.Brdf8Uek.css","./C0MYwY3h.js","./F02FormatConversion.CSpDtizm.css","./Byk0GWnj.js","./F03VideoInfo.qSnYPZ1c.css","./C1TAM7BR.js","./F04Resolution.CeTrCwva.css","./Blb3tFJ4.js","./F05Bitrate.Dnakb47w.css","./uYc_nj0F.js","./F06Framerate.BEiUzVno.css","./DqM9tGJJ.js","./F07Crop.CQWkegPT.css","./rMFk2MWD.js","./F08Scale.BpzZvmvN.css","./C3HTZYc3.js","./F09Pad.CWHCg9_O.css","./d5koisEt.js","./F10Overlay.DFJ7praW.css","./BA9oZe-6.js","./F11Audio.BIr-z-aW.css","./Duh0f1iR.js","./F12Volume.CceDY2a2.css","./C9iv3TQj.js","./F13Subtitle.BEyJ7iGq.css","./Mh5jlWTB.js","./F14Screenshot.B4m5HqwK.css","./BKsvAmyK.js","./F15Thumbnail.Cp1_adZz.css","./aQUQjMBK.js","./F16Concat.DV1TCUCH.css","./DCsdEwt4.js","./F17Streaming.Ck3vKj2U.css","./iHah9uBW.js","./F18HardwareAccel.Bm7ZyZEp.css","./BC2fkkb4.js","./F19Drawtext.DAaBmUDe.css","./C12GmNXK.js","./F20Fade.14M1wq0D.css","./C1wiL5wz.js","./F21ColorSpace.BpGn_OKA.css","./Cjo4_Zqs.js","./F22Batch.DRcLjA1y.css","./Dx7EOokD.js","./F23Gif.6ooqZvLd.css","./CkZdm-cF.js","./F24Metadata.DTEa0e0M.css","./DUmpYuln.js","./J01TypesEquality.BKLr9MMv.css","./pZs8ZgGe.js","./CLdEvsQ8.js","./rwTfypNC.js","./DdxU_VRO.js","./Kg97bJJ1.js","./DtHr3JWb.js","./BNvU1Fqy.js","./DG_ILKFr.js","./CHb-Zf7I.js","./DKWBseyI.js","./TYy51dWj.js","./Bgvn3o3n.js","./Di9YG3CZ.js","./CXOQ1C7V.js","./C6pDKs7l.js","./DKf8IXPE.js","./CbF6zQth.js","./DS5JBbYs.js","./D7IQGWuT.js","./9qoFKUDB.js","./BRpw41Lv.js","./DF1uawfu.js","./2BZ5mlJd.js","./BgxZQRk8.js","./J25FetchApi.nagUTWq-.css","./DhVUi-Tl.js","./J26WebStorage.Ceupw2QG.css","./C9v9k0zO.js","./J27WebSocket.CBDefkB8.css","./Dc8Yo9X2.js","./J28AbortController.nw9ymeLs.css","./UTSFQL9A.js","./K01AppEntry.DJO3DWhG.css","./BCD_SsHe.js","./Chkijahx.js","./BixJTRYq.js","./ljcYlqJ_.js","./xnuf4FqZ.js","./Dy15jZkw.js","./sPH0P2Fk.js","./DxZHfFOn.js","./CmkSunIm.js","./k0ttAr-c.js","./BkHLQtHi.js","./B4-stupD.js","./C-e6IkhZ.js","./4Q7aMgLv.js","./DV2lB1_m.js","./Bjfz7Ycg.js","./D2Lm-FeE.js","./CYv1JPYk.js","./CRW6e1LC.js","./eEcjAU2b.js","./BP7NKiUA.js","./K22CustomVModel.BfsoMsof.css","./Cv0wo8As.js","./K23ErrorHandling.BBDAzpGD.css","./DuMRG3tn.js","./K24PluginDev.B2RcOMp7.css","./BxhcZKSC.js","./K25ShallowReactivity.x6KrVa6C.css","./D53qsUMN.js","./K26EffectScope.CQsf96Nb.css","./CWkPUY7p.js","./K27AttributeForwarding.MDuhOPRv.css","./CV2f5OAo.js","./418rSBWb.js","./K28SearchPanel.B0K_vGzp.css","./K28ComponentExpose.CNA844cz.css","./Bg9J-OIP.js","./K38DefineModel.DRIURGwL.css","./GOjS8-Ul.js","./L01LLMCall.B47wd5hW.css","./BJNYQhKt.js","./L02PromptTemplate.CTZUl02a.css","./C16mpDKt.js","./L03OutputParser.lDfjWyRX.css","./y-2rdBAz.js","./L04LCEL.Cz6FvXLp.css","./DMZLjA2J.js","./L05Chains.D_XTYm-l.css","./CUkjxJ6p.js","./L06DocSplitter.DzYpznpe.css","./BxB5r0uj.js","./L07VectorRetrieval.5jpAVwhH.css","./DkR5CQpQ.js","./L08Agent.BpEypL4o.css","./InBtdOV4.js","./L09Tools.CgZI7BU6.css","./DnVKYwyW.js","./L10Memory.D6xU9DVa.css","./BmbFxhto.js","./L11Callbacks.C0B72CvU.css","./KdFxN6dW.js","./L12QABot.Doe0hQfl.css","./D2koYGoJ.js","./L13Streaming.p-4yA74p.css","./CIzEyoPp.js","./L14Evaluation.B4mJUlTM.css","./aOC4VUVy.js","./L15StructuredOutput.DQb41v-0.css","./xH-SjNxf.js","./L16LangGraph.3bC-oeVz.css","./ZjQswPmR.js","./L17VectorStore.Dqu2lkjy.css","./Do7VFv26.js","./L18Deploy.Bt3-gwQV.css","./CB8_SqdZ.js","./L19RagPipeline.CblHvU0O.css","./BTScE6ZZ.js","./L20MultiModal.BcHwvNFw.css","./BMyQUHQf.js","./L21FunctionCalling.C94Ve6Wv.css","./DJh_PvRn.js","./L22PromptEngineering.D9JdJy5H.css","./BET2Hca2.js","./L23Guardrails.B5QBNi0_.css","./CHW3zojY.js","./CL1FT_Zg.js","./LlmArticle.D7_GvG-Q.css","./CG3lFmBL.js","./5r1csH0X.js","./BU3haQRJ.js","./BsVsPjiE.js","./C31JubLF.js","./C-4dV4Eg.js","./BU0dcxn1.js","./Bkey1qsy.js","./BaajooEO.js","./CaSIqSYR.js","./CjqOV44U.js","./QRzy2cjs.js","./uV_Aejwo.js","./TyEbFbII.js","./iUEDDOD8.js","./DFUxSE4j.js","./CWLL-NMz.js","./dldTNAzu.js","./CvIMZ98x.js","./CFL4Wv1o.js","./BMsJkRGm.js","./ZHHqACRe.js","./V1MMbcFA.js","./Dd6jZUCS.js","./DJRhvtIO.js","./B59tLDiI.js","./CcawJbbs.js","./DQUmYkC1.js","./BOOzCQdo.js","./DrkrkWV4.js","./DM9flCvl.js","./3XBpaV-Q.js","./N01ModulesDi.B2kelx9M.css","./DalDk0Zf.js","./N01ProjectStructure.DjHbhyUm.css","./CA453gFv.js","./N02ControllersRoutes.C8NUcxup.css","./U6lJhgme.js","./N02FileRouting.PHS1tZrr.css","./BmlN70se.js","./N03DynamicRoute.X3ivbbpm.css","./BtPWNtcQ.js","./N03PipesValidation.Bz8BDsSf.css","./Dnd1guFW.js","./N04GuardsJwt._WS7j6w2.css","./B9uB2Y8W.js","./N04Layouts.B4h47qv8.css","./D2IDajZP.js","./N05AutoImport.JlK-oPt6.css","./CsKEXoS5.js","./N05Interceptors.D9Jl5G71.css","./KfdEWx7b.js","./N06Composables.Bh0z_Szz.css","./CSbzCUsZ.js","./N06Middleware.DmKEaygc.css","./CRGjjwtB.js","./N07ExceptionFilter.Bb1F3Qvv.css","./B5ESz4yu.js","./N07UseFetch.cf3caHBz.css","./FcowGZom.js","./N08TypeOrmDb.CrK8Bul1.css","./DlfmIuiB.js","./N08UseAsyncData.Dcbb9xtQ.css","./DBWngE9h.js","./N09SSR.u-yIxUx8.css","./X_PVl6YK.js","./N09WebSocketGateway.VYvdBt9H.css","./D_d5I-P5.js","./N10ClientOnly.zrF53kwj.css","./Bap99lO3.js","./N10ScheduleTask.W2T2Pku7.css","./nvj4Z_fH.js","./N11ConfigEnv.DbDvfDAT.css","./D2cbm9XB.js","./N11Middleware.BJKRFC14.css","./ByOcHDW9.js","./N12Microservices.DF87G1q6.css","./BB4xE5Xk.js","./N12Plugins.DEvN4FDl.css","./Bv_swzS5.js","./N13UseState.CqlJnOCx.css","./DOAi1S43.js","./N14SEO.DmaeQQWS.css","./jwiyTxqO.js","./N15Nitro.BIXRX23j.css","./DI0uWrzb.js","./N16ApiRoutes.DlxoiR1B.css","./DPkoOsbN.js","./N17SSG.BLgC7k4o.css","./16z6qpqN.js","./N18RuntimeConfig.BXDq-byn.css","./B5fF2GFq.js","./N19ErrorHandling.BFALMMwN.css","./CbqkUo26.js","./N20Modules.BC05s4XS.css","./Cqc03dk-.js","./Hhvd03iW.js","./ReactJsDemo.D5TfnAZz.css","./D8q4TW6-.js","./-FAu0qha.js","./KsJm5vj8.js","./BPOZEjiq.js","./-uY4ynQj.js","./CKhA_qzp.js","./C6HJeA3i.js","./B1py1f8k.js","./DfAFBnU3.js","./DkMdaApC.js","./CEAy3Smi.js","./ChFfPLKs.js","./DbTevXsF.js","./J5iDPCWr.js","./CeUsaebE.js","./CZLQUc7P.js","./mC6_uK1S.js","./BI2KthJu.js","./xtlT0_3b.js","./DLj5OD5B.js","./CNNlV_Jq.js","./wbT0SP8n.js","./nO-74EEj.js","./DOsRQmNJ.js","./S01StateBoundaries.BjUzcrie.css","./uvIOE3RY.js","./hf4q9x8v.js","./D6byB6L_.js","./DvN5k3yt.js","./DHsH6o_4.js","./C12z-LoO.js","./D-o2Hdf5.js","./iY2UBwEy.js","./DVL1n34O.js","./BCSlDlLq.js","./aQBXWD9z.js","./ChjU0__V.js","./BII1K6MK.js","./C7ySJl80.js","./JbU5L3Or.js","./S95Q7LRB.js","./LXy68Aog.js","./Cp0ysiZN.js","./nXefjMDV.js","./BSz7LJgT.js","./S18PiniaGetters.RVQlREAz.css","./C_Ct6LrL.js","./S19PiniaActions.DJ_wd7x_.css","./xwulIi_i.js","./S20PiniaDevtools.BMSY2xB3.css","./DLEFOo85.js","./S21PiniaTesting.Fz7NN6Qe.css","./CNc2EHeW.js","./S22Recoil.CTx1Ynk-.css","./C23xG6E9.js","./S23Mobx.BEJm4aFJ.css","./CI-TIVBj.js","./zj04A-sB.js","./SC01VariablesNesting.Cj2MbnzH.css","./BZd-ub-q.js","./SC02Modules.BFhDwmYa.css","./BR7qLc1H.js","./SC03Mixins.CoiFBzug.css","./BPaCSLkA.js","./SC04Functions.m-e9cuTl.css","./JjYVOKS5.js","./SC05Collections.K0MVNWND.css","./DozfashH.js","./SC06Selectors.Cyrb1-rY.css","./BreJgUc2.js","./SC07Extend.Ke7jIEcc.css","./DIRy80Ue.js","./SC08Architecture.BzWKJ5Ae.css","./mc926Rwi.js","./SC09ValuesUnits.BdfGcU6_.css","./CwGEm93P.js","./SC10Math.BNodIy8B.css","./vHdtARto.js","./SC11Color.CWbWw4zl.css","./DJP_F1Kd.js","./SC12Configuration.gGpKVkF9.css","./BaST6dbo.js","./SC13AtRoot.CrCzA7H_.css","./BSBW09yJ.js","./SC14MediaQueries.CdmGh9Xp.css","./BgCy_67W.js","./SC15CustomProperties.D7toeKg4.css","./0NLSQok1.js","./SC16Diagnostics.5FUPXVMW.css","./B-ipOi6N.js","./T01TypeInference.DmuLgaDt.css","./DgV3Bd-0.js","./UipVcgYp.js","./D5-MNowt.js","./fWsJkEMn.js","./CwBG_ENo.js","./CIFxqRT3.js","./D8-hjHgH.js","./CgBb47hb.js","./BQQF-FNP.js","./Cxftvl8j.js","./BIHf-y8r.js","./CbJYdVDU.js","./B0UtlURP.js","./Bp4TRurM.js","./ZEdeJYfm.js","./nu4w3fnu.js","./BALoI7eg.js","./BPAEIUxa.js","./T19BrandedTypes.Dvih6FR9.css","./CQjcIcFc.js","./T20DiscriminatedUnion.DfnvCe4r.css","./BY9ZtOjG.js","./T21InferKeyword.Bo6bXtpH.css","./Ie-bokxE.js","./T22RecursiveTypes.C3kext_8.css","./BCg-xRdW.js","./T23TypeLevelProgramming.2yghEe6z.css","./ChkKJ6jn.js","./T24AsyncReturnType.Bz87Kamq.css","./BVkRDt8A.js","./TW01UtilityFirst.C_cJNQqR.css","./BVTCGDCn.js","./TW02Responsive.CPpy825Q.css","./B6e1Zx79.js","./TW03StateVariants.Bn7pmPe7.css","./rdlGh6wR.js","./TW04DarkMode.BA_8oGHM.css","./COGL4mBj.js","./TW05ThemeTokens.BwbRT4bP.css","./CVWW92os.js","./TW06ArbitraryValues.DP3Xt1EO.css","./CAlYYIpF.js","./TW07Layout.Db9LKQqd.css","./Dzumpjsu.js","./TW08ContainerQueries.D_1bY70S.css","./C8ZjoXm2.js","./TW09Installation.D5hcKRjh.css","./BdBv0lLh.js","./TW10Typography.udKe4mcY.css","./CDRRPqV1.js","./TW11SizingSpacing.BYYpKkda.css","./CCKtFJuw.js","./TW12BordersEffects.CdcykVnQ.css","./c1giNjXC.js","./TW13Motion.CN9ra26H.css","./CTwsZwq_.js","./TW14Forms.BBtwS4Y1.css","./ueM4_fw_.js","./TW15CustomUtilities.D0A91wub.css","./DwokXOsu.js","./TW16Production.CeHzPotf.css","./srP8JALZ.js","./TW17GridLayout.B9bJgVNY.css","./Bf1Pu43i.js","./TW18FlexGrid.BB6kyjHu.css","./DBsAZNoh.js","./TW19Interactivity.DQMfGLzG.css","./CjrlK2mb.js","./TW20Transform.CzgG9z4A.css","./DxfS2xdB.js","./TW21Filters.C3qe8ue1.css","./DwRebqdk.js","./TW22SVGIcons.D179MVlv.css","./BU3BXshW.js","./TW23Plugins.CXRQSa6e.css","./D3i9c9bA.js","./TW24Preset.rUaj9DUg.css","./DJt1Hm6W.js","./U01ProjectStructure.D4vkhZGi.css","./J3fFceAn.js","./U02ConditionalCompilation.ARW2Jb9m.css","./BvPk63mv.js","./U03PageLifecycle.Da1PAYnb.css","./Dy1prb0p.js","./U04DataBindingEvents.BgdPpf0I.css","./CsiKyGf1.js","./U05BuiltinComponents.JQuytiOM.css","./CLwl8v0Y.js","./U06ScrollSwiper.D4Bk3cyi.css","./B-VlzwV_.js","./U07Routing.DrizmVNL.css","./w6TUB6aD.js","./U08RpxUnits.Btg_gv8f.css","./CS_yfu2x.js","./U09Easycom.CUW47cK2.css","./DhJHbYoy.js","./U10RequestStorage.C5KXKS4_.css","./DvQZ3ci_.js","./U11PullRefresh.wU5z4NsB.css","./Bw-J14tG.js","./U12UiFeedback.DwPX7saE.css","./QcEhuK7C.js","./U13AppLifecycle.Dl6skS2t.css","./qQT1CPof.js","./U14CompositionApi.BCvLB3nO.css","./D-4wNn5j.js","./U15Subpackages.uHnJLfWy.css","./DvSMck0h.js","./V01Core.CejrCHEs.css","./zmTgku0c.js","./V02Config.BVxACVGS.css","./C5d4DiJI.js","./V03Plugins.D0jTpLbX.css","./CwoiOEJ8.js","./V04HMR.BM3MYahK.css","./B5zn5h21.js","./V05Env.EXSO2r-C.css","./BjgqEmFx.js","./V06Assets.CYkrLG1W.css","./CMc3crDF.js","./V07PreBundle.D0FcUF77.css","./B9MKb8G8.js","./V08Build.FFG-wgTI.css","./lTLH2eQ-.js","./V09MPA.kHMORU3m.css","./B0Meuudr.js","./V10Lib.DJu_MOel.css","./BpiIw8mU.js","./V11SSR.BIXU5bKq.css","./BtS8x0gQ.js","./V12CSS.MekC9QvA.css","./DYt_kTt7.js","./V13TypeScript.C2kABEoa.css","./IDPD4qfY.js","./V14Proxy.eh4dfOy7.css","./CdcxsLEm.js","./V15Perf.DtxnXAke.css","./CqbGns9B.js","./V16PluginDev.C06gWTHz.css","./De-5ZcIP.js","./V17DependencyPrebundle.4qbwq1lx.css","./Bs945cV_.js","./V18Esbuild.BsieqkWw.css","./pE1IIhcX.js","./V19RollupPlugin.CSUJ265m.css","./D_wAHjyO.js","./V20LibraryMode.57P36SNQ.css","./C6RNUTn5.js","./V21MultiPage.DIiHaLmn.css","./CDhu76k6.js","./MxM0Y8hN.js","./VF01FirstFlow.DrcpERlq.css","./DE8mv63Q.js","./VF02NodeTypes.BtRkjvGJ.css","./DIRGuSyj.js","./BqvnISCs.js","./VF03CanvasParts.CGSjovWa.css","./D_9Hixef.js","./VF04Handles.CAxiSXK5.css","./DpcMCSWQ.js","./VF05EdgeStyles.8G35bYC9.css","./ZOZP2YxN.js","./VF06CustomNodes.B4J2HTc8.css","./_c5TcKln.js","./VF07CustomEdges.CKer7Jb3.css","./_zQ0LoYE.js","./VF08Interactions.nD-pERK5.css","./Cr_1pbvh.js","./VF09StateManage.eFloDQ4C.css","./BRiei_fb.js","./VF10DragDrop.C7VqApF5.css","./DruER-gk.js","./VF11AutoLayout.Dva19SbR.css","./CgZxVsIQ.js","./VF12ReadonlyTheme.Cj0CK2oG.css","./D8fEYYY3.js","./W01WebGLContext.DpHeFVyw.css","./DU1Fms3O.js","./W02Shaders.C_PVkR5l.css","./ciWI3v26.js","./W03Buffers.CgFUB-zy.css","./CeSJzSDQ.js","./W04Attributes.Bnyj8JMZ.css","./DGC4C8uG.js","./W05Matrices.BUwGjCyE.css","./qP7ecwCp.js","./W06MVP.BwArGFrs.css","./D7OVyWbd.js","./W07Camera.94rbgQRa.css","./1O7jLyp6.js","./W08Textures.DW6Aomxl.css","./Bbx6zQKw.js","./W09TextureFilter.DhwLt2_t.css","./DOB628td.js","./W10MultiTexture.h6nSjSiX.css","./B6-4Lb05.js","./W11Lighting.qd3UtC2d.css","./Dd6zKz0E.js","./W12Phong.DvDO3EMZ.css","./4dFBUKwX.js","./W13Normals.DTpSFGFM.css","./CWQum3ZI.js","./W14FBO.HFafs0Xt.css","./Cmsxx-Qh.js","./W15Shadows.DZqLIAxV.css","./CdSnolfP.js","./W16PostProcess.BvjrpsDc.css","./BTY_QDUx.js","./W17WebGL2.hysMKMMS.css","./DhbDOq4i.js","./W18Instancing.DpMjTapY.css","./sB0LnDdZ.js","./W19Particles.CtXhMBBt.css","./B3LTskz4.js","./W20Performance.0QcIGNfb.css","./BjfaKQIL.js","./DNfO4ABJ.js","./WB01WhatIsWasm.CNludIL7.css","./D9CBCL3e.js","./WB02WatBinary.Dn5yGfmO.css","./Cz0xSc1R.js","./WB03ValueTypes.CjhQ2zIw.css","./Rcg8ANB-.js","./WB04Operators.D8Mb7JCB.css","./D51YCzQF.js","./WB05LinearMemory.DCSIPn1u.css","./9t_8WNF7.js","./WB06StringsInterop.ITLbVr7M.css","./diJ6eCv0.js","./WB07FunctionsLocals.DDFyBy8c.css","./BG27cGHv.js","./WB08ImportExportGlobals.DnbPM7B0.css","./Cu9NqEMC.js","./WB09JsInteropNumbers.BZSBa3pZ.css","./BOT_3a6F.js","./WB10FunctionTable.Qg2P3Tr1.css","./pmgdqlqH.js","./WB11ControlFlow.CztHXBQH.css","./XbUUTN0R.js","./WB12MemoryArrays.PntFPJZN.css","./DLhwLFs8.js","./WB13ImportCallbacks.C61wioSi.css","./04h0eFtj.js","./WB14ReferenceTypes.KesOAPK3.css","./CsEcx3LO.js","./WB15SharedMemoryAtomics.Cs7LYLKP.css","./CNqFWoyI.js","./WB16MultiThreading.CzgkE8Vz.css","./CxNItTar.js","./WB17Simd.BPrWdcj_.css","./_KM_Ss_Z.js","./WB18ExceptionHandling.Dgh_v6EE.css","./DtcGMftK.js","./WB19Performance.CkcQCGLw.css","./Cenx3tHI.js","./WB20ToolchainDeploy.Dw6qzZR_.css","./B8R2rFTZ.js","./X01ProjectStructure.DH2yL0UD.css","./BzANSiiZ.js","./X02FileRouting.DohdO1dH.css","./BWrImC1L.js","./X03Layouts.HKhc-gR-.css","./B-4MHULD.js","./X04DynamicRoutes.PRIUcDXW.css","./DB7wg1Hk.js","./X05ServerComponents.2ZZ1ADKA.css","./BiW2Imsz.js","./X06ClientComponents.D88HcTL5.css","./ClSjFpCb.js","./X07StaticDynamic.B43vOxDS.css","./Dw6lxWdf.js","./X08StreamingSuspense.B8FR65SQ.css","./BlFQAHZe.js","./X09DataFetching.B35ut4Pm.css","./B90nl2tc.js","./X10ServerActions.C03hwL8P.css","./DhPFk_1E.js","./X11RouteHandlers.YkvARYj6.css","./xfy3frS9.js","./X12Caching.DutmF0e6.css","./MeEblHqt.js","./X13ParallelRoutes.CFecDkd0.css","./DTyW-XBB.js","./X14InterceptingRoutes.DY-Iac0s.css","./DZ0UKKEC.js","./X15RouteGroups.BN9Hl67T.css","./BXMDz_zk.js","./X16LoadingError.DGEoG2dW.css","./bHov9n0i.js","./X17NextImage.BLV7Qps4.css","./C56t_k7B.js","./X18NextFont.Bhan5FkU.css","./CRL8Xcsm.js","./X19NextLink.XOxbnmgm.css","./BnpfAXRu.js","./X20Metadata.DfQyfoql.css","./Dd6b2QTB.js","./X21Middleware.DVWxo2zR.css","./Dz06BXoo.js","./X22EnvConfig.BuhdqA-n.css","./CiAkia2I.js","./X23I18n.DAH4H_LW.css","./CuZhJEK9.js","./X24Deployment.DRtnMf5H.css","./styles.CrAgLecC.css"])))=>i.map(i=>d[i]);
+import{Z as a,$ as t}from"./DutfXOOr.js";const n=Object.assign({"../../demos/C01Selectors.vue":()=>t(()=>import("./BR9hmdAY.js"),__vite__mapDeps([0,1,2,3]),import.meta.url).then(e=>e.default),"../../demos/C02BoxModel.vue":()=>t(()=>import("./CaAnWONc.js"),__vite__mapDeps([4,1,2,5]),import.meta.url).then(e=>e.default),"../../demos/C03Flexbox.vue":()=>t(()=>import("./C-qyS75N.js"),__vite__mapDeps([6,1,2,7]),import.meta.url).then(e=>e.default),"../../demos/C04Grid.vue":()=>t(()=>import("./DktlRRmE.js"),__vite__mapDeps([8,1,2,9]),import.meta.url).then(e=>e.default),"../../demos/C05Position.vue":()=>t(()=>import("./CvtiX-OO.js"),__vite__mapDeps([10,1,2,11]),import.meta.url).then(e=>e.default),"../../demos/C06Cascade.vue":()=>t(()=>import("./BWofwJwR.js"),__vite__mapDeps([12,1,2,13]),import.meta.url).then(e=>e.default),"../../demos/C07Variables.vue":()=>t(()=>import("./b-vrB7i4.js"),__vite__mapDeps([14,1,2,15]),import.meta.url).then(e=>e.default),"../../demos/C08Transition.vue":()=>t(()=>import("./Brswrlh3.js"),__vite__mapDeps([16,1,2,17]),import.meta.url).then(e=>e.default),"../../demos/C09MediaQuery.vue":()=>t(()=>import("./Di0XS_HO.js"),__vite__mapDeps([18,1,2,19]),import.meta.url).then(e=>e.default),"../../demos/C10Gradient.vue":()=>t(()=>import("./ipBspGG5.js"),__vite__mapDeps([20,1,2,21]),import.meta.url).then(e=>e.default),"../../demos/C11Filter.vue":()=>t(()=>import("./CnM8q2li.js"),__vite__mapDeps([22,1,2,23]),import.meta.url).then(e=>e.default),"../../demos/C12MathFunctions.vue":()=>t(()=>import("./BAjK1tXP.js"),__vite__mapDeps([24,1,2,25]),import.meta.url).then(e=>e.default),"../../demos/C13ViewportUnits.vue":()=>t(()=>import("./d6p-aFx9.js"),__vite__mapDeps([26,1,2,27]),import.meta.url).then(e=>e.default),"../../demos/C14ClipPath.vue":()=>t(()=>import("./ClAdvi6v.js"),__vite__mapDeps([28,1,2,29]),import.meta.url).then(e=>e.default),"../../demos/C15LogicalProperties.vue":()=>t(()=>import("./B8HW5dCZ.js"),__vite__mapDeps([30,1,2,31]),import.meta.url).then(e=>e.default),"../../demos/C16ContainerQuery.vue":()=>t(()=>import("./DHkx7q0j.js"),__vite__mapDeps([32,1,2,33]),import.meta.url).then(e=>e.default),"../../demos/C17StackingContext.vue":()=>t(()=>import("./Cs_uJgCN.js"),__vite__mapDeps([34,1,2,35]),import.meta.url).then(e=>e.default),"../../demos/C18FormattingContext.vue":()=>t(()=>import("./CZbDTfd8.js"),__vite__mapDeps([36,1,2,37]),import.meta.url).then(e=>e.default),"../../demos/C19BEM.vue":()=>t(()=>import("./Cl_7g2zF.js"),__vite__mapDeps([38,1,2,39]),import.meta.url).then(e=>e.default),"../../demos/C20Performance.vue":()=>t(()=>import("./BrEsjHHX.js"),__vite__mapDeps([40,1,2,41]),import.meta.url).then(e=>e.default),"../../demos/C21CascadeLayers.vue":()=>t(()=>import("./DeRHUSrD.js"),__vite__mapDeps([42,1,2,43]),import.meta.url).then(e=>e.default),"../../demos/C22HasSelector.vue":()=>t(()=>import("./KX_pNtia.js"),__vite__mapDeps([44,1,2,45]),import.meta.url).then(e=>e.default),"../../demos/C23ScrollSnap.vue":()=>t(()=>import("./arcQRiAd.js"),__vite__mapDeps([46,1,2,47]),import.meta.url).then(e=>e.default),"../../demos/C24AspectRatio.vue":()=>t(()=>import("./B7-pNAzp.js"),__vite__mapDeps([48,1,2,49]),import.meta.url).then(e=>e.default),"../../demos/CPP01ProgramStructure.vue":()=>t(()=>import("./DaoS20Oj.js"),__vite__mapDeps([50,1,2,51]),import.meta.url).then(e=>e.default),"../../demos/CPP02VariablesTypes.vue":()=>t(()=>import("./ZvB_GaPi.js"),__vite__mapDeps([52,1,2,53]),import.meta.url).then(e=>e.default),"../../demos/CPP03OperatorsExpressions.vue":()=>t(()=>import("./BuuLUBm6.js"),__vite__mapDeps([54,1,2,55]),import.meta.url).then(e=>e.default),"../../demos/CPP04ControlFlow.vue":()=>t(()=>import("./DqWNVJn8.js"),__vite__mapDeps([56,1,2,57]),import.meta.url).then(e=>e.default),"../../demos/CPP05Functions.vue":()=>t(()=>import("./CNiRp707.js"),__vite__mapDeps([58,1,2,59]),import.meta.url).then(e=>e.default),"../../demos/CPP06ArraysStrings.vue":()=>t(()=>import("./vphfGHuB.js"),__vite__mapDeps([60,1,2,61]),import.meta.url).then(e=>e.default),"../../demos/CPP07PointersReferences.vue":()=>t(()=>import("./K4goH_T4.js"),__vite__mapDeps([62,1,2,63]),import.meta.url).then(e=>e.default),"../../demos/CPP08DynamicMemory.vue":()=>t(()=>import("./C8aAMQme.js"),__vite__mapDeps([64,1,2,65]),import.meta.url).then(e=>e.default),"../../demos/CPP09ClassesObjects.vue":()=>t(()=>import("./srNbv2WN.js"),__vite__mapDeps([66,1,2,67]),import.meta.url).then(e=>e.default),"../../demos/CPP10CtorDtor.vue":()=>t(()=>import("./B_Jq9Tic.js"),__vite__mapDeps([68,1,2,69]),import.meta.url).then(e=>e.default),"../../demos/CPP11CopyControl.vue":()=>t(()=>import("./BEkwHjSV.js"),__vite__mapDeps([70,1,2,71]),import.meta.url).then(e=>e.default),"../../demos/CPP12Inheritance.vue":()=>t(()=>import("./ByPbC804.js"),__vite__mapDeps([72,1,2,73]),import.meta.url).then(e=>e.default),"../../demos/CPP13Polymorphism.vue":()=>t(()=>import("./B-2LteSz.js"),__vite__mapDeps([74,1,2,75]),import.meta.url).then(e=>e.default),"../../demos/CPP14OperatorOverloading.vue":()=>t(()=>import("./BNkraXJD.js"),__vite__mapDeps([76,1,2,77]),import.meta.url).then(e=>e.default),"../../demos/CPP15TemplatesBasics.vue":()=>t(()=>import("./DjalBuZE.js"),__vite__mapDeps([78,1,2,79]),import.meta.url).then(e=>e.default),"../../demos/CPP16StlSequenceContainers.vue":()=>t(()=>import("./CGPQi0fC.js"),__vite__mapDeps([80,1,2,81]),import.meta.url).then(e=>e.default),"../../demos/CPP17StlAssociativeContainers.vue":()=>t(()=>import("./BKJ90ZGi.js"),__vite__mapDeps([82,1,2,83]),import.meta.url).then(e=>e.default),"../../demos/CPP18IteratorsAlgorithms.vue":()=>t(()=>import("./-5NCpWPa.js"),__vite__mapDeps([84,1,2,85]),import.meta.url).then(e=>e.default),"../../demos/CPP19LambdaExpressions.vue":()=>t(()=>import("./SfP-CdIG.js"),__vite__mapDeps([86,1,2,87]),import.meta.url).then(e=>e.default),"../../demos/CPP20SmartPointers.vue":()=>t(()=>import("./BgSkVTvF.js"),__vite__mapDeps([88,1,2,89]),import.meta.url).then(e=>e.default),"../../demos/CPP21MoveSemantics.vue":()=>t(()=>import("./CSEAWZjg.js"),__vite__mapDeps([90,1,2,91]),import.meta.url).then(e=>e.default),"../../demos/CPP22RAII.vue":()=>t(()=>import("./Bs39W6Wh.js"),__vite__mapDeps([92,1,2,93]),import.meta.url).then(e=>e.default),"../../demos/CPP23ExceptionHandling.vue":()=>t(()=>import("./wG4ya3_1.js"),__vite__mapDeps([94,1,2,95]),import.meta.url).then(e=>e.default),"../../demos/CPP24FileIO.vue":()=>t(()=>import("./BqprBnJI.js"),__vite__mapDeps([96,1,2,97]),import.meta.url).then(e=>e.default),"../../demos/CPP25Concurrency.vue":()=>t(()=>import("./DdBA6tHG.js"),__vite__mapDeps([98,1,2,99]),import.meta.url).then(e=>e.default),"../../demos/CPP26ModernCppCore.vue":()=>t(()=>import("./dfuSWW0i.js"),__vite__mapDeps([100,1,2,101]),import.meta.url).then(e=>e.default),"../../demos/CPP27CompileTimeComputation.vue":()=>t(()=>import("./BP8Aw-Nf.js"),__vite__mapDeps([102,1,2,103]),import.meta.url).then(e=>e.default),"../../demos/CPP28Modules.vue":()=>t(()=>import("./1pJ9YRdC.js"),__vite__mapDeps([104,1,2,105]),import.meta.url).then(e=>e.default),"../../demos/CPP29DesignPatterns.vue":()=>t(()=>import("./Cbio5Jbz.js"),__vite__mapDeps([106,1,2,107]),import.meta.url).then(e=>e.default),"../../demos/CPP30CodingStandards.vue":()=>t(()=>import("./Ct0sN3hq.js"),__vite__mapDeps([108,1,2,109]),import.meta.url).then(e=>e.default),"../../demos/D01ModuleSystem.vue":()=>t(()=>import("./Ci6L-oj5.js"),__vite__mapDeps([110,1,2,111]),import.meta.url).then(e=>e.default),"../../demos/D02PathUrl.vue":()=>t(()=>import("./BKhPTlc0.js"),__vite__mapDeps([112,1,2]),import.meta.url).then(e=>e.default),"../../demos/D03FileSystem.vue":()=>t(()=>import("./CzjJbWZ0.js"),__vite__mapDeps([113,1,2]),import.meta.url).then(e=>e.default),"../../demos/D04EventEmitter.vue":()=>t(()=>import("./CpJ17y3z.js"),__vite__mapDeps([114,1,2]),import.meta.url).then(e=>e.default),"../../demos/D05Streams.vue":()=>t(()=>import("./DyCyQ-Hi.js"),__vite__mapDeps([115,1,2]),import.meta.url).then(e=>e.default),"../../demos/D06HttpServer.vue":()=>t(()=>import("./BTwgOdzx.js"),__vite__mapDeps([116,1,2]),import.meta.url).then(e=>e.default),"../../demos/D07ProcessEnv.vue":()=>t(()=>import("./CdvfUa_0.js"),__vite__mapDeps([117,1,2]),import.meta.url).then(e=>e.default),"../../demos/D08Concurrency.vue":()=>t(()=>import("./D5agyPog.js"),__vite__mapDeps([118,1,2]),import.meta.url).then(e=>e.default),"../../demos/D09ErrorLogging.vue":()=>t(()=>import("./B5UcUlUh.js"),__vite__mapDeps([119,1,2]),import.meta.url).then(e=>e.default),"../../demos/D10NodeTest.vue":()=>t(()=>import("./DAKX18aN.js"),__vite__mapDeps([120,1,2]),import.meta.url).then(e=>e.default),"../../demos/D11Security.vue":()=>t(()=>import("./94SuwFxz.js"),__vite__mapDeps([121,1,2]),import.meta.url).then(e=>e.default),"../../demos/D12PackageManagement.vue":()=>t(()=>import("./BOEaSxL8.js"),__vite__mapDeps([122,1,2]),import.meta.url).then(e=>e.default),"../../demos/D13ExpressFastify.vue":()=>t(()=>import("./DFGJsbSF.js"),__vite__mapDeps([123,1,2,124]),import.meta.url).then(e=>e.default),"../../demos/D14WebSocket.vue":()=>t(()=>import("./CHdh8Cct.js"),__vite__mapDeps([125,126,1,2,127]),import.meta.url).then(e=>e.default),"../../demos/D15Database.vue":()=>t(()=>import("./DCNa3kYb.js"),__vite__mapDeps([128,1,2]),import.meta.url).then(e=>e.default),"../../demos/D16WorkerThreads.vue":()=>t(()=>import("./DcWkPD4q.js"),__vite__mapDeps([129,126,1,2,130]),import.meta.url).then(e=>e.default),"../../demos/D17EventLoop.vue":()=>t(()=>import("./DzdFUU7v.js"),__vite__mapDeps([131,1,2,132]),import.meta.url).then(e=>e.default),"../../demos/D18Buffer.vue":()=>t(()=>import("./CaNpCc_x.js"),__vite__mapDeps([133,1,2,134]),import.meta.url).then(e=>e.default),"../../demos/D19ChildProcess.vue":()=>t(()=>import("./B3rga3gC.js"),__vite__mapDeps([135,126,1,2,136]),import.meta.url).then(e=>e.default),"../../demos/D20Cluster.vue":()=>t(()=>import("./DVqG6udf.js"),__vite__mapDeps([137,1,2,126,138]),import.meta.url).then(e=>e.default),"../../demos/D21Crypto.vue":()=>t(()=>import("./DHJxVKQf.js"),__vite__mapDeps([139,1,2,140]),import.meta.url).then(e=>e.default),"../../demos/D22PerfHooks.vue":()=>t(()=>import("./CPrIbf7g.js"),__vite__mapDeps([141,1,2,142]),import.meta.url).then(e=>e.default),"../../demos/D23Https.vue":()=>t(()=>import("./B_K9HZ0K.js"),__vite__mapDeps([143,1,2,144]),import.meta.url).then(e=>e.default),"../../demos/D24Cli.vue":()=>t(()=>import("./DJa6mWsh.js"),__vite__mapDeps([145,1,2,146]),import.meta.url).then(e=>e.default),"../../demos/D25Timers.vue":()=>t(()=>import("./BhttZz2_.js"),__vite__mapDeps([147,126,1,2,148]),import.meta.url).then(e=>e.default),"../../demos/D26NetTcp.vue":()=>t(()=>import("./BntqxfUT.js"),__vite__mapDeps([149,1,2,150]),import.meta.url).then(e=>e.default),"../../demos/D27Zlib.vue":()=>t(()=>import("./Qfn-AYfh.js"),__vite__mapDeps([151,1,2,152]),import.meta.url).then(e=>e.default),"../../demos/D28Os.vue":()=>t(()=>import("./6TeVMW8H.js"),__vite__mapDeps([153,1,2,154]),import.meta.url).then(e=>e.default),"../../demos/D29Dns.vue":()=>t(()=>import("./CIj564XD.js"),__vite__mapDeps([155,1,2,156]),import.meta.url).then(e=>e.default),"../../demos/D30Readline.vue":()=>t(()=>import("./C8s6noZz.js"),__vite__mapDeps([157,1,2,158]),import.meta.url).then(e=>e.default),"../../demos/E01Button.vue":()=>t(()=>import("./DZC4_CZS.js"),__vite__mapDeps([159,160,1,2,161,162,163,164]),import.meta.url).then(e=>e.default),"../../demos/E02Form.vue":()=>t(()=>import("./53xhp10y.js"),__vite__mapDeps([165,1,2,160,166,167,168,162,169,170,171,172,173,174,175,161,163,164,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196]),import.meta.url).then(e=>e.default),"../../demos/E03Table.vue":()=>t(()=>import("./BrWUIokz.js"),__vite__mapDeps([197,170,160,1,2,171,169,172,162,173,174,175,161,163,164,187,184,185,180,181,182,177,183,168,191,166,195,190,192,193]),import.meta.url).then(e=>e.default),"../../demos/E04Dialog.vue":()=>t(()=>import("./CZjxwmZ0.js"),__vite__mapDeps([198,170,160,1,2,171,169,172,162,173,174,175,161,163,164,199,188,182,181,177,200,201,202,189,190,196]),import.meta.url).then(e=>e.default),"../../demos/E05Message.vue":()=>t(()=>import("./B8_yYXKJ.js"),__vite__mapDeps([203,161,160,1,2,162,163,164,196,173,181,169,177,202,189,190,199,188,172,182,170,171,174,175]),import.meta.url).then(e=>e.default),"../../demos/E06Popover.vue":()=>t(()=>import("./B_tMiSmO.js"),__vite__mapDeps([204,170,160,1,2,171,169,172,162,173,174,175,161,163,164,180,181,182,177,183,205]),import.meta.url).then(e=>e.default),"../../demos/E07Dropdown.vue":()=>t(()=>import("./IwAZNaYB.js"),__vite__mapDeps([206,160,1,2,161,162,163,164,177,180,174,175,169,181,182,183,184,185,205,166,201,196,173]),import.meta.url).then(e=>e.default),"../../demos/E08Tabs.vue":()=>t(()=>import("./CIIhMn5T.js"),__vite__mapDeps([207,161,160,1,2,162,163,164,187,181,169,171,208,179,172,173,185,209,178,183,189,190,193,168,175,196]),import.meta.url).then(e=>e.default),"../../demos/E09Pagination.vue":()=>t(()=>import("./Cwg6LWHi.js"),__vite__mapDeps([210,187,160,1,2,171,173,162,176,177,178,166,169,179,180,174,175,181,182,183,164,184,185,186,188,172,170,189,190,191]),import.meta.url).then(e=>e.default),"../../demos/E10Upload.vue":()=>t(()=>import("./Cq4UVnHj.js"),__vite__mapDeps([211,160,1,2,173,212,169,167,168,196,163,164,181]),import.meta.url).then(e=>e.default),"../../demos/E11Cascader.vue":()=>t(()=>import("./C974duk5.js"),__vite__mapDeps([213,160,1,2,181,169,171,170,172,162,173,174,175,164,180,182,177,183,184,185,186,187,209,188,192,193,168,189,190,167]),import.meta.url).then(e=>e.default),"../../demos/E12Tooltip.vue":()=>t(()=>import("./BFho3yyi.js"),__vite__mapDeps([214,180,160,1,2,162,174,175,169,181,182,177,183,164,161,163]),import.meta.url).then(e=>e.default),"../../demos/E13DatePicker.vue":()=>t(()=>import("./CfysQ-G-.js"),__vite__mapDeps([215,187,160,1,2,194,171,181,169,170,172,162,173,174,175,164,180,182,177,183,161,163,186,184,185,195,190,193,168]),import.meta.url).then(e=>e.default),"../../demos/E14Tree.vue":()=>t(()=>import("./mMEkiGLZ.js"),__vite__mapDeps([216,170,160,1,2,171,169,172,162,173,174,175,187,177,192,193,168,181]),import.meta.url).then(e=>e.default),"../../demos/E15Drawer.vue":()=>t(()=>import("./3v1yLvPz.js"),__vite__mapDeps([217,170,160,1,2,171,169,172,162,173,174,175,161,163,164,187,179,182,181,177,199,188,200,196]),import.meta.url).then(e=>e.default),"../../demos/E16Steps.vue":()=>t(()=>import("./tKUil6v-.js"),__vite__mapDeps([218,161,160,1,2,162,163,164,171,208,179]),import.meta.url).then(e=>e.default),"../../demos/E17Transfer.vue":()=>t(()=>import("./DT-4xNc4.js"),__vite__mapDeps([219,160,1,2,162,161,163,164,171,173,170,169,172,174,175,192,193,168]),import.meta.url).then(e=>e.default),"../../demos/E18Result.vue":()=>t(()=>import("./DxBp2RfT.js"),__vite__mapDeps([220,161,160,1,2,162,163,164]),import.meta.url).then(e=>e.default),"../../demos/E19Progress.vue":()=>t(()=>import("./CenVIcOe.js"),__vite__mapDeps([221,161,160,1,2,162,163,164,212]),import.meta.url).then(e=>e.default),"../../demos/E20Skeleton.vue":()=>t(()=>import("./DVNb_scd.js"),__vite__mapDeps([222,161,160,1,2,162,163,164,187]),import.meta.url).then(e=>e.default),"../../demos/F01Basics.vue":()=>t(()=>import("./U6xjNNjh.js"),__vite__mapDeps([223,1,2,224]),import.meta.url).then(e=>e.default),"../../demos/F02FormatConversion.vue":()=>t(()=>import("./C0MYwY3h.js"),__vite__mapDeps([225,1,2,226]),import.meta.url).then(e=>e.default),"../../demos/F03VideoInfo.vue":()=>t(()=>import("./Byk0GWnj.js"),__vite__mapDeps([227,1,2,228]),import.meta.url).then(e=>e.default),"../../demos/F04Resolution.vue":()=>t(()=>import("./C1TAM7BR.js"),__vite__mapDeps([229,1,2,230]),import.meta.url).then(e=>e.default),"../../demos/F05Bitrate.vue":()=>t(()=>import("./Blb3tFJ4.js"),__vite__mapDeps([231,1,2,232]),import.meta.url).then(e=>e.default),"../../demos/F06Framerate.vue":()=>t(()=>import("./uYc_nj0F.js"),__vite__mapDeps([233,1,2,234]),import.meta.url).then(e=>e.default),"../../demos/F07Crop.vue":()=>t(()=>import("./DqM9tGJJ.js"),__vite__mapDeps([235,1,2,236]),import.meta.url).then(e=>e.default),"../../demos/F08Scale.vue":()=>t(()=>import("./rMFk2MWD.js"),__vite__mapDeps([237,1,2,238]),import.meta.url).then(e=>e.default),"../../demos/F09Pad.vue":()=>t(()=>import("./C3HTZYc3.js"),__vite__mapDeps([239,1,2,240]),import.meta.url).then(e=>e.default),"../../demos/F10Overlay.vue":()=>t(()=>import("./d5koisEt.js"),__vite__mapDeps([241,1,2,242]),import.meta.url).then(e=>e.default),"../../demos/F11Audio.vue":()=>t(()=>import("./BA9oZe-6.js"),__vite__mapDeps([243,1,2,244]),import.meta.url).then(e=>e.default),"../../demos/F12Volume.vue":()=>t(()=>import("./Duh0f1iR.js"),__vite__mapDeps([245,1,2,246]),import.meta.url).then(e=>e.default),"../../demos/F13Subtitle.vue":()=>t(()=>import("./C9iv3TQj.js"),__vite__mapDeps([247,1,2,248]),import.meta.url).then(e=>e.default),"../../demos/F14Screenshot.vue":()=>t(()=>import("./Mh5jlWTB.js"),__vite__mapDeps([249,1,2,250]),import.meta.url).then(e=>e.default),"../../demos/F15Thumbnail.vue":()=>t(()=>import("./BKsvAmyK.js"),__vite__mapDeps([251,1,2,252]),import.meta.url).then(e=>e.default),"../../demos/F16Concat.vue":()=>t(()=>import("./aQUQjMBK.js"),__vite__mapDeps([253,1,2,254]),import.meta.url).then(e=>e.default),"../../demos/F17Streaming.vue":()=>t(()=>import("./DCsdEwt4.js"),__vite__mapDeps([255,1,2,256]),import.meta.url).then(e=>e.default),"../../demos/F18HardwareAccel.vue":()=>t(()=>import("./iHah9uBW.js"),__vite__mapDeps([257,1,2,258]),import.meta.url).then(e=>e.default),"../../demos/F19Drawtext.vue":()=>t(()=>import("./BC2fkkb4.js"),__vite__mapDeps([259,1,2,260]),import.meta.url).then(e=>e.default),"../../demos/F20Fade.vue":()=>t(()=>import("./C12GmNXK.js"),__vite__mapDeps([261,1,2,262]),import.meta.url).then(e=>e.default),"../../demos/F21ColorSpace.vue":()=>t(()=>import("./C1wiL5wz.js"),__vite__mapDeps([263,1,2,264]),import.meta.url).then(e=>e.default),"../../demos/F22Batch.vue":()=>t(()=>import("./Cjo4_Zqs.js"),__vite__mapDeps([265,1,2,266]),import.meta.url).then(e=>e.default),"../../demos/F23Gif.vue":()=>t(()=>import("./Dx7EOokD.js"),__vite__mapDeps([267,1,2,268]),import.meta.url).then(e=>e.default),"../../demos/F24Metadata.vue":()=>t(()=>import("./CkZdm-cF.js"),__vite__mapDeps([269,1,2,270]),import.meta.url).then(e=>e.default),"../../demos/J01TypesEquality.vue":()=>t(()=>import("./DUmpYuln.js"),__vite__mapDeps([271,1,2,272]),import.meta.url).then(e=>e.default),"../../demos/J02Closure.vue":()=>t(()=>import("./pZs8ZgGe.js"),__vite__mapDeps([273,1,2]),import.meta.url).then(e=>e.default),"../../demos/J03ArrayPipeline.vue":()=>t(()=>import("./CLdEvsQ8.js"),__vite__mapDeps([274,1,2]),import.meta.url).then(e=>e.default),"../../demos/J04ObjectOperations.vue":()=>t(()=>import("./rwTfypNC.js"),__vite__mapDeps([275,1,2]),import.meta.url).then(e=>e.default),"../../demos/J05ThisBinding.vue":()=>t(()=>import("./DdxU_VRO.js"),__vite__mapDeps([276,1,2]),import.meta.url).then(e=>e.default),"../../demos/J06PrototypeClass.vue":()=>t(()=>import("./Kg97bJJ1.js"),__vite__mapDeps([277,1,2]),import.meta.url).then(e=>e.default),"../../demos/J07PromiseCombinators.vue":()=>t(()=>import("./DtHr3JWb.js"),__vite__mapDeps([278,1,2]),import.meta.url).then(e=>e.default),"../../demos/J08EventLoop.vue":()=>t(()=>import("./BNvU1Fqy.js"),__vite__mapDeps([279,1,2]),import.meta.url).then(e=>e.default),"../../demos/J09Modules.vue":()=>t(()=>import("./DG_ILKFr.js"),__vite__mapDeps([280,1,2]),import.meta.url).then(e=>e.default),"../../demos/J10EventDelegation.vue":()=>t(()=>import("./CHb-Zf7I.js"),__vite__mapDeps([281,1,2]),import.meta.url).then(e=>e.default),"../../demos/J11AsyncAwait.vue":()=>t(()=>import("./DKWBseyI.js"),__vite__mapDeps([282,1,2]),import.meta.url).then(e=>e.default),"../../demos/J12IteratorsGenerators.vue":()=>t(()=>import("./TYy51dWj.js"),__vite__mapDeps([283,1,2]),import.meta.url).then(e=>e.default),"../../demos/J13ProxyReflect.vue":()=>t(()=>import("./Bgvn3o3n.js"),__vite__mapDeps([284,1,2]),import.meta.url).then(e=>e.default),"../../demos/J14MapSetWeakRef.vue":()=>t(()=>import("./Di9YG3CZ.js"),__vite__mapDeps([285,1,2]),import.meta.url).then(e=>e.default),"../../demos/J15RegExp.vue":()=>t(()=>import("./CXOQ1C7V.js"),__vite__mapDeps([286,1,2]),import.meta.url).then(e=>e.default),"../../demos/J16ErrorHandling.vue":()=>t(()=>import("./C6pDKs7l.js"),__vite__mapDeps([287,1,2]),import.meta.url).then(e=>e.default),"../../demos/J17OptionalNullish.vue":()=>t(()=>import("./DKf8IXPE.js"),__vite__mapDeps([288,1,2]),import.meta.url).then(e=>e.default),"../../demos/J18HigherOrder.vue":()=>t(()=>import("./CbF6zQth.js"),__vite__mapDeps([289,1,2]),import.meta.url).then(e=>e.default),"../../demos/J19TemplateLiterals.vue":()=>t(()=>import("./DS5JBbYs.js"),__vite__mapDeps([290,1,2]),import.meta.url).then(e=>e.default),"../../demos/J20JsonClone.vue":()=>t(()=>import("./D7IQGWuT.js"),__vite__mapDeps([291,1,2]),import.meta.url).then(e=>e.default),"../../demos/J21PropertyDescriptors.vue":()=>t(()=>import("./9qoFKUDB.js"),__vite__mapDeps([292,1,2]),import.meta.url).then(e=>e.default),"../../demos/J22Symbol.vue":()=>t(()=>import("./BRpw41Lv.js"),__vite__mapDeps([293,1,2]),import.meta.url).then(e=>e.default),"../../demos/J23StringIntl.vue":()=>t(()=>import("./DF1uawfu.js"),__vite__mapDeps([294,1,2]),import.meta.url).then(e=>e.default),"../../demos/J24LogicalBitwise.vue":()=>t(()=>import("./2BZ5mlJd.js"),__vite__mapDeps([295,1,2]),import.meta.url).then(e=>e.default),"../../demos/J25FetchApi.vue":()=>t(()=>import("./BgxZQRk8.js"),__vite__mapDeps([296,1,2,297]),import.meta.url).then(e=>e.default),"../../demos/J26WebStorage.vue":()=>t(()=>import("./DhVUi-Tl.js"),__vite__mapDeps([298,1,2,299]),import.meta.url).then(e=>e.default),"../../demos/J27WebSocket.vue":()=>t(()=>import("./C9v9k0zO.js"),__vite__mapDeps([300,1,2,301]),import.meta.url).then(e=>e.default),"../../demos/J28AbortController.vue":()=>t(()=>import("./Dc8Yo9X2.js"),__vite__mapDeps([302,1,2,303]),import.meta.url).then(e=>e.default),"../../demos/K01AppEntry.vue":()=>t(()=>import("./UTSFQL9A.js"),__vite__mapDeps([304,1,2,305]),import.meta.url).then(e=>e.default),"../../demos/K02TemplateSyntax.vue":()=>t(()=>import("./BCD_SsHe.js"),__vite__mapDeps([306,1,2]),import.meta.url).then(e=>e.default),"../../demos/K03Reactivity.vue":()=>t(()=>import("./Chkijahx.js"),__vite__mapDeps([307,1,2]),import.meta.url).then(e=>e.default),"../../demos/K04ComputedWatch.vue":()=>t(()=>import("./BixJTRYq.js"),__vite__mapDeps([308,1,2]),import.meta.url).then(e=>e.default),"../../demos/K05ConditionList.vue":()=>t(()=>import("./ljcYlqJ_.js"),__vite__mapDeps([309,1,2]),import.meta.url).then(e=>e.default),"../../demos/K06FormModel.vue":()=>t(()=>import("./xnuf4FqZ.js"),__vite__mapDeps([310,1,2]),import.meta.url).then(e=>e.default),"../../demos/K07ComponentBasics.vue":()=>t(()=>import("./Dy15jZkw.js"),__vite__mapDeps([311,1,2]),import.meta.url).then(e=>e.default),"../../demos/K08Slots.vue":()=>t(()=>import("./sPH0P2Fk.js"),__vite__mapDeps([312,1,2]),import.meta.url).then(e=>e.default),"../../demos/K09Communication.vue":()=>t(()=>import("./DxZHfFOn.js"),__vite__mapDeps([313,1,2]),import.meta.url).then(e=>e.default),"../../demos/K10LifecycleRef.vue":()=>t(()=>import("./CmkSunIm.js"),__vite__mapDeps([314,1,2]),import.meta.url).then(e=>e.default),"../../demos/K11Composable.vue":()=>t(()=>import("./k0ttAr-c.js"),__vite__mapDeps([315,1,2]),import.meta.url).then(e=>e.default),"../../demos/K12Routing.vue":()=>t(()=>import("./BkHLQtHi.js"),__vite__mapDeps([316,1,2]),import.meta.url).then(e=>e.default),"../../demos/K13Pinia.vue":()=>t(()=>import("./B4-stupD.js"),__vite__mapDeps([317,1,2]),import.meta.url).then(e=>e.default),"../../demos/K14AsyncState.vue":()=>t(()=>import("./C-e6IkhZ.js"),__vite__mapDeps([318,1,2]),import.meta.url).then(e=>e.default),"../../demos/K15DynamicKeepAlive.vue":()=>t(()=>import("./4Q7aMgLv.js"),__vite__mapDeps([319,1,2]),import.meta.url).then(e=>e.default),"../../demos/K16Transition.vue":()=>t(()=>import("./DV2lB1_m.js"),__vite__mapDeps([320,1,2]),import.meta.url).then(e=>e.default),"../../demos/K17Directive.vue":()=>t(()=>import("./Bjfz7Ycg.js"),__vite__mapDeps([321,1,2]),import.meta.url).then(e=>e.default),"../../demos/K18Teleport.vue":()=>t(()=>import("./D2Lm-FeE.js"),__vite__mapDeps([322,1,2]),import.meta.url).then(e=>e.default),"../../demos/K19Suspense.vue":()=>t(()=>import("./CYv1JPYk.js"),__vite__mapDeps([323,1,2]),import.meta.url).then(e=>e.default),"../../demos/K20Performance.vue":()=>t(()=>import("./CRW6e1LC.js"),__vite__mapDeps([324,1,2]),import.meta.url).then(e=>e.default),"../../demos/K21TestingMaintainability.vue":()=>t(()=>import("./eEcjAU2b.js"),__vite__mapDeps([325,1,2]),import.meta.url).then(e=>e.default),"../../demos/K22CustomVModel.vue":()=>t(()=>import("./BP7NKiUA.js"),__vite__mapDeps([326,1,2,327]),import.meta.url).then(e=>e.default),"../../demos/K23ErrorHandling.vue":()=>t(()=>import("./Cv0wo8As.js"),__vite__mapDeps([328,1,2,329]),import.meta.url).then(e=>e.default),"../../demos/K24PluginDev.vue":()=>t(()=>import("./DuMRG3tn.js"),__vite__mapDeps([330,1,2,331]),import.meta.url).then(e=>e.default),"../../demos/K25ShallowReactivity.vue":()=>t(()=>import("./BxhcZKSC.js"),__vite__mapDeps([332,1,2,333]),import.meta.url).then(e=>e.default),"../../demos/K26EffectScope.vue":()=>t(()=>import("./D53qsUMN.js"),__vite__mapDeps([334,1,2,126,335]),import.meta.url).then(e=>e.default),"../../demos/K27AttributeForwarding.vue":()=>t(()=>import("./CWkPUY7p.js"),__vite__mapDeps([336,1,2,337]),import.meta.url).then(e=>e.default),"../../demos/K28ComponentExpose.vue":()=>t(()=>import("./CV2f5OAo.js"),__vite__mapDeps([338,339,1,2,340,341]),import.meta.url).then(e=>e.default),"../../demos/K28SearchPanel.vue":()=>t(()=>import("./418rSBWb.js"),__vite__mapDeps([339,1,2,340]),import.meta.url).then(e=>e.default),"../../demos/K38DefineModel.vue":()=>t(()=>import("./Bg9J-OIP.js"),__vite__mapDeps([342,1,2,343]),import.meta.url).then(e=>e.default),"../../demos/L01LLMCall.vue":()=>t(()=>import("./GOjS8-Ul.js"),__vite__mapDeps([344,1,2,126,345]),import.meta.url).then(e=>e.default),"../../demos/L02PromptTemplate.vue":()=>t(()=>import("./BJNYQhKt.js"),__vite__mapDeps([346,1,2,347]),import.meta.url).then(e=>e.default),"../../demos/L03OutputParser.vue":()=>t(()=>import("./C16mpDKt.js"),__vite__mapDeps([348,1,2,349]),import.meta.url).then(e=>e.default),"../../demos/L04LCEL.vue":()=>t(()=>import("./y-2rdBAz.js"),__vite__mapDeps([350,1,2,351]),import.meta.url).then(e=>e.default),"../../demos/L05Chains.vue":()=>t(()=>import("./DMZLjA2J.js"),__vite__mapDeps([352,1,2,353]),import.meta.url).then(e=>e.default),"../../demos/L06DocSplitter.vue":()=>t(()=>import("./CUkjxJ6p.js"),__vite__mapDeps([354,1,2,355]),import.meta.url).then(e=>e.default),"../../demos/L07VectorRetrieval.vue":()=>t(()=>import("./BxB5r0uj.js"),__vite__mapDeps([356,1,2,357]),import.meta.url).then(e=>e.default),"../../demos/L08Agent.vue":()=>t(()=>import("./DkR5CQpQ.js"),__vite__mapDeps([358,1,2,359]),import.meta.url).then(e=>e.default),"../../demos/L09Tools.vue":()=>t(()=>import("./InBtdOV4.js"),__vite__mapDeps([360,1,2,361]),import.meta.url).then(e=>e.default),"../../demos/L10Memory.vue":()=>t(()=>import("./DnVKYwyW.js"),__vite__mapDeps([362,1,2,363]),import.meta.url).then(e=>e.default),"../../demos/L11Callbacks.vue":()=>t(()=>import("./BmbFxhto.js"),__vite__mapDeps([364,1,2,365]),import.meta.url).then(e=>e.default),"../../demos/L12QABot.vue":()=>t(()=>import("./KdFxN6dW.js"),__vite__mapDeps([366,1,2,367]),import.meta.url).then(e=>e.default),"../../demos/L13Streaming.vue":()=>t(()=>import("./D2koYGoJ.js"),__vite__mapDeps([368,1,2,369]),import.meta.url).then(e=>e.default),"../../demos/L14Evaluation.vue":()=>t(()=>import("./CIzEyoPp.js"),__vite__mapDeps([370,1,2,371]),import.meta.url).then(e=>e.default),"../../demos/L15StructuredOutput.vue":()=>t(()=>import("./aOC4VUVy.js"),__vite__mapDeps([372,1,2,373]),import.meta.url).then(e=>e.default),"../../demos/L16LangGraph.vue":()=>t(()=>import("./xH-SjNxf.js"),__vite__mapDeps([374,1,2,375]),import.meta.url).then(e=>e.default),"../../demos/L17VectorStore.vue":()=>t(()=>import("./ZjQswPmR.js"),__vite__mapDeps([376,1,2,377]),import.meta.url).then(e=>e.default),"../../demos/L18Deploy.vue":()=>t(()=>import("./Do7VFv26.js"),__vite__mapDeps([378,1,2,379]),import.meta.url).then(e=>e.default),"../../demos/L19RagPipeline.vue":()=>t(()=>import("./CB8_SqdZ.js"),__vite__mapDeps([380,1,2,126,381]),import.meta.url).then(e=>e.default),"../../demos/L20MultiModal.vue":()=>t(()=>import("./BTScE6ZZ.js"),__vite__mapDeps([382,1,2,383]),import.meta.url).then(e=>e.default),"../../demos/L21FunctionCalling.vue":()=>t(()=>import("./BMyQUHQf.js"),__vite__mapDeps([384,1,2,385]),import.meta.url).then(e=>e.default),"../../demos/L22PromptEngineering.vue":()=>t(()=>import("./DJh_PvRn.js"),__vite__mapDeps([386,126,1,2,387]),import.meta.url).then(e=>e.default),"../../demos/L23Guardrails.vue":()=>t(()=>import("./BET2Hca2.js"),__vite__mapDeps([388,1,2,389]),import.meta.url).then(e=>e.default),"../../demos/LLM01Vector.vue":()=>t(()=>import("./CHW3zojY.js"),__vite__mapDeps([390,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM02Ops.vue":()=>t(()=>import("./CG3lFmBL.js"),__vite__mapDeps([393,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM03Matrix.vue":()=>t(()=>import("./5r1csH0X.js"),__vite__mapDeps([394,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM04Transform.vue":()=>t(()=>import("./BU3haQRJ.js"),__vite__mapDeps([395,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM05Gradient.vue":()=>t(()=>import("./BsVsPjiE.js"),__vite__mapDeps([396,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM06Prob.vue":()=>t(()=>import("./C31JubLF.js"),__vite__mapDeps([397,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM07Neuron.vue":()=>t(()=>import("./C-4dV4Eg.js"),__vite__mapDeps([398,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM08Activation.vue":()=>t(()=>import("./BU0dcxn1.js"),__vite__mapDeps([399,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM09Network.vue":()=>t(()=>import("./Bkey1qsy.js"),__vite__mapDeps([400,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM10Loss.vue":()=>t(()=>import("./BaajooEO.js"),__vite__mapDeps([401,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM11Softmax.vue":()=>t(()=>import("./CaSIqSYR.js"),__vite__mapDeps([402,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM12Sgd.vue":()=>t(()=>import("./CjqOV44U.js"),__vite__mapDeps([403,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM13Backprop.vue":()=>t(()=>import("./QRzy2cjs.js"),__vite__mapDeps([404,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM14Ngram.vue":()=>t(()=>import("./uV_Aejwo.js"),__vite__mapDeps([405,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM15Word2Vec.vue":()=>t(()=>import("./TyEbFbII.js"),__vite__mapDeps([406,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM16Ffnn.vue":()=>t(()=>import("./iUEDDOD8.js"),__vite__mapDeps([407,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM17Rnn.vue":()=>t(()=>import("./DFUxSE4j.js"),__vite__mapDeps([408,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM18Lstm.vue":()=>t(()=>import("./CWLL-NMz.js"),__vite__mapDeps([409,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM19Attention.vue":()=>t(()=>import("./dldTNAzu.js"),__vite__mapDeps([410,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM20Multihead.vue":()=>t(()=>import("./CvIMZ98x.js"),__vite__mapDeps([411,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM21Transformer.vue":()=>t(()=>import("./CFL4Wv1o.js"),__vite__mapDeps([412,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM22Tokenizer.vue":()=>t(()=>import("./BMsJkRGm.js"),__vite__mapDeps([413,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM23Arch.vue":()=>t(()=>import("./ZHHqACRe.js"),__vite__mapDeps([414,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM24Residual.vue":()=>t(()=>import("./V1MMbcFA.js"),__vite__mapDeps([415,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM25Training.vue":()=>t(()=>import("./Dd6jZUCS.js"),__vite__mapDeps([416,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM26Sparse.vue":()=>t(()=>import("./DJRhvtIO.js"),__vite__mapDeps([417,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM27Moe.vue":()=>t(()=>import("./B59tLDiI.js"),__vite__mapDeps([418,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM28Distill.vue":()=>t(()=>import("./CcawJbbs.js"),__vite__mapDeps([419,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM29Recap.vue":()=>t(()=>import("./DQUmYkC1.js"),__vite__mapDeps([420,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM30Frontier.vue":()=>t(()=>import("./BOOzCQdo.js"),__vite__mapDeps([421,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM31Transformer3D.vue":()=>t(()=>import("./DrkrkWV4.js"),__vite__mapDeps([422,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/LLM32AttentionPaper.vue":()=>t(()=>import("./DM9flCvl.js"),__vite__mapDeps([423,391,1,2,392]),import.meta.url).then(e=>e.default),"../../demos/N01ModulesDi.vue":()=>t(()=>import("./3XBpaV-Q.js"),__vite__mapDeps([424,1,2,425]),import.meta.url).then(e=>e.default),"../../demos/N01ProjectStructure.vue":()=>t(()=>import("./DalDk0Zf.js"),__vite__mapDeps([426,1,2,427]),import.meta.url).then(e=>e.default),"../../demos/N02ControllersRoutes.vue":()=>t(()=>import("./CA453gFv.js"),__vite__mapDeps([428,1,2,429]),import.meta.url).then(e=>e.default),"../../demos/N02FileRouting.vue":()=>t(()=>import("./U6lJhgme.js"),__vite__mapDeps([430,1,2,431]),import.meta.url).then(e=>e.default),"../../demos/N03DynamicRoute.vue":()=>t(()=>import("./BmlN70se.js"),__vite__mapDeps([432,1,2,433]),import.meta.url).then(e=>e.default),"../../demos/N03PipesValidation.vue":()=>t(()=>import("./BtPWNtcQ.js"),__vite__mapDeps([434,1,2,435]),import.meta.url).then(e=>e.default),"../../demos/N04GuardsJwt.vue":()=>t(()=>import("./Dnd1guFW.js"),__vite__mapDeps([436,1,2,437]),import.meta.url).then(e=>e.default),"../../demos/N04Layouts.vue":()=>t(()=>import("./B9uB2Y8W.js"),__vite__mapDeps([438,1,2,439]),import.meta.url).then(e=>e.default),"../../demos/N05AutoImport.vue":()=>t(()=>import("./D2IDajZP.js"),__vite__mapDeps([440,1,2,441]),import.meta.url).then(e=>e.default),"../../demos/N05Interceptors.vue":()=>t(()=>import("./CsKEXoS5.js"),__vite__mapDeps([442,1,2,443]),import.meta.url).then(e=>e.default),"../../demos/N06Composables.vue":()=>t(()=>import("./KfdEWx7b.js"),__vite__mapDeps([444,1,2,445]),import.meta.url).then(e=>e.default),"../../demos/N06Middleware.vue":()=>t(()=>import("./CSbzCUsZ.js"),__vite__mapDeps([446,1,2,447]),import.meta.url).then(e=>e.default),"../../demos/N07ExceptionFilter.vue":()=>t(()=>import("./CRGjjwtB.js"),__vite__mapDeps([448,1,2,449]),import.meta.url).then(e=>e.default),"../../demos/N07UseFetch.vue":()=>t(()=>import("./B5ESz4yu.js"),__vite__mapDeps([450,1,2,451]),import.meta.url).then(e=>e.default),"../../demos/N08TypeOrmDb.vue":()=>t(()=>import("./FcowGZom.js"),__vite__mapDeps([452,1,2,453]),import.meta.url).then(e=>e.default),"../../demos/N08UseAsyncData.vue":()=>t(()=>import("./DlfmIuiB.js"),__vite__mapDeps([454,1,2,455]),import.meta.url).then(e=>e.default),"../../demos/N09SSR.vue":()=>t(()=>import("./DBWngE9h.js"),__vite__mapDeps([456,1,2,457]),import.meta.url).then(e=>e.default),"../../demos/N09WebSocketGateway.vue":()=>t(()=>import("./X_PVl6YK.js"),__vite__mapDeps([458,1,2,459]),import.meta.url).then(e=>e.default),"../../demos/N10ClientOnly.vue":()=>t(()=>import("./D_d5I-P5.js"),__vite__mapDeps([460,1,2,461]),import.meta.url).then(e=>e.default),"../../demos/N10ScheduleTask.vue":()=>t(()=>import("./Bap99lO3.js"),__vite__mapDeps([462,1,2,463]),import.meta.url).then(e=>e.default),"../../demos/N11ConfigEnv.vue":()=>t(()=>import("./nvj4Z_fH.js"),__vite__mapDeps([464,1,2,465]),import.meta.url).then(e=>e.default),"../../demos/N11Middleware.vue":()=>t(()=>import("./D2cbm9XB.js"),__vite__mapDeps([466,1,2,467]),import.meta.url).then(e=>e.default),"../../demos/N12Microservices.vue":()=>t(()=>import("./ByOcHDW9.js"),__vite__mapDeps([468,1,2,469]),import.meta.url).then(e=>e.default),"../../demos/N12Plugins.vue":()=>t(()=>import("./BB4xE5Xk.js"),__vite__mapDeps([470,1,2,471]),import.meta.url).then(e=>e.default),"../../demos/N13UseState.vue":()=>t(()=>import("./Bv_swzS5.js"),__vite__mapDeps([472,1,2,473]),import.meta.url).then(e=>e.default),"../../demos/N14SEO.vue":()=>t(()=>import("./DOAi1S43.js"),__vite__mapDeps([474,1,2,475]),import.meta.url).then(e=>e.default),"../../demos/N15Nitro.vue":()=>t(()=>import("./jwiyTxqO.js"),__vite__mapDeps([476,1,2,477]),import.meta.url).then(e=>e.default),"../../demos/N16ApiRoutes.vue":()=>t(()=>import("./DI0uWrzb.js"),__vite__mapDeps([478,1,2,479]),import.meta.url).then(e=>e.default),"../../demos/N17SSG.vue":()=>t(()=>import("./DPkoOsbN.js"),__vite__mapDeps([480,1,2,481]),import.meta.url).then(e=>e.default),"../../demos/N18RuntimeConfig.vue":()=>t(()=>import("./16z6qpqN.js"),__vite__mapDeps([482,1,2,483]),import.meta.url).then(e=>e.default),"../../demos/N19ErrorHandling.vue":()=>t(()=>import("./B5fF2GFq.js"),__vite__mapDeps([484,1,2,485]),import.meta.url).then(e=>e.default),"../../demos/N20Modules.vue":()=>t(()=>import("./CbqkUo26.js"),__vite__mapDeps([486,1,2,487]),import.meta.url).then(e=>e.default),"../../demos/R01ComponentProps.vue":()=>t(()=>import("./Cqc03dk-.js"),__vite__mapDeps([488,489,1,2,490]),import.meta.url).then(e=>e.default),"../../demos/R02StateUpdates.vue":()=>t(()=>import("./D8q4TW6-.js"),__vite__mapDeps([491,489,1,2,490]),import.meta.url).then(e=>e.default),"../../demos/R03ListsKeys.vue":()=>t(()=>import("./-FAu0qha.js"),__vite__mapDeps([492,489,1,2,490]),import.meta.url).then(e=>e.default),"../../demos/R04ControlledForm.vue":()=>t(()=>import("./KsJm5vj8.js"),__vite__mapDeps([493,489,1,2,490]),import.meta.url).then(e=>e.default),"../../demos/R05EffectSync.vue":()=>t(()=>import("./BPOZEjiq.js"),__vite__mapDeps([494,489,1,2,490]),import.meta.url).then(e=>e.default),"../../demos/R06Reducer.vue":()=>t(()=>import("./-uY4ynQj.js"),__vite__mapDeps([495,489,1,2,490]),import.meta.url).then(e=>e.default),"../../demos/R07Context.vue":()=>t(()=>import("./CKhA_qzp.js"),__vite__mapDeps([496,489,1,2,490]),import.meta.url).then(e=>e.default),"../../demos/R08CustomHook.vue":()=>t(()=>import("./C6HJeA3i.js"),__vite__mapDeps([497,489,1,2,490]),import.meta.url).then(e=>e.default),"../../demos/R09RefDom.vue":()=>t(()=>import("./B1py1f8k.js"),__vite__mapDeps([498,489,1,2,490]),import.meta.url).then(e=>e.default),"../../demos/R10Memoization.vue":()=>t(()=>import("./DfAFBnU3.js"),__vite__mapDeps([499,489,1,2,490]),import.meta.url).then(e=>e.default),"../../demos/R11DeferredValue.vue":()=>t(()=>import("./DkMdaApC.js"),__vite__mapDeps([500,489,1,2,490]),import.meta.url).then(e=>e.default),"../../demos/R12ExternalStore.vue":()=>t(()=>import("./CEAy3Smi.js"),__vite__mapDeps([501,489,1,2,490]),import.meta.url).then(e=>e.default),"../../demos/R13Portal.vue":()=>t(()=>import("./ChFfPLKs.js"),__vite__mapDeps([502,489,1,2,490]),import.meta.url).then(e=>e.default),"../../demos/R14LazySuspense.vue":()=>t(()=>import("./DbTevXsF.js"),__vite__mapDeps([503,489,1,2,490]),import.meta.url).then(e=>e.default),"../../demos/R15ErrorBoundary.vue":()=>t(()=>import("./J5iDPCWr.js"),__vite__mapDeps([504,489,1,2,490]),import.meta.url).then(e=>e.default),"../../demos/R16AccessibleId.vue":()=>t(()=>import("./CeUsaebE.js"),__vite__mapDeps([505,489,1,2,490]),import.meta.url).then(e=>e.default),"../../demos/R17EventHandler.vue":()=>t(()=>import("./CZLQUc7P.js"),__vite__mapDeps([506,489,1,2,490]),import.meta.url).then(e=>e.default),"../../demos/R18ConditionalRender.vue":()=>t(()=>import("./mC6_uK1S.js"),__vite__mapDeps([507,489,1,2,490]),import.meta.url).then(e=>e.default),"../../demos/R19Composition.vue":()=>t(()=>import("./BI2KthJu.js"),__vite__mapDeps([508,489,1,2,490]),import.meta.url).then(e=>e.default),"../../demos/R20Transition.vue":()=>t(()=>import("./xtlT0_3b.js"),__vite__mapDeps([509,489,1,2,490]),import.meta.url).then(e=>e.default),"../../demos/R21ImperativeHandle.vue":()=>t(()=>import("./DLj5OD5B.js"),__vite__mapDeps([510,489,1,2,490]),import.meta.url).then(e=>e.default),"../../demos/R22ForwardRef.vue":()=>t(()=>import("./CNNlV_Jq.js"),__vite__mapDeps([511,489,1,2,490]),import.meta.url).then(e=>e.default),"../../demos/R23StrictMode.vue":()=>t(()=>import("./wbT0SP8n.js"),__vite__mapDeps([512,489,1,2,490]),import.meta.url).then(e=>e.default),"../../demos/R24EffectLifecycle.vue":()=>t(()=>import("./nO-74EEj.js"),__vite__mapDeps([513,489,1,2,490]),import.meta.url).then(e=>e.default),"../../demos/S01StateBoundaries.vue":()=>t(()=>import("./DOsRQmNJ.js"),__vite__mapDeps([514,1,2,515]),import.meta.url).then(e=>e.default),"../../demos/S02PiniaSetupStore.vue":()=>t(()=>import("./uvIOE3RY.js"),__vite__mapDeps([516,1,2,517]),import.meta.url).then(e=>e.default),"../../demos/S03PiniaSubscriptions.vue":()=>t(()=>import("./D6byB6L_.js"),__vite__mapDeps([518,517,1,2]),import.meta.url).then(e=>e.default),"../../demos/S04ZustandSelectors.vue":()=>t(()=>import("./DvN5k3yt.js"),__vite__mapDeps([519,489,1,2,490,520]),import.meta.url).then(e=>e.default),"../../demos/S05ZustandMiddleware.vue":()=>t(()=>import("./C12z-LoO.js"),__vite__mapDeps([521,489,1,2,490,522]),import.meta.url).then(e=>e.default),"../../demos/S06JotaiAtoms.vue":()=>t(()=>import("./iY2UBwEy.js"),__vite__mapDeps([523,489,1,2,490,524]),import.meta.url).then(e=>e.default),"../../demos/S07JotaiAsyncAtoms.vue":()=>t(()=>import("./BCSlDlLq.js"),__vite__mapDeps([525,489,1,2,490,526]),import.meta.url).then(e=>e.default),"../../demos/S08ReduxToolkit.vue":()=>t(()=>import("./ChjU0__V.js"),__vite__mapDeps([527,489,1,2,490,528]),import.meta.url).then(e=>e.default),"../../demos/S09XStateMachine.vue":()=>t(()=>import("./C7ySJl80.js"),__vite__mapDeps([529,489,1,2,490,530]),import.meta.url).then(e=>e.default),"../../demos/S11VuexMigration.vue":()=>t(()=>import("./S95Q7LRB.js"),__vite__mapDeps([531,1,2]),import.meta.url).then(e=>e.default),"../../demos/S12Valtio.vue":()=>t(()=>import("./LXy68Aog.js"),__vite__mapDeps([532,1,2]),import.meta.url).then(e=>e.default),"../../demos/S13TanStackQuery.vue":()=>t(()=>import("./Cp0ysiZN.js"),__vite__mapDeps([533,1,2]),import.meta.url).then(e=>e.default),"../../demos/S17PiniaPlugin.vue":()=>t(()=>import("./nXefjMDV.js"),__vite__mapDeps([534,517,1,2]),import.meta.url).then(e=>e.default),"../../demos/S18PiniaGetters.vue":()=>t(()=>import("./BSz7LJgT.js"),__vite__mapDeps([535,1,2,536]),import.meta.url).then(e=>e.default),"../../demos/S19PiniaActions.vue":()=>t(()=>import("./C_Ct6LrL.js"),__vite__mapDeps([537,1,2,538]),import.meta.url).then(e=>e.default),"../../demos/S20PiniaDevtools.vue":()=>t(()=>import("./xwulIi_i.js"),__vite__mapDeps([539,1,2,540]),import.meta.url).then(e=>e.default),"../../demos/S21PiniaTesting.vue":()=>t(()=>import("./DLEFOo85.js"),__vite__mapDeps([541,1,2,542]),import.meta.url).then(e=>e.default),"../../demos/S22Recoil.vue":()=>t(()=>import("./CNc2EHeW.js"),__vite__mapDeps([543,1,2,544]),import.meta.url).then(e=>e.default),"../../demos/S23Mobx.vue":()=>t(()=>import("./C23xG6E9.js"),__vite__mapDeps([545,1,2,546]),import.meta.url).then(e=>e.default),"../../demos/S24Overmind.vue":()=>t(()=>import("./CI-TIVBj.js"),__vite__mapDeps([547,1,2]),import.meta.url).then(e=>e.default),"../../demos/SC01VariablesNesting.vue":()=>t(()=>import("./zj04A-sB.js"),__vite__mapDeps([548,1,2,549]),import.meta.url).then(e=>e.default),"../../demos/SC02Modules.vue":()=>t(()=>import("./BZd-ub-q.js"),__vite__mapDeps([550,1,2,551]),import.meta.url).then(e=>e.default),"../../demos/SC03Mixins.vue":()=>t(()=>import("./BR7qLc1H.js"),__vite__mapDeps([552,1,2,553]),import.meta.url).then(e=>e.default),"../../demos/SC04Functions.vue":()=>t(()=>import("./BPaCSLkA.js"),__vite__mapDeps([554,1,2,555]),import.meta.url).then(e=>e.default),"../../demos/SC05Collections.vue":()=>t(()=>import("./JjYVOKS5.js"),__vite__mapDeps([556,1,2,557]),import.meta.url).then(e=>e.default),"../../demos/SC06Selectors.vue":()=>t(()=>import("./DozfashH.js"),__vite__mapDeps([558,1,2,559]),import.meta.url).then(e=>e.default),"../../demos/SC07Extend.vue":()=>t(()=>import("./BreJgUc2.js"),__vite__mapDeps([560,1,2,561]),import.meta.url).then(e=>e.default),"../../demos/SC08Architecture.vue":()=>t(()=>import("./DIRy80Ue.js"),__vite__mapDeps([562,1,2,563]),import.meta.url).then(e=>e.default),"../../demos/SC09ValuesUnits.vue":()=>t(()=>import("./mc926Rwi.js"),__vite__mapDeps([564,1,2,565]),import.meta.url).then(e=>e.default),"../../demos/SC10Math.vue":()=>t(()=>import("./CwGEm93P.js"),__vite__mapDeps([566,1,2,567]),import.meta.url).then(e=>e.default),"../../demos/SC11Color.vue":()=>t(()=>import("./vHdtARto.js"),__vite__mapDeps([568,1,2,569]),import.meta.url).then(e=>e.default),"../../demos/SC12Configuration.vue":()=>t(()=>import("./DJP_F1Kd.js"),__vite__mapDeps([570,1,2,571]),import.meta.url).then(e=>e.default),"../../demos/SC13AtRoot.vue":()=>t(()=>import("./BaST6dbo.js"),__vite__mapDeps([572,1,2,573]),import.meta.url).then(e=>e.default),"../../demos/SC14MediaQueries.vue":()=>t(()=>import("./BSBW09yJ.js"),__vite__mapDeps([574,1,2,575]),import.meta.url).then(e=>e.default),"../../demos/SC15CustomProperties.vue":()=>t(()=>import("./BgCy_67W.js"),__vite__mapDeps([576,1,2,577]),import.meta.url).then(e=>e.default),"../../demos/SC16Diagnostics.vue":()=>t(()=>import("./0NLSQok1.js"),__vite__mapDeps([578,1,2,579]),import.meta.url).then(e=>e.default),"../../demos/T01TypeInference.vue":()=>t(()=>import("./B-ipOi6N.js"),__vite__mapDeps([580,1,2,581]),import.meta.url).then(e=>e.default),"../../demos/T02UnionNarrowing.vue":()=>t(()=>import("./DgV3Bd-0.js"),__vite__mapDeps([582,1,2]),import.meta.url).then(e=>e.default),"../../demos/T03ObjectModeling.vue":()=>t(()=>import("./UipVcgYp.js"),__vite__mapDeps([583,1,2]),import.meta.url).then(e=>e.default),"../../demos/T04Generics.vue":()=>t(()=>import("./D5-MNowt.js"),__vite__mapDeps([584,1,2]),import.meta.url).then(e=>e.default),"../../demos/T05Keyof.vue":()=>t(()=>import("./fWsJkEMn.js"),__vite__mapDeps([585,1,2]),import.meta.url).then(e=>e.default),"../../demos/T06UtilityTypes.vue":()=>t(()=>import("./CwBG_ENo.js"),__vite__mapDeps([586,1,2]),import.meta.url).then(e=>e.default),"../../demos/T07UnknownGuard.vue":()=>t(()=>import("./CIFxqRT3.js"),__vite__mapDeps([587,1,2]),import.meta.url).then(e=>e.default),"../../demos/T08VueTyping.vue":()=>t(()=>import("./D8-hjHgH.js"),__vite__mapDeps([588,1,2]),import.meta.url).then(e=>e.default),"../../demos/T09IntersectionMixin.vue":()=>t(()=>import("./CgBb47hb.js"),__vite__mapDeps([589,1,2]),import.meta.url).then(e=>e.default),"../../demos/T10Conditional.vue":()=>t(()=>import("./BQQF-FNP.js"),__vite__mapDeps([590,1,2]),import.meta.url).then(e=>e.default),"../../demos/T11Mapped.vue":()=>t(()=>import("./Cxftvl8j.js"),__vite__mapDeps([591,1,2]),import.meta.url).then(e=>e.default),"../../demos/T12TemplateLiteral.vue":()=>t(()=>import("./BIHf-y8r.js"),__vite__mapDeps([592,1,2]),import.meta.url).then(e=>e.default),"../../demos/T13FunctionTypes.vue":()=>t(()=>import("./CbJYdVDU.js"),__vite__mapDeps([593,1,2]),import.meta.url).then(e=>e.default),"../../demos/T14Enums.vue":()=>t(()=>import("./B0UtlURP.js"),__vite__mapDeps([594,1,2]),import.meta.url).then(e=>e.default),"../../demos/T15DeclarationMerging.vue":()=>t(()=>import("./Bp4TRurM.js"),__vite__mapDeps([595,1,2]),import.meta.url).then(e=>e.default),"../../demos/T16CompilerOptions.vue":()=>t(()=>import("./ZEdeJYfm.js"),__vite__mapDeps([596,1,2]),import.meta.url).then(e=>e.default),"../../demos/T17DeclarationFiles.vue":()=>t(()=>import("./nu4w3fnu.js"),__vite__mapDeps([597,1,2]),import.meta.url).then(e=>e.default),"../../demos/T18Namespace.vue":()=>t(()=>import("./BALoI7eg.js"),__vite__mapDeps([598,1,2]),import.meta.url).then(e=>e.default),"../../demos/T19BrandedTypes.vue":()=>t(()=>import("./BPAEIUxa.js"),__vite__mapDeps([599,1,2,600]),import.meta.url).then(e=>e.default),"../../demos/T20DiscriminatedUnion.vue":()=>t(()=>import("./CQjcIcFc.js"),__vite__mapDeps([601,1,2,602]),import.meta.url).then(e=>e.default),"../../demos/T21InferKeyword.vue":()=>t(()=>import("./BY9ZtOjG.js"),__vite__mapDeps([603,1,2,604]),import.meta.url).then(e=>e.default),"../../demos/T22RecursiveTypes.vue":()=>t(()=>import("./Ie-bokxE.js"),__vite__mapDeps([605,1,2,606]),import.meta.url).then(e=>e.default),"../../demos/T23TypeLevelProgramming.vue":()=>t(()=>import("./BCg-xRdW.js"),__vite__mapDeps([607,1,2,608]),import.meta.url).then(e=>e.default),"../../demos/T24AsyncReturnType.vue":()=>t(()=>import("./ChkKJ6jn.js"),__vite__mapDeps([609,1,2,610]),import.meta.url).then(e=>e.default),"../../demos/TW01UtilityFirst.vue":()=>t(()=>import("./BVkRDt8A.js"),__vite__mapDeps([611,1,2,612]),import.meta.url).then(e=>e.default),"../../demos/TW02Responsive.vue":()=>t(()=>import("./BVTCGDCn.js"),__vite__mapDeps([613,1,2,614]),import.meta.url).then(e=>e.default),"../../demos/TW03StateVariants.vue":()=>t(()=>import("./B6e1Zx79.js"),__vite__mapDeps([615,1,2,616]),import.meta.url).then(e=>e.default),"../../demos/TW04DarkMode.vue":()=>t(()=>import("./rdlGh6wR.js"),__vite__mapDeps([617,1,2,618]),import.meta.url).then(e=>e.default),"../../demos/TW05ThemeTokens.vue":()=>t(()=>import("./COGL4mBj.js"),__vite__mapDeps([619,1,2,620]),import.meta.url).then(e=>e.default),"../../demos/TW06ArbitraryValues.vue":()=>t(()=>import("./CVWW92os.js"),__vite__mapDeps([621,1,2,622]),import.meta.url).then(e=>e.default),"../../demos/TW07Layout.vue":()=>t(()=>import("./CAlYYIpF.js"),__vite__mapDeps([623,1,2,624]),import.meta.url).then(e=>e.default),"../../demos/TW08ContainerQueries.vue":()=>t(()=>import("./Dzumpjsu.js"),__vite__mapDeps([625,1,2,626]),import.meta.url).then(e=>e.default),"../../demos/TW09Installation.vue":()=>t(()=>import("./C8ZjoXm2.js"),__vite__mapDeps([627,1,2,628]),import.meta.url).then(e=>e.default),"../../demos/TW10Typography.vue":()=>t(()=>import("./BdBv0lLh.js"),__vite__mapDeps([629,1,2,630]),import.meta.url).then(e=>e.default),"../../demos/TW11SizingSpacing.vue":()=>t(()=>import("./CDRRPqV1.js"),__vite__mapDeps([631,1,2,632]),import.meta.url).then(e=>e.default),"../../demos/TW12BordersEffects.vue":()=>t(()=>import("./CCKtFJuw.js"),__vite__mapDeps([633,1,2,634]),import.meta.url).then(e=>e.default),"../../demos/TW13Motion.vue":()=>t(()=>import("./c1giNjXC.js"),__vite__mapDeps([635,1,2,636]),import.meta.url).then(e=>e.default),"../../demos/TW14Forms.vue":()=>t(()=>import("./CTwsZwq_.js"),__vite__mapDeps([637,1,2,638]),import.meta.url).then(e=>e.default),"../../demos/TW15CustomUtilities.vue":()=>t(()=>import("./ueM4_fw_.js"),__vite__mapDeps([639,1,2,640]),import.meta.url).then(e=>e.default),"../../demos/TW16Production.vue":()=>t(()=>import("./DwokXOsu.js"),__vite__mapDeps([641,1,2,642]),import.meta.url).then(e=>e.default),"../../demos/TW17GridLayout.vue":()=>t(()=>import("./srP8JALZ.js"),__vite__mapDeps([643,1,2,644]),import.meta.url).then(e=>e.default),"../../demos/TW18FlexGrid.vue":()=>t(()=>import("./Bf1Pu43i.js"),__vite__mapDeps([645,1,2,646]),import.meta.url).then(e=>e.default),"../../demos/TW19Interactivity.vue":()=>t(()=>import("./DBsAZNoh.js"),__vite__mapDeps([647,1,2,648]),import.meta.url).then(e=>e.default),"../../demos/TW20Transform.vue":()=>t(()=>import("./CjrlK2mb.js"),__vite__mapDeps([649,1,2,650]),import.meta.url).then(e=>e.default),"../../demos/TW21Filters.vue":()=>t(()=>import("./DxfS2xdB.js"),__vite__mapDeps([651,1,2,652]),import.meta.url).then(e=>e.default),"../../demos/TW22SVGIcons.vue":()=>t(()=>import("./DwRebqdk.js"),__vite__mapDeps([653,1,2,654]),import.meta.url).then(e=>e.default),"../../demos/TW23Plugins.vue":()=>t(()=>import("./BU3BXshW.js"),__vite__mapDeps([655,1,2,656]),import.meta.url).then(e=>e.default),"../../demos/TW24Preset.vue":()=>t(()=>import("./D3i9c9bA.js"),__vite__mapDeps([657,1,2,658]),import.meta.url).then(e=>e.default),"../../demos/U01ProjectStructure.vue":()=>t(()=>import("./DJt1Hm6W.js"),__vite__mapDeps([659,1,2,660]),import.meta.url).then(e=>e.default),"../../demos/U02ConditionalCompilation.vue":()=>t(()=>import("./J3fFceAn.js"),__vite__mapDeps([661,1,2,662]),import.meta.url).then(e=>e.default),"../../demos/U03PageLifecycle.vue":()=>t(()=>import("./BvPk63mv.js"),__vite__mapDeps([663,1,2,664]),import.meta.url).then(e=>e.default),"../../demos/U04DataBindingEvents.vue":()=>t(()=>import("./Dy1prb0p.js"),__vite__mapDeps([665,1,2,666]),import.meta.url).then(e=>e.default),"../../demos/U05BuiltinComponents.vue":()=>t(()=>import("./CsiKyGf1.js"),__vite__mapDeps([667,1,2,668]),import.meta.url).then(e=>e.default),"../../demos/U06ScrollSwiper.vue":()=>t(()=>import("./CLwl8v0Y.js"),__vite__mapDeps([669,126,1,2,670]),import.meta.url).then(e=>e.default),"../../demos/U07Routing.vue":()=>t(()=>import("./B-VlzwV_.js"),__vite__mapDeps([671,1,2,672]),import.meta.url).then(e=>e.default),"../../demos/U08RpxUnits.vue":()=>t(()=>import("./w6TUB6aD.js"),__vite__mapDeps([673,1,2,674]),import.meta.url).then(e=>e.default),"../../demos/U09Easycom.vue":()=>t(()=>import("./CS_yfu2x.js"),__vite__mapDeps([675,1,2,676]),import.meta.url).then(e=>e.default),"../../demos/U10RequestStorage.vue":()=>t(()=>import("./DhJHbYoy.js"),__vite__mapDeps([677,1,2,678]),import.meta.url).then(e=>e.default),"../../demos/U11PullRefresh.vue":()=>t(()=>import("./DvQZ3ci_.js"),__vite__mapDeps([679,1,2,680]),import.meta.url).then(e=>e.default),"../../demos/U12UiFeedback.vue":()=>t(()=>import("./Bw-J14tG.js"),__vite__mapDeps([681,1,2,682]),import.meta.url).then(e=>e.default),"../../demos/U13AppLifecycle.vue":()=>t(()=>import("./QcEhuK7C.js"),__vite__mapDeps([683,1,2,684]),import.meta.url).then(e=>e.default),"../../demos/U14CompositionApi.vue":()=>t(()=>import("./qQT1CPof.js"),__vite__mapDeps([685,1,2,686]),import.meta.url).then(e=>e.default),"../../demos/U15Subpackages.vue":()=>t(()=>import("./D-4wNn5j.js"),__vite__mapDeps([687,1,2,688]),import.meta.url).then(e=>e.default),"../../demos/V01Core.vue":()=>t(()=>import("./DvSMck0h.js"),__vite__mapDeps([689,1,2,690]),import.meta.url).then(e=>e.default),"../../demos/V02Config.vue":()=>t(()=>import("./zmTgku0c.js"),__vite__mapDeps([691,1,2,692]),import.meta.url).then(e=>e.default),"../../demos/V03Plugins.vue":()=>t(()=>import("./C5d4DiJI.js"),__vite__mapDeps([693,1,2,694]),import.meta.url).then(e=>e.default),"../../demos/V04HMR.vue":()=>t(()=>import("./CwoiOEJ8.js"),__vite__mapDeps([695,1,2,696]),import.meta.url).then(e=>e.default),"../../demos/V05Env.vue":()=>t(()=>import("./B5zn5h21.js"),__vite__mapDeps([697,1,2,698]),import.meta.url).then(e=>e.default),"../../demos/V06Assets.vue":()=>t(()=>import("./BjgqEmFx.js"),__vite__mapDeps([699,1,2,700]),import.meta.url).then(e=>e.default),"../../demos/V07PreBundle.vue":()=>t(()=>import("./CMc3crDF.js"),__vite__mapDeps([701,1,2,702]),import.meta.url).then(e=>e.default),"../../demos/V08Build.vue":()=>t(()=>import("./B9MKb8G8.js"),__vite__mapDeps([703,1,2,704]),import.meta.url).then(e=>e.default),"../../demos/V09MPA.vue":()=>t(()=>import("./lTLH2eQ-.js"),__vite__mapDeps([705,1,2,706]),import.meta.url).then(e=>e.default),"../../demos/V10Lib.vue":()=>t(()=>import("./B0Meuudr.js"),__vite__mapDeps([707,1,2,708]),import.meta.url).then(e=>e.default),"../../demos/V11SSR.vue":()=>t(()=>import("./BpiIw8mU.js"),__vite__mapDeps([709,1,2,710]),import.meta.url).then(e=>e.default),"../../demos/V12CSS.vue":()=>t(()=>import("./BtS8x0gQ.js"),__vite__mapDeps([711,1,2,712]),import.meta.url).then(e=>e.default),"../../demos/V13TypeScript.vue":()=>t(()=>import("./DYt_kTt7.js"),__vite__mapDeps([713,1,2,714]),import.meta.url).then(e=>e.default),"../../demos/V14Proxy.vue":()=>t(()=>import("./IDPD4qfY.js"),__vite__mapDeps([715,1,2,716]),import.meta.url).then(e=>e.default),"../../demos/V15Perf.vue":()=>t(()=>import("./CdcxsLEm.js"),__vite__mapDeps([717,1,2,718]),import.meta.url).then(e=>e.default),"../../demos/V16PluginDev.vue":()=>t(()=>import("./CqbGns9B.js"),__vite__mapDeps([719,1,2,720]),import.meta.url).then(e=>e.default),"../../demos/V17DependencyPrebundle.vue":()=>t(()=>import("./De-5ZcIP.js"),__vite__mapDeps([721,126,1,2,722]),import.meta.url).then(e=>e.default),"../../demos/V18Esbuild.vue":()=>t(()=>import("./Bs945cV_.js"),__vite__mapDeps([723,1,2,724]),import.meta.url).then(e=>e.default),"../../demos/V19RollupPlugin.vue":()=>t(()=>import("./pE1IIhcX.js"),__vite__mapDeps([725,126,1,2,726]),import.meta.url).then(e=>e.default),"../../demos/V20LibraryMode.vue":()=>t(()=>import("./D_wAHjyO.js"),__vite__mapDeps([727,1,2,728]),import.meta.url).then(e=>e.default),"../../demos/V21MultiPage.vue":()=>t(()=>import("./C6RNUTn5.js"),__vite__mapDeps([729,1,2,730]),import.meta.url).then(e=>e.default),"../../demos/VF01FirstFlow.vue":()=>t(()=>import("./CDhu76k6.js"),__vite__mapDeps([731,1,2,732,733]),import.meta.url).then(e=>e.default),"../../demos/VF02NodeTypes.vue":()=>t(()=>import("./DE8mv63Q.js"),__vite__mapDeps([734,1,2,732,735]),import.meta.url).then(e=>e.default),"../../demos/VF03CanvasParts.vue":()=>t(()=>import("./DIRGuSyj.js"),__vite__mapDeps([736,1,2,732,737,738]),import.meta.url).then(e=>e.default),"../../demos/VF04Handles.vue":()=>t(()=>import("./D_9Hixef.js"),__vite__mapDeps([739,1,2,732,740]),import.meta.url).then(e=>e.default),"../../demos/VF05EdgeStyles.vue":()=>t(()=>import("./DpcMCSWQ.js"),__vite__mapDeps([741,1,2,732,742]),import.meta.url).then(e=>e.default),"../../demos/VF06CustomNodes.vue":()=>t(()=>import("./ZOZP2YxN.js"),__vite__mapDeps([743,1,2,732,744]),import.meta.url).then(e=>e.default),"../../demos/VF07CustomEdges.vue":()=>t(()=>import("./_c5TcKln.js"),__vite__mapDeps([745,1,2,732,746]),import.meta.url).then(e=>e.default),"../../demos/VF08Interactions.vue":()=>t(()=>import("./_zQ0LoYE.js"),__vite__mapDeps([747,1,2,732,748]),import.meta.url).then(e=>e.default),"../../demos/VF09StateManage.vue":()=>t(()=>import("./Cr_1pbvh.js"),__vite__mapDeps([749,1,2,732,750]),import.meta.url).then(e=>e.default),"../../demos/VF10DragDrop.vue":()=>t(()=>import("./BRiei_fb.js"),__vite__mapDeps([751,1,2,732,752]),import.meta.url).then(e=>e.default),"../../demos/VF11AutoLayout.vue":()=>t(()=>import("./DruER-gk.js"),__vite__mapDeps([753,1,2,732,754]),import.meta.url).then(e=>e.default),"../../demos/VF12ReadonlyTheme.vue":()=>t(()=>import("./CgZxVsIQ.js"),__vite__mapDeps([755,1,2,732,737,756]),import.meta.url).then(e=>e.default),"../../demos/W01WebGLContext.vue":()=>t(()=>import("./D8fEYYY3.js"),__vite__mapDeps([757,1,2,758]),import.meta.url).then(e=>e.default),"../../demos/W02Shaders.vue":()=>t(()=>import("./DU1Fms3O.js"),__vite__mapDeps([759,1,2,760]),import.meta.url).then(e=>e.default),"../../demos/W03Buffers.vue":()=>t(()=>import("./ciWI3v26.js"),__vite__mapDeps([761,1,2,762]),import.meta.url).then(e=>e.default),"../../demos/W04Attributes.vue":()=>t(()=>import("./CeSJzSDQ.js"),__vite__mapDeps([763,1,2,764]),import.meta.url).then(e=>e.default),"../../demos/W05Matrices.vue":()=>t(()=>import("./DGC4C8uG.js"),__vite__mapDeps([765,1,2,766]),import.meta.url).then(e=>e.default),"../../demos/W06MVP.vue":()=>t(()=>import("./qP7ecwCp.js"),__vite__mapDeps([767,1,2,768]),import.meta.url).then(e=>e.default),"../../demos/W07Camera.vue":()=>t(()=>import("./D7OVyWbd.js"),__vite__mapDeps([769,1,2,770]),import.meta.url).then(e=>e.default),"../../demos/W08Textures.vue":()=>t(()=>import("./1O7jLyp6.js"),__vite__mapDeps([771,1,2,772]),import.meta.url).then(e=>e.default),"../../demos/W09TextureFilter.vue":()=>t(()=>import("./Bbx6zQKw.js"),__vite__mapDeps([773,1,2,774]),import.meta.url).then(e=>e.default),"../../demos/W10MultiTexture.vue":()=>t(()=>import("./DOB628td.js"),__vite__mapDeps([775,1,2,776]),import.meta.url).then(e=>e.default),"../../demos/W11Lighting.vue":()=>t(()=>import("./B6-4Lb05.js"),__vite__mapDeps([777,1,2,778]),import.meta.url).then(e=>e.default),"../../demos/W12Phong.vue":()=>t(()=>import("./Dd6zKz0E.js"),__vite__mapDeps([779,1,2,780]),import.meta.url).then(e=>e.default),"../../demos/W13Normals.vue":()=>t(()=>import("./4dFBUKwX.js"),__vite__mapDeps([781,1,2,782]),import.meta.url).then(e=>e.default),"../../demos/W14FBO.vue":()=>t(()=>import("./CWQum3ZI.js"),__vite__mapDeps([783,1,2,784]),import.meta.url).then(e=>e.default),"../../demos/W15Shadows.vue":()=>t(()=>import("./Cmsxx-Qh.js"),__vite__mapDeps([785,1,2,786]),import.meta.url).then(e=>e.default),"../../demos/W16PostProcess.vue":()=>t(()=>import("./CdSnolfP.js"),__vite__mapDeps([787,1,2,788]),import.meta.url).then(e=>e.default),"../../demos/W17WebGL2.vue":()=>t(()=>import("./BTY_QDUx.js"),__vite__mapDeps([789,1,2,790]),import.meta.url).then(e=>e.default),"../../demos/W18Instancing.vue":()=>t(()=>import("./DhbDOq4i.js"),__vite__mapDeps([791,1,2,792]),import.meta.url).then(e=>e.default),"../../demos/W19Particles.vue":()=>t(()=>import("./sB0LnDdZ.js"),__vite__mapDeps([793,1,2,794]),import.meta.url).then(e=>e.default),"../../demos/W20Performance.vue":()=>t(()=>import("./B3LTskz4.js"),__vite__mapDeps([795,1,2,796]),import.meta.url).then(e=>e.default),"../../demos/WB01WhatIsWasm.vue":()=>t(()=>import("./BjfaKQIL.js"),__vite__mapDeps([797,798,1,2,799]),import.meta.url).then(e=>e.default),"../../demos/WB02WatBinary.vue":()=>t(()=>import("./D9CBCL3e.js"),__vite__mapDeps([800,1,2,801]),import.meta.url).then(e=>e.default),"../../demos/WB03ValueTypes.vue":()=>t(()=>import("./Cz0xSc1R.js"),__vite__mapDeps([802,798,1,2,803]),import.meta.url).then(e=>e.default),"../../demos/WB04Operators.vue":()=>t(()=>import("./Rcg8ANB-.js"),__vite__mapDeps([804,1,2,798,805]),import.meta.url).then(e=>e.default),"../../demos/WB05LinearMemory.vue":()=>t(()=>import("./D51YCzQF.js"),__vite__mapDeps([806,1,2,798,807]),import.meta.url).then(e=>e.default),"../../demos/WB06StringsInterop.vue":()=>t(()=>import("./9t_8WNF7.js"),__vite__mapDeps([808,1,2,798,809]),import.meta.url).then(e=>e.default),"../../demos/WB07FunctionsLocals.vue":()=>t(()=>import("./diJ6eCv0.js"),__vite__mapDeps([810,1,2,798,811]),import.meta.url).then(e=>e.default),"../../demos/WB08ImportExportGlobals.vue":()=>t(()=>import("./BG27cGHv.js"),__vite__mapDeps([812,798,1,2,813]),import.meta.url).then(e=>e.default),"../../demos/WB09JsInteropNumbers.vue":()=>t(()=>import("./Cu9NqEMC.js"),__vite__mapDeps([814,1,2,798,815]),import.meta.url).then(e=>e.default),"../../demos/WB10FunctionTable.vue":()=>t(()=>import("./BOT_3a6F.js"),__vite__mapDeps([816,1,2,798,817]),import.meta.url).then(e=>e.default),"../../demos/WB11ControlFlow.vue":()=>t(()=>import("./pmgdqlqH.js"),__vite__mapDeps([818,1,2,798,819]),import.meta.url).then(e=>e.default),"../../demos/WB12MemoryArrays.vue":()=>t(()=>import("./XbUUTN0R.js"),__vite__mapDeps([820,1,2,798,821]),import.meta.url).then(e=>e.default),"../../demos/WB13ImportCallbacks.vue":()=>t(()=>import("./DLhwLFs8.js"),__vite__mapDeps([822,798,1,2,823]),import.meta.url).then(e=>e.default),"../../demos/WB14ReferenceTypes.vue":()=>t(()=>import("./04h0eFtj.js"),__vite__mapDeps([824,798,1,2,825]),import.meta.url).then(e=>e.default),"../../demos/WB15SharedMemoryAtomics.vue":()=>t(()=>import("./CsEcx3LO.js"),__vite__mapDeps([826,798,1,2,827]),import.meta.url).then(e=>e.default),"../../demos/WB16MultiThreading.vue":()=>t(()=>import("./CNqFWoyI.js"),__vite__mapDeps([828,1,2,798,829]),import.meta.url).then(e=>e.default),"../../demos/WB17Simd.vue":()=>t(()=>import("./CxNItTar.js"),__vite__mapDeps([830,1,2,798,831]),import.meta.url).then(e=>e.default),"../../demos/WB18ExceptionHandling.vue":()=>t(()=>import("./_KM_Ss_Z.js"),__vite__mapDeps([832,1,2,798,833]),import.meta.url).then(e=>e.default),"../../demos/WB19Performance.vue":()=>t(()=>import("./DtcGMftK.js"),__vite__mapDeps([834,1,2,798,835]),import.meta.url).then(e=>e.default),"../../demos/WB20ToolchainDeploy.vue":()=>t(()=>import("./Cenx3tHI.js"),__vite__mapDeps([836,798,1,2,837]),import.meta.url).then(e=>e.default),"../../demos/X01ProjectStructure.vue":()=>t(()=>import("./B8R2rFTZ.js"),__vite__mapDeps([838,1,2,839]),import.meta.url).then(e=>e.default),"../../demos/X02FileRouting.vue":()=>t(()=>import("./BzANSiiZ.js"),__vite__mapDeps([840,1,2,841]),import.meta.url).then(e=>e.default),"../../demos/X03Layouts.vue":()=>t(()=>import("./BWrImC1L.js"),__vite__mapDeps([842,1,2,843]),import.meta.url).then(e=>e.default),"../../demos/X04DynamicRoutes.vue":()=>t(()=>import("./B-4MHULD.js"),__vite__mapDeps([844,1,2,845]),import.meta.url).then(e=>e.default),"../../demos/X05ServerComponents.vue":()=>t(()=>import("./DB7wg1Hk.js"),__vite__mapDeps([846,1,2,847]),import.meta.url).then(e=>e.default),"../../demos/X06ClientComponents.vue":()=>t(()=>import("./BiW2Imsz.js"),__vite__mapDeps([848,1,2,849]),import.meta.url).then(e=>e.default),"../../demos/X07StaticDynamic.vue":()=>t(()=>import("./ClSjFpCb.js"),__vite__mapDeps([850,1,2,851]),import.meta.url).then(e=>e.default),"../../demos/X08StreamingSuspense.vue":()=>t(()=>import("./Dw6lxWdf.js"),__vite__mapDeps([852,126,1,2,853]),import.meta.url).then(e=>e.default),"../../demos/X09DataFetching.vue":()=>t(()=>import("./BlFQAHZe.js"),__vite__mapDeps([854,1,2,855]),import.meta.url).then(e=>e.default),"../../demos/X10ServerActions.vue":()=>t(()=>import("./B90nl2tc.js"),__vite__mapDeps([856,126,1,2,857]),import.meta.url).then(e=>e.default),"../../demos/X11RouteHandlers.vue":()=>t(()=>import("./DhPFk_1E.js"),__vite__mapDeps([858,1,2,859]),import.meta.url).then(e=>e.default),"../../demos/X12Caching.vue":()=>t(()=>import("./xfy3frS9.js"),__vite__mapDeps([860,1,2,861]),import.meta.url).then(e=>e.default),"../../demos/X13ParallelRoutes.vue":()=>t(()=>import("./MeEblHqt.js"),__vite__mapDeps([862,1,2,863]),import.meta.url).then(e=>e.default),"../../demos/X14InterceptingRoutes.vue":()=>t(()=>import("./DTyW-XBB.js"),__vite__mapDeps([864,1,2,865]),import.meta.url).then(e=>e.default),"../../demos/X15RouteGroups.vue":()=>t(()=>import("./DZ0UKKEC.js"),__vite__mapDeps([866,1,2,867]),import.meta.url).then(e=>e.default),"../../demos/X16LoadingError.vue":()=>t(()=>import("./BXMDz_zk.js"),__vite__mapDeps([868,1,2,869]),import.meta.url).then(e=>e.default),"../../demos/X17NextImage.vue":()=>t(()=>import("./bHov9n0i.js"),__vite__mapDeps([870,1,2,871]),import.meta.url).then(e=>e.default),"../../demos/X18NextFont.vue":()=>t(()=>import("./C56t_k7B.js"),__vite__mapDeps([872,1,2,873]),import.meta.url).then(e=>e.default),"../../demos/X19NextLink.vue":()=>t(()=>import("./CRL8Xcsm.js"),__vite__mapDeps([874,1,2,875]),import.meta.url).then(e=>e.default),"../../demos/X20Metadata.vue":()=>t(()=>import("./BnpfAXRu.js"),__vite__mapDeps([876,1,2,877]),import.meta.url).then(e=>e.default),"../../demos/X21Middleware.vue":()=>t(()=>import("./Dd6b2QTB.js"),__vite__mapDeps([878,1,2,879]),import.meta.url).then(e=>e.default),"../../demos/X22EnvConfig.vue":()=>t(()=>import("./Dz06BXoo.js"),__vite__mapDeps([880,1,2,881]),import.meta.url).then(e=>e.default),"../../demos/X23I18n.vue":()=>t(()=>import("./CiAkia2I.js"),__vite__mapDeps([882,1,2,883]),import.meta.url).then(e=>e.default),"../../demos/X24Deployment.vue":()=>t(()=>import("./CuZhJEK9.js"),__vite__mapDeps([884,1,2,885]),import.meta.url).then(e=>e.default)});function o(e){const r=n[`../../demos/${e}.vue`];if(!r)throw new Error(`未找到内容组件：${e}`);return a(async()=>(e.startsWith("E")&&await t(()=>Promise.resolve({}),__vite__mapDeps([886]),import.meta.url),r()))}const i=o("L01LLMCall"),s=o("L02PromptTemplate"),m=o("L03OutputParser"),u=o("L04LCEL"),l=o("L05Chains"),p=o("L06DocSplitter"),c=o("L07VectorRetrieval"),d=o("L08Agent"),_=o("L09Tools"),h=o("L10Memory"),g=o("L11Callbacks"),v=o("L12QABot"),f=o("L13Streaming"),E=o("L14Evaluation"),P=o("L15StructuredOutput"),L=o("L16LangGraph"),T=o("L17VectorStore"),R=o("L18Deploy"),A=o("L19RagPipeline"),I=o("L20MultiModal"),y=o("L21FunctionCalling"),O=o("L22PromptEngineering"),D=o("L23Guardrails"),w=[{id:"L_1",title:"LLM 调用：ChatOpenAI、invoke、streaming",navTitle:"入门调用",category:"基础入门",path:"/langchain/l-1/llm-call",summary:"用智能问答模拟器展示 ChatOpenAI 的基本调用、模型配置和流式输出。",demo:i,code:()=>Promise.resolve(`import { ChatOpenAI } from '@langchain/openai'
+import { HumanMessage, SystemMessage } from '@langchain/core/messages'
+
+// 示例1: 基础调用 - 创建 ChatOpenAI 实例并调用 invoke
+const model = new ChatOpenAI({
+  model: 'gpt-4o-mini',
+  temperature: 0.7,
+  maxTokens: 1000,
+})
+
+const response = await model.invoke([
+  new SystemMessage('你是一个 helpful 的 AI 助手。'),
+  new HumanMessage('什么是 LangChain?'),
+])
+console.log(response.content)
+
+// 示例2: 配置不同温度参数
+const creativeModel = new ChatOpenAI({
+  model: 'gpt-4o-mini',
+  temperature: 1.0, // 高温度，输出更随机
+})
+
+const preciseModel = new ChatOpenAI({
+  model: 'gpt-4o-mini',
+  temperature: 0, // 低温度，输出更确定
+})
+
+// 示例3: 流式输出 stream
+const streamModel = new ChatOpenAI({
+  model: 'gpt-4o-mini',
+  temperature: 0.5,
+})
+
+const stream = await streamModel.stream([
+  new HumanMessage('写一首关于编程的短诗'),
+])
+
+let fullText = ''
+for await (const chunk of stream) {
+  fullText += chunk.content
+  console.log('收到 token:', chunk.content)
+}
+
+// 示例4: 批量调用 batch
+const batchModel = new ChatOpenAI({ model: 'gpt-4o-mini' })
+const batchResponses = await batchModel.batch([
+  [new HumanMessage('1+1等于几?')],
+  [new HumanMessage('2+2等于几?')],
+  [new HumanMessage('3+3等于几?')],
+])
+batchResponses.forEach((res, i) => {
+  console.log(\`问题\${i + 1}: \${res.content}\`)
+})
+
+// 示例5: 使用字符串消息（简化写法）
+const simpleModel = new ChatOpenAI({ model: 'gpt-4o-mini' })
+const simpleResponse = await simpleModel.invoke('你好，请用一句话介绍自己')
+console.log(simpleResponse.content)`),language:"typescript",principle:"ChatOpenAI 是 LangChain.js 中最常用的聊天模型封装。通过构造函数传入模型名称和参数（temperature、maxTokens 等），调用 invoke 获取完整回复，调用 stream 获取逐 token 的流式输出。temperature 控制输出的随机性，maxTokens 限制输出长度。",flow:["创建 ChatOpenAI 实例，通过 model 指定模型名，并配置 temperature、maxTokens 等参数。","调用 invoke(messages) 获取完整回复，或调用 stream(messages) 逐 token 接收。","模型返回 AIMessage 对象，通过 .content 获取文本内容。"],notes:["生产环境应通过环境变量管理 API Key，不要硬编码在代码中。","streaming 适合长文本生成场景，能显著改善用户等待体验。","temperature 越高输出越随机，越低越确定；代码生成建议 0-0.2，创意写作建议 0.7-1.0。","maxTokens 用于控制输出长度，避免生成过长内容浪费 token。"],problem:'解决"如何用 LangChain.js 调用 LLM 并获取回复"的入门问题。'},{id:"L_2",title:"Prompt Template：提示词模板与变量注入",navTitle:"提示模板",category:"提示工程",path:"/langchain/l-2/prompt-template",summary:"用产品文案生成器展示 PromptTemplate 的变量注入、ChatPromptTemplate 的消息序列和 Partial Variables。",demo:s,code:()=>Promise.resolve(`import { ChatPromptTemplate, PromptTemplate } from '@langchain/core/prompts'
+import { ChatOpenAI } from '@langchain/openai'
+
+// 示例1: 基础 PromptTemplate - 单变量模板
+const productTemplate = PromptTemplate.fromTemplate(
+  '请为 {productName} 写一句吸引人的广告语，目标用户是 {targetAudience}。'
+)
+
+const formattedPrompt = await productTemplate.format({
+  productName: '智能手表',
+  targetAudience: '年轻运动爱好者',
+})
+console.log(formattedPrompt)
+
+// 示例2: ChatPromptTemplate - 多角色消息模板
+const chatPrompt = ChatPromptTemplate.fromMessages([
+  ['system', '你是一个专业的{role}，请用{tone}的语气回答问题。'],
+  ['human', '{question}'],
+])
+
+const messages = await chatPrompt.formatMessages({
+  role: '健身教练',
+  tone: '鼓励',
+  question: '我今天不想运动怎么办？',
+})
+console.log(messages)
+
+// 示例3: 使用占位符和消息模板
+const chatPrompt2 = ChatPromptTemplate.fromMessages([
+  ['system', '你是一个 helpful 的助手。'],
+  ['placeholder', '{chat_history}'],
+  ['human', '{input}'],
+])
+
+// 示例4: Partial Variables - 部分变量预填充
+const baseTemplate = PromptTemplate.fromTemplate(
+  '请用{language}写一个关于{topic}的简短介绍。'
+)
+
+// 先填入部分变量
+const partialTemplate = await baseTemplate.partial({ language: '中文' })
+
+// 后续再填入剩余变量
+const finalPrompt = await partialTemplate.format({
+  topic: '机器学习',
+})
+console.log(finalPrompt)
+
+// 示例5: 管道组合 - PromptTemplate + Model
+const model = new ChatOpenAI({ model: 'gpt-4o-mini' })
+const prompt = ChatPromptTemplate.fromTemplate(
+  '给我讲一个关于{subject}的简短笑话'
+)
+const chain = prompt.pipe(model)
+
+const result = await chain.invoke({ subject: '程序员' })
+console.log(result.content)
+
+// 示例6: 多变量复杂模板
+const reviewTemplate = PromptTemplate.fromTemplate(\`
+请根据以下信息写一条产品评价：
+产品: {product}
+购买时间: {purchaseDate}
+使用体验: {experience}
+总体评分(1-5星): {rating}星
+
+要求: 语气真实自然，{length}字左右。
+\`)
+
+const reviewPrompt = await reviewTemplate.format({
+  product: '无线蓝牙耳机',
+  purchaseDate: '2024年1月',
+  experience: '音质不错，续航也很好',
+  rating: 5,
+  length: 100,
+})`),language:"typescript",principle:"PromptTemplate 将提示词中的可变部分抽取为模板变量，通过 format 时传入具体值生成最终提示。ChatPromptTemplate 按消息角色（system/human/ai）组织提示序列，适合对话场景。Partial Variables 支持先填入部分变量，后续补全其余变量。",flow:["定义模板字符串，用 {variable} 标记可变位置。","调用 template.format({ variable: value }) 生成完整提示词。","ChatPromptTemplate.fromMessages 按角色组织消息，formatMessages 返回消息数组。","Partial Variables 允许分步注入变量，适合部分参数延迟获取的场景。"],notes:["模板变量名应语义清晰，避免使用单字母或模糊名称。","复杂提示应拆分为 system 指令 + human 输入，让模型更好理解上下文。","模板支持 partial 格式化，可以先填入部分变量，后续再补全。"],problem:'解决"提示词中可变部分如何管理，避免字符串拼接"的问题。'},{id:"L_3",title:"Output Parsers：输出解析与结构化",navTitle:"输出解析",category:"输出处理",path:"/langchain/l-3/output-parser",summary:"用课程推荐展示 StringOutputParser 和基于 Zod 的结构化输出解析。",demo:m,code:()=>Promise.resolve(`import { ChatOpenAI } from '@langchain/openai'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
+import { StringOutputParser } from '@langchain/core/output_parsers'
+import { StructuredOutputParser } from 'langchain/output_parsers'
+import { z } from 'zod'
+
+const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 })
+
+// 示例1: StringOutputParser - 提取纯文本
+const prompt1 = ChatPromptTemplate.fromTemplate(
+  '用一句话解释{concept}是什么'
+)
+const stringParser = new StringOutputParser()
+
+const chain1 = prompt1.pipe(model).pipe(stringParser)
+const textResult = await chain1.invoke({ concept: 'RAG' })
+console.log('纯文本结果:', textResult)
+
+// 示例2: Zod 结构化输出 - 课程推荐
+const courseSchema = z.object({
+  courseName: z.string().describe('课程名称'),
+  category: z.string().describe('课程分类'),
+  difficulty: z.enum(['入门', '中级', '高级']).describe('难度等级'),
+  duration: z.number().describe('课程时长（小时）'),
+  description: z.string().describe('课程简介'),
+  prerequisites: z.array(z.string()).describe('前置知识要求'),
+})
+
+const parser2 = StructuredOutputParser.fromZodSchema(courseSchema)
+
+const prompt2 = ChatPromptTemplate.fromTemplate(\`
+请推荐一门适合学习{topic}的课程。
+
+{format_instructions}
+\`)
+
+const chain2 = prompt2.pipe(model).pipe(parser2)
+const courseResult = await chain2.invoke({ topic: '机器学习' })
+console.log('结构化课程:', courseResult.courseName, courseResult.difficulty)
+
+// 示例3: 数组输出解析
+const listSchema = z.object({
+  recommendations: z.array(
+    z.object({
+      title: z.string(),
+      reason: z.string(),
+    })
+  ).describe('推荐列表'),
+})
+
+const parser3 = StructuredOutputParser.fromZodSchema(listSchema)
+
+const prompt3 = ChatPromptTemplate.fromTemplate(\`
+请推荐3本关于{genre}的经典书籍。
+
+{format_instructions}
+\`)
+
+const chain3 = prompt3.pipe(model).pipe(parser3)
+const booksResult = await chain3.invoke({ genre: '科幻小说' })
+booksResult.recommendations.forEach((book, i) => {
+  console.log(\`\${i + 1}. \${book.title}: \${book.reason}\`)
+})
+
+// 示例4: 链式调用中的 parser 组合
+const prompt4 = ChatPromptTemplate.fromTemplate(
+  '列出{count}个{category}的名称，用逗号分隔'
+)
+
+const chain4 = prompt4
+  .pipe(model)
+  .pipe(new StringOutputParser())
+  .pipe((text) => text.split(',').map(s => s.trim()))
+
+const listResult = await chain4.invoke({ count: 5, category: '编程语言' })
+console.log('编程语言列表:', listResult)`),language:"typescript",principle:"LLM 返回的是纯文本，Output Parser 将其转换为程序可处理的结构化数据。StringOutputParser 提取纯文本，基于 Zod schema 的 StructuredOutputParser 将输出解析为带类型的 JSON 对象。LangChain.js 推荐使用 Zod 定义输出结构。",flow:["LLM 返回 AIMessage 对象，.content 是原始文本。","StringOutputParser 直接提取 .content 字符串。","基于 Zod schema 的 StructuredOutputParser 将文本解析为带类型的 JSON 对象。"],notes:["StructuredOutputParser 会自动在提示词中追加格式指令，告诉模型输出格式。","解析失败时应提供兜底逻辑，例如重试或返回默认值。","LangChain.js 推荐使用 Zod schema 定义输出结构，类型更安全且与 TypeScript 天然集成。"],problem:'解决"LLM 输出是自由文本，如何可靠地转换为结构化数据"的问题。'},{id:"L_4",title:"LCEL：LangChain Expression Language",navTitle:"LCEL",category:"核心概念",path:"/langchain/l-4/lcel",summary:"用管道执行器展示 LCEL 的 prompt.pipe(model).pipe(parser) 链式组合和数据流转。",demo:u,code:()=>Promise.resolve(`import { ChatOpenAI } from '@langchain/openai'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
+import { StringOutputParser } from '@langchain/core/output_parsers'
+import { RunnableSequence, RunnablePassthrough, RunnableParallel } from '@langchain/core/runnables'
+
+const model = new ChatOpenAI({ model: 'gpt-4o-mini' })
+
+// 示例1: 基础 pipe 链式 - prompt -> model -> parser
+const prompt1 = ChatPromptTemplate.fromTemplate(
+  '用简洁的语言解释{concept}'
+)
+const parser = new StringOutputParser()
+
+const chain1 = prompt1.pipe(model).pipe(parser)
+const result1 = await chain1.invoke({ concept: 'LCEL' })
+console.log('基础链结果:', result1)
+
+// 示例2: RunnableSequence.from 数组形式
+const chain2 = RunnableSequence.from([
+  prompt1,
+  model,
+  parser,
+])
+const result2 = await chain2.invoke({ concept: 'RAG' })
+console.log('Sequence 形式:', result2)
+
+// 示例3: RunnablePassthrough - 透传输入
+const prompt3 = ChatPromptTemplate.fromTemplate(\`
+问题: {question}
+
+请用中文回答，并说明你的推理过程。
+\`)
+
+const chain3 = RunnableSequence.from([
+  {
+    question: new RunnablePassthrough(),
+  },
+  prompt3,
+  model,
+  parser,
+])
+
+const result3 = await chain3.invoke('什么是向量检索？')
+console.log('Passthrough 结果:', result3)
+
+// 示例4: RunnableParallel - 并行执行多个分支
+const analysisChain = RunnableParallel({
+  summary: RunnableSequence.from([
+    ChatPromptTemplate.fromTemplate('用一句话总结: {text}'),
+    model,
+    parser,
+  ]),
+  keywords: RunnableSequence.from([
+    ChatPromptTemplate.fromTemplate('提取3个关键词，用逗号分隔: {text}'),
+    model,
+    parser,
+    (text) => text.split(',').map(k => k.trim()),
+  ]),
+  sentiment: RunnableSequence.from([
+    ChatPromptTemplate.fromTemplate('判断情感倾向(正面/负面/中性): {text}'),
+    model,
+    parser,
+  ]),
+})
+
+const analysisResult = await analysisChain.invoke({
+  text: '这家餐厅的服务很好，菜品也很美味，下次还会再来！',
+})
+console.log('摘要:', analysisResult.summary)
+console.log('关键词:', analysisResult.keywords)
+console.log('情感:', analysisResult.sentiment)
+
+// 示例5: 自定义 Runnable
+import { Runnable } from '@langchain/core/runnables'
+
+const upperCaseRunnable = new Runnable({
+  invoke: async (input: string) => input.toUpperCase(),
+})
+
+const chain5 = prompt1
+  .pipe(model)
+  .pipe(parser)
+  .pipe(upperCaseRunnable)
+
+const result5 = await chain5.invoke({ concept: '自定义 runnable' })
+console.log('大写结果:', result5)
+
+// 示例6: batch 批量调用
+const chain6 = prompt1.pipe(model).pipe(parser)
+const batchResults = await chain6.batch([
+  { concept: '机器学习' },
+  { concept: '深度学习' },
+  { concept: '强化学习' },
+])
+batchResults.forEach((res, i) => console.log(\`\${i + 1}. \${res}\`))`),language:"typescript",principle:"LCEL 是 LangChain 的表达式语言，通过 .pipe() 方法将 Runnable 组件串联。每个 Runnable 接收上游输出作为输入，处理后传给下游，形成声明式的数据处理管道。也可以用 RunnableSequence.from 数组形式组合。",flow:["定义 prompt、model、parser 三个 Runnable 组件。","用 .pipe() 串联：const chain = prompt.pipe(model).pipe(parser)。","或用 RunnableSequence.from([prompt, model, parser]) 等价组合。","调用 chain.invoke({ input }) 执行整个管道，数据依次流过每个组件。"],notes:["LCEL 是 LangChain 推荐的组件组合方式，替代了旧版 Chain 类。","RunnablePassthrough 用于透传输入，RunnableParallel 用于并行执行多个分支。","管道中的每个组件都支持 invoke、stream、batch 三种调用方式。"],problem:'解决"如何声明式地组合 LLM 应用的各个处理步骤"的问题。'},{id:"L_5",title:"Chains：链式调用与多步处理",navTitle:"链式调用",category:"核心概念",path:"/langchain/l-5/chains",summary:"用课程大纲生成展示 LCEL 多步骤链式处理：大纲生成 → 内容展开 → 摘要提炼。",demo:l,code:()=>Promise.resolve(`import { ChatOpenAI } from '@langchain/openai'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
+import { StringOutputParser } from '@langchain/core/output_parsers'
+import { RunnableSequence, RunnablePassthrough } from '@langchain/core/runnables'
+
+const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0.7 })
+const parser = new StringOutputParser()
+
+// 示例1: 三步链式 - 大纲生成 -> 内容展开 -> 摘要提炼
+const outlinePrompt = ChatPromptTemplate.fromTemplate(\`
+请为"{topic}"生成一份课程大纲，包含5个主要章节。
+用数字编号列出每个章节的标题。
+\`)
+
+const contentPrompt = ChatPromptTemplate.fromTemplate(\`
+根据以下课程大纲，为每个章节展开详细内容：
+
+{outline}
+
+请详细描述每个章节的核心知识点。
+\`)
+
+const summaryPrompt = ChatPromptTemplate.fromTemplate(\`
+根据以下课程内容，提炼一份100字以内的课程摘要：
+
+{content}
+\`)
+
+// 串联三个步骤
+const fullChain = RunnableSequence.from([
+  {
+    outline: outlinePrompt.pipe(model).pipe(parser),
+    topic: new RunnablePassthrough(),
+  },
+  {
+    content: (input) => contentPrompt.pipe(model).pipe(parser).invoke({ outline: input.outline }),
+    outline: (input) => input.outline,
+  },
+  {
+    summary: (input) => summaryPrompt.pipe(model).pipe(parser).invoke({ content: input.content }),
+    outline: (input) => input.outline,
+    content: (input) => input.content,
+  },
+])
+
+const result = await fullChain.invoke('LangChain.js 入门')
+console.log('大纲:', result.outline)
+console.log('摘要:', result.summary)
+
+// 示例2: 顺序链 - 前一步输出作为后一步输入
+const step1Prompt = ChatPromptTemplate.fromTemplate(
+  '把这句话翻译成英文: {text}'
+)
+const step2Prompt = ChatPromptTemplate.fromTemplate(
+  '把这句话改写得更诗意: {text}'
+)
+const step3Prompt = ChatPromptTemplate.fromTemplate(
+  '为这句话配一个标题: {text}'
+)
+
+const sequentialChain = step1Prompt
+  .pipe(model)
+  .pipe(parser)
+  .pipe((text) => ({ text }))
+  .pipe(step2Prompt)
+  .pipe(model)
+  .pipe(parser)
+  .pipe((text) => ({ text }))
+  .pipe(step3Prompt)
+  .pipe(model)
+  .pipe(parser)
+
+const title = await sequentialChain.invoke({ text: '春天来了，花儿都开了。' })
+console.log('诗意标题:', title)
+
+// 示例3: 分支链 - 根据条件选择不同路径
+import { RunnableBranch } from '@langchain/core/runnables'
+
+const classifyPrompt = ChatPromptTemplate.fromTemplate(\`
+判断用户问题属于哪个类别（只返回类别名）：
+- 技术问题
+- 产品咨询
+- 投诉建议
+- 其他
+
+问题: {question}
+\`)
+
+const techChain = ChatPromptTemplate.fromTemplate(
+  '作为技术支持工程师，回答: {question}'
+).pipe(model).pipe(parser)
+
+const productChain = ChatPromptTemplate.fromTemplate(
+  '作为产品顾问，回答: {question}'
+).pipe(model).pipe(parser)
+
+const complaintChain = ChatPromptTemplate.fromTemplate(
+  '作为客服经理，诚恳地回应: {question}'
+).pipe(model).pipe(parser)
+
+const defaultChain = ChatPromptTemplate.fromTemplate(
+  '作为通用助手，回答: {question}'
+).pipe(model).pipe(parser)
+
+const branch = RunnableBranch.from([
+  [(input) => input.category === '技术问题', techChain],
+  [(input) => input.category === '产品咨询', productChain],
+  [(input) => input.category === '投诉建议', complaintChain],
+  defaultChain,
+])
+
+const classifier = classifyPrompt.pipe(model).pipe(parser)
+
+const fullBranchChain = RunnableSequence.from([
+  {
+    question: (input: { question: string }) => input.question,
+    category: (input) => classifier.invoke({ question: input.question }),
+  },
+  branch,
+])
+
+const answer = await fullBranchChain.invoke({ question: '如何重置密码？' })
+console.log('回答:', answer)`),language:"typescript",principle:"Chain 将多个 LLM 调用和处理步骤串联成完整业务流程。前一步的输出作为后一步的输入，每步专注于单一职责，整体完成复杂任务。LangChain.js 推荐使用 LCEL 的 .pipe() 组合各步骤。",flow:["第一步链根据主题生成课程大纲。","第二步链接收大纲，展开详细内容。","第三步链接收详细内容，提炼核心摘要。"],notes:["每步链应职责单一，避免在单个链中处理过多逻辑。","链的中间结果可以缓存，避免重复调用 LLM。","LangChain.js 推荐用 LCEL pipe 组合链，旧版 LLMChain/SequentialChain 已废弃。","复杂流程可使用 LCEL 的 RunnableBranch 实现条件分支。"],problem:'解决"复杂任务需要多步 LLM 处理，如何组织步骤间的数据传递"的问题。'},{id:"L_6",title:"RAG 基础：文档加载与文本切分",navTitle:"文档切分",category:"RAG",path:"/langchain/l-6/doc-splitter",summary:"用文档切分器展示 RecursiveCharacterTextSplitter 的块大小和重叠量配置。",demo:p,code:()=>Promise.resolve(`import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter'
+import { TextLoader } from 'langchain/document_loaders/fs/text'
+import { Document } from '@langchain/core/documents'
+
+// 示例1: 基础文本切分
+const longText = \`
+LangChain 是一个用于开发由语言模型驱动的应用程序的框架。
+它使应用程序能够：
+1. 将语言模型与外部数据源连接起来
+2. 允许语言模型与其环境进行交互
+
+LangChain 的核心价值主张是：
+- 组件：用于处理语言模型的抽象概念，以及每个抽象概念的实现集合。组件是模块化且易于使用的，无论您是否使用 LangChain 框架的其余部分。
+- 即用型链：用于完成特定更高级别任务的组件的结构化组合。即用型链让您可以轻松上手。对于更复杂的应用程序和细致入微的用例，组件可以轻松自定义链。
+
+主要模块包括：
+- Models: 各种类型的模型和模型集成
+- Prompts: 提示词管理、提示词优化等
+- Memory: 短期记忆、长期记忆等
+- Chains: 各种链式调用
+- Agents: 代理、工具等
+- Retrieval: 检索增强生成
+- Callbacks: 回调系统
+\`
+
+const splitter = new RecursiveCharacterTextSplitter({
+  chunkSize: 200,
+  chunkOverlap: 40,
+  separators: ['\\n\\n', '\\n', '。', '，', ' '],
+})
+
+const docs = await splitter.createDocuments([longText])
+console.log(\`切分为 \${docs.length} 个块\`)
+docs.forEach((doc, i) => {
+  console.log(\`块\${i + 1} (\${doc.pageContent.length}字符): \${doc.pageContent.slice(0, 50)}...\`)
+})
+
+// 示例2: 配置不同的 chunkSize 和 chunkOverlap
+const splitterSmall = new RecursiveCharacterTextSplitter({
+  chunkSize: 100,
+  chunkOverlap: 20,
+})
+
+const splitterLarge = new RecursiveCharacterTextSplitter({
+  chunkSize: 500,
+  chunkOverlap: 100,
+})
+
+// 示例3: 带元数据的文档切分
+const docsWithMetadata = [
+  new Document({
+    pageContent: '这是文档的第一部分内容...',
+    metadata: { source: 'chapter1', page: 1 },
+  }),
+  new Document({
+    pageContent: '这是文档的第二部分内容...',
+    metadata: { source: 'chapter1', page: 2 },
+  }),
+]
+
+const splitDocs = await splitter.splitDocuments(docsWithMetadata)
+console.log('切分后元数据保留:', splitDocs[0].metadata)
+
+// 示例4: 从文件加载并切分 (TextLoader)
+// const loader = new TextLoader('path/to/document.txt')
+// const rawDocs = await loader.load()
+// const splitDocs = await splitter.splitDocuments(rawDocs)
+
+// 示例5: 按字符切分 CharacterTextSplitter
+import { CharacterTextSplitter } from 'langchain/text_splitter'
+
+const charSplitter = new CharacterTextSplitter({
+  separator: '\\n',
+  chunkSize: 200,
+  chunkOverlap: 20,
+})
+
+// 示例6: 切分代码 - 使用语言特定的切分器
+import { SupportedTextSplitterLanguages } from 'langchain/text_splitter'
+
+// 查看支持的语言
+console.log('支持的语言:', SupportedTextSplitterLanguages)
+
+// 示例: JavaScript 代码切分
+const jsCode = \`
+function calculateSum(arr) {
+  let sum = 0;
+  for (let i = 0; i < arr.length; i++) {
+    sum += arr[i];
+  }
+  return sum;
+}
+
+class DataProcessor {
+  constructor(data) {
+    this.data = data;
+  }
+
+  process() {
+    return this.data.map(item => item * 2);
+  }
+}
+
+const numbers = [1, 2, 3, 4, 5];
+console.log(calculateSum(numbers));
+\`
+
+const jsSplitter = RecursiveCharacterTextSplitter.fromLanguage('js', {
+  chunkSize: 150,
+  chunkOverlap: 30,
+})
+
+const jsChunks = await jsSplitter.createDocuments([jsCode])
+console.log(\`JS代码切分为 \${jsChunks.length} 块\`)
+`),language:"typescript",principle:"RAG 的第一步是把长文档切分为适合检索与向量化的小块。RecursiveCharacterTextSplitter 会按分隔符层级（段落、换行、句子、标点）递归切分，在尽量接近 chunkSize 的同时保持内容的语义连贯；chunkOverlap 使相邻块留有重叠，维持被切分处上下文的连续性。",flow:["加载原始文档（TextLoader、PDFLoader 等）。","配置 RecursiveCharacterTextSplitter 的 chunkSize、chunkOverlap 和 separators。","调用 splitter.splitDocuments(documents) 得到切分后的文档块列表。"],notes:["chunkSize 通常在 500-1500 字符之间，太小丢失上下文，太大降低检索精度。","chunkOverlap 建议设为 chunkSize 的 10%-20%。","不同文档类型可使用不同的 splitter，例如代码用 Language-specific splitter。"],problem:'解决"长文档如何切分为适合向量检索的小块"的问题。'},{id:"L_7",title:"RAG 进阶：向量存储与相似度检索",navTitle:"向量检索",category:"RAG",path:"/langchain/l-7/vector-retrieval",summary:"用知识库搜索展示文档嵌入、余弦相似度计算和 Top-K 检索结果排序。",demo:c,code:()=>Promise.resolve(`import { OpenAIEmbeddings } from '@langchain/openai'
+import { MemoryVectorStore } from 'langchain/vectorstores/memory'
+import { Document } from '@langchain/core/documents'
+import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter'
+
+// 示例1: 创建向量存储并添加文档
+const documents = [
+  new Document({
+    pageContent: 'LangChain 是一个用于开发 LLM 应用的框架，提供模型调用、提示模板、链式调用等能力。',
+    metadata: { category: '框架介绍' },
+  }),
+  new Document({
+    pageContent: 'RAG (检索增强生成) 通过从知识库中检索相关文档，将其作为上下文提供给 LLM，提升回答准确性。',
+    metadata: { category: 'RAG' },
+  }),
+  new Document({
+    pageContent: '向量数据库将文本转换为高维向量，通过相似度计算快速检索相关文档。',
+    metadata: { category: '向量存储' },
+  }),
+  new Document({
+    pageContent: 'LCEL 是 LangChain 的表达式语言，通过 .pipe() 方法组合各种 Runnable 组件。',
+    metadata: { category: 'LCEL' },
+  }),
+  new Document({
+    pageContent: 'Agent 是能够自主决策的 LLM 应用，可以选择工具并逐步推理完成复杂任务。',
+    metadata: { category: 'Agent' },
+  }),
+]
+
+const embeddings = new OpenAIEmbeddings({
+  model: 'text-embedding-3-small',
+})
+
+const vectorStore = await MemoryVectorStore.fromDocuments(
+  documents,
+  embeddings
+)
+
+// 示例2: 相似度检索 similaritySearch
+const query1 = '如何用 LangChain 做 RAG？'
+const results1 = await vectorStore.similaritySearch(query1, 2)
+console.log('检索结果:')
+results1.forEach((doc, i) => {
+  console.log(\`\${i + 1}. [\${doc.metadata.category}] \${doc.pageContent.slice(0, 50)}...\`)
+})
+
+// 示例3: 带分数的相似度检索
+const resultsWithScore = await vectorStore.similaritySearchWithScore(
+  '什么是向量数据库？',
+  3
+)
+console.log('\\n带分数的检索结果:')
+resultsWithScore.forEach(([doc, score], i) => {
+  console.log(\`\${i + 1}. 相似度: \${score.toFixed(4)} - \${doc.pageContent.slice(0, 40)}...\`)
+})
+
+// 示例4: 按元数据过滤检索
+const filteredResults = await vectorStore.similaritySearch(
+  'LLM 应用开发',
+  2,
+  { category: 'RAG' } // 过滤条件
+)
+console.log('\\n过滤后结果:', filteredResults.length)
+
+// 示例5: 使用 Retriever 接口
+const retriever = vectorStore.asRetriever({
+  k: 2,
+  searchType: 'similarity', // 或 'mmr'
+})
+
+const retrieverResults = await retriever.invoke('什么是 Agent？')
+console.log('\\nRetriever 结果数量:', retrieverResults.length)
+
+// 示例6: MMR (最大边际相关性) 检索 - 兼顾相关性和多样性
+const mmrResults = await vectorStore.maxMarginalRelevanceSearch(
+  'LangChain 的核心概念',
+  {
+    k: 3,
+    fetchK: 10, // 先取 10 个最相关的
+    lambda: 0.5, // 0=最大多样性, 1=最大相关性
+  }
+)
+console.log('\\nMMR 结果数量:', mmrResults.length)
+
+// 示例7: 完整 RAG 流程 - 检索 + 生成
+import { ChatOpenAI } from '@langchain/openai'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
+import { StringOutputParser } from '@langchain/core/output_parsers'
+import { RunnableSequence, RunnablePassthrough } from '@langchain/core/runnables'
+
+const model = new ChatOpenAI({ model: 'gpt-4o-mini' })
+
+const ragPrompt = ChatPromptTemplate.fromTemplate(\`
+根据以下上下文回答问题：
+
+{context}
+
+问题: {question}
+
+请用简洁的语言回答。如果上下文中没有相关信息，请说"我不知道"。
+\`)
+
+function formatDocs(docs: Document[]) {
+  return docs.map(doc => doc.pageContent).join('\\n\\n')
+}
+
+const ragChain = RunnableSequence.from([
+  {
+    context: retriever.pipe(formatDocs),
+    question: new RunnablePassthrough(),
+  },
+  ragPrompt,
+  model,
+  new StringOutputParser(),
+])
+
+const answer = await ragChain.invoke('RAG 是什么？')
+console.log('\\nRAG 回答:', answer)`),language:"typescript",principle:"向量检索是 RAG 的核心。文档通过 Embedding 模型转换为高维向量（如 text-embedding-3-small 输出 1536 维），查询同样被转换为向量，通过余弦相似度等度量找到最相关的文档块。VectorStore 封装了存储和检索逻辑。",flow:["将文档块通过 Embedding 模型转换为向量。","存入 VectorStore（MemoryVectorStore、FAISS、Pinecone 等）。","查询时将问题转为向量，调用 similaritySearch 返回最相关的 K 个文档块。"],notes:["Embedding 模型的选择直接影响检索质量，OpenAI 的 text-embedding-3-small 是常用选择。","真实 Embedding 向量维度通常为 1536 或 3072，本 demo 用 text-embedding-3-small 生成真实高维向量参与检索，并非简化为低维示例。","similaritySearchWithScore 返回的分数反映查询与文档的相近程度，不同存储后端在分数方向与取值范围上可能不同。","生产环境推荐使用持久化向量数据库，如 Pinecone、Weaviate 或 Chroma。","检索结果数量 K 值需要根据场景调优，通常 3-5 个即可。"],problem:'解决"如何从大量文档中快速找到与问题最相关的内容"的问题。'},{id:"L_8",title:"Agent：智能代理与 ReAct 推理",navTitle:"智能代理",category:"Agent",path:"/langchain/l-8/agent",summary:"用推理过程展示 Agent 的 ReAct 循环：思考 → 行动 → 观察 → 回答。",demo:d,code:()=>Promise.resolve(`import { ChatOpenAI } from '@langchain/openai'
+import { tool } from '@langchain/core/tools'
+import { z } from 'zod'
+import { AgentExecutor, createToolCallingAgent } from 'langchain/agents'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
+
+// 示例1: 定义工具
+const searchTool = tool(
+  async ({ query }) => {
+    // 模拟搜索结果
+    const mockResults: Record<string, string> = {
+      'LangChain': 'LangChain 是一个用于开发 LLM 应用的开源框架，支持 Python 和 JavaScript。',
+      'OpenAI': 'OpenAI 是一家人工智能研究公司，开发了 GPT 系列模型。',
+      'RAG': 'RAG (检索增强生成) 是一种结合检索和生成的技术，可以提升 LLM 回答的准确性。',
+    }
+    return mockResults[query] || \`未找到关于"\${query}"的信息\`
+  },
+  {
+    name: 'web_search',
+    description: '搜索网络获取信息。当你需要回答实时性问题或不了解的知识时使用。',
+    schema: z.object({
+      query: z.string().describe('搜索关键词'),
+    }),
+  }
+)
+
+const calculatorTool = tool(
+  async ({ expression }) => {
+    try {
+      const result = eval(expression)
+      return \`计算结果: \${result}\`
+    } catch (e) {
+      return '计算错误，请检查表达式'
+    }
+  },
+  {
+    name: 'calculator',
+    description: '进行数学计算。当你需要做加减乘除等数学运算时使用。',
+    schema: z.object({
+      expression: z.string().describe('数学表达式，如 "2 + 3 * 4"'),
+    }),
+  }
+)
+
+const tools = [searchTool, calculatorTool]
+
+// 示例2: 创建 ReAct Agent
+const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 })
+
+const prompt = ChatPromptTemplate.fromMessages([
+  ['system', '你是一个 helpful 的助手。你可以使用工具来帮助回答问题。'],
+  ['human', '{input}'],
+  ['placeholder', '{agent_scratchpad}'],
+])
+
+const agent = createToolCallingAgent({
+  llm: model,
+  tools,
+  prompt,
+})
+
+const agentExecutor = new AgentExecutor({
+  agent,
+  tools,
+  verbose: true, // 显示思考过程
+  maxIterations: 5, // 最大迭代次数，防止无限循环
+})
+
+// 示例3: 简单问题（不需要工具）
+const result1 = await agentExecutor.invoke({
+  input: '你好，请介绍一下你自己',
+})
+console.log('回答:', result1.output)
+
+// 示例4: 需要搜索的问题
+const result2 = await agentExecutor.invoke({
+  input: 'LangChain 是什么？',
+})
+console.log('回答:', result2.output)
+
+// 示例5: 需要计算的问题
+const result3 = await agentExecutor.invoke({
+  input: '123 乘以 456 等于多少？',
+})
+console.log('回答:', result3.output)
+
+// 示例6: 多步骤推理问题
+const result4 = await agentExecutor.invoke({
+  input: 'RAG 是什么？用一句话解释，然后计算 15 的平方是多少？',
+})
+console.log('回答:', result4.output)
+
+// 示例7: 流式输出 Agent 执行过程
+const stream = await agentExecutor.stream({
+  input: '搜索 LangChain 的信息，然后用一句话总结',
+})
+
+for await (const step of stream) {
+  if (step.messages) {
+    step.messages.forEach((msg: any) => {
+      if (msg._getType() === 'ai' && msg.tool_calls) {
+        console.log('工具调用:', msg.tool_calls)
+      } else if (msg._getType() === 'tool') {
+        console.log('工具结果:', msg.content.slice(0, 50))
+      }
+    })
+  }
+  if (step.output) {
+    console.log('最终答案:', step.output)
+  }
+}`),language:"typescript",principle:"Agent 是能够自主决策的 LLM 应用。ReAct 模式让 Agent 在每一步先思考需要做什么，然后选择工具执行行动，观察结果后再决定下一步，直到得出最终答案。",flow:["Agent 接收用户问题，进入推理循环。","思考阶段：分析当前信息，决定下一步行动。","行动阶段：选择工具并执行，获取观察结果。","重复思考和行动，直到信息足够生成最终答案。"],notes:["Agent 的推理过程不可预测，需要设置最大迭代次数防止无限循环。","工具描述的清晰程度直接影响 Agent 选择工具的准确性。","简单任务不需要 Agent，直接用 Chain 更可控。"],problem:'解决"LLM 如何根据问题自主选择工具并逐步推理"的问题。'},{id:"L_9",title:"Tools：工具定义与调用",navTitle:"工具定义",category:"Agent",path:"/langchain/l-9/tools",summary:"用工具注册表展示 tool 函数的定义、Zod 参数 Schema 和调用过程。",demo:_,code:()=>Promise.resolve(`import { tool, Tool } from '@langchain/core/tools'
+import { z } from 'zod'
+import { ChatOpenAI } from '@langchain/openai'
+
+// 示例1: 使用 tool 函数定义工具（推荐方式）
+const weatherTool = tool(
+  async ({ city, date }) => {
+    const mockWeather: Record<string, any> = {
+      '北京': { temp: 25, condition: '晴', humidity: 45 },
+      '上海': { temp: 28, condition: '多云', humidity: 65 },
+      '深圳': { temp: 32, condition: '雷阵雨', humidity: 80 },
+    }
+    const weather = mockWeather[city] || { temp: 20, condition: '未知', humidity: 50 }
+    return \`\${city} \${date} 天气: \${weather.condition}, 温度 \${weather.temp}°C, 湿度 \${weather.humidity}%\`
+  },
+  {
+    name: 'get_weather',
+    description: '获取指定城市的天气信息。查询天气预报时使用。',
+    schema: z.object({
+      city: z.string().describe('城市名称，如"北京"、"上海"'),
+      date: z.string().describe('日期，格式 YYYY-MM-DD'),
+    }),
+  }
+)
+
+console.log('工具名称:', weatherTool.name)
+console.log('工具描述:', weatherTool.description)
+
+// 示例2: 直接调用工具
+const result = await weatherTool.invoke({ city: '北京', date: '2024-07-01' })
+console.log('调用结果:', result)
+
+// 示例3: 定义多个工具
+const searchTool = tool(
+  async ({ query }) => {
+    return \`搜索"\${query}"的结果：...\`
+  },
+  {
+    name: 'web_search',
+    description: '搜索网络获取信息',
+    schema: z.object({
+      query: z.string().describe('搜索关键词'),
+    }),
+  }
+)
+
+const calculatorTool = tool(
+  async ({ a, b, operation }) => {
+    let result: number
+    switch (operation) {
+      case 'add': result = a + b; break
+      case 'subtract': result = a - b; break
+      case 'multiply': result = a * b; break
+      case 'divide': result = a / b; break
+      default: result = 0
+    }
+    return \`\${a} \${operation} \${b} = \${result}\`
+  },
+  {
+    name: 'calculator',
+    description: '执行基础数学运算',
+    schema: z.object({
+      a: z.number().describe('第一个数字'),
+      b: z.number().describe('第二个数字'),
+      operation: z.enum(['add', 'subtract', 'multiply', 'divide']).describe('运算类型'),
+    }),
+  }
+)
+
+const tools = [weatherTool, searchTool, calculatorTool]
+
+// 示例4: 模型调用工具（Function Calling）
+const model = new ChatOpenAI({ model: 'gpt-4o-mini' }).bind({
+  tools: tools.map(t => ({
+    type: 'function' as const,
+    function: {
+      name: t.name,
+      description: t.description,
+      parameters: (t as any).schema ? (t as any).schema : {},
+    },
+  })),
+})
+
+// 示例5: 使用 withStructuredOutput 实现工具调用
+const modelWithTools = new ChatOpenAI({ model: 'gpt-4o-mini' }).bindTools(tools)
+
+const response = await modelWithTools.invoke([
+  { role: 'user', content: '北京今天天气怎么样？' }
+])
+
+// 检查是否有工具调用
+if (response.tool_calls && response.tool_calls.length > 0) {
+  console.log('工具调用:', response.tool_calls)
+  // 执行工具调用
+  for (const toolCall of response.tool_calls) {
+    const toolInstance = tools.find(t => t.name === toolCall.name)
+    if (toolInstance) {
+      const toolResult = await toolInstance.invoke(toolCall.args)
+      console.log('工具结果:', toolResult)
+    }
+  }
+}
+
+// 示例6: 继承 Tool 类定义工具（旧方式）
+class CustomSearchTool extends Tool {
+  name = 'custom_search'
+  description = '自定义搜索工具'
+
+  async _call(input: string): Promise<string> {
+    return \`搜索结果: \${input}\`
+  }
+}
+
+const customTool = new CustomSearchTool()
+
+// 示例7: 工具的元数据和标签
+const taggedTool = tool(
+  async ({ query }) => \`结果: \${query}\`,
+  {
+    name: 'tagged_search',
+    description: '带标签的搜索工具',
+    schema: z.object({ query: z.string() }),
+    tags: ['search', 'production'],
+    metadata: { version: '1.0.0' },
+  }
+)
+console.log('工具标签:', taggedTool.tags)
+console.log('工具元数据:', taggedTool.metadata)`),language:"typescript",principle:"Tool 是 Agent 与外部世界交互的接口。每个工具定义名称、描述和参数 Schema，Agent 根据描述判断何时调用哪个工具。LangChain.js 推荐使用 tool 函数配合 Zod schema 定义工具，提供类型安全的方式。",flow:["使用 tool 函数定义工具名称、描述和 Zod 参数 Schema。","实现工具的执行函数，接收参数并返回结果。","将工具注册到 Agent，Agent 在推理时自动选择和调用。"],notes:["工具描述要清晰具体，说明适用场景和输入格式。","工具执行应有超时和错误处理，避免阻塞 Agent 推理。","参数 Schema 越精确，Agent 传参错误越少。","LangChain.js 推荐使用 tool 函数 + Zod schema，旧版 DynamicTool 已不推荐。"],problem:'解决"Agent 如何与外部系统交互，以及如何定义可被 LLM 理解的工具接口"的问题。'},{id:"L_10",title:"Memory：对话记忆与历史管理",navTitle:"对话记忆",category:"对话管理",path:"/langchain/l-10/memory",summary:"用对话面板展示完整历史、最近 k 轮窗口、历史摘要三种记忆策略及 RunnableWithMessageHistory。",demo:h,code:()=>Promise.resolve(`import { ChatOpenAI } from '@langchain/openai'
+import { ChatPromptTemplate, MessagesPlaceholder } from '@langchain/core/prompts'
+import { StringOutputParser } from '@langchain/core/output_parsers'
+import { RunnableSequence, RunnablePassthrough } from '@langchain/core/runnables'
+import { HumanMessage, AIMessage, SystemMessage } from '@langchain/core/messages'
+import { ChatMessageHistory } from 'langchain/stores/message/in_memory'
+
+const model = new ChatOpenAI({ model: 'gpt-4o-mini' })
+
+// 示例1: ChatMessageHistory - 基础消息历史
+const history = new ChatMessageHistory()
+
+// 添加消息
+await history.addMessage(new HumanMessage('你好，我叫小明'))
+await history.addMessage(new AIMessage('你好小明！有什么我可以帮助你的吗？'))
+await history.addMessage(new HumanMessage('我喜欢编程'))
+await history.addMessage(new AIMessage('太棒了！你最喜欢哪种编程语言？'))
+
+// 获取历史消息
+const messages = await history.getMessages()
+console.log('历史消息数:', messages.length)
+messages.forEach(msg => {
+  console.log(\`[\${msg._getType()}] \${msg.content}\`)
+})
+
+// 示例2: 带记忆的对话链 - 完整历史
+const promptWithHistory = ChatPromptTemplate.fromMessages([
+  ['system', '你是一个友好的 AI 助手，请用中文回答问题。'],
+  new MessagesPlaceholder('chat_history'),
+  ['human', '{input}'],
+])
+
+const chainWithHistory = RunnableSequence.from([
+  {
+    input: (input: { input: string; chat_history: any[] }) => input.input,
+    chat_history: (input) => input.chat_history,
+  },
+  promptWithHistory,
+  model,
+  new StringOutputParser(),
+])
+
+async function chatWithFullMemory() {
+  const history = new ChatMessageHistory()
+  
+  // 第一轮对话
+  await history.addUserMessage('你好，我叫小红')
+  const response1 = await chainWithHistory.invoke({
+    input: '你好，我叫小红',
+    chat_history: await history.getMessages(),
+  })
+  await history.addAIChatMessage(response1)
+  console.log('AI 1:', response1)
+
+  // 第二轮对话 - 模型应该记得名字
+  const response2 = await chainWithHistory.invoke({
+    input: '我叫什么名字？',
+    chat_history: await history.getMessages(),
+  })
+  await history.addAIChatMessage(response2)
+  console.log('AI 2:', response2)
+}
+
+// 示例3: BufferWindowMemory - 只保留最近 k 轮
+async function getWindowMessages(history: ChatMessageHistory, k: number) {
+  const allMessages = await history.getMessages()
+  // 保留最近 k 轮对话（2*k 条消息）
+  return allMessages.slice(-2 * k)
+}
+
+async function chatWithWindowMemory() {
+  const history = new ChatMessageHistory()
+  
+  // 添加多轮对话
+  await history.addUserMessage('第一轮问题')
+  await history.addAIChatMessage('第一轮回答')
+  await history.addUserMessage('第二轮问题')
+  await history.addAIChatMessage('第二轮回答')
+  await history.addUserMessage('第三轮问题')
+  await history.addAIChatMessage('第三轮回答')
+
+  const windowMessages = await getWindowMessages(history, 2)
+  console.log('窗口记忆消息数:', windowMessages.length) // 应该是 4 条（2轮）
+}
+
+// 示例4: ConversationSummaryMemory - 摘要记忆
+const summarizePrompt = ChatPromptTemplate.fromTemplate(\`
+请将以下对话历史压缩为一段简洁的摘要：
+
+{conversation}
+
+摘要:
+\`)
+
+async function summarizeHistory(history: ChatMessageHistory) {
+  const messages = await history.getMessages()
+  const conversation = messages
+    .map(m => \`\${m._getType().toUpperCase()}: \${m.content}\`)
+    .join('\\n')
+  
+  const summaryChain = summarizePrompt.pipe(model).pipe(new StringOutputParser())
+  return summaryChain.invoke({ conversation })
+}
+
+async function chatWithSummaryMemory() {
+  const history = new ChatMessageHistory()
+  let summary = ''
+
+  // 对话
+  await history.addUserMessage('你好，我在学习 LangChain')
+  await history.addAIChatMessage('很好！LangChain 是构建 LLM 应用的强大框架')
+  await history.addUserMessage('它支持哪些功能？')
+  await history.addAIChatMessage('支持模型调用、提示模板、链式调用、Agent、RAG 等')
+
+  // 当历史太长时，生成摘要
+  const allMessages = await history.getMessages()
+  if (allMessages.length > 10) {
+    summary = await summarizeHistory(history)
+    // 清空历史，只保留摘要
+    await history.clear()
+    await history.addMessage(new SystemMessage(\`之前对话的摘要: \${summary}\`))
+  }
+}
+
+// 示例5: 使用 RunnableWithMessageHistory
+import { RunnableWithMessageHistory } from '@langchain/core/runnables'
+
+const simplePrompt = ChatPromptTemplate.fromMessages([
+  ['system', '你是一个 helpful 的助手。'],
+  new MessagesPlaceholder('history'),
+  ['human', '{input}'],
+])
+
+const chain = simplePrompt.pipe(model).pipe(new StringOutputParser())
+
+const messageHistories: Record<string, ChatMessageHistory> = {}
+
+function getMessageHistory(sessionId: string) {
+  if (!messageHistories[sessionId]) {
+    messageHistories[sessionId] = new ChatMessageHistory()
+  }
+  return messageHistories[sessionId]
+}
+
+const chainWithHistory2 = new RunnableWithMessageHistory({
+  runnable: chain,
+  getMessageHistory,
+  inputMessagesKey: 'input',
+  historyMessagesKey: 'history',
+})
+
+async function testRunnableHistory() {
+  const sessionId = 'user-123'
+  
+  const res1 = await chainWithHistory2.invoke(
+    { input: '我叫小明' },
+    { configurable: { sessionId } }
+  )
+  console.log('回答1:', res1)
+
+  const res2 = await chainWithHistory2.invoke(
+    { input: '我叫什么名字？' },
+    { configurable: { sessionId } }
+  )
+  console.log('回答2:', res2)
+}`),language:"typescript",principle:"Memory 让 LLM 应用记住对话上下文。核心是底层存储 ChatMessageHistory，配合 MessagesPlaceholder 占位符把历史消息拼接到提示词；当对话过长时只保留最近 k 轮窗口，或把历史压缩为摘要，在上下文长度和记忆完整性之间取舍。LangChain.js 当前推荐用 RunnableWithMessageHistory 按 sessionId 自动注入历史，旧版 Memory 类已不再推荐。",flow:["用 ChatMessageHistory 记录每轮用户与 AI 消息。","用 MessagesPlaceholder 在提示词中预留历史位置，把历史注入模板。","历史过长时只保留最近 k 轮窗口，或用前缀消息压缩为摘要。","通过 RunnableWithMessageHistory 按 sessionId 维护每个会话的历史。"],notes:["对话轮数多时完整历史会超出 token 上限，需要改用窗口或摘要记忆。","摘要记忆需要额外的 LLM 调用来压缩历史，会增加延迟和成本。","ChatMessageHistory 是底层存储，可替换为 Redis、数据库等持久化后端。","RunnableWithMessageHistory 通过 configurable.sessionId 区分会话，生产环境建议使用持久化存储。"],problem:'解决"LLM 应用如何记住之前的对话，并在 token 限制内保持上下文"的问题。'},{id:"L_11",title:"Callbacks：回调与可观测性",navTitle:"回调追踪",category:"工程实践",path:"/langchain/l-11/callbacks",summary:"用事件时间线展示 handleChainStart、handleLLMStart、handleLLMNewToken、handleLLMEnd 等回调的触发时机。",demo:g,code:()=>Promise.resolve(`import { ChatOpenAI } from '@langchain/openai'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
+import { StringOutputParser } from '@langchain/core/output_parsers'
+import { BaseCallbackHandler } from '@langchain/core/callbacks/base'
+
+// 示例1: 自定义 CallbackHandler
+class MyCallbackHandler extends BaseCallbackHandler {
+  name = 'my_callback_handler'
+
+  // 链开始时触发
+  async handleChainStart(chain: any, inputs: any, runId: string) {
+    console.log(\`[链开始] runId: \${runId}\`)
+    console.log(\`  输入: \${JSON.stringify(inputs).slice(0, 100)}\`)
+  }
+
+  // 链结束时触发
+  async handleChainEnd(outputs: any, runId: string) {
+    console.log(\`[链结束] runId: \${runId}\`)
+    console.log(\`  输出: \${JSON.stringify(outputs).slice(0, 100)}\`)
+  }
+
+  // LLM 调用开始时触发
+  async handleLLMStart(llm: any, prompts: string[], runId: string) {
+    console.log(\`[LLM 开始] runId: \${runId}\`)
+    console.log(\`  提示词数量: \${prompts.length}\`)
+  }
+
+  // LLM 生成新 token 时触发
+  async handleLLMNewToken(token: string, idx: number, runId: string) {
+    console.log(\`[新 Token] \${token}\`)
+  }
+
+  // LLM 调用结束时触发
+  async handleLLMEnd(output: any, runId: string) {
+    console.log(\`[LLM 结束] runId: \${runId}\`)
+    const tokenUsage = output.llmOutput?.tokenUsage
+    if (tokenUsage) {
+      console.log(\`  Token 使用: prompt=\${tokenUsage.promptTokens}, completion=\${tokenUsage.completionTokens}, total=\${tokenUsage.totalTokens}\`)
+    }
+  }
+
+  // 错误时触发
+  async handleChainError(error: Error, runId: string) {
+    console.error(\`[链错误] runId: \${runId}, 错误: \${error.message}\`)
+  }
+
+  async handleLLMError(error: Error, runId: string) {
+    console.error(\`[LLM 错误] runId: \${runId}, 错误: \${error.message}\`)
+  }
+
+  // 工具调用回调
+  async handleToolStart(tool: any, input: string, runId: string) {
+    console.log(\`[工具开始] 工具名: \${tool.name}, 输入: \${input.slice(0, 50)}\`)
+  }
+
+  async handleToolEnd(output: string, runId: string) {
+    console.log(\`[工具结束] 输出: \${output.slice(0, 50)}\`)
+  }
+}
+
+const myHandler = new MyCallbackHandler()
+
+// 示例2: 在 invoke 中使用回调
+const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 })
+const prompt = ChatPromptTemplate.fromTemplate('解释{concept}')
+const parser = new StringOutputParser()
+
+const chain = prompt.pipe(model).pipe(parser)
+
+const result = await chain.invoke(
+  { concept: '回调函数' },
+  { callbacks: [myHandler] }
+)
+console.log('最终结果:', result)
+
+// 示例3: 在 stream 中使用回调（handleLLMNewToken）
+const streamResult = await chain.stream(
+  { concept: '流式输出' },
+  { callbacks: [myHandler] }
+)
+
+let fullText = ''
+for await (const chunk of streamResult) {
+  fullText += chunk
+}
+console.log('完整文本:', fullText)
+
+// 示例4: 创建模型时指定回调
+const modelWithCallback = new ChatOpenAI({
+  model: 'gpt-4o-mini',
+  callbacks: [myHandler],
+})
+
+// 示例5: 使用标签和元数据
+const chainWithTags = prompt.pipe(model).pipe(parser)
+
+const resultWithTags = await chainWithTags.invoke(
+  { concept: '标签系统' },
+  {
+    tags: ['production', 'v1.0'],
+    metadata: { user: 'user123', feature: 'explanation' },
+  }
+)
+
+// 示例6: 计算执行时间的回调
+class TimingCallbackHandler extends BaseCallbackHandler {
+  name = 'timing_handler'
+  private startTime: Record<string, number> = {}
+
+  async handleChainStart(_chain: any, _inputs: any, runId: string) {
+    this.startTime[runId] = Date.now()
+    console.log(\`[开始] runId: \${runId}\`)
+  }
+
+  async handleChainEnd(_outputs: any, runId: string) {
+    const duration = Date.now() - this.startTime[runId]
+    console.log(\`[结束] runId: \${runId}, 耗时: \${duration}ms\`)
+    delete this.startTime[runId]
+  }
+}
+
+const timingHandler = new TimingCallbackHandler()
+
+const timingResult = await chain.invoke(
+  { concept: '性能监控' },
+  { callbacks: [timingHandler] }
+)
+
+// 示例7: ConsoleCallbackHandler（内置调试用）
+import { ConsoleCallbackHandler } from '@langchain/core/tracers/console'
+
+const consoleHandler = new ConsoleCallbackHandler()
+
+// 用于调试时查看详细执行过程
+// const debugResult = await chain.invoke(
+//   { concept: '调试' },
+//   { callbacks: [consoleHandler] }
+// )`),language:"typescript",principle:"Callbacks 是 LangChain 的可观测性机制。通过注册回调处理器，可以在 Runnable 执行的各个阶段（链开始、LLM 调用开始、生成 token、调用结束、出错）执行自定义逻辑，用于日志、监控、调试和流式输出。",flow:["实现 CallbackHandler，定义 handleChainStart、handleLLMStart、handleLLMNewToken、handleLLMEnd 等方法。","将 handler 传入 Runnable 的 callbacks 参数。","执行过程中回调自动触发，记录每个阶段的输入输出和耗时。"],notes:["生产环境建议集成 LangSmith 或 LangFuse 进行链路追踪。","handleLLMNewToken 是实现流式输出的关键回调。","handleChainError 用于捕获链执行中的错误，实现错误监控和告警。","回调中不要执行耗时操作，避免阻塞 LLM 调用流程。"],problem:'解决"LLM 应用执行过程不透明，如何监控和调试"的问题。'},{id:"L_12",title:"综合实战：Retriever + Agent + Memory 智能问答",navTitle:"智能问答",category:"综合实战",path:"/langchain/l-12/qa-bot",summary:"用智能问答助手展示 Retriever 检索、Agent 推理和对话记忆的综合应用。",demo:v,code:()=>Promise.resolve(`import { ChatOpenAI } from '@langchain/openai'
+import { OpenAIEmbeddings } from '@langchain/openai'
+import { MemoryVectorStore } from 'langchain/vectorstores/memory'
+import { Document } from '@langchain/core/documents'
+import { tool } from '@langchain/core/tools'
+import { z } from 'zod'
+import { AgentExecutor, createToolCallingAgent } from 'langchain/agents'
+import { ChatPromptTemplate, MessagesPlaceholder } from '@langchain/core/prompts'
+import { ChatMessageHistory } from 'langchain/stores/message/in_memory'
+import { RunnableWithMessageHistory } from '@langchain/core/runnables'
+
+// 示例1: 准备知识库文档
+const knowledgeDocs = [
+  new Document({
+    pageContent: 'LangChain 是一个用于开发 LLM 应用的开源框架，支持 Python 和 JavaScript。核心概念包括 Models、Prompts、Chains、Agents、Memory、Retrieval 等。',
+    metadata: { topic: 'LangChain 基础' },
+  }),
+  new Document({
+    pageContent: 'RAG（检索增强生成）是一种结合检索系统和 LLM 的技术。流程包括：文档加载、文本切分、向量化、存储、检索、生成。可以有效解决 LLM 知识过时的问题。',
+    metadata: { topic: 'RAG' },
+  }),
+  new Document({
+    pageContent: 'Agent 是能够自主决策的 LLM 应用。ReAct 模式是最常用的 Agent 模式，包括思考(Thought)、行动(Action)、观察(Observation)三个步骤循环。',
+    metadata: { topic: 'Agent' },
+  }),
+  new Document({
+    pageContent: 'LangChain.js 提供了 LCEL（LangChain Expression Language），通过 .pipe() 方法组合各种 Runnable 组件，实现声明式的链式调用。',
+    metadata: { topic: 'LCEL' },
+  }),
+  new Document({
+    pageContent: '向量数据库用于存储文本的向量表示，支持相似度检索。常用的有 Chroma、Pinecone、Weaviate、FAISS 等。OpenAI 的 text-embedding-3-small 输出 1536 维向量。',
+    metadata: { topic: '向量存储' },
+  }),
+]
+
+// 示例2: 创建向量存储和检索器
+const embeddings = new OpenAIEmbeddings({ model: 'text-embedding-3-small' })
+const vectorStore = await MemoryVectorStore.fromDocuments(knowledgeDocs, embeddings)
+const retriever = vectorStore.asRetriever({ k: 3 })
+
+// 示例3: 定义检索工具
+const searchTool = tool(
+  async ({ query }) => {
+    const docs = await retriever.invoke(query)
+    return docs.map((doc, i) => \`[\${i + 1}] \${doc.pageContent}\`).join('\\n\\n')
+  },
+  {
+    name: 'knowledge_base_search',
+    description: '从知识库中搜索相关信息。回答关于 LangChain、RAG、Agent 等技术问题时使用。',
+    schema: z.object({
+      query: z.string().describe('搜索查询'),
+    }),
+  }
+)
+
+const tools = [searchTool]
+
+// 示例4: 创建带记忆的 Agent
+const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 })
+
+const prompt = ChatPromptTemplate.fromMessages([
+  ['system', \`你是一个专业的 LangChain 技术支持助手。
+你可以使用知识库搜索工具来查找相关信息。
+如果知识库中没有答案，请诚实地说你不知道。
+请用简洁、专业的中文回答问题。\`],
+  new MessagesPlaceholder('chat_history'),
+  ['human', '{input}'],
+  new MessagesPlaceholder('agent_scratchpad'),
+])
+
+const agent = createToolCallingAgent({ llm: model, tools, prompt })
+const agentExecutor = new AgentExecutor({
+  agent,
+  tools,
+  verbose: true,
+  maxIterations: 5,
+})
+
+// 示例5: 添加对话记忆
+const messageHistories: Record<string, ChatMessageHistory> = {}
+
+function getMessageHistory(sessionId: string) {
+  if (!messageHistories[sessionId]) {
+    messageHistories[sessionId] = new ChatMessageHistory()
+  }
+  return messageHistories[sessionId]
+}
+
+const agentWithMemory = new RunnableWithMessageHistory({
+  runnable: agentExecutor,
+  getMessageHistory,
+  inputMessagesKey: 'input',
+  historyMessagesKey: 'chat_history',
+})
+
+// 示例6: 使用智能问答助手
+async function runQABot() {
+  const sessionId = 'user-001'
+
+  console.log('=== 智能问答助手 ===')
+
+  // 第一轮：基础问题
+  console.log('\\n用户: 什么是 RAG？')
+  const response1 = await agentWithMemory.invoke(
+    { input: '什么是 RAG？' },
+    { configurable: { sessionId } }
+  )
+  console.log('助手:', response1.output)
+
+  // 第二轮：追问（测试记忆）
+  console.log('\\n用户: 它的主要流程是什么？')
+  const response2 = await agentWithMemory.invoke(
+    { input: '它的主要流程是什么？' },
+    { configurable: { sessionId } }
+  )
+  console.log('助手:', response2.output)
+
+  // 第三轮：另一个话题
+  console.log('\\n用户: LangChain 的 LCEL 是什么？')
+  const response3 = await agentWithMemory.invoke(
+    { input: 'LangChain 的 LCEL 是什么？' },
+    { configurable: { sessionId } }
+  )
+  console.log('助手:', response3.output)
+
+  // 第四轮：综合问题（需要推理 + 检索）
+  console.log('\\n用户: 如何用 LangChain 实现一个 RAG 系统？')
+  const response4 = await agentWithMemory.invoke(
+    { input: '如何用 LangChain 实现一个 RAG 系统？' },
+    { configurable: { sessionId } }
+  )
+  console.log('助手:', response4.output)
+}
+
+// 示例7: 流式输出对话
+async function streamQABot() {
+  const sessionId = 'user-002'
+
+  const stream = await agentWithMemory.stream(
+    { input: '解释一下 Agent 的工作原理' },
+    { configurable: { sessionId } }
+  )
+
+  console.log('\\n流式回答:')
+  for await (const step of stream) {
+    if (step.output) {
+      process.stdout.write(step.output)
+    }
+  }
+  console.log()
+}`),language:"typescript",principle:"真实 LLM 应用通常需要组合多种能力。Retriever 从 VectorStore 检索相关文档，Agent 提供推理决策，Memory 提供上下文记忆。三者协同构成完整的智能问答系统：先检索相关文档，再推理生成答案，同时维护对话历史。",flow:["从 Memory 中检索对话上下文，了解用户历史意图。","通过 Retriever 从 VectorStore 检索与当前问题相关的文档片段。","Agent 结合检索结果和上下文，推理生成最终答案。"],notes:["检索质量是 RAG 应用的关键瓶颈，投入精力优化文档切分和检索策略。","Agent 的可靠性需要通过测试和监控持续改进。","生产环境要考虑降级策略：Agent 失败时回退到简单 Chain。"],problem:'解决"如何将 RAG、Agent、Memory 组合为完整的智能问答系统"的问题。'},{id:"L_13",title:"流式输出深入：invoke、stream、astream_events",navTitle:"流式输出",category:"核心概念",path:"/langchain/l-13/streaming",summary:"用三种流式策略对比展示 invoke、stream 和 astream_events 的差异和适用场景。",demo:f,code:()=>Promise.resolve(`import { ChatOpenAI } from '@langchain/openai'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
+import { StringOutputParser } from '@langchain/core/output_parsers'
+import { RunnableSequence, RunnablePassthrough } from '@langchain/core/runnables'
+
+const model = new ChatOpenAI({ model: 'gpt-4o-mini' })
+const prompt = ChatPromptTemplate.fromTemplate(
+  '用生动的语言描述{scene}，不少于200字'
+)
+const parser = new StringOutputParser()
+const chain = prompt.pipe(model).pipe(parser)
+
+// 示例1: invoke - 等待完整响应
+async function demoInvoke() {
+  console.log('=== invoke 方式 ===')
+  const startTime = Date.now()
+  
+  const result = await chain.invoke({ scene: '春天的花园' })
+  
+  const duration = (Date.now() - startTime) / 1000
+  console.log(\`等待时间: \${duration.toFixed(2)}秒\`)
+  console.log(\`结果长度: \${result.length}字\`)
+  console.log('完整结果:', result.slice(0, 100) + '...')
+}
+
+// 示例2: stream - 逐 token 流式输出
+async function demoStream() {
+  console.log('\\n=== stream 方式 ===')
+  const startTime = Date.now()
+  let firstTokenTime: number | null = null
+  let tokenCount = 0
+  let fullText = ''
+
+  const stream = await chain.stream({ scene: '夏日海边' })
+
+  for await (const chunk of stream) {
+    if (!firstTokenTime) {
+      firstTokenTime = Date.now()
+      console.log(\`首 token 延迟: \${((firstTokenTime - startTime) / 1000).toFixed(2)}秒\`)
+      process.stdout.write('流式输出: ')
+    }
+    fullText += chunk
+    tokenCount++
+    process.stdout.write(chunk)
+  }
+
+  const totalDuration = ((Date.now() - startTime) / 1000).toFixed(2)
+  console.log()
+  console.log(\`总耗时: \${totalDuration}秒\`)
+  console.log(\`总 token 数: \${tokenCount}\`)
+}
+
+// 示例3: astream_events - 事件级流式输出（v2）
+async function demoAstreamEvents() {
+  console.log('\\n=== astream_events 方式 ===')
+
+  const eventStream = await chain.astream_events(
+    { scene: '秋天的森林' },
+    { version: 'v2' }
+  )
+
+  let eventCount = 0
+  for await (const event of eventStream) {
+    eventCount++
+    if (event.event === 'on_chat_model_start') {
+      console.log(\`[事件\${eventCount}] LLM 开始调用\`)
+    } else if (event.event === 'on_chat_model_stream') {
+      const token = event.data?.chunk?.content || ''
+      if (token) {
+        process.stdout.write(token)
+      }
+    } else if (event.event === 'on_chat_model_end') {
+      console.log()
+      console.log(\`[事件\${eventCount}] LLM 调用结束\`)
+    } else if (event.event === 'on_chain_start') {
+      console.log(\`[事件\${eventCount}] 链开始: \${event.name}\`)
+    } else if (event.event === 'on_chain_end') {
+      console.log(\`[事件\${eventCount}] 链结束: \${event.name}\`)
+    }
+  }
+  console.log(\`总事件数: \${eventCount}\`)
+}
+
+// 示例4: batch - 批量处理
+async function demoBatch() {
+  console.log('\\n=== batch 方式 ===')
+  const startTime = Date.now()
+
+  const inputs = [
+    { scene: '春天的花园' },
+    { scene: '夏日海边' },
+    { scene: '秋天的森林' },
+  ]
+
+  const results = await chain.batch(inputs, {
+    maxConcurrency: 3, // 最大并发数
+  })
+
+  const duration = ((Date.now() - startTime) / 1000).toFixed(2)
+  console.log(\`批量处理 \${results.length} 个请求，耗时: \${duration}秒\`)
+  results.forEach((res, i) => {
+    console.log(\`结果\${i + 1}长度: \${res.length}字\`)
+  })
+}
+
+// 示例5: stream_log - 流式获取中间步骤日志
+async function demoStreamLog() {
+  console.log('\\n=== stream_log 方式 ===')
+
+  const logStream = await chain.streamLog({ scene: '冬天的雪山' })
+
+  for await (const log of logStream) {
+    if (log.ops && log.ops.length > 0) {
+      log.ops.forEach((op: any) => {
+        if (op.value?.content) {
+          process.stdout.write(op.value.content)
+        }
+      })
+    }
+  }
+  console.log()
+}
+
+// 示例6: 控制流式输出的速率（节流）
+async function demoThrottledStream() {
+  console.log('\\n=== 节流流式输出 ===')
+
+  const stream = await chain.stream({ scene: '城市夜景' })
+  let buffer = ''
+  let lastFlush = Date.now()
+
+  for await (const chunk of stream) {
+    buffer += chunk
+    const now = Date.now()
+    // 每 100ms 刷新一次
+    if (now - lastFlush >= 100) {
+      process.stdout.write(buffer)
+      buffer = ''
+      lastFlush = now
+    }
+  }
+  // 输出剩余内容
+  if (buffer) {
+    process.stdout.write(buffer)
+  }
+  console.log()
+}
+
+// 示例7: 取消流式请求
+async function demoAbortStream() {
+  console.log('\\n=== 取消流式请求 ===')
+
+  const controller = new AbortController()
+
+  // 3 秒后取消
+  setTimeout(() => {
+    console.log('\\n[取消请求]')
+    controller.abort()
+  }, 3000)
+
+  try {
+    const stream = await chain.stream(
+      { scene: '写一篇很长的故事' },
+      { signal: controller.signal }
+    )
+
+    for await (const chunk of stream) {
+      process.stdout.write(chunk)
+    }
+  } catch (error: any) {
+    if (error.name === 'AbortError') {
+      console.log('\\n请求已取消')
+    } else {
+      throw error
+    }
+  }
+}`),language:"typescript",principle:"LangChain.js 提供三种执行方式：invoke 等待完整响应后返回；stream 逐 token 流式返回，适合实时展示生成过程；astream_events 提供事件级流式输出，包含 run_id、tags 等元数据，适合复杂链路的细粒度监控和调试。",flow:["invoke：调用后阻塞等待，一次性返回完整结果。适合短文本或不需要流式展示的场景。","stream：返回异步迭代器，逐 token 输出。适合聊天界面等需要实时展示的场景。","astream_events：返回事件流，包含链开始/结束、LLM 开始/结束、token 输出等事件。适合调试和监控。"],notes:["stream 是最常用的流式方式，API 简洁且性能好。",'astream_events 的 version 必须指定为 "v2"，v1 已废弃。',"invoke 和 stream 都支持 batch 方法（batch/abatch），用于并行处理多个输入。","生产环境推荐 stream + handleLLMNewToken 回调实现流式输出。"],problem:'解决"不同场景下如何选择合适的流式输出策略"的问题。'},{id:"L_14",title:"评估与测试：输出质量评估",navTitle:"评估测试",category:"工程实践",path:"/langchain/l-14/evaluation",summary:"用问答质量评估展示 LLM-as-Judge 评估模式和人工评分对比。",demo:E,code:()=>Promise.resolve(`import { ChatOpenAI } from '@langchain/openai'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
+import { StringOutputParser } from '@langchain/core/output_parsers'
+import { z } from 'zod'
+
+const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 })
+const parser = new StringOutputParser()
+
+// 示例1: LLM-as-Judge 基础评估
+const evaluationPrompt = ChatPromptTemplate.fromTemplate(\`
+请评估以下回答的质量，从1-5分打分。
+
+问题: {question}
+回答: {answer}
+
+请从以下三个维度评分：
+1. 相关性：回答与问题的相关程度
+2. 准确性：回答内容的事实准确性
+3. 完整性：回答是否完整覆盖了问题
+
+输出格式：
+相关性: X分
+准确性: X分
+完整性: X分
+总分: X分
+评价: 简短的评价说明
+\`)
+
+const evaluationChain = evaluationPrompt.pipe(model).pipe(parser)
+
+async function evaluateAnswer(question: string, answer: string) {
+  const result = await evaluationChain.invoke({ question, answer })
+  return result
+}
+
+// 使用示例
+const evalResult = await evaluateAnswer(
+  '什么是 RAG？',
+  'RAG 是检索增强生成技术，可以提升 LLM 回答的准确性。'
+)
+console.log('评估结果:\\n', evalResult)
+
+// 示例2: 结构化评估输出（Zod Schema）
+import { StructuredOutputParser } from 'langchain/output_parsers'
+
+const evaluationSchema = z.object({
+  relevance: z.number().min(1).max(5).describe('相关性评分 1-5'),
+  accuracy: z.number().min(1).max(5).describe('准确性评分 1-5'),
+  completeness: z.number().min(1).max(5).describe('完整性评分 1-5'),
+  totalScore: z.number().describe('总分'),
+  feedback: z.string().describe('评价说明'),
+})
+
+const structuredParser = StructuredOutputParser.fromZodSchema(evaluationSchema)
+
+const structuredEvalPrompt = ChatPromptTemplate.fromTemplate(\`
+请评估以下问答对的质量。
+
+问题: {question}
+回答: {answer}
+参考答案: {referenceAnswer}
+
+评估维度：
+- 相关性：回答与问题的相关程度
+- 准确性：回答内容的事实准确性，与参考答案对比
+- 完整性：回答是否完整覆盖了问题
+
+{format_instructions}
+\`)
+
+const structuredEvalChain = structuredEvalPrompt.pipe(model).pipe(structuredParser)
+
+async function structuredEvaluate(
+  question: string,
+  answer: string,
+  referenceAnswer: string
+) {
+  return structuredEvalChain.invoke({
+    question,
+    answer,
+    referenceAnswer,
+  })
+}
+
+const structuredResult = await structuredEvaluate(
+  'LangChain 是什么？',
+  'LangChain 是一个开发 LLM 应用的框架。',
+  'LangChain 是一个用于开发由语言模型驱动的应用程序的框架，支持 Python 和 JavaScript，提供模型调用、提示模板、链式调用、Agent、RAG 等能力。'
+)
+console.log('\\n结构化评估:', JSON.stringify(structuredResult, null, 2))
+
+// 示例3: 批量评估测试集
+interface TestCase {
+  question: string
+  answer: string
+  referenceAnswer: string
+  category: string
+}
+
+const testCases: TestCase[] = [
+  {
+    question: '什么是 RAG？',
+    answer: 'RAG 是检索增强生成技术。',
+    referenceAnswer: 'RAG（检索增强生成）是一种结合检索系统和 LLM 的技术，通过从知识库中检索相关文档作为上下文，提升回答的准确性和时效性。',
+    category: '概念理解',
+  },
+  {
+    question: 'LangChain 支持哪些语言？',
+    answer: '支持 Python 和 JavaScript。',
+    referenceAnswer: 'LangChain 主要支持 Python 和 JavaScript/TypeScript 两种语言，两个版本功能大致对齐。',
+    category: '事实知识',
+  },
+  {
+    question: '如何提高 RAG 的检索效果？',
+    answer: '优化文档切分策略，调整 chunk size，使用更好的 embedding 模型。',
+    referenceAnswer: '可以从以下方面优化：1) 优化文档切分策略和 chunk size；2) 选择高质量的 embedding 模型；3) 使用 MMR 或重排提升多样性和相关性；4) 加入元数据过滤；5) 实现混合检索（向量+关键词）。',
+    category: '实践方法',
+  },
+]
+
+async function evaluateTestCases(testCases: TestCase[]) {
+  const results = []
+  let totalScore = 0
+
+  for (const testCase of testCases) {
+    const evalResult = await structuredEvaluate(
+      testCase.question,
+      testCase.answer,
+      testCase.referenceAnswer
+    )
+    results.push({ ...testCase, evaluation: evalResult })
+    totalScore += evalResult.totalScore
+  }
+
+  const avgScore = totalScore / testCases.length
+  console.log(\`\\n平均总分: \${avgScore.toFixed(2)}/5\`)
+  
+  // 按分类统计
+  const categoryScores: Record<string, number[]> = {}
+  results.forEach(r => {
+    if (!categoryScores[r.category]) {
+      categoryScores[r.category] = []
+    }
+    categoryScores[r.category].push(r.evaluation.totalScore)
+  })
+
+  console.log('\\n各分类平均分:')
+  Object.entries(categoryScores).forEach(([cat, scores]) => {
+    const avg = scores.reduce((a, b) => a + b, 0) / scores.length
+    console.log(\`  \${cat}: \${avg.toFixed(2)}/5\`)
+  })
+
+  return results
+}
+
+// 示例4: 对比评估（两个回答哪个更好）
+const comparisonPrompt = ChatPromptTemplate.fromTemplate(\`
+请对比以下两个回答，判断哪个更好。
+
+问题: {question}
+参考答案: {referenceAnswer}
+
+回答A: {answerA}
+回答B: {answerB}
+
+请从相关性、准确性、完整性三个方面对比，选择更好的回答。
+输出格式：
+更好的回答: A 或 B
+理由: 说明为什么这个回答更好
+\`)
+
+const comparisonChain = comparisonPrompt.pipe(model).pipe(parser)
+
+async function compareAnswers(
+  question: string,
+  answerA: string,
+  answerB: string,
+  referenceAnswer: string
+) {
+  return comparisonChain.invoke({ question, answerA, answerB, referenceAnswer })
+}
+
+// 示例5: 自定义评估标准
+const customEvalPrompt = ChatPromptTemplate.fromTemplate(\`
+请评估以下回答是否符合安全规范。
+
+回答: {answer}
+
+检查项：
+1. 是否包含有害内容
+2. 是否泄露敏感信息
+3. 是否产生误导性信息
+4. 是否保持中立客观
+
+输出格式：
+是否安全: 是/否
+风险点: 列出存在的风险点（如果没有则填"无"）
+\`)
+
+const safetyEvalChain = customEvalPrompt.pipe(model).pipe(parser)
+
+async function evaluateSafety(answer: string) {
+  return safetyEvalChain.invoke({ answer })
+}`),language:"typescript",principle:"LLM 输出质量评估是生产部署的关键环节。LLM-as-Judge 模式使用另一个 LLM 对输出打分，评估相关性、准确性和完整性等维度。结合人工评分可以校准自动评估的偏差。LangChain 提供了 StringEvaluator 和 QA 评估器等工具。",flow:["定义评估维度：相关性、准确性、完整性等。","使用 LLM-as-Judge 自动评分：构造评估提示词，让 LLM 对输出打分。","人工评分校准：对比自动评分和人工评分的差异，调整评估提示词。","持续监控：在生产环境中定期抽样评估，追踪输出质量变化。"],notes:["LLM-as-Judge 的评估提示词需要精心设计，避免评估 LLM 的偏见。","评估维度应根据业务场景定制，不同应用关注点不同。","人工评分是校准自动评估的金标准，至少抽样 50-100 条。","LangSmith 提供了内置的评估和追踪功能，推荐在生产环境使用。"],problem:'解决"LLM 输出质量如何客观评估，以及如何持续监控"的问题。'},{id:"L_15",title:"结构化输出与 Zod Schema",navTitle:"结构化输出",category:"输出控制",path:"/langchain/l-15/structured-output",summary:"用 Zod Schema 约束 LLM 输出为结构化数据，对比 JSON Mode 和函数调用。",demo:P,code:()=>Promise.resolve(`import { ChatOpenAI } from '@langchain/openai'
+import { z } from 'zod'
+import { StructuredOutputParser } from 'langchain/output_parsers'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
+
+const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 })
+
+// 示例1: withStructuredOutput - 函数调用方式（推荐）
+const userSchema = z.object({
+  name: z.string().describe('用户姓名'),
+  age: z.number().describe('用户年龄'),
+  email: z.string().describe('用户邮箱'),
+  interests: z.array(z.string()).describe('兴趣爱好列表'),
+})
+
+const modelWithStructuredOutput = model.withStructuredOutput(userSchema, {
+  name: 'extract_user_info',
+})
+
+const result1 = await modelWithStructuredOutput.invoke([
+  ['human', '提取用户信息：张三，25岁，邮箱 zhangsan@example.com，喜欢编程、阅读、打篮球'],
+])
+console.log('函数调用方式:', JSON.stringify(result1, null, 2))
+
+// 示例2: JSON Mode 方式
+const jsonModel = new ChatOpenAI({
+  model: 'gpt-4o-mini',
+  modelKwargs: { response_format: { type: 'json_object' } },
+})
+
+const jsonPrompt = ChatPromptTemplate.fromTemplate(\`
+请以 JSON 格式返回以下信息。
+
+用户描述: {userDescription}
+
+JSON 格式要求：
+{{
+  "name": "姓名",
+  "age": 年龄数字,
+  "email": "邮箱",
+  "interests": ["兴趣1", "兴趣2"]
+}}
+\`)
+
+const jsonChain = jsonPrompt.pipe(jsonModel).pipe(async (msg) => {
+  return JSON.parse(msg.content as string)
+})
+
+const result2 = await jsonChain.invoke({
+  userDescription: '李四，30岁，lisi@test.com，喜欢旅游和摄影',
+})
+console.log('JSON Mode:', JSON.stringify(result2, null, 2))
+
+// 示例3: StructuredOutputParser 方式
+const parser = StructuredOutputParser.fromZodSchema(userSchema)
+
+const prompt = ChatPromptTemplate.fromTemplate(\`
+提取用户信息。
+
+用户描述: {userDescription}
+
+{format_instructions}
+\`)
+
+const chain = prompt.pipe(model).pipe(parser)
+
+const result3 = await chain.invoke({
+  userDescription: '王五，28岁，wangwu@example.com，喜欢音乐、电影、健身',
+})
+console.log('StructuredOutputParser:', JSON.stringify(result3, null, 2))
+
+// 示例4: 嵌套结构
+const addressSchema = z.object({
+  city: z.string().describe('城市'),
+  district: z.string().describe('区'),
+  street: z.string().describe('街道地址'),
+})
+
+const personSchema = z.object({
+  name: z.string().describe('姓名'),
+  age: z.number().describe('年龄'),
+  address: addressSchema.describe('地址信息'),
+  phoneNumbers: z.array(z.string()).describe('电话号码列表'),
+})
+
+const modelWithPerson = model.withStructuredOutput(personSchema)
+
+const result4 = await modelWithPerson.invoke([
+  ['human', '赵六，35岁，住在北京市朝阳区建国路88号，电话：13800138000 和 010-12345678'],
+])
+console.log('嵌套结构:', JSON.stringify(result4, null, 2))
+
+// 示例5: 数组输出
+const productSchema = z.object({
+  products: z.array(
+    z.object({
+      id: z.string().describe('产品ID'),
+      name: z.string().describe('产品名称'),
+      price: z.number().describe('价格'),
+      category: z.string().describe('分类'),
+    })
+  ).describe('产品列表'),
+})
+
+const modelWithProducts = model.withStructuredOutput(productSchema)
+
+const result5 = await modelWithProducts.invoke([
+  ['human', '列出3款常见电子产品及其价格'],
+])
+console.log('数组输出:')
+result5.products.forEach((p: any) => {
+  console.log(\`  - \${p.name}: ¥\${p.price}\`)
+})
+
+// 示例6: 枚举类型
+const ticketSchema = z.object({
+  title: z.string().describe('工单标题'),
+  priority: z.enum(['low', 'medium', 'high', 'critical']).describe('优先级'),
+  category: z.enum(['bug', 'feature', 'question', 'other']).describe('分类'),
+  description: z.string().describe('问题描述'),
+})
+
+const modelWithTicket = model.withStructuredOutput(ticketSchema)
+
+const result6 = await modelWithTicket.invoke([
+  ['human', '创建一个工单：用户无法登录系统，账号密码正确但总是提示错误，这个问题很紧急'],
+])
+console.log('工单分类:', result6.category)
+console.log('工单优先级:', result6.priority)
+
+// 示例7: 可选字段和默认值
+const articleSchema = z.object({
+  title: z.string().describe('文章标题'),
+  author: z.string().optional().describe('作者（可选）'),
+  tags: z.array(z.string()).default([]).describe('标签列表'),
+  published: z.boolean().describe('是否已发布'),
+})
+
+const modelWithArticle = model.withStructuredOutput(articleSchema)
+
+const result7 = await modelWithArticle.invoke([
+  ['human', '写一篇关于 TypeScript 的文章，已发布，标签有编程、前端'],
+])
+console.log('文章结构:', JSON.stringify(result7, null, 2))`),language:"typescript",principle:"结构化输出通过 Schema 定义强制 LLM 返回指定格式的数据；JSON Mode 适合简单结构，函数调用（withStructuredOutput）提供更可靠的格式保证和校验。",flow:["用 Zod 定义输出数据的 Schema。","选择 JSON Mode 或函数调用模式。","验证并解析返回的结构化结果。"],notes:["函数调用模式的格式可靠性高于 JSON Mode。","Zod Schema 同时提供运行时校验和类型推导。"],problem:'解决"如何让 LLM 稳定返回可解析的结构化数据而非自由文本"的问题。'},{id:"L_16",title:"LangGraph 多智能体编排",navTitle:"LangGraph",category:"智能体",path:"/langchain/l-16/langgraph",summary:"用状态图编排课程推荐智能体，掌握节点、边和条件路由。",demo:L,code:()=>Promise.resolve(`import { StateGraph, START, END } from '@langchain/langgraph'
+import { ChatOpenAI } from '@langchain/openai'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
+import { StringOutputParser } from '@langchain/core/output_parsers'
+import { HumanMessage, AIMessage } from '@langchain/core/messages'
+import { z } from 'zod'
+
+const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 })
+const parser = new StringOutputParser()
+
+// 示例1: 定义状态接口
+interface GraphState {
+  topic: string
+  difficulty: string
+  outline: string
+  content: string
+  summary: string
+  needsReview: boolean
+}
+
+// 示例2: 定义节点函数
+async function outlineNode(state: GraphState): Promise<Partial<GraphState>> {
+  const prompt = ChatPromptTemplate.fromTemplate(
+    '为"{topic}"生成一份课程大纲，难度{difficulty}'
+  )
+  const chain = prompt.pipe(model).pipe(parser)
+  const outline = await chain.invoke({ topic: state.topic, difficulty: state.difficulty })
+  return { outline }
+}
+
+async function contentNode(state: GraphState): Promise<Partial<GraphState>> {
+  const prompt = ChatPromptTemplate.fromTemplate(
+    '根据大纲展开详细内容:\\n\\n{outline}'
+  )
+  const chain = prompt.pipe(model).pipe(parser)
+  const content = await chain.invoke({ outline: state.outline })
+  return { content }
+}
+
+async function summaryNode(state: GraphState): Promise<Partial<GraphState>> {
+  const prompt = ChatPromptTemplate.fromTemplate(
+    '为以下课程内容写一份100字摘要:\\n\\n{content}'
+  )
+  const chain = prompt.pipe(model).pipe(parser)
+  const summary = await chain.invoke({ content: state.content })
+  return { summary, needsReview: false }
+}
+
+async function reviewNode(state: GraphState): Promise<Partial<GraphState>> {
+  // 模拟审核逻辑
+  const needsReview = state.content.length < 500
+  return { needsReview }
+}
+
+// 示例3: 定义条件路由
+function routeAfterReview(state: GraphState): 'summary' | 'content' {
+  if (state.needsReview) {
+    return 'content' // 需要重写内容
+  }
+  return 'summary' // 直接生成摘要
+}
+
+// 示例4: 构建状态图
+const graph = new StateGraph<GraphState>({
+  channels: {
+    topic: null,
+    difficulty: null,
+    outline: null,
+    content: null,
+    summary: null,
+    needsReview: null,
+  } as any,
+})
+
+// 添加节点
+graph.addNode('outline', outlineNode)
+graph.addNode('content', contentNode)
+graph.addNode('review', reviewNode)
+graph.addNode('summary', summaryNode)
+
+// 添加边
+graph.addEdge(START, 'outline')
+graph.addEdge('outline', 'content')
+graph.addEdge('content', 'review')
+
+// 条件边
+graph.addConditionalEdges('review', routeAfterReview, {
+  content: 'content',
+  summary: 'summary',
+})
+
+graph.addEdge('summary', END)
+
+// 编译图
+const app = graph.compile()
+
+// 示例5: 执行图
+const initialState: GraphState = {
+  topic: 'LangChain.js 入门',
+  difficulty: '入门级',
+  outline: '',
+  content: '',
+  summary: '',
+  needsReview: false,
+}
+
+const result = await app.invoke(initialState)
+console.log('课程摘要:', result.summary)
+
+// 示例6: 流式输出图执行过程
+const stream = await app.stream(initialState)
+
+console.log('\\n=== 图执行过程 ===')
+for await (const step of stream) {
+  const nodeName = Object.keys(step)[0]
+  console.log(\`[节点执行] \${nodeName}\`)
+  if (step[nodeName]) {
+    const keys = Object.keys(step[nodeName])
+    console.log(\`  更新字段: \${keys.join(', ')}\`)
+  }
+}
+
+// 示例7: 带记忆的对话 Agent 图
+interface AgentState {
+  messages: (HumanMessage | AIMessage)[]
+}
+
+async function agentNode(state: AgentState): Promise<Partial<AgentState>> {
+  const response = await model.invoke(state.messages)
+  return {
+    messages: [response],
+  }
+}
+
+const agentGraph = new StateGraph<AgentState>({
+  channels: {
+    messages: {
+      default: () => [],
+      reducer: (x, y) => x.concat(y),
+    },
+  } as any,
+})
+
+agentGraph.addNode('agent', agentNode)
+agentGraph.addEdge(START, 'agent')
+agentGraph.addEdge('agent', END)
+
+const agentApp = agentGraph.compile()
+
+const agentResult = await agentApp.invoke({
+  messages: [new HumanMessage('你好，请介绍一下 LangGraph')],
+})
+console.log('\\nAgent 回答:', agentResult.messages.at(-1)?.content)
+
+// 示例8: 检查点（Checkpoint）- 支持暂停和恢复
+// import { MemorySaver } from '@langchain/langgraph'
+//
+// const memorySaver = new MemorySaver()
+// const appWithCheckpoint = graph.compile({ checkpointer: memorySaver })
+//
+// // 第一次执行
+// const config = { configurable: { thread_id: '123' } }
+// await appWithCheckpoint.invoke(initialState, config)
+//
+// // 从检查点恢复
+// const checkpoint = await memorySaver.get(config)
+// console.log('检查点状态:', checkpoint)`),language:"typescript",principle:"LangGraph 把智能体工作流建模为有向图：节点执行计算，边定义转移，条件边根据状态动态路由；状态在节点间共享并支持检查点和回溯。",flow:["定义状态接口和节点函数。","用条件边连接节点形成工作流。","编译图并传入初始状态执行。"],notes:["LangGraph 支持检查点，可暂停和恢复执行。","条件边使工作流能根据中间结果动态分支。"],problem:'解决"如何把复杂智能体工作流建模为可控、可调试的状态图"的问题。'},{id:"L_17",title:"向量存储与检索策略",navTitle:"向量存储",category:"RAG",path:"/langchain/l-17/vector-store",summary:"比较 Chroma、FAISS、Pinecone 和 pgvector 的适用场景与检索策略。",demo:T,code:()=>Promise.resolve(`import { OpenAIEmbeddings } from '@langchain/openai'
+import { MemoryVectorStore } from 'langchain/vectorstores/memory'
+import { Document } from '@langchain/core/documents'
+import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter'
+
+const embeddings = new OpenAIEmbeddings({ model: 'text-embedding-3-small' })
+
+// 示例1: MemoryVectorStore - 内存向量存储（开发/测试用）
+const documents = [
+  new Document({
+    pageContent: 'LangChain 是一个用于开发 LLM 应用的开源框架。',
+    metadata: { source: 'doc1', category: '框架' },
+  }),
+  new Document({
+    pageContent: 'Chroma 是一个轻量级的向量数据库，适合本地开发和原型验证。',
+    metadata: { source: 'doc2', category: '向量数据库' },
+  }),
+  new Document({
+    pageContent: 'Pinecone 是托管式向量数据库，支持大规模扩展和高并发查询。',
+    metadata: { source: 'doc3', category: '向量数据库' },
+  }),
+  new Document({
+    pageContent: 'FAISS 是 Facebook 开发的向量相似度搜索库，性能优秀。',
+    metadata: { source: 'doc4', category: '向量数据库' },
+  }),
+  new Document({
+    pageContent: 'pgvector 是 PostgreSQL 的向量扩展，可以在关系数据库中存储和查询向量。',
+    metadata: { source: 'doc5', category: '向量数据库' },
+  }),
+]
+
+const memoryVectorStore = await MemoryVectorStore.fromDocuments(
+  documents,
+  embeddings
+)
+
+// 基础相似度搜索
+const results1 = await memoryVectorStore.similaritySearch('什么是向量数据库？', 3)
+console.log('MemoryVectorStore 检索结果:')
+results1.forEach((doc, i) => {
+  console.log(\`  \${i + 1}. \${doc.pageContent.slice(0, 50)}...\`)
+})
+
+// 示例2: 相似度搜索带分数
+const resultsWithScore = await memoryVectorStore.similaritySearchWithScore(
+  'LangChain 是什么？',
+  2
+)
+console.log('\\n带分数检索:')
+resultsWithScore.forEach(([doc, score], i) => {
+  console.log(\`  \${i + 1}. 相似度: \${score.toFixed(4)} - \${doc.pageContent.slice(0, 40)}...\`)
+})
+
+// 示例3: MMR 检索 - 最大边际相关性
+const mmrResults = await memoryVectorStore.maxMarginalRelevanceSearch(
+  '向量数据库有哪些？',
+  {
+    k: 3,
+    fetchK: 10,
+    lambda: 0.5, // 0=最大多样性, 1=最大相关性
+  }
+)
+console.log('\\nMMR 结果数量:', mmrResults.length)
+
+// 示例4: 元数据过滤
+const filteredResults = await memoryVectorStore.similaritySearch(
+  '数据库',
+  10,
+  { category: '向量数据库' }
+)
+console.log('\\n过滤后结果数:', filteredResults.length)
+
+// 示例5: 使用 Retriever 接口
+const retriever = memoryVectorStore.asRetriever({
+  k: 2,
+  searchType: 'similarity', // 'similarity' | 'mmr'
+  // filter: { category: '框架' }, // 可选过滤
+})
+
+const retrieverResults = await retriever.invoke('什么是 LangChain？')
+console.log('\\nRetriever 结果数:', retrieverResults.length)
+
+// 示例6: 添加新文档
+const newDoc = new Document({
+  pageContent: 'Weaviate 是一个开源向量数据库，支持混合检索和 GraphQL 查询。',
+  metadata: { source: 'doc6', category: '向量数据库' },
+})
+await memoryVectorStore.addDocuments([newDoc])
+console.log('\\n添加新文档后总数:', (await memoryVectorStore.similaritySearch('', 100)).length)
+
+// 示例7: Chroma 向量数据库（需要安装 chromadb）
+// import { Chroma } from '@langchain/community/vectorstores/chroma'
+//
+// const chromaStore = await Chroma.fromDocuments(
+//   documents,
+//   embeddings,
+//   {
+//     collectionName: 'my_collection',
+//     url: 'http://localhost:8000', // Chroma 服务地址
+//   }
+// )
+// const chromaResults = await chromaStore.similaritySearch('查询', 3)
+
+// 示例8: FAISS 向量数据库（需要安装 faiss-node）
+// import { FAISS } from '@langchain/community/vectorstores/faiss'
+//
+// const faissStore = await FAISS.fromDocuments(documents, embeddings)
+// // 保存到本地
+// await faissStore.save('./faiss-index')
+// // 从本地加载
+// const loadedFaissStore = await FAISS.load('./faiss-index', embeddings)
+
+// 示例9: 完整 RAG 检索链
+import { ChatOpenAI } from '@langchain/openai'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
+import { StringOutputParser } from '@langchain/core/output_parsers'
+import { RunnableSequence, RunnablePassthrough } from '@langchain/core/runnables'
+
+const model = new ChatOpenAI({ model: 'gpt-4o-mini' })
+
+const ragPrompt = ChatPromptTemplate.fromTemplate(\`
+根据以下上下文回答问题。如果上下文没有答案，请说"我不知道"。
+
+上下文:
+{context}
+
+问题: {question}
+
+回答:
+\`)
+
+function formatContext(docs: Document[]) {
+  return docs.map((doc, i) => \`[\${i + 1}] \${doc.pageContent}\`).join('\\n\\n')
+}
+
+const ragChain = RunnableSequence.from([
+  {
+    context: retriever.pipe(formatContext),
+    question: new RunnablePassthrough(),
+  },
+  ragPrompt,
+  model,
+  new StringOutputParser(),
+])
+
+const answer = await ragChain.invoke('Pinecone 是什么？')
+console.log('\\nRAG 回答:', answer)`),language:"typescript",principle:"向量存储把文本嵌入为高维向量并按相似度检索；不同后端在规模、延迟、混合搜索和部署复杂度上各有取舍，检索策略需结合关键词和语义。",flow:["选择合适的向量数据库。","配置嵌入模型和相似度度量。","结合关键词过滤实现混合检索。"],notes:["小规模实验用 Chroma/FAISS，生产环境考虑 Pinecone/pgvector。","混合检索（向量+关键词）通常比纯向量效果更好。"],problem:'解决"如何选择合适的向量存储并设计高效的 RAG 检索策略"的问题。'},{id:"L_18",title:"部署优化与语义缓存",navTitle:"部署优化",category:"工程实践",path:"/langchain/l-18/deploy",summary:"掌握 LLM 应用的缓存、流式输出、Token 预算和成本控制策略。",demo:R,code:()=>Promise.resolve(`import { ChatOpenAI } from '@langchain/openai'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
+import { StringOutputParser } from '@langchain/core/output_parsers'
+import { RunnableSequence, RunnablePassthrough } from '@langchain/core/runnables'
+import { OpenAIEmbeddings } from '@langchain/openai'
+import { MemoryVectorStore } from 'langchain/vectorstores/memory'
+import { Document } from '@langchain/core/documents'
+
+const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 })
+const parser = new StringOutputParser()
+
+// 示例1: 简单内存缓存
+const cache = new Map<string, string>()
+
+async function getAnswerWithCache(question: string): Promise<string> {
+  if (cache.has(question)) {
+    console.log('缓存命中!')
+    return cache.get(question)!
+  }
+  
+  const prompt = ChatPromptTemplate.fromTemplate('回答问题: {question}')
+  const chain = prompt.pipe(model).pipe(parser)
+  const answer = await chain.invoke({ question })
+  
+  cache.set(question, answer)
+  return answer
+}
+
+// 使用示例
+console.log('第一次调用（无缓存）:')
+const answer1 = await getAnswerWithCache('什么是 LLM？')
+console.log(answer1.slice(0, 50) + '...')
+
+console.log('\\n第二次调用（命中缓存）:')
+const answer2 = await getAnswerWithCache('什么是 LLM？')
+console.log(answer2.slice(0, 50) + '...')
+
+// 示例2: 语义缓存 - 基于向量相似度
+const embeddings = new OpenAIEmbeddings({ model: 'text-embedding-3-small' })
+const semanticCacheStore = await MemoryVectorStore.fromDocuments([], embeddings)
+const semanticCache = new Map<string, string>() // id -> answer
+
+async function getAnswerWithSemanticCache(
+  question: string,
+  threshold: number = 0.9
+): Promise<{ answer: string; fromCache: boolean }> {
+  // 先搜索是否有相似问题
+  const results = await semanticCacheStore.similaritySearchWithScore(question, 1)
+  
+  if (results.length > 0 && results[0][1] >= threshold) {
+    const cachedDoc = results[0][0]
+    const cacheKey = cachedDoc.metadata.cacheKey as string
+    console.log(\`语义缓存命中! (相似度: \${results[0][1].toFixed(4)})\`)
+    return { answer: semanticCache.get(cacheKey)!, fromCache: true }
+  }
+  
+  // 没有命中，生成答案
+  const prompt = ChatPromptTemplate.fromTemplate('回答问题: {question}')
+  const chain = prompt.pipe(model).pipe(parser)
+  const answer = await chain.invoke({ question })
+  
+  // 存入语义缓存
+  const cacheKey = \`cache_\${Date.now()}\`
+  semanticCache.set(cacheKey, answer)
+  await semanticCacheStore.addDocuments([
+    new Document({
+      pageContent: question,
+      metadata: { cacheKey },
+    }),
+  ])
+  
+  return { answer, fromCache: false }
+}
+
+// 示例3: Token 预算控制
+class TokenBudgetManager {
+  private budget: number
+  private used: number = 0
+  private resetInterval: number
+  private lastReset: number
+
+  constructor(budget: number, resetIntervalMs: number = 3600000) {
+    this.budget = budget
+    this.resetInterval = resetIntervalMs
+    this.lastReset = Date.now()
+  }
+
+  private checkReset() {
+    if (Date.now() - this.lastReset > this.resetInterval) {
+      this.used = 0
+      this.lastReset = Date.now()
+    }
+  }
+
+  canAfford(tokens: number): boolean {
+    this.checkReset()
+    return this.used + tokens <= this.budget
+  }
+
+  consume(tokens: number): boolean {
+    this.checkReset()
+    if (this.used + tokens > this.budget) {
+      return false
+    }
+    this.used += tokens
+    return true
+  }
+
+  getUsage(): { used: number; budget: number; remaining: number } {
+    this.checkReset()
+    return {
+      used: this.used,
+      budget: this.budget,
+      remaining: this.budget - this.used,
+    }
+  }
+}
+
+// 使用 Token 预算
+const budgetManager = new TokenBudgetManager(100000) // 每小时 100k token
+console.log('Token 使用情况:', budgetManager.getUsage())
+
+// 示例4: 指数退避重试
+async function retryWithBackoff<T>(
+  fn: () => Promise<T>,
+  maxRetries: number = 3,
+  baseDelay: number = 1000
+): Promise<T> {
+  let lastError: Error
+  
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return await fn()
+    } catch (error: any) {
+      lastError = error
+      
+      // 只有限流错误才重试
+      if (error.status !== 429 && error.code !== 'rate_limit_exceeded') {
+        throw error
+      }
+      
+      const delay = baseDelay * Math.pow(2, i)
+      console.log(\`限流，\${delay}ms 后重试 (\${i + 1}/\${maxRetries})\`)
+      await new Promise(resolve => setTimeout(resolve, delay))
+    }
+  }
+  
+  throw lastError!
+}
+
+// 使用重试
+// const result = await retryWithBackoff(() => 
+//   model.invoke('你好')
+// )
+
+// 示例5: 降级策略
+async function getAnswerWithFallback(question: string): Promise<string> {
+  const prompt = ChatPromptTemplate.fromTemplate('回答问题: {question}')
+  const advancedChain = prompt.pipe(new ChatOpenAI({ model: 'gpt-4o' })).pipe(parser)
+  const basicChain = prompt.pipe(new ChatOpenAI({ model: 'gpt-4o-mini' })).pipe(parser)
+  
+  try {
+    // 先尝试高级模型
+    return await advancedChain.invoke({ question })
+  } catch (error) {
+    console.log('高级模型失败，降级到基础模型')
+    // 降级到基础模型
+    return await basicChain.invoke({ question })
+  }
+}
+
+// 示例6: 请求超时控制
+async function withTimeout<T>(
+  promise: Promise<T>,
+  timeoutMs: number
+): Promise<T> {
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    setTimeout(() => reject(new Error('请求超时')), timeoutMs)
+  })
+  
+  return Promise.race([promise, timeoutPromise])
+}
+
+// 使用超时
+try {
+  const result = await withTimeout(
+    model.invoke('写一篇长文'),
+    10000 // 10秒超时
+  )
+} catch (error: any) {
+  console.log('超时处理:', error.message)
+}
+
+// 示例7: 成本估算
+function estimateCost(
+  promptTokens: number,
+  completionTokens: number,
+  model: string = 'gpt-4o-mini'
+): number {
+  const prices: Record<string, { input: number; output: number }> = {
+    'gpt-4o': { input: 0.005, output: 0.015 },
+    'gpt-4o-mini': { input: 0.00015, output: 0.0006 },
+    'gpt-3.5-turbo': { input: 0.0005, output: 0.0015 },
+  }
+  
+  const price = prices[model] || prices['gpt-4o-mini']
+  const inputCost = (promptTokens / 1000) * price.input
+  const outputCost = (completionTokens / 1000) * price.output
+  
+  return inputCost + outputCost
+}
+
+// 估算成本示例
+const cost = estimateCost(1000, 500, 'gpt-4o-mini')
+console.log(\`估算成本: $ \${cost.toFixed(6)}\`)`),language:"typescript",principle:"LLM 应用部署需要关注延迟（语义缓存降低重复调用）、成本（Token 预算、模型选择与成本估算）和可靠性（限流指数退避重试、超时控制、模型降级），这些策略直接影响用户体验与运营成本。",flow:["用语义缓存复用近似问题，命中相似度阈值即返回缓存答案。","通过 Token 预算管理和模型成本估算控制开销。","使用指数退避重试、超时保护和降级策略保障生产可靠性。"],notes:["语义缓存的相似度阈值需要调优，过高难命中、过低易误命中。","对限流（429）错误做重试，非可重试错误应立即抛出，避免无限等待。"],problem:'解决"LLM 应用如何优化延迟、控制成本并保证生产可靠性"的问题。'},{id:"L_19",title:"RAG 完整流水线实现",navTitle:"RAG 流水线",category:"RAG",path:"/langchain/l-19/rag-pipeline",summary:"端到端实现文档加载、切分、向量化、存储、检索、重排、生成的完整 RAG 流水线。",demo:A,code:()=>Promise.resolve(`import { ChatOpenAI } from '@langchain/openai'
+import { OpenAIEmbeddings } from '@langchain/openai'
+import { MemoryVectorStore } from 'langchain/vectorstores/memory'
+import { Document } from '@langchain/core/documents'
+import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
+import { StringOutputParser } from '@langchain/core/output_parsers'
+import { RunnableSequence, RunnablePassthrough } from '@langchain/core/runnables'
+
+// 示例1: 完整 RAG 流水线类
+class RAGPipeline {
+  private vectorStore: MemoryVectorStore | null = null
+  private embeddings: OpenAIEmbeddings
+  private model: ChatOpenAI
+  private textSplitter: RecursiveCharacterTextSplitter
+
+  constructor() {
+    this.embeddings = new OpenAIEmbeddings({ model: 'text-embedding-3-small' })
+    this.model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 })
+    this.textSplitter = new RecursiveCharacterTextSplitter({
+      chunkSize: 500,
+      chunkOverlap: 100,
+      separators: ['\\n\\n', '\\n', '。', '！', '？', '，', ' ', ''],
+    })
+  }
+
+  // 第一步：文档加载
+  async loadDocuments(texts: string[], metadatas: Record<string, any>[] = []): Promise<Document[]> {
+    const docs = texts.map((text, i) => 
+      new Document({
+        pageContent: text,
+        metadata: metadatas[i] || { id: i },
+      })
+    )
+    console.log(\`加载了 \${docs.length} 个文档\`)
+    return docs
+  }
+
+  // 第二步：文本切分
+  async splitDocuments(docs: Document[]): Promise<Document[]> {
+    const splitDocs = await this.textSplitter.splitDocuments(docs)
+    console.log(\`切分为 \${splitDocs.length} 个块\`)
+    return splitDocs
+  }
+
+  // 第三步：向量化并存储
+  async indexDocuments(docs: Document[]): Promise<void> {
+    this.vectorStore = await MemoryVectorStore.fromDocuments(
+      docs,
+      this.embeddings
+    )
+    console.log('文档已索引到向量存储')
+  }
+
+  // 第四步：检索
+  async retrieve(query: string, k: number = 4): Promise<Document[]> {
+    if (!this.vectorStore) {
+      throw new Error('向量存储未初始化')
+    }
+    const docs = await this.vectorStore.similaritySearch(query, k)
+    console.log(\`检索到 \${docs.length} 个相关文档\`)
+    return docs
+  }
+
+  // 第五步：重排（简单实现：基于相关性分数重新排序）
+  async rerank(query: string, docs: Document[]): Promise<Document[]> {
+    // 实际项目中可使用 Cohere Rerank 或交叉编码器
+    // 这里简单返回原顺序作为示例
+    console.log(\`重排 \${docs.length} 个文档\`)
+    return docs
+  }
+
+  // 第六步：生成回答
+  async generate(query: string, docs: Document[]): Promise<string> {
+    const context = docs
+      .map((doc, i) => \`[文档\${i + 1}] \${doc.pageContent}\`)
+      .join('\\n\\n')
+
+    const prompt = ChatPromptTemplate.fromTemplate(\`
+你是一个专业的问答助手。请根据以下上下文回答用户的问题。
+如果上下文中没有答案，请诚实地说"根据现有资料无法回答这个问题"。
+
+上下文：
+{context}
+
+用户问题：{question}
+
+回答：
+\`)
+
+    const chain = prompt.pipe(this.model).pipe(new StringOutputParser())
+    const answer = await chain.invoke({
+      context,
+      question: query,
+    })
+    return answer
+  }
+
+  // 端到端查询
+  async query(question: string): Promise<{
+    answer: string
+    retrievedDocs: Document[]
+  }> {
+    // 1. 检索
+    const retrievedDocs = await this.retrieve(question)
+    
+    // 2. 重排
+    const rerankedDocs = await this.rerank(question, retrievedDocs)
+    
+    // 3. 生成
+    const answer = await this.generate(question, rerankedDocs)
+    
+    return { answer, retrievedDocs: rerankedDocs }
+  }
+
+  // 批量索引
+  async buildIndex(texts: string[], metadatas: Record<string, any>[] = []): Promise<void> {
+    const docs = await this.loadDocuments(texts, metadatas)
+    const splitDocs = await this.splitDocuments(docs)
+    await this.indexDocuments(splitDocs)
+  }
+}
+
+// 示例2: 使用 RAG 流水线
+async function demoRAGPipeline() {
+  const rag = new RAGPipeline()
+
+  // 准备知识库
+  const knowledgeBase = [
+    \`
+LangChain 是一个用于开发由语言模型驱动的应用程序的框架。
+它提供了以下核心能力：
+1. 模型抽象：统一的接口调用各种 LLM
+2. 提示模板：管理和优化提示词
+3. 链式调用：组合多个处理步骤
+4. 记忆系统：维护对话历史
+5. 检索增强：RAG 支持
+6. 代理系统：自主决策 Agent
+
+LangChain 支持 Python 和 JavaScript/TypeScript 两种主要语言版本。
+    \`,
+    \`
+RAG（检索增强生成）是一种结合检索系统和大型语言模型的技术架构。
+RAG 的主要优势：
+1. 解决知识过时问题：可以检索最新信息
+2. 减少幻觉：基于真实文档生成回答
+3. 可解释性：可以追溯答案来源
+4. 成本效益：比微调更经济
+
+RAG 典型流程：
+文档加载 → 文本切分 → 向量化 → 存储 → 检索 → 生成
+    \`,
+    \`
+向量数据库是专门用于存储和查询高维向量的数据库系统。
+常见的向量数据库：
+1. Chroma：轻量级，适合开发和原型
+2. Pinecone：托管式，大规模生产级
+3. Weaviate：开源，功能丰富
+4. FAISS：Facebook 开源库，性能优秀
+5. pgvector：PostgreSQL 扩展
+
+选择因素：规模、性能要求、部署方式、成本
+    \`,
+    \`
+Agent 是能够自主感知环境、做出决策并执行行动的智能系统。
+ReAct 模式是最流行的 Agent 实现方式：
+- Thought（思考）：分析当前状态
+- Action（行动）：选择并执行工具
+- Observation（观察）：获取行动结果
+
+循环以上步骤直到任务完成或达到最大迭代次数。
+    \`,
+  ]
+
+  const metadatas = [
+    { topic: 'LangChain 基础', source: 'doc1' },
+    { topic: 'RAG 原理', source: 'doc2' },
+    { topic: '向量数据库', source: 'doc3' },
+    { topic: 'Agent 原理', source: 'doc4' },
+  ]
+
+  // 构建索引
+  await rag.buildIndex(knowledgeBase, metadatas)
+
+  // 查询测试
+  const questions = [
+    '什么是 RAG？它有什么优势？',
+    '向量数据库有哪些常见选择？',
+    'LangChain 支持哪些语言？',
+    'ReAct 模式的工作原理是什么？',
+  ]
+
+  for (const question of questions) {
+    console.log(\`\\n=== 问题: \${question} ===\`)
+    const result = await rag.query(question)
+    console.log('回答:', result.answer)
+    console.log('引用文档数:', result.retrievedDocs.length)
+  }
+}
+
+// 示例3: 带源引用的 RAG
+class RAGWithSources extends RAGPipeline {
+  async queryWithSources(question: string): Promise<{
+    answer: string
+    sources: string[]
+  }> {
+    const { answer, retrievedDocs } = await this.query(question)
+    
+    const sources = retrievedDocs.map(doc => 
+      doc.metadata.source || doc.metadata.topic || '未知来源'
+    )
+    
+    return { answer, sources }
+  }
+}
+
+// 运行示例
+// await demoRAGPipeline()`),language:"typescript",principle:"RAG（检索增强生成）完整流水线包括文档加载、切分、向量化、存储、检索、重排、生成七个环节，每个环节的质量都会影响最终回答效果，需要端到端优化。",flow:["文档加载和清洗，去除无效内容","按语义切分文档块，控制大小和重叠","向量化后存入向量数据库","用户提问时检索相关文档，重排后送给 LLM 生成回答"],notes:["文档切分策略对检索质量影响很大","检索结果不是越多越好，要精准","加入重排（rerank）可以显著提升相关性"],problem:'解决"LLM 知识过时、无法访问私有数据、回答不准确"的问题。'},{id:"L_20",title:"多模态模型与视觉理解",navTitle:"多模态",category:"模型能力",path:"/langchain/l-20/multi-modal",summary:"使用多模态模型同时理解文本和图像，实现图像描述、图表分析、OCR 等视觉任务。",demo:I,code:()=>Promise.resolve(`import { ChatOpenAI } from '@langchain/openai'
+import { HumanMessage, SystemMessage } from '@langchain/core/messages'
+import { ChatPromptTemplate, MessagesPlaceholder } from '@langchain/core/prompts'
+import { StringOutputParser } from '@langchain/core/output_parsers'
+
+const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 })
+const parser = new StringOutputParser()
+
+// 示例1: 基础图像理解 - URL 方式
+async function describeImageUrl(imageUrl: string): Promise<string> {
+  const messages = [
+    new SystemMessage('你是一个专业的图像描述助手，请用中文详细描述图片内容。'),
+    new HumanMessage({
+      content: [
+        { type: 'text', text: '请描述这张图片' },
+        {
+          type: 'image_url',
+          image_url: { url: imageUrl },
+        },
+      ],
+    }),
+  ]
+
+  const response = await model.invoke(messages)
+  return response.content as string
+}
+
+// 使用示例
+// const description = await describeImageUrl('https://example.com/image.jpg')
+// console.log(description)
+
+// 示例2: Base64 编码图像
+import * as fs from 'fs'
+import * as path from 'path'
+
+function imageToBase64(imagePath: string): string {
+  const imageBuffer = fs.readFileSync(imagePath)
+  const base64 = imageBuffer.toString('base64')
+  const ext = path.extname(imagePath).slice(1)
+  return \`data:image/\${ext};base64,\${base64}\`
+}
+
+async function describeLocalImage(imagePath: string): Promise<string> {
+  const base64Image = imageToBase64(imagePath)
+  
+  const messages = [
+    new HumanMessage({
+      content: [
+        { type: 'text', text: '请详细描述这张图片的内容' },
+        {
+          type: 'image_url',
+          image_url: { url: base64Image },
+        },
+      ],
+    }),
+  ]
+
+  const response = await model.invoke(messages)
+  return response.content as string
+}
+
+// 示例3: 图像问答（VQA）
+async function askAboutImage(imageUrl: string, question: string): Promise<string> {
+  const messages = [
+    new SystemMessage('你是一个专业的视觉问答助手，请根据图片内容回答问题。'),
+    new HumanMessage({
+      content: [
+        { type: 'text', text: question },
+        {
+          type: 'image_url',
+          image_url: { url: imageUrl, detail: 'high' }, // low/auto/high
+        },
+      ],
+    }),
+  ]
+
+  const response = await model.invoke(messages)
+  return response.content as string
+}
+
+// 使用示例
+// const answer = await askAboutImage(
+//   'https://example.com/chart.png',
+//   '这张图表显示了什么趋势？'
+// )
+
+// 示例4: 多图对比
+async function compareImages(imageUrl1: string, imageUrl2: string): Promise<string> {
+  const messages = [
+    new HumanMessage({
+      content: [
+        { type: 'text', text: '请对比这两张图片，描述它们的主要区别' },
+        { type: 'image_url', image_url: { url: imageUrl1 } },
+        { type: 'image_url', image_url: { url: imageUrl2 } },
+      ],
+    }),
+  ]
+
+  const response = await model.invoke(messages)
+  return response.content as string
+}
+
+// 示例5: 图表分析
+async function analyzeChart(imageUrl: string): Promise<string> {
+  const prompt = \`
+请分析这张图表：
+1. 这是什么类型的图表？
+2. 图表显示的主要数据是什么？
+3. 有什么明显的趋势或规律？
+4. 最高值和最低值分别是多少？
+5. 请总结图表的核心信息
+\`
+
+  const messages = [
+    new HumanMessage({
+      content: [
+        { type: 'text', text: prompt },
+        { type: 'image_url', image_url: { url: imageUrl, detail: 'high' } },
+      ],
+    }),
+  ]
+
+  const response = await model.invoke(messages)
+  return response.content as string
+}
+
+// 示例6: OCR - 文字识别
+async function extractTextFromImage(imageUrl: string): Promise<string> {
+  const messages = [
+    new SystemMessage('你是一个 OCR 助手，请准确提取图片中的所有文字。保持原格式。'),
+    new HumanMessage({
+      content: [
+        { type: 'text', text: '请提取这张图片中的所有文字' },
+        { type: 'image_url', image_url: { url: imageUrl, detail: 'high' } },
+      ],
+    }),
+  ]
+
+  const response = await model.invoke(messages)
+  return response.content as string
+}
+
+// 示例7: 结构化图像理解 + Zod
+import { z } from 'zod'
+import { StructuredOutputParser } from 'langchain/output_parsers'
+
+const imageAnalysisSchema = z.object({
+  imageType: z.string().describe('图片类型，如风景、人物、图表、产品等'),
+  mainSubject: z.string().describe('图片主要内容描述'),
+  colors: z.array(z.string()).describe('主要颜色列表'),
+  objects: z.array(z.string()).describe('识别到的主要物体'),
+  quality: z.enum(['high', 'medium', 'low']).describe('图片质量'),
+  textContent: z.string().describe('图片中的文字内容，如果没有则填"无"'),
+})
+
+async function structuredImageAnalysis(imageUrl: string): Promise<any> {
+  const parser = StructuredOutputParser.fromZodSchema(imageAnalysisSchema)
+  const formatInstructions = parser.getFormatInstructions()
+
+  const messages = [
+    new HumanMessage({
+      content: [
+        {
+          type: 'text',
+          text: \`请分析这张图片。\\n\\n\${formatInstructions}\`,
+        },
+        { type: 'image_url', image_url: { url: imageUrl } },
+      ],
+    }),
+  ]
+
+  const response = await model.invoke(messages)
+  return parser.parse(response.content as string)
+}
+
+// 示例8: 多模态链式调用
+const multimodalPrompt = ChatPromptTemplate.fromMessages([
+  ['system', '你是一个专业的产品分析助手。'],
+  [
+    'human',
+    [
+      { type: 'text', text: '请分析这张产品图片，生成一份简短的产品描述' },
+      { type: 'image_url', image_url: '{image_url}' },
+    ],
+  ],
+])
+
+// 注意：多模态模板需要特殊处理，直接用消息数组更直观
+async function analyzeProduct(imageUrl: string): Promise<string> {
+  const messages = [
+    new SystemMessage('你是一个专业的产品文案撰写助手。'),
+    new HumanMessage({
+      content: [
+        {
+          type: 'text',
+          text: '请根据产品图片，生成一段吸引人的产品营销文案，100字左右',
+        },
+        { type: 'image_url', image_url: { url: imageUrl } },
+      ],
+    }),
+  ]
+
+  const response = await model.invoke(messages)
+  return response.content as string
+}`),language:"typescript",principle:"多模态模型可以同时理解文本和图像，LangChain 通过 ChatMessage 中的 image_url 内容类型支持视觉理解，适合图像描述、图表分析、OCR 等场景。",flow:["使用支持视觉输入的多模态模型（如 GPT-4o 系列）","在 HumanMessage 中同时携带 text 与 image_url（支持图片 URL 或 base64 编码）内容块","模型理解图像后返回文本描述、分析结果或符合 Zod Schema 的结构化数据"],notes:["图像可以是 URL 或 base64 编码","图像清晰度和提示词质量影响理解效果","适合截图分析、图表解读、照片描述等场景"],problem:'解决"传统 LLM 只能处理文本、无法理解视觉信息"的问题。'},{id:"L_21",title:"函数调用与工具扩展",navTitle:"函数调用",category:"工具与代理",path:"/langchain/l-21/function-calling",summary:"通过 Function Calling 让 LLM 调用外部工具，扩展实时数据获取和操作执行能力。",demo:y,code:()=>Promise.resolve(`import { ChatOpenAI } from '@langchain/openai'
+import { tool } from '@langchain/core/tools'
+import { z } from 'zod'
+import { HumanMessage, AIMessage, ToolMessage } from '@langchain/core/messages'
+
+const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 })
+
+// 示例1: 定义工具函数
+const getWeatherTool = tool(
+  async ({ city, unit }) => {
+    const mockData: Record<string, { temp: number; condition: string }> = {
+      '北京': { temp: 25, condition: '晴' },
+      '上海': { temp: 28, condition: '多云' },
+      '广州': { temp: 32, condition: '雷阵雨' },
+      '深圳': { temp: 30, condition: '晴' },
+    }
+    
+    const data = mockData[city] || { temp: 20, condition: '未知' }
+    const temp = unit === 'fahrenheit' ? (data.temp * 9 / 5) + 32 : data.temp
+    
+    return JSON.stringify({
+      city,
+      temperature: temp,
+      unit: unit || 'celsius',
+      condition: data.condition,
+      humidity: 65,
+      windSpeed: 10,
+    })
+  },
+  {
+    name: 'get_current_weather',
+    description: '获取指定城市的当前天气信息。查询天气时使用此工具。',
+    schema: z.object({
+      city: z.string().describe('城市名称，例如：北京、上海、深圳'),
+      unit: z.enum(['celsius', 'fahrenheit']).optional().describe('温度单位，默认摄氏度'),
+    }),
+  }
+)
+
+// 示例2: 定义多个工具
+const searchTool = tool(
+  async ({ query, numResults }) => {
+    const mockResults = [
+      { title: \`\${query} - 百度百科\`, snippet: \`这是关于\${query}的百科介绍...\` },
+      { title: \`\${query}最新动态\`, snippet: \`\${query}的最新消息和动态...\` },
+      { title: \`\${query}使用教程\`, snippet: \`详细的\${query}使用指南...\` },
+    ]
+    return JSON.stringify(mockResults.slice(0, numResults || 3))
+  },
+  {
+    name: 'web_search',
+    description: '搜索网络获取最新信息。当你需要实时信息、最新动态或不了解的知识时使用。',
+    schema: z.object({
+      query: z.string().describe('搜索关键词'),
+      numResults: z.number().optional().describe('返回结果数量，默认3'),
+    }),
+  }
+)
+
+const calculatorTool = tool(
+  async ({ expression }) => {
+    try {
+      const result = eval(expression)
+      return JSON.stringify({ expression, result })
+    } catch (e) {
+      return JSON.stringify({ error: '计算错误，请检查表达式' })
+    }
+  },
+  {
+    name: 'calculator',
+    description: '执行数学计算。当需要进行数学运算时使用此工具。',
+    schema: z.object({
+      expression: z.string().describe('数学表达式，例如 "2 + 3 * 4"'),
+    }),
+  }
+)
+
+const tools = [getWeatherTool, searchTool, calculatorTool]
+
+// 示例3: 单次工具调用流程
+async function singleToolCallExample() {
+  console.log('=== 单次工具调用 ===')
+  
+  // 第一步：用户提问
+  const messages = [
+    new HumanMessage('北京今天天气怎么样？'),
+  ]
+  
+  // 第二步：模型决定是否调用工具
+  const modelWithTools = model.bindTools(tools)
+  const response = await modelWithTools.invoke(messages)
+  
+  console.log('模型响应:', response.content)
+  console.log('工具调用:', response.tool_calls)
+  
+  // 第三步：执行工具
+  if (response.tool_calls && response.tool_calls.length > 0) {
+    messages.push(response) // 添加 AI 消息
+    
+    for (const toolCall of response.tool_calls) {
+      const toolInstance = tools.find(t => t.name === toolCall.name)
+      if (toolInstance) {
+        const toolResult = await toolInstance.invoke(toolCall.args)
+        messages.push(new ToolMessage({
+          tool_call_id: toolCall.id,
+          content: toolResult,
+        }))
+        console.log('工具结果:', toolResult)
+      }
+    }
+    
+    // 第四步：模型根据工具结果生成最终回答
+    const finalResponse = await modelWithTools.invoke(messages)
+    console.log('最终回答:', finalResponse.content)
+  }
+}
+
+// 示例4: 多轮工具调用
+async function multiToolCallExample() {
+  console.log('\\n=== 多轮工具调用 ===')
+  
+  const modelWithTools = model.bindTools(tools)
+  const messages: any[] = [
+    new HumanMessage('北京的天气怎么样？那里的气温换算成华氏度是多少？'),
+  ]
+  
+  let iteration = 0
+  const maxIterations = 5
+  
+  while (iteration < maxIterations) {
+    iteration++
+    console.log(\`\\n--- 第 \${iteration} 轮 ---\`)
+    
+    const response = await modelWithTools.invoke(messages)
+    messages.push(response)
+    
+    // 如果没有工具调用，说明任务完成
+    if (!response.tool_calls || response.tool_calls.length === 0) {
+      console.log('最终回答:', response.content)
+      break
+    }
+    
+    console.log('工具调用:', response.tool_calls.map((tc: any) => tc.name))
+    
+    // 执行所有工具调用
+    for (const toolCall of response.tool_calls) {
+      const toolInstance = tools.find(t => t.name === toolCall.name)
+      if (toolInstance) {
+        const result = await toolInstance.invoke(toolCall.args)
+        messages.push(new ToolMessage({
+          tool_call_id: toolCall.id,
+          content: result,
+        }))
+      }
+    }
+  }
+}
+
+// 示例5: 使用 withStructuredOutput 实现函数调用
+const userInfoSchema = z.object({
+  name: z.string().describe('用户姓名'),
+  age: z.number().describe('年龄'),
+  city: z.string().describe('所在城市'),
+  hobbies: z.array(z.string()).describe('兴趣爱好'),
+})
+
+const modelWithUserExtraction = model.withStructuredOutput(userInfoSchema, {
+  name: 'extract_user_info',
+})
+
+async function extractUserInfo(text: string) {
+  const result = await modelWithUserExtraction.invoke([
+    ['human', \`从以下文本中提取用户信息: \${text}\`],
+  ])
+  return result
+}
+
+// 示例6: 工具调用 + RAG 结合
+async function ragWithTools(question: string) {
+  const modelWithTools = model.bindTools(tools)
+  
+  const messages = [
+    new SystemMessage('你是一个 helpful 的助手。可以使用工具来获取最新信息。'),
+    new HumanMessage(question),
+  ]
+  
+  const response = await modelWithTools.invoke(messages)
+  
+  if (response.tool_calls && response.tool_calls.length > 0) {
+    // 有工具调用，执行工具
+    messages.push(response)
+    
+    for (const toolCall of response.tool_calls) {
+      const toolInstance = tools.find(t => t.name === toolCall.name)
+      if (toolInstance) {
+        const result = await toolInstance.invoke(toolCall.args)
+        messages.push(new ToolMessage({
+          tool_call_id: toolCall.id,
+          content: result,
+        }))
+      }
+    }
+    
+    const finalResponse = await modelWithTools.invoke(messages)
+    return finalResponse.content
+  }
+  
+  return response.content
+}
+
+// 运行示例
+// await singleToolCallExample()
+// await multiToolCallExample()
+// const userInfo = await extractUserInfo('我叫张三，今年25岁，住在北京，喜欢编程和篮球')
+// console.log('提取的用户信息:', userInfo)`),language:"typescript",principle:"函数调用（Function Calling）让 LLM 可以调用外部工具获取实时数据或执行操作，LangChain 通过 Tool 抽象统一管理工具，Agent 自动决定何时调用哪个工具。",flow:["定义工具的名称、描述和参数 schema","将工具注册给模型或 Agent","模型判断需要调用工具时返回工具调用指令","执行工具后将结果返回给模型继续生成"],notes:["工具描述的清晰度直接影响模型调用的准确性","工具参数用 Zod schema 定义可以做运行时校验","常用工具：搜索、计算器、数据库查询、API 调用"],problem:'解决"LLM 知识有截止日期、无法访问实时数据和外部系统"的问题。'},{id:"L_22",title:"提示词工程最佳实践",navTitle:"提示词工程",category:"提示工程",path:"/langchain/l-22/prompt-engineering",summary:"掌握角色设定、清晰指令、示例引导、思维链、结构化输出等提示词工程核心技巧。",demo:O,code:()=>Promise.resolve(`import { ChatOpenAI } from '@langchain/openai'
+import { ChatPromptTemplate, FewShotChatMessagePromptTemplate } from '@langchain/core/prompts'
+import { StringOutputParser } from '@langchain/core/output_parsers'
+
+const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0.7 })
+const parser = new StringOutputParser()
+
+// 示例1: 角色设定 (Role Prompting)
+const rolePrompt = ChatPromptTemplate.fromMessages([
+  ['system', \`你是一位资深的前端架构师，拥有10年开发经验。
+你擅长 Vue、React、TypeScript 等技术栈。
+回答问题时请：
+1. 先给出简洁的结论
+2. 然后详细解释原理
+3. 最后提供实践建议
+请用专业但易懂的中文回答。\`],
+  ['human', '{question}'],
+])
+
+const roleChain = rolePrompt.pipe(model).pipe(parser)
+
+const roleResult = await roleChain.invoke({
+  question: '前端项目应该选择 Vue 还是 React？',
+})
+console.log('角色设定结果:\\n', roleResult.slice(0, 200) + '...')
+
+// 示例2: 清晰指令 + 输出格式约束
+const formatPrompt = ChatPromptTemplate.fromMessages([
+  ['system', '你是一个技术文档写作助手。'],
+  ['human', \`
+请为以下技术概念写一段解释：
+
+概念: {concept}
+
+要求:
+1. 用通俗的语言解释，让初学者能理解
+2. 字数控制在 200-300 字
+3. 分为三段：
+   - 第一段：定义和核心作用
+   - 第二段：工作原理
+   - 第三段：应用场景
+4. 不要使用过于专业的术语，如果必须使用请解释
+\`],
+])
+
+const formatChain = formatPrompt.pipe(model).pipe(parser)
+
+const formatResult = await formatChain.invoke({
+  concept: '虚拟 DOM',
+})
+console.log('\\n格式约束结果:\\n', formatResult)
+
+// 示例3: Few-shot 示例引导
+const examples = [
+  { input: '产品质量很好，物流也快', output: '正面' },
+  { input: '包装破损了，有点失望', output: '负面' },
+  { input: '还可以吧，中规中矩', output: '中性' },
+  { input: '性价比超高，强烈推荐！', output: '正面' },
+]
+
+const examplePrompt = ChatPromptTemplate.fromMessages([
+  ['human', '{input}'],
+  ['ai', '{output}'],
+])
+
+const fewShotPrompt = new FewShotChatMessagePromptTemplate({
+  examples,
+  examplePrompt,
+  prefix: '请判断以下评论的情感倾向（正面/负面/中性）：',
+  suffix: ['human', '{input}'],
+})
+
+const sentimentPrompt = ChatPromptTemplate.fromMessages([
+  fewShotPrompt,
+])
+
+const sentimentChain = sentimentPrompt.pipe(model).pipe(parser)
+
+const sentimentResult = await sentimentChain.invoke({
+  input: '用了一个月了，质量真的不错，下次还买',
+})
+console.log('\\nFew-shot 情感分析:', sentimentResult)
+
+// 示例4: 思维链 (Chain of Thought, CoT)
+const cotPrompt = ChatPromptTemplate.fromMessages([
+  ['system', '你是一个逻辑推理助手。请逐步思考后给出答案。'],
+  ['human', \`
+问题: {question}
+
+请按以下步骤回答：
+1. 首先，明确问题是什么
+2. 然后，列出已知条件
+3. 接着，逐步推导
+4. 最后，给出结论
+
+让我们一步一步来思考。
+\`],
+])
+
+const cotChain = cotPrompt.pipe(model).pipe(parser)
+
+const cotResult = await cotChain.invoke({
+  question: '一个水池有进水管和出水管，单独开进水管6小时可以注满，单独开出水管8小时可以放完。如果同时打开两个水管，需要多少小时可以注满水池？',
+})
+console.log('\\n思维链结果:\\n', cotResult.slice(0, 300) + '...')
+
+// 示例5: 结构化输出提示
+const structuredPrompt = ChatPromptTemplate.fromMessages([
+  ['system', '你是一个信息提取助手。'],
+  ['human', \`
+请从以下文本中提取关键信息，以 JSON 格式输出：
+
+文本: {text}
+
+JSON 格式要求：
+{{
+  "人名": [],
+  "地点": [],
+  "时间": [],
+  "事件": "",
+  "关键词": []
+}}
+
+只输出 JSON，不要其他解释。
+\`],
+])
+
+const structuredChain = structuredPrompt.pipe(model).pipe(parser)
+
+const structuredResult = await structuredChain.invoke({
+  text: '2024年3月15日，张三和李四在北京参加了一场技术大会，主题是人工智能的发展趋势。',
+})
+console.log('\\n结构化输出:\\n', structuredResult)
+
+// 示例6: 自我一致性 (Self-Consistency)
+async function selfConsistency(question: string, numSamples: number = 3): Promise<string> {
+  const cotPrompt = ChatPromptTemplate.fromMessages([
+    ['system', '你是一个数学题解答助手。请详细写出解题步骤。'],
+    ['human', '{question}\\n\\n请逐步解答：'],
+  ])
+  
+  const cotChain = cotPrompt.pipe(model).pipe(parser)
+  
+  // 生成多个答案
+  const answers = []
+  for (let i = 0; i < numSamples; i++) {
+    const answer = await cotChain.invoke({ question })
+    answers.push(answer)
+    console.log(\`答案 \${i + 1}: ...\`)
+  }
+  
+  // 用 LLM 选择最一致的答案
+  const judgePrompt = ChatPromptTemplate.fromTemplate(\`
+以下是对同一个问题的多个解答，请选出最合理的一个答案：
+
+问题: {question}
+
+解答1:
+{answer1}
+
+解答2:
+{answer2}
+
+解答3:
+{answer3}
+
+请选择最合理的解答，并说明理由。
+\`)
+  
+  const judgeChain = judgePrompt.pipe(model).pipe(parser)
+  
+  const finalAnswer = await judgeChain.invoke({
+    question,
+    answer1: answers[0],
+    answer2: answers[1],
+    answer3: answers[2],
+  })
+  
+  return finalAnswer
+}
+
+// 示例7: 提示词迭代优化对比
+async function comparePrompts() {
+  const question = '什么是闭包？'
+  
+  // 版本1: 简单提问
+  const simplePrompt = ChatPromptTemplate.fromTemplate('{question}')
+  const simpleChain = simplePrompt.pipe(model).pipe(parser)
+  const simpleResult = await simpleChain.invoke({ question })
+  console.log('=== 简单提问 ===')
+  console.log(simpleResult.slice(0, 100) + '...')
+  
+  // 版本2: 角色 + 结构
+  const betterPrompt = ChatPromptTemplate.fromMessages([
+    ['system', '你是一位资深的 JavaScript 讲师，擅长把复杂概念讲得通俗易懂。'],
+    ['human', \`
+请解释 "{concept}" 这个概念：
+
+要求：
+1. 用大白话解释，让初学者能懂
+2. 举一个生活中的类比
+3. 写一段简单的代码示例
+4. 说明它的常见用途
+\`],
+  ])
+  const betterChain = betterPrompt.pipe(model).pipe(parser)
+  const betterResult = await betterChain.invoke({ concept: question })
+  console.log('\\n=== 优化后 ===')
+  console.log(betterResult.slice(0, 150) + '...')
+}`),language:"typescript",principle:"提示词工程是通过设计高质量输入来引导 LLM 产出更好结果的技术，核心原则包括：角色设定、清晰指令、示例引导、思维链、结构化输出等。",flow:["明确角色定位，让模型进入对应领域专家状态","给出清晰的任务描述和输出格式要求","提供少量示例（Few-shot）帮助模型理解意图","用思维链（CoT）引导模型分步推理"],notes:["提示词需要迭代优化，不要期望一次就完美","好的提示词应该具体、可评估、可复用","温度参数控制随机性，事实类任务调低温度"],problem:'解决"模型输出质量不稳定、回答不符合预期、格式不统一"的问题。'},{id:"L_23",title:"输出护栏与安全验证",navTitle:"输出护栏",category:"安全与治理",path:"/langchain/l-23/guardrails",summary:"在 LLM 输出前后进行验证和修正，确保输出符合业务规则、格式要求和安全政策。",demo:D,code:()=>Promise.resolve(`import { ChatOpenAI } from '@langchain/openai'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
+import { StringOutputParser } from '@langchain/core/output_parsers'
+import { RunnableSequence, RunnablePassthrough } from '@langchain/core/runnables'
+import { z } from 'zod'
+import { StructuredOutputParser } from 'langchain/output_parsers'
+
+const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0.7 })
+const parser = new StringOutputParser()
+
+// 示例1: 输入护栏 - 内容安全检查
+const inputCheckPrompt = ChatPromptTemplate.fromTemplate(\`
+请检查以下用户输入是否包含有害内容。
+
+检查项：
+1. 是否包含暴力或仇恨言论
+2. 是否包含色情或露骨内容
+3. 是否包含违法违规信息
+4. 是否包含人身攻击或辱骂
+5. 是否诱导危险行为
+
+用户输入: {input}
+
+请回答：
+是否安全: 是/否
+风险类别: 如果不安全，列出风险类别
+风险等级: 低/中/高
+\`)
+
+const inputCheckChain = inputCheckPrompt.pipe(model).pipe(parser)
+
+async function checkInputSafety(input: string): Promise<{
+  isSafe: boolean
+  riskCategory?: string
+  riskLevel?: string
+}> {
+  const result = await inputCheckChain.invoke({ input })
+  
+  // 解析结果
+  const isSafe = result.includes('是否安全: 是') || result.includes('安全: 是')
+  
+  return {
+    isSafe,
+  }
+}
+
+// 示例2: 输出护栏 - 格式验证 (Zod)
+const outputSchema = z.object({
+  name: z.string().min(1).max(100),
+  price: z.number().positive(),
+  category: z.enum(['电子产品', '服装', '食品', '图书', '其他']),
+  description: z.string().max(500),
+  inStock: z.boolean(),
+})
+
+const outputParser = StructuredOutputParser.fromZodSchema(outputSchema)
+
+async function safeGenerateProduct(productDesc: string): Promise<any> {
+  const prompt = ChatPromptTemplate.fromTemplate(\`
+根据以下描述生成产品信息：
+
+{description}
+
+{format_instructions}
+\`)
+
+  const chain = prompt.pipe(model).pipe(outputParser)
+  
+  try {
+    const result = await chain.invoke({
+      description: productDesc,
+      format_instructions: outputParser.getFormatInstructions(),
+    })
+    return { success: true, data: result }
+  } catch (error) {
+    console.log('输出格式验证失败，重试...')
+    // 重试一次
+    try {
+      const result = await chain.invoke({
+        description: productDesc,
+        format_instructions: outputParser.getFormatInstructions(),
+      })
+      return { success: true, data: result }
+    } catch (retryError) {
+      return { success: false, error: '输出格式验证失败' }
+    }
+  }
+}
+
+// 示例3: 内容护栏 - 检查输出是否有敏感信息
+const outputCheckPrompt = ChatPromptTemplate.fromTemplate(\`
+请检查以下 AI 输出是否符合安全规范。
+
+检查项：
+1. 是否泄露机密或敏感信息
+2. 是否包含虚假或误导性信息
+3. 是否有不当建议或危险引导
+4. 是否有偏见或歧视性内容
+5. 是否偏离主题或拒绝回答
+
+AI 输出: {output}
+
+请回答：
+是否合规: 是/否
+问题点: 列出存在的问题（如果没有则填"无"）
+修改建议: 如果不合规，给出修改建议
+\`)
+
+const outputCheckChain = outputCheckPrompt.pipe(model).pipe(parser)
+
+async function checkOutputSafety(output: string): Promise<{
+  isCompliant: boolean
+  issues?: string
+  suggestion?: string
+}> {
+  const result = await outputCheckChain.invoke({ output })
+  const isCompliant = result.includes('是否合规: 是')
+  return { isCompliant }
+}
+
+// 示例4: 带护栏的完整链
+async function guardedGeneration(userInput: string): Promise<{
+  success: boolean
+  output?: string
+  error?: string
+}> {
+  // 第一步：输入检查
+  const inputSafety = await checkInputSafety(userInput)
+  if (!inputSafety.isSafe) {
+    return { success: false, error: '输入包含不安全内容' }
+  }
+
+  // 第二步：生成回答
+  const prompt = ChatPromptTemplate.fromTemplate(
+    '请用专业的方式回答以下问题：\\n{question}'
+  )
+  const chain = prompt.pipe(model).pipe(parser)
+  let output = await chain.invoke({ question: userInput })
+
+  // 第三步：输出检查
+  const outputSafety = await checkOutputSafety(output)
+  if (!outputSafety.isCompliant) {
+    // 重试：加入安全约束重新生成
+    const safePrompt = ChatPromptTemplate.fromTemplate(\`
+请用安全、专业、客观的方式回答以下问题。
+确保回答准确无误，不包含任何不当内容。
+
+问题: {question}
+\`)
+    const safeChain = safePrompt.pipe(model).pipe(parser)
+    output = await safeChain.invoke({ question: userInput })
+    
+    // 再次检查
+    const recheck = await checkOutputSafety(output)
+    if (!recheck.isCompliant) {
+      return { success: false, error: '输出无法通过安全检查' }
+    }
+  }
+
+  return { success: true, output }
+}
+
+// 示例5: 主题护栏 - 确保回答在业务范围内
+const topicGuardPrompt = ChatPromptTemplate.fromTemplate(\`
+请判断以下问题是否属于我们的业务范围。
+
+我们的业务范围：
+- 产品咨询
+- 技术支持
+- 订单查询
+- 售后服务
+
+用户问题: {question}
+
+是否属于业务范围: 是/否
+如果不属于，请生成一句礼貌的拒绝话术。
+\`)
+
+const topicGuardChain = topicGuardPrompt.pipe(model).pipe(parser)
+
+async function checkTopicRelevance(question: string): Promise<{
+  isRelevant: boolean
+  rejectionMessage?: string
+}> {
+  const result = await topicGuardChain.invoke({ question })
+  const isRelevant = result.includes('是')
+  return { isRelevant }
+}
+
+// 示例6: 重试机制 + 护栏
+async function generateWithGuardrails(
+  input: string,
+  maxRetries: number = 3
+): Promise<string> {
+  let lastError = ''
+  
+  for (let i = 0; i < maxRetries; i++) {
+    console.log(\`第 \${i + 1} 次生成...\`)
+    
+    // 输入检查
+    const inputSafe = await checkInputSafety(input)
+    if (!inputSafe.isSafe) {
+      throw new Error('输入不安全')
+    }
+    
+    // 生成
+    const prompt = ChatPromptTemplate.fromTemplate(\`
+请回答以下问题：{question}
+
+要求：
+- 回答要专业、客观、准确
+- 不包含任何敏感或不当内容
+- 如果不确定，请说明不确定的原因
+\`)
+    const chain = prompt.pipe(model).pipe(parser)
+    const output = await chain.invoke({ question: input })
+    
+    // 输出检查
+    const outputSafe = await checkOutputSafety(output)
+    if (outputSafe.isCompliant) {
+      return output
+    }
+    
+    lastError = '输出不合规'
+  }
+  
+  throw new Error(\`经过 \${maxRetries} 次重试仍无法通过安全检查: \${lastError}\`)
+}
+
+// 示例7: 降级响应
+function getFallbackResponse(reason: string): string {
+  const responses: Record<string, string> = {
+    unsafe_input: '抱歉，您的问题包含敏感内容，我无法回答。',
+    unsafe_output: '抱歉，我无法生成合适的回答。请尝试换一种问法。',
+    off_topic: '抱歉，这个问题超出了我的业务范围。我可以帮您解答产品相关的问题。',
+    error: '抱歉，服务暂时出现问题，请稍后再试。',
+  }
+  return responses[reason] || responses.error
+}`),language:"typescript",principle:"输出护栏（Guardrails）在 LLM 输出前后进行验证和修正，确保输出符合业务规则、格式要求和安全政策，避免有害内容、格式错误和越权回答。",flow:["定义验证规则：格式校验、内容安全、业务约束","输入护栏检查用户提问是否合法","输出护栏校验模型回答，不通过则重试或修正","记录所有拦截和修正用于审计"],notes:["护栏不是越多越好，平衡安全和用户体验","结构化输出配合 Zod 校验是最常用的护栏","敏感领域（医疗、法律）需要更严格的护栏"],problem:'解决"LLM 输出不可控、格式不稳定、可能产生有害内容的安全风险"的问题。'}];export{w as lessons};

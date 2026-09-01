@@ -1,0 +1,4 @@
+const e=`<script setup lang="ts">import { ref } from 'vue'; const reduced = ref(false); const played = ref(false)<\/script>
+<template><div class="demo-card motion-demo"><label><input v-model="reduced" type="checkbox">模拟减少动态效果</label><button @click="played = !played">切换提示</button><div class="toast" :class="{ played, reduced }">🌰 已保存学习进度</div><code>transition motion-safe:animate-bounce motion-reduce:transition-none</code><small>过渡用于状态连续性，动画用于少量强调；尊重 prefers-reduced-motion，并避免让布局属性参与昂贵动画。</small></div></template>
+<style scoped>.motion-demo{display:grid;gap:.8rem}.toast{padding:.8rem;border-radius:.6rem;background:#e7f2dd;color:#39613a;opacity:.45;transform:translateY(8px);transition:opacity .25s,transform .25s}.toast.played{opacity:1;transform:none}.toast.reduced{transition:none}.motion-demo>code{font-size:.73rem}</style>
+`;export{e as default};

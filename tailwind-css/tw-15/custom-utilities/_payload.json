@@ -1,0 +1,1 @@
+[{"data":1,"prerenderedAt":4},["ShallowReactive",2],{"lesson-code-TW_15":3},"@import \"tailwindcss\";\n\n@utility content-auto {\n  content-visibility: auto;\n}\n\n@utility tab-* {\n  tab-size: --value(integer);\n}\n\n@layer components {\n  .course-card { border-radius: var(--radius-xl); }\n}\n\n\u002F* @utility 生成的工具可继续使用 hover:、md: 等变体。 *\u002F\n",1788269096173]

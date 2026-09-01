@@ -1,0 +1,1 @@
+[{"data":1,"prerenderedAt":4},["ShallowReactive",2],{"lesson-code-SC_09":3},"@use \"sass:meta\";\n\n$length: 1rem;\n$duration: 200ms;\n$ratio: 1.5;\n$palette: (brand: #c45125, surface: #fff8ed);\n\n@debug meta.type-of($length); \u002F\u002F number\n@debug $length + 8px;          \u002F\u002F Sass 会转换兼容单位\n\u002F\u002F $length + $duration 会报错：长度与时间不兼容。\n",1788269096111]

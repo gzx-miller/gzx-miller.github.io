@@ -1,0 +1,1 @@
+import{R as o}from"./Hhvd03iW.js";import e from"./BII1K6MK.js";import{d as t,B as r,y as a,o as c}from"./DutfXOOr.js";const l=t({__name:"S08ReduxToolkit",setup(n){return(s,m)=>(c(),r(o,{title:"Redux Toolkit 演示",code:a(e)},null,8,["code"]))}});export{l as default};

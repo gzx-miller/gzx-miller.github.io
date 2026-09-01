@@ -1,0 +1,6 @@
+import{I as v,b as p,e,K as b,L as _,f,r,o as m}from"./DutfXOOr.js";const h={class:"demo-card"},y={class:"row"},A={class:"row"},g=["disabled"],C=["disabled"],w={class:"output"},x={__name:"J28AbortController",setup(T){const n=r("https://jsonplaceholder.typicode.com/posts"),o=r(""),l=r(!1);let a=null;async function u(){o.value="",l.value=!0,a=new AbortController;const c=a.signal,t=setTimeout(()=>a.abort(),3e3);try{o.value+=`⏳ 开始请求（3秒超时）…
+`;const s=await fetch(n.value,{signal:c});clearTimeout(t);const i=await s.json();o.value+=`✅ 请求成功，收到 ${Array.isArray(i)?i.length:1} 条数据
+`}catch(s){clearTimeout(t),s.name==="AbortError"?o.value+=`⚠️ 请求已取消（超时或手动取消）
+`:o.value+=`❌ 错误：${s.message}
+`}finally{l.value=!1}}function d(){a?.abort(),o.value+=`🛑 手动取消请求
+`}return(c,t)=>(m(),p("div",h,[t[1]||(t[1]=e("h4",null,"AbortController：取消请求",-1)),e("div",y,[b(e("input",{"onUpdate:modelValue":t[0]||(t[0]=s=>n.value=s),class:"input",style:{flex:"1"}},null,512),[[_,n.value]])]),e("div",A,[e("button",{class:"btn",onClick:u,disabled:l.value},"发送请求（3秒超时）",8,g),e("button",{class:"btn btn-cancel",onClick:d,disabled:!l.value},"取消请求",8,C)]),e("pre",w,f(o.value||"（日志为空）"),1),t[2]||(t[2]=e("p",{style:{"font-size":"12px",color:"#868e96"}},"💡 AbortController 还可用于取消 addEventListener 等可中断操作",-1))]))}},B=v(x,[["__scopeId","data-v-376fe52c"]]);export{B as default};

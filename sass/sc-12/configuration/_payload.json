@@ -1,0 +1,1 @@
+[{"data":1,"prerenderedAt":4},["ShallowReactive",2],{"lesson-code-SC_12":3},"\u002F\u002F _library.scss\n$prefix: \"ui\" !default;\n$radius: 0.5rem !default;\n.#{$prefix}-button { border-radius: $radius; }\n\n\u002F\u002F app.scss：配置必须出现在模块首次加载时\n@use \"library\" with (\n  $prefix: \"forest\",\n  $radius: 0.75rem,\n);\n",1788269096014]

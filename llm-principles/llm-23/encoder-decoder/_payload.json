@@ -1,0 +1,1 @@
+[{"data":1,"prerenderedAt":4},["ShallowReactive",2],{"lesson-code-LLM_23":3},"# 编码器：每个位置同时看左右 -> 双向，擅长“读懂输入”，如 BERT\n# 解码器：只能看左侧已有内容 -> 单向，擅长自回归“续写”，如 GPT\n# 纯解码器(decoder-only) 成为主流：任务被统一成“预测下一个 token”，\n#   于是问答、翻译、总结、代码都能用同一套法子改写来实现\n# - 隐式：decoder 用因果掩码(mask) 让注意力只看左边\ndef causal_mask(i, j):\n    return 0 if i >= j else -float(\"inf\")   # 遮住未来，保证自回归",1788269093738]

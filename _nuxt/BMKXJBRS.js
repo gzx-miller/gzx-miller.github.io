@@ -1,0 +1,11 @@
+const r=`// _library.scss
+$prefix: "ui" !default;
+$radius: 0.5rem !default;
+.#{$prefix}-button { border-radius: $radius; }
+
+// app.scss：配置必须出现在模块首次加载时
+@use "library" with (
+  $prefix: "forest",
+  $radius: 0.75rem,
+);
+`;export{r as default};

@@ -1,0 +1,21 @@
+const t=`<!-- 组件文件：components/course-card/course-card.vue
+     目录名 = 文件名 = 标签名，命中 easycom 默认匹配规则 -->
+
+<template>
+  <view class="course-card">
+    <text class="title">{{ title }}</text>
+    <text class="tag">{{ tag }}</text>
+  </view>
+</template>
+
+<script>
+export default {
+  name: 'course-card',
+  props: {
+    title: { type: String, default: '' },
+    tag: { type: String, default: '' },
+  },
+}
+<\/script>
+
+<!-- 页面文件 pages/home/home.vue：模板直接用 <course-card>，无需 import 和 components 注册 -->`;export{t as default};

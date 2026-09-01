@@ -1,0 +1,1 @@
+[{"data":1,"prerenderedAt":4},["ShallowReactive",2],{"lesson-code-WB_1":3},";; 最小的 Wasm 模块：add(a, b) = a + b\n;; 一个模块由若干\"段\"组成：类型段、函数段、导出段、代码段等\n(module\n  ;; 函数签名：(i32, i32) -> i32\n  (func $add (param $a i32) (param $b i32) (result i32)\n    local.get $a\n    local.get $b\n    i32.add\n  )\n  ;; 导出段：把内部函数以 \"add\" 暴露给宿主 JS\n  (export \"add\" (func $add))\n)\n",1788269097657]

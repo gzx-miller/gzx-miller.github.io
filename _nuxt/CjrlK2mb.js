@@ -1,0 +1,54 @@
+import{d as j,b as l,e as a,M as b,f as i,K as m,L as y,z as w,F as _,E as $,A as p,a0 as f,r as e,o,I as h}from"./DutfXOOr.js";const L={class:"demo-card tw-demo"},V={class:"tab-bar"},M={key:0},z={class:"transform-playground"},B={class:"controls-grid"},S={class:"control-item"},U={class:"control-item"},A={class:"control-item"},D={class:"control-item"},F={class:"transform-preview"},H={class:"magic-items-section"},I={class:"magic-grid"},N={class:"magic-emoji transition-all duration-300 ease-out hover:rotate-12 hover:scale-110"},Y={class:"magic-name"},E={key:1},W={class:"easing-demo"},q={key:0,class:"fade-demo"},K={key:2},X={class:"animation-demo"},G={class:"anim-grid"},J={class:"anim-item"},O={class:"anim-bounce"},P={class:"custom-anim-demo"},Q={class:"leaf-stage"},R={key:0,class:"falling-leaf"},Z=`<span style="color:#7c7c99">// 缩放</span>
+<span style="color:#8a8a3a">scale-100 scale-105 scale-110 scale-125</span>
+<span style="color:#8a8a3a">scale-x-110 scale-y-90</span>
+
+<span style="color:#7c7c99">// 旋转</span>
+<span style="color:#8a8a3a">rotate-0 rotate-45 rotate-90 rotate-180</span>
+<span style="color:#8a8a3a">-rotate-12 rotate-6</span>
+
+<span style="color:#7c7c99">// 平移</span>
+<span style="color:#8a8a3a">translate-x-4 translate-y-2 -translate-y-1</span>
+<span style="color:#8a8a3a">translate-x-1/2 translate-y-full</span>
+
+<span style="color:#7c7c99">// 倾斜</span>
+<span style="color:#8a8a3a">skew-x-6 skew-y-3</span>
+
+<span style="color:#7c7c99">// 变换原点</span>
+<span style="color:#8a8a3a">origin-center origin-top-left origin-bottom-right</span>`,aa=`<span style="color:#7c7c99">// 基础过渡</span>
+<span style="color:#8a8a3a">transition-all duration-300 ease-in-out</span>
+
+<span style="color:#7c7c99">// 指定属性</span>
+<span style="color:#8a8a3a">transition-colors transition-opacity</span>
+<span style="color:#8a8a3a">transition-transform</span>
+
+<span style="color:#7c7c99">// 时长</span>
+<span style="color:#8a8a3a">duration-75 duration-150 duration-300</span>
+<span style="color:#8a8a3a">duration-500 duration-700 duration-1000</span>
+
+<span style="color:#7c7c99">// 缓动函数</span>
+<span style="color:#8a8a3a">ease-linear ease-in ease-out ease-in-out</span>
+
+<span style="color:#7c7c99">// 延迟</span>
+<span style="color:#8a8a3a">delay-75 delay-150 delay-300 delay-500</span>`,sa=`<span style="color:#7c7c99">// 内置动画</span>
+<span style="color:#8a8a3a">animate-spin</span>    <span style="color:#7c7c99">// 旋转加载</span>
+<span style="color:#8a8a3a">animate-pulse</span>   <span style="color:#7c7c99">// 脉冲呼吸</span>
+<span style="color:#8a8a3a">animate-bounce</span>  <span style="color:#7c7c99">// 弹跳</span>
+<span style="color:#8a8a3a">animate-ping</span>    <span style="color:#7c7c99">// 雷达扩散</span>
+
+<span style="color:#7c7c99">// 自定义动画（tailwind.config.js）</span>
+module.exports = {
+  theme: {
+    extend: {
+      animation: {
+        <span style="color:#8a8a3a">'float'</span>: <span style="color:#a31414">'float 3s ease-in-out infinite'</span>,
+        <span style="color:#8a8a3a">'fall'</span>: <span style="color:#a31414">'fall 2s ease-in forwards'</span>,
+      },
+      keyframes: {
+        float: {
+          <span style="color:#8a8a3a">'0%, 100%'</span>: { transform: <span style="color:#a31414">'translateY(0)'</span> },
+          <span style="color:#8a8a3a">'50%'</span>: { transform: <span style="color:#a31414">'translateY(-10px)'</span> },
+        }
+      }
+    }
+  }
+}`,ta=j({__name:"TW20Transform",setup(na){const n=e("transform"),d=e(0),r=e(1),c=e(0),v=e(0),u=e(!0),g=e(!1),x=e(0),k=[{id:1,name:"枫叶符咒",emoji:"🍁",effect:"hover:rotate-12 hover:scale-110"},{id:2,name:"松果护符",emoji:"🌰",effect:"hover:scale-125 hover:-translate-y-1"},{id:3,name:"橡果宝石",emoji:"💎",effect:"hover:rotate-180"},{id:4,name:"森林之羽",emoji:"🪶",effect:"hover:-rotate-12 hover:translate-x-2"},{id:5,name:"萤火灯笼",emoji:"🏮",effect:"hover:scale-110 hover:translate-y-[-4px]"},{id:6,name:"蘑菇秘药",emoji:"🍄",effect:"hover:rotate-6 hover:scale-105"}],C=()=>{g.value=!0,setTimeout(()=>{g.value=!1},2e3)},T=()=>{x.value++};return(la,s)=>(o(),l("div",L,[s[25]||(s[25]=a("h3",null,"变换、过渡与动画",-1)),a("div",V,[a("button",{class:b(["tab-btn",{active:n.value==="transform"}]),onClick:s[0]||(s[0]=t=>n.value="transform")},"Transform 变换",2),a("button",{class:b(["tab-btn",{active:n.value==="transition"}]),onClick:s[1]||(s[1]=t=>n.value="transition")},"Transition 过渡",2),a("button",{class:b(["tab-btn",{active:n.value==="animation"}]),onClick:s[2]||(s[2]=t=>n.value="animation")},"Animation 动画",2)]),n.value==="transform"?(o(),l("div",M,[a("div",z,[s[9]||(s[9]=a("h4",null,"🎮 变换控制台",-1)),a("div",B,[a("div",S,[a("label",null,"旋转: "+i(d.value)+"°",1),m(a("input",{type:"range","onUpdate:modelValue":s[3]||(s[3]=t=>d.value=t),min:"-180",max:"180"},null,512),[[y,d.value,void 0,{number:!0}]])]),a("div",U,[a("label",null,"缩放: "+i(r.value.toFixed(2)),1),m(a("input",{type:"range","onUpdate:modelValue":s[4]||(s[4]=t=>r.value=t),min:"0.5",max:"2",step:"0.1"},null,512),[[y,r.value,void 0,{number:!0}]])]),a("div",A,[a("label",null,"水平位移: "+i(c.value)+"px",1),m(a("input",{type:"range","onUpdate:modelValue":s[5]||(s[5]=t=>c.value=t),min:"-100",max:"100"},null,512),[[y,c.value,void 0,{number:!0}]])]),a("div",D,[a("label",null,"垂直位移: "+i(v.value)+"px",1),m(a("input",{type:"range","onUpdate:modelValue":s[6]||(s[6]=t=>v.value=t),min:"-50",max:"50"},null,512),[[y,v.value,void 0,{number:!0}]])])]),a("div",F,[a("div",{class:"transform-box",style:w({transform:`rotate(${d.value}deg) scale(${r.value}) translate(${c.value}px, ${v.value}px)`})}," 🍂 ",4)]),a("button",{onClick:s[7]||(s[7]=t=>{d.value=0,r.value=1,c.value=0,v.value=0}),class:"reset-btn"}," 重置变换 ")]),a("div",H,[s[10]||(s[10]=a("h4",null,"✨ 魔法道具商店（悬停看效果）",-1)),a("div",I,[(o(),l(_,null,$(k,t=>a("div",{key:t.id,class:"magic-card"},[a("div",N,i(t.emoji),1),a("span",Y,i(t.name),1)])),64))])]),a("pre",{class:"mini-code",innerHTML:Z}),s[11]||(s[11]=a("div",{class:"tips-box"},[a("p",null,[a("strong",null,"Transform 要点：")]),a("ul",null,[a("li",null,"变换不会影响布局（不会挤开其他元素），只影响视觉呈现"),a("li",null,"可组合使用：同时设置 rotate + scale + translate"),a("li",null,"配合 transition 实现平滑的变换动画"),a("li",null,"使用 origin-* 调整变换的原点位置")])],-1))])):p("",!0),n.value==="transition"?(o(),l("div",E,[s[14]||(s[14]=f('<div class="transition-demo" data-v-47626c88><h4 data-v-47626c88>🎨 过渡效果对比</h4><div class="transition-cards" data-v-47626c88><div class="t-card t-card-1" data-v-47626c88><div class="t-card-inner" data-v-47626c88><span class="t-emoji" data-v-47626c88>🐿️</span><span class="t-label" data-v-47626c88>颜色过渡</span></div><small data-v-47626c88>hover:bg-orange-500</small></div><div class="t-card t-card-2" data-v-47626c88><div class="t-card-inner" data-v-47626c88><span class="t-emoji" data-v-47626c88>🦊</span><span class="t-label" data-v-47626c88>缩放过渡</span></div><small data-v-47626c88>hover:scale-110</small></div><div class="t-card t-card-3" data-v-47626c88><div class="t-card-inner" data-v-47626c88><span class="t-emoji" data-v-47626c88>🦉</span><span class="t-label" data-v-47626c88>阴影过渡</span></div><small data-v-47626c88>hover:shadow-xl</small></div><div class="t-card t-card-4" data-v-47626c88><div class="t-card-inner" data-v-47626c88><span class="t-emoji" data-v-47626c88>🦌</span><span class="t-label" data-v-47626c88>位移过渡</span></div><small data-v-47626c88>hover:-translate-y-2</small></div></div></div>',1)),a("div",W,[s[13]||(s[13]=f('<h4 data-v-47626c88>⏱️ 缓动函数对比</h4><div class="easing-row" data-v-47626c88><div class="easing-item" data-v-47626c88><div class="easing-track" data-v-47626c88><div class="easing-ball ball-linear" data-v-47626c88>linear</div></div><span data-v-47626c88>linear 线性</span></div><div class="easing-item" data-v-47626c88><div class="easing-track" data-v-47626c88><div class="easing-ball ball-ease-in" data-v-47626c88>ease-in</div></div><span data-v-47626c88>ease-in 加速</span></div><div class="easing-item" data-v-47626c88><div class="easing-track" data-v-47626c88><div class="easing-ball ball-ease-out" data-v-47626c88>ease-out</div></div><span data-v-47626c88>ease-out 减速</span></div><div class="easing-item" data-v-47626c88><div class="easing-track" data-v-47626c88><div class="easing-ball ball-ease-in-out" data-v-47626c88>ease-in-out</div></div><span data-v-47626c88>ease-in-out 缓入缓出</span></div></div>',2)),a("button",{onClick:s[8]||(s[8]=t=>u.value=!u.value),class:"toggle-btn"},i(u.value?"隐藏卡片":"显示卡片"),1),u.value?(o(),l("div",q,[...s[12]||(s[12]=[a("div",{class:"fade-card transition-all duration-500 ease-out"},[a("span",null,"🍁 淡入淡出效果")],-1)])])):p("",!0)]),a("pre",{class:"mini-code",innerHTML:aa}),s[15]||(s[15]=f('<div class="tips-box" data-v-47626c88><p data-v-47626c88><strong data-v-47626c88>Transition 要点：</strong></p><ul data-v-47626c88><li data-v-47626c88>使用 <code data-v-47626c88>transition-all</code> 过渡所有属性，或指定单个属性</li><li data-v-47626c88>配合 <code data-v-47626c88>duration-*</code> 设置动画时长（毫秒）</li><li data-v-47626c88>使用 <code data-v-47626c88>ease-*</code> 选择合适的缓动曲线</li><li data-v-47626c88>性能友好：优先过渡 transform 和 opacity</li></ul></div>',1))])):p("",!0),n.value==="animation"?(o(),l("div",K,[a("div",X,[s[20]||(s[20]=a("h4",null,"🎬 内置动画演示",-1)),a("div",G,[s[17]||(s[17]=a("div",{class:"anim-item"},[a("div",{class:"anim-spinner animate-spin"},"🌀"),a("span",null,"animate-spin 旋转")],-1)),s[18]||(s[18]=a("div",{class:"anim-item"},[a("div",{class:"anim-pulse animate-pulse"},"💓"),a("span",null,"animate-pulse 脉冲")],-1)),a("div",J,[a("div",O,[(o(),l("span",{key:x.value,class:"animate-bounce inline-block"},"🐿️"))]),s[16]||(s[16]=a("span",null,"animate-bounce 弹跳",-1)),a("button",{onClick:T,class:"replay-btn"},"重播")]),s[19]||(s[19]=a("div",{class:"anim-item"},[a("div",{class:"ping-wrapper"},[a("span",{class:"ping-icon"},"🔔"),a("span",{class:"animate-ping ping-ring"})]),a("span",null,"animate-ping 扩散")],-1))])]),a("div",P,[s[22]||(s[22]=a("h4",null,"🍂 自定义动画：落叶",-1)),a("div",Q,[g.value?(o(),l("div",R,"🍁")):p("",!0),s[21]||(s[21]=a("div",{class:"ground"},"～～～～～～～～",-1))]),a("button",{onClick:C,class:"trigger-btn"}," 让枫叶飘落 ")]),s[23]||(s[23]=f('<div class="float-demo" data-v-47626c88><h4 data-v-47626c88>✨ 悬浮动画组合</h4><div class="float-scene" data-v-47626c88><div class="float-item float-1" data-v-47626c88>🍂</div><div class="float-item float-2" data-v-47626c88>🍃</div><div class="float-item float-3" data-v-47626c88>🌰</div><div class="float-item float-4" data-v-47626c88>🍄</div><div class="float-squirrel" data-v-47626c88>🐿️</div></div></div>',1)),a("pre",{class:"mini-code",innerHTML:sa}),s[24]||(s[24]=a("div",{class:"tips-box"},[a("p",null,[a("strong",null,"Animation 要点：")]),a("ul",null,[a("li",null,"Tailwind 内置 4 种常用动画：spin / pulse / bounce / ping"),a("li",null,"可在配置文件中扩展自定义动画和 keyframes"),a("li",null,"动画与过渡的区别：动画可循环、可有关键帧"),a("li",null,"适度使用动画，避免过度干扰用户注意力")])],-1))])):p("",!0)]))}}),oa=h(ta,[["__scopeId","data-v-47626c88"]]);export{oa as default};

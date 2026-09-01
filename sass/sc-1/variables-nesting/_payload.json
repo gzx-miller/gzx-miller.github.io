@@ -1,0 +1,1 @@
+[{"data":1,"prerenderedAt":4},["ShallowReactive",2],{"lesson-code-SC_01":3},"$accent: #c45125;\n$card-radius: 0.75rem;\n.course-card {\n  border-left: 4px solid $accent;\n  border-radius: $card-radius;\n  &__title { color: $accent; }\n  &:hover { box-shadow: 0 8px 24px rgb(90 40 15 \u002F 12%); }\n}\n\u002F\u002F 运行时切换的主题值优先使用 CSS 自定义属性，而不是 Sass 变量。\n",1788269095972]

@@ -1,0 +1,1 @@
+[{"data":1,"prerenderedAt":4},["ShallowReactive",2],{"lesson-code-SC_13":3},".dashboard .panel {\n  \u002F\u002F 输出到文档根层级，而不是保留两个父选择器\n  @at-root .theme-dark .widget {\n    color: white;\n  }\n}\n\n@media print {\n  .article {\n    @at-root (without: media) { .print-helper { display: block; } }\n  }\n}\n",1788269096021]

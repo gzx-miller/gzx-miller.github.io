@@ -1,0 +1,12 @@
+import{d as v,b as u,e as t,v as _,K as h,L as C,f as i,F as f,E as g,r as d,o as l,M as k,A as c,I as x}from"./DutfXOOr.js";const y={class:"demo-card"},L={class:"chain-input"},w=["disabled"],E={class:"chain-steps"},P={class:"step-header"},V={class:"step-num"},b={class:"step-name"},T={class:"step-status"},B={key:0,class:"step-content"},N={key:1,class:"step-content output"},D=`// 用 LCEL pipe 串联多步处理
+const outlineChain = outlinePrompt.pipe(model).pipe(parser)
+const detailChain = detailPrompt.pipe(model).pipe(parser)
+const summaryChain = summaryPrompt.pipe(model).pipe(parser)
+
+// 顺序执行：前一步输出作为后一步输入
+const outline = await outlineChain.invoke({ topic })
+const detail = await detailChain.invoke({ outline })
+const summary = await summaryChain.invoke({ detail })`,F=v({__name:"L05Chains",setup(I){const p=d("Vue3 响应式原理"),a=d([{id:1,name:"大纲生成",input:"",output:"",status:"pending"},{id:2,name:"内容展开",input:"",output:"",status:"pending"},{id:3,name:"摘要提炼",input:"",output:"",status:"pending"}]),o=d(!1),r=[`1. 响应式对象创建
+2. 依赖收集机制
+3. 派发更新流程
+4. nextTick 与异步更新`,"响应式对象通过 Proxy 拦截 get/set 操作。get 时收集当前副作用函数到依赖集合，set 时触发所有依赖重新执行。nextTick 将更新回调推入微任务队列，避免重复渲染。","Vue3 响应式基于 Proxy，核心流程为：依赖收集 → 派发更新 → 异步批量渲染。理解这三步即可掌握响应式基本原理。"];async function m(){if(!o.value){o.value=!0,a.value.forEach(e=>{e.status="pending",e.input="",e.output=""}),a.value[0].input=`主题：${p.value}`;for(let e=0;e<a.value.length;e++)a.value[e].status="running",await new Promise(n=>setTimeout(n,1e3)),a.value[e].output=r[e],a.value[e].status="done",e+1<a.value.length&&(a.value[e+1].input=r[e]);o.value=!1}}return(e,n)=>(l(),u("div",y,[n[5]||(n[5]=t("h3",null,"链式调用",-1)),t("div",L,[t("label",null,[n[1]||(n[1]=_("课程主题 ",-1)),h(t("input",{"onUpdate:modelValue":n[0]||(n[0]=s=>p.value=s)},null,512),[[C,p.value]])]),t("button",{disabled:o.value,onClick:m},i(o.value?"执行中...":"执行链"),9,w)]),t("div",E,[(l(!0),u(f,null,g(a.value,s=>(l(),u("div",{key:s.id,class:k(["chain-step",s.status])},[t("div",P,[t("span",V,i(s.id),1),t("span",b,i(s.name),1),t("span",T,i(s.status==="done"?"✓":s.status==="running"?"...":"—"),1)]),s.input?(l(),u("div",B,[n[2]||(n[2]=t("small",null,"输入",-1)),t("p",null,i(s.input),1)])):c("",!0),s.output?(l(),u("div",N,[n[3]||(n[3]=t("small",null,"输出",-1)),t("p",null,i(s.output),1)])):c("",!0)],2))),128))]),t("div",{class:"code-example"},[n[4]||(n[4]=t("h4",null,"LCEL 实现",-1)),t("pre",null,i(D))])]))}}),S=x(F,[["__scopeId","data-v-a989062d"]]);export{S as default};

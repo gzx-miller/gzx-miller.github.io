@@ -1,0 +1,1 @@
+import{R as o}from"./Hhvd03iW.js";import e from"./aQBXWD9z.js";import{d as t,B as a,y as r,o as c}from"./DutfXOOr.js";const f=t({__name:"S07JotaiAsyncAtoms",setup(s){return(n,m)=>(c(),a(o,{title:"Jotai 异步原子演示",code:r(e)},null,8,["code"]))}});export{f as default};

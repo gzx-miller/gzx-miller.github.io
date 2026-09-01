@@ -1,0 +1,35 @@
+const e=`<template>
+  <view class="page">
+    <!-- swiper：轮播容器，indicator-dots 显示指示点，circular 循环播放 -->
+    <swiper class="banner" circular autoplay indicator-dots :interval="3000">
+      <swiper-item v-for="b in banners" :key="b.id">
+        <image class="banner-img" :src="b.cover" mode="aspectFill" />
+      </swiper-item>
+    </swiper>
+
+    <!-- scroll-view：局部滚动需限定高度，@scrolltolower 触底加载下一页 -->
+    <scroll-view class="list" scroll-y @scrolltolower="loadMore">
+      <view v-for="course in courses" :key="course.id" class="row">
+        <text>{{ course.title }}</text>
+      </view>
+    </scroll-view>
+
+    <!-- scroll-x：横向滑动，子项需不换行 -->
+    <scroll-view class="tabs" scroll-x>
+      <view v-for="t in tabs" :key="t" class="tab">{{ t }}</view>
+    </scroll-view>
+  </view>
+</template>
+
+<script>
+export default {
+  data() {
+    return { banners: [], courses: [], tabs: [] }
+  },
+  methods: {
+    loadMore() {
+      // 触底加载下一页
+    },
+  },
+}
+<\/script>`;export{e as default};

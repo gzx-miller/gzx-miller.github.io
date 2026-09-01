@@ -1,0 +1,1 @@
+[{"data":1,"prerenderedAt":4},["ShallowReactive",2],{"lesson-code-LLM_31":3},"# 全景图把 30 课零件拼回原位的六站流水线：\n# ① 分词 -> ② 词向量(embedding) -> ③ 加位置(embedding + position)\n# -> ④ 自注意力(QKV 投影、QKᵀ\u002F√d、softmax、A·V 混合上下文)\n# -> ⑤ FFN(W1 -> GELU -> W2) -> ⑥ Block x 2 + Softmax\n# 所谓“生成”：每吐出一个词就接到句尾，整条流水线再从头跑一遍(自回归)",1788269093825]

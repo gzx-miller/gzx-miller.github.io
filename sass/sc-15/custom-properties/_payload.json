@@ -1,0 +1,1 @@
+[{"data":1,"prerenderedAt":4},["ShallowReactive",2],{"lesson-code-SC_15":3},"@use \"sass:meta\";\n\n$brand: #c45125;\n$font-stack: \"Noto Serif SC\", serif;\n\n:root {\n  --brand: #{$brand};\n  --font-display: #{meta.inspect($font-stack)};\n}\n\n.title { color: var(--brand); font-family: var(--font-display); }\n\u002F\u002F 自定义属性在浏览器运行时继承、级联并可被 JavaScript 更新。\n",1788269096034]

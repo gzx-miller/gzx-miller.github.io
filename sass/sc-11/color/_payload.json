@@ -1,0 +1,1 @@
+[{"data":1,"prerenderedAt":4},["ShallowReactive",2],{"lesson-code-SC_11":3},"@use \"sass:color\";\n\n$brand: #c45125;\n$brand-hover: color.scale($brand, $lightness: -18%);\n$brand-soft: color.mix(white, $brand, 78%);\n\n.button {\n  background: $brand;\n  &:hover { background: $brand-hover; }\n}\n\u002F\u002F 计算配色后仍应使用对比度工具验证文字可读性。\n",1788269095994]

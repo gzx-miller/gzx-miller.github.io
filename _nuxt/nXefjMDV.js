@@ -1,0 +1,7 @@
+import{u}from"./hf4q9x8v.js";import{d as g,b as t,e as n,v as i,F as m,E as f,A as x,o as s,f as c}from"./DutfXOOr.js";const y={class:"demo-card"},k={style:{background:"#f5f5f5",padding:"8px","border-radius":"4px","font-size":"12px"}},v={style:{margin:"4px 0 0","padding-left":"16px"}},S={key:0,style:{color:"#999"}},L=g({__name:"S17PiniaPlugin",setup(b){const a=u(),e=[];function d(r){e.unshift(`${new Date().toLocaleTimeString()} · ${r}`),e.length>5&&e.pop()}function p(){d("调用 enroll 添加新课程"),a.enroll({id:Date.now(),title:"插件实战",minutes:30})}return(r,o)=>(s(),t("div",y,[o[1]||(o[1]=n("h4",null,"🌰 Pinia 插件机制",-1)),o[2]||(o[2]=n("p",null,[i("插件通过 "),n("code",null,"pinia.use()"),i(" 注入，可为所有 Store 统一添加持久化、日志或错误处理。")],-1)),n("div",{style:{margin:"12px 0"}},[n("button",{onClick:p},"触发 action 并查看日志")]),n("div",k,[o[0]||(o[0]=n("strong",null,"插件执行日志:",-1)),n("ul",v,[(s(),t(m,null,f(e,l=>n("li",{key:l},c(l),1)),64)),e.length?x("",!0):(s(),t("li",S,"点击按钮后日志显示在这里"))])]),o[3]||(o[3]=n("div",{style:{"margin-top":"12px","font-size":"12px",color:"#666"}},[n("strong",null,"关键代码:"),n("pre",{style:{background:"#f0f8e8",padding:"8px","border-radius":"4px","overflow-x":"auto"}},`// 创建插件
+const pinia = createPinia()
+pinia.use(({ store }) => {
+  store.$onAction(({ name, args }) => {
+    console.log(\`[Plugin] \${name}\`, ...args)
+  })
+})`)],-1)),o[4]||(o[4]=n("div",{style:{"font-size":"12px",color:"#888","margin-top":"8px"}},[n("strong",null,"使用场景:"),i(" 统一日志、持久化、SSR 状态同步、错误上报 ")],-1))]))}});export{L as default};

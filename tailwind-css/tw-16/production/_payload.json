@@ -1,0 +1,1 @@
+[{"data":1,"prerenderedAt":4},["ShallowReactive",2],{"lesson-code-TW_16":3},"@import \"tailwindcss\";\n\n\u002F* 自动检测之外的显式源；路径相对当前样式表 *\u002F\n@source \"..\u002Fshared-ui\";\n@source not \"..\u002Flegacy\";\n\n\u002F* 仅在无法修改外部源码时内联完整候选，不要拼接碎片。 *\u002F\n@source inline(\"underline\");\n\n\u002F* 生产构建启用压缩，并检查输出 CSS 与缓存策略。 *\u002F\n",1788269096178]

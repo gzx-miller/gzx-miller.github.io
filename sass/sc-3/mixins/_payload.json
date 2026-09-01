@@ -1,0 +1,1 @@
+[{"data":1,"prerenderedAt":4},["ShallowReactive",2],{"lesson-code-SC_03":3},"@mixin button-size($padding-y, $padding-x) {\n  padding: $padding-y $padding-x;\n  @content;\n}\n\n.button {\n  @include button-size(0.625rem, 1rem) {\n    font-weight: 600;\n  }\n}\n\u002F\u002F 可选参数优先使用 $name: value 的关键字调用，语义更稳。\n",1788269096056]
