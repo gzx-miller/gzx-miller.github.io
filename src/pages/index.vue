@@ -231,7 +231,7 @@ function clearSearch() {
         <span class="hero-decor hero-decor-squirrel">🐿️</span>
       </div>
       <div class="hero-inner">
-        <h1 class="hero-title">小松鼠举栗子 🌰</h1>
+        <h1 class="hero-title"><span class="hero-title-brand">小松鼠举栗子</span> 🌰</h1>
         <p class="hero-subtitle">
           通过独立的内容，学懂 Vue3、TypeScript、React、Node.js、CSS、AI 等软件技术 ——
           每一颗栗子只讲一个知识点。

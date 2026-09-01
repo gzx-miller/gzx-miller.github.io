@@ -2311,6 +2311,29 @@ pre.code-block > code.hljs,
     radial-gradient(88% 58% at 50% 0%, rgba(240, 138, 36, 0.09) 0%, rgba(240, 138, 36, 0) 62%);
 }
 
+/* 氛围感：标题后方一缕缓慢呼吸的暖光，贴合秋日暖阳气质，纯 CSS、零 JS */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(58% 42% at 50% 8%, rgba(246, 193, 90, 0.22), transparent 72%);
+  animation: ambientGlow 9s ease-in-out infinite;
+}
+
+@keyframes ambientGlow {
+  0%, 100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
 .hero-inner {
   width: min(760px, 100%);
   margin: 0 auto;
@@ -2376,6 +2399,16 @@ pre.code-block > code.hljs,
   line-height: 1.15;
   letter-spacing: -0.02em;
   color: var(--chestnut);
+}
+
+/* 设计感：标题用树叶红→橙→金三色渐变做描字，秋日基调清晰可辨，
+   栗子 emoji 保留实体色，不在渐变裁剪内 */
+.hero-title-brand {
+  background: linear-gradient(120deg, var(--leaf-red) 0%, var(--leaf-orange) 48%, var(--leaf-gold) 92%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 .hero-subtitle {
