@@ -256,7 +256,7 @@ export const lessons: Lesson[] = [
     code: WB08Code,
     language: 'wat',
     principle:
-      'Wasm 通过导入段声明对宿主（JS）能力的依赖，实例化时由 JS 按 importObject 注入实现；通过导出段把内部函数、内存、表格、全局变量暴露给宿主。全局变量的可变性需显式声明：默认不可变，要写入必须在类型前加 mut。',
+      'Wasm 通过导入段声明对宿主（JS）能力的依赖，实例化时由 JS 按 importObject 注入实现，模块本身不关心实现细节；通过导出段把内部函数、内存、表格、全局变量暴露给宿主。全局变量的可变性需显式声明：默认不可变（外部只能读），要允许写入必须在类型前加 mut，且跨边界写可变全局需经导出函数或全局对象的 value 属性。',
     flow: [
       'counter 用 (import "env" "log" ...) 声明依赖 env.log : (i32) -> ()。',
       '内部维护一个可变全局变量 count（(mut i32)，初始为 0）。',
@@ -386,7 +386,7 @@ export const lessons: Lesson[] = [
     code: WB13Code,
     language: 'javascript',
     principle:
-      'Wasm 模块只声明其对宿主函数与签名的依赖，不关心具体实现。同一份二进制可分别注入不同的 JS 实现实例化多次，得到完全不同的行为——这是依赖注入思想在 Wasm 中的体现，让业务逻辑与宿主能力解耦并具备可测性。',
+      'Wasm 模块只声明其对宿主函数与签名的依赖，不关心具体实现：同一份二进制可以分别注入不同的 JS 实现、实例化多次，得到完全不同的行为——这是依赖注入思想在 Wasm 中的体现。日志、存储、网络等宿主能力因此与业务逻辑解耦，测试时还能注入桩函数，让模块行为可验证、可复用。',
     flow: [
       'counter 声明需要导入 env.log : (i32) -> ()。',
       '实例 A 注入"明细日志"实现并实例化。',
@@ -399,7 +399,7 @@ export const lessons: Lesson[] = [
       '同一二进制 + 不同导入 = 可复用、可测试的模块设计。',
       '高频回调有跨边界开销，性能敏感时应批量传递数据。',
     ],
-    problem: '解决"如何通过导入让一个 Wasm 模块适配多种宿主行为"的问题。',
+    problem: '解决"同一份 Wasm 二进制要在不同宿主环境表现不同，又不想编译多份、改一处要重编多次"的问题。',
   },
   {
     id: 'WB_14',
@@ -425,7 +425,7 @@ export const lessons: Lesson[] = [
       'WasmGC 提案进一步让 Wasm 直接操作结构体 / 数组对象。',
       '引用类型让 Wasm 安全地保管宿主对象而无需拷贝。',
     ],
-    problem: '解决"Wasm 如何安全地引用 JS 对象而不复制数据"的问题。',
+    problem: '解决"把大对象（DOM 节点、缓存句柄）传入 Wasm 时不愿承受复制数据的开销，又担心对象生命周期失控"的问题。',
   },
   {
     id: 'WB_15',
@@ -451,7 +451,7 @@ export const lessons: Lesson[] = [
       'SharedArrayBuffer 需 COOP/COEP 跨源隔离才能启用。',
       'atomicAdd（rmw.add）返回操作前的旧值。',
     ],
-    problem: '解决"多线程共享数据时如何避免竞态、保证计数正确"的问题。',
+    problem: '解决"多个 Worker 同时对同一个计数器加一，普通读写会互相覆盖、最终结果总少于预期"的竞态问题。',
   },
   {
     id: 'WB_16',
@@ -464,7 +464,7 @@ export const lessons: Lesson[] = [
     code: WB16Code,
     language: 'javascript',
     principle:
-      'Wasm 本身是单线程的，但可配合 Web Worker 与共享内存真正利用多核。每个 Worker 用同一份模块实例化，对共享内存执行原子自增。若换成普通读写，结果会因竞态而小于预期；用原子指令则能保证最终值精确等于 N × K。',
+      'Wasm 本身是单线程执行的，但可配合 Web Worker 与共享内存真正利用多核：每个 Worker 各自实例化同一份模块，对共享内存中的同一位置执行原子自增。若换成普通 load/store 的读-改-写，多个 Worker 交错执行会互相覆盖、结果小于预期；原子指令保证最终值精确等于 N × K，也正因此需要 COOP/COEP 隔离来安全启用 SharedArrayBuffer。',
     flow: [
       '主线程创建共享内存并把计数清零。',
       '启动 N 个 Worker，各自实例化同一份 atomic 模块。',
@@ -477,7 +477,7 @@ export const lessons: Lesson[] = [
       '需跨源隔离才能使用 SharedArrayBuffer 进行共享。',
       '真实项目可用 comlink 等库简化 Worker 通信。',
     ],
-    problem: '解决"如何让 Wasm 真正多线程并行、并验证并发正确性"的问题。',
+    problem: '解决"单个 Worker 跑不满多核、主线程还被计算任务卡死，而多开 Worker 共享计数又会算错"的问题。',
   },
   {
     id: 'WB_17',
@@ -503,7 +503,7 @@ export const lessons: Lesson[] = [
       '不支持的浏览器会抛 CompileError，需先做能力检测。',
       'SIMD 是数据并行，可与多线程组合叠加加速。',
     ],
-    problem: '解决"如何用 SIMD 指令让大批量数值运算更快"的问题。',
+    problem: '解决"图像处理、矩阵运算这类批量同构计算逐元素循环太慢，CPU 通道利用率低下"的提速问题。',
   },
   {
     id: 'WB_18',
@@ -529,7 +529,7 @@ export const lessons: Lesson[] = [
       'Wasm 内部也可用 try/catch 就地处理异常，无需回到 JS。',
       '异常可跨 Wasm/JS 边界传递，不破坏调用栈。',
     ],
-    problem: '解决"Wasm 如何像高级语言一样抛出并捕获异常"的问题。',
+    problem: '解决"Wasm 内部出错时只能返回错误码层层判断，或直接 trap 崩溃，无法携带上下文信息跨越边界"的问题。',
   },
   {
     id: 'WB_19',
@@ -555,7 +555,7 @@ export const lessons: Lesson[] = [
       '计算密集、可复用、需稳定性能时才优先选 Wasm。',
       '测量要预热并多次取样，取最小值以减小抖动。',
     ],
-    problem: '解决"Wasm 与 JS 谁更快、什么场景该选谁"的性能决策问题。',
+    problem: '解决"听说 Wasm 性能好就想全面替换 JS，却不清楚哪些场景真能提速、哪些反而更慢"的选型问题。',
   },
   {
     id: 'WB_20',
@@ -581,6 +581,6 @@ export const lessons: Lesson[] = [
       'Module 可缓存复用（如配 IndexedDB），多次实例化免去重复编译。',
       '部署需正确 MIME（application/wasm），线程特性还需 COOP/COEP。',
     ],
-    problem: '解决"如何把业务代码编译成 Wasm 并部署到生产环境"的工程问题。',
+    problem: '解决"本地写好的 .wasm 怎么接入前端工程、如何流式加载并配合 MIME 与缓存正确上线"的工程问题。',
   },
 ]

@@ -71,7 +71,7 @@ export const lessons: Lesson[] = [
     principle: '条件编译让同一份源码仅对目标平台生效：`#ifdef MP-WEIXIN` 只在微信小程序编译，`#ifndef H5` 表示非 H5；它同时支持 js/ts、template 和 css 三种位置，编译期直接裁剪无关分支，不会把其他平台的死代码带进产物。',
     flow: ['用 #ifdef 平台标识圈定仅某端需要的代码。', '用 #ifndef 表达"除某端之外"的反向分支。', '在 template 中同样用注释包裹差异化的 DOM。', '平台值如 H5、MP-WEIXIN、APP-PLUS 在官方文档可查。'],
     notes: ['条件编译是编译期行为，不会产生运行时判断开销。', '一页内多次出现 #ifdef 时保持注释闭合配对，避免语法错乱。', '不能跨 script 与 template 之间用一段 #ifdef 包裹。', '抽公共逻辑到外部文件再条件引入，可读性更好。'],
-    problem: '解决"一套代码如何在不同平台表现不同，而不用维护多份工程"的问题。',
+    problem: '解决"一套代码要在小程序、H5、App 上表现不同，又不想维护多份工程重复改三遍"的问题。',
   },
   {
     id: 'U_03', title: '页面生命周期 onLoad 与 onShow', navTitle: '页面生命周期', category: '页面与生命周期',
@@ -80,7 +80,7 @@ export const lessons: Lesson[] = [
     principle: 'uni-app 页面生命周期继承小程序模型：onLoad 只在页面首次创建时触发（适合读取路由参数、初始化一次），onShow 每次页面回到前台都触发（适合刷新可能变化的数据），onReady 表示首次渲染完成，onHide/onUnload 分别对应切走与销毁。',
     flow: ['onLoad 中解析 options 参数并做一次性初始化。', 'onShow 每次可见时刷新共享状态或列表。', 'onReady 首次渲染后访问节点或第三方初始化。', 'onUnload 清理定时器、事件监听等资源。'],
     notes: ['onShow 在 onLoad 之后、以及从后台返回时都会执行。', '不要在 onLoad 里做依赖 DOM 的操作，此时尚未渲染。', '下拉刷新、上拉加载分别对应 onPullDownRefresh、onReachBottom。', 'onUnload 与 onHide 的区别：销毁页面和暂时隐藏。'],
-    problem: '解决"页面在不同时机该在哪个钩子里加载与刷新数据"的问题。',
+    problem: '解决"页面数据到底该在 onLoad 还是 onShow 里拉取，返回页面时列表不刷新、或者频繁重复刷新"的问题。',
   },
   {
     id: 'U_04', title: '数据绑定与事件处理', navTitle: '数据与事件', category: '语法基础',
@@ -107,7 +107,7 @@ export const lessons: Lesson[] = [
     principle: 'scroll-view 是可滚动的容器，需要显式高度或 `scroll-y` 才能滚动，支持 scroll-into-view 定位、@scroll 事件与刷新加载；swiper 是轮播容器，内联 swiper-item，通过 autoplay、circular、indicator-dots 控制自动播放与指示点，二者都把原生滚动手势封装成声明式组件。',
     flow: ['为 scroll-view 设定高度并开启 scroll-y。', '横向滚动用 scroll-x 并让子项不换行。', 'swiper 内放多个 swiper-item 组成轮播。', '用 indicator-dots 与 autoplay 控制轮播反馈。'],
     notes: ['scroll-view 若不定高，小程序里内容高度会撑开而无法滚动。', '页面级滚动与 scroll-view 局部滚动不要混用造成嵌套滚动。', 'swiper 的 indicator 颜色可通过样式定制。', '大量列表项优先考虑虚拟列表而非一次性全渲染。'],
-    problem: '解决"页面内局部区域如何滚动、横向滑动与轮播展示"的问题。',
+    problem: '解决"页面里的横滑商品条、局部滚动列表与轮播图如何各就各位，不把整页内容拖成超长条"的问题。',
   },
   {
     id: 'U_07', title: '页面路由与导航跳转', navTitle: '路由跳转', category: '页面与路由',
@@ -125,7 +125,7 @@ export const lessons: Lesson[] = [
     principle: 'rpx 是 uni-app 的响应式单位，规定屏幕宽度恒为 750rpx，因此 1rpx 随设备宽度等比缩放，天然适配不同屏幕；750 宽设计稿上 1rpx 恰等于 1 个设计像素，标注可直接照抄。px 在小程序与 App 端不随屏幕缩放，用于固定物理尺寸。rpx 的具体换算：小程序/App 由框架在运行时按屏幕宽度解析，H5 端由编译器换算成 rem、vw 等响应式单位。',
     flow: ['设计稿以 750 宽度为基准，元素标注值原样写成 rpx。', '占比类尺寸用 rpx 保持跨端等比。', '需要固定物理尺寸（如 1px 细边框）时改用 px。', '动态换算场景用 uni.upx2px 把 rpx 转成 px 写入 style。'],
     notes: ['rpx 的基准是小程序宽 750，大屏 H5 上同样等比缩放。', '细边框建议用 px，避免 rpx 缩放后出现小数模糊。', '百分比与 flex 仍适用，rpx 主要解决绝对尺寸适配。', 'upx2px 在编译后返回浏览器可用的 px 值。'],
-    problem: '解决"同一设计稿如何在不同宽度设备上保持视觉一致"的适配问题。',
+    problem: '解决"按 750 设计稿写死的 px 在大小屏上比例失调，元素忽大忽小、留白忽宽忽窄"的适配问题。',
   },
   {
     id: 'U_09', title: 'easycom 组件自动注册', navTitle: 'easycom', category: '组件规范',
@@ -134,7 +134,7 @@ export const lessons: Lesson[] = [
     principle: 'easycom 是 uni-app 的自动组件引入机制：只要组件放在 `components/组件名/组件名.vue`，页面模板中就能直接用 `<组件名>` 而无需 import 和注册；默认按目录名匹配组件名，也可在 pages.json 的 easycom 字段自定义匹配规则与正则，命中后由框架异步加载。',
     flow: ['按 components/xxx/xxx.vue 目录规范组织组件。', '模板中直接写 <xxx> 使用，免 import。', '需要自定义路径时在 easycom 配置正则规则。', '仅打包被使用到的组件，避免全量引入。'],
     notes: ['默认仅匹配 components/组件名/组件名.vue 这种目录名=文件名=标签名的一致约定。', '其他目录结构可在 pages.json 的 easycom.custom 里用正则自定义匹配规则。', 'easycom 默认覆盖 src/components 与 uni_modules 下的规范路径，页面可免 import 直接用。', 'easycom 只解决自动引入，组件的 props/事件仍需在组件内部自行定义声明。'],
-    problem: '解决"高频复用组件每次都要手动 import 与注册"的繁琐问题。',
+    problem: '解决"每个页面都要重复 import 与注册十几个高频组件，漏改一处就报错"的繁琐问题。',
   },
   {
     id: 'U_10', title: 'uni.request 封装与本地存储', navTitle: '请求与存储', category: '数据与存储',
@@ -152,7 +152,7 @@ export const lessons: Lesson[] = [
     principle: '列表页最常见的数据更新有两种：下拉刷新对应页面事件 onPullDownRefresh，触底加载对应 onReachBottom。前者需先在 pages.json 对应页面开启 enablePullDownRefresh，并在完成后调用 uni.stopPullDownRefresh 收起动画；后者在内容滚动到底部时自动触发，通常用「页码 +1 追加」的分页策略，并在数据耗尽时给出「没有更多了」的终止提示。',
     flow: ['在 pages.json 页面 style 中开启 enablePullDownRefresh。', 'onPullDownRefresh 里重置页码并请求第一页。', 'onReachBottom 里页码递增并追加下一页。', '刷新收尾调用 uni.stopPullDownRefresh 结束动画。'],
     notes: ['onReachBottom 需页面内容超出屏幕才会触发滚动。', '刷新中避免重复请求，用 loading 标志位防抖。', '分页要维护当前页码与「没有更多了」的终止状态。', '需要局部滚动时改用 scroll-view 的 @scrolltolower 触底。'],
-    problem: '解决"列表页如何下拉刷新、滚动到底自动加载更多数据"的问题。',
+    problem: '解决"列表页用户习惯下拉就刷新、滚到底就想看更多，而手动点按钮翻页体验落后"的问题。',
   },
   {
     id: 'U_12', title: '交互反馈 showToast 与 showModal', navTitle: '交互反馈', category: '交互反馈',
@@ -161,7 +161,7 @@ export const lessons: Lesson[] = [
     principle: 'uni-app 提供一套跨端交互反馈 API：showToast 用于轻量提示并自动消失；showModal 用于需要用户确认/取消的模态框；showLoading 配合 hideLoading 表达进行中的阻断状态；showActionSheet 用于底部多选项操作菜单。这些 API 在小程序、H5、App 上被映射到各自原生控件，比手写弹窗更统一、也更省事。',
     flow: ['成功/失败提示用 showToast，指定 icon 与 title。', '危险操作前用 showModal 让用户确认，读取 res.confirm。', '耗时操作前 showLoading，完成后必须 hideLoading。', '多选项操作用 showActionSheet，通过 tapIndex 区分。'],
     notes: ['showToast 的 title 长度受限，过长会被截断。', 'showLoading 必须手动 hideLoading，否则会一直遮挡。', 'showModal 可同屏展示 title 与 content 两行文案。', 'showActionSheet 最多 6 项，超出会自动转列表形式。'],
-    problem: '解决"如何用统一的跨端方式给用户即时、明确的交互反馈"的问题。',
+    problem: '解决"三端各自弹窗、提示实现不一致，成功失败状态用户看不清、耗时操作等半天也不知进度"的问题。',
   },
   {
     id: 'U_13', title: '应用生命周期与全局数据', navTitle: '应用生命周期', category: '工程基础',
@@ -188,6 +188,6 @@ export const lessons: Lesson[] = [
     principle: '当页面变多，主包体积会成为启动瓶颈。subPackages 允许把部分页面拆到独立分包，打包时与主包分开、按需下载；preloadRule 可配置在进入某页后预下载指定分包，在空闲时静默拉取，用户真正使用时已就绪。主包只保留首页与高优路径页面，能显著降低首屏加载时间。',
     flow: ['在 pages.json 用 subPackages 声明分包 root 与页面。', '分包页面路径相对 root 写，无需加根前缀。', '用 preloadRule 配置进入主包页后预下载指定分包。', '主包只保留首页与关键路径，其余下沉分包。'],
     notes: ['subPackages 与 subpackages 两种字段名均被识别。', '主包与分包不能重复声明同一个页面。', '跨分包跳转前需确保目标分包已加载。', '单个分包过大仍会卡顿，需合理拆分粒度。'],
-    problem: '解决"页面较多时如何压缩首屏体积、实现按需加载分包"的问题。',
+    problem: '解决"页面一多主包体积超限、小程序启动变慢、首屏白屏时间越拖越长"的加载问题。',
   },
 ]
