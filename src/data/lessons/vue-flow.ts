@@ -92,6 +92,7 @@ export const lessons: Lesson[] = [
     notes: [
       'input 拖不出连线、output 接不进连线，是类型只约束连接桩方向的结果，不是 bug。',
       '类型仅定连接桩方向，不含业务语义；要承载富信息卡片请用自定义节点。',
+      '同一节点可挂多个 source/target 桩，多桩以 id 区分时连线需携带 handle id（下一课详解）。',
     ],
     problem: '解决"起点为什么连不进来、终点为什么连不出去"的入门疑惑。',
     officialUrl: 'https://vueflow.dev/guide/node.html',
@@ -141,6 +142,7 @@ export const lessons: Lesson[] = [
     notes: [
       'Handle 一旦设置 id，连线就必须显式携带对应 handle id，否则对接不上。',
       '校验放 isValidConnection 而不是 onConnect，可以在拖线过程中就给出拒绝反馈。',
+      'Handle 的 position 决定线从哪条边进出；桩位与停靠边不匹配时连线会从节点内部斜穿，观感很差。',
     ],
     problem: '解决"一个节点多个出口/入口时连线乱接、业务规则拦不住"的问题。',
     officialUrl: 'https://vueflow.dev/guide/handle.html',
@@ -165,8 +167,9 @@ export const lessons: Lesson[] = [
     notes: [
       'style 里的 stroke 可用 CSS 变量，天然适配双主题。',
       '默认边的 label 渲染在 SVG 文本层，纯文本场景够用；复杂标签要自定义连线 + EdgeLabelRenderer。',
+      'default-edge-options 只影响之后新建的连线；已有 edge 的形态由它自身的 type 字段决定。',
     ],
-    problem: '解决"连线形态单一、看不出主次流向"的表达问题。',
+    problem: '解决"流程图中所有连线长得一样，看不出哪条是主路径、哪条是绕过分支，阅读全靠猜"的问题。',
     officialUrl: 'https://vueflow.dev/guide/edge.html',
   },
   {
@@ -189,6 +192,7 @@ export const lessons: Lesson[] = [
     notes: [
       'data 建议为可序列化的普通对象，便于保存、持久化与快照回放。',
       'Handle 要放在卡片外缘并给足尺寸，避免被文字遮住影响连线命中。',
+      '自定义节点同样只能从声明过的 Handle 出线；没放 Handle 的卡片连不上任何线。',
     ],
     problem: '解决"默认节点只有一行文字，承载不了业务信息"的问题。',
     officialUrl: 'https://vueflow.dev/guide/custom-node.html',
@@ -238,6 +242,7 @@ export const lessons: Lesson[] = [
     notes: [
       '选中时拖空白处是框选、拖节点本身是移动，二者由 selection-key-code 区分。',
       '业务删除建议走按钮+确认；键盘删除适合高频快捷清场。',
+      '不查重直接 push edges，会让同一对桩位堆出多条重叠连线，删除时也容易漏删。',
     ],
     problem: '解决"画布能看不能编：连线重复、多选困难、删不干净"的问题。',
     officialUrl: 'https://vueflow.dev/guide/interactions.html',
@@ -287,6 +292,7 @@ export const lessons: Lesson[] = [
     notes: [
       '不做坐标换算，缩放后拖放的落点会明显偏离鼠标位置，这是最常见的坑。',
       '旧版用于坐标换算的 project() 已被 screenToFlowCoordinate 取代，勿再使用。',
+      'dataTransfer 写入的数据在 dragstart 后立即读取可能为空（浏览器安全限制），统一在 drop 里 getData 最稳妥。',
     ],
     problem: '解决"低代码平台如何从物料区拖组件到画布并放在鼠标位置"的问题。',
     officialUrl: 'https://vueflow.dev/guide/drag-and-drop.html',
@@ -311,6 +317,7 @@ export const lessons: Lesson[] = [
     notes: [
       '布局函数保持纯函数、返回 Map，方便单元测试与切换 dagre 等布局引擎。',
       '环是流程图常态，算法必须显式处理（沉底或忽略），否则会死循环。',
+      '布局只改写 position，不触碰 data 与连线；重复执行可随时把手工拖动恢复为整齐排布。',
     ],
     problem: '解决"手工摆节点乱成一团，想按依赖关系一键对齐"的问题。',
     officialUrl: 'https://vueflow.dev/guide/layouting.html',

@@ -721,7 +721,7 @@ console.log(\`JS代码切分为 \${jsChunks.length} 块\`)
       'chunkOverlap 建议设为 chunkSize 的 10%-20%。',
       '不同文档类型可使用不同的 splitter，例如代码用 Language-specific splitter。',
     ],
-    problem: '解决"长文档如何切分为适合向量检索的小块"的问题。',
+    problem: '解决"整篇长文档直接向量化导致检索粒度过粗，问题答案淹没在大块文本里"的问题。',
   },
 {
     id: 'L_7',
@@ -987,7 +987,7 @@ for await (const step of stream) {
 }`),
     language: 'typescript',
     principle:
-      'Agent 是能够自主决策的 LLM 应用。ReAct 模式让 Agent 在每一步先思考需要做什么，然后选择工具执行行动，观察结果后再决定下一步，直到得出最终答案。',
+      'Agent 是能够自主决策的 LLM 应用：模型根据用户目标自行决定是否调用工具、调用哪个工具。ReAct 模式让 Agent 每一步先思考当前已知信息（Thought），选择工具执行行动（Action），读取工具返回的观察结果（Observation），再进入下一轮循环，直到信息足够生成最终答案；AgentExecutor 负责驱动这个循环并拼接中间消息。',
     flow: [
       'Agent 接收用户问题，进入推理循环。',
       '思考阶段：分析当前信息，决定下一步行动。',
@@ -1667,7 +1667,7 @@ async function streamQABot() {
 }`),
     language: 'typescript',
     principle:
-      '真实 LLM 应用通常需要组合多种能力。Retriever 从 VectorStore 检索相关文档，Agent 提供推理决策，Memory 提供上下文记忆。三者协同构成完整的智能问答系统：先检索相关文档，再推理生成答案，同时维护对话历史。',
+      '真实 LLM 应用通常需要组合多种能力：Retriever 把知识库封装成可调用的检索工具，Agent 在推理中自主决定何时检索、如何追问；Memory（RunnableWithMessageHistory）按 sessionId 注入历史消息，让多轮对话能接住代词与省略指代。三者组装后的问答机器人既有知识库依据，又保持对话连贯性。',
     flow: [
       '从 Memory 中检索对话上下文，了解用户历史意图。',
       '通过 Retriever 从 VectorStore 检索与当前问题相关的文档片段。',
@@ -1879,7 +1879,7 @@ async function demoAbortStream() {
       'invoke 和 stream 都支持 batch 方法（batch/abatch），用于并行处理多个输入。',
       '生产环境推荐 stream + handleLLMNewToken 回调实现流式输出。',
     ],
-    problem: '解决"不同场景下如何选择合适的流式输出策略"的问题。',
+    problem: '解决"聊天界面首 token 延迟高、长链路难以调试时，不知何时用 invoke、何时用 stream 或 astream_events"的问题。',
   },
 {
     id: 'L_14',
@@ -2259,9 +2259,9 @@ const result7 = await modelWithArticle.invoke([
 ])
 console.log('文章结构:', JSON.stringify(result7, null, 2))`),
     language: 'typescript',
-    principle: '结构化输出通过 Schema 定义强制 LLM 返回指定格式的数据；JSON Mode 适合简单结构，函数调用（withStructuredOutput）提供更可靠的格式保证和校验。',
-    flow: ['用 Zod 定义输出数据的 Schema。', '选择 JSON Mode 或函数调用模式。', '验证并解析返回的结构化结果。'],
-    notes: ['函数调用模式的格式可靠性高于 JSON Mode。', 'Zod Schema 同时提供运行时校验和类型推导。'],
+    principle: '结构化输出让 LLM 直接返回可编程消费的数据：withStructuredOutput 底层走函数调用，模型按 Zod Schema 生成参数对象并由 Schema 校验；JSON Mode 只保证输出是合法 JSON，字段结构仍靠提示词约束。字段越多、层级越深，函数调用的可靠性优势越明显；Zod 同时提供运行时校验与 TypeScript 类型推导。',
+    flow: ['用 Zod 定义输出结构，给每个字段加 describe 说明语义。', '调用 withStructuredOutput(schema)，或在请求中开启 JSON Mode。', 'invoke 后直接拿到类型安全的对象（函数调用），或手动 JSON.parse 再校验（JSON Mode）。'],
+    notes: ['函数调用模式的格式可靠性高于 JSON Mode。', 'Zod Schema 同时提供运行时校验和类型推导。', '模型不支持函数调用时才回退到 JSON Mode，提示词中要明确字段结构与只输出 JSON 的约束。'],
     problem: '解决"如何让 LLM 稳定返回可解析的结构化数据而非自由文本"的问题。',
   },
 {
@@ -2436,9 +2436,9 @@ console.log('\\nAgent 回答:', agentResult.messages.at(-1)?.content)
 // const checkpoint = await memorySaver.get(config)
 // console.log('检查点状态:', checkpoint)`),
     language: 'typescript',
-    principle: 'LangGraph 把智能体工作流建模为有向图：节点执行计算，边定义转移，条件边根据状态动态路由；状态在节点间共享并支持检查点和回溯。',
-    flow: ['定义状态接口和节点函数。', '用条件边连接节点形成工作流。', '编译图并传入初始状态执行。'],
-    notes: ['LangGraph 支持检查点，可暂停和恢复执行。', '条件边使工作流能根据中间结果动态分支。'],
+    principle: 'LangGraph 把智能体工作流建模为有向状态图：节点是执行函数，接收当前状态并返回状态更新；普通边定义固定转移，条件边根据状态动态选择下一个节点，从而表达循环与分支。状态通过 channel 在节点间共享并按 reducer 合并更新；编译后的图支持流式观察每个节点执行过程，并可挂载检查点实现暂停与恢复。',
+    flow: ['用接口定义图状态，节点函数接收状态并返回局部更新。', 'addNode/addEdge 搭建流程，addConditionalEdges 按状态动态路由。', 'compile 后 invoke 初始状态执行，用 stream 观察各节点执行顺序。'],
+    notes: ['LangGraph 支持检查点，可暂停和恢复执行。', '条件边使工作流能根据中间结果动态分支。', '节点返回的是局部状态更新而非完整状态，messages 这类列表字段需要配合 reducer（如 concat）追加合并。'],
     problem: '解决"如何把复杂智能体工作流建模为可控、可调试的状态图"的问题。',
   },
 {
@@ -2593,9 +2593,9 @@ const ragChain = RunnableSequence.from([
 const answer = await ragChain.invoke('Pinecone 是什么？')
 console.log('\\nRAG 回答:', answer)`),
     language: 'typescript',
-    principle: '向量存储把文本嵌入为高维向量并按相似度检索；不同后端在规模、延迟、混合搜索和部署复杂度上各有取舍，检索策略需结合关键词和语义。',
-    flow: ['选择合适的向量数据库。', '配置嵌入模型和相似度度量。', '结合关键词过滤实现混合检索。'],
-    notes: ['小规模实验用 Chroma/FAISS，生产环境考虑 Pinecone/pgvector。', '混合检索（向量+关键词）通常比纯向量效果更好。'],
+    principle: '向量存储把文本嵌入为高维向量，用余弦相似度等度量做近邻检索，是 RAG 的检索底座。后端选择取决于规模与运维条件：MemoryVectorStore 仅供开发验证，Chroma/FAISS 适合本地与中小规模，Pinecone 等托管服务面向生产，pgvector 适合已有 PostgreSQL 的团队。检索侧还要选择策略：纯相似度、MMR（兼顾多样性）以及元数据过滤与混合检索（向量+关键词）。',
+    flow: ['按规模与运维条件选择后端：开发用 MemoryVectorStore，生产用 Chroma/Pinecone/pgvector。', '配置嵌入模型与 topK，用 similaritySearchWithScore 观察分数分布。', '加入元数据过滤或 MMR 提升结果质量，评估是否需要混合检索。'],
+    notes: ['小规模实验用 Chroma/FAISS，生产环境考虑 Pinecone/pgvector。', '混合检索（向量+关键词）通常比纯向量效果更好。', '更换嵌入模型后必须重建全部向量索引，新旧向量不可混用。'],
     problem: '解决"如何选择合适的向量存储并设计高效的 RAG 检索策略"的问题。',
   },
 {
@@ -2818,9 +2818,9 @@ function estimateCost(
 const cost = estimateCost(1000, 500, 'gpt-4o-mini')
 console.log(\`估算成本: $ \${cost.toFixed(6)}\`)`),
     language: 'typescript',
-    principle: 'LLM 应用部署需要关注延迟（语义缓存降低重复调用）、成本（Token 预算、模型选择与成本估算）和可靠性（限流指数退避重试、超时控制、模型降级），这些策略直接影响用户体验与运营成本。',
+    principle: 'LLM 应用部署需要同时平衡三件事：延迟（用语义缓存复用近似问题的答案，降低重复调用）、成本（管理 Token 预算、按任务选择模型并估算调用费用）和可靠性（对限流做指数退避重试、为长请求设置超时上限、在模型不可用时降级到备用模型），任何一项失守都会直接反映到用户体验与运营账单上。',
     flow: ['用语义缓存复用近似问题，命中相似度阈值即返回缓存答案。', '通过 Token 预算管理和模型成本估算控制开销。', '使用指数退避重试、超时保护和降级策略保障生产可靠性。'],
-    notes: ['语义缓存的相似度阈值需要调优，过高难命中、过低易误命中。', '对限流（429）错误做重试，非可重试错误应立即抛出，避免无限等待。'],
+    notes: ['语义缓存的相似度阈值需要调优，过高难命中、过低易误命中。', '对限流（429）错误做重试，非可重试错误应立即抛出，避免无限等待。', '语义缓存会长期保留历史问答，涉及用户私有数据的场景需按用户隔离或设置过期策略。'],
     problem: '解决"LLM 应用如何优化延迟、控制成本并保证生产可靠性"的问题。',
   },
 {
@@ -3046,7 +3046,7 @@ class RAGWithSources extends RAGPipeline {
 // 运行示例
 // await demoRAGPipeline()`),
     language: 'typescript',
-    principle: 'RAG（检索增强生成）完整流水线包括文档加载、切分、向量化、存储、检索、重排、生成七个环节，每个环节的质量都会影响最终回答效果，需要端到端优化。',
+    principle: 'RAG（检索增强生成）把外部知识接进 LLM：离线阶段把文档加载、切分、向量化后存入向量库，在线阶段把用户提问向量化并检索相关块、重排精选后连同问题一起放进提示词，让模型基于真实资料作答。加载、切分、向量化、存储、检索、重排、生成七个环节逐级传递，任何一环质量不足都会让最终回答失真，因此需要端到端测量与调优。',
     flow: ['文档加载和清洗，去除无效内容', '按语义切分文档块，控制大小和重叠', '向量化后存入向量数据库', '用户提问时检索相关文档，重排后送给 LLM 生成回答'],
     notes: ['文档切分策略对检索质量影响很大', '检索结果不是越多越好，要精准', '加入重排（rerank）可以显著提升相关性'],
     problem: '解决"LLM 知识过时、无法访问私有数据、回答不准确"的问题。',
@@ -3261,7 +3261,7 @@ async function analyzeProduct(imageUrl: string): Promise<string> {
   return response.content as string
 }`),
     language: 'typescript',
-    principle: '多模态模型可以同时理解文本和图像，LangChain 通过 ChatMessage 中的 image_url 内容类型支持视觉理解，适合图像描述、图表分析、OCR 等场景。',
+    principle: '多模态模型（如 GPT-4o 系列）可以同时理解文本与图像：LangChain 在 HumanMessage 的 content 数组中混排 text 与 image_url 内容块，图片既可传 URL 也可传 base64 data URL。模型据此完成图像描述、视觉问答、图表解读与 OCR 等任务，还可与 Zod Schema 结合输出结构化的图像分析结果。',
     flow: ['使用支持视觉输入的多模态模型（如 GPT-4o 系列）', '在 HumanMessage 中同时携带 text 与 image_url（支持图片 URL 或 base64 编码）内容块', '模型理解图像后返回文本描述、分析结果或符合 Zod Schema 的结构化数据'],
     notes: ['图像可以是 URL 或 base64 编码', '图像清晰度和提示词质量影响理解效果', '适合截图分析、图表解读、照片描述等场景'],
     problem: '解决"传统 LLM 只能处理文本、无法理解视觉信息"的问题。',
@@ -3486,7 +3486,7 @@ async function ragWithTools(question: string) {
 // const userInfo = await extractUserInfo('我叫张三，今年25岁，住在北京，喜欢编程和篮球')
 // console.log('提取的用户信息:', userInfo)`),
     language: 'typescript',
-    principle: '函数调用（Function Calling）让 LLM 可以调用外部工具获取实时数据或执行操作，LangChain 通过 Tool 抽象统一管理工具，Agent 自动决定何时调用哪个工具。',
+    principle: '函数调用让 LLM 突破知识截止与封闭环境：应用先用 Zod Schema 描述工具参数，模型在对话中返回结构化的 tool_calls（工具名+参数），宿主代码执行对应函数后把 ToolMessage 结果回传，模型再基于结果生成最终回答。LangChain 的 tool 抽象把定义、校验与执行统一起来，Agent 在此之上自动编排多轮调用。',
     flow: ['定义工具的名称、描述和参数 schema', '将工具注册给模型或 Agent', '模型判断需要调用工具时返回工具调用指令', '执行工具后将结果返回给模型继续生成'],
     notes: ['工具描述的清晰度直接影响模型调用的准确性', '工具参数用 Zod schema 定义可以做运行时校验', '常用工具：搜索、计算器、数据库查询、API 调用'],
     problem: '解决"LLM 知识有截止日期、无法访问实时数据和外部系统"的问题。',
@@ -3706,7 +3706,7 @@ async function comparePrompts() {
   console.log(betterResult.slice(0, 150) + '...')
 }`),
     language: 'typescript',
-    principle: '提示词工程是通过设计高质量输入来引导 LLM 产出更好结果的技术，核心原则包括：角色设定、清晰指令、示例引导、思维链、结构化输出等。',
+    principle: '提示词工程通过设计输入来引导模型行为，核心手段包括：角色设定（system 提示框定专家身份）、清晰指令与输出格式约束、Few-shot 示例（用样例对齐判别标准）、思维链（引导分步推理提升复杂任务准确率）、以及结构化输出要求。它本质上是在补偿模型缺失的上下文与约束，需要针对真实样例迭代验证。',
     flow: ['明确角色定位，让模型进入对应领域专家状态', '给出清晰的任务描述和输出格式要求', '提供少量示例（Few-shot）帮助模型理解意图', '用思维链（CoT）引导模型分步推理'],
     notes: ['提示词需要迭代优化，不要期望一次就完美', '好的提示词应该具体、可评估、可复用', '温度参数控制随机性，事实类任务调低温度'],
     problem: '解决"模型输出质量不稳定、回答不符合预期、格式不统一"的问题。',
@@ -3955,7 +3955,7 @@ function getFallbackResponse(reason: string): string {
   return responses[reason] || responses.error
 }`),
     language: 'typescript',
-    principle: '输出护栏（Guardrails）在 LLM 输出前后进行验证和修正，确保输出符合业务规则、格式要求和安全政策，避免有害内容、格式错误和越权回答。',
+    principle: '输出护栏在 LLM 调用前后插入校验层：输入侧检查提示注入与有害内容，输出侧用 Zod 校验格式、用审核提示词检查合规与业务范围，不通过则重试、改写或返回降级话术。护栏把不可控的生成约束成符合业务规则的输出，所有拦截都应有日志以便审计与迭代。',
     flow: ['定义验证规则：格式校验、内容安全、业务约束', '输入护栏检查用户提问是否合法', '输出护栏校验模型回答，不通过则重试或修正', '记录所有拦截和修正用于审计'],
     notes: ['护栏不是越多越好，平衡安全和用户体验', '结构化输出配合 Zod 校验是最常用的护栏', '敏感领域（医疗、法律）需要更严格的护栏'],
     problem: '解决"LLM 输出不可控、格式不稳定、可能产生有害内容的安全风险"的问题。',

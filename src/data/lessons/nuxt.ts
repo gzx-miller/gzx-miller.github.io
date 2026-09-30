@@ -150,7 +150,7 @@ export const lessons: Lesson[] = [
       'catch-all 路由的优先级低于更具体的静态与动态路由。',
       'validate 在服务端渲染与客户端导航上都会执行，逻辑需两端一致。',
     ],
-    problem: '解决"动态路由如何匹配、参数如何获取和校验"的问题。',
+    problem: '解决"为什么 /courses/3 这类地址能被一个文件接住，参数如何获取、非法参数如何拦截"的问题。',
   },
 {
     id: 'N_4',
@@ -198,7 +198,7 @@ export const lessons: Lesson[] = [
       '自动导入默认覆盖 .vue、.ts、.js 等可编译文件，并可通过 imports.dirs 添加自定义目录。',
       '目录约定之外的文件不会被自动导入，需显式 import 使用。',
     ],
-    problem: '解决"哪些内容无需手动 import、组件命名规则是什么"的问题。',
+    problem: '解决"组件与工具函数如何免 import 直接用，嵌套目录的组件又叫什么名字"的问题。',
   },
 {
     id: 'N_6',
@@ -247,7 +247,7 @@ export const lessons: Lesson[] = [
       'key 按请求 URL 自动生成，同一 URL 的请求会在服务端与客户端之间共享结果，避免重复调用。',
       '响应式 URL 或 query 变化时组件会自动重新请求，无需手动触发。',
     ],
-    problem: '解决"如何在组件中声明式获取数据、SSR 和 CSR 如何协同"的问题。',
+    problem: '解决"组件里如何声明式拿数据，让 SSR 与客户端共享结果而不是重复请求"的问题。',
   },
 {
     id: 'N_8',
@@ -272,7 +272,7 @@ export const lessons: Lesson[] = [
       'useLazyAsyncData 等价于设置 lazy: true 的 useAsyncData，而 immediate: false 另指跳过首次执行，二者含义不同。',
       'default 返回的初始值类型应与最终数据保持兼容，避免模板中出现 undefined。',
     ],
-    problem: '解决"如何精细控制数据获取的缓存、去重、转换和懒加载"的问题。',
+    problem: '解决"多个请求如何用 key 去重、响应如何转换、懒加载如何不阻塞导航"的问题。',
   },
 {
     id: 'N_9',
@@ -345,7 +345,7 @@ export const lessons: Lesson[] = [
       '全局中间件文件名需带 .global 后缀（如 stats.global.ts）才会对全路由自动生效。',
       '中间件在服务端渲染与客户端导航中都会执行，逻辑需保证两端一致。',
     ],
-    problem: '解决"如何在导航前进行权限校验、全局拦截和路由重定向"的问题。',
+    problem: '解决"登录态、权限、统计等跳转前逻辑如何集中拦截，而不是散落在每个页面"的问题。',
   },
 {
     id: 'N_12',
@@ -418,7 +418,7 @@ export const lessons: Lesson[] = [
       'useSeoMeta 简化搜索引擎与分享卡片的 meta 配置，可用 ogTitle、twitterCard 等键名。',
       '避免在 useHead 中放入异步副作用，以免影响服务端渲染完成性。',
     ],
-    problem: '解决"如何管理页面 SEO 标签、标题如何随状态动态变化"的问题。',
+    problem: '解决"页面标题、描述与社交分享卡片如何随内容动态变化并被搜索引擎抓取"的问题。',
   },
 {
     id: 'N_15',
@@ -541,7 +541,7 @@ export const lessons: Lesson[] = [
       'clearError 可传 redirect 指定导航回退地址，不传则留在当前页面。',
       '生产环境建议接入 Sentry 等监控服务，而不只依赖控制台日志。',
     ],
-    problem: '解决"Nuxt 各类错误如何捕获和展示、如何自定义错误页面"的问题。',
+    problem: '解决"404/500、组件运行时错误与接口错误分别在哪里捕获，如何自定义错误页"的问题。',
   },
 {
     id: 'N_20',

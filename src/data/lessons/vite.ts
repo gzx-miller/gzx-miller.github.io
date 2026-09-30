@@ -180,10 +180,10 @@ export default defineConfig(({ mode }) => {
   
   return { plugins }
 })`), language: 'typescript',
-    principle: 'vite.config.ts 使用 defineConfig 包装以获得类型推导与提示；既可导出静态对象，也可导出接收 { mode, command } 的函数来按环境切换配置。',
-    flow: ['查看基础配置示例（server、build）。', '查看高级配置：resolve.alias 别名、css 预处理器、rollupOptions 分包。', '了解导出函数按 mode 切换不同配置。'],
-    notes: ['使用 defineConfig 可获得完整的类型提示。', 'resolve.alias 设置路径别名，css.preprocessorOptions 可注入全局样式。', '配置文件也可导出函数，按 mode 与 command 返回不同配置。'],
-    problem: '解决"如何组织 Vite 配置，以及不同环境下如何切换配置"的问题。',
+    principle: 'vite.config.ts 是 Vite 的项目级配置入口：用 defineConfig 包装可获得完整的类型推导与提示；既可导出静态对象，也可导出接收 { mode, command } 的函数，在函数内按环境返回不同配置，或在条件成立时动态追加插件。',
+    flow: ['用 defineConfig 编写 server、build、resolve.alias 等基础配置。', '把配置改为函数形式，接收 { mode, command } 按环境返回不同配置。', '在函数内按环境变量（如 ANALYZE）条件性添加插件或调整构建选项。'],
+    notes: ['使用 defineConfig 可获得完整类型提示，避免手写配置时字段拼错或被静默忽略。', 'resolve.alias 设置路径别名，css.preprocessorOptions 可注入全局样式。', '函数式配置的返回值会与默认配置深度合并，返回空对象也不会丢失默认行为。'],
+    problem: '解决"开发/生产需要不同的 server、minify、sourcemap 等设置，手动改配置文件既繁琐又容易漏改"的问题。',
   },
 {
     id: 'V_03', title: '插件系统', navTitle: '插件系统', category: '插件',
@@ -276,9 +276,9 @@ export default defineConfig(({ command }) => {
   return { plugins }
 })`), language: 'typescript',
     principle: '在 vite.config.ts 的 plugins 数组中注册即可扩展 Vite 功能；常用插件覆盖 Vue 支持、Vue JSX、组件与 API 自动按需引入、PWA 等，社区插件多以 vite-plugin 或 unplugin 前缀分发。',
-    flow: ['浏览常用插件列表。', '理解插件在 vite.config.ts 中的注册方式。', '了解插件执行顺序。'],
-    notes: ['插件在 plugins 数组中按声明顺序执行，配合 enforce: pre/post 可调整先后。', 'unplugin-vue-components 与 unplugin-auto-import 可自动按需引入组件与 API。'],
-    problem: '解决"如何扩展 Vite 功能，以及选择合适的插件"的问题。',
+    flow: ['在 plugins 数组中注册 vue()、vueJsx() 等基础插件。', '用 AutoImport 与 Components 配置 API 与组件的自动按需引入。', '通过 enforce: pre/post 或条件判断控制插件执行顺序与生效阶段。'],
+    notes: ['插件在 plugins 数组中按声明顺序执行，配合 enforce: pre/post 可调整先后。', 'unplugin-vue-components 与 unplugin-auto-import 可自动按需引入组件与 API。', '自动引入会生成 dts 声明文件，需加入 tsconfig 的 include，否则编辑器报变量未定义。'],
+    problem: '解决"每写一个组件都要手动 import，或需要按开发/构建阶段启用不同插件"的问题。',
   },
 {
     id: 'V_04', title: 'HMR 热更新', navTitle: 'HMR', category: '开发体验',
@@ -353,10 +353,10 @@ if (import.meta.hot) {
 if (import.meta.hot) {
   import.meta.hot.accept()
 }`), language: 'typescript',
-    principle: 'Vite HMR 基于原生 ESM，通过 import.meta.hot API 实现模块级热更新；Vue/React 插件自动处理状态保留。',
-    flow: ['查看 HMR API 手动处理示例。', '理解 Vue SFC 的 HMR 行为。', '了解 React Fast Refresh 的工作原理。'],
-    notes: ['Vue SFC 的 template 更新不丢失状态。', 'HMR 只更新变化的模块，速度极快。'],
-    problem: '解决"开发时修改代码后页面刷新导致状态丢失"的问题。',
+    principle: 'Vite HMR 依托原生 ESM 的模块边界实现：文件修改后服务器沿 import 链向上寻找最近的“接受者”（import.meta.hot.accept 声明的模块），只替换该模块而不刷新页面；Vue/React 插件会为每个组件自动注入接受逻辑并尽量保留组件状态。',
+    flow: ['在模块中用 import.meta.hot.accept 声明自身可热替换，并处理状态迁移。', '用 accept(dep, cb) 接受依赖模块更新，用 dispose 做替换前清理。', '观察 Vue SFC 中 template、script、style 分别更新时的页面行为差异。'],
+    notes: ['Vue SFC 的 template 与 style 更新不丢失状态，<script setup> 的逻辑变更会重建组件实例。', 'HMR 只沿模块边界替换，状态保存在 Pinia store 或模块级变量中才能跨更新存活。', '模块未声明 accept 时更新会沿依赖链冒泡，找不到边界就整页刷新。'],
+    problem: '解决"改一行样式页面就整页刷新、表单输入与展开状态被重置，要反复操作才能复现问题"的问题。',
   },
 {
     id: 'V_05', title: '环境变量与模式', navTitle: '环境变量', category: '配置',
@@ -433,10 +433,10 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv
 }`), language: 'typescript',
-    principle: 'Vite 使用 dotenv 加载 .env 文件；只有 VITE_ 前缀的变量会暴露到客户端（通过 import.meta.env 访问）。',
-    flow: ['理解 .env 文件的加载优先级。', '学习在代码和配置中读取环境变量。', '掌握 VITE_ 前缀的作用和安全意义。'],
-    notes: ['import.meta.env.MODE 可获取当前模式。', '敏感信息（如数据库密码）不应使用 VITE_ 前缀。'],
-    problem: '解决"如何在不同环境（开发/测试/生产）中使用不同的 API 地址"的问题。',
+    principle: 'Vite 内置 dotenv，按 .env → .env.local → .env.[mode] → .env.[mode].local 的优先级加载变量并以后者覆盖前者；只有 VITE_ 前缀的变量会被静态替换进客户端代码（通过 import.meta.env 访问），其余变量仅对配置文件的 Node 侧逻辑可见，从机制上避免密钥泄漏到浏览器。',
+    flow: ['创建 .env.development / .env.production，写入带 VITE_ 前缀的变量。', '在业务代码中用 import.meta.env.VITE_API_BASE_URL 读取变量。', '在 vite.config.ts 中用 loadEnv 读取变量配置 proxy，并在 vite-env.d.ts 中补充类型声明。'],
+    notes: ['import.meta.env.MODE / DEV / PROD 等内置变量可判断当前运行模式。', '敏感信息（如数据库密码）不应使用 VITE_ 前缀，因为它会被打进客户端产物。', '修改 .env 后需要重启开发服务器才会生效，已注入的旧值不会热更新。'],
+    problem: '解决"开发/测试/生产需要不同的 API 地址与开关，硬编码在代码里每次发布都要手改"的问题。',
   },
 {
     id: 'V_06', title: '静态资源处理', navTitle: '静态资源', category: '资源',
@@ -514,10 +514,10 @@ import Worker from './worker.js?worker'
 
 // 作为 Web Worker URL 导入
 import workerUrl from './worker.js?worker&url'`), language: 'typescript',
-    principle: 'Vite 对静态资源有三种处理：导入的资源会被哈希化并复制到构建产物；public 目录的文件原样复制；小于阈值的小资源会被内联为 base64。',
-    flow: ['理解显式导入的资源处理方式。', '了解 public 目录的适用场景。', '掌握 assetsInlineLimit 配置。'],
-    notes: ['优先使用导入方式引用资源（可获得哈希和优化）。', 'public 目录适合不常变更的静态文件（favicon、robots.txt）。'],
-    problem: '解决"静态资源在构建后路径错误，或希望控制资源哈希/内联行为"的问题。',
+    principle: 'Vite 对静态资源有三条处理路径：import 导入的资源进入模块图，按内容哈希命名后输出并返回最终 URL；public 目录的文件不经过构建管线、原样复制到产物根目录；小于 assetsInlineLimit（默认 4096 字节）的资源会被内联为 base64 data URL，省去一次请求。',
+    flow: ['用 import logo from "./assets/logo.png" 导入图片，观察产物文件名带内容哈希。', '把 favicon、robots.txt 放进 public 目录，用绝对路径 /favicon.ico 引用。', '调整 assetsInlineLimit 或用 ?url、?inline、?raw 后缀显式控制单个资源。'],
+    notes: ['优先使用导入方式引用资源，可获得哈希缓存与压缩等构建优化。', 'public 目录适合不常变更的静态文件（favicon、robots.txt），引用时必须写绝对路径。', '内联为 base64 会增大约 33% 体积且无法单独缓存，大图应调低阈值避免被打进 JS/CSS。'],
+    problem: '解决"构建后图片路径 404、小图标产生大量请求拖慢首屏，或不知该把资源放 assets 还是 public"的问题。',
   },
 {
     id: 'V_07', title: '依赖预构建', navTitle: '预构建', category: '性能',
@@ -597,10 +597,10 @@ import dayjs from 'dayjs'          // 自动发现
 // 但动态导入可能无法被自动发现
 const module = await import(someDynamicPath)
 // 这种情况需要手动加到 include 中`), language: 'typescript',
-    principle: 'Vite 使用 Esbuild 将 CommonJS/大量 ESM 依赖转换为单个 ESM 文件，减少 HTTP 请求并兼容 CommonJS 模块。',
-    flow: ['理解为什么需要依赖预构建。', '学习 optimizeDeps 配置。', '了解 Esbuild 在 Vite 中的其他用途。'],
-    notes: ['预构建产物缓存在 node_modules/.vite/。', '删除缓存可强制重新预构建。'],
-    problem: '解决"首次启动慢，或某些 CommonJS 包无法直接使用"的问题。',
+    principle: '首次启动时 Vite 用 Esbuild 把 node_modules 中的依赖预构建为单个 ESM 文件：既将 CommonJS/UMD 转换为浏览器可加载的 ESM，又把一个包的内部模块合并，避免开发时产生成百上千次模块请求；产物按依赖与配置的 hash 缓存在 node_modules/.vite 中复用。',
+    flow: ['启动开发服务器，观察终端输出的 Pre-bundling dependencies 日志。', '把动态导入未被扫描到的依赖加入 optimizeDeps.include 强制预构建。', '修改 lockfile 或执行 vite --force，验证缓存失效后依赖重新预构建。'],
+    notes: ['预构建只处理第三方依赖，业务源码不参与，include 中不要写 src 下的路径。', '预构建产物缓存在 node_modules/.vite/ 下，删除缓存可强制重新预构建。', '动态 import 的路径若无法被静态扫描，运行时会出现 404，需要手动加入 include。'],
+    problem: '解决"依赖内部模块过多导致开发服务器卡顿，或引入 CommonJS 包时报 require is not defined"的问题。',
   },
 {
     id: 'V_08', title: '构建优化', navTitle: '构建优化', category: '构建',
@@ -714,10 +714,10 @@ export default defineConfig({
     }
   }
 })`), language: 'typescript',
-    principle: 'Vite 基于 Rollup 构建，支持自动代码分割（每个动态 import 生成独立 chunk）、手动分包、多种压缩策略。',
-    flow: ['学习自动代码分割和手动分包配置。', '理解路由级懒加载的实现。', '掌握 esbuild/terser 压缩配置。'],
-    notes: ['动态 import() 是代码分割的基础。', 'esbuild 压缩速度快，terser 压缩率高。'],
-    problem: '解决"生产构建产物过大，或希望控制 chunk 分割策略"的问题。',
+    principle: 'Vite 生产构建基于 Rollup：每个动态 import() 会生成独立 chunk 实现按需加载；rollupOptions.output.manualChunks 可把依赖按组拆分以获得更好的缓存复用；压缩默认用 Esbuild（速度快），可切换 Terser（压缩率更高、可配置 drop_console 等选项）。',
+    flow: ['在路由中用 () => import("../views/Home.vue") 配置路由级懒加载。', '在 rollupOptions.output.manualChunks 中按框架、UI 库、工具库分组依赖。', '切换 minify 为 terser 并配置 drop_console，对比产物体积变化。'],
+    notes: ['动态 import() 是代码分割的基础，缺少它时 Rollup 只能产出单一大 chunk。', '分包不是越细越好，拆得过散会增加请求数，建议按“变更频率”归组。', 'chunkSizeWarningLimit 只影响警告阈值，不代表超过阈值的 chunk 一定需要拆分。'],
+    problem: '解决"首屏需要下载的 chunk 过大、大依赖与业务代码混在一起导致上线后缓存全部失效"的问题。',
   },
 {
     id: 'V_09', title: '多页面应用（MPA）', navTitle: 'MPA', category: '构建',
@@ -814,10 +814,10 @@ export default defineConfig({
 //       ├── admin-xxx.js
 //       ├── login-xxx.js
 //       └── shared-xxx.js  # 共享依赖自动提取`), language: 'typescript',
-    principle: 'Vite 通过 build.rollupOptions.input 配置多个 HTML 入口；每个入口是独立的页面，共享依赖会被提取为 common chunk。',
-    flow: ['学习 MPA 配置方式。', '理解项目结构组织。', '对比 MPA 与 SPA 的适用场景。'],
-    notes: ['每个 HTML 文件使用 <script type="module"> 引入入口 JS。', '共享依赖自动提取，不会重复打包。'],
-    problem: '解决"项目需要多个独立页面（如官网+管理后台），而不想用 SPA 前端路由"的问题。',
+    principle: 'Vite 通过 build.rollupOptions.input 声明多个 HTML 入口构建多页面应用：每个 HTML 是独立入口页，Vite 会为其分别产出 HTML 与入口 JS，同时把跨页面共享的依赖自动提取为 common chunk，避免重复打包。',
+    flow: ['在 rollupOptions.input 中以 { main, admin, login } 的键值对声明多个 HTML 入口。', '按“HTML + 入口脚本 + 组件”为每个页面组织目录，把共享代码放入 shared 目录。', '执行构建，检查 dist 中每个页面的 HTML 与共享 chunk 产物结构。'],
+    notes: ['每个 HTML 用 <script type="module" src="..."> 引入自己的入口 JS，路径需与 input 键名对应。', '共享依赖自动提取为公共 chunk，不会在每个页面里重复打包。', 'dev 服务器下访问子页面需带尾部斜杠（/admin/）才能命中其 index.html。'],
+    problem: '解决"官网与管理后台需要完全隔离的独立页面，用 SPA 前端路由硬拼在一起既臃肿又不好按页发布"的问题。',
   },
 {
     id: 'V_10', title: '库模式', navTitle: '库模式', category: '构建',
@@ -933,10 +933,10 @@ export default defineConfig({
     }
   }
 })`), language: 'typescript',
-    principle: 'Vite 库模式通过 build.lib 配置，可同时输出 ESM（供现代打包器）、UMD（供 CDN）、CJS（供 Node.js）格式。',
-    flow: ['学习库模式配置。', '理解构建产物结构。', '掌握发布到 npm 的完整流程。'],
-    notes: ['使用 peerDependencies 声明框架依赖（如 vue）。', 'package.json 的 module/main 字段指向对应格式产物。'],
-    problem: '解决"如何开发一个同时支持 ESM 和 UMD 引入的 npm 包"的问题。',
+    principle: 'Vite 库模式通过 build.lib 配置一次输出多种格式：ESM 供现代打包器按需引入、UMD 供 CDN <script> 直接使用、CJS 供 Node.js require；框架依赖用 rollupOptions.external 外部化，UMD 下再通过 output.globals 映射为全局变量避免重复打包。',
+    flow: ['在 build.lib 中配置 entry、name 与 formats: ["es", "cjs", "umd"]。', '用 rollupOptions.external 外部化 vue 等依赖，并配置 globals 映射。', '配置 package.json 的 module/main/exports 与 files 字段后发布到 npm。'],
+    notes: ['使用 peerDependencies 声明框架依赖（如 vue），避免打包多份 Vue 实例。', 'package.json 的 module/main/exports 字段应分别指向对应格式产物与类型声明。', '类型声明不会自动生成，需要 vite-plugin-dts 或手写，并保证与 exports 的 types 字段一致。'],
+    problem: '解决"组件库既要被 Vite 项目按 ESM import、又要能用 CDN <script> 直接引入，还要带正确的类型声明"的问题。',
   },
 {
     id: 'V_11', title: '服务端渲染（SSR）', navTitle: 'SSR', category: '进阶',
@@ -1044,10 +1044,10 @@ export default defineConfig({
     external: ['some-cjs-only-package']
   }
 })`), language: 'typescript',
-    principle: 'Vite SSR 在服务器端运行 Vue 组件生成 HTML，在客户端进行 Hydration（激活）；Nuxt 3/4 内置了完整的 SSR 支持。',
-    flow: ['理解 SSR 的工作原理和优势。', '学习 Vite SSR 的基础配置。', '了解 Nuxt 如何基于 Vite 实现 SSR。'],
-    notes: ['SSR 有利于 SEO 和首屏速度。', '本仓库（小松鼠举栗子）就是使用 Nuxt 4 + Vite 构建的！'],
-    problem: '解决"Vue 应用需要 SEO 友好，或希望提升首屏加载速度"的问题。',
+    principle: 'SSR 在服务端用 renderToString 把组件渲染为完整 HTML 返回，浏览器先展示静态内容，再由客户端入口 mount 完成 Hydration（激活）绑定事件；Vite 以中间件模式与 ssrLoadModule 在同一进程转换服务端代码，并分别构建服务端与客户端两份产物，Nuxt 3/4 即基于这套机制内置了完整的 SSR 支持。',
+    flow: ['用 createServer({ server: { middlewareMode: true } }) 启动 Vite 中间件并挂到 Express。', '服务端用 transformIndexHtml 与 ssrLoadModule 渲染 HTML，客户端 createSSRApp 后 mount 完成 Hydration。', '用 ssr.noExternal / external 控制哪些依赖需要打包进 SSR 产物。'],
+    notes: ['SSR 有利于 SEO 和首屏速度，但需要 Node 服务端运行环境；本仓库（小松鼠举栗子）就是 Nuxt 4 + Vite 的 SSR 应用。', '服务端与客户端首次渲染结果必须一致，否则会触发 Hydration 不匹配警告。', '依赖浏览器 API 的代码要放到 onMounted 或 ClientOnly 中，避免服务端执行报错。'],
+    problem: '解决"纯客户端渲染的商城首页不被搜索引擎收录、弱网设备首屏长时间白屏"的问题。',
   },
 {
     id: 'V_12', title: 'CSS 与 PostCSS', navTitle: 'CSS处理', category: '样式',
@@ -1171,10 +1171,10 @@ export default {
 //   }
 // }
 // </style>`), language: 'typescript',
-    principle: 'Vite 自动检测 PostCSS 配置；安装预处理器（如 sass）后即可在 Vue SFC 中使用；CSS Modules 在 Vue SFC 中默认启用。',
-    flow: ['学习 PostCSS 配置方式。', '掌握预处理器（Sass/Less）的使用。', '理解 CSS Modules 在 Vue 中的使用。'],
-    notes: ['Vue SFC 的 <style scoped> 已提供组件级样式隔离。', '预处理器需要单独安装（npm install -D sass）。'],
-    problem: '解决"如何在 Vite 项目中使用 Tailwind、Sass 或 CSS Modules"的问题。',
+    principle: 'Vite 自动读取 postcss.config.js 或 css.postcss 中的插件链并应用于全部样式；安装 sass/less 后即可直接在 <style lang="scss"> 中书写预处理器语法，css.preprocessorOptions 可向每个样式文件注入共享变量；CSS Modules 在 SFC 的 <style module> 中开箱即用。',
+    flow: ['在 postcss.config.js（或 css.postcss）中配置 autoprefixer、tailwindcss 等插件。', '安装 sass 后书写 <style lang="scss">，用 preprocessorOptions.additionalData 注入全局变量。', '在 <style module> 中书写样式，通过 :class="$style.xxx" 使用局部类名。'],
+    notes: ['Vue SFC 的 <style scoped> 已提供组件级样式隔离，普通场景不必再用 CSS Modules。', '预处理器需要单独安装（npm install -D sass），Vite 不内置编译器。', 'additionalData 只能注入变量与 mixin 定义，放入实际样式会被重复输出到每个文件。'],
+    problem: '解决"全局样式逐步失控、希望统一接入 Tailwind、Sass 变量与组件级样式隔离"的问题。',
   },
 {
     id: 'V_13', title: 'TypeScript 集成', navTitle: 'TypeScript', category: '类型',
@@ -1294,10 +1294,10 @@ interface ImportMeta {
 //   }
 // }
 // </script>`), language: 'typescript',
-    principle: 'Vite 使用 Esbuild 转译 TypeScript（移除类型注解，不做类型检查）；类型检查由 IDE 或单独运行 vue-tsc --noEmit 完成。',
-    flow: ['理解 Vite 的 TypeScript 处理策略。', '学习 Vue SFC 中使用 TypeScript。', '掌握类型检查的最佳实践。'],
-    notes: ['Vite 不负责类型检查（保证开发服务器速度）。', '建议配置 type-check 脚本在构建前运行。'],
-    problem: '解决"Vite 项目中如何获得完整的 TypeScript 支持，以及类型检查应该由谁负责"的问题。',
+    principle: 'Vite 用 Esbuild 转译 TypeScript：仅擦除类型注解并做目标语法降级，不做类型检查，因此类型错误不会阻断 dev 与 build；完整的类型安全由 IDE 实时提示与 vue-tsc --noEmit 在构建脚本或 CI 中把关。',
+    flow: ['在 package.json 中配置 "type-check": "vue-tsc --noEmit" 并接在构建脚本前。', '在 <script setup lang="ts"> 中编写带接口、泛型的组件逻辑。', '在 vite-env.d.ts 中补充 .vue 模块与 import.meta.env 的类型声明。'],
+    notes: ['Vite 不负责类型检查（保证开发服务器速度），构建通过不代表类型无误。', '建议配置 type-check 脚本在构建前或 CI 中运行，拦截类型回归。', 'tsconfig.json 的 paths 别名要与 vite.config.ts 的 resolve.alias 保持一致，否则编辑器能跳转但运行时报找不到模块。'],
+    problem: '解决"Vite 项目写 TS 时类型错误不阻断构建、上线才发现问题，以及别名与环境变量缺类型提示"的问题。',
   },
 {
     id: 'V_14', title: '代理与跨域', navTitle: '代理跨域', category: '开发体验',
@@ -1413,10 +1413,10 @@ async function getUsers() {
 // 1. 后端配置 CORS
 // 2. 使用 Nginx 反向代理
 // 3. 部署在同一域名下`), language: 'typescript',
-    principle: 'Vite 开发服务器的 server.proxy 配置基于 http-proxy，可将特定路径的请求代理到后端服务器，避免浏览器 CORS 限制。',
-    flow: ['学习基础代理配置。', '掌握路径重写和 WebSocket 代理。', '了解 CORS 问题的其他解决方案。'],
-    notes: ['changeOrigin: true 会修改请求头的 Origin。', '代理只作用于开发环境，生产环境需要后端配置 CORS 或使用 Nginx 反向代理。'],
-    problem: '解决"开发环境中前端请求后端 API 遇到 CORS 错误"的问题。',
+    principle: 'server.proxy 基于 http-proxy 中间件：开发服务器把匹配前缀或正则的请求转发到 target，浏览器只看到同源请求，从机制上绕开 CORS 限制；rewrite 可改写转发路径，changeOrigin 修改 Host 头，ws: true 开启 WebSocket 转发。',
+    flow: ['在 server.proxy 中把 /api 转发到 http://localhost:3000 并设置 changeOrigin: true。', '用 rewrite 去掉或重写路径前缀，用 configure 钩子追加或修改请求头。', '用 ws: true 转发 WebSocket，或在函数式配置中按 loadEnv 切换不同后端地址。'],
+    notes: ['changeOrigin: true 会把请求头的 Host 改为 target 的域名，配合虚拟主机后端时必须开启。', '代理只在 vite dev 生效，生产环境需要后端 CORS、Nginx 反向代理或同域部署。', 'rewrite 的正则作用于带前缀的完整路径，注意用 ^ 锚定避免误改其他请求。'],
+    problem: '解决"本地开发时前端 5173 端口请求后端 3000 端口被 CORS 拦截，或联调时需在不同后端环境间切换"的问题。',
   },
 {
     id: 'V_15', title: '性能分析', navTitle: '性能分析', category: '性能',
@@ -1551,10 +1551,10 @@ export default defineConfig({
     })
   ]
 })`), language: 'typescript',
-    principle: '用 rollup-plugin-visualizer 生成可视化的构建产物报告来分析体积；优化手段包括按需引入以减小依赖体积、将大型库外部化交给 CDN、合理代码分包与设置 chunk 大小阈值。',
-    flow: ['学习使用 rollup-plugin-visualizer 分析产物。', '掌握 Vite 性能优化清单。', '了解如何监控构建和运行时的性能指标。'],
-    notes: ['定期分析 bundle 大小，及时发现体积膨胀。', '大型库（如 lodash-es）应使用按需引入。'],
-    problem: '解决"构建产物过大，或希望找到体积膨胀的原因"的问题。',
+    principle: '优化从“测量”开始：用 rollup-plugin-visualizer 生成 treemap 报告，定位占比最大的依赖；再对症下药——按需引入或替换超大依赖（如 moment 换 dayjs）、把大型库外部化交给 CDN、用 manualChunks 合理分包，同时用 server.warmup 与 optimizeDeps 缩短开发启动时间。',
+    flow: ['安装 rollup-plugin-visualizer，在 ANALYZE 变量下执行构建产出 stats.html 并查看占比。', '针对报告中的体积大户改为按需引入，或替换为更轻的替代库。', '用 manualChunks 复测分包效果，并设定 chunkSizeWarningLimit 防止反弹。'],
+    notes: ['定期分析 bundle 大小，及时发现体积膨胀趋势。', '大型库（如 lodash-es）应使用按需引入，避免整体导入。', 'visualizer 只在分析时加入插件数组，日常构建不必生成报告以免拖慢 CI。'],
+    problem: '解决"构建产物体积持续膨胀却找不到是哪个依赖导致，优化效果无法量化对比"的问题。',
   },
 {
     id: 'V_16', title: '自定义插件开发', navTitle: '插件开发', category: '进阶',
@@ -1693,9 +1693,9 @@ export default defineConfig({
 // name 字段: 'vite-plugin-xxx'
 // 提供 TypeScript 类型支持`), language: 'typescript',
     principle: '自定义插件是返回插件对象（含 name 与各钩子）的函数：既有 Rollup 兼容的 resolveId、load、transform，也有 Vite 独有的 config、configureServer、transformIndexHtml、handleHotUpdate，以此参与开发与构建流程。',
-    flow: ['理解 Vite 插件的结构和钩子。', '学习自定义插件开发示例。', '掌握发布 Vite 插件到 npm 的流程。'],
-    notes: ['插件命名规范为 vite-plugin-xxx，导出函数返回插件对象。', '可利用 transform 钩子改写模块代码，例如注入版本号等全局信息。'],
-    problem: '解决"现有插件无法满足需求，需要为项目定制构建行为"的问题。',
+    flow: ['编写返回 Plugin 对象的函数，注册 name 与 transform、config、configureServer 等钩子。', '在 transform 中按文件后缀过滤并改写代码（如把 .md 内容包装成 Vue 组件）。', '用 resolveId/load 暴露虚拟模块，或在 plugins 中接入项目验证效果。'],
+    notes: ['插件命名规范为 vite-plugin-xxx，导出函数返回插件对象。', '可利用 transform 钩子改写模块代码，例如注入版本号等全局信息。', 'transform 会被高频调用，务必先按 id 过滤目标文件、快速 return null，避免拖慢开发与构建。'],
+    problem: '解决"现有插件无法满足需求，比如想直接 import .md 文件、或在构建时把版本号注入代码"的问题。',
   },
 {
     id: 'V_17', title: '依赖预构建与缓存优化', navTitle: '依赖预构建', category: '性能',
@@ -1807,7 +1807,7 @@ optimizeDeps: {
 
 // 问题 4: 依赖更新后没生效
 // 解决: 删除缓存或使用 --force 重新构建`), language: 'typescript',
-    principle: 'Vite 在首次启动时使用 esbuild 预构建 node_modules 中的依赖，将 CommonJS/UMD 转换为 ESM，并缓存到磁盘，避免重复构建提升启动速度。',
+    principle: 'Vite 在首次启动时用 esbuild 预构建 node_modules 中的依赖：把 CommonJS/UMD 模块统一转换成 ESM，并把一个依赖的众多内部模块合并成单个文件，避免浏览器发起成百上千次请求造成瀑布式加载。构建结果带 hash 缓存到 node_modules/.vite，依赖或配置变化才重新构建，二次启动直接复用缓存。',
     flow: ['首次启动 Vite 时扫描依赖并预构建。', '构建结果缓存到 node_modules/.vite。', '后续启动直接读取缓存，依赖变化时重新构建。'],
     notes: ['预构建只处理第三方依赖，源码不预构建。', 'optimizeDeps.include 可以强制预构建某些包。', '缓存失效会自动检测并重新构建。'],
     problem: '解决"大量依赖下启动慢、CommonJS 模块无法直接在浏览器运行"的问题。',
@@ -1948,7 +1948,7 @@ await esbuild.build({
   minify: true,
   target: 'es2020'
 })`), language: 'typescript',
-    principle: 'Vite 使用 esbuild 处理 TypeScript 和 JSX 转换，esbuild 用 Go 编写比传统 JS 工具快 10-100 倍，开发环境下跳过类型检查只做语法转换。',
+    principle: 'Vite 用 esbuild 处理 TypeScript 与 JSX 的语法转换：esbuild 以 Go 编写、多核并行，速度比传统 JS 实现的工具快 10-100 倍；转换只剥离类型标注，不做类型检查，因此开发服务器能在毫秒级响应模块请求。类型检查的正确性由 vue-tsc/tsc 在构建前或 CI 中单独保证。',
     flow: ['源码中的 .ts/.tsx 文件请求到达 Vite 开发服务器。', 'esbuild 进行语法转换，输出纯 JS。', '浏览器直接运行转换后的 ESM 模块。'],
     notes: ['开发环境与依赖预构建都由 esbuild 快速做语法转换，不做类型检查。', 'esbuild 不支持 const enum、export = 等 TS 特性，需改用兼容写法。', '完整类型检查交给 tsc 或 vue-tsc，在构建前或 CI 中执行。'],
     problem: '解决"传统构建工具 TS/JSX 编译速度慢、开发体验差"的问题。',
@@ -2108,8 +2108,8 @@ function transformCustomCode(code: string): string {
   // 转换逻辑
   return code
 }`), language: 'typescript',
-    principle: 'Vite 构建时基于 Rollup，兼容大部分 Rollup 插件，同时扩展了 Vite 特有的钩子如 config、configureServer、transformIndexHtml 等。',
-    flow: ['在 vite.config.ts 的 plugins 数组中添加 Rollup 插件。', '开发和构建时 Vite 调用插件的不同钩子。', '使用 Vite 特有钩子扩展开发服务器等能力。'],
+    principle: 'Vite 构建时基于 Rollup，因此大部分 Rollup 插件（如 visualizer、imagemin）可直接复用；同时扩展了 config、configResolved、configureServer、transformIndexHtml、handleHotUpdate 等 Vite 特有钩子，并支持 apply 字段让插件只在 serve 或 build 阶段生效。',
+    flow: ['在 vite.config.ts 的 plugins 数组中添加 Rollup 插件并观察构建效果。', '用 apply: "serve" / "build" 或钩子类型区分插件在开发与构建阶段的行为。', '编写同时使用 Vite 特有钩子与 Rollup 兼容钩子的通用插件。'],
     notes: ['并非所有 Rollup 插件都能在开发模式下工作，产物类钩子主要在构建时触发。', '插件可通过 apply: "serve" | "build" 只在开发或构建阶段生效。', 'Vite 特有钩子负责开发服务器、HTML 与 HMR，Rollup 钩子负责模块解析、加载与转换。'],
     problem: '解决"构建工具生态碎片化、需要学习多套插件 API"的问题。',
   },
@@ -2295,8 +2295,8 @@ import './styles/index.scss'
 // <script src="https://unpkg.com/@my-org/ui-lib/dist/index.umd.js"></script>
 // <link rel="stylesheet" href="https://unpkg.com/@my-org/ui-lib/dist/index.css">
 // const { Button } = MyUILib`), language: 'typescript',
-    principle: 'Vite 的库模式（Library Mode）可以把项目打包成可发布的 npm 包，支持 ESM、CommonJS、UMD 等多种输出格式，并自动处理 CSS 和类型声明。',
-    flow: ['在 vite.config.ts 中配置 build.lib 选项。', '指定入口文件、输出格式和包名。', '运行 vite build 生成可发布的 dist 目录。'],
+    principle: 'Vite 的库模式可以把项目打包成可发布的 npm 包：build.lib 一次输出 ESM、CJS、UMD 等多种格式，框架依赖通过 external 外部化交由使用方提供；CSS 会单独产出文件，类型声明则需借助 vite-plugin-dts 等工具生成后随包发布。',
+    flow: ['在 vite.config.ts 中配置 build.lib 选项。', '指定入口文件、输出格式和 UMD 包名，并配置 external 与 exports 映射。', '运行 vite build 生成可发布的 dist 目录。'],
     notes: ['库模式下外部化 Vue 等 peer dependencies。', '需要单独配置 d.ts 生成或使用 vite-plugin-dts。', '注意输出格式兼容性和 Tree Shaking 支持。'],
     problem: '解决"组件库/工具库打包配置复杂、输出格式不统一"的问题。',
   },
@@ -2488,7 +2488,7 @@ export default defineConfig(async () => {
 //           ├── admin-xxx.css
 //           └── ...`), language: 'typescript',
     principle: '多页面应用通过 build.rollupOptions.input 声明多个 HTML 入口；本课重点是动态收集入口、用 manualChunks 按页面拆分共享依赖，并规划公共目录与各页面独立模块的目录结构。',
-    flow: ['认识多页面应用在官网+后台等多入口场景中的价值。', '学习配置多个 HTML 入口并动态收集入口文件。', '通过 manualChunks 提取跨页面共享依赖，并查看构建产物。'],
+    flow: ['用 fast-glob 扫描 src/pages/*/index.html 动态生成入口表并传给 rollupOptions.input。', '为每个页面配置 index.html + main.ts + App.vue 的独立目录，公共代码集中到共享目录。', '用 manualChunks 提取跨页面共享依赖，构建后核对各页面 HTML 与公共 chunk。'],
     notes: ['多页面可共享公共组件、工具与状态，Vite 会提取为公共 chunk。', '每个 HTML 入口对应各自的入口脚本，可挂载到不同 DOM 节点。', '配合 manualChunks 把 vue、UI 库等共享依赖单独分包，利于缓存复用。'],
     problem: '解决"传统 MPA 构建配置复杂、公共资源管理困难"的问题。',
   }

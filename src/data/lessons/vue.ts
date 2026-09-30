@@ -125,7 +125,7 @@ export const lessons: Lesson[] = [
     code: K01Code,
     language: 'vue',
     principle:
-      'Vue3 应用从 createApp 创建独立应用实例开始。应用实例负责承载根组件、全局插件、全局配置和挂载目标；SFC 则把逻辑、模板和样式放在同一个组件文件里，让组件成为可维护的最小页面单元。',
+      'Vue3 应用从 createApp 创建独立的应用实例开始：每个实例拥有自己的组件树、插件注册表、全局配置与挂载目标，因此同一页面可以并存多个互不干扰的 Vue 应用。SFC 把 template、script、style 三种关注点收进同一文件，配合编译器在构建期完成模板编译，让组件成为可维护、可复用的最小页面单元。',
     flow: [
       '在 main.ts 中创建应用实例，导入全局样式和根组件。',
       '通过 app.use 注册 Router、Pinia 等跨页面能力，让后续组件可以读取路由和 store。',
@@ -149,7 +149,7 @@ export const lessons: Lesson[] = [
     code: K02Code,
     language: 'vue',
     principle:
-      'Vue 模板是一层声明式视图描述：状态是什么，页面就应该长什么样。插值负责显示文本，指令负责常见 DOM 行为，事件绑定负责把用户动作交回组件逻辑。',
+      'Vue 模板是一层声明式视图描述：开发者只声明“状态是什么、页面应该长什么样”，模板编译器会把它转换成渲染函数，由响应式系统在状态变化时精确更新对应 DOM，无需手动操作节点。插值负责显示文本、指令负责常见 DOM 行为（条件、循环、属性绑定）、事件绑定把用户动作交回组件逻辑，三者共同构成模板的协作模型。',
     flow: [
       '输入框通过 v-model 把关键词同步到响应式状态。',
       'computed 根据关键词过滤订单列表，避免在模板中写复杂表达式。',
@@ -210,7 +210,7 @@ export const lessons: Lesson[] = [
       'watchEffect 依赖收集更隐式，复杂场景下 watch 的可读性通常更好。',
       'watch 监听对象属性时需要 deep: true 才能检测嵌套变化；immediate: true 可在初始化时立即执行一次。',
     ],
-    problem: '解决"派生值和状态变化后的副作用应该如何分工"的问题。',
+    problem: '解决"派生值该用 computed 还是 watch 维护，副作用如何绑定到明确的状态来源"的问题。',
   },
 {
     id: 'K_5',
@@ -223,7 +223,7 @@ export const lessons: Lesson[] = [
     code: K05Code,
     language: 'vue',
     principle:
-      'v-if 控制节点是否创建，v-show 控制节点是否显示，v-for 根据数组生成多个节点。key 是列表项的身份标识，帮助 Vue 在更新时复用正确的 DOM 和组件实例。',
+      'v-if 在条件为假时不创建节点（惰性渲染、切换有开销），v-show 始终创建、仅切换 display 样式（首渲染开销高、切换成本低），v-for 根据数组在每次渲染时生成一组节点。key 是列表项的身份标识：靠它，diff 算法才能在列表增删排序时复用正确的 DOM 与组件实例，避免状态错位。',
     flow: [
       '任务数组作为单一数据来源，模板只负责把它展示出来。',
       '勾选开关改变 showDone，已完成任务通过 v-show 控制可见性。',
@@ -247,7 +247,7 @@ export const lessons: Lesson[] = [
     code: K06Code,
     language: 'vue',
     principle:
-      'v-model 把表单控件和响应式状态连接成双向关系；修饰符在同步前处理常见输入细节；校验逻辑通常用 computed 表达，让按钮状态和提示文案自动更新。',
+      'v-model 是“绑定值 + 事件监听”的语法糖：对文本输入展开为 value 绑定与 input 事件处理，从而把表单控件与响应式状态连接成双向关系；修饰符（.trim、.number、.lazy）在同步前处理常见输入细节；校验逻辑通常用 computed 表达，让提交按钮状态与提示文案随输入自动更新。',
     flow: [
       '用户填写姓名、邮箱并勾选同意项。',
       'v-model.trim 把输入同步到 form，同时去掉首尾空格。',
@@ -271,7 +271,7 @@ export const lessons: Lesson[] = [
     code: K07Code,
     language: 'vue',
     principle:
-      'props 是父级传入的只读输入，emits 是组件向外通知的事件，局部状态用于承载组件自己的临时交互。三者分开后，组件边界才清晰。',
+      'props 是父级传入的只读输入，更新必须由父级发起；emits 是组件向外通知的事件，参数即变更载荷；局部状态承载组件自己的临时交互，例如未保存的编辑草稿。三者各司其职，组件才形成"输入 → 交互 → 输出"清晰、可预测、可复用的边界。',
     flow: [
       'props 接收外部传入的初始标题。',
       '输入框修改组件内部 draft，避免直接改 props。',
@@ -295,7 +295,7 @@ export const lessons: Lesson[] = [
     code: K08Code,
     language: 'vue',
     principle:
-      '插槽让组件保留自己的外壳、布局和行为，同时把某些内容区域开放给使用者。作用域插槽还能把组件内部数据传给外部模板，让定制内容更灵活。',
+      '插槽让组件保留自己的外壳、布局和行为，把内容区域开放给使用者决定。默认插槽承载主体内容，具名插槽对应多个命名位置，作用域插槽则把组件内部数据作为参数回传给父级模板——父级提供内容、子组件决定渲染位置，这正是"结构复用、内容定制"的关键分工。',
     flow: [
       'CourseCard 负责卡片结构，声明 header、default、footer 三个内容位置。',
       '父级在使用组件时填入课程名、说明和价格。',
@@ -306,7 +306,7 @@ export const lessons: Lesson[] = [
       '具名插槽越多，组件使用成本越高，应保持命名直接。',
       '作用域插槽传出的数据要稳定，不要暴露太多内部实现细节。',
     ],
-    problem: '解决"组件结构相同但局部内容经常变化"的复用问题。',
+    problem: '解决"多个页面都要用同一种卡片外壳，但标题、正文、底部按钮各不相同，复制多份结构后改一处要动全身"的问题。',
   },
 {
     id: 'K_9',
@@ -319,7 +319,7 @@ export const lessons: Lesson[] = [
     code: K09Code,
     language: 'vue',
     principle:
-      '父子之间优先使用 props 和 emits；当数据需要跨过多层组件传递，并且它更像上下文能力时，可以由上层 provide，再由后代 inject 读取。',
+      '父子之间优先用 props 向下传值、emits 向上通知，数据流单向清晰；当数据需要跨越多层中间组件、又更像“上下文能力”（主题、语言、表单上下文、组件库配置）时，由上层 provide 注入、任意深度的后代 inject 读取，中间层无需感知。注意注入值默认非响应式，传 ref 或 reactive 对象时后代才能跟随变化。',
     flow: [
       '上层组件维护 theme，并通过 provide 暴露给后代。',
       '后代组件通过 inject 获取同一个响应式主题。',
@@ -367,7 +367,7 @@ export const lessons: Lesson[] = [
     code: K11Code,
     language: 'vue',
     principle:
-      '组合式函数把响应式状态、派生值、方法和生命周期封装到普通函数中。组件调用它后获得一组可直接使用的状态和行为，从而复用逻辑而不是复用 UI。',
+      '组合式函数（composable）把响应式状态、派生值、方法与生命周期钩子封装进一个普通函数，借助组合式 API 的运行时上下文，函数内创建的 ref 与副作用能正确挂载到调用它的组件实例上。组件调用后获得一组可直接使用的状态与行为——复用逻辑而不复用 UI，是替代 mixin 的现代方案，同一逻辑可在多组件间甚至跨项目共享。',
     flow: [
       '组件调用 useCountdown 并传入初始秒数。',
       '组合式函数内部管理 seconds、isFinished、start 和 reset。',
@@ -391,7 +391,7 @@ export const lessons: Lesson[] = [
     code: K12Code,
     language: 'vue',
     principle:
-      'Vue Router 把 URL 映射到组件。动态参数让同一个页面承载不同资源；导航守卫则适合集中处理标题、权限、埋点等横切逻辑。',
+      '本项目的 Nuxt 文件路由把目录与文件名直接映射为 URL，页面组件无需手写路由表；动态参数（如 /vue/k-12/routing/lee 中的 slug）让同一个页面承载不同资源；路由中间件则在跳转前集中处理标题、权限、非法地址等横切逻辑，避免这些判断散落在每个页面里。',
     flow: [
       '用户点击 NuxtLink，地址从 lee 切换到 ming。',
       '组件通过 useRoute 读取 catch-all 路由的 slug 参数。',
@@ -415,7 +415,7 @@ export const lessons: Lesson[] = [
     code: K13Code,
     language: 'vue',
     principle:
-      'Pinia 把跨组件共享的业务状态集中到 store。state 保存数据，getter 表达派生结果，action 封装修改流程，让组件不用知道状态修改细节。',
+      'Pinia 把跨组件、跨页面共享的业务状态集中到独立 store 中：state 保存原始数据，getter 用 computed 语义表达派生结果（自带缓存与类型推导），action 封装修改流程且天然支持异步，组件只需调用意图明确的 action、读取派生好的 getter，不必知道状态修改的内部细节，也让这些逻辑便于单元测试。',
     flow: [
       '组件通过 useCartStore 获取购物车 store。',
       '列表读取 cart.items，总价读取 cart.total getter。',
@@ -426,7 +426,7 @@ export const lessons: Lesson[] = [
       '复杂修改流程放进 action，组件只表达用户意图。',
       'store 的 getter 和 action 很适合写单元测试。',
     ],
-    problem: '解决"多个页面或组件需要共享同一份业务状态"的问题。',
+    problem: '解决"多个页面或组件需要读写同一份业务状态，且修改流程需要统一维护"的问题。',
   },
 {
     id: 'K_14',
@@ -537,7 +537,7 @@ export const lessons: Lesson[] = [
     code: K18Code,
     language: 'vue',
     principle:
-      'Teleport 让组件逻辑仍然写在当前组件中，但把实际 DOM 渲染到另一个目标节点。弹窗因此不会被父级 overflow、transform 或 z-index 限制。',
+      'Teleport 把组件的逻辑保留在原组件体系中（响应式作用域、props、事件都不变），但实际 DOM 渲染到指定的另一个目标节点（如 body）。弹窗因此不会被父级的 overflow: hidden 裁剪、不会被 transform 创建的新包含块改变定位、也不会困在父级的层叠上下文中被 z-index 压住。',
     flow: [
       '组件内部用 open 控制弹窗是否显示。',
       'Teleport to="body" 把弹窗 DOM 移到 body 下。',
@@ -561,7 +561,7 @@ export const lessons: Lesson[] = [
     code: K19Code,
     language: 'vue',
     principle:
-      '异步组件把某些组件的加载延迟，Suspense 为等待中的异步依赖提供统一 fallback。用户先看到占位反馈，加载完成后再看到真实内容。',
+      'defineAsyncComponent 把组件拆成独立 chunk 按需加载；Suspense 会等待其异步依赖（含 async setup）全部落定，等待期间渲染 fallback 插槽，完成后切换到真实内容。它把"加载中"从组件里手写的 loading 分支，提升为模板层面可声明的异步边界。',
     flow: [
       'defineAsyncComponent 返回一个延迟解析的组件。',
       'Suspense 捕获异步等待阶段并展示 fallback 插槽。',
@@ -585,7 +585,7 @@ export const lessons: Lesson[] = [
     code: K20Code,
     language: 'vue',
     principle:
-      '性能优化的核心是减少不必要的计算、渲染和资源加载。computed 缓存过滤结果，v-memo 在依赖未变化时跳过局部更新，但真正优化前应先确认瓶颈。',
+      '性能优化的核心是减少不必要的计算、渲染与资源加载：computed 基于依赖缓存派生结果，依赖不变时不重算；v-memo 在依赖数组未变化时跳过这段子树的重渲染；大列表则考虑分页、虚拟滚动与后端过滤。所有手段都应建立在测量的基础上——先用性能工具确认瓶颈，再对症选择，过早优化只会增加复杂度。',
     flow: [
       '用户输入关键词，keyword 变化触发 visibleCourses 重新计算。',
       'computed 避免无关状态变化时重复执行过滤逻辑。',
@@ -609,7 +609,7 @@ export const lessons: Lesson[] = [
     code: K21Code,
     language: 'vue',
     principle:
-      '可维护代码通常拥有清晰输入输出。组件测试关注用户行为和渲染结果，组合式函数测试关注状态变化，store 测试关注 action 和 getter 的业务规则。',
+      '可维护的代码通常拥有清晰的输入与输出，也因此容易测试：组件测试关注用户行为与渲染结果（输入、点击、提交后看到什么），组合式函数测试关注状态在调用过程中的变化轨迹，store 测试关注 action 与 getter 承载的业务规则。把纯逻辑抽到 composable 或 store，测试成本会明显低于直接测组件细节。',
     flow: [
       '把纯业务逻辑抽到 composable 或 store，降低组件测试难度。',
       '用测试描述用户行为，例如输入、点击、提交后的可见结果。',
@@ -710,7 +710,7 @@ export const lessons: Lesson[] = [
     code: K25Code,
     language: 'vue',
     principle:
-      'shallowRef 只追踪 .value 的替换，不会把内部对象递归转换成深层响应式。深层数据原地修改后可以调用 triggerRef 主动通知依赖更新，也可以直接替换整个顶层值。',
+      'shallowRef 只追踪 .value 被整体替换这一件事，不会把内部对象递归转换为深层响应式代理，因此省下了为海量深层字段建立代理的开销。原地修改深层数据不会触发更新，需要手动调用 triggerRef 主动通知依赖刷新，或者直接替换整个 .value；适合大型目录、第三方实例与批量更新场景。',
     flow: [
       '把较大的商品目录放入 shallowRef，避免为每个深层字段建立响应式代理。',
       '批量修改商品库存时只更新普通对象，界面暂不重新渲染。',

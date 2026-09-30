@@ -87,7 +87,7 @@ export const lessons: Lesson[] = [
       '上下文属性（antialias、alpha、preserveDrawingBuffer）只影响渲染行为，按需开启，不要一律设为 true。',
       '片段着色器须用 precision 声明浮点精度，mediump 与 highp 会换算取舍，影响精度与开销。',
     ],
-    problem: '解决"WebGL 如何在浏览器中启动渲染，以及数据如何在 GPU 管线中流转"的入门问题。',
+    problem: '解决"第一次上手 WebGL 时无从下手，上下文获取、着色器编译、缓冲上传与 draw call 整套启动流程串不起来"的问题。',
   },
   {
     id: 'W_2',
@@ -113,7 +113,7 @@ export const lessons: Lesson[] = [
       '对比平涂版（改用 uniform 单色、关闭插值）可以直观看出插值渐变，便于理解光栅化。',
       'uniform 是两个着色器通用的全局只读输入，单次 draw call 内所有顶点与像素共享，适合传时间、角度等。',
     ],
-    problem: '解决"顶点着色器和片段着色器如何分工协作渲染一个图形"的问题。',
+    problem: '解决"写 GLSL 时分不清两个着色器各自负责什么、顶点上的颜色传不到像素上"的问题。',
   },
   {
     id: 'W_3',
@@ -139,7 +139,7 @@ export const lessons: Lesson[] = [
       '复用顶点时 drawElements 比重复放顶点更省显存与带宽。',
       'VAO 只保存状态而非数据，绑定后无需重复执行 enableVertexAttribArray / vertexAttribPointer；WebGL1 用扩展、WebGL2 原生支持。',
     ],
-    problem: '解决"顶点数据如何高效发送到 GPU，以及如何复用顶点减少传输"的问题。',
+    problem: '解决"每次绘制都重复上传顶点数据、相邻面顶点不共用，显存与带宽白白浪费"的问题。',
   },
   {
     id: 'W_4',
@@ -165,7 +165,7 @@ export const lessons: Lesson[] = [
       'varying 在光栅化阶段做透视校正插值，无需在着色器里手写插值。',
       'attribute/varying 是 WebGL1 的旧关键字，WebGL2 的 #version 300 es 改用 in/out；本课沿用 WebGL1 写法以便对照入门。',
     ],
-    problem: '解决"WebGL 中不同粒度的数据如何在 CPU 与 GPU 之间正确传递"的问题。',
+    problem: '解决"分不清 attribute、uniform、varying 各自适合传什么数据，导致值传不进去或每帧重复上传"的问题。',
   },
   {
     id: 'W_5',
@@ -269,7 +269,7 @@ export const lessons: Lesson[] = [
       '纹理 y 轴与 WebGL 屏幕坐标方向相反，上传前通常需在 CPU 端把图片上下翻转。',
       '图片需异步加载，texImage2D 之前要确认 Image 已完成解码，否则上传的是空白数据。',
     ],
-    problem: '解决"如何把一张图片贴到 3D 几何体表面"的问题。',
+    problem: '解决"图片贴在四边形上方向颠倒、边缘拉伸，或平铺时接缝明显"的问题。',
   },
   {
     id: 'W_9',
@@ -295,7 +295,7 @@ export const lessons: Lesson[] = [
       'WebGL1 中完整 mip 链通常要求纹理尺寸为 2 的幂；WebGL2 / NPOT 扩展才允许非 2 次幂并带 mip。',
       '各向异性过滤（EXT_texture_filter_anisotropic）可改善斜视角纹理的模糊，属于进阶优化。',
     ],
-    problem: '解决"纹理在缩小时如何减少摩尔纹和锯齿"的问题。',
+    problem: '解决"纹理缩小时画面出现摩尔纹与闪烁、放大时边缘发糊"的问题。',
   },
   {
     id: 'W_10',
@@ -373,7 +373,7 @@ export const lessons: Lesson[] = [
       'Blinn-Phong 改用半向量 H = normalize(L + V) 计算 N·H，速度更快且高光形状更柔和，是 Phong 的常用改进。',
       '本课镜面高光用固定强度与白色 specular，未乘光源/材质颜色，突出高光位置与形状即可。',
     ],
-    problem: '解决"如何模拟光滑表面的镜面反射高光效果"的问题。',
+    problem: '解决"球体等光滑表面缺少高光点，材质看起来平淡没有反光质感"的问题。',
   },
   {
     id: 'W_13',
@@ -477,7 +477,7 @@ export const lessons: Lesson[] = [
       '成熟的泛光常先提取高亮、多次降采样并模糊后再叠加；本课用阈值判定加亮作为简化演示。',
       '后处理开销集中在片段着色器的纹理采样次数，采样越多越贵，是移动端的主要瓶颈。',
     ],
-    problem: '解决"如何在渲染管线末端添加视觉特效"的问题。',
+    problem: '解决"场景画完后还想叠加泛光、模糊、灰度等全屏特效，却无处下手"的问题。',
   },
   {
     id: 'W_17',
@@ -503,7 +503,7 @@ export const lessons: Lesson[] = [
       'WebGL2 原生提供 gl.createVertexArray 等 VAO API，不再需要 OES 扩展。',
       '整数/浮点纹理渲染目标等需配合相应扩展（如 EXT_color_buffer_float）；Transform Feedback、MRT 亦为 WebGL2 增强能力。',
     ],
-    problem: '解决"如何利用 WebGL2 的新特性获得更好的性能和能力"的问题。',
+    problem: '解决"WebGL1 中 uniform 只能逐个设置、VAO 与 3D 纹理等能力缺失，导致代码冗长且状态切换开销大"的问题。',
   },
   {
     id: 'W_18',
@@ -529,7 +529,7 @@ export const lessons: Lesson[] = [
       'WebGL1 用 ANGLE_instanced_arrays 扩展（vertexAttribDivisorANGLE / drawArraysInstancedANGLE），WebGL2 原生同名 API 不需要扩展。',
       '适合草地、雨滴、粒子、网格阵列等大量相同几何体；相比逐个 draw 大幅减少 CPU→GPU 状态切换。',
     ],
-    problem: '解决"如何高效绘制上千个相同几何体"的性能问题。',
+    problem: '解决"上千个相同物体逐个 draw call 绘制时 CPU 开销爆炸、帧率崩塌"的问题。',
   },
   {
     id: 'W_19',

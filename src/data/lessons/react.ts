@@ -126,7 +126,7 @@ export const lessons: Lesson[] = [
       'Props 是组件调用时的输入快照，不要在子组件中直接修改。',
       '展示代码用浏览器 ES Module 直接加载 React 19，由 iframe 沙箱执行。',
     ],
-    problem: '解决"React 应用如何挂载，以及如何用组件和 Props 拆分可复用界面"的问题。',
+    problem: '解决"界面重复代码多、组件间数据流向混乱，子组件误改 Props 导致状态来源失控"的问题。',
   },
 {
     id: 'R_2',
@@ -198,7 +198,7 @@ export const lessons: Lesson[] = [
       '可即时推导的校验错误可直接在渲染中计算，不必复制到 State。',
       '禁用提交按钮只改善体验，最终校验仍需在提交处理器中执行。',
     ],
-    problem: '解决"React 如何统一管理输入值、校验状态和表单提交"的问题。',
+    problem: '解决"多个输入框各自维护状态导致校验分散、提交后页面意外刷新"的问题。',
   },
 {
     id: 'R_5',
@@ -510,7 +510,7 @@ export const lessons: Lesson[] = [
       '事件委托挂在根容器上，因此不必担心为大量元素逐个绑定监听器。',
       '事件处理器应保持简洁，复杂逻辑可拆为独立函数或调用组件方法。',
     ],
-    problem: '解决"React 如何统一处理浏览器事件，以及何时需要阻止默认行为"的问题。',
+    problem: '解决"表单提交导致整页刷新、事件信息读取方式在浏览器间不统一"的问题。',
   },
 {
     id: 'R_18',
@@ -534,7 +534,7 @@ export const lessons: Lesson[] = [
       'if/else 是语句而非表达式，不能直接嵌入 JSX 条件渲染。',
       '分支过多时应拆分为独立子组件，让每个组件保持单一职责。',
     ],
-    problem: '解决"React 没有模板指令，如何用 JavaScript 表达式实现条件渲染"的问题。',
+    problem: '解决"没有模板指令可用时，条件分支写法不统一、可选内容意外渲染出 0"的问题。',
   },
 {
     id: 'R_19',
@@ -558,7 +558,7 @@ export const lessons: Lesson[] = [
       'render props 函数不要在渲染中每次新建，以免连累子组件的 memo 判断。',
       'Hooks 已解决多数状态逻辑复用需求，render props 的适用场景相应收窄。',
     ],
-    problem: '解决"如何让容器组件灵活接收和动态生成子内容"的问题。',
+    problem: '解决"容器外壳相似而内容各异时，每换一种内容就要复制一份容器组件"的问题。',
   },
 {
     id: 'R_20',
@@ -678,7 +678,7 @@ export const lessons: Lesson[] = [
       '清理函数会在"依赖变化重新执行前"和"组件卸载时"各跑一次。',
       '互不相关的副作用应拆成独立 Effect，而不是塞进一个 Effect 里。',
     ],
-    problem: '解决"Effect 在组件生命周期各阶段如何正确同步外部系统"的问题。',
+    problem: '解决"挂载时注册的监听忘记清理、依赖变化后旧的同步逻辑仍在运行"的问题。',
   },
 {
     id: 'R_25', title: 'Zustand Store 与细粒度 Selector', navTitle: 'Zustand Selector', category: '轻量 Store',
@@ -807,7 +807,7 @@ function App() {
 
 createRoot(document.getElementById('root')).render(<App />)
 `), language: 'jsx',
-    principle: 'Valtio 用 Proxy 包裹状态对象，直接赋值属性即触发更新；组件再用 useSnapshot 取到不可变快照用于渲染，快照层会自动追踪组件实际读到的路径，从而把重渲染收敛到真正依赖它的组件。',
+    principle: 'Valtio 用 Proxy 包裹状态对象，直接赋值属性即触发更新，无需 Provider 与 reducer 样板代码；组件再用 useSnapshot 取到不可变快照用于渲染，快照层会自动追踪组件实际读到的路径，从而把重渲染收敛到真正依赖它的组件。',
     flow: ['用 proxy 创建响应式状态对象，跨组件共享引用。', '在组件或动作里直接修改 proxy 的属性（如 state.count++）。', '组件用 useSnapshot 读取并渲染，系统按所读路径自动收集依赖。'],
     notes: ['Valtio 提供 subscribe 订阅任意路径的变化，便于接入调试或持久化。', '不要把 proxy 对象整体放进 React Context，快照隔离更适合组件消费。', 'useSnapshot 的可变性对象不宜作 props 长期保存，尽量保持组件使用模式一致。'],
     problem: '解决"如何以最少样板代码获得 React 的响应式状态管理"的问题。',

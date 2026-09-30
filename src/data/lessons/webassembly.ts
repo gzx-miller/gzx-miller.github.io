@@ -87,7 +87,7 @@ export const lessons: Lesson[] = [
       'Wasm 指令运行在虚拟 ISA 上，不绑定具体 CPU，因此跨平台可移植。',
       'instantiate 前引擎会先做类型校验，非法模块抛出 CompileError 被拒绝。',
     ],
-    problem: '解决"WebAssembly 文件到底是什么、浏览器如何把它变成可调用函数"的入门问题。',
+    problem: '解决"只见过 .wasm 文件却读不懂其二进制结构，也没法在浏览器里把它实例化调用"的问题。',
   },
   {
     id: 'WB_2',
@@ -113,7 +113,7 @@ export const lessons: Lesson[] = [
       'wabt 工具包提供 wat2wasm（文本→二进制）与 wasm2wat（二进制→文本）。',
       '调试时可用 wasm2wat 反编译任意 .wasm 文件。',
     ],
-    problem: '解决"如何阅读和编写可读的 Wasm 源码，并理解其二进制对应关系"的问题。',
+    problem: '解决"拿到 .wasm 二进制无从下手，需要一份可读文本逐条对照指令含义"的问题。',
   },
   {
     id: 'WB_3',
@@ -126,7 +126,7 @@ export const lessons: Lesson[] = [
     code: WB03Code,
     language: 'wat',
     principle:
-      'WebAssembly 的标量数值类型只有 i32、i64、f32、f64 四种；所有函数签名、局部变量、内存读写都必须显式声明类型。i64 与 JS 互操作必须用 BigInt，f32 是单精度、存在舍入误差。类型信息集中在类型段，函数按索引引用，这既让验证器能快速做安全检查，也让编译器可以高效地下生成代码。',
+      'WebAssembly 的标量数值类型只有 i32、i64、f32、f64 四种；所有函数签名、局部变量、内存读写都必须显式声明类型。i64 与 JS 互操作必须用 BigInt，f32 是单精度、存在舍入误差。类型信息集中在类型段，函数按索引引用，这既让验证器能快速做安全检查，也让编译器可以高效地生成机器码。',
     flow: [
       '类型段集中声明函数签名（参数与返回值的类型）。',
       '函数体内局部变量按类型声明，用 local.get/set 访问。',
@@ -139,7 +139,7 @@ export const lessons: Lesson[] = [
       'Wasm 没有字符串、对象、null 等高层类型，需经内存或引用类型表达。',
       '类型系统是验证器安全检查与高效编译的基础。',
     ],
-    problem: '解决"Wasm 有哪些数据类型、类型如何约束函数与内存"的问题。',
+    problem: '解决"跨语言写 Wasm 时类型对不上：i64 传参报错、f32 精度悄悄丢失却找不到原因"的问题。',
   },
   {
     id: 'WB_4',
@@ -165,7 +165,7 @@ export const lessons: Lesson[] = [
       '浮点指令有独立命名空间，如 0x92 是 f32.add。',
       '指令不直接访问内存，须用显式的 load / store 指令。',
     ],
-    problem: '解决"Wasm 的运算指令如何在栈上完成数值计算"的问题。',
+    problem: '解决"看 WAT 时不明白运算指令怎么在栈上取操作数、算完的结果又去了哪里"的问题。',
   },
   {
     id: 'WB_5',
@@ -191,7 +191,7 @@ export const lessons: Lesson[] = [
       '越界读写不会破坏宿主进程，引擎会抛出 RuntimeError。',
       '内存按页增长，1 页 = 64KiB = 65536 字节。',
     ],
-    problem: '解决"Wasm 如何存储和访问数据，JS 又如何与它共享数据"的问题。',
+    problem: '解决"Wasm 里数据存哪里，以及 JS 写入的数据如何与 Wasm 共享、互不拷贝"的问题。',
   },
   {
     id: 'WB_6',
@@ -243,7 +243,7 @@ export const lessons: Lesson[] = [
       '函数体以 0x0b（end）收尾。',
       '返回值类型必须与签名声明的 result 类型一致。',
     ],
-    problem: '解决"Wasm 函数如何组织参数、局部变量与返回值"的问题。',
+    problem: '解决"写 Wasm 函数时参数与局部变量索引混在一起，取错值或返回值与签名对不上"的问题。',
   },
   {
     id: 'WB_8',
@@ -347,7 +347,7 @@ export const lessons: Lesson[] = [
       'loop 中的 br 0 表示跳回循环体开头，实现迭代。',
       '深递归会占用大量栈帧，过大的 n 可能触发栈溢出异常。',
     ],
-    problem: '解决"Wasm 如何表达分支与循环等结构化控制流"的问题。',
+    problem: '解决"没有 goto 的 Wasm 里如何用 block/loop/br 表达分支、循环与递归"的问题。',
   },
   {
     id: 'WB_12',
@@ -373,7 +373,7 @@ export const lessons: Lesson[] = [
       'JS 用 DataView 的 setInt32 / getInt32 按小端读写。',
       '越界访问会触发 RuntimeError，天然防缓冲区溢出。',
     ],
-    problem: '解决"Wasm 如何用线性内存表达数组等复合数据结构"的问题。',
+    problem: '解决"Wasm 没有数组类型，列表数据要如何按字节布局、用指针遍历求和"的问题。',
   },
   {
     id: 'WB_13',

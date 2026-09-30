@@ -153,7 +153,7 @@ p::first-letter {
     language: 'css',
     principle: 'box-sizing 决定 width 是否计入 padding 与 border：content-box 的 width 只含内容区，实际总宽要另加 padding 与 border；border-box 把内容区压缩以包含二者，width 即最终外围宽度。外边距折叠指普通文档流中垂直相邻的块级盒，外边距合并取较大值。',
     flow: ['切换 content-box / border-box 观察内容区与总宽度的变化。', '对照尺寸计算表看 content/padding/border 三者如何分摊。', '切换外边距折叠，确认 30px 与 20px 合并为 30px。'],
-    notes: ['全局统一 * { box-sizing: border-box } 可避免"设了宽度实际更宽"的困扰，是通用做法。', '外边距折叠仅发生在垂直方向、相邻块级盒之间，不进子元素内部。'],
+    notes: ['全局统一 * { box-sizing: border-box } 可避免"设了宽度实际更宽"的困扰，是通用做法。', '外边距折叠只发生在垂直方向，横向外边距从不折叠。', '父子的上下外边距在无 padding/border/BFC 隔离时也会折叠，用 padding 或 display: flow-root 可阻断。'],
     problem: '解决"设置 width: 200px 但元素实际更宽，以及相邻元素间距不符合预期"的问题。',
   },
 {
@@ -605,7 +605,7 @@ p {
     language: 'css',
     principle: '@media 依据视口尺寸与设备特性条件性地应用规则；移动优先指先写小屏默认样式，再用 @media (min-width: …) 逐级增强，让手机优先并渐进升级到平板、桌面，避免桌面优先的 max-width 反复覆盖。',
     flow: ['拖动滑块放大视口宽度，观察卡片列数从 1 → 2 → 4。', '对照代码块理解 min-width 断点（640/1024）的递增写法。', '参考断点表 sm/md/lg/xl 的典型取值与用途。'],
-    notes: ['移动优先统一用 min-width，从已写好的小屏样式向上增强。', '可叠加 prefers-color-scheme、prefers-reduced-motion 等媒体特性做暗色与无障碍适配。'],
+    notes: ['移动优先统一用 min-width，从已写好的小屏样式向上增强。', '可叠加 prefers-color-scheme、prefers-reduced-motion 等媒体特性做暗色与无障碍适配。', '不要把断点绑死在具体设备型号上，应依据内容开始"不好看"的临界宽度定义断点。'],
     problem: '解决"同一套 HTML 如何在手机、平板、桌面上呈现不同布局"的问题。',
   },
 {
