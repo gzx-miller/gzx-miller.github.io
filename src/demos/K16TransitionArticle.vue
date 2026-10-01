@@ -8,7 +8,7 @@ import K16Transition from './K16Transition.vue'
       <strong>开场问题：</strong>一条提示语「啪」地出现、「啪」地消失，用户根本没看清发生了什么——为什么给元素写好 CSS 过渡，动画还是不着调？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>提示进出动画</h2>
     <p>
       你做一个学习提醒：用户完成一节课程，页面冒出一条鼓励的提示，几秒后淡出。你还想给待办清单加点手感——新加一条时从右侧滑入，删掉时滑出去。可当状态一变，提示语和列表项都是<strong>瞬间出现、瞬间消失</strong>，界面生硬得像坏了，用户甚至来不及注意到「多了什么、少了什么」。
     </p>
@@ -16,7 +16,7 @@ import K16Transition from './K16Transition.vue'
       你可能尝试过：给元素写一句 <code>transition: opacity .3s</code>，然后在 JS 里把它插进 DOM。结果发现淡出根本没发生——因为<strong>元素被移除的那一刻，它已经不在了，CSS 无从过渡</strong>。这就是问题真正的难点：让一个「即将被删除的节点」在删除前把动画完整播完，这件事在纯 CSS 里做不到。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>手动类名切换</h2>
     <p>
       最省事的做法：用状态控制元素的显隐，同时手动给元素挂上过渡属性，在插入前后改 <code>class</code> 或 <code>style</code>，让浏览器有前后两帧可比较，从而触发过渡。
     </p>
@@ -24,7 +24,7 @@ import K16Transition from './K16Transition.vue'
       这个方案做对了一件本质的事：<strong>动画的前提是「同一属性有两个不同取值」</strong>。透明度、位移这些能过渡的属性，必须一帧是初值、一帧是终值，中间才有插值空间。只要满足这一条，简单元素的淡入淡出是能做出来的。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>进出重排难题</h2>
     <ul>
       <li>元素<strong>进入</strong>时，你得先把它插进 DOM、强制浏览器重排一次，再改目标值，否则首帧和末帧被合并，动画被吞掉。</li>
       <li>元素<strong>离开</strong>时更难：要在动画播完后才移除节点，你甚至得监听 <code>transitionend</code> 并处理它不触发、被打断的各种情况。</li>
@@ -32,7 +32,7 @@ import K16Transition from './K16Transition.vue'
       <li>这些「插节点、加类名、等结束、删节点」的时序逻辑，每处都要重写一遍，稍有闪失就是动画卡住或节点残留。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>节点增删托管</h2>
     <p>
       不推翻「靠两个取值触发过渡」，而是把<strong>节点增删的时机</strong>从你手里接管过去。这就是 <code>Transition</code>：当被它包裹的元素进入或离开时，它会在<strong>正确的时刻</strong>自动添加、移除一组阶段类名，你只需要在 CSS 里针对这些类名写动画，剩下的时序全由 Vue 负责。
     </p>
@@ -58,13 +58,13 @@ import K16Transition from './K16Transition.vue'
       <strong>一条尺度：</strong>动画应当服务于理解和反馈——让用户看清「什么进来了、什么离开了」，而不是为了装饰而拖慢操作。动效时长过长、处处都在动，反而会让人分不清主次、觉得卡顿。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>阶段类挂载时机</h2>
     <figure class="lesson-figure">
       <figcaption>点「切换提示」看单元素淡入淡出，观察 <code>fade-enter</code> 与 <code>fade-leave</code> 阶段类的挂载时机。</figcaption>
       <K16Transition />
     </figure>
 
-    <h2>总结</h2>
+    <h2>时序托管规则</h2>
     <p>
       过渡动画要解决的，是「状态变了，但用户没看清」的问题。方案是把节点增删的时序交给 <code>Transition</code>——它在进入和离开的正确时机自动加阶段类名，CSS 只管写动画；列表的多元素增删移动则交给 <code>TransitionGroup</code>，并务必用稳定 key。更复杂的动效走 JavaScript 钩子，但状态来源始终要清晰。
     </p>

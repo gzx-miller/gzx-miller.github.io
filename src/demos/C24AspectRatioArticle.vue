@@ -8,7 +8,7 @@ import C24AspectRatio from './C24AspectRatio.vue'
       <strong>开场问题：</strong>列表里的图片还没加载完时页面是好好的，图片一到，下面的内容「啪」地往下跳了一截——用户刚想点的按钮瞬间被推走了，这该怎么治？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>封面尺寸不固定</h2>
     <p>
       设想你在做课程列表：每条课程都配一张封面图，图片地址由接口返回，尺寸并不固定——有的 16:9，有的 4:3，有的干脆是方图。你按设计稿给图片容器写了一个固定高度，以为这样就能先把位置占好。
     </p>
@@ -16,7 +16,7 @@ import C24AspectRatio from './C24AspectRatio.vue'
       上线后冒出两个问题。第一，图片还没下载完时容器的高度不对，<strong>图一加载出来，下面的内容整体往下跳，用户刚要点的地方被推走，甚至误触</strong>——这就是布局偏移。第二，为了消掉跳动你改用固定宽高，结果<strong>比例不同的图片被强行拉伸，人物都变形了</strong>。<strong>要跳出这个两难，得先意识到：「元素占多大地方」和「图片在盒子里怎么放」其实是两件事。</strong>把它们混在一起来解决，才会两头都做不好。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>固定像素宽高</h2>
     <p>
       最朴素的做法是把尺寸写死：给图片 <code>width: 300px; height: 200px</code>。
     </p>
@@ -24,7 +24,7 @@ import C24AspectRatio from './C24AspectRatio.vue'
       它做对了一件重要的事：<strong>布局在图片到达之前就已经确定</strong>，浏览器不必等图片下载完才决定页面长什么样，跳动消失了。承认这一点很关键——避免布局偏移的正解，本来就是「提前把空间留出来」；我们可以保留这份功劳，只把「写死的数字」换成「比例」。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>图片拉伸变形</h2>
     <ul>
       <li>写死宽高会让比例不同的图片被拉伸变形，因为 <code>img</code> 默认的填充方式就是 <code>object-fit: fill</code>。</li>
       <li>固定像素宽度在响应式下不成立：容器变窄时，图片不会跟着变。</li>
@@ -32,7 +32,7 @@ import C24AspectRatio from './C24AspectRatio.vue'
       <li>容器尺寸变化时，高度不会跟着宽度推导，于是产生留白或溢出。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>内边距撑出比例</h2>
     <p>
       历史上最常见的绕法是「padding 撑比例」：在外层容器上写 <code>padding-top: 56.25%</code>，让高度等于宽度的 56.25%（也就是 16:9），再把真正的内容绝对定位铺满其中。
     </p>
@@ -97,13 +97,13 @@ import C24AspectRatio from './C24AspectRatio.vue'
       <code>aspect-ratio</code> 负责在图片下载前就把空间占好，<code>object-fit: cover</code> 负责图片到位后铺满且不变形。<strong>两张拼图各管一段，缺一条都会退回开场的那个问题</strong>：只留 <code>aspect-ratio</code>，图片会被拉伸；只留 <code>object-fit</code>，加载时照样跳。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>比例推导高度</h2>
     <figure class="lesson-figure">
       <figcaption>先展开「比值演示」看不同宽高比如何由宽度推导高度，再逐个切换 object-fit 观察图片在盒子里的填充差异。</figcaption>
       <C24AspectRatio />
     </figure>
 
-    <h2>总结</h2>
+    <h2>占位与填充分工</h2>
     <p>
       <code>aspect-ratio</code> 与 <code>object-fit</code> 解决的是两件相邻但不同的事。前者回答「这个盒子该占多大」——在布局阶段就由宽度推出高度，把位置提前留好，从而消掉布局偏移；后者回答「图片该怎么装进这个盒子」——<code>cover</code> 裁剪铺满、<code>contain</code> 完整留白、<code>fill</code> 拉伸变形、<code>none</code> 不缩放、<code>scale-down</code> 取较小者。两者配合，才是「加载前不跳、加载后不变形」的完整答案。
     </p>

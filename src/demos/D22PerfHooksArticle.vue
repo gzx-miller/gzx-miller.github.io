@@ -8,7 +8,7 @@ import D22PerfHooks from './D22PerfHooks.vue'
       <strong>开场问题：</strong>线上接口的 P99 从 80ms 涨到了 400ms。你翻代码，一眼揪出那段「在循环里用加号拼字符串」的祖传逻辑，认定就是它，花一下午改成数组 <code>join</code>。上线后 P99 只降了 3ms——真正吃掉时间的，是你从没怀疑过的一句 <code>JSON.parse</code>。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>凭经验的性能猜测</h2>
     <p>
       你想做优化，手上却没有任何「哪段代码各自花了多久」的数据。只能靠「哪段看着复杂、哪段不像好代码」来猜。这套凭经验的做法，把三笔成本悄悄转嫁给了你：
     </p>
@@ -21,7 +21,7 @@ import D22PerfHooks from './D22PerfHooks.vue'
       <strong>能不能在不挂重型诊断器的前提下，把每段逻辑各自花了多少时间，准确地量出来？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>前后取时求差</h2>
     <p>
       最朴素也真能跑的办法：在待测逻辑的前后各读一次 <code>performance.now()</code>，两个数一减就是这段代码的耗时。
     </p>
@@ -29,7 +29,7 @@ import D22PerfHooks from './D22PerfHooks.vue'
       它做对了一件关键的事：<strong>把「感觉慢」变成了一个可比较的数字</strong>。而且 <code>performance.now()</code> 用的是单调递增的高精度时钟，不受系统时间被调整的影响，比 <code>Date.now()</code> 更适合做耗时测量。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>测点增多的混乱</h2>
     <ul>
       <li>点位一多就散：每段逻辑都要自己起名、自己用变量接住两次读数，测点越多，散落的临时变量越乱。</li>
       <li>只能量「一段代码」，产出不了带名字、带元数据、带类别的区间记录，别的模块也无法统一读取。</li>
@@ -37,7 +37,7 @@ import D22PerfHooks from './D22PerfHooks.vue'
       <li>想在生产里长期采集，靠 <code>console.log</code> 既污染日志，又有同步 IO 开销，测量本身反倒成了负担。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>命名化的性能条目</h2>
     <p>
       不推翻「前后取时间求差」，而是把这件事<strong>标准化成有名字的性能条目</strong>。Node 的 <code>perf_hooks</code> 提供了一套与浏览器 <code>performance</code> API 兼容的接口，先打点、再测量：
     </p>
@@ -60,13 +60,13 @@ import D22PerfHooks from './D22PerfHooks.vue'
       <strong>最常见的误区：</strong>跳过测量直接改代码。没有数据支撑的性能改动可能毫无收益——你以为的瓶颈和真实的瓶颈，往往根本不是同一段代码。顺序永远是「先量化，再优化，再验证」。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>四段耗时的排行</h2>
     <figure class="lesson-figure">
       <figcaption>点「运行性能基准测试」，四段逻辑会依次执行，每段的耗时以条形长度直观展示——你会发现最慢的往往是排序，最快的可能是正则，和「哪段代码看起来复杂」并没有必然联系。</figcaption>
       <D22PerfHooks />
     </figure>
 
-    <h2>总结</h2>
+    <h2>测量先于优化</h2>
     <p>
       性能问题的第一性问题不是「怎么优化」，而是「怎么知道该优化哪里」。用 <code>mark</code> / <code>measure</code> 把一堆模糊的「慢」变成一组可对比的数字，先找到真正的大头，再决定要不要动手——这一步做对了，优化才不至于把力气花在错的地方。
     </p>

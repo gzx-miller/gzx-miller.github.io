@@ -8,7 +8,7 @@ import R23StrictMode from './R23StrictMode.vue'
       <strong>开场问题：</strong>你写了个最普通的计数器组件，Effect 里只干一件事：把「执行」或「清理」记进日志。组件刚挂载、你还没点任何按钮，日志里就已经排着三条——「Effect 执行（count=0）」「Effect 清理」「Effect 执行（count=0）」。界面一切正常，你也从没写过任何「跑两遍」的代码。到底是谁，把同一个 Effect 执行了两次？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>隐藏路径缺陷</h2>
     <p>
       有些 bug 天生难缠，因为它们只在特定路径上才会现形：Effect 忘记返回清理函数，你本地跑一遍、组件只挂载一次，看不出问题；渲染函数里不小心写了副作用（比如直接改一个外部变量），单跑一次结果也是对的；订阅、计时器漏了拆除，功能照样能用。这些代码在评审时常常「看着没问题」，等到线上被反复挂载、卸载、更新时才开始出错。
     </p>
@@ -19,7 +19,7 @@ import R23StrictMode from './R23StrictMode.vue'
       所以要回答的是：<strong>能不能让框架自己，在开发阶段就把「多跑一遍」塞进那些容易出错的路径，把不纯的渲染和漏掉的清理当场逼出来？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>包裹应用根节点</h2>
     <p>
       最省事的做法：用 <code>&lt;React.StrictMode&gt;</code> 把应用树包起来——<code>&lt;StrictMode&gt;&lt;App /&gt;&lt;/StrictMode&gt;</code>。
     </p>
@@ -27,7 +27,7 @@ import R23StrictMode from './R23StrictMode.vue'
       这个方案做对了一件事：<strong>它给「开发阶段」单独加了一层额外检查</strong>。它本身不渲染任何可见内容，也不会改变生产环境的行为；它做的是让某些函数在开发构建里<strong>多执行一次</strong>，从而把你平时看不见的问题放大出来。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>不可见检测开关</h2>
     <ul>
       <li>只把它包上去，界面不会有任何可见变化——它不是 UI 组件，你不去读日志、观察副作用，根本不知道它在不在工作。</li>
       <li>「多跑一次」只覆盖开发构建：它不会替你在生产环境兜底，也不能当成对运行行为的一种保证。</li>
@@ -35,7 +35,7 @@ import R23StrictMode from './R23StrictMode.vue'
       <li>最大的误区是<strong>为了消掉重复执行而把 StrictMode 删掉</strong>：那等于拆掉开发期的报警器，把问题留到线上去炸。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>重复执行范围</h2>
     <p>
       先把「多执行一次」的<strong>范围</strong>说准，再谈怎么用它。StrictMode 在开发构建下会让这几处各额外执行一次：
     </p>
@@ -54,13 +54,13 @@ import R23StrictMode from './R23StrictMode.vue'
       <strong>两个常见误区：</strong>看到 Effect 在开发里重复执行，先别怀疑 React——这恰恰说明它在替你验证清理逻辑，要去看<strong>清理函数是否对称</strong>，而不是想办法按掉它。另外，依赖「副作用执行顺序」才能成立的代码（比如 A 的 Effect 一定晚于 B）本身就是设计问题，StrictMode 会把它暴露出来；正确做法是靠数据流或显式依赖表达先后，而不是靠副作用碰巧的时序。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>日志条数变化</h2>
     <figure class="lesson-figure">
       <figcaption>先别点按钮，直接看挂载时就排好的日志：开启 StrictMode 时是「执行 → 清理 → 执行」，拨一下开关关掉后只剩一条「执行」；再点几次计数，分辨哪些日志是业务更新、哪一条是开发环境额外加的检查。</figcaption>
       <R23StrictMode />
     </figure>
 
-    <h2>总结</h2>
+    <h2>暴露不纯渲染</h2>
     <p>
       StrictMode 是开发阶段的一面照妖镜：它不渲染任何东西，只是让渲染、初始化与 Effect 多跑一遍，把不纯的渲染和漏写的清理当场逼出来。看到它重复执行时，正确反应是去把清理写对、把渲染写纯，而不是把它关掉。
     </p>

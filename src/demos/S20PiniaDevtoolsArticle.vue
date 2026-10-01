@@ -8,7 +8,7 @@ import S20PiniaDevtools from './S20PiniaDevtools.vue'
       <strong>开场问题：</strong>用户反馈「日记列表突然只剩一条了」，可你反复操作也复现不出来——状态到底是在哪一次操作、被哪一行代码改坏的？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>变化历史缺失</h2>
     <p>
       你在做一个「秋日心情日记」：用户可以新增笔记、删除笔记、切换当前心情和主题。某天有人报障，说写着写着列表就少了好几篇。你自己怎么点都正常，因为这个 bug 依赖一连串特定操作的先后顺序——<strong>问题不在于改错了哪个字段，而在于你根本看不见「状态变化的历史」</strong>。
     </p>
@@ -16,7 +16,7 @@ import S20PiniaDevtools from './S20PiniaDevtools.vue'
       调试状态类 bug，难点从来不是「值现在是多少」，而是「它是怎么一步步变成这个值的」。只要能把每一步变化都记下来、并能回到任意一步，复现就几乎等于解决了一半。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>打印比对法</h2>
     <p>
       最直接的做法：在关键位置 <code>console.log</code> 打印当前状态，靠肉眼比对两次打印的差别。
     </p>
@@ -24,7 +24,7 @@ import S20PiniaDevtools from './S20PiniaDevtools.vue'
       它做对了最基础的一件事：<strong>开始尝试观察状态变化</strong>。当只有一个变量、只变一次时，这招足够用。问题在于，一旦状态由多个字段组成、变化又频繁，打印出的日志会迅速把人淹没，你分不清哪一行对应哪一次操作，更别说回到过去那个状态。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>日志淹没回放</h2>
     <ul>
       <li>日志太多，无法从输出里还原出操作与状态的对应关系。</li>
       <li>只能看到「现在」，看不到「几步之前」，无法回放。</li>
@@ -33,7 +33,7 @@ import S20PiniaDevtools from './S20PiniaDevtools.vue'
       <li>想复现一个偶发问题时，缺少可反复回退的机制。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>快照记录与回退</h2>
     <p>
       不推翻「观察状态」，而是把观察升级成<strong>一路记下每次变化、并且能随时回退</strong>。这正是 Vue DevTools 与 Pinia 集成后提供的能力：在 DevTools 的 Pinia 面板里，你能看到每个 store 的当前状态、按时间排列的 action 调用记录，并基于快照做<strong>时间旅行</strong>——选中历史中的某一刻，直接回溯到当时的状态。
     </p>
@@ -56,13 +56,13 @@ import S20PiniaDevtools from './S20PiniaDevtools.vue'
       <strong>三个实践建议：</strong>第一，<strong>action 命名要表达业务意图</strong>，叫 <code>addNote</code> 比叫 <code>setList</code> 更容易在时间线里一眼定位来源。第二，开发时结合 <code>import.meta.hot</code> 与 <code>acceptHMRUpdate</code>，<strong>修改 store 代码时保住现场状态</strong>，不必每次都重头点一遍。第三，DevTools 主要服务开发阶段，<strong>生产环境的排障要靠日志与监控</strong>，别指望它。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>时间线回退观察</h2>
     <figure class="lesson-figure">
       <figcaption>写几条日记、切换心情，然后到时间线上回退，看状态如何被整体回放。</figcaption>
       <S20PiniaDevtools />
     </figure>
 
-    <h2>总结</h2>
+    <h2>回退机制底层</h2>
     <p>
       时间旅行调试把「状态是怎么变成现在这样的」变成了可查看、可回退的东西。它的底层并不神秘：<code>$subscribe</code> 负责捕获变更生成快照，<code>$patch</code> 负责回放快照恢复状态。配合清晰的 action 命名与 HMR，状态类 bug 的定位效率会大幅提升。
     </p>

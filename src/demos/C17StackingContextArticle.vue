@@ -8,7 +8,7 @@ import C17StackingContext from './C17StackingContext.vue'
       <strong>开场问题：</strong>弹层已经写了 <code>z-index: 9999</code>，却还是被外面一个 <code>z-index: 2</code> 的元素压在底下——这么大的数字，为什么一点用都没有？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>卡片浮层的层级</h2>
     <p>
       你在做一张卡片，卡片入场时加了一段 <code>transform</code> 动画，卡片里的「更多」按钮点开后弹出一层浮层，浮层给了 <code>z-index: 9999</code>。按理说这个数已经大得离谱，可它偏偏被卡片外面一个 <code>z-index: 2</code> 的兄弟元素盖住了，用户根本点不到。
     </p>
@@ -16,7 +16,7 @@ import C17StackingContext from './C17StackingContext.vue'
       这类 bug 最折磨人的地方在于：<strong>代码完全没错，数字也够大，可结果就是不对</strong>。真正支配层级的不是数字的大小，而是数字<strong>在哪个范围里比较</strong>。不搞清这层「范围」，你会一直在盲目地把 <code>z-index</code> 往上加，越加越乱。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>数值高低的直觉</h2>
     <p>
       最直觉的理解：<code>z-index</code> 是层级高度，数字越大越靠上。<code>9999</code> 必然压过 <code>2</code>，写就完事了。这个理解做对了一件事：<strong>在同一批元素里，它确实成立</strong>——同层兄弟之间，谁的数字大谁在上面，规律简单可靠。
     </p>
@@ -24,7 +24,7 @@ import C17StackingContext from './C17StackingContext.vue'
       但只要你跨出「同一批元素」这个圈子，它立刻失灵。而真实页面里，元素几乎从来不是干净地待在同一批里。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>翻不过的隐形边界</h2>
     <ul>
       <li>它解释不了「子元素数字再大也翻不过外部元素」——仿佛有一道看不见的墙挡住了层级比较。</li>
       <li>它没提 <code>z-index</code> 只在定位元素上生效：<code>position: static</code> 的元素写了也是白写。</li>
@@ -32,7 +32,7 @@ import C17StackingContext from './C17StackingContext.vue'
       <li>按这个模型调试，只能不断加数字，永远找不到根因。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>层叠上下文的范围</h2>
     <p>
       不推翻「数字决定层级」，而是给它补上<strong>比较范围</strong>：每个元素都归属于某个<strong>层叠上下文</strong>，<code>z-index</code> 的这个数字，<strong>只在同一个上下文内部的兄弟及其后代之间比较</strong>。而一个创建了新上下文的元素，它连同它所有后代，会被打包成<strong>一个整体</strong>，再参与到父级上下文的排序里。
     </p>
@@ -75,13 +75,13 @@ import C17StackingContext from './C17StackingContext.vue'
       <strong>弹层的最佳实践：</strong>模态、下拉、Popover 这类需要「永远在最上层」的组件，尽量挂到 <code>body</code> 下渲染（也就是常说的传送门 / Portal），从根本上避开祖先层叠上下文的束缚，比在组件树里死磕 <code>z-index</code> 稳得多。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>属性引发的上下文</h2>
     <figure class="lesson-figure">
       <figcaption>先在默认模式看 999 &gt; 2 &gt; 1 的正常排序，再给 B 的父元素加上 opacity 或 transform，看它如何被整体隔离。</figcaption>
       <C17StackingContext />
     </figure>
 
-    <h2>总结</h2>
+    <h2>同层比较的约束</h2>
     <p>
       <code>z-index</code> 只在定位元素上生效，而且比较范围被限制在同一个层叠上下文内。父元素一旦创建上下文，子元素再大的 <code>z-index</code> 也翻不过那道边界。<code>opacity</code> 小于 1、<code>transform</code> 非 <code>none</code>、<code>filter</code> 非 <code>none</code>、<code>isolation: isolate</code>、flex / grid 子项带 <code>z-index</code> 等都会创建新上下文——记住这一点，层级问题就不再靠猜。
     </p>

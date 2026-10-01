@@ -8,7 +8,7 @@ import N07ExceptionFilter from './N07ExceptionFilter.vue'
       <strong>开场问题：</strong>业务代码里只写了一句 <code>throw new NotFoundException('课程 42 不存在')</code>，客户端却收到了一份字段齐全、结构规整的 JSON——这句异常究竟是被谁接住、又是怎么变成响应的？如果换成一句普通的 <code>Error</code>，返回的又会是什么？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>错误响应的不统一</h2>
     <p>
       你在写课程接口，出错的情形有很多：ID 查不到课程，该回 404；参数不合法，该回 400；数据库连接断了，程序里抛出的却是一句普通的 <code>Error</code>。而前端只想要一件事：<strong>无论哪种错误，都给我一套稳定的结构</strong>（比如 <code>{ code, message, path, timestamp }</code>），好统一弹提示。
     </p>
@@ -16,7 +16,7 @@ import N07ExceptionFilter from './N07ExceptionFilter.vue'
       如果不做统一处理，这些异常会各走各的路：业务里抛的 <code>HttpException</code> 和一句裸 <code>Error</code> 返回的格式并不一致，未捕获的异常甚至会被框架用默认格式吐出去。<strong>前端要针对不同格式写多套解析分支</strong>，维护成本高；更糟的是，默认的错误响应有时会带上堆栈，等于把内部细节暴露给了调用方。不解决它，你要付的代价是：<strong>错误响应的契约不稳定，且不受你控制</strong>。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>逐方法捕获与拼装</h2>
     <p>
       最省事的做法，是在每个可能出错的方法里手动 <code>try / catch</code>：捕获到异常后，自己拼一个 JSON，<code>res.status(404).json({ code: 404, message })</code> 返回出去。
     </p>
@@ -24,7 +24,7 @@ import N07ExceptionFilter from './N07ExceptionFilter.vue'
       它做对了一件关键的事：<strong>错误结构完全由自己掌控，返回的状态码与消息都是明确的</strong>。在只有一两个会出错的接口时，这个做法直截了当，写出来也看得懂。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>捕获遗漏的风险</h2>
     <ul>
       <li><code>try / catch</code> 在每个方法里重复，异常类型一多，分支就越写越乱。</li>
       <li>总有漏网之鱼：某个没被包住的异常会抛出去，返回框架的默认格式，与其它接口不一致。</li>
@@ -33,7 +33,7 @@ import N07ExceptionFilter from './N07ExceptionFilter.vue'
       <li>既想区分「课程不存在」和「服务端崩溃」，又不想在每个 <code>catch</code> 里重复判断类型。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>全局异常过滤器</h2>
     <p>
       不推翻「构造统一错误」，而是把这件事<strong>从每个方法里提到一个全局的收口点</strong>——这就是异常过滤器（Exception Filter）。它实现 <code>ExceptionFilter</code> 接口，用 <code>@Catch()</code> 声明捕获范围：<code>@Catch(HttpException)</code> 只处理 HTTP 异常，而<strong>空参数的 <code>@Catch()</code> 则捕获所有异常</strong>，正好用来兜底。
     </p>
@@ -71,13 +71,13 @@ import N07ExceptionFilter from './N07ExceptionFilter.vue'
       别忘了管道：参数校验失败抛出的 400 同样是 <code>HttpException</code>，会被全局过滤器一并格式化成相同的结构。这正是统一过滤器的价值——<strong>不论错误来自业务、来自校验还是完全没预料到，API 契约在所有错误场景下都保持一致</strong>。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>三类异常的一致响应</h2>
     <figure class="lesson-figure">
       <figcaption>分别点三个按钮，看不同异常如何被同一个过滤器翻译成结构一致的 JSON 响应。</figcaption>
       <N07ExceptionFilter />
     </figure>
 
-    <h2>总结</h2>
+    <h2>响应格式的单点收敛</h2>
     <p>
       异常过滤器把「错误长什么样」这件事从业务代码里抽离出来，收敛到一个全局的收口点。业务只管抛出语义化的异常，格式、状态码与兜底逻辑由过滤器统一负责。这样一来，无论错误来自校验、业务还是意外崩溃，前端看到的都是同一套结构，接口契约才真正稳定。
     </p>

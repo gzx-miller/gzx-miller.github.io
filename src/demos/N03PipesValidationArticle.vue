@@ -8,7 +8,7 @@ import N03PipesValidation from './N03PipesValidation.vue'
       <strong>开场问题：</strong>报名接口的请求体里多塞了一个 <code>role: 'admin'</code> 字段，代码里没写它、也没校验它，它却一路透传到了业务逻辑——为什么框架不替我拦住这个「多出来的字段」？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>非法数据的拦截</h2>
     <p>
       课程报名接口收到一份表单：姓名、邮箱、年龄、课程 ID。任何一条不合规，都不该进入业务逻辑——姓名不能为空、邮箱要有格式、年龄得在 18 到 99 之间、课程 ID 必须是合法的 UUID。
     </p>
@@ -16,7 +16,7 @@ import N03PipesValidation from './N03PipesValidation.vue'
       如果在控制器里逐条 <code>if</code> 判断，会立刻遇到两个麻烦。第一是<strong>重复</strong>：同一个「邮箱格式」的规则，注册接口、报名接口、找回密码接口都要再写一遍，改一次漏一处。第二是<strong>穿透</strong>：请求体是个普通对象，前端多传一个业务没声明的字段，它会被原样带进后续流程。<strong>校验不只是「检查对错」，更是决定「哪些数据被允许进入系统」。</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>手动判空写法</h2>
     <p>
       最省事的做法：在控制器方法开头写一串 <code>if</code>。<code>if (!dto.name) throw new BadRequestException('姓名不能为空')</code>，一条条往下判，最后再调 Service。
     </p>
@@ -24,7 +24,7 @@ import N03PipesValidation from './N03PipesValidation.vue'
       它做对了一件事：<strong>把「非法数据」挡在了业务逻辑之外</strong>。数据对不对、能不能进，在一个地方就说清了，不靠调用方自觉。接口只有一两个、规则只有两三条时，这种方式完全够用。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>校验与业务耦合</h2>
     <ul>
       <li>规则散落在每个控制器里，同一个字段的规则被反复抄写，改一处就得同步改多处。</li>
       <li>校验与业务逻辑混在同一个函数里，控制器的核心业务被一堆 <code>if</code> 淹没。</li>
@@ -32,7 +32,7 @@ import N03PipesValidation from './N03PipesValidation.vue'
       <li>请求体里的<strong>多余字段无人拦截</strong>，前端多传的参数会被静默带进业务，形成隐式的越权入口。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>规则落到结构上</h2>
     <p>
       不推翻「先把非法数据挡在门外」，而是把<strong>规则从代码里挪到数据结构上</strong>。先定义一个 DTO（数据传输对象），用装饰器把每个字段的规则写在字段旁边：
     </p>
@@ -67,13 +67,13 @@ import N03PipesValidation from './N03PipesValidation.vue'
       <strong>白名单不是可选项：</strong>未启用 <code>whitelist</code> 时，请求体里多余的字段会被原样透传到业务代码——前端传一个 <code>role: 'admin'</code>，就可能被写进用户记录，形成隐式的<strong>越权风险</strong>。DTO 校验必须配合白名单，校验的是「值对不对」，白名单防的是「字段该不该存在」。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>表单校验响应</h2>
     <figure class="lesson-figure">
       <figcaption>填表单并提交，试试留空姓名、填非法邮箱或年龄 12，看 ValidationPipe 返回的 400 结构。</figcaption>
       <N03PipesValidation />
     </figure>
 
-    <h2>总结</h2>
+    <h2>管道层统一校验</h2>
     <p>
       管道把「校验」从控制器代码里搬到了数据结构的定义上：用 DTO 加装饰器声明规则，用 <code>ValidationPipe</code> 在数据进入处理器前统一执行，规则得以复用、错误响应格式统一。再配上 <code>whitelist</code> 拦截多余字段，非法数据和越权字段就都进不来。
     </p>

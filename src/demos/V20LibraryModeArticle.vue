@@ -8,7 +8,7 @@ import V20LibraryMode from './V20LibraryMode.vue'
       <strong>开场问题：</strong>你的组件库发到了 npm，同事只想用其中的一个 <code>Button</code>。他写下 <code>import { Button } from '@my-org/ui-lib/button'</code>，Vite 当场报 <code>Failed to resolve entry for package</code>——<code>button</code> 明明就在包里，为什么这个子路径解析不了？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>按需引用诉求</h2>
     <p>
       你已经知道库要一次输出多种格式、把 <code>vue</code> 外部化。可一个库长大后会被拆成很多块，使用者往往只想按需引其中一小片；而安装到别人机器上时，构建工具手里只有一个包名，它得靠 <code>package.json</code> 的字段决定「这个路径该去取哪个文件」。
     </p>
@@ -16,7 +16,7 @@ import V20LibraryMode from './V20LibraryMode.vue'
       如果只产出「整包一个入口」，人要付出的隐藏成本是：使用者没法按子路径引，只能整包引入再指望 Tree Shaking 兜底，包一大就救不回来；多种格式的文件名和入口字段对不上，使用方一装就报「找不到模块」；框架依赖没声明清楚，使用方可能重复安装甚至整出多实例；发布时没配清单，源码、测试、配置一起被推上 npm。于是问题落在：<strong>怎么让一个包的产物能被「按入口、按格式、按依赖关系」正确地引用？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>单入口整体输出</h2>
     <p>
       最直接的做法：用 <code>build.lib</code> 配一个入口、几样格式，把 <code>dist</code> 发出去。
     </p>
@@ -24,7 +24,7 @@ import V20LibraryMode from './V20LibraryMode.vue'
       这个方案做对了一件事：<strong>库变成了一个可以被安装的包</strong>，整包 <code>import</code> 这一条路是通的。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>子路径解析失败</h2>
     <ul>
       <li>子路径不可达：包里只有整包入口，<code>@my-org/ui-lib/button</code> 这类路径找不到任何文件，于是报 <code>Failed to resolve entry</code>。</li>
       <li>条件导出缺失：<code>exports</code> 没写，Node 与现代打包器只能回退到 <code>main</code> / <code>module</code>，取到的格式可能和当前运行环境对不上。</li>
@@ -32,7 +32,7 @@ import V20LibraryMode from './V20LibraryMode.vue'
       <li>发布清单失控：没配 <code>files</code>，<code>src</code>、测试、配置文件全被打进包里，体积和暴露面都白白变大。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>对象式多入口</h2>
     <p>
       先补「多入口」。<code>build.lib.entry</code> 除了传字符串，还可以传一个对象，<strong>键名就是入口名、也就是子路径名</strong>——比如 <code>index</code> 指向主入口、<code>button</code> 指向 <code>Button</code> 的入口文件。再配一个 <code>fileName(format, entryName)</code>，让每个入口按各自格式产出自己的文件（如 <code>button.mjs</code> / <code>button.cjs</code>）。这样 <code>./button</code> 这条子路径就有实体文件可指了。
     </p>
@@ -52,13 +52,13 @@ import V20LibraryMode from './V20LibraryMode.vue'
       <strong>两条必守的线：</strong><code>external</code> 管「不打包」，<code>peerDependencies</code> 管「由谁提供」，缺一个都会出问题；<code>exports</code> 的 <code>types</code> 条件要放在 <code>import</code> / <code>require</code> 之前，而且没有在 <code>exports</code> 里登记的子路径，使用者根本 import 不进来。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>打包产物格式</h2>
     <figure class="lesson-figure">
       <figcaption>切 输出格式 / 配置示例 / package.json / 构建演示 四个页签；点「开始构建」，看 <code>dist</code> 里依次产出 ES / CJS / UMD 三种格式、样式文件与类型声明，并留意发布流程的五步。</figcaption>
       <V20LibraryMode />
     </figure>
 
-    <h2>总结</h2>
+    <h2>引用路径的交代</h2>
     <p>
       发布一个库的难点不在写代码，而在把「产物如何被引用」交代清楚：多入口让子路径可达，<code>exports</code> 把每条路径与条件映射到正确文件，<code>external</code> 加 <code>peerDependencies</code> 把框架依赖交还给使用方，<code>files</code> 与 <code>prepublishOnly</code> 保证发出去的是一份构建过、清单干净、带类型的产物。库不是应用，它的产物要服务于你见不到的使用者。
     </p>

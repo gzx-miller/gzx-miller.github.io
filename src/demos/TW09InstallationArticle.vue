@@ -8,7 +8,7 @@ import TW09Installation from './TW09Installation.vue'
       <strong>开场问题：</strong>我按文档装了 Tailwind，Vite 插件和 PostCSS 两套配置都配上了，结果产物里的样式体积翻了一倍——为什么「都配上」反而成了问题？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>接入路径选择</h2>
     <p>
       你给一个已有项目接入 Tailwind v4。项目本身可能有不同的构建环境：有的是 Vite 的 SPA，有的是被临时压缩成一行 CSS 的老站点，还有的需要在命令行里单独产出样式文件。接入方式看着有好几种，到底该选哪条路？
     </p>
@@ -16,7 +16,7 @@ import TW09Installation from './TW09Installation.vue'
       更现实的问题出现在升级时：项目里原本就有一套 PostCSS 配置，现在要换成 v4，新配置和旧配置会不会同时生效？如果会，会发生什么？
     </p>
 
-    <h2>最小方案</h2>
+    <h2>能配就配思路</h2>
     <p>
       最省事的思路是「能配的都配上」：装好核心包，Vite 插件配一套，PostCSS 插件再配一套，CSS 入口里把指令都写全，心想这样总不会漏。
     </p>
@@ -24,7 +24,7 @@ import TW09Installation from './TW09Installation.vue'
       这个方案想对了一件事：<strong>Tailwind 需要有人把源码里的类名扫描出来、再生成最终样式</strong>，所以必须有一个「适配器」参与构建。方向没错，问题出在数量上。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>双适配器重复编译</h2>
     <ul>
       <li>两套适配器同时处理同一个 CSS 入口，等于同一件事被做了两遍，样式被重复编译。</li>
       <li>旧的 PostCSS 配置没清干净，和新机制一起生效，可能出现互相覆盖的奇怪结果。</li>
@@ -32,7 +32,7 @@ import TW09Installation from './TW09Installation.vue'
       <li>往往是生产构建时才发现问题，排查起来要从构建链一路往前翻。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>核心包与适配器分工</h2>
     <p>
       先建立一个最小的心智模型：<strong>核心包提供工具与运行时，适配器负责把它接进你现有的构建流程</strong>。所以接入的复杂度并不来自 Tailwind 本身，而来自你的项目里已经存在几条 CSS 处理链。看清这一点，选路就收窄成了一个问题——我的项目靠什么打包。
     </p>
@@ -71,13 +71,13 @@ import TW09Installation from './TW09Installation.vue'
       <li>在产物里确认样式只生成了一份，没有重复编译的入口。</li>
     </ol>
 
-    <h2>动手试试</h2>
+    <h2>三种适配生成结果</h2>
     <figure class="lesson-figure">
       <figcaption>切换 Vite、PostCSS、CLI 三种适配器，看同一份源码类名经由不同路径生成 CSS。</figcaption>
       <TW09Installation />
     </figure>
 
-    <h2>总结</h2>
+    <h2>单一入口原则</h2>
     <p>
       接入 Tailwind v4 的关键词是「唯一」。一份 CSS 入口、一个适配器，剩下的交给核心包去扫描和生成；配置能省则省，因为 CSS-first 本就不需要旧式配置文件。升级时最容易翻车的地方不是少配了，而是旧配置没清干净。
     </p>

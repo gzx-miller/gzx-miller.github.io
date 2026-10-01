@@ -8,7 +8,7 @@ import C08Transition from './C08Transition.vue'
       <strong>开场问题：</strong>按钮悬停时颜色「啪」地一下就变了，想让它平滑一点却不知从何下手；另一边，加载图标要自己一直转，可它根本没有鼠标事件可以触发——这两种变化，是同一回事吗？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>反馈动效的两类</h2>
     <p>
       你在做一组交互反馈：卡片悬停要微微上浮，按钮按下要柔和变色，加载时那个小圆圈要不停旋转。如果只是把 <code>:hover</code> 里的颜色改掉，界面确实"响应"了，但变化是瞬时的，像被硬生生切换过去，观感生硬；而加载图标更棘手，它的转动不依赖任何用户操作，你连一个触发点都找不到。
     </p>
@@ -16,7 +16,7 @@ import C08Transition from './C08Transition.vue'
       根子在于：面对"值要变化"这件事，浏览器其实提供了两条完全不同的路径。<strong>一条是补间——在两个状态之间自动算出中间帧；另一条是关键帧——由你直接描述整段变化过程</strong>。分不清这两条路，就会在需要自动播放时硬凑一个触发条件，或者在只有两个状态时煞有介事地画一堆关键帧。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>状态值的直接切换</h2>
     <p>
       最省事的做法：直接改属性值。<code>:hover</code> 里写上新的颜色或位置，让元素在两种状态间切换。
     </p>
@@ -24,7 +24,7 @@ import C08Transition from './C08Transition.vue'
       这个方案做对了最基础的一层：<strong>状态被区分开了</strong>。悬停与未悬停是两个明确的视觉状态，用户能感知到交互发生了。当变化很小、或者你只想要"切换"而非"过渡"时，它简单直接，没有多余成本。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>瞬时跳变的生硬</h2>
     <ul>
       <li>值的变化是<strong>瞬时</strong>的，没有中间过程，观感生硬，缺了过渡的圆润。</li>
       <li>变化必须由状态改变触发（<code>:hover</code>、类名切换等），没有任何事件可挂的持续动效无从下手。</li>
@@ -32,7 +32,7 @@ import C08Transition from './C08Transition.vue'
       <li>想让动效循环播放、反向播放或中途暂停，也无从配置。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>补间过渡的机制</h2>
     <p>
       第一条路径是 <strong>transition（过渡）</strong>。在起始状态上声明要过渡的属性、时长与缓动函数，浏览器就会在状态切换时<strong>自动补齐中间帧</strong>：
     </p>
@@ -64,13 +64,13 @@ import C08Transition from './C08Transition.vue'
       <strong>性能与无障碍：</strong>优先过渡 <code>transform</code> 与 <code>opacity</code>，它们走合成器、开销低且不触发重排；动画里避免动 <code>width</code>、<code>height</code>、<code>margin</code> 这类会引发重排的属性。另外，别忘了用 <code>@media (prefers-reduced-motion: reduce)</code> 为动效提供降级，尊重用户在系统里设置的"减弱动态"偏好。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>两种动效的对照</h2>
     <figure class="lesson-figure">
       <figcaption>切换 transition 与 animation，再拖动时长滑块，感受「状态补间」与「关键帧循环」的差别。</figcaption>
       <C08Transition />
     </figure>
 
-    <h2>总结</h2>
+    <h2>交互触发与循环分工</h2>
     <p>
       过渡与动画解决的是同一个问题的两面：当变化只是两个状态之间的插值、且由交互触发时，用 transition；当动效需要自动播放、循环、反向或中途暂停时，用 @keyframes 动画。区分开「谁触发、有几帧」，再挑对合成友好的属性，动效就能既流畅又克制。这条判断链其实很短：先问它由谁触发、有几个关键帧，答案自然指向某一条路径。
     </p>

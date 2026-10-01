@@ -8,7 +8,7 @@ import E14Storage from './E14Storage.vue'
       <strong>开场问题：</strong>你把用户设置写进 <code>path.join(__dirname, 'config.json')</code>，在开发机上一直好好的。打包成安装版发给用户，他改了主题、重启——设置全没了。去翻安装目录才发现，文件根本写不进去，那个目录在 Windows 上是 <code>Program Files</code> 下的只读位置。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>数据落点选择</h2>
     <p>
       桌面应用总要「记住」点什么：窗口大小、上次登录的用户、离线缓存的数据。看着都是「存个文件」，可旧办法到处是坑。
     </p>
@@ -19,7 +19,7 @@ import E14Storage from './E14Storage.vue'
       所以真正的问题是：不同形态的本地数据，各自该落在哪、用什么存，才能兼顾正确的落点、合适的性能和并发安全？
     </p>
 
-    <h2>最小方案</h2>
+    <h2>配置存储方案</h2>
     <p>
       配置这类小对象，用 <code>electron-store</code>。它默认把 JSON 落到 <code>app.getPath('userData')</code>——一个各平台都正确的、当前用户可写的目录——然后给你键路径读写：<code>store.set('user.name', 'Alice')</code>、<code>store.get('user.name')</code>，存对象就是 <code>store.set('settings', { theme: 'dark' })</code>。
     </p>
@@ -27,7 +27,7 @@ import E14Storage from './E14Storage.vue'
       这个方案做对了一件事：<strong>它把「存到哪个平台的哪个目录」和「JSON 读写」这两件琐事标准化了</strong>。你不再猜路径，也不再手写解析和写盘。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>整文件读写代价</h2>
     <ul>
       <li><code>electron-store</code> 是<strong>整文件读写</strong>：数据量一大、或写入很频繁时，每次都要序列化整个文件，效率跟不上。</li>
       <li>它默认<strong>不加密</strong>：密码、令牌这类敏感字段得自己处理，别以为落进 userData 就安全了。</li>
@@ -37,7 +37,7 @@ import E14Storage from './E14Storage.vue'
       <li>数据结构升级了（比如配置里新增一个字段）却没有版本号：老用户的数据读出来可能直接崩。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>按形态选存储</h2>
     <p>
       先按数据形态分路，这是本课的主干：配置 / 设置这类小对象用 <code>electron-store</code>，图的是简单、落点正确；需要异步访问的高结构化数据（离线缓存）用 <code>IndexedDB</code>，浏览器标准的异步存储；临时的小键值数据用 <code>localStorage</code>，同步、简单，但只适合临时数据；有复杂查询、多表关联需求的，才用 <code>better-sqlite3</code> 或 <code>sql.js</code> 这类 SQLite，关系型、支持事务。
     </p>
@@ -54,13 +54,13 @@ import E14Storage from './E14Storage.vue'
       最后加迁移与容错。给数据配一个 schema 版本号，启动时比对版本号决定要不要迁移；读文件用 <code>try / catch</code> 兜住，遇到损坏就先备份原文件、重建一份默认值，别让一个坏文件把应用卡死在启动阶段。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>四种方案比较</h2>
     <figure class="lesson-figure">
       <figcaption>对照四张存储卡片，比较 electron-store / IndexedDB / SQLite / localStorage 各自的定位，再读 <code>electron-store</code> 的键路径读写示例，体会「配置用 store、大数据用 SQLite」这套取舍。</figcaption>
       <E14Storage />
     </figure>
 
-    <h2>总结</h2>
+    <h2>形态与落点对应</h2>
     <p>
       本地存储的取舍，本质是先分清数据形态，再各归各的落点：配置走 <code>electron-store</code>、异步结构化数据走 <code>IndexedDB</code>、复杂查询走 SQLite、临时数据走 <code>localStorage</code>；落点一律用 <code>app.getPath('userData')</code>，跨进程共享统一经主进程，多窗口写入串行化，并给数据留一个版本号来做迁移。
     </p>

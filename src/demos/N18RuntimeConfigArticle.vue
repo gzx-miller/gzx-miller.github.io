@@ -8,7 +8,7 @@ import N18RuntimeConfig from './N18RuntimeConfig.vue'
       <strong>开场问题：</strong>你把两个配置都写进了同一个 <code>runtimeConfig</code>：一个 <code>secretKey</code> 放在顶层，一个 <code>apiKey</code> 放在 <code>public</code> 里。上线后你在浏览器里搜打包好的 JS，发现 <code>apiKey</code> 赫然躺在里面，而 <code>secretKey</code> 怎么也搜不到。同一份配置，凭什么一个能被用户翻出来、另一个藏得住？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>公有与私密配置混同</h2>
     <p>
       「配置」这个词其实把两件完全不同的事混在了一起。一类是主题色、功能开关这种<strong>代码的一部分</strong>，定了就不该变；另一类是数据库地址、密钥、按环境切换的接口域名这种<strong>随运行环境变化的东西</strong>。前者可以写死在仓库里，后者绝不能。
     </p>
@@ -22,7 +22,7 @@ import N18RuntimeConfig from './N18RuntimeConfig.vue'
       于是问题落到：<strong>能不能用一个统一入口管理配置，同时明确标出「哪部分是公开的、哪部分只给服务端」，并且靠环境变量在各环境覆盖默认值？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>两层结构的集中声明</h2>
     <p>
       在 <code>nuxt.config.ts</code> 里用 <code>runtimeConfig</code> 集中声明配置，并且分成两层：顶层是<strong>私有配置</strong>，比如 <code>secretKey</code>、<code>dbUrl</code>；<code>public</code> 下是<strong>公有配置</strong>，比如 <code>apiKey</code>、<code>appVersion</code>。
     </p>
@@ -30,7 +30,7 @@ import N18RuntimeConfig from './N18RuntimeConfig.vue'
       这个方案做对了一件事：<strong>用同一个入口管配置，并在写代码时就显式声明了可见范围</strong>。选错了位置会立刻在结构上显得别扭，而不是等到上线才靠搜索 JS 排查。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>环境覆盖与可见范围</h2>
     <ul>
       <li>只声明了默认值，各环境要怎么覆盖？总不能在每个环境的 CI 里都改一次 <code>nuxt.config.ts</code>。</li>
       <li>服务端和客户端的读法不一样：在浏览器里调用 <code>useRuntimeConfig()</code> 后写 <code>config.secretKey</code> 拿到的是 <code>undefined</code>，调试时很容易误判成「配置没读到」。</li>
@@ -38,7 +38,7 @@ import N18RuntimeConfig from './N18RuntimeConfig.vue'
       <li>把密钥误放进 <code>public</code> 而不自知：本地能正常读到，一切看起来都对，直到有人打开浏览器开发者工具。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>前缀环境变量的覆盖</h2>
     <p>
       不推翻这套分层，而是<strong>把「覆盖、读取、安放」三件事各自补清楚</strong>。
     </p>
@@ -55,13 +55,13 @@ import N18RuntimeConfig from './N18RuntimeConfig.vue'
       <strong>最该记住的一条：</strong>不要把密钥放进 <code>public</code> 配置——它会被打包并暴露到客户端代码里，任何访问者都能看到。反过来，<code>public</code> 是专门留给「本来就要暴露给浏览器的公钥、版本号」的。另外要意识到 <code>runtimeConfig</code> 是在<strong>应用启动时</strong>读取环境变量的，修改它之后需要重启 dev server 或重新部署才生效，热更新不会带上新值。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>配置定义与使用方式</h2>
     <figure class="lesson-figure">
       <figcaption>三个页签分别是「配置定义 / 环境变量 / 使用方式」：配置定义页签里用「锁」与「开锁」两组图标摊开私有项和公有项各自的可见范围，并对照 <code>app.config.ts</code>；环境变量页签给 <code>NUXT_</code> 前缀到配置字段的映射规则；使用方式页签有一张 <code>runtimeConfig</code> 与 <code>appConfig</code> 的逐项对比表。照着表把「什么该放哪儿」对一遍。</figcaption>
       <N18RuntimeConfig />
     </figure>
 
-    <h2>总结</h2>
+    <h2>分层声明与可见范围</h2>
     <p>
       运行时配置解决的是「同一份代码怎么在不同环境跑成不同样子，同时不把秘密带出服务器」：分层声明决定可见范围，<code>NUXT_</code> 前缀的环境变量负责覆盖，<code>useRuntimeConfig(event)</code> 与 <code>useRuntimeConfig()</code> 的差异守住安全边界，而构建期固定、不随环境变化的东西交给 <code>app.config.ts</code>。想清一个值「要不要给浏览器看、跟不跟环境变」，答案就唯一了。
     </p>

@@ -8,7 +8,7 @@ import C20Performance from './C20Performance.vue'
       <strong>开场问题：</strong>你只给一个小方块加了个悬停上浮效果，在你的机器上丝般顺滑，到同事的旧笔记本上却是整个列表都在抖——明明只动了一个小方块，为什么卡的是整页？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>列表悬停的卡顿</h2>
     <p>
       设想你要给课程列表做一个「悬停轻微上浮」的交互：鼠标移到卡片上，卡片向上移 4px、稍微放大一点。你写了 <code>transition: all 0.3s</code>，再在 <code>:hover</code> 里改一下 <code>top</code> 或者 <code>margin</code>，本机跑起来完全没有问题。
     </p>
@@ -16,7 +16,7 @@ import C20Performance from './C20Performance.vue'
       真正的代价出现在别的地方：列表有几百条数据，用户往下滚动时开始掉帧；切换主题时整页闪一下；首屏白屏的时间比预期长。你第一反应是「是不是 CSS 写太多了」，可压缩之后并没有变好。<strong>要找到原因，得先知道浏览器把一张网页画到屏幕上，中间到底做了哪几步。</strong>不知道这条流水线，就只能凭感觉乱试，改了半天也只是碰运气。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>减小体积的诊断</h2>
     <p>
       最省事的诊断是「减体积」：压缩 CSS、删掉没用到的规则、把文件合并起来。
     </p>
@@ -24,7 +24,7 @@ import C20Performance from './C20Performance.vue'
       这个方向确实做对了最基础的一层——<strong>样式规则越少，浏览器做样式计算时匹配的选择器就越少</strong>。在一个样式表极度臃肿的老项目里，删掉几万行无用规则，确确实实能换来肉眼可见的提升。所以「先瘦身」是合理的起手式，只是它不解决开场那个问题。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>逐帧重算的开销</h2>
     <ul>
       <li>大多数「滚动卡顿、动画掉帧」的瓶颈不在样式体积，而在每一帧都要重新计算布局。</li>
       <li>你分不清哪些属性改动会让浏览器做完整重排、哪些只是重绘，改起来全靠猜。</li>
@@ -32,7 +32,7 @@ import C20Performance from './C20Performance.vue'
       <li>长列表里几百个屏幕外的元素仍然被逐个渲染，白白耗费算力。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>渲染四阶段的拆解</h2>
     <p>
       换个角度：先把渲染拆成<strong>四个阶段</strong>来看——<strong>样式计算 → 布局（Layout） → 绘制（Paint） → 合成（Composite）</strong>。改一个属性时，浏览器要重跑的起点各不相同：有的要从布局开始全量重算，这就是<strong>重排</strong>；有的只重新画像素，这是<strong>重绘</strong>；有的连像素都不用重画，只在合成阶段变换图层。成本从高到低，正好就是这个顺序。于是第一条原则浮出来了：<strong>尽量把变动按在流水线的末端</strong>。哪些属性落在哪一段，看这张表就清楚了。
     </p>
@@ -103,13 +103,13 @@ import C20Performance from './C20Performance.vue'
       还有两个容易忽略的细节。字体加载时用 <code>font-display: swap</code>，可以让文字先用后备字体渲染、字体到位后再替换，避免「看不见文字」的 FOIT。而在脚本里连续读写布局属性——先改宽度、再读高度、再改宽度——会强制浏览器<strong>同步布局</strong>，一帧内反复重排，也就是常说的 layout thrashing；正确做法是批量读、批量写，中间不穿插。此外，<code>contain: strict</code> 可以直接告诉浏览器「这个元素内部的变化不会影响外部」，把渲染范围圈起来。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>图层提升的取舍</h2>
     <figure class="lesson-figure">
       <figcaption>切换 will-change、图层提升与 content-visibility 几页，对比「提升图层」和「滥用图层」的差别。</figcaption>
       <C20Performance />
     </figure>
 
-    <h2>总结</h2>
+    <h2>流水线末端的优化</h2>
     <p>
       CSS 性能的抓手可以归成一句话：<strong>让改动尽量落在渲染流水线的末端</strong>。动画优先 <code>transform</code> 与 <code>opacity</code>；<code>will-change</code> 按需取用而非滥用；长列表用 <code>content-visibility</code> 配 <code>contain-intrinsic-size</code> 跳过离屏渲染；样式层面避免 <code>@import</code> 与过深的选择器嵌套；操作层面避免频繁读写布局属性引发同步布局。
     </p>

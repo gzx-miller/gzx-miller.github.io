@@ -8,7 +8,7 @@ import WB05LinearMemory from './WB05LinearMemory.vue'
       <strong>开场问题：</strong>你在 JS 里改了一个数组的第 3 个元素，然后把它交给 Wasm 的函数处理。处理完你发现，Wasm 读到的正是你刚改过的值；你又回头在 JS 里改一次，Wasm 立刻也能看到。两个人、两份代码，<strong>凭什么共享同一份数据，而且不需要来回拷贝？</strong>
     </div>
 
-    <h2>提出问题</h2>
+    <h2>序列化拷贝开销</h2>
     <p>
       你想让宿主和模块交换可变数据——图片像素、字符串字节、数组。最自然的做法是每次调用都序列化一份传过去，但成本有三：大数组每调用一次就拷贝一遍，来回两趟；拷贝出的副本在两边各改各的，最后对不上；没有一个「可写的地址」概念，模块没法原地修改数据。
     </p>
@@ -16,7 +16,7 @@ import WB05LinearMemory from './WB05LinearMemory.vue'
       于是问题变成：<strong>能不能给模块一块双方都能直接读写、且不用拷贝的存储？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>模块自持字节区</h2>
     <p>
       最朴素的做法：让模块持有一块自己的连续字节数组，JS 通过地址去读写它。这块内存叫<strong>线性内存</strong>，从地址 0 开始按字节连续编号。<code>store8(addr, val)</code> 在地址 <code>addr</code> 写一个字节，<code>load8(addr)</code> 从 <code>addr</code> 读一个字节。
     </p>
@@ -24,7 +24,7 @@ import WB05LinearMemory from './WB05LinearMemory.vue'
       这个方案做对了一件事：<strong>模块有了一块可以用整数地址直接访问的连续存储</strong>，数据不再需要拆成一个个参数传进传出。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>地址访问与字节序</h2>
     <ul>
       <li>只有地址还不够——JS 怎么找到这块内存？它不能凭空访问模块内部。</li>
       <li>一个字节装不下一个 <code>i32</code>，多字节的值该怎么摆、按什么顺序。</li>
@@ -32,7 +32,7 @@ import WB05LinearMemory from './WB05LinearMemory.vue'
       <li>数据变多、内存不够用了，能长大吗？</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>内存导出与访问</h2>
     <p>
       不推翻「字节数组」，而是把这块内存和 JS 连起来。第一层，解决「JS 怎么访问」。模块用 <code>(memory (export "memory") 1)</code> 声明一块内存并把它<strong>导出</strong>；JS 实例化后拿到 <code>instance.exports.memory</code>，它的 <code>buffer</code> 属性是一个 ArrayBuffer。用 <code>new Uint8Array(memory.buffer)</code> 建一个视图，就能像看普通数组一样逐个看字节。这一步是共享的关键：<strong>JS 和 Wasm 看的是同一个 buffer，不是副本</strong>，所以 JS 写完 Wasm 立刻能读到。
     </p>
@@ -52,13 +52,13 @@ import WB05LinearMemory from './WB05LinearMemory.vue'
       Wasm 侧只能通过 <code>load</code> / <code>store</code> 指令访问线性内存，JS 侧则通过导出的 <code>memory.buffer</code> 摸到同一块存储，两边看到的是同一份数据，不存在「传进去」这个动作。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>字节读写验证</h2>
     <figure class="lesson-figure">
       <figcaption>在字节网格里点选地址，或用 <code>store8</code> 写入、<code>load8</code> 读出，亲手验证 JS 与 Wasm 共享的是同一块内存。</figcaption>
       <WB05LinearMemory />
     </figure>
 
-    <h2>总结</h2>
+    <h2>线性内存约束</h2>
     <p>
       线性内存是一块从地址 0 连续编号的字节数组，按页增长（1 页 = 64KiB）。模块内只能经 load/store 访问它，宿主 JS 则通过导出的 <code>memory.buffer</code> 访问<strong>同一块</strong>存储，因此双方共享而非拷贝。越界读写触发 <code>RuntimeError</code>，多字节小端排列，内存一旦增长，旧的 JS 视图就会失效。
     </p>

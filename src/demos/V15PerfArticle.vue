@@ -8,7 +8,7 @@ import V15Perf from './V15Perf.vue'
       <strong>开场问题：</strong>三个月里产物从 <code>800KB</code> 涨到了 <code>3MB</code>，首屏肉眼可见地变慢；你凭经验删掉几处 <code>console</code>、又把一张大图压小，重新构建，体积数字几乎没动——那两兆的增长，根本不在你以为的地方。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>产物体积盲区</h2>
     <p>
       想优化体积，可 bundle 是一个（或几个）黑盒文件：你只看到总大小，看不到<strong>「哪一块占了多少」</strong>。于是只能凭经验猜——怀疑是 UI 库、怀疑是某张图、怀疑是压缩没开——猜中纯属运气。旧办法要人承担的成本有三项：没有数据只能反复试错；改完无法量化，不知道到底有没有变小；没有参照，也就无从判断「多大才算超标」。
     </p>
@@ -16,7 +16,7 @@ import V15Perf from './V15Perf.vue'
       所以问题必须先转向测量：<strong>怎么先量出「哪个依赖占了多大」，再对症下药？</strong>不先归因就优化，等于蒙着眼睛修 bug。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>体积报告生成</h2>
     <p>
       最直接的做法：先测量。用 <code>rollup-plugin-visualizer</code> 在构建后生成一份 <code>stats.html</code> 报告，它是张 treemap——每个模块用一块矩形的面积表示体积占比，一眼就能看出谁大谁小。
     </p>
@@ -24,7 +24,7 @@ import V15Perf from './V15Perf.vue'
       这个方案做对了一件事：<strong>它把黑盒拆成了可归因的构成</strong>。在此之前你只有「3MB」这一个数字；在此之后，你知道这 3MB 里有多少是框架、多少是被整包导入的工具库、多少是图片。优化这件事，从此有了靶子。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>整包导入成因</h2>
     <ul>
       <li>报告只告诉你「谁大」，不告诉你「为什么大」——<code>lodash-es</code> 占了 500KB，是因为整包导入，而不是它本身必须这么大。</li>
       <li>测量本身有成本：visualizer 每次构建都跑，会拖慢日常开发和 CI。</li>
@@ -33,7 +33,7 @@ import V15Perf from './V15Perf.vue'
       <li>改完没有留底对比，下次只会重新猜一遍。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>按需测量开关</h2>
     <p>
       先补「只在需要时测量」。把 visualizer 放进 <code>if (process.env.ANALYZE)</code> 里，日常构建不生成报告，避免拖慢 CI；要分析时执行 <code>ANALYZE=true vite build</code>。同时开启 <code>gzipSize</code>，报告里就能看到传输时更真实的压缩后大小。
     </p>
@@ -58,13 +58,13 @@ import V15Perf from './V15Perf.vue'
       <strong>一条最容易被忽略的方法论：</strong>优化前先存一份报告，改完再存一份，<strong>用两份报告对比来证明收益</strong>，而不是凭感觉说「应该小了吧」。另外，visualizer 平时不要常驻插件数组——它是分析工具，不是构建必需品。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>报告与三类手段</h2>
     <figure class="lesson-figure">
       <figcaption>切 analyze / optimize / metrics 三个页签：先看可视化报告怎么生成与阅读，再看三种体积优化手段怎么写，最后看构建与开发两侧的性能指标该如何监控。</figcaption>
       <V15Perf />
     </figure>
 
-    <h2>总结</h2>
+    <h2>测量与归因次序</h2>
     <p>
       性能优化这件事，顺序不能反：<strong>先测量，再归因，最后对症下药</strong>。visualizer 的 treemap 把黑盒拆成可归因的构成，你据此决定是改按需引入、换更轻的库，还是外部化交给 CDN；改完再用报告复核，用数据而不是感觉确认收益。别忘了一件事——构建体积和开发启动是两条独立的线，各有各的优化手段。
     </p>

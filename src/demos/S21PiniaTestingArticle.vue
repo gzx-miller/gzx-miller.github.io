@@ -8,7 +8,7 @@ import S21PiniaTesting from './S21PiniaTesting.vue'
       <strong>开场问题：</strong>为一个 action 补了测试，跑第一次通过，跑整个测试套件时却红了——为什么单跑是对的，一起跑就错？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>任务状态与动作</h2>
     <p>
       你在做一个任务清单：store 里有 <code>tasks</code> 状态，以及 <code>addTask</code>、<code>toggleTask</code>、<code>removeTask</code>、<code>clearCompleted</code> 这几个 action，还配了「已完成数量」「完成率」等派生结果。你打算给这些业务规则补上单元测试。
     </p>
@@ -16,7 +16,7 @@ import S21PiniaTesting from './S21PiniaTesting.vue'
       测试的难点往往不在断言本身，而在于<strong>每个用例之间不能互相影响</strong>。如果你想当然地引入同一个 store 就在所有用例里用，前一个用例加进去的任务会留在状态里，后一个用例断言的「初始数量」就已经不是初始值了。测试红或绿，取决于用例的执行顺序——这是最糟糕的一类不确定性。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>用例直接断言</h2>
     <p>
       最直接的做法：在测试文件顶部引入那个 store，之后每个用例都直接调它的 action、读它的状态来断言。
     </p>
@@ -24,7 +24,7 @@ import S21PiniaTesting from './S21PiniaTesting.vue'
       它做对了一件根本的事：<strong>业务规则确实可以脱离组件被验证</strong>。Pinia 的 store 本质就是普通的响应式对象，不需要挂载任何界面，直接调用函数、读取结果就能测。麻烦只出在「大家共享了同一个实例」——单例在应用里是优点，在测试里却成了互相传染的病源。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>共用实例隐患</h2>
     <ul>
       <li>所有用例共用一个 store，前一例改过的状态会污染后一例。</li>
       <li>断言结果依赖执行顺序，单跑通过、套件里却失败。</li>
@@ -33,7 +33,7 @@ import S21PiniaTesting from './S21PiniaTesting.vue'
       <li>测试里真的去打了网络请求，慢且不可控。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>每例独立实例</h2>
     <p>
       不推翻「直接调 store 来断言」，而是<strong>让每个用例拿到一个全新的、干净的 store</strong>。做法是：在每个用例开始时先 <code>setActivePinia(createPinia())</code> 创建并激活一个独立的 Pinia 实例，再调用 <code>useXxxStore()</code>。由于实例是新建的，上一个用例留下的状态不会带过来，污染问题就消失了。
     </p>
@@ -56,13 +56,13 @@ import S21PiniaTesting from './S21PiniaTesting.vue'
       <strong>三个容易踩的坑：</strong>第一，Setup Store <strong>没有内建的 <code>$reset</code> 来还原初始状态</strong>，要么自己实现一个重置函数，要么就干脆每个用例重建实例，别指望框架替你做。第二，异步 action 请<strong>用 <code>vi.mock</code> 模拟接口并 <code>await</code> 返回值</strong>，否则既慢又不稳，竞态会让断言时对时错。第三，优先给承载业务规则的 action 与 getter 补单测，<strong>低价值的快照测试要控制数量</strong>，别用一堆脆弱快照把测试套件撑得又大又假。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>逐例隔离运行</h2>
     <figure class="lesson-figure">
       <figcaption>点「运行测试」，看每个用例如何在独立实例里一条条完成断言。</figcaption>
       <S21PiniaTesting />
     </figure>
 
-    <h2>总结</h2>
+    <h2>测试隔离本质</h2>
     <p>
       测 Pinia store 之所以轻松，是因为它本就是普通对象，不需要框架层的 mock。真正要解决的是「用例之间的状态隔离」：每个用例用 <code>setActivePinia(createPinia())</code> 建一个干净实例，异步先 <code>await</code>，断言对准业务结果。做到这几点，store 的测试就会稳定又可读。当用例与用例之间互不影响、又只盯着行为而非实现时，重构才真正有了安全网——改完跑一遍，就能确认自己没有悄悄改坏别处的规则。
     </p>

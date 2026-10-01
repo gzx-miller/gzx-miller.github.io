@@ -8,7 +8,7 @@ import C11Filter from './C11Filter.vue'
       <strong>开场问题：</strong>课程封面悬停时要变灰，我准备了两张图来回切换；结果产品又要「略微变暗」和「模糊一点」，图片数量眼看就要失控了。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>图片状态带来的膨胀</h2>
     <p>
       你在给图片做各种视觉效果：悬停时变灰、加载时模糊、强调时提高对比度、封面图上叠一行会与背景"融"在一起的大标题。过去的路子只有两条——要么提前把每种效果导成一张图，要么在元素上盖一层半透明遮罩。
     </p>
@@ -16,7 +16,7 @@ import C11Filter from './C11Filter.vue'
       两条路都有天花板。重出图意味着<strong>状态一多，资源就成倍膨胀</strong>：彩色、灰度、暗化、模糊，每种组合一张；而遮罩只能压明暗、调色调倾向，它改不了像素本身——你没法用一层盖色实现真正的"灰度"，也做不出围绕图片轮廓的柔和阴影。真正的办法，是让浏览器<strong>在渲染时对像素做运算</strong>。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>半透明遮罩的叠加</h2>
     <p>
       最朴素的做法：在图片上叠一层半透明遮罩，或者干脆换一张预先处理好的图。
     </p>
@@ -24,7 +24,7 @@ import C11Filter from './C11Filter.vue'
       这个方案确实做对了一件事：<strong>它不改变原图，就能叠加一层统一的效果</strong>。遮罩实现简单、可控，做"变暗""加一层色偏"这类明暗与色调调整时，成本极低。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>遮罩无法逐像素运算</h2>
     <ul>
       <li>遮罩只能变暗变亮、加色偏，做不出灰度、对比度、饱和度、色相旋转这类<strong>逐像素色彩运算</strong>。</li>
       <li>每种状态都要单独出图，图片状态组合一多，资源数量迅速失控。</li>
@@ -32,7 +32,7 @@ import C11Filter from './C11Filter.vue'
       <li>文字与背景的融合只能靠透明度接近，做不到真正的像素级混色。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>逐像素滤镜的能力</h2>
     <p>
       <strong>filter（滤镜）</strong>是第一件工具，它对元素整体施加逐像素效果，还能多个叠加：<code>filter: blur(4px)</code> 模糊、<code>grayscale(100%)</code> 灰度、<code>brightness(1.2)</code> 亮度、<code>contrast(1.5)</code> 对比度、<code>saturate(2)</code> 饱和度、<code>hue-rotate(90deg)</code> 色相旋转、<code>invert(100%)</code> 反相、<code>opacity(50%)</code> 透明度。叠加时写在前面、效果更贴近原图：<code>filter: brightness(1.1) contrast(1.1) saturate(1.2)</code>。
     </p>
@@ -63,13 +63,13 @@ import C11Filter from './C11Filter.vue'
       <strong>两个连带影响：</strong><code>filter</code> 会创建新的<strong>层叠上下文与包含块</strong>，可能影响内部元素的 <code>fixed</code> 定位——定位突然"跑偏"时，记得把祖先上的 <code>transform</code>、<code>filter</code> 纳入排查。另外，<code>mix-blend-mode</code> 要靠下方不透明内容才显得出混色，用的时候要<strong>盯住文字的可读性</strong>，别让它和背景糊在一起。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>滤镜与混合的对照</h2>
     <figure class="lesson-figure">
       <figcaption>下拉切换 filter 与 mix-blend-mode，观察图片逐像素变化、文字在渐变上如何融合。</figcaption>
       <C11Filter />
     </figure>
 
-    <h2>总结</h2>
+    <h2>两类效果的边界</h2>
     <p>
       滤镜与混合模式把视觉效果从"预处理的图片"交还给了渲染过程：<code>filter</code> 改元素自身，<code>mix-blend-mode</code> 与下方内容混色，<code>backdrop-filter</code> 只处理后方的背景。分清三者各自的作用对象，再留意它们会创建层叠上下文，就能安全地用纯 CSS 做出过去必须切图或写脚本的效果。下次再遇到「变灰、模糊、融合」这类需求，先别急着出图或叠遮罩，想想该交给哪一个属性来做。
     </p>

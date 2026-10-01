@@ -8,7 +8,7 @@ import J07PromiseCombinators from './J07PromiseCombinators.vue'
       <strong>开场问题：</strong>看板要同时展示「课程、通知、进度」三块数据，你把三个请求依次 <code>await</code>，页面硬生生等了三次网络往返——它们明明互不依赖，为什么不能一起等？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>三接口加载场景</h2>
     <p>
       你在做一个学习看板：顶部课程列表、右侧通知、底部学习进度，三份数据来自三个不同的接口，每个接口平均要 200 到 400 毫秒。如果按书写顺序一个接一个地请求，用户要盯着空白页等将近一秒。可这三份数据谁也不依赖谁，先拿通知并不会影响课程列表。
     </p>
@@ -16,7 +16,7 @@ import J07PromiseCombinators from './J07PromiseCombinators.vue'
       <strong>「互不依赖的异步任务，本该同时进行」</strong>，这是并发要解决的核心。真正的难点不在「怎么发起」，而在「怎么把多个各自独立、各自可能成功或失败的未来结果，收敛成一个你能继续处理的值」。写这种聚合并发结果的代码，才是容易出错的地方。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>顺序等待写法</h2>
     <p>
       最省事的做法：一个接一个地 <code>await</code>。第一句拿到课程，再发通知，再发进度，代码从上往下读，数据一步步到手，逻辑清晰，调试也直观。
     </p>
@@ -24,7 +24,7 @@ import J07PromiseCombinators from './J07PromiseCombinators.vue'
       这个方案确实做对了一件事：<strong>它把「等待」变成了顺序可读的代码</strong>，你完全清楚哪一步在前、哪一步在后，不存在竞态。当任务之间真的存在依赖时，这就是唯一正确的写法。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>串行耗时叠加</h2>
     <ul>
       <li>总耗时是三次请求之和（约 900 毫秒），而不是最慢那一次（约 400 毫秒），多出来的时间纯属白等。</li>
       <li>第二个请求抛错时，第三个请求根本没机会发出，明明它可以独立成功。</li>
@@ -32,7 +32,7 @@ import J07PromiseCombinators from './J07PromiseCombinators.vue'
       <li>为了把「等待」写整齐，代码被拆成一长串赋值语句，中间态变量越堆越多。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>失败容忍选型</h2>
     <p>
       保留「一步拿到结果」的写法，把「逐个等待」换成「一起发起、一起等」。为此要先认识 <code>Promise</code>：它表示一个<strong>未来会落定</strong>的结果，落定只有两种状态——成功（fulfilled）拿到值，或失败（rejected）拿到原因。并发要做的，就是同时启动多个 Promise，再在某个时刻统一汇总它们的落定结果。
     </p>
@@ -66,13 +66,13 @@ import J07PromiseCombinators from './J07PromiseCombinators.vue'
       最后一个容易被忽略的现实约束：<strong>并发不等于无限并发</strong>。把几百个请求一次性丢进 <code>Promise.all</code>，浏览器会排满连接、服务端也可能被压垮，反而更慢甚至触发限流。真要做大规模并发，得自己控制并发数量，或分批发起。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>三任务同时发起</h2>
     <figure class="lesson-figure">
       <figcaption>点一下按钮，看三个互不依赖的任务如何同时发起、一起返回。</figcaption>
       <J07PromiseCombinators />
     </figure>
 
-    <h2>总结</h2>
+    <h2>并发组合器机制</h2>
     <p>
       并发组合器解决的，是「多个独立未来如何收敛成一个结果」。互不依赖就同时发起，再把「对失败的容忍度」翻译成选择：全部必须成功用 <code>all</code>，尽量都拿到用 <code>allSettled</code>，只求最先成功用 <code>any</code>，谁先落定算谁用 <code>race</code>。
     </p>

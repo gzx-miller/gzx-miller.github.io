@@ -8,7 +8,7 @@ import E02MainWindow from './E02MainWindow.vue'
       <strong>开场问题：</strong>你写了 <code>new BrowserWindow</code> 再 <code>loadFile('index.html')</code>，应用一启动，用户却先看到一块刺眼的白板，过一会儿内容才冒出来——页面明明没问题，那片白到底是哪来的？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>网页缺窗口外壳</h2>
     <p>
       你要开一个桌面窗口：它要有尺寸、标题、图标，能被拖动和缩放，还要能在任务栏上分组。可你低头一看 HTML，发现它压根没有"窗口"这个概念——网页不知道自己是"一个操作系统的窗口"，它只是一块画布。
     </p>
@@ -19,7 +19,7 @@ import E02MainWindow from './E02MainWindow.vue'
       那谁该来创建这个"系统认识"的原生窗口，并把一个网页装进去？
     </p>
 
-    <h2>最小方案</h2>
+    <h2>基础窗口创建</h2>
     <p>
       在主进程里 <code>new BrowserWindow({ width: 800, height: 600 })</code>，再 <code>mainWindow.loadFile('index.html')</code>。这就是最小可跑的窗口。
     </p>
@@ -30,7 +30,7 @@ import E02MainWindow from './E02MainWindow.vue'
       但它默认是"先显示、后加载"的：窗口一创建就亮出来，页面还在路上，用户看到的正是开场那片白。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>白屏与状态复位</h2>
     <ul>
       <li>默认创建即显示，首屏内容还没准备好就先露出空背景，用户看到白屏一闪。</li>
       <li>只给尺寸不够：每次启动都回到默认位置和默认大小的窗口，用起来像"新手"，接不上用户上次的工作状态。</li>
@@ -38,7 +38,7 @@ import E02MainWindow from './E02MainWindow.vue'
       <li><code>webPreferences</code> 一旦配错——比如误开 <code>nodeIntegration</code>——前面辛苦搭起来的安全边界当场崩塌。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>隐藏启动避白屏</h2>
     <p>
       先补"不闪"这一步，因为它最先影响第一印象。创建时写 <code>show: false</code> 让窗口先藏着，再绑上 <code>win.once('ready-to-show', () =&gt; win.show())</code>，等页面首屏准备就绪再显示出来，那片白就被掐掉了。
     </p>
@@ -63,13 +63,13 @@ import E02MainWindow from './E02MainWindow.vue'
       <strong>两个常见误区：</strong>其一，<code>webSecurity</code> 只在本地开发叠加跨域时才临时关，生产环境必须保持 <code>true</code>；其二，窗口创建是重操作，多窗口应用创建前应先检查同类窗口是否已存在，存在就聚焦，而不是重复新建。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>配置项与事件时序</h2>
     <figure class="lesson-figure">
       <figcaption>在上面勾选、修改宽度高度与各项窗口配置，感受不同参数组合下窗口的样子；再点「模拟生命周期」，看事件按真实顺序一条条点亮，尤其留意 <code>ready-to-show</code> 排在 <code>show</code> 之前。</figcaption>
       <E02MainWindow />
     </figure>
 
-    <h2>总结</h2>
+    <h2>窗口与网页缝合</h2>
     <p>
       <code>BrowserWindow</code> 是把"操作系统窗口"和"一个网页"缝在一起的那层。创建时用 <code>show: false</code> 避开白屏，用生命周期事件抓住 <code>ready-to-show</code> 与 <code>closed</code> 两头，再把 <code>nodeIntegration: false</code>、<code>contextIsolation: true</code> 作为不可动摇的安全基线写进 <code>webPreferences</code>。
     </p>

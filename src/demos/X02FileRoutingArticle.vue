@@ -8,7 +8,7 @@ import X02FileRouting from './X02FileRouting.vue'
       <strong>开场问题：</strong>同样是文件夹，<code>app/blog/[slug]/page.tsx</code>、<code>app/docs/[...slug]/page.tsx</code>、<code>app/(marketing)/about/page.tsx</code> 分别能匹配到什么地址？满屏的方括号、圆括号、点号，到底各自代表什么意思？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>多层路径场景</h2>
     <p>
       后台要做一套内容站，路径不止「一个页面一个目录」这么简单：博客文章是 <code>/blog/某某</code>，文档是 <code>/docs/第一章/第一节</code> 这种能无限往下钻的多段路径，商品页还希望 <code>/shop</code> 和 <code>/shop/手机/旗舰</code> 都能命中同一个页面。这些需求和「一个文件对应一条固定 URL」的直觉明显对不上。
     </p>
@@ -16,7 +16,7 @@ import X02FileRouting from './X02FileRouting.vue'
       如果在传统方案里解决，你多半会到路由配置里写正则：先匹配固定段，再匹配参数段，还要处理可选段和通配。规则一多，配置文件就成了最难读懂、也最容易改错的地方。于是问题变成：<strong>能不能不用正则，让文件名自己把这种结构说清楚？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>单层目录路由</h2>
     <p>
       最小的一步，是接受「目录即路由」这条规则，只用最简单的一层：新建 <code>app/blog/page.tsx</code>，它就对应 <code>/blog</code>，页面组件直接返回内容即可。
     </p>
@@ -24,7 +24,7 @@ import X02FileRouting from './X02FileRouting.vue'
       这个方案做对了核心的一件事——<strong>固定路径的映射是直观且零配置的</strong>，你看到目录结构就等于看到了站点地图。只要站点只有几个静态页面，这样写完全够用，也不会有人抱怨。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>静态目录边界</h2>
     <ul>
       <li>文章 ID、分类名这类「运行时才知道」的路径段，静态目录表达不了。</li>
       <li>文档那种任意深度的路径，没法为每一层都建一个文件夹。</li>
@@ -33,7 +33,7 @@ import X02FileRouting from './X02FileRouting.vue'
       <li>内部组件和工具函数如果随手放进 <code>app/</code>，会连同它们所在的目录一起被当成路由，凭空多出页面。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>目录名符号集</h2>
     <p>
       不用推翻「目录即路由」，而是给目录名加一套<strong>约定符号</strong>，把上述每一种需求都翻译成一个可见的写法。核心依旧只有一句：<code>page.tsx</code> 才是页面的 UI 入口，目录层级就是 URL 层级，其余符号只是在描述「这一段路径怎么匹配」。
     </p>
@@ -64,13 +64,13 @@ import X02FileRouting from './X02FileRouting.vue'
       <strong>两个易错点：</strong>动态段的<strong>目录名要和页面里读取的 <code>params</code> 字段一致</strong>，把 <code>[slug]</code> 改成 <code>[id]</code> 后，组件里的 <code>params.slug</code> 也要同步改成 <code>params.id</code>，否则拿到的是 <code>undefined</code>；另外，<code>page.tsx</code> 之外的文件（<code>layout</code>／<code>loading</code>／<code>error</code> 等）本身<strong>不直接生成路由</strong>，它们只是页面周边的约定文件。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>写法与匹配范围</h2>
     <figure class="lesson-figure">
       <figcaption>切换不同的目录写法，看它们各自能匹配出哪些真实 URL。</figcaption>
       <X02FileRouting />
     </figure>
 
-    <h2>总结</h2>
+    <h2>符号替代正则</h2>
     <p>
       文件路由把「这条路径怎么匹配」这件事，从正则表达式搬到了目录名字里：方括号管动态，三点号管多段，双层方括号管可选，圆括号管分组不改路径，下划线管私有。你只要读一遍目录，就能推断出整个站点的路由结构。
     </p>

@@ -8,7 +8,7 @@ import VF08Interactions from './VF08Interactions.vue'
       <strong>开场问题：</strong>画布做得挺好看，用户一上手就露馅——同一对节点被拉出三条一模一样的线叠在一起，想批量删几个节点只能一个个点，删完节点还留下断头线挂在半空。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>编辑画布三件事</h2>
     <p>
       一个真正能用的编辑画布，光能看不行，得能编。用户会反复做三件事：在节点之间拉线建立依赖，一次选中一片元素，然后把选中的东西删掉。这三件事听着简单，每一件都藏着坑。
     </p>
@@ -16,7 +16,7 @@ import VF08Interactions from './VF08Interactions.vue'
       如果不处理，后果很具体。拉线不查重，同一对连接桩会被拉出多条重叠的线，看图和删图都乱成一团；不给框选能力，清场只能靠一个个点，效率低到没人愿意用；删除时不清理相邻的边，图上就会留下一条连着空气的悬空线。<strong>所以要把「连接、框选、删除」当成一组交互来编排</strong>，而不是三件互不相干的小功能。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>库默认行为便利</h2>
     <p>
       最省事的做法是全部交给库：连线一松手它自动加边，按下默认删除键它自动删除。
     </p>
@@ -24,7 +24,7 @@ import VF08Interactions from './VF08Interactions.vue'
       这个方案对在「开箱即用」：<strong>画布默认就支持拉线和键盘删除</strong>，一行业务代码都不用写。当图很小、只有一个操作者、也不在乎整洁时，它确实够用。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>默认行为三缺口</h2>
     <ul>
       <li>不查重，同一对节点会被拉出多条一模一样的线，叠在一起互相遮挡。</li>
       <li>默认选不中一批元素，批量操作无从下手。</li>
@@ -32,7 +32,7 @@ import VF08Interactions from './VF08Interactions.vue'
       <li>删完没有任何反馈，用户不知道刚才到底发生了什么。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>连接查重补齐</h2>
     <p>
       不推翻默认行为，而是给它补上业务规则。梳理下来是四个动作，一步步来。
     </p>
@@ -57,13 +57,13 @@ import VF08Interactions from './VF08Interactions.vue'
       <strong>两种删除方式各有场合：</strong>面向业务的删除建议走按钮加确认，避免误操作；键盘删除适合高频的快捷清场。另外，<strong>不查重就直接 push edges</strong>，会让同一对桩位堆出多条重叠连线，删的时候也极容易漏删——查重这一步不能省。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>框选与批量清场</h2>
     <figure class="lesson-figure">
       <figcaption>拖线建依赖（重复的会被拦下），按住 Shift 框选几个节点，再按 Delete 或点按钮一起清场。</figcaption>
       <VF08Interactions />
     </figure>
 
-    <h2>总结</h2>
+    <h2>业务规则叠加</h2>
     <p>
       交互编排的思路，是把库的默认行为当成起点，再按业务补规则：连接经 <code>onConnect</code> 查重后再落账，选中态读 <code>selected</code> 算出集合，删除时连同相邻边一起清理，交互键则交给 <code>selection-key-code</code> 与 <code>delete-key-code</code> 配置。画布这才从「能看」变成「能编」。
     </p>

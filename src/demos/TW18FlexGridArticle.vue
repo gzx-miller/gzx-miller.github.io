@@ -8,7 +8,7 @@ import TW18FlexGrid from './TW18FlexGrid.vue'
       <strong>开场问题：</strong>课程卡片墙我用 <code>flex flex-wrap</code> 排得挺整齐，可最后一行只剩两张卡时，它们被拉得比上面一排宽出一大截——同样一排卡片，为什么一换行就散架？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>单维布局的起点</h2>
     <p>
       你在做一个装备展示页，结构很简单：顶部一条导航（左边 Logo、右边菜单），中间一片商品卡片墙。第一次写的时候你只学了一个布局工具：让父元素 <code>flex</code>，再 <code>flex-wrap</code> 允许换行，卡片各给一个 <code>flex-1</code> 让它自己撑开。导航栏这样写确实漂亮，Logo 靠左、菜单靠右，一行就搞定，于是你顺手把这套写法套到了卡片墙上。
     </p>
@@ -16,7 +16,7 @@ import TW18FlexGrid from './TW18FlexGrid.vue'
       问题就出在「顺手」上。导航是一行固定数量的元素，而卡片墙是「数量不定、还要成行成列对齐」的网格。表面看两边都能排出整齐的样子，实际约束完全不同：一边只有横向一个方向，另一边同时要管行和列。所以真正要回答的不是「Flex 和 Grid 哪个更好」，而是<strong>这个布局到底有几个维度、由谁决定尺寸</strong>。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>统一Flex布局</h2>
     <p>
       最朴素的做法，是把一切布局都交给 Flex：容器 <code>flex flex-wrap gap-4</code>，卡片给 <code>flex-1 basis-56</code>，让它自己有最小宽度又能伸展。导航栏这么做是对的，卡片墙第一眼也没毛病。
     </p>
@@ -24,7 +24,7 @@ import TW18FlexGrid from './TW18FlexGrid.vue'
       这个方案做对了最关键的一件事：<strong>它承认了「一维排列」这种最常见的需求</strong>。元素排成一行、间距均匀、两端对齐，Flex 用 <code>justify-between</code> 与 <code>items-center</code> 一句话就能表达，比手写浮动或绝对定位清爽太多。只要布局是一维的，Flex 就是最短路径，不必舍近求远。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>末行拉伸问题</h2>
     <p>可当卡片墙真的用起来，Flex 的短板一条条冒出来：</p>
     <ul>
       <li>最后一行不满时，<code>flex-1</code> 会让剩下的卡片按剩余空间强行拉伸，宽度和其他行对不齐。</li>
@@ -37,7 +37,7 @@ import TW18FlexGrid from './TW18FlexGrid.vue'
       根因其实只有一个：<strong>Flex 是内容驱动、一维的</strong>。子项的尺寸由内容与分配规则决定，容器再按主轴把它们排开；它天生就不负责「行列同时对齐」这件事。你越是要强行让它对齐成网格，写的补偿样式就越多。
     </p>
 
-    <h2>迭代</h2>
+    <h2>一维二维的分工</h2>
     <p>
       不推翻 Flex，而是给布局分个类：<strong>一维流用 Flex，二维网格用 Grid</strong>。判断标准很好记——如果你关心的是「这一行里的元素怎么排、怎么对齐」，那是内容驱动的 Flex；如果你关心的是「这个位置该放第几行第几列」，那是布局驱动的 Grid。
     </p>
@@ -63,13 +63,13 @@ import TW18FlexGrid from './TW18FlexGrid.vue'
       </tbody>
     </table>
 
-    <h2>动手试试</h2>
+    <h2>四类场景的切换</h2>
     <figure class="lesson-figure">
       <figcaption>切换 Flex 与 Grid 两种模式，再把导航、标签、卡片、表单四个场景都点一遍。</figcaption>
       <TW18FlexGrid />
     </figure>
 
-    <h2>总结</h2>
+    <h2>维度分工原则</h2>
     <p>
       Flex 与 Grid 不是二选一，而是各自擅长一个维度。先问自己「这个布局有几个方向要同时对齐」：一维流交给 Flex，用 <code>justify-*</code> 与 <code>items-*</code> 控制主轴交叉轴；二维网格交给 Grid，用 <code>grid-cols-*</code> 与 <code>col-span-*</code> 控制轨道。大框架用 Grid、内部对齐用 Flex，两者嵌套是常态而非妥协。
     </p>

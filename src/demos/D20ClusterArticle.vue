@@ -8,7 +8,7 @@ import D20Cluster from './D20Cluster.vue'
       <strong>开场问题：</strong>你把 Node 接口部署到一台 16 核的服务器上，结果 <code>top</code> 里只有一颗核跑到 100%，其余十五颗全程闲着，吞吐量怎么压都上不去。你试着把应用再起一个副本——可客户端得知道连哪个端口，负载均衡、会话语义又得从头做一遍。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>单进程的单核限制</h2>
     <p>
       Node 的一个进程只有一个主线程、一个事件循环，也就是<strong>只吃一个核</strong>。在一台多核机器上，「多核」这份硬件红利，单进程天然拿不到。你以前想绕过它，通常有这么几条路：
     </p>
@@ -21,7 +21,7 @@ import D20Cluster from './D20Cluster.vue'
       <strong>能不能让多个进程共享同一个端口，由 Node 自己把连接分给还有余力的进程？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>主进程与工作进程</h2>
     <p>
       <code>cluster</code> 模块就是干这个的。用 <code>cluster.isPrimary</code> 区分两种角色：主进程按 CPU 核数 <code>cluster.fork()</code> 出若干个工作进程；每个工作进程里照常 <code>http.createServer(...).listen(3000)</code>。
     </p>
@@ -29,7 +29,7 @@ import D20Cluster from './D20Cluster.vue'
       它做对了一件很关键的事：<strong>多个工作进程可以直接 listen 同一个端口</strong>。在别的语言里，这通常要主进程 <code>accept</code> 之后自己把连接分发出去；Node 把这件事做进了运行时，你只要 fork 就够了。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>进程间内存不共享</h2>
     <ul>
       <li><strong>内存不共享</strong>：你在工作进程 A 里把 <code>count</code> 加一，进程 B 完全不知道。主进程里的缓存、会话、限流计数，各进程各有一份。</li>
       <li>默认的轮询（Round-Robin）分发是「挨个给」，不是「给最闲的」——请求耗时差异大时，负载可能并不均衡。</li>
@@ -38,7 +38,7 @@ import D20Cluster from './D20Cluster.vue'
       <li>没有优雅关闭：收到终止信号就一刀切，正在处理的请求直接断掉。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>退出后的自动重启</h2>
     <p>
       先补<strong>崩溃自愈</strong>。主进程监听 <code>cluster.on('exit', ...)</code>，任何一个工作进程退出，就立刻再 <code>fork()</code> 一个补上。之所以先补它：单进程崩溃等于全站不可用，而「挂了能自己爬起来」正是多进程架构最直接的收益。
     </p>
@@ -55,13 +55,13 @@ import D20Cluster from './D20Cluster.vue'
       <strong>和子进程课的分工：</strong><code>child_process</code> 解决「执行外部命令、隔离单个任务」；<code>cluster</code> 解决「把一台机器的多核吃满、并且挂了能自愈」。两者都基于 <code>fork</code>，但目标不同，别混用。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>请求分发的轮转</h2>
     <figure class="lesson-figure">
       <figcaption>调整工作进程数，点「启动集群模拟」，看 12 个请求是怎么被轮流派到各工作进程的，以及结束后每个进程的处理计数是否均匀。</figcaption>
       <D20Cluster />
     </figure>
 
-    <h2>总结</h2>
+    <h2>多核与状态外置</h2>
     <p>
       <code>cluster</code> 用「主进程 fork 出一组共享同一端口的工作进程」这套架构，把单机 Node 服务从「吃一个核」变成「吃满多核」，同时借进程隔离把一次崩溃限制在单个工作进程，自己再把它拉起来。要带走的判断是：多核的前提是<strong>状态不能留在内存里</strong>——会话、缓存一旦外置成共享存储，横向扩展才真正成立。
     </p>

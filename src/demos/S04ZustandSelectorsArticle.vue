@@ -8,7 +8,7 @@ import S04ZustandSelectors from './S04ZustandSelectors.vue'
       <strong>开场问题：</strong>购物车页面上有一个「加入课程」按钮和旁边的件数，还有一个优惠码输入框。你在优惠码里敲字，每敲一个字母，那个只显示件数的面板都会跟着重新渲染一遍——可件数根本没变。改一次优惠码，就白白重渲染一次计数组件；敲几十下，就白跑几十次。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>状态两半共享</h2>
     <p>
       件数和优惠码是同一份业务状态的两半：加商品要改件数，填优惠码要改优惠码。它们得能被多个组件共享——「加入课程」按钮在一个组件里，件数显示在另一个组件里，优惠码输入在第三个组件里。共享之外还有一条不低的隐形要求：<strong>只关心件数的组件，不该被优惠码的变化连累</strong>。
     </p>
@@ -19,7 +19,7 @@ import S04ZustandSelectors from './S04ZustandSelectors.vue'
       所以要回答的是：<strong>能不能有一个住在组件树之外的共享数据源，让每个组件只订阅它真正用到的那一小片，别的地方怎么变都不打扰它？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>树外仓库创建</h2>
     <p>
       最朴素的做法：用 Zustand 的 <code>create</code> 在组件之外建一个 Store，把状态和改状态的方法放进去——<code>const useCartStore = create((set) =&gt; ({ items: 1, coupon: '', addItem: () =&gt; set((s) =&gt; ({ items: s.items + 1 })), setCoupon: (coupon) =&gt; set({ coupon }) }))</code>。组件里直接 <code>useCartStore((state) =&gt; state.items)</code> 就把件数取出来了。
     </p>
@@ -27,7 +27,7 @@ import S04ZustandSelectors from './S04ZustandSelectors.vue'
       这个方案做对了一件事：<strong>它把状态搬到了 React 树外面</strong>。任何组件都能直接读写这份状态，不需要 Provider，也不需要一层层透传——共享这一半需求，一行 import 就解决了。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>宽订阅代价</h2>
     <ul>
       <li>把手上的 selector 写成 <code>useCartStore((s) =&gt; s)</code>，直接把整个 state 返回：任何一个字段变化，返回的对象引用就变了，组件照旧全都重渲染——selector 形同虚设。</li>
       <li>让 selector 每次返回一个<strong>新对象</strong>，比如 <code>useCartStore((s) =&gt; ({ items: s.items, coupon: s.coupon }))</code>：每次渲染都是新引用，默认的相等比较永远判定「变了」，轻则白渲染，重则触发无限循环，报出「getSnapshot 结果应该被缓存」之类的错误。</li>
@@ -35,7 +35,7 @@ import S04ZustandSelectors from './S04ZustandSelectors.vue'
       <li>selector 返回派生数组（比如筛选后的列表）却每次新建数组：引用不稳定，同样会引起多余的甚至无限的重渲染。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>细粒度订阅</h2>
     <p>
       不推翻「树外共享」，而是把每个组件和 Store 之间的连接收窄成一条只属于自己的<strong>细粒度订阅</strong>。Zustand 的 Hook API 接收一个 selector，这个函数把整个 state <strong>投影成组件真正要用的那一个最小切片</strong>；切片引用没变，组件就不重渲染。
     </p>
@@ -54,13 +54,13 @@ import S04ZustandSelectors from './S04ZustandSelectors.vue'
       <strong>一条最容易翻车的边界：</strong>selector 必须返回<strong>稳定的切片</strong>。只要它每次调用都凭空造一个新对象或新数组，默认的相等比较就会一直判定「变了」——后果先是多余渲染，严重时因为每次都返回不同结果而陷入无限循环。要派生出新集合，就把基础字段分开订阅，或者显式使用浅比较选择器。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>各组件互不干扰</h2>
     <figure class="lesson-figure">
       <figcaption>点「加入课程」，只有显示件数的面板在变；再去优惠码输入框里打字，件数依旧纹丝不动——两个组件各订各的切片，互不打扰。把两者的变化都看在眼里，就能体会「只订阅自己用到的那一小片」到底省下了什么。</figcaption>
       <S04ZustandSelectors />
     </figure>
 
-    <h2>总结</h2>
+    <h2>性能取决于切片</h2>
     <p>
       Zustand 把共享状态挪出 React 树，用 <code>create</code> 一处定义、随处订阅；真正决定性能的，是每个组件交给 Hook 的那个 selector——它返回的最小切片引用不变，组件就不重渲染。选对 selector，等于给每个组件划出一条只属于自己的订阅线，别处的改动自然波及不到它。
     </p>

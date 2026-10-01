@@ -8,7 +8,7 @@ import S24Overmind from './S24Overmind.vue'
       <strong>开场问题：</strong>你写了一个「加载待办」的函数，里面 <code>fetch</code> 了一下、<code>setState</code> 了一下、顺手把 token 存进 <code>localStorage</code>。后来接口报错，你花半天才分清到底是网络挂了、状态写错了、还是存储满了；更头疼的是想给这段逻辑补个单测，得先把 <code>fetch</code> 和 <code>localStorage</code> 都 mock 一遍。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>两类逻辑交织</h2>
     <p>
       这类逻辑里混着两种东西：<strong>改自己的状态</strong>，和<strong>与外界打交道</strong>（网络、存储、路由）。它们挤在同一个函数里，就同时带来三个必须由人承担的成本。
     </p>
@@ -19,7 +19,7 @@ import S24Overmind from './S24Overmind.vue'
       所以要回答的是：<strong>能不能立一条约定——状态只有一条变更入口，所有和外界打交道的能力都放进一个可替换的独立层，让「决定改什么」和「真的去外面拿」彻底分开？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>单一状态树</h2>
     <p>
       最朴素的做法：把所有状态放进一个对象——一棵<strong>单一状态树</strong>，所有修改都通过 <code>actions</code> 里定义好的函数进行。这个方案做对了一件事：<strong>它建立了「变更入口唯一」的约定</strong>，每次改动都对应到一个有名字的动作，界面永远通过调用动作来推进，而不是到处直接改字段。
     </p>
@@ -27,7 +27,7 @@ import S24Overmind from './S24Overmind.vue'
       但只做到这一步还不够。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>动作内副作用</h2>
     <ul>
       <li><code>actions</code> 里照样直接 <code>fetch</code>、直接写 <code>localStorage</code>，测试还是得 mock 网络和存储，逻辑离不开环境。</li>
       <li>「决定改什么」和「怎么去外面拿」写在同一个函数里，想换一种取数方式（缓存、mock、离线）只能改动 action 本身。</li>
@@ -35,7 +35,7 @@ import S24Overmind from './S24Overmind.vue'
       <li>所有状态平铺在一个大对象里，业务一多就成一张大表，看不出边界在哪。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>副作用外置</h2>
     <p>
       不推翻「单一状态树 + 唯一入口」，而是把副作用抽出来、把派生和模块结构补齐。一层层来：
     </p>
@@ -50,13 +50,13 @@ import S24Overmind from './S24Overmind.vue'
       <strong>三条边界：</strong>state 只能在 action 里改，别在组件里直接动它；effects 只放「外部能力」，别把业务状态判断塞进去，那等于把耦合又搬了个位置；命名空间要先按业务域划分，再往里放 actions / effects，否则「分形结构」只是摆设。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>单次操作的连锁反应</h2>
     <figure class="lesson-figure">
       <figcaption>在「森林区域」页点已解锁区域的「探索」——它是一次 action，里面对外同时扣体力、加经验、可能解锁新区域、往背包里收东西；切到「背包」看物品与稀有度，「收藏价值」和「稀有数量」都是派生值；再切到「状态结构」页，能直观看到这棵树是怎么按 state / getters / actions 分层、又如何由命名空间组合起来的。</figcaption>
       <S24Overmind />
     </figure>
 
-    <h2>总结</h2>
+    <h2>状态动作分治</h2>
     <p>
       Overmind 把状态组织成一棵按命名空间「分形」展开的单一状态树，并立下两条硬约定：<strong>state 只能由 actions 改</strong>，<strong>与外界打交道的副作用一律放进 effects</strong>。这样一来，每次状态变更都能回溯到某个具名动作，而外部能力因为成了可注入、可替换的一层，action 逻辑就能脱离真实环境单独测试——网络、存储、框架都不再和业务逻辑纠缠。
     </p>

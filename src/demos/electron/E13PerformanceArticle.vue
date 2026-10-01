@@ -8,7 +8,7 @@ import E13Performance from './E13Performance.vue'
       <strong>开场问题：</strong>应用冷启动要八秒，白屏一直挂在那儿。你在创建窗口前后打了时间戳，发现<code>new BrowserWindow</code> 本身只花了不到两百毫秒——那多出来的七秒多，凭什么也算在「启动」头上？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>三类性能瓶颈</h2>
     <p>
       「慢」其实不是一个问题，而是三个：<strong>启动慢</strong>（从双击到首屏出现）、<strong>内存高</strong>（多开几个窗口就上 GB）、<strong>渲染卡</strong>（长列表一滚就掉帧）。用同一把尺子量这三件事，必然优化错地方。
     </p>
@@ -19,7 +19,7 @@ import E13Performance from './E13Performance.vue'
       于是问题变成：怎么先把「慢在哪」量出来，再分别对症下药？
     </p>
 
-    <h2>最小方案</h2>
+    <h2>性能指标采样</h2>
     <p>
       先别急着改代码，先量。主进程里用 <code>process.memoryUsage()</code> 定时采样 <code>rss</code>（常驻内存），再用一张时间线把「双击 → 主进程 ready → 窗口创建 → 首屏渲染」几个关键点记下来；渲染侧就用 DevTools 的 Performance 面板录一段启动和关键交互。
     </p>
@@ -27,7 +27,7 @@ import E13Performance from './E13Performance.vue'
       这个方案做对了一件事：<strong>它把「先测量、后优化」定成了顺序</strong>。有了数据，你会立刻发现那七秒根本不在创建窗口那一步，而在它前面被你同步堵住的主进程启动阶段。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>单点测量盲区</h2>
     <ul>
       <li>只测 <code>createWindow</code> 的耗时：漏掉了启动阶段那些同步 I/O 和 <code>require</code> 的阻塞，首帧其实是被它们拖住的。</li>
       <li>每个额外打开的渲染进程都有几十 MB 量级的内存成本，窗口随意堆叠很快把内存吃光。</li>
@@ -36,7 +36,7 @@ import E13Performance from './E13Performance.vue'
       <li>后台窗口里的定时器和动画还在照常跑：白白耗 CPU 和电，用户却看不见。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>启动路径优化</h2>
     <p>
       先切启动路径，因为首屏速度是用户最直观的感受。两条：主进程里<strong>避免同步 I/O</strong>——能异步就异步，或者延后到窗口出现之后再做；<strong>非关键模块延迟加载</strong>——别在 <code>app.whenReady()</code> 之前 <code>require</code> 全量模块，等首屏出来、系统空闲时再动态 <code>import()</code>。在渲染进程里，把不影响首屏的任务交给 <code>requestIdleCallback</code>，让浏览器挑空闲帧去跑，别和首屏抢主线程。
     </p>
@@ -53,13 +53,13 @@ import E13Performance from './E13Performance.vue'
       最后说一个容易被忽略的开关 <code>backgroundThrottling</code>。窗口失焦、切到后台后，Chromium 默认会节流它里面的定时器和动画（<code>backgroundThrottling</code> 默认为 <code>true</code>），省下不少 CPU 和电。<strong>只有当后台窗口仍需精确计时</strong>（比如一个计时类应用）时才考虑把它关掉——代价是后台也照常耗资源，大多数应用保持默认就好。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>三项优化对照</h2>
     <figure class="lesson-figure">
       <figcaption>对照三张优化卡片（启动 / 内存 / 渲染），再读示例里「延迟加载重模块」与「定时采样 RSS」两段代码，看每条优化各自对应哪条性能线、该在哪一步动手。</figcaption>
       <E13Performance />
     </figure>
 
-    <h2>总结</h2>
+    <h2>分线对症策略</h2>
     <p>
       性能优化不是「哪里慢改哪里」，而是先分线再对症：用 <code>process.memoryUsage()</code> 和 DevTools 把瓶颈量出来，启动上砍同步 I/O、延迟加载重模块、首屏先给骨架，内存在窗口关闭时释放引用，渲染上用虚拟滚动与 <code>requestIdleCallback</code> 把工作挪出主线程。慢的往往不是你以为的那一步。
     </p>

@@ -8,7 +8,7 @@ import U13AppLifecycle from './U13AppLifecycle.vue'
       <strong>开场问题：</strong>你在 <code>App.vue</code> 里写「启动时从缓存恢复登录态」，测试时一切正常。可用户把 App 切到后台、几个小时后切回来，token 明明已经在服务端过期了，你的恢复逻辑却一点反应都没有——同一段代码，冷启动管用，切回前台就失灵。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>应用级生命周期</h2>
     <p>
       原因是：应用有它自己的「一生」，和单个页面的一生<strong>不是一回事</strong>。页面会被创建、显示、隐藏、销毁，一个页面可以反复进出；而应用只在启动时被创建一次，之后就是「进前台 / 退后台」的循环。你的登录态恢复写在了「只发生一次」的那个时刻，自然管不住「每次回到前台」的那件事。
     </p>
@@ -19,7 +19,7 @@ import U13AppLifecycle from './U13AppLifecycle.vue'
       问题于是分成两半：<strong>应用的启动与前后台切换，该在哪一层处理？跨页面要共享的那些数据，又该放在哪里？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>必经页面初始化</h2>
     <p>
       最省事的做法：挑一个「用户一定会经过」的页面，在它的 <code>onLoad</code> 里做初始化，把用户信息挂到一个模块级的变量上，别处 <code>import</code> 进来读。
     </p>
@@ -27,7 +27,7 @@ import U13AppLifecycle from './U13AppLifecycle.vue'
       这个方案做对了一件事：<strong>它至少把初始化收敛到了一个点</strong>，不再让每个页面各初始化一遍。当应用只有一个入口、初始化也只做一次时，这样写是能跑的。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>直达入口的漏判</h2>
     <ul>
       <li>用户从扫码/分享链接直达详情页，作为「入口」的那个首页 <code>onLoad</code> 根本没执行，初始化整个落空。</li>
       <li>把登录态校验写在 <code>onLaunch</code> 里，热启动（从后台切回）不会重跑它，token 过期了也毫无察觉。</li>
@@ -35,7 +35,7 @@ import U13AppLifecycle from './U13AppLifecycle.vue'
       <li>未捕获的异常没有兜底，真机上白屏了，日志里却什么都没有，问题根本无从查起。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>四个应用级钩子</h2>
     <p>
       不推翻「收敛初始化」，而是把「应用的一生」正式交给应用入口 <code>App.vue</code>。它承载四个<strong>应用级生命周期</strong>：
     </p>
@@ -61,13 +61,13 @@ import U13AppLifecycle from './U13AppLifecycle.vue'
       <strong>两条最常踩的边界：</strong><code>onLaunch</code> 只在<strong>冷启动</strong>执行一次，「从后台切回前台」不会重跑它，把登录态校验、数据刷新写在 <code>onLaunch</code>，热启动时就会全部失效，这类逻辑要放到 <code>onShow</code>；另外 <code>globalData</code> 的改动<strong>不会触发视图更新</strong>，别拿它当响应式状态用。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>钩子出现次数对比</h2>
     <figure class="lesson-figure">
       <figcaption>依次点「启动」「切后台」「回前台」：日志里 <code>onLaunch</code> 只会出现一次，而 <code>onShow</code> / <code>onHide</code> 会反复出现；右侧面板显示的，就是页面侧用 <code>getApp().globalData</code> 能读到的共享数据。</figcaption>
       <U13AppLifecycle />
     </figure>
 
-    <h2>总结</h2>
+    <h2>两层生命周期分工</h2>
     <p>
       应用生命周期和页面生命周期是两个层次：应用只出生一次，之后在前后台之间往返；页面会反复被创建和销毁。<strong>把「只做一次」的初始化放 <code>onLaunch</code>、「每次回前台」的逻辑放 <code>onShow</code>、异常兜底放 <code>onError</code></strong>，跨页面数据用 <code>getApp().globalData</code>，并记住它不响应式——这样冷启动、热启动、直达页三条路径才不会各漏一块。
     </p>

@@ -8,7 +8,7 @@ import N20Modules from './N20Modules.vue'
       <strong>开场问题：</strong>你想在项目里用 Pinia，按以往在 Vue 里的经验，脑子里已经开始盘算 <code>app.use(createPinia())</code> 该写在哪。结果文档只说：往 <code>nuxt.config.ts</code> 的 <code>modules</code> 数组里加一行 <code>'@pinia/nuxt'</code> 就行。你照做了，store 竟然真的能用，连 <code>import</code> 都没写——这一行字符串，在构建的时候到底替你做了什么？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>每项能力的手工接线</h2>
     <p>
       给项目加一项能力（状态管理、图片优化、国际化），本质上都要做同一套「胶水」：装依赖、注册插件、配置自动导入的目录、往运行时的配置里塞值、必要时挂上构建钩子。换一个库，这套动作换汤不换药，但每一步的写法都不太一样。
     </p>
@@ -19,7 +19,7 @@ import N20Modules from './N20Modules.vue'
       于是问题落到：<strong>能不能把这套接线封装成一个可安装、可发布的包，让使用者只写一行配置？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>一行安装的接入方式</h2>
     <p>
       用 Nuxt 模块。先 <code>pnpm add</code> 装上模块依赖，再在 <code>nuxt.config.ts</code> 的 <code>modules</code> 数组里加一项（如 <code>'@pinia/nuxt'</code>）。模块的 <code>setup</code> 会在<strong>构建期</strong>执行，替你把插件、组件、自动导入这些接线登记好。
     </p>
@@ -27,7 +27,7 @@ import N20Modules from './N20Modules.vue'
       这个方案做对了一件事：<strong>把「接线」从每个项目里提了出来，做成可复用、可发布的包</strong>。使用者只面对一个自己理解和信任的「一行配置」，剩下的事情交回给模块作者去维护和升级。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>数组顺序的隐式依赖</h2>
     <ul>
       <li>只写一行，顺序却没人管：<code>modules</code> 数组的顺序决定注册先后，两个有依赖关系的模块顺序颠倒了就会出错，而且是那种难复现的错。</li>
       <li>模块里既有构建期的部分（<code>setup</code>、<code>hook</code>），也有要随应用一起跑的部分（插件、composable、组件），全写在一个文件里，运行时代码会被搅进构建配置。</li>
@@ -35,7 +35,7 @@ import N20Modules from './N20Modules.vue'
       <li>生态里模块质量参差，选到一个维护不活跃的，某次升级 Nuxt 时它会最先出问题。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>模块结构与配置入口</h2>
     <p>
       不推翻「一行安装」，而是把<strong>模块的结构、运行时代码的位置、配置入口与生态经验逐一理清</strong>。
     </p>
@@ -61,13 +61,13 @@ import N20Modules from './N20Modules.vue'
       <strong>顺序不是小事：</strong><code>modules</code> 数组的顺序决定注册先后，也决定<strong>钩子与插件的执行次序</strong>。依赖别的模块的模块必须排在它之后——否则会出现在某台机器上偶发失败、换个环境又好了这类极难复现的问题，排查成本远高于当初多看一眼顺序。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>常用开发与生态指南</h2>
     <figure class="lesson-figure">
       <figcaption>三个页签分别是「常用模块 / 开发模块 / 生态指南」：常用模块页签列出 <code>@pinia/nuxt</code>、<code>@nuxtjs/tailwindcss</code>、<code>@nuxt/content</code> 等模块各自的核心能力；开发模块页签并排展示模块的目录结构与 <code>defineNuxtModule</code> 入口代码；生态指南页签则是一份「查找、安装、排序、本地加载」的经验清单。对照着看，能明白「一行安装」背后被封装了什么。</figcaption>
       <N20Modules />
     </figure>
 
-    <h2>总结</h2>
+    <h2>接线包的构建期执行</h2>
     <p>
       Nuxt 模块是「构建期执行的接线包」：<code>setup</code> 在构建时通过 Kit API 替你注册插件、组件、自动导入与运行时配置，随应用运行的代码则被收进 <code>runtime/</code>，用户选项放在与 <code>configKey</code> 同名的键下。你自己装模块时只需一行，自己写模块时才需要关心结构、顺序与这套 Kit API——也正是在那一刻，你才真正看清那一行字符串到底做了什么。
     </p>

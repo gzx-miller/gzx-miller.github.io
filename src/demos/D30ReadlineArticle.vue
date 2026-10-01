@@ -8,7 +8,7 @@ import D30Readline from './D30Readline.vue'
       <strong>开场问题：</strong>你写了个小脚本，直接监听 <code>process.stdin.on('data')</code>，想一回合一回合地问用户；可用户一次粘贴了三行，回调一下子给你一大坨；换个环境把输入用管道灌进来，它又只给你半行。按「数据块」读，怎么就读不出「一行」？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>终端输入的行切分</h2>
     <p>
       你要做一个命令行工具：先问名字、再问年龄、最后确认，然后打印结果。输入来自终端，本质是<strong>字节流</strong>——用户敲一下、粘贴一段、或者用管道灌进来，到达的节奏和大小都不由你控制。
     </p>
@@ -19,7 +19,7 @@ import D30Readline from './D30Readline.vue'
       问题落到一句话：怎样把「按块到达的字节流」变成「一行一行的事件」，并且把「提问—等待回答」这种异步流转表达清楚？
     </p>
 
-    <h2>最小方案</h2>
+    <h2>行事件监听接口</h2>
     <p>
       用 <code>node:readline</code>：<code>readline.createInterface({ input, output })</code> 拿到一个接口对象，监听它的 <code>'line'</code> 事件，每凑齐一整行就触发一次回调，参数就是这一行的字符串。
     </p>
@@ -27,7 +27,7 @@ import D30Readline from './D30Readline.vue'
       这个方案做对了一件省心的事：<strong>它把「按块到达的字节流」翻译成「按行触发的事件」</strong>。分片、残留、换行判定、编码，这些原本要你自己扛的细节，全被收进接口内部；你只管对「一行」做业务处理。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>回调嵌套困境</h2>
     <ul>
       <li><code>'line'</code> 事件是<strong>推给你</strong>的：当一问依赖上一答时，只能在回调里再套一层回调，几步下来就成了回调金字塔。</li>
       <li>忘记调 <code>rl.close()</code>，接口不释放、<strong>进程迟迟不退出</strong>——因为 stdin 还活着，事件循环还有东西可等。</li>
@@ -36,7 +36,7 @@ import D30Readline from './D30Readline.vue'
       <li>多选、输入校验、动态提示这类交互，用 <code>'line'</code> 一个个手写会迅速膨胀，越写越难维护。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>提问原语的引入</h2>
     <p>
       先补上「提问」这个原语，因为交互式 CLI 的核心就是「打印提示、暂停等输入、收到一行后继续」。<code>rl.question('请输入名字: ', callback)</code> 一步到位：它打印提示、挂起等待，用户回车后把这一行交给回调。用提问串起四步，结构是这样的：
     </p>
@@ -59,13 +59,13 @@ import D30Readline from './D30Readline.vue'
       <strong>四点提醒：</strong><code>readline</code> 是处理流的<strong>低级 API</strong>，复杂交互推荐用 <code>inquirer</code> / <code>prompts</code>；交互结束务必 <code>rl.close()</code>，否则进程不退出；逐行处理大文件要用 <code>createReadStream</code> 当输入、按需消费，别整份读入内存；处理 <code>SIGINT</code>，保证终端状态与资源被正确恢复。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>逐题推进的问答</h2>
     <figure class="lesson-figure">
       <figcaption>点「开始模拟交互式输入」，看脚本依次抛出「请输入名字 / 年龄 / 语言 / 确认提交」，每答完一题才进入下一题——这就是 <code>rl.question</code> 的「提问—等待—回调」节奏，也是改造前那层嵌套的来源。</figcaption>
       <D30Readline />
     </figure>
 
-    <h2>总结</h2>
+    <h2>输入流的按行消费</h2>
     <p>
       <code>readline</code> 解决的是「把输入流按行消费」这件事：它把字节块翻译成一行一行的事件，于是同一套接口既能驱动「提问—等待回答」的交互式 CLI，也能流式扫过大文件。再配上 Promise 版接口把嵌套拉平、用 <code>close</code> 与 <code>SIGINT</code> 做好收尾，一个稳的 CLI 就成型了。
     </p>

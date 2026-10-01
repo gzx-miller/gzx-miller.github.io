@@ -8,7 +8,7 @@ import F19Drawtext from './F19Drawtext.vue'
       <strong>开场问题：</strong>你照着教程给视频加文字水印，命令一个字没改，回车却报 <code>No such filter: 'drawtext'</code>；好不容易换上带 libfreetype 的版本跑通了，中文又全部变成了一个个方块。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>视频文字叠加</h2>
     <p>
       你想要的其实很常规：在视频上压一行标题、加一个台标、角落滚动一条公告，或者把当前时间码显示出来。旧办法各有各的别扭——用剪辑软件手动敲字，遇到成百上千个文件就废了，参数也没法脚本化；事先把文字做成 PNG 水印再用 overlay 叠上去，文字一改就得重做图，像实时时间码这种每帧都变的字，更是根本做不出来。
     </p>
@@ -19,7 +19,7 @@ import F19Drawtext from './F19Drawtext.vue'
       所以要回答的是：<strong>怎么让 FFmpeg 直接在画面上画字，既能显示中文，又能随着时间变化？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>文字滤镜写法</h2>
     <p>
       最基本的写法是在一条滤镜里把文字和位置交代清楚：<code>ffmpeg -i input.mp4 -vf "drawtext=text='Hello World':x=10:y=10:fontsize=24:fontcolor=white" output.mp4</code>。
     </p>
@@ -27,7 +27,7 @@ import F19Drawtext from './F19Drawtext.vue'
       它做对了一件本质的事：<strong>把「文字」当成一个逐帧渲染的滤镜</strong>，跟着每一帧画面一起绘出来。不需要外部素材、不需要剪辑软件，也就意味着它可以被写进脚本、批量套用。前提是这份 FFmpeg 在编译时启用了 <code>libfreetype</code>，并且有可用的字体。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>中文显示异常</h2>
     <ul>
       <li>编译时没带 <code>libfreetype</code>，滤镜根本不存在，直接报 <code>No such filter: 'drawtext'</code>。</li>
       <li>不指定 <code>fontfile</code>，默认字体的字库里没有中文字形，于是「你好」被画成一串方块。</li>
@@ -37,7 +37,7 @@ import F19Drawtext from './F19Drawtext.vue'
       <li>把跑马灯、时间码的值写死是不行的——它们必须随帧变化。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>字体与动画次序</h2>
     <p>
       不推翻这条命令，而是按「先让它显示对，再让它动起来」的顺序，一层层补。
     </p>
@@ -63,13 +63,13 @@ import F19Drawtext from './F19Drawtext.vue'
       <strong>调试口诀：先简化文本。</strong>命令失败时，先把 <code>text</code> 里的冒号、百分号、反斜杠统统去掉，用一句纯字母试跑；确认链路通了，再逐段把特殊字符加回来。另外务必确认 <code>fontfile</code> 的路径真实存在——文件找不到时，报错不会直说是字体问题。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>三个页签的对照</h2>
     <figure class="lesson-figure">
       <figcaption>切换「基础用法 / 样式参数 / 动态效果」三个页签：先看一条静态文字是怎么加上去的，再看样式参数表，最后看时间码与跑马灯这类随帧变化的写法。</figcaption>
       <F19Drawtext />
     </figure>
 
-    <h2>总结</h2>
+    <h2>逐帧渲染滤镜</h2>
     <p>
       <code>drawtext</code> 的本质是「一个逐帧在画面上渲染文字的滤镜」。把它用顺只需三件事：给它一个含所需字形的字体文件；文本复杂就改用 <code>textfile</code> 绕开转义；要动起来就用逐帧求值的表达式，而不是写死数值。
     </p>

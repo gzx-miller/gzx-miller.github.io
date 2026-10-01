@@ -8,7 +8,7 @@ import C05Position from './C05Position.vue'
       <strong>开场问题：</strong>我给商品卡片的「热卖」角标写了 <code>position: absolute; top: 0; right: 0</code>，结果角标没待在卡片角上，反而飞到了整个页面的右上角——它到底相对谁在定位？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>多场景的定位需求</h2>
     <p>
       同一个页面里还有别的需求：顶部导航要在滚动时一直吸在视口顶端；右下角要有一个悬浮的客服按钮；卡片里的角标要牢牢贴住卡片右上角。这三件事看起来都是「挪个位置」，但要求并不一样——有的要跟着页面滚，有的滚动到某处才吸住，有的只能待在父级内部。
     </p>
@@ -19,7 +19,7 @@ import C05Position from './C05Position.vue'
       这三个需求的差别，其实落在两个问题上：<strong>元素偏移时以谁为原点，偏移之后它还算不算「原来那个位置」</strong>。把这两问想清楚，五种定位的选用就是水到渠成的事。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>负边距与平移法</h2>
     <p>
       最朴素的做法：用负的 <code>margin</code> 或 <code>transform: translate</code> 把元素硬挪过去。比如角标就用 <code>margin-top: -8px; margin-left: -8px</code> 往外拉一点。
     </p>
@@ -27,7 +27,7 @@ import C05Position from './C05Position.vue'
       它做对了<strong>「位移可以不影响布局」这一层</strong>：<code>transform</code> 只改变绘制位置，不改变元素占的空间，做微调时非常省心。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>裁剪与基准问题</h2>
     <ul>
       <li>往外挪会被父容器的 <code>overflow: hidden</code> 裁掉，或者把父容器撑出滚动条。</li>
       <li>基准是「元素自己原来的位置」：卡片一旦换了位置，写死的偏移量就全错了。</li>
@@ -35,7 +35,7 @@ import C05Position from './C05Position.vue'
       <li>复杂场景下（角标贴父级右上角、弹层居中）没法用位移简单表达。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>定位取值的分工</h2>
     <p>
       不推翻「位移」，而是用 <code>position</code> 一次说清两件事：<strong>偏移的参考系是谁，以及它是否脱离文档流</strong>。五种取值各有分工：
     </p>
@@ -71,13 +71,13 @@ import C05Position from './C05Position.vue'
       <strong>两个常见坑：</strong>其一，<code>sticky</code> 必须同时给出 top/bottom/left/right 中的至少一个，只写 <code>position: sticky</code> 是不会生效的；而且它在父容器的高度用尽之后会随容器滚出视口，并非常久吸顶。其二，<code>fixed</code> 默认相对视口，但如果祖先带有 <code>transform</code>、<code>filter</code> 这类属性，它会被当作包含块而不再是视口——这也是弹层偶尔「位置突然不对」的原因。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>占位与滚动的对比</h2>
     <figure class="lesson-figure">
       <figcaption>依次切换五种定位值，观察盒子位置、占位与滚动行为的变化。</figcaption>
       <C05Position />
     </figure>
 
-    <h2>总结</h2>
+    <h2>偏移基准与占位判定</h2>
     <p>
       定位要同时回答两个问题：<strong>相对谁偏移，以及是否还占原来的位置</strong>。relative 保留占位、absolute 脱离流并找最近的非 static 祖先、fixed 认准视口、sticky 到阈值才吸住——把参考系和占位这两条理清，元素乱飞与吸顶失效就都有了答案。
     </p>

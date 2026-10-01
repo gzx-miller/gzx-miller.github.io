@@ -8,7 +8,7 @@ import D04EventEmitter from './D04EventEmitter.vue'
       <strong>开场问题：</strong>订单支付成功后要通知库存、发邮件、加积分；某天运营说「再加一个发货提醒」，你不得不回去改那段早已上线的支付代码——明明只是多了一个「关心它的人」，凭什么要动支付本身？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>逐个调用的耦合</h2>
     <p>
       一个状态变了，好几个模块都想做出反应。最直接的写法是在变更发生的那一行，把后续动作逐个调过去：支付成功就调 <code>减库存()</code>、<code>发邮件()</code>、<code>加积分()</code>。
     </p>
@@ -19,7 +19,7 @@ import D04EventEmitter from './D04EventEmitter.vue'
       所以真正的问题是：怎样让「发生了一件事」和「谁来处理这件事」<strong>互相不认识，消息却还能送过去</strong>？
     </p>
 
-    <h2>最小方案</h2>
+    <h2>广播机制的引入</h2>
     <p>
       Node 内置的 <code>node:events</code> 给出了 <code>EventEmitter</code>。变更方只负责广播一句话：<code>emit('order:paid', order)</code>；关心方各自订阅：<code>bus.on('order:paid', handler)</code>。写入 <code>order</code> 载荷，谁需要谁去取。
     </p>
@@ -27,7 +27,7 @@ import D04EventEmitter from './D04EventEmitter.vue'
       这个方案做对了一件关键的事：<strong>它把「发布者」与「订阅者」彻底对调了依赖方向</strong>。支付方只认事件名和载荷结构，不需要知道有几个订阅者、他们叫什么；订阅者彼此独立，加一个、删一个都不必碰发布方。也就是 <code>emit</code> 的那一行，从此可以长期不动。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>同步执行的监听器</h2>
     <ul>
       <li><code>emit</code> 是<strong>同步</strong>的：所有监听器会在 <code>emit</code> 那一行里依次跑完，<code>emit</code> 返回时它们已经执行过了。某个监听器慢，支付流程就跟着慢。</li>
       <li>监听器里抛出的异常会<strong>顺着 <code>emit</code> 的调用栈往上抛</strong>：一个「发邮件」的监听器报错，可能把整段支付流程一起带崩。</li>
@@ -36,7 +36,7 @@ import D04EventEmitter from './D04EventEmitter.vue'
       <li>它是<strong>单进程</strong>的：<code>emit</code> 只在当前进程内广播，多实例部署时，另一个进程里的订阅者什么也收不到。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>事件契约的约定</h2>
     <p>
       先立<strong>契约</strong>。解耦的前提是双方对「消息长什么样」有共同认识：事件名要稳定（比如 <code>order:paid</code>），载荷结构要固定（比如都传一个 <code>order</code>）。没有契约，订阅方就还是在猜，解耦只解了一半。
     </p>
@@ -59,13 +59,13 @@ import D04EventEmitter from './D04EventEmitter.vue'
       <strong>三个最容易踩的点：</strong><code>emit</code> 是同步派发，监听器会在其中同步执行；监听器抛出的异常会沿 <code>emit</code> 栈向上抛，必要时包 <code>try ... catch</code>；<code>'error'</code> 事件没有监听器时会被抛出、乃至终止进程。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>多订阅者的响应</h2>
     <figure class="lesson-figure">
       <figcaption>点「发布订单已支付事件」，看一条业务事件如何一次广播、同时把库存与邮件两个订阅者叫起来。</figcaption>
       <D04EventEmitter />
     </figure>
 
-    <h2>总结</h2>
+    <h2>变更与响应的解耦</h2>
     <p>
       EventEmitter 把「状态变更」与「响应逻辑」拆开：发布方只广播事件名和载荷，订阅方各自 <code>on</code> / <code>once</code>。要真正用好它，还得记牢两件事——<strong>派发是同步的、异常会沿 <code>emit</code> 抛出</strong>，以及<strong>监听器要主动移除</strong>，否则会悄悄泄漏。
     </p>

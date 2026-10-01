@@ -8,7 +8,7 @@ import J16ErrorHandling from './J16ErrorHandling.vue'
       <strong>开场问题：</strong>表单提交失败时界面只弹一句「操作失败」，你怎么分辨这次到底是「姓名太短」还是「服务器 503」？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>失败的多种来源</h2>
     <p>
       真实程序里，失败来自四面八方：<code>JSON.parse()</code> 拿到坏数据会抛错、网络请求会超时、业务规则校验会不通过。你希望它们能被<strong>分别处理</strong>，并且在向上传递时保留「到底哪一步出的错」，好在界面上给出准确的提示。
     </p>
@@ -19,7 +19,7 @@ import J16ErrorHandling from './J16ErrorHandling.vue'
       更麻烦的是，同一个错误往往要在多层函数之间传递：底层知道原因，上层要给用户提示，中间几层只负责转发。如果没有一种能承载上下文的载体，信息会在每一层被压扁成一句笼统的话，等真正要处理时，原始原因早就丢失了。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>返回值携带错误</h2>
     <p>
       最省事的做法：用返回值表达错误——函数失败就 <code>return</code> 一个错误字符串或 <code>false</code>，让调用方自己判断。
     </p>
@@ -30,7 +30,7 @@ import J16ErrorHandling from './J16ErrorHandling.vue'
       但它有个隐含前提：调用方足够自觉。只要有一个人少写一个判断，错误就顺着返回值一路漂过去，最后在别处爆发成更难查的问题——那时你已经看不到它最初是从哪冒出来的了。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>单条消息的分流障碍</h2>
     <ul>
       <li>可被无视：调用方完全可以不检查返回值继续往下跑，错误被悄悄吞掉。</li>
       <li>只有一条消息：拿到的是一句字符串，没法按「类型」分流，只能去解析 <code>message</code> 文本，脆弱又难维护。</li>
@@ -38,7 +38,7 @@ import J16ErrorHandling from './J16ErrorHandling.vue'
       <li>异步更别扭：Promise 与 <code>await</code> 的结果里混着错误，用返回值表达非常难受。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>异常对象的一等化</h2>
     <p>
       不推翻「判断失败」，而是让失败升级为一种<strong>可抛、可捕获、可携带信息的一等对象</strong>。
     </p>
@@ -58,13 +58,13 @@ import J16ErrorHandling from './J16ErrorHandling.vue'
       两个边界要知道：<code>try/catch</code> 捕获不到 <code>setTimeout</code> 这类<strong>异步回调内部</strong>的同步抛出，因为回调在另一个任务里执行，调用栈早已不同；Promise 链连续 <code>then</code> 时用最后的 <code>catch</code> 兜底，未处理的拒绝还要配置全局监听，否则会静默丢失。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>类型分流与上下文</h2>
     <figure class="lesson-figure">
       <figcaption>分别点三个按钮，观察 <code>instanceof</code> 如何分流错误类型，以及 <code>cause</code> 怎样把字段信息带出来。</figcaption>
       <J16ErrorHandling />
     </figure>
 
-    <h2>总结</h2>
+    <h2>错误边界的设计原则</h2>
     <p>
       错误处理的关键，是把失败当成设计对象而非意外：在系统边界统一收口，用类型清晰分流，用 <code>cause</code> 保留底层上下文。这样「失败」才是一条可追踪、可恢复的路径。
     </p>

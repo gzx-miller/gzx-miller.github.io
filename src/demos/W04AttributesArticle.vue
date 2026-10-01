@@ -8,7 +8,7 @@ import W04Attributes from './W04Attributes.vue'
       <strong>开场问题：</strong>你想让形状随时间上下起伏，于是把「时间」当成顶点属性，给每个顶点都存了一份一模一样的时间值。形状确实动了，可它每帧都要把整块顶点缓冲重新上传——明明只是改了一个数，却搬运了上千个顶点的数据，这活儿是不是干反了？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>顶点数据粒度</h2>
     <p>
       在把数据送进着色器时，你手上其实混着好几种性质完全不同的数据：位置、颜色是<strong>每个顶点各不一样</strong>的；时间、变换矩阵、一个开关是<strong>这一次绘制里所有顶点和像素都一样</strong>的；还有顶点算出来的中间量，需要交给像素阶段接着用。如果不先分清它们的性质，就会用错通道、付错代价：
     </p>
@@ -21,7 +21,7 @@ import W04Attributes from './W04Attributes.vue'
       所以问题的核心不是「怎么把值传进去」，而是：<strong>面对一份数据，怎么一眼判断它该走哪条通道？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>统一变量适用</h2>
     <p>
       最省事的做法：全当全局量传，反正 <code>uniform</code> 设一次就处处可用。对时间、角度、颜色这类整个图形共享的数据，这确实是最划算的选择——设一次，所有顶点和像素都拿到同一个值。
     </p>
@@ -29,7 +29,7 @@ import W04Attributes from './W04Attributes.vue'
       这个方案做对了一件事：<strong>它认出了「全局共享」这一种粒度</strong>，并把它的成本压到了最低。当一份数据整次绘制都保持不变时，用 <code>uniform</code> 就是标准答案。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>全局量逐顶点盲区</h2>
     <ul>
       <li>逐顶点的位置或颜色用 <code>uniform</code> 根本表达不了：三个顶点会拿到同一个坐标，三角形退化成一个点，颜色也只剩一块。</li>
       <li>想把逐顶点数据硬塞进一个 <code>uniform</code> 数组，还得在着色器里自己按下标取值，绕了一大圈，远不如属性直观。</li>
@@ -37,7 +37,7 @@ import W04Attributes from './W04Attributes.vue'
       <li>顶点着色器算出的量（例如波浪后的颜色）片段着色器读不到，缺一条跨阶段的通道。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>数据通道分流</h2>
     <p>
       不推翻「全局量用 uniform」，而是按<strong>数据出现的粒度</strong>把输入分成两类，再补上一条连接两个阶段的通道。三者的分工，就是这一课真正要记住的东西。
     </p>
@@ -53,13 +53,13 @@ import W04Attributes from './W04Attributes.vue'
       <strong>两个易错点：</strong><code>uniform</code> 必须在 <code>useProgram</code> <strong>之后</strong>设置才会生效，顺序反了它就不会作用到当前程序上；另外要留意 <code>attribute</code> / <code>varying</code> 是 WebGL1 的旧关键字，WebGL2 的 <code>#version 300 es</code> 已改用 <code>in</code> / <code>out</code>，入门阶段先按 WebGL1 的写法对照更直观。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>两种手法对比</h2>
     <figure class="lesson-figure">
       <figcaption>拖动「Uniform 时间」滑杆或开启自动动画，看同一个 uTime 如何驱动所有顶点一起波动；再勾选/取消「使用 attribute 顶点颜色」，对比「顶点各自带色、插值出的渐变」与「按时间动态计算的全局色」，并对照下方的三张变量卡片与数据流向图。</figcaption>
       <W04Attributes />
     </figure>
 
-    <h2>总结</h2>
+    <h2>输入通道选择依据</h2>
     <p>
       往着色器里送数据，先看它的粒度：每个顶点都不一样，就用 <code>attribute</code>；整次绘制都相同，就用 <code>uniform</code>；要从顶点阶段交到像素阶段、还希望它自动过渡，就用 <code>varying</code>。选对通道，值既传得进去，也不会有多余的重复上传。
     </p>

@@ -8,7 +8,7 @@ import TW06ArbitraryValues from './TW06ArbitraryValues.vue'
       <strong>开场问题：</strong>我给卡片拼了个动态类名 <code>bg-${color}-600</code>，开发时切换颜色好好的，一上线所有卡片全变透明——为什么明明写进模板的类名，样式却没有生成？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>内置档位取值不足</h2>
     <p>
       你在做课程卡：设计稿要求某个区块的圆角和阴影是精确值，既不是内置档位、也不适合当成设计令牌；统计面板还需要根据输入框的 <code>data-state</code> 切换边框颜色。这些都是「内置工具类表达不了、却又确实需要」的约束。
     </p>
@@ -16,7 +16,7 @@ import TW06ArbitraryValues from './TW06ArbitraryValues.vue'
       更棘手的是最后那种：颜色来自一个变量，看起来得在运行时拼出来。你希望既保留工具类的组合能力，又能表达这些一次性的、特殊的 CSS。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>内联样式方案</h2>
     <p>
       最快的办法是用内联样式或临时补一段全局 CSS：<code>style="border-radius: 18px"</code>，或者给这个卡片单独写个类。它当然能显示出来，也确实解决了「这个值不在档位里」的问题。
     </p>
@@ -24,7 +24,7 @@ import TW06ArbitraryValues from './TW06ArbitraryValues.vue'
       它做对的是<strong>承认特殊约束的存在</strong>，而不是硬把精确值塞进最近的档位。但代价很快显现：一旦这些值要跟着状态、断点变化，手写的这一层就脱离了整套工具类体系。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>拼接类名失效</h2>
     <ul>
       <li>内联样式无法叠加变体：要在窄屏换另一个值，就得再补一遍媒体查询。</li>
       <li>数量一多，这些零散的精确值就变成了没人管理的魔法数字，设计一致性无从谈起。</li>
@@ -32,7 +32,7 @@ import TW06ArbitraryValues from './TW06ArbitraryValues.vue'
       <li>因为「反正能内联」，大家会绕过设计尺度，样式系统慢慢被掏空。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>方括号任意值</h2>
     <p>
       Tailwind 用<strong>方括号语法</strong>把一次性值接回工具类体系：<code>w-[327px]</code> 表示任意宽度，<code>rounded-[18px]</code> 表示任意圆角。方括号里的值会原样生成声明，同时它<strong>仍然是一个工具类</strong>，所以可以照常加变体前缀——<code>md:rounded-[18px]</code> 这类组合完全能用。
     </p>
@@ -58,13 +58,13 @@ import TW06ArbitraryValues from './TW06ArbitraryValues.vue'
       <li>在产物里确认方括号类名被原样生成，而不是被静默丢弃。</li>
     </ol>
 
-    <h2>动手试试</h2>
+    <h2>滑杆调节类名变化</h2>
     <figure class="lesson-figure">
       <figcaption>拖动滑杆改变圆角与阴影，看方括号类名里的字符串如何随参数变化。</figcaption>
       <TW06ArbitraryValues />
     </figure>
 
-    <h2>总结</h2>
+    <h2>静态文本硬边界</h2>
     <p>
       任意值把特殊约束接回工具类体系：方括号里可以是值、属性或变体，写法统一、还能叠前缀。但它有一条硬边界——构建器只认源码里完整出现的类名，动态拼接等于没写。值偶尔特殊用方括号，值开始重复，就该升级成令牌。
     </p>

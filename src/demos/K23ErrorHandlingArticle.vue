@@ -8,7 +8,7 @@ import K23ErrorHandling from './K23ErrorHandling.vue'
       <strong>开场问题：</strong>某个子组件因为接口返回的数据格式不对，在渲染时抛了错，结果整个页面直接白屏——能不能让错误只影响那一小块区域，并且还能被统一上报？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>看板抛错场景</h2>
     <p>
       你在做一个数据看板：页面上有图表、有列表、有统计卡片。某天接口抽风，返回了预期之外的结构，其中一个子组件在渲染时抛出了异常。你原本以为「最多就是那一块显示不出来」，结果整页变成空白——一个局部的问题，却让用户什么都看不到。
     </p>
@@ -16,7 +16,7 @@ import K23ErrorHandling from './K23ErrorHandling.vue'
       更麻烦的是，这个错误只在控制台一闪而过，没有任何上报。你要解决的是两个问题：<strong>怎么把错误的影响范围限制在一小块区域内</strong>，以及<strong>怎么给错误一个统一的收集入口</strong>。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>异常捕获尝试</h2>
     <p>
       最自然的反应是用 <code>try / catch</code> 把可疑的代码包起来，接住异常后展示一段降级提示。
     </p>
@@ -27,7 +27,7 @@ import K23ErrorHandling from './K23ErrorHandling.vue'
       更现实的是，就算你每处都补上 <code>try / catch</code>，只要还有一处漏网，整棵组件树的渲染就会被中断。靠人手动去堵每一个窟窿，注定会漏——而且事后根本不知道该从哪查起。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>框架调用盲区</h2>
     <ul>
       <li>模板渲染、生命周期钩子里抛出的错误<strong>不是由你的 <code>try / catch</code> 调用的</strong>，而是由 Vue 框架调用，包不住。</li>
       <li>一处未捕获的错误会让组件树的渲染中断，结果是整页白屏，影响范围被无限放大。</li>
@@ -35,7 +35,7 @@ import K23ErrorHandling from './K23ErrorHandling.vue'
       <li>错误发生后没有恢复手段，用户只能刷新页面重来。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>错误边界声明</h2>
     <p>
       不推翻「接住错误」，而是换一个更懂 Vue 的接法：用 <code>onErrorCaptured</code> 在组件里声明一个错误边界。它会在<strong>当前组件捕获后代组件抛出的错误</strong>，参数里带着错误对象、出错实例和信息类型；在这里把错误写进日志、把降级状态打开，出问题的那一小块就变成「此处暂不可用」，页面其余部分照常运行。
     </p>
@@ -55,13 +55,13 @@ import K23ErrorHandling from './K23ErrorHandling.vue'
       <strong>两个容易踩的坑：</strong>其一，<code>errorCaptured</code> <strong>只能捕获后代组件的错误，捕获不到自身抛出的错误</strong>，边界要包在目标之上；其二，它管的是 Vue 调用流程里的错误，<strong>异步错误（<code>setTimeout</code>、<code>Promise</code>）不会被它接住</strong>，那类错误要用 <code>window.onerror</code> 或 <code>window.addEventListener</code> 来兜。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>局部降级观察</h2>
     <figure class="lesson-figure">
       <figcaption>点按钮让子组件抛错，看错误边界如何只降级那一块区域并写入日志。</figcaption>
       <K23ErrorHandling />
     </figure>
 
-    <h2>总结</h2>
+    <h2>影响范围收窄</h2>
     <p>
       错误处理的关键，是把「一个错误的影响范围」收窄到它该在的地方。<code>onErrorCaptured</code> 负责在局部接住后代错误、给出降级 UI，并用返回值决定是否继续上抛；<code>app.config.errorHandler</code> 负责全局兜底与上报。两者一前一后，页面才不会因为一处异常就整片白掉。
     </p>

@@ -8,7 +8,7 @@ import U06ScrollSwiper from './U06ScrollSwiper.vue'
       <strong>开场问题：</strong>首页顶部有一条横向的「推荐课程」横滑条，手指在它上面左右滑，整页却跟着平移、横条自己不动；换到小程序真机，一处明明写了 <code>scroll-y</code> 的局部列表又纹丝不动——同一个组件，两个端两种表现。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>局部滚动诉求</h2>
     <p>
       你想让页面的某一小块能独立滚动：顶部的横滑商品条、只占半屏的课程列表、每隔几秒翻一张的轮播图。最直觉的做法是让整页滚动，把内容一路堆下去。但这个办法把三份成本悄悄压给了你。
     </p>
@@ -19,7 +19,7 @@ import U06ScrollSwiper from './U06ScrollSwiper.vue'
       所以问题落到一句话上：<strong>为什么要把「滚动」这件事封装成声明式组件，它到底替我们接管了哪些手势与性能细节？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>页面级滚动方案</h2>
     <p>
       最省事的做法：所有内容直接铺在页面里，靠页面自身的滚动。
     </p>
@@ -27,7 +27,7 @@ import U06ScrollSwiper from './U06ScrollSwiper.vue'
       这个方案做对了一件事：<strong>竖直滚动是页面天然就有的能力</strong>，你不用写一行代码，内容超屏了自然能滑。只有一个纵向列表、没有局部滚动需求时，这就够了。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>超宽内容的裁切</h2>
     <ul>
       <li>横滑条的内容超出屏幕宽度后只能换行或被裁掉，页面级滚动给不了它一次独立的横向位移。</li>
       <li>想让「只有列表这一块滚、其余不动」时做不到——整页只能一起动。</li>
@@ -36,7 +36,7 @@ import U06ScrollSwiper from './U06ScrollSwiper.vue'
       <li>局部列表想要自己的下拉刷新也做不到，页面级刷新会牵动整页。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>滚动容器的封装</h2>
     <p>
       第一层，先解决「局部能滚」。<code>scroll-view</code> 就是 uni-app 封装的滚动容器，它替代了原生 <code>overflow</code>，手势由框架接管，你不用再自己算位移。但有一条必须记住：<strong>滚动方向要显式打开</strong>，竖滑写 <code>scroll-y</code>，横滑写 <code>scroll-x</code>；并且竖滑时容器得有一个确定的高度，否则在小程序里内容会把容器撑开，看起来就像「没滚动」。
     </p>
@@ -61,13 +61,13 @@ import U06ScrollSwiper from './U06ScrollSwiper.vue'
       <strong>两个常见误区：</strong>页面级滚动与 <code>scroll-view</code> 局部滚动不要无意义地层层嵌套，两层会抢手势，出现「滚一半卡住」；另外 <code>scroll-view</code> 不设高度时，小程序端内容会撑开容器而不滚动，这不是 bug，是它按内容高度布局的默认行为。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>轮播与触底加载</h2>
     <figure class="lesson-figure">
       <figcaption>点左右箭头切换轮播、或用「暂停自动播放」停下它，再点「触底加载更多」看底部那块局部滚动列表追加内容。</figcaption>
       <U06ScrollSwiper />
     </figure>
 
-    <h2>总结</h2>
+    <h2>声明式滚动要点</h2>
     <p>
       <code>scroll-view</code> 与 <code>swiper</code> 把「滚动」这项原生能力封装成了声明式组件：方向要显式声明、容器要有确定尺寸、位置可以编程控制、当前下标能双向绑定。而列表到底「滑不滑得动」，取决于你渲染了多少节点。
     </p>

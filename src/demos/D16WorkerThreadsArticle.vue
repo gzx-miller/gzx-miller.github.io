@@ -8,7 +8,7 @@ import D16WorkerThreads from './D16WorkerThreads.vue'
       <strong>开场问题：</strong>你给接口加了一个「导出全量报表」功能，跑一次要八秒。上线后第一个用户点了导出，整个服务的健康检查开始超时，负载均衡把实例标记成不健康——一个只用一次的功能，把所有人都拖住了。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>计算独占主线程</h2>
     <p>
       报表导出本身不是慢查询，它是<strong>纯计算</strong>：几百万条记录在内存里做聚合、排序、格式化。可你忘了 Node.js 的一个前提——<strong>一个 Node 进程只有一个主线程，也只有一个事件循环</strong>。事件循环既要跑你的同步代码，也要处理网络 I/O、定时器、各种回调。
     </p>
@@ -24,7 +24,7 @@ import D16WorkerThreads from './D16WorkerThreads.vue'
       三条路都不想走，问题就剩一句：<strong>能不能让一段计算离开主线程，但结果还能拿回来？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>工作线程的引入</h2>
     <p>
       能。<code>worker_threads</code> 让你把一段代码放进独立线程里跑。把计算逻辑单独写进一个 worker 文件，主线程用 <code>new Worker('./worker.js')</code> 把它拉起来，两边用消息说话。
     </p>
@@ -35,7 +35,7 @@ import D16WorkerThreads from './D16WorkerThreads.vue'
       <strong>为什么是线程不是进程：</strong>同一个进程内的线程共享进程地址空间，创建与切换都比进程轻；代价是它们<strong>仍然不能共享普通变量</strong>，见下一段。
     </div>
 
-    <h2>发现不足</h2>
+    <h2>新建线程的代价</h2>
     <ul>
       <li>每次都 <code>new Worker()</code> 太贵：起一个线程要重新初始化一整套 JS 运行环境。如果任务是「高频、单次不大」，光创建开销就可能超过计算本身。</li>
       <li>想在 worker 里改主线程的一个计数器，做不到。worker 有<strong>自己独立的内存</strong>，你在里面 <code>count++</code>，主线程那个 <code>count</code> 纹丝不动。</li>
@@ -44,7 +44,7 @@ import D16WorkerThreads from './D16WorkerThreads.vue'
       <li>消息里只要带了函数、类实例的方法或 DOM 节点，直接抛 <code>DataCloneError</code>，克隆算法只认「可复制的数据」。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>线程池与零拷贝</h2>
     <p>
       先补<strong>复用</strong>。既然创建线程贵，那就别每次新建——维护一个固定数量的 worker 池，任务来了排队、派给空闲的线程，用完不销毁。<code>Piscina</code> 这类库就是替你把这层池化做掉。之所以先补它，是因为真实业务里的 CPU 计算往往「高频、单次不大」，创建开销才是最吃时间的那一块。
     </p>
@@ -65,13 +65,13 @@ import D16WorkerThreads from './D16WorkerThreads.vue'
       <strong>诊断顺序别搞反：</strong>动手之前先用性能分析确认瓶颈<strong>真的是 CPU 密集</strong>。如果慢在等数据库、等下游接口，那是 I/O 问题，加 worker 不但没用，还会因为线程变多让内存和调度更糟。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>阻塞与否的对比</h2>
     <figure class="lesson-figure">
       <figcaption>左右两个按钮算的是同一段素数；先点「主线程阻塞」，感受计算期间主线程被占住、页面短暂失去响应，再点「Worker 线程」对比同一次计算的响应表现。</figcaption>
       <D16WorkerThreads />
     </figure>
 
-    <h2>总结</h2>
+    <h2>重计算的适用场景</h2>
     <p>
       Worker 线程解决的是「单线程事件循环被一段同步计算独占」的问题：把计算搬进独立线程，用消息把结果拿回来，主线程始终留得住响应能力。代价是线程之间不共享普通内存，数据要么复制、要么转移所有权、要么共享 <code>SharedArrayBuffer</code>——这条边界决定了它只值得用在 CPU 密集场景。
     </p>

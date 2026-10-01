@@ -8,7 +8,7 @@ import WB15SharedMemoryAtomics from './WB15SharedMemoryAtomics.vue'
       <strong>开场问题：</strong>两个顾客各自拼命点「赞」，后台明明执行了 200 次自增，最终点赞数却停在 187——少的那些赞去哪儿了？多线程环境下，同一个计数器怎么就越加越少？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>读改写三步</h2>
     <p>
       你让多个 Worker 共享同一个计数器。问题的根子在「加一」这件事本身不是一步：普通写法是 <code>load</code> 读当前值、加一、再 <code>store</code> 写回，三步之间随时可能被另一个线程插进来。两个线程都读到 5，各自算成 6，又各自写回 6——一次点赞就这么丢了。读得越频繁、线程越多，丢得越狠，最终结果总是小于预期。
     </p>
@@ -16,7 +16,7 @@ import WB15SharedMemoryAtomics from './WB15SharedMemoryAtomics.vue'
       旧办法也都不趁手：靠加锁——可 JS 里没有原生的共享锁，自己用标志位拼一个同样会踩到同一类竞态；退成单线程——那等于直接放弃并行的意义。问题于是收敛成一句：<strong>怎么让多个线程安全地对同一块内存里的同一个位置做「读-改-写」，而不互相覆盖？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>共享内存与原子</h2>
     <p>
       有两件东西要一起用。第一件是<strong>共享内存</strong>：模块把内存声明成 <code>(memory (export "memory") 1 1 shared)</code>，它的 <code>buffer</code> 就是一个 <code>SharedArrayBuffer</code>，多个 Worker 看到的是同一块内存。第二件是<strong>原子指令</strong>：累加时不再用普通 load/store，改用原子的「读-改-写」。
     </p>
@@ -24,7 +24,7 @@ import WB15SharedMemoryAtomics from './WB15SharedMemoryAtomics.vue'
       这个方案做对了一件事：<strong>它让「读-改-写」在一条指令里一气呵成，中途不允许别的线程插进来</strong>。别的线程要么看到加之前的值，要么看到加之后的值，绝不会看到「加到一半」的中间状态。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>原子性适用范围</h2>
     <ul>
       <li>普通 load/store <strong>依旧会丢更新</strong>——原子性只属于原子指令，共享内存本身不会自动帮你加锁。</li>
       <li>光在模块里写 <code>shared</code> 还不够：页面必须启用<strong>跨源隔离</strong>（COOP/COEP 响应头），否则 <code>SharedArrayBuffer</code> 根本创建不出来，<code>crossOriginIsolated</code> 是 <code>false</code>。</li>
@@ -33,7 +33,7 @@ import WB15SharedMemoryAtomics from './WB15SharedMemoryAtomics.vue'
       <li>原子指令比普通读写慢，别把它当默认选项到处用。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>不可中断的累加</h2>
     <p>
       先补<strong>原子读-改-写</strong>。核心是 <code>i32.atomic.rmw.add</code>——即演示里的 <code>atomicAdd</code>：它原子地把某个地址上的 <code>i32</code> 加一。整条操作不可分割，正是它把「读、加、写」三步合成了一步，丢更新随之消失。
     </p>
@@ -50,13 +50,13 @@ import WB15SharedMemoryAtomics from './WB15SharedMemoryAtomics.vue'
       <strong>两个高频误区：</strong>其一，以为「用了共享内存就并发安全」——不是，共享内存只负责「同一块」，安全靠的是你每一步都走原子指令；其二，以为 <code>atomicAdd</code> 返回的是自增后的值——它返回<strong>旧值</strong>，要读当前计数请用 <code>atomic.load</code> 或类型化数组视图。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>连点百次计数</h2>
     <figure class="lesson-figure">
       <figcaption>点「连点 100 次」，看点赞数精确地增加 100（而不是少几个）；再看下面两个标记，确认 <code>memory.buffer</code> 确实是 <code>SharedArrayBuffer</code>、页面处于跨源隔离状态。</figcaption>
       <WB15SharedMemoryAtomics />
     </figure>
 
-    <h2>总结</h2>
+    <h2>可见性与原子性</h2>
     <p>
       多线程共享计数器会丢更新，是因为「读-改-写」三步可能被打断。共享内存（<code>SharedArrayBuffer</code>）只解决「同一块内存」，真正的安全来自原子指令：<code>i32.atomic.rmw.add</code> 把读改写合成一气呵成的操作。前提是模块声明 <code>shared</code> 且 <code>min = max</code>、页面启用 COOP/COEP 跨源隔离；并且要记住它返回的是旧值。
     </p>

@@ -8,7 +8,7 @@ import R09RefDom from './R09RefDom.vue'
       <strong>开场问题：</strong>点「聚焦输入框」，光标立刻跳进搜索框、开始闪烁——可界面数据一个字都没变，组件也压根没重新渲染。再点几次「检索」，组件内部有个计数在悄悄往上走，界面同样纹丝不动；直到你把计数拼进反馈文案、用 <code>setResult</code> 更新，屏幕才跟着变一次。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>状态无法承载的对象</h2>
     <p>
       有两类东西，State 装不下。第一类是 <strong>DOM 节点本身</strong>：<code>focus</code>、<code>scrollIntoView</code> 这些都是命令式方法，React 的声明式写法里没有对应的 prop。第二类是「<strong>跨渲染要保留、但变化不该驱动界面</strong>」的可变值——会话计数、定时器 id、上一次的某个值。
     </p>
@@ -16,7 +16,7 @@ import R09RefDom from './R09RefDom.vue'
       旧办法的隐藏成本：用 <code>useState</code> 存 DOM 节点，会白白触发重渲染，还带来「第一次渲染时节点根本还不存在」的时序难题；用模块级变量代替组件内状态，组件多实例时会互相串台；在渲染函数体里直接读写这些值，渲染就不再纯粹，StrictMode 下会被放大。所以要回答的是：<strong>能不能拿到一个跨渲染稳定、可以随便改、但改动完全不惊动 React 的盒子？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>引用存入状态的尝试</h2>
     <p>
       最朴素的尝试：干脆用 <code>useState</code> 来存这些东西。
     </p>
@@ -24,7 +24,7 @@ import R09RefDom from './R09RefDom.vue'
       这个方案做对了一件事：<strong>值确实跨渲染保留了下来</strong>，你下次渲染还能读到它——「跨渲染」这一半的需求被满足了。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>首次渲染的空引用</h2>
     <ul>
       <li>用 state 存 DOM 引用：节点是在提交之后才由 React 写进去的，第一次渲染时它还是 <code>null</code>，想「挂载即聚焦」就不得不再加一个 Effect 绕一圈。</li>
       <li>每改一次计数就触发一次重渲染：<code>submitCountRef</code> 只是内部记录，却让整个组件白渲染一遍，还可能连累子组件。</li>
@@ -32,7 +32,7 @@ import R09RefDom from './R09RefDom.vue'
       <li>在渲染函数体里直接写 <code>ref.current = ...</code>：渲染必须是纯的，StrictMode 会把渲染跑两遍，这次写入被放大成两次。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>非响应式的引用容器</h2>
     <p>
       用 <code>useRef</code> 提供那个「不参与 React 反应式体系」的盒子。它和 state 最大的不同是：改它的 <code>current</code> 不会惊动 React，因此只适合装不上墙的东西。
     </p>
@@ -48,13 +48,13 @@ import R09RefDom from './R09RefDom.vue'
       <strong>两个反向的常见错误：</strong>把「需要显示的值」放进 ref，改了界面纹丝不动，你会以为渲染坏了；把「只用于逻辑判断的值」塞进 state，则凭空多出重渲染。前者该用 <code>useState</code>，后者才该用 <code>useRef</code>。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>静默写入与状态更新</h2>
     <figure class="lesson-figure">
       <figcaption>点「聚焦输入框」，光标跳进搜索框却不触发重渲染；连点「检索」，内部计数在涨、反馈文案由 State 更新——Ref 静默，State 会喊人，一次看全。</figcaption>
       <R09RefDom />
     </figure>
 
-    <h2>总结</h2>
+    <h2>无需显示的稳定容器</h2>
     <p>
       <code>useRef</code> 给你一个跨渲染稳定、可随意改写、但完全静默的盒子，用来装 DOM 节点、定时器 id、上次的值这类「不需要上墙」的东西。要不要显示、要不要随变化更新，就是 State 和 Ref 之间那条分界线。
     </p>

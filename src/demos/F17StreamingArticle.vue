@@ -8,7 +8,7 @@ import F17Streaming from './F17Streaming.vue'
       <strong>开场问题：</strong>你用 <code>-i input.mp4 -f flv rtmp://...</code> 推流，服务器日志显示连接建立成功，可三秒钟后推流就结束了；观众端只看到画面一闪而过，像是播了个开头就没了。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>实时推流诉求</h2>
     <p>
       你想做的其实是「直播」：一边产生画面一边送出去，而不是先转好一个文件再让人下载。旧办法在这个场景下全都不顺手——把文件传到服务器再让观众下载，根本没有实时性可言；自己写程序到网络层去分包，得先吃透整套流媒体协议；而只把文件转成另一种格式，也解决不了「持续、按时」这件事。
     </p>
@@ -16,7 +16,7 @@ import F17Streaming from './F17Streaming.vue'
       这些麻烦背后是三笔必须由你承担的成本：<strong>文件是按磁盘速度读的，不是按播放速度读的</strong>，直接推会被瞬间灌完；网络需要一条<strong>均匀</strong>的码流，忽快忽慢会让观众端反复缓冲；播放端还希望<strong>边下边播、按带宽切换码率</strong>，单一路码流满足不了。所以要回答的是：<strong>怎么让 FFmpeg 持续、稳定地把码流送到远端，并让播放端能跟得上？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>最短推流命令</h2>
     <p>
       最短的一条推流命令只比转码多两个开关：<code>ffmpeg -re -i input.mp4 -c copy -f flv rtmp://server/live/stream</code>。
     </p>
@@ -24,7 +24,7 @@ import F17Streaming from './F17Streaming.vue'
       它做对了两件关键的事。<code>-re</code> 让 FFmpeg <strong>按原始帧率读取输入</strong>，把「磁盘速度」压成「播放速度」，于是 1 分钟的片子就用 1 分钟推完，而不是几秒；<code>-f flv</code> 把输出指定成 RTMP 需要的 FLV 封装。<code>-c copy</code> 不重新编码，CPU 几乎不动，是最省的一版。前提是源编码必须是这套协议认的——H.264 视频配 AAC 音频。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>五处参数遗漏</h2>
     <ul>
       <li>忘了 <code>-re</code>：文件瞬间被读完、瞬间推完，直播变成「点播闪现」，服务器端连接只活了几秒。</li>
       <li><code>-c copy</code> 推流要求视频是 H.264、音频是 AAC；源若是 HEVC 或 Opus，直接推会被服务器拒掉，你却在本地看不到任何画面问题。</li>
@@ -33,7 +33,7 @@ import F17Streaming from './F17Streaming.vue'
       <li>直播完想留一份回看，还得另想办法切片存档。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>输入端与输出端</h2>
     <p>
       不推翻这条命令，而是先把「实时」拆成输入端与输出端两件事：<strong>输入端节流，输出端匹配协议</strong>，然后一层层补齐。
     </p>
@@ -59,13 +59,13 @@ import F17Streaming from './F17Streaming.vue'
       <strong>一个安全习惯：</strong>推流地址里的流密钥不要直接写死在命令、脚本或仓库里，生产环境用环境变量注入，并限制访问来源，避免密钥泄露被人盗推。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>推流协议切换</h2>
     <figure class="lesson-figure">
       <figcaption>切换「RTMP 推流 / HLS 切片 / DASH 切片」三个页签看对应命令，再对照下方的参数说明表，弄清 <code>-re</code>、<code>-hls_time</code>、<code>-hls_list_size</code> 各自管什么。</figcaption>
       <F17Streaming />
     </figure>
 
-    <h2>总结</h2>
+    <h2>直播推流三步</h2>
     <p>
       流媒体这件事只有三步：输入端用 <code>-re</code> 把速度压成实时，输出端用 <code>-f flv</code>、<code>-f hls</code> 匹配协议，切片时让关键帧间隔与目标片长对齐。记住最后一条，你就不会再遇到「<code>-hls_time</code> 写了 2 秒，切片却都是 8 秒」这种怪事。
     </p>

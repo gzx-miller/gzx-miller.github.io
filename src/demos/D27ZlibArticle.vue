@@ -8,7 +8,7 @@ import D27Zlib from './D27Zlib.vue'
       <strong>开场问题：</strong>一个返回 500KB JSON 的接口，开了 gzip 之后响应体掉到约 55KB、加载肉眼变快；可你把同一套压缩逻辑套到一张已经压好的 PNG 上，体积不但没降，反而涨了几十个字节——同样叫「压缩」，为什么差别这么大？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>压缩带来的体积收益</h2>
     <p>
       你要的就一件事：让要传输、要存储的数据变小。网络带宽、磁盘容量、加载时间都和体积成正比，能压掉一半就是实打实的收益。
     </p>
@@ -19,7 +19,7 @@ import D27Zlib from './D27Zlib.vue'
       问题落到一句话：怎样用同一套机制，对<strong>该压的</strong>内容压得动、对<strong>不该压的</strong>内容不去白费力气，而且不给内存添负担？
     </p>
 
-    <h2>最小方案</h2>
+    <h2>一次性整块压缩</h2>
     <p>
       用 <code>node:zlib</code> 的一次性 API：<code>zlib.gzipSync(buffer)</code> 把整块数据压成一段 gzip 字节，<code>zlib.gunzipSync()</code> 再还原回来。
     </p>
@@ -27,7 +27,7 @@ import D27Zlib from './D27Zlib.vue'
       这个方案做对了一件根本的事：<strong>压缩和解压是无损、可逆的</strong>。压出来的字节可以一字不差地还原成原文，接收方拿到它解一下就得到原始数据——这是压缩能被透明地用在传输和存储里的前提。也正因为无损，「压缩率」衡量的是同一份内容被压掉多少，而不是丢了什么。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>整块压缩的内存压力</h2>
     <ul>
       <li><code>gzipSync()</code> 要求<strong>整块数据先摆进内存</strong>：压一个 2GB 的文件，进程内存得先涨到 2GB 以上，很容易被系统杀掉。</li>
       <li>一次性 API 也意味着<strong>首字节给得晚</strong>：非要等整份数据压完才往外写，流式响应就退化成「全压完再发」。</li>
@@ -35,7 +35,7 @@ import D27Zlib from './D27Zlib.vue'
       <li>算法不挑：Brotli 压缩率最高，但 CPU 开销也最大；对一段几百字节的小响应，省下的带宽常常抵不上多花的时间。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>流式压缩实现</h2>
     <p>
       先把「整块压」换成<strong>流式压</strong>，因为内存才是大文件场景的硬约束。<code>zlib.createGzip()</code> 本身就是一个转换流：它吃进原始字节、吐出压缩字节。用 <code>pipeline</code> 把「读文件 → gzip → 写文件」串起来，任一时刻在内存里的只有有限几块数据，占用与文件大小解耦。这正好复用了流那一课的工具——压缩只是链路上的一个 <code>Transform</code> 环节。
     </p>
@@ -57,13 +57,13 @@ import D27Zlib from './D27Zlib.vue'
       <strong>别踩的坑：</strong>图片、视频、压缩包这类<strong>已经压过</strong>的内容不要再压，白费 CPU 还可能变大；大文件或大响应一律走 <code>createGzip</code> 流式处理，别用 <code>gzipSync</code> 整块读；压缩级别高不等于好，省下的带宽要能和多花的 CPU 对得上账。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>不同算法的压缩率</h2>
     <figure class="lesson-figure">
       <figcaption>切换压缩算法（Gzip / Deflate / Brotli）并修改要压缩的文本，看「原始大小 → 压缩后大小 → 节省比例」如何随算法变化——同一份输入，压缩率与 CPU 成本的权衡在这里一目了然。</figcaption>
       <D27Zlib />
     </figure>
 
-    <h2>总结</h2>
+    <h2>冗余决定压缩收益</h2>
     <p>
       压缩换来的体积收益来自「内容里的冗余」，所以<strong>能不能压、能压多少，取决于数据本身</strong>：文本冗余大、压得动，已压缩的二进制几乎没得压。用流式处理把内存和文件大小解耦，按兼容性与 CPU 成本选算法和级别，HTTP 传输则靠 <code>Content-Encoding</code> 协商——这笔账才算算清。
     </p>

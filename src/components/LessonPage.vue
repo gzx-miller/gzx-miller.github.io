@@ -171,7 +171,6 @@ useSeoMeta({
     </header>
 
     <section v-if="currentLesson.demo" class="lesson-section">
-      <h2>内容演示</h2>
       <ClientOnly>
         <component :is="currentLesson.demo" />
         <template #fallback>

@@ -8,7 +8,7 @@ import K04ComputedWatch from './K04ComputedWatch.vue'
       <strong>开场问题：</strong>「合计金额」这种数据，到底是该单独存一个变量、每次手动同步，还是根本不存、随用随算？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>合计数量的存储取舍</h2>
     <p>
       做一个购物车：填入单价和数量，页面实时显示合计金额。此外还有两个附带要求——每次金额变化要记一条日志，数量达到批量优惠门槛时要给出提示。
     </p>
@@ -16,7 +16,7 @@ import K04ComputedWatch from './K04ComputedWatch.vue'
       合计金额是在 <code>单价 × 数量</code> 这个关系下产生的新值。问题来了：它该被当成一个<strong>要维护的状态</strong>，还是当成一个<strong>要计算的结论</strong>？这个判断会直接影响后面代码里有多少 bug 在等着你。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>声明加监听的重算</h2>
     <p>
       最直觉的做法：声明一个 <code>total</code> 变量，然后「监听」两个输入，一旦它们变化，就重新算一遍并赋值给 <code>total</code>。
     </p>
@@ -24,7 +24,7 @@ import K04ComputedWatch from './K04ComputedWatch.vue'
       这个方案做对了两件事：<strong>它承认「金额会变」</strong>，也<strong>承认「变化需要有人响应」</strong>。在只有一个输入源、一条计算规则、一处响应逻辑的场景里，这种做法完全够用，而且行为一目了然。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>双来源的同步矛盾</h2>
     <ul>
       <li>同一份事实出现了两个来源：单价数量和合计金额。它们随时可能因为漏写一次同步而互相矛盾。</li>
       <li>派生关系被写进了命令式代码里，看代码的人很难一眼看出「合计就是单价乘数量」。</li>
@@ -32,7 +32,7 @@ import K04ComputedWatch from './K04ComputedWatch.vue'
       <li>多个地方都要读这个值，但没人能保证它被更新的时机，读到旧值的概率随代码量上升。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>计算结果不入状态</h2>
     <p>
       关键的分岔点在于：<strong>能算出来的，就不要存</strong>。把合计从「状态」降级成「派生值」，交给 <code>computed</code> 描述。它接收一段表达式，返回一个结果，依赖变化时自动重算；更妙的是它<strong>带缓存</strong>——只要依赖没变，重复读取不会重新执行，适合高频访问的派生数据。派生关系被写回了「数据本身」，不再是一串需要人记住的同步动作。
     </p>
@@ -84,13 +84,13 @@ import K04ComputedWatch from './K04ComputedWatch.vue'
       <li>对比 <code>computed</code> 与 <code>watch</code> 的触发日志，验证前者只在依赖变化时重算。</li>
     </ol>
 
-    <h2>动手试试</h2>
+    <h2>即时重算与日志触发</h2>
     <figure class="lesson-figure">
       <figcaption>调整单价与数量，看合计即时变化，同时观察下方日志被哪些变化触发。</figcaption>
       <K04ComputedWatch />
     </figure>
 
-    <h2>总结</h2>
+    <h2>派生与副作用的划分</h2>
     <p>
       计算与监听的区别，本质是「派生」与「副作用」的区别：能由状态推出来的结果用 <code>computed</code>，让它随依赖自动重算并享受缓存；需要对变化做出反应的事用 <code>watch</code>，监听明确来源、执行明确的副作用。把两者用反，就会出现两份数据打架或者一堆看不懂的隐式依赖。
     </p>

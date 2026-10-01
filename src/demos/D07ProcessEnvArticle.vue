@@ -8,7 +8,7 @@ import D07ProcessEnv from './D07ProcessEnv.vue'
       <strong>开场问题：</strong>你的服务用 <code>process.env.PORT</code> 取端口，本地一直好好的；某次生产部署漏配了这个变量，服务却在错误的端口上「正常」起来了，直到第一笔请求打进来才出问题——为什么配置缺失不会在启动时立刻报错？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>多环境配置分散</h2>
     <p>
       同一份代码要跑在本地、测试、生产好几套环境里，每套的端口、数据库地址、密钥都不一样。最直接的做法是用环境变量：需要什么，就当场 <code>process.env.XXX</code> 取什么。
     </p>
@@ -19,7 +19,7 @@ import D07ProcessEnv from './D07ProcessEnv.vue'
       问题落到一句话：怎样让「配置」在程序真正开始干活之前，就被完整、正确地确定下来？
     </p>
 
-    <h2>最小方案</h2>
+    <h2>启动期读取变量</h2>
     <p>
       在启动脚本里把需要的变量一次读出来，逐个给兜底：<code>const port = process.env.PORT || 3000</code>，再把它当作参数传给需要用它的地方。
     </p>
@@ -27,7 +27,7 @@ import D07ProcessEnv from './D07ProcessEnv.vue'
       这个方案做对了一件事：<strong>配置有了一个明确的来源</strong>，业务逻辑里不再满天飞地读环境变量。但 <code>|| 3000</code> 这个兜底，会顺手把「忘记配置」这件事故意藏起来。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>兜底掩盖缺配置</h2>
     <ul>
       <li>漏配时用 <code>||</code> 兜底：服务不报错，却跑在错误端口、连错数据库，问题被推迟到运行时才爆。</li>
       <li><code>NODE_ENV</code> 没设置时是 <code>undefined</code>，它<strong>不等于</strong> <code>'production'</code>，于是代码悄悄走了「非生产」那条分支。</li>
@@ -36,7 +36,7 @@ import D07ProcessEnv from './D07ProcessEnv.vue'
       <li>业务代码到处读 <code>process.env</code>，测试时想替换成假值也无从下手。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>配置模块收口</h2>
     <p>
       先做<strong>配置收口</strong>：建一个配置模块，在启动阶段一次性读取所有需要的变量。为什么先做它——「字符串、分散、可能缺失」这三个乱源，只有收进一个地方，才能一次解决。
     </p>
@@ -65,13 +65,13 @@ import D07ProcessEnv from './D07ProcessEnv.vue'
       再补<strong>兜底超时</strong>：优雅退出本身也要有上限。K8s 默认给 30 秒（terminationGracePeriodSeconds），超过这个窗口还在清理的进程会被强杀，所以业务侧要自己设一个更早的兜底超时，到点强制退出，避免进程无限挂起。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>环境切换解析差异</h2>
     <figure class="lesson-figure">
       <figcaption>切换 <code>NODE_ENV</code>，看同一份配置代码在 development 与 production 下解析出不同的端口与日志级别——这就是「配置集中在启动时读取并校验」的效果。</figcaption>
       <D07ProcessEnv />
     </figure>
 
-    <h2>总结</h2>
+    <h2>时机把控的要点</h2>
     <p>
       配置与退出，共同点是「<strong>时机</strong>」：配置要在启动阶段一次性读全、校验、定型，缺项就拒绝启动；退出要在收到信号后先停止接流量、再等存量完成、最后释放资源。把这两头的时机守住，服务在部署滚动时才不会「悄悄跑错」或「丢请求」。
     </p>

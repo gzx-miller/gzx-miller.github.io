@@ -8,7 +8,7 @@ import CPP17StlAssociativeContainers from './CPP17StlAssociativeContainers.vue'
       <strong>开场问题：</strong>你只想查一下字典里有没有 <code>David</code> 的年龄，顺手写了一句 <code>ages["David"]</code>。程序没报错，可当你把整张表打印出来时，凭空多了一行 <code>David: 0</code>——你只是「读」了一下，它怎么就悄悄「写」进去一条了？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>按键定位数据</h2>
     <p>
       你要的不是「第 5 个元素」，而是「叫 Alice 的那个人今年几岁」——也就是按一个<strong>关键字</strong>去定位数据，还得能快速判断某个键在不在。最笨的老办法是拿两个平行数组，一个存名字、一个存年龄，按下标对齐。它能跑，但成本都落在你身上：
     </p>
@@ -22,7 +22,7 @@ import CPP17StlAssociativeContainers from './CPP17StlAssociativeContainers.vue'
       所以要问的是：<strong>能不能有一个容器，直接按「键」来存和取，让「查、插、删」都不必逐个扫描？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>键值对映射</h2>
     <p>
       最省事的答案是 <code>std::map&lt;std::string, int&gt;</code>：你存的是键值对，用 <code>ages["Alice"] = 25</code> 直接写、用 <code>ages["Alice"]</code> 直接读，容器内部替你维护「键唯一」这件事。
     </p>
@@ -30,7 +30,7 @@ import CPP17StlAssociativeContainers from './CPP17StlAssociativeContainers.vue'
       这个方案做对了一件关键的事：<strong>查找、插入、删除都是 <code>O(log n)</code></strong>，而且它把键按大小排好序，遍历时天然是升序。它底层是一棵<strong>自平衡的红黑树</strong>，这棵树既保证了查找快，也保证了「随时能按顺序取出所有键」。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>下标读取副作用</h2>
     <ul>
       <li><code>operator[]</code> 在键不存在时会<strong>插入一个值初始化的元素</strong>（<code>int</code> 是 0、<code>std::string</code> 是空串），于是「只是想读一下」变成了「偷偷加了一条」。</li>
       <li>每次操作都要走一遍树高，<code>O(log n)</code> 虽然不慢，但在海量数据、纯查找为主的场景里仍不是最快。</li>
@@ -38,7 +38,7 @@ import CPP17StlAssociativeContainers from './CPP17StlAssociativeContainers.vue'
       <li>自定义的类当键时直接编译不过：容器不知道拿什么标准去比大小。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>读取入口的修正</h2>
     <p>
       先补最贴近日常、也最容易踩的一步：<strong>「读」不要用 <code>operator[]</code></strong>。想读一个键，用 <code>at()</code>——键不存在时它抛 <code>std::out_of_range</code>，而不是悄悄插入；或者用 <code>find()</code>——它返回迭代器，没找到就是 <code>end()</code>，你显式判断一下再用 <code>it-&gt;second</code> 取值。把「读」和「写」在语法上分开，那个凭空出现的 <code>David: 0</code> 就再也不会发生了。
     </p>
@@ -65,13 +65,13 @@ import CPP17StlAssociativeContainers from './CPP17StlAssociativeContainers.vue'
       补完自定义键，还有一个绕不开的现实：<strong>容器里的键是 <code>const</code> 的，不能就地改</strong>（改了它会破坏树序或哈希，容器再也找不到它）。C++17 为此引入了 <strong>node handles</strong>：用 <code>extract(key)</code> 把节点从容器里摘下来，此时你可以改它的键，再 <code>insert</code> 回去。摘下来的节点还能在不重新分配内存的前提下，直接搬到另一个兼容的关联容器里，避免了一次次拷贝元素。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>查找与遍历次序</h2>
     <figure class="lesson-figure">
       <figcaption>对着代码和要点表看：同一个「按键取值」的动作，<code>operator[]</code> 会在键缺失时插入默认值，<code>find()</code> 只返回一个迭代器而不改数据；再看 <code>map</code> 遍历为什么是升序，而 <code>unordered_map</code> 的顺序不可依赖。</figcaption>
       <CPP17StlAssociativeContainers />
     </figure>
 
-    <h2>总结</h2>
+    <h2>有序性的取舍</h2>
     <p>
       关联容器让你按「键」而不是按「位置」存取。<code>map</code>/<code>set</code> 用红黑树换来<strong>有序 + <code>O(log n)</code></strong>，<code>unordered_map</code>/<code>unordered_set</code> 用哈希表换来<strong>平均 <code>O(1)</code>、但顺序不定</strong>。要不要有序遍历、要不要范围查询，是这两条路的分界。至于日常代码，只要记住一件事：用 <code>operator[]</code> 之前先问自己，我到底是在读，还是在写。
     </p>

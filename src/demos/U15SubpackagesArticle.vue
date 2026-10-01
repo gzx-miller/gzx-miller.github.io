@@ -8,7 +8,7 @@ import U15Subpackages from './U15Subpackages.vue'
       <strong>开场问题：</strong>你的小程序在开发者工具里点一下秒开，提交审核后在真机上首次打开，却要盯着白屏等三四秒。你把首页的图片压小、无用的代码删掉，启动时间几乎没动——真正拖慢它的，是被打进主包、首页一次都没用到的十几个二级页面。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>主包体积与白屏</h2>
     <p>
       小程序的启动是<strong>整包先下载、再执行，然后才渲染首页</strong>。所以主包越大，白屏越久；而且各平台对主包体积有硬上限（微信小程序主包上限 <span class="lesson-kv">2MB</span>），超了直接无法上传。页面一多，主包就不可避免地膨胀。
     </p>
@@ -19,7 +19,7 @@ import U15Subpackages from './U15Subpackages.vue'
       问题于是很清楚：<strong>能不能把「启动就必须加载」的页面和「用到才加载」的页面分开打包，让首屏只背它该背的那部分？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>独立目录声明</h2>
     <p>
       最朴素的做法：把不常用的页面挪进一个独立目录，在 <code>pages.json</code> 里用 <code>subPackages</code> 声明它。形如 <code>"subPackages": [ { "root": "pages-mine", "pages": [ { "path": "mine" } ] } ]</code>。
     </p>
@@ -27,7 +27,7 @@ import U15Subpackages from './U15Subpackages.vue'
       这个方案做对了一件事：<strong>它把「启动必须加载」和「用到才加载」在打包层面拆开了</strong>。这个目录会被单独打成一个分包，不再塞进主包，主包因此变小、启动下载更快。就凭这一点，「我的」「订单」这类低频页面就该被下沉。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>绝对路径误区</h2>
     <ul>
       <li>分包页面的路径写错就跳不过去：声明里 <code>path</code> 只写相对 <code>root</code> 的片段，写成绝对路径 <code>/pages-mine/mine</code> 或漏了前缀，都会报「页面不存在」。</li>
       <li>同一个页面同时写进主包 <code>pages</code> 和分包 <code>subPackages</code>，构建报错或行为异常——两处不能重复声明。</li>
@@ -36,7 +36,7 @@ import U15Subpackages from './U15Subpackages.vue'
       <li>把所有低频页塞进同一个分包，首次进入该分包时一次性下载几十个页面，卡顿只是换了个地方发生。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>预下载规则引入</h2>
     <p>
       不推翻「拆包」，而是先把「谁是主包」这件事划清楚。第一层，主包只保留<strong>启动路径上的页面</strong>：首页，以及从首页一步就能到的高频页。判断标准是「首屏会不会用到」，而不是「重不重要」——重要性高但不进首屏的页面，照样该下沉。
     </p>
@@ -56,13 +56,13 @@ import U15Subpackages from './U15Subpackages.vue'
       <strong>几条必须记住的边界：</strong><code>subPackages</code> 与 <code>subpackages</code> 两种拼写框架都能识别，但团队内要统一；<strong>主包与分包不能重复声明同一个页面</strong>；分包粒度不是越细越好——分包过多会增加管理成本和跨包跳转的下载次数，而且<strong>单个分包也有大小上限</strong>，别把所有低频页堆进一个分包。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>状态标签差异</h2>
     <figure class="lesson-figure">
       <figcaption>上面是主包（启动即加载），下面是两个分包；点「进入分包」模拟一次按需下载，而标着「已预下载」的分包无需等待——试着对比这两个分包的状态标签，体会 <code>preloadRule</code> 到底省掉了什么。</figcaption>
       <U15Subpackages />
     </figure>
 
-    <h2>总结</h2>
+    <h2>启动页与按需下沉</h2>
     <p>
       分包要解决的是启动耗时：<strong>主包只留启动路径上的页面，其余下沉到分包按需下载，再用 <code>preloadRule</code> 把「大概率会去」的分包提前下好</strong>。代价是路径要按相对 <code>root</code> 重新声明、资源要重新对位、公共依赖不能重复打包。收益最终体现在一件事上——用户看到首页白屏的时间变短了。
     </p>

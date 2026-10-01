@@ -8,7 +8,7 @@ import F20Fade from './F20Fade.vue'
       <strong>开场问题：</strong>你想给视频结尾加两秒淡出，写了 <code>fade=t=out:st=58:d=2</code>，可这段素材其实只有 30 秒——结果一点淡出都没有，画面一直到最后一帧还是亮的，然后硬生生切黑。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>画面过渡需求</h2>
     <p>
       你想要的只是「别那么生硬」：开头从黑场缓缓浮现，结尾缓缓隐去，不要咔嚓一下跳进去、又咔嚓一下跳出来。旧办法要么在剪辑软件里手动拉不透明度关键帧——一次性还好，批量处理根本做不动；要么做一段纯黑视频前后拼上去——得额外准备素材，还常常和正片的时长对不齐。
     </p>
@@ -19,7 +19,7 @@ import F20Fade from './F20Fade.vue'
       所以要回答的是：<strong>怎么用滤镜让画面和声音都平滑过渡，并且在裁剪或拼接之后，时间点仍然对得上？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>淡入滤镜命令</h2>
     <p>
       最短的一条淡入命令只多一个滤镜：<code>ffmpeg -i input.mp4 -vf "fade=t=in:st=0:d=2" -c:a copy output.mp4</code>。
     </p>
@@ -27,7 +27,7 @@ import F20Fade from './F20Fade.vue'
       它做对了一件很干净的事：<strong>把「从黑场渐显」抽象成按时间插值的渐变</strong>。<code>t</code> 指定方向（<code>in</code> 淡入 / <code>out</code> 淡出），<code>st</code> 是起始时间，<code>d</code> 是持续时长；画面这一侧渐变的是亮度与不透明度。只要 <code>st</code> 落在素材范围内，它就能稳定生效。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>秒数硬编码</h2>
     <ul>
       <li><code>st</code> 是<strong>写死的秒数</strong>。素材从 60 秒变成 30 秒，<code>st=58</code> 就落在范围之外，淡出直接不生效，而且<strong>不会报错</strong>——这正是开场那一幕。</li>
       <li>只加了 <code>-vf fade</code>，音频完全没有跟着淡，于是画面渐暗、声音却在最后一帧「啪」地切断。</li>
@@ -36,7 +36,7 @@ import F20Fade from './F20Fade.vue'
       <li>时长没节制：五秒的淡入淡出会显得拖沓，观众的耐心其实撑不了多久。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>滤镜时间轴语义</h2>
     <p>
       不推翻 <code>fade</code>，而是先把它的<strong>时间轴语义</strong>讲清楚：<code>st</code> 和 <code>d</code> 都是相对滤镜输入的时间轴来算的，默认从输出的 0 秒起。想清楚「起点是谁的起点」，后面所有坑都好解释。
     </p>
@@ -59,13 +59,13 @@ import F20Fade from './F20Fade.vue'
       <strong>节奏提醒：</strong>淡入淡出时长要和内容节奏匹配，通常 <strong>2 秒以内</strong>最自然；淡出的起点务必用<strong>实际时长</strong>算出来，别把教程里的数字原样照抄——那是别人素材的时长。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>音画过渡页签</h2>
     <figure class="lesson-figure">
       <figcaption>切换「视频淡入淡出 / 音频淡入淡出 / xfade 转场」三个页签，对照命令看画面与声音是怎么各管一段的，再翻到曲线表理解不同渐变的形状差别。</figcaption>
       <F20Fade />
     </figure>
 
-    <h2>总结</h2>
+    <h2>包络插值机制</h2>
     <p>
       <code>fade</code> 与 <code>afade</code> 的本质都是「在时间轴上按一条包络做插值」：画面那条包络通向黑场，声音那条通向静音，所以要分开写。把 <code>st</code> 用实际时长算出来，并在裁剪之后按新的时间轴重新对齐，淡入淡出就不会再无声无息地失效。
     </p>

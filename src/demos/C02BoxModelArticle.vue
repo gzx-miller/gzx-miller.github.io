@@ -8,7 +8,7 @@ import C02BoxModel from './C02BoxModel.vue'
       <strong>开场问题：</strong>我给卡片写了 <code>width: 200px</code>，可开发者工具量出来的总宽却是 248px，多出来的 48px 是从哪儿冒出来的？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>宽度所指的范围</h2>
     <p>
       你在排一个三列课程卡片：每张卡片写 <code>width: 33.33%</code>、<code>padding: 16px</code>、<code>border: 1px solid</code>，心里想的是「三张正好铺满一行」。可浏览器把第三张挤到了下一行——因为它实际占的宽度比 33.33% 更大。你只好把宽度改小一点凑合，换到窄屏一测，又错位了。
     </p>
@@ -16,7 +16,7 @@ import C02BoxModel from './C02BoxModel.vue'
       代价在于：<strong>尺寸算不准，建立在尺寸之上的东西全都不可靠</strong>。栅格、间距、响应式断点，本质上都是在算盒子的宽高。如果连「我设的宽度到底指哪一段」都没弄清，后面每调一次布局都只能靠试。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>固定宽高的写法</h2>
     <p>
       最省事的做法：要多大就写多大，直接给元素设 <code>width</code> 和 <code>height</code>，再配 <code>padding</code> 和 <code>border</code>。
     </p>
@@ -24,7 +24,7 @@ import C02BoxModel from './C02BoxModel.vue'
       这个做法对在<strong>它把盒子的四层结构摆出来了</strong>：最里面是内容区，外面依次是内边距 padding、边框 border、外边距 margin。想给内容留白就加 padding，想画边界就加 border，思路本身没错。问题只出在「这些层怎么分摊你写下的那个宽度」。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>实际总宽的膨胀</h2>
     <ul>
       <li>设了 <code>width: 200px</code>、<code>padding: 20px</code>、<code>border: 4px</code>，实际总宽成了 <code>200 + 20×2 + 4×2 = 248px</code>，宽度被 padding 和 border 撑开了。</li>
       <li>总宽不可预测：每加一点 padding 就要回头重算一遍 width，改一处牵动一片。</li>
@@ -32,7 +32,7 @@ import C02BoxModel from './C02BoxModel.vue'
       <li>父子的上下 margin 也会悄悄合到一起，父容器的高度因此变得难以捉摸。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>尺寸算法的切换</h2>
     <p>
       先解决「宽度指哪一段」的问题，答案由 <code>box-sizing</code> 给出。<strong><code>content-box</code></strong>（默认）里，<code>width</code> 只指内容区，padding 与 border 要另外加在两侧——所以是 248px。<strong><code>border-box</code></strong> 则把 padding 和 border 一起算进 <code>width</code>，总宽就是 200px，内容区被压缩成 172px。一句话记：content-box 是「内容宽度」，border-box 是「外围宽度」。
     </p>
@@ -64,13 +64,13 @@ import C02BoxModel from './C02BoxModel.vue'
       <strong>排查顺序：</strong>发现两个元素间距不对劲，第一反应先怀疑外边距折叠，而不是急着改数值；确认确实需要那样精确的间距，再考虑换成 padding，或者干脆用 <code>gap</code> 交给 Flex/Grid 来管。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>两套算法的对照表</h2>
     <figure class="lesson-figure">
       <figcaption>切换 content-box 与 border-box，对照尺寸表看 padding、border 如何分摊总宽。</figcaption>
       <C02BoxModel />
     </figure>
 
-    <h2>总结</h2>
+    <h2>可预测的排版宽度</h2>
     <p>
       盒模型把「一个元素占多大地方」拆成内容、内边距、边框、外边距四层。用 <code>box-sizing: border-box</code> 让 <code>width</code> 直接等于外围宽度，尺寸就变成可预测的；再把外边距折叠只发生在垂直方向这件事记住，间距的意外也就少了一半。
     </p>

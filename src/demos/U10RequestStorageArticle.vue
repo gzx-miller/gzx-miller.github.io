@@ -8,7 +8,7 @@ import U10RequestStorage from './U10RequestStorage.vue'
       <strong>开场问题：</strong>课程列表页每次进来都要白屏一两秒等接口，退出去再进来又是白屏；你想「把上次的数据先显示出来」，可同事那边用 <code>uni.getStorageSync</code> 存进去的对象，读出来变成了字符串 <code>"[object Object]"</code>。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>请求与缓存两需</h2>
     <p>
       这里其实有两个需求碰在一起：<strong>数据从服务器来</strong>——异步、可能失败、要带登录态；<strong>页面又希望打开就有内容</strong>——同步、在本地、能持久。最原始的做法是每个页面各写各的。
     </p>
@@ -19,7 +19,7 @@ import U10RequestStorage from './U10RequestStorage.vue'
       问题于是变得很清楚：<strong>请求能不能像普通函数一样 <code>await</code>？缓存又该用什么形态存、有什么边界？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>回调式请求</h2>
     <p>
       先直接用回调式的 <code>uni.request</code>：<code>uni.request({ url, success, fail })</code>，在 <code>success</code> 里给列表赋值。
     </p>
@@ -27,7 +27,7 @@ import U10RequestStorage from './U10RequestStorage.vue'
       这个方案做对了一件事：<strong>它完成了最核心的那一步——把请求发出去、把结果收回来</strong>。只有一个接口、没有依赖时，这样写完全说得过去。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>多层嵌套的困境</h2>
     <ul>
       <li>多个接口有先后依赖时（先拿列表再拿详情），回调一层层嵌套，错误没法统一处理。</li>
       <li>每个调用点都要重复设置 baseURL、header 里的 token、超时时间与失败提示，改一处要改一片。</li>
@@ -36,7 +36,7 @@ import U10RequestStorage from './U10RequestStorage.vue'
       <li>同步存储在大数据量写入时会阻塞主线程；各平台还有容量上限（小程序单个 key 约 1MB、总量约 10MB），超了会直接抛错。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>异步请求的封装</h2>
     <p>
       第一层，把回调包成 Promise。写一个函数，内部用 <code>new Promise</code> 包住 <code>uni.request</code>，<code>success</code> 里 <code>resolve(res.data)</code>，<code>fail</code> 里 <code>reject(err)</code>。调用点就能 <code>await request(...)</code>，用 <code>try/catch</code> 统一兜错，有依赖的请求也就变回了顺序代码。
     </p>
@@ -64,13 +64,13 @@ import U10RequestStorage from './U10RequestStorage.vue'
       <strong>还差一步的边界：</strong><code>uni.request</code> 默认超时要按业务显式设 <code>timeout</code>；不同小程序平台对请求域名有白名单要求，跨端上线前记得把后端域名配进各平台后台，否则真机上直接失败。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>缓存优先的加载</h2>
     <figure class="lesson-figure">
       <figcaption>先点「加载课程」看 Promise 封装后的请求过程，再点「保存登录态」把 token 写进本地；然后「清空列表」再加载一次，就能看到「先读缓存、再异步刷新」的差别。</figcaption>
       <U10RequestStorage />
     </figure>
 
-    <h2>总结</h2>
+    <h2>远近数据的分流</h2>
     <p>
       请求与缓存处理的是两类数据来源：<strong>远的</strong>交给 Promise 封装后的 <code>uni.request</code>，把 baseURL、token、错误与 401 收进一处；<strong>近的</strong>用本地存储持久化，但要记住它只认字符串、有容量、同步版会阻塞。把「先读缓存、再异步刷新」串起来，页面就不再每次都白屏。
     </p>

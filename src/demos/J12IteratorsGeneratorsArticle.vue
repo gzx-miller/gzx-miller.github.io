@@ -8,7 +8,7 @@ import J12IteratorsGenerators from './J12IteratorsGenerators.vue'
       <strong>开场问题：</strong>播放列表上的「下一课」按钮，为什么每点一次才算出下一条，而不是一开始就把上万条课程一次性算成数组？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>数据来源多样</h2>
     <p>
       假设你要做一个课程播放列表：数据来源可能是接口分页拿到的数组，也可能是本地根据规则即时生成的序列（比如「第 n 个质数」）。界面只有一个「下一课」按钮，用户点一次就消费一条。可问题是——总共有多少条、还有没有下一条，事先很可能完全未知。
     </p>
@@ -19,7 +19,7 @@ import J12IteratorsGenerators from './J12IteratorsGenerators.vue'
       更麻烦的是「取到哪算完」这件事。数组有 <code>length</code> 可以判断终点，可一个动态生成的序列根本没有这个长度，你无从知道下一条还在不在。取值方式和结束条件，本来是两个正交的问题，却被下标访问硬绑在了一起。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>整体物化数组</h2>
     <p>
       最省事的做法：不管来源是什么，先一次性算成一个数组，再交给 <code>for...of</code> 或 <code>forEach</code> 消费。
     </p>
@@ -27,7 +27,7 @@ import J12IteratorsGenerators from './J12IteratorsGenerators.vue'
       这个方案做对了一件事：<strong>数组是最简单、最可预测的容器</strong>，有统一的下标和 <code>length</code>，小数据量下用它天经地义。这个「给消费方一个统一入口」的思路要保留。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>全量计算代价</h2>
     <ul>
       <li>一次性物化一万条、一百万条数据，全部常驻内存，还没用上就先占满了。</li>
       <li>「第 n 个质数」这种序列没有终点，你无法先算完再返回，数组根本装不下无限长。</li>
@@ -35,7 +35,7 @@ import J12IteratorsGenerators from './J12IteratorsGenerators.vue'
       <li>消费方写死了 <code>list.length</code> 与 <code>list[i]</code>，换一种数据来源就要重写整套循环。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>迭代协议定义</h2>
     <p>
       不推翻「逐个取值」，而是把这个动作抽象成一个协议。
     </p>
@@ -70,13 +70,13 @@ import J12IteratorsGenerators from './J12IteratorsGenerators.vue'
       </tbody>
     </table>
 
-    <h2>动手试试</h2>
+    <h2>逐个拉取演示</h2>
     <figure class="lesson-figure">
       <figcaption>点「下一课」看看生成器如何被按需拉取，注意它不会提前把整份列表算出来。</figcaption>
       <J12IteratorsGenerators />
     </figure>
 
-    <h2>总结</h2>
+    <h2>协议与生成器</h2>
     <p>
       迭代协议把「怎么取值、什么时候结束」从具体数据结构里抽了出来，生成器则是实现这套协议最顺手的写法。于是消费方不必认识数据来源，惰性序列和无限序列都变得可表达。
     </p>

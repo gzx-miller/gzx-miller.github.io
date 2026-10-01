@@ -8,7 +8,7 @@ import E10AutoUpdate from './E10AutoUpdate.vue'
       <strong>开场问题：</strong>你给应用接好了自动更新，测试时一路顺利：发现新版本、下载、提示重启。可正式版发给用户后，macOS 用户点了"重启安装"，应用反而起不来了，系统提示"应用已损坏"。你在本机怎么都复现不出来——因为问题根本不在你那几行代码里。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>上线更新诉求</h2>
     <p>
       桌面应用一旦发出去，你就再也没法像网页那样"改一下就刷新"。想让用户拿到修复和新功能，只能靠更新。而让用户<strong>手动</strong>去官网下载新安装包重装，几乎等于没有更新——安全补丁发出去也没人装，旧版本会一直留在用户机器上。
     </p>
@@ -19,7 +19,7 @@ import E10AutoUpdate from './E10AutoUpdate.vue'
       所以要问的是：怎样让应用自己发现新版本、安全地下载、验证来源、并在合适的时机完成升级？
     </p>
 
-    <h2>最小方案</h2>
+    <h2>更新组件接入</h2>
     <p>
       生产环境推荐用 electron-builder 配套的 <strong>electron-updater</strong>：主进程里用 <code>autoUpdater.setFeedURL(...)</code> 指向发布服务，再调 <code>checkForUpdatesAndNotify()</code>。
     </p>
@@ -27,7 +27,7 @@ import E10AutoUpdate from './E10AutoUpdate.vue'
       这个方案做对了一件事：<strong>它把更新拆成了一条由事件驱动的流水线</strong>。应用会自己去发布服务读取 <code>latest.yml</code> 元数据、比对版本号、按需下载差量包——你不用像用 Electron 内置 <code>autoUpdater</code> 那样自建一套更新服务器。整条流程发生在主进程，渲染进程只负责展示进度、接收状态。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>打包签名门槛</h2>
     <ul>
       <li>在开发环境里调用：应用没打包时 <code>autoUpdater</code> 直接报错，本地根本走不通，容易误判成代码有问题。</li>
       <li>macOS 更新包没签名、没公证：下载完在安装阶段被系统拒绝，用户看到的就是那句"应用已损坏"。</li>
@@ -37,7 +37,7 @@ import E10AutoUpdate from './E10AutoUpdate.vue'
       <li>不监听 <code>error</code>：网络断了、服务器返回 404，整条流程静默死掉，既不重试也不提示。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>生效范围限定</h2>
     <p>
       第一步，<strong>先限定生效范围</strong>。用 <code>app.isPackaged</code> 判断，只有打包后的安装版才启用自动更新，开发环境直接跳过。这样既避免了报错，也让你明白：自动更新本来就不是给开发环境用的。
     </p>
@@ -67,13 +67,13 @@ import E10AutoUpdate from './E10AutoUpdate.vue'
       <strong>两个前提条件：</strong>自动更新只在打包后的安装版中生效，开发环境调用会直接报错，接入前先用 <code>app.isPackaged</code> 判断；另外，macOS 未签名、未公证的包，Windows 未做 Authenticode 签名的包，都会在安装阶段被系统拒绝——签名不是可选项。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>事件日志顺序</h2>
     <figure class="lesson-figure">
       <figcaption>点「检查更新」，看事件日志按 <code>checking-for-update</code> → <code>update-available</code> → <code>download-progress</code> → <code>update-downloaded</code> 依次追加，状态色块同步变化——这正是主进程里那条更新流水线。</figcaption>
       <E10AutoUpdate />
     </figure>
 
-    <h2>总结</h2>
+    <h2>主进程事件流水线</h2>
     <p>
       自动更新是一条住在主进程里的事件流水线：用 <code>setFeedURL</code>（或 electron-builder 的 <code>publish</code>）定好更新源，按 <code>checking-for-update</code> → <code>update-available</code> → <code>download-progress</code> → <code>update-downloaded</code> 依次推进，最后由用户确认触发 <code>quitAndInstall</code>。而它真正的地基是签名与 <code>latest.yml</code> 校验——没有签名，更新根本装不上，装了也不敢用。
     </p>

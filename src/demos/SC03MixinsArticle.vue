@@ -8,7 +8,7 @@ import SC03Mixins from './SC03Mixins.vue'
       <strong>开场问题：</strong>三种尺寸的按钮，我把几乎相同的 <code>padding</code>、<code>border-radius</code> 声明复制了三遍；后来设计统一调了圆角，我又只改了其中两处——为什么「长得一样」的样式，改起来却要靠记性？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>整组声明复用</h2>
     <p>
       按钮的三种尺寸、通知的四种状态、卡片的内外边距——这类需求的共同点是：<strong>要复用的不是某一个值，而是一整组声明</strong>。尺寸之间差的是数值，不是结构；状态之间差的是颜色，也不是结构。既然结构相同，它就该只写一遍。
     </p>
@@ -16,7 +16,7 @@ import SC03Mixins from './SC03Mixins.vue'
       复制粘贴的代价，在第一次写的时候完全看不出来。真正的账单在后面：设计调整一次，你得回忆自己复制过几处；新增一种尺寸，你得找到同类的那一段作为模板再抄一份。抄的过程中只要有一处笔误——少了 <code>display</code>、圆角写成 5px——都不会报错，界面看上去也「差不多对」。<strong>靠人眼维护的重复，迟早会分叉。</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>公共类提取</h2>
     <p>
       不引入 Sass 能力，最朴素的两种做法是：把公共声明提成一个公共类 <code>.btn</code>，让 <code>.btn-sm</code>、<code>.btn-md</code>、<code>.btn-lg</code> 只覆盖差异；或者用逗号把同类选择器合并成一条规则，如 <code>.btn-sm, .btn-md, .btn-lg { border-radius: 6px; }</code>。
     </p>
@@ -24,7 +24,7 @@ import SC03Mixins from './SC03Mixins.vue'
       这两种做法都做对了一件事：<strong>它们识别出了「共同部分」并只写了一处</strong>，这已经比三份复制强得多。前者还额外带来了一个好处——公共类可以写在组件根元素上，语义清晰，调试时一眼能看出这个按钮属于哪个家族。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>结构与类名绑定</h2>
     <ul>
       <li>公共类要求 DOM 上必须挂上那个类名。样式复用被硬绑到了结构上，想在一个原本没有 <code>.btn</code> 的元素上借用这套声明，就得回去改模板。</li>
       <li>它表达不了<strong>参数</strong>。<code>sm</code> 与 <code>lg</code> 的差距本质上是同一套规则换了输入值，而公共类只能表达「共同的部分」，差异部分依然要各写各的。</li>
@@ -32,7 +32,7 @@ import SC03Mixins from './SC03Mixins.vue'
       <li>逗号选择器会稀释语义。<code>.notice, .alert, .toast</code> 并在一起之后，这条规则到底属于谁变得模糊，日后想单独调整其中一个，就必须把它从组里剔出来。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>带参即时展开</h2>
     <p>
       不推翻「只写一遍」，而是把复用对象从「一条规则」升级为<strong>一个可以带输入、当场展开的声明生成器</strong>。这就是 Mixin：用 <code>@mixin button-size($py, $px)</code> 定义一段带参数的声明块，用 <code>@include button-size(6px, 12px)</code> 在需要的地方展开它。尺寸差异变成了实参差异，共同结构只存在一份。
     </p>
@@ -75,13 +75,13 @@ import SC03Mixins from './SC03Mixins.vue'
       <strong>代价要提前知道：</strong>Mixin 的展开方式是<strong>复制</strong>——每一次 <code>@include</code> 都会把这组声明原样写进调用处。因此它适合复用「一组声明」，不适合用来替代单个值，否则产物会无谓地变大。另外，如果发现 <code>@content</code> 里被塞进了大量规则，那通常意味着抽象层次切错了，应该拆成两个 Mixin，而不是继续往内容块里加东西。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>单段展开多态</h2>
     <figure class="lesson-figure">
       <figcaption>切换 sm / md / lg，看同一段 Mixin 展开出三种尺寸的按钮。</figcaption>
       <SC03Mixins />
     </figure>
 
-    <h2>总结</h2>
+    <h2>工具选用准则</h2>
     <p>
       Mixin 把「复制三遍」变成「定义一次、按参数展开多次」，并把可选扩展交给了 <code>@content</code>。但它不是万能胶：只复用一个值就用变量或函数，只想共享裸声明就用普通类或 CSS 自定义属性——选对了工具，抽象才不会反过来拖累你。
     </p>

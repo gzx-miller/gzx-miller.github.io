@@ -8,7 +8,7 @@ import T14Enums from './T14Enums.vue'
       <strong>开场问题：</strong>课程状态写成 <code>enum CourseStatus { Draft, Review, Published, Archived }</code>，可打印出来是 <code>0</code>、<code>1</code>、<code>2</code>——日志里根本分不清哪个是「已发布」，枚举的名字去哪了？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>状态集合与枚举</h2>
     <p>
       你要给课程的发布流程建模：草稿、审核中、已发布、已归档，一共四个状态。用字符串硬编码会让魔法字符串散落各处，于是你想到枚举——它看起来既能当类型用、又能当值用，还有自动补全。可用起来很快撞上两个疑问：为什么日志里打出的是数字而不是名字？为什么把状态存进接口之后，别人拿到 <code>2</code> 完全不知道对应哪个状态？
     </p>
@@ -16,7 +16,7 @@ import T14Enums from './T14Enums.vue'
       <strong>枚举不只是「一组常量」，它同时产出运行时的对象。</strong>这层运行时代价与伴随的行为，才是选型真正要权衡的地方。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>数字枚举的写法</h2>
     <p>
       先用<strong>数字枚举</strong>：<code>enum CourseStatus { Draft, Review, Published, Archived }</code>。成员依次是 0、1、2、3，写法最省事，比较大小也方便，<code>status &lt; CourseStatus.Archived</code> 这样的判断直接可用。
     </p>
@@ -24,7 +24,7 @@ import T14Enums from './T14Enums.vue'
       它做对了一件事：<strong>把「一组合法状态」收敛成单一来源，类型与取值共用同一个名字</strong>。这个目标完全正确，后面的方案也都在保留它。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>反向映射的代价</h2>
     <ul>
       <li>数字枚举的值是数字，序列化到接口或日志后只剩下 <code>2</code>，脱离代码就失去意义。</li>
       <li>它会生成<strong>反向映射</strong>：除了 <code>CourseStatus.Draft → 0</code>，还多了 <code>CourseStatus[0] → 'Draft'</code>；用 <code>Object.entries</code> 遍历时会同时拿到两组键，必须额外过滤。</li>
@@ -32,7 +32,7 @@ import T14Enums from './T14Enums.vue'
       <li>枚举会产出运行时代码，虽然体积不大，但无法被树摇掉，作为库对外导出时还要考虑转译兼容性。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>字符串枚举形式</h2>
     <p>
       把值换成字符串，就得到<strong>字符串枚举</strong>：<code>enum CourseLevel { Beginner = 'beginner', Advanced = 'advanced' }</code>。它只有正向映射，序列化出去就是可读的字符串，跨代码边界也不会失真；代价是失去自动递增与大小比较的能力。
     </p>
@@ -59,13 +59,13 @@ import T14Enums from './T14Enums.vue'
       用 <code>Object.entries</code> 遍历数字枚举时，<strong>记得过滤反向映射产生的键</strong>（例如用 <code>isNaN(Number(key))</code> 判断），否则状态列表里会混进一堆数字键。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>取值与反向映射</h2>
     <figure class="lesson-figure">
       <figcaption>推进一步看看数字枚举的取值与反向映射，再切换难度，对照字符串枚举的可读性。</figcaption>
       <T14Enums />
     </figure>
 
-    <h2>总结</h2>
+    <h2>枚举与联合之别</h2>
     <p>
       枚举与联合字面量解决的是同一件事：把有限的状态集合收敛成单一来源，让非法取值无法通过编译。区别在于枚举会产出运行时对象，数字枚举还带着反向映射与「任意数字都能赋值」的漏洞；<code>const enum</code> 会内联但不适合对外发布；<code>as const</code> 加联合字面量产物最轻，配合 <code>satisfies</code> 与 <code>Record</code> 还能反过来校验配置的完整性。
     </p>

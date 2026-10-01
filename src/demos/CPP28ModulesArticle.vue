@@ -8,7 +8,7 @@ import CPP28Modules from './CPP28Modules.vue'
       <strong>开场问题：</strong>某个头文件里藏着一句参数宏，另一个源文件只是 <code>#include</code> 了它，里面一个重名的变量忽然编译报错——你根本没碰那行代码，它怎么就坏了？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>文本粘贴式复用</h2>
     <p>
       根源在于 C++ 复用代码的方式：<code>#include</code> 不是「引用一个文件」，而是<strong>在预处理阶段把这个文件的全部文本原样粘进来</strong>。粘进来的东西不分你我，于是三笔成本全落到写代码的人身上。
     </p>
@@ -21,7 +21,7 @@ import CPP28Modules from './CPP28Modules.vue'
       所以问题是：<strong>能不能有一种「导入代码」的方式，只暴露你明确要分享的东西，既不泄漏宏，也不用重复解析？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>重复包含的防护</h2>
     <p>
       最省事的补丁：给每个头文件套上 <code>#pragma once</code>（或传统的 include guard），保证它在同一个翻译单元里只被包含一次。
     </p>
@@ -29,7 +29,7 @@ import CPP28Modules from './CPP28Modules.vue'
       这个方案做对了一件事：<strong>它解决了「自己重复包含自己」这一类问题</strong>。同一个头文件被两条路径引到，也只会展开一次，重复定义立刻消失；成本也低，加一行就见效。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>宏泄漏与顺序依赖</h2>
     <ul>
       <li><strong>宏照样泄漏。</strong><code>#pragma once</code> 只防重复包含，管不住 <code>#define</code>——它已经展开进整片翻译单元了。</li>
       <li><strong>顺序依赖还在。</strong>该先包含谁、后包含谁的约束一点没变，换个包含顺序仍然可能「未定义」。</li>
@@ -37,7 +37,7 @@ import CPP28Modules from './CPP28Modules.vue'
       <li><strong>封装全靠约定。</strong>头文件里写的所有声明一律暴露给使用者，想藏起来的实现细节只能靠「别去用」来约束。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>模块的导出边界</h2>
     <p>
       不推翻「复用代码」这个目标，而是把「文本粘贴」换成一种<strong>有边界、有导出声明</strong>的结构——这就是 C++20 的模块。它分成两种文件角色：模块接口文件（习惯叫 <code>.cppm</code> 或 <code>.ixx</code>）负责声明「我导出什么」，模块实现可以就写在接口文件里，也可以拆成实现分区。
     </p>
@@ -57,13 +57,13 @@ import CPP28Modules from './CPP28Modules.vue'
       <strong>容易踩的一点：</strong>别再指望用宏给模块接口做条件编译来「影响使用者」——宏被隔离在模块实现内部，使用方既看不到也改不了。反过来，如果你把某个辅助声明<strong>忘了加 <code>export</code></strong>，模块外就是访问不到，报错会写成「未声明的标识符」。排查这类错误时，第一步永远是确认那个名字到底有没有被 <code>export</code>。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>接口与使用方分工</h2>
     <figure class="lesson-figure">
       <figcaption>对照 <code>math.cppm</code> 与 <code>main.cpp</code> 两份文件：接口文件里 <code>export module math;</code> 声明模块、<code>export</code> 标出 <code>add</code> 与 <code>multiply</code>，使用方一句 <code>import math;</code> 就能调用——注意它<strong>看不到</strong>任何未被导出的内部细节。</figcaption>
       <CPP28Modules />
     </figure>
 
-    <h2>总结</h2>
+    <h2>命名边界与单次解析</h2>
     <p>
       头文件的问题，是它把「复用」实现成了「文本粘贴」，于是宏泄漏、顺序敏感、重复解析全都躲不开。模块把同一件事换成了<strong>有名字、有导出边界、只解析一次</strong>的导入：导出的才可见，内部的外不外泄，接口只编译一遍。理解这一层，就明白 C++20 为什么要费这么大力气给「include 的替代品」。
     </p>

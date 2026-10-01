@@ -8,7 +8,7 @@ import C16ContainerQuery from './C16ContainerQuery.vue'
       <strong>开场问题：</strong>同一个卡片组件，放进侧边栏被压得挤成一团，放进主内容区却依然很窄——媒体查询明明写了 <code>@media (min-width: 900px)</code>，组件为什么一点都不肯应变？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>组件宽度的自适应</h2>
     <p>
       你在维护一个组件库，卡片会根据自身宽度决定「竖排」还是「图文左右分栏」。你用媒体查询按视口宽度写了断点：屏幕够宽就分栏。可当这个卡片被放进一个只有 300px 宽的侧边栏时，视口依旧是 1200px、断点照样命中，卡片就硬生生展开成了双栏——内容被挤成一道缝。
     </p>
@@ -16,7 +16,7 @@ import C16ContainerQuery from './C16ContainerQuery.vue'
       问题的本质是：<strong>组件该关心的是「我有多宽」，而不是「屏幕有多宽」</strong>。基于视口的断点，把组件的命运绑在了窗口大小上，可组件并不知道自己会被塞进多宽的宿主。不解决这一点，组件就永远无法真正复用——每换一个摆放位置，就得回头改一次断点。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>视口分档的延续</h2>
     <p>
       最省事的做法：继续用媒体查询，按视口宽度分档。<code>@media (min-width: 900px)</code> 时卡片分栏，否则竖排。这个方案做对了一件事：<strong>它确实实现了响应式，页面整体布局随窗口变化而调整</strong>，而且写法成熟、兼容性广。
     </p>
@@ -24,7 +24,7 @@ import C16ContainerQuery from './C16ContainerQuery.vue'
       当组件的宽度恰好跟视口成正比时，这套写法看不出毛病——比如整页就一个通栏卡片。问题出在「组件的宽度由谁决定」上。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>窄容器的宽屏误判</h2>
     <ul>
       <li>断点基于视口，与组件实际可用的宽度毫无关系，窄容器里照样触发「宽屏」样式。</li>
       <li>同一个组件放在不同宽度的容器中时，样式完全相同，无法做真正的组件级自适应。</li>
@@ -32,7 +32,7 @@ import C16ContainerQuery from './C16ContainerQuery.vue'
       <li>「卡片里再嵌一张卡片」这种嵌套场景，媒体查询更是彻底失效。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>容器基准的引入</h2>
     <p>
       不推翻「按宽度分档」，而是把基准从<strong>视口</strong>换成<strong>祖先容器</strong>。做法分两步：先在「生产者」上声明自己可以被查询——<code>container-type: inline-size</code>，意思是按<strong>行内尺寸</strong>（也就是宽度）追踪；再用 <code>@container (min-width: 400px)</code> 让「消费者」依据最近那个容器的尺寸应用样式。此时那 400px 量的是<strong>容器的宽度</strong>，视口再宽也不影响它。
     </p>
@@ -63,13 +63,13 @@ import C16ContainerQuery from './C16ContainerQuery.vue'
       落到工程上，一条值得写进组件规范的原则是：<strong>组件库应默认自带容器查询适配</strong>。这样宿主侧无论把它放进多宽的坑位，组件都能自己调整，无需外部额外干预。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>断点落在容器宽度</h2>
     <figure class="lesson-figure">
       <figcaption>拖动滑块改变容器宽度，注意断点发生在容器宽度 400px，而不是视口宽度。</figcaption>
       <C16ContainerQuery />
     </figure>
 
-    <h2>总结</h2>
+    <h2>页面与组件的分工</h2>
     <p>
       容器查询把「响应式」的判断基准从视口搬到了容器。先用 <code>container-type: inline-size</code>（必要时配 <code>container-name</code>）声明容器，再用 <code>@container (min-width: …)</code> 依据祖先容器尺寸应用样式，配合 <code>cqw</code> / <code>cqh</code> 让尺寸随容器缩放。它与以视口为基准的 <code>@media</code> 互补，让同一组件在任意宽度的宿主里都能自适应。
     </p>

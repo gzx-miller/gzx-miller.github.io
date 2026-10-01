@@ -8,7 +8,7 @@ import X04DynamicRoutes from './X04DynamicRoutes.vue'
       <strong>开场问题：</strong>商品详情页只有一个文件 <code>app/products/[id]/page.tsx</code>，可全站有上万件商品——这个文件名里没写数字，页面又是怎么知道用户到底点开的是哪一件的？URL 后面那串 <code>?utm_source=xxx</code> 又该从哪里读？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>同类页面复用</h2>
     <p>
       电商站的商品详情页、内容站的分类页、搜索页，都有一个共同点：<strong>它们的「长相」是同一个，只是数据不同</strong>。你不会为每一件商品都建一个目录，而是希望一条规则覆盖一整类路径，运行时再根据实际地址取出参数，去查对应的数据。
     </p>
@@ -16,7 +16,7 @@ import X04DynamicRoutes from './X04DynamicRoutes.vue'
       这里其实藏着两类完全不同的「参数字段」：一类是路径的一部分，比如 <code>/products/123</code> 里的 <code>123</code>，它决定了你访问的是哪个资源；另一类是路径之外的查询串，比如 <code>/products/123?utm_source=wechat</code>，它通常是统计来源、分页、筛选这类附加信息。搞清楚 <strong>这两类参数各自从哪读、读出来是什么类型</strong>，是这一课要解决的核心问题。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>单段参数捕获</h2>
     <p>
       最小的一步，是先用方括号捕获一段路径：<code>app/products/[id]/page.tsx</code>。页面组件会收到一个 <code>params</code> 对象，访问 <code>/products/123</code> 时 <code>params.id</code> 就是字符串 <code>'123'</code>，拿它去请求数据即可。
     </p>
@@ -24,7 +24,7 @@ import X04DynamicRoutes from './X04DynamicRoutes.vue'
       这一步做对了最关键的事——<strong>用文件名表达「这一段是变量」</strong>，一条路由就能覆盖整类页面。只要路径只有一段可变、且这一段必然存在，这样写就足够。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>深路径捕获缺口</h2>
     <ul>
       <li>分类页的路径可能有任意多段，像 <code>/categories/electronics/phones</code>，单段 <code>[id]</code> 只能吃到一段。</li>
       <li>搜索页希望 <code>/search</code>、<code>/search/react</code>、<code>/search/react/hooks</code> 都能命中，尾段可有可无，普通方括号表达不了「可选」。</li>
@@ -33,7 +33,7 @@ import X04DynamicRoutes from './X04DynamicRoutes.vue'
       <li>热门商品如果能提前生成静态页，首屏会更快，但静态目录没法为「未知的上万个 id」预先建好。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>捕获能力分级</h2>
     <p>
       不推翻「方括号捕获变量」，而是把捕获能力按需要分级，并为查询串单独留一个入口。
     </p>
@@ -70,13 +70,13 @@ import X04DynamicRoutes from './X04DynamicRoutes.vue'
       <strong>两个要注意的副作用：</strong>一是在 Server Component 中读取 <code>searchParams</code>，会让这条路由<strong>转为动态渲染</strong>（每次请求执行），因为它依赖每次请求都可能不同的查询串；二是 <code>searchParams</code> 的每个值都可能是字符串或数组，直接当字符串拼接容易出错，先判断类型再使用。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>参数解析结果</h2>
     <figure class="lesson-figure">
       <figcaption>切换不同的路径写法，看 <code>params</code> 与 <code>searchParams</code> 各自解析出什么。</figcaption>
       <X04DynamicRoutes />
     </figure>
 
-    <h2>总结</h2>
+    <h2>两类参数分工</h2>
     <p>
       动态路由这一课，本质是把「一类页面」压进一条规则：方括号捕获单段（字符串）、三点号捕获多段（数组）、双层方括号做可选捕获，路径参数走 <code>params</code>、附加信息走 <code>searchParams</code>。<code>generateStaticParams</code> 负责把已知参数预先静态化，而 Next.js 15+ 中这两个参数都是 Promise，记得用 <code>await</code> 解包。
     </p>

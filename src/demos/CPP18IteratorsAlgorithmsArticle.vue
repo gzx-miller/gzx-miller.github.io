@@ -8,7 +8,7 @@ import CPP18IteratorsAlgorithms from './CPP18IteratorsAlgorithms.vue'
       <strong>开场问题：</strong>你想把 <code>vector</code> 里所有的 <code>0</code> 删掉，翻手册时看到一个名字正合适的函数，于是写下 <code>std::remove(v.begin(), v.end(), 0);</code>。运行后一检查，<code>v.size()</code> 一点没变，那个 <code>0</code> 还稳稳躺在里面——一个名字就叫「删除」的函数，为什么什么都没删掉？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>逐容器重复实现</h2>
     <p>
       你要对一串元素做最普通的事：找出某个值、统计它出现几次、求和、排序、把每个元素翻倍。最笨的办法是每种容器、每种类型都手写一遍循环。它能跑，但代价都压在你身上：
     </p>
@@ -22,7 +22,7 @@ import CPP18IteratorsAlgorithms from './CPP18IteratorsAlgorithms.vue'
       所以要问的是：<strong>能不能把「算法」从「数据存在哪里」里剥出来，让同一份查找、排序、变换，对任何容器都成立？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>统一算法入口</h2>
     <p>
       答案是 STL 的算法加上<strong>迭代器</strong>：<code>std::find(nums.begin(), nums.end(), 8)</code>、<code>std::count(...)</code>、<code>std::sort(...)</code>——你不再写循环，而是把「一段范围」交给算法。
     </p>
@@ -33,7 +33,7 @@ import CPP18IteratorsAlgorithms from './CPP18IteratorsAlgorithms.vue'
       这里要先立下一条全区通用的约定：范围统一写成 <code>[first, last)</code>，<strong>前闭后开</strong>——<code>last</code> 指向「最后一个元素的下一个位置」，而不是最后一个元素本身。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>迭代器等级门槛</h2>
     <ul>
       <li>不同算法的「门槛」不一样：<code>std::sort</code> 要求随机访问迭代器，把它用在 <code>list</code> 上<strong>直接编译失败</strong>，而不是运行时报错，让人一时摸不着头脑。</li>
       <li><code>std::accumulate</code> 并不在 <code>&lt;algorithm&gt;</code> 里，而在 <code>&lt;numeric&gt;</code> 里，写漏头文件就找不到它。</li>
@@ -42,7 +42,7 @@ import CPP18IteratorsAlgorithms from './CPP18IteratorsAlgorithms.vue'
       <li>想把变换的结果放进另一个容器，如果那个容器是空的、还按老办法直接写进去，立刻就写越界。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>半开区间约定</h2>
     <p>
       先把「半开区间」这个约定的好处想清楚，它是后面一切的地基。<code>last</code> 取「最后一个元素的下一个位置」，于是：<code>last - first</code> 恰好就是元素个数；空的区间自然表示成 <code>first == last</code>；循环写成 <code>for (it = first; it != last; ++it)</code> 正好一遍不多一遍不少。<strong>用等号做终止条件，而不是小于等于</strong>，边界就再也不用手工 +1/-1 去凑。
     </p>
@@ -75,13 +75,13 @@ import CPP18IteratorsAlgorithms from './CPP18IteratorsAlgorithms.vue'
       最后是两个稍新的补充。C++20 的 <strong>ranges</strong> 让你直接对容器调用 <code>ranges::sort(vec)</code>，不必再写 <code>begin()</code>/<code>end()</code>，还能挂上「投影」只按元素里的某个字段比较，甚至用管道把多个操作串起来、惰性求值。C++17 还给了<strong>并行版本</strong>：在 <code>&lt;execution&gt;</code> 里指定执行策略 <code>execution::par</code>，就能让 <code>sort</code> 之类的算法吃满多核，例如 <code>std::sort(std::execution::par, v.begin(), v.end())</code>。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>返回值与头文件差异</h2>
     <figure class="lesson-figure">
       <figcaption>对着代码和两张要点表看：<code>find</code> 为什么返回的是迭代器而不是下标、<code>accumulate</code> 为什么在 <code>&lt;numeric&gt;</code> 里、<code>transform</code> 的结果怎么写进另一个容器；再回头对照「算法需要哪一级迭代器」，就能明白 <code>sort</code> 为什么挑容器。</figcaption>
       <CPP18IteratorsAlgorithms />
     </figure>
 
-    <h2>总结</h2>
+    <h2>算法与容器解耦</h2>
     <p>
       STL 算法与容器之间，靠迭代器这条「桥」解耦：算法只认一段 <code>[first, last)</code> 区间，并对区间的<strong>迭代器等级</strong>有硬要求，这正是同一个算法能配 <code>vector</code> 却配不了 <code>list</code> 的原因。日常最该记牢的两件事是：范围一律前闭后开；名字叫 <code>remove</code> 的它不删，要配 <code>erase</code> 才真的删。
     </p>

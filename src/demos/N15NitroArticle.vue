@@ -8,7 +8,7 @@ import N15Nitro from './N15Nitro.vue'
       <strong>开场问题：</strong>一个内容站上有三类页面，诉求正好相反：营销首页几乎不变，博客详情页可以缓存一小时，后台管理必须登录后才敢渲染。你选了整站 SSR：首页每次访问都重新渲染一遍，白耗 CPU。改成整站预渲染：构建时要为每一个详情页生成 HTML，而那份后台的静态外壳谁都能打开。同一套 Vue 代码，为什么没有一种渲染模式能同时照顾好这三类页面？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>渲染需求的路径分歧</h2>
     <p>
       你写的是同一套页面代码，但不同路径对「谁来渲染、什么时候渲染、缓存多久」的需求是相互矛盾的：有的路径构建时定死就够，有的希望首次请求渲染、之后一段时间直接用缓存，有的则必须完全跳过服务端。
     </p>
@@ -19,7 +19,7 @@ import N15Nitro from './N15Nitro.vue'
       于是问题落到：<strong>能不能在代码里按路径声明各自的渲染与缓存策略，并且让这份声明还能落到不同的部署目标上？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>路径级策略的声明</h2>
     <p>
       在 <code>nuxt.config.ts</code> 里用 <code>routeRules</code> 按路径声明策略：<code>'/'</code> 配 <code>prerender: true</code>，<code>'/blog/**'</code> 配 <code>swr: 3600</code>。
     </p>
@@ -27,7 +27,7 @@ import N15Nitro from './N15Nitro.vue'
       这个方案做对了一件事：<strong>渲染策略从「服务器的配置」变成了「项目里与路径一一对应的声明」</strong>。剩下的编译工作交给 Nitro——Nuxt 的服务端引擎，它会把 <code>server/</code> 目录编译成一份独立、自动代码分割的服务端产物，并按这些规则运行。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>通配规则的范围误伤</h2>
     <ul>
       <li>只声明了 <code>prerender</code>，<code>'/admin/**'</code> 也会被一起预渲染成静态 HTML：后台外壳谁访问都拿到同一份，登录态没有立足之地。</li>
       <li><code>swr</code> 的「过期后重新生成」需要一个<strong>常驻进程</strong>来接住过期后的第一个请求、在后台重算；如果把它部署到纯静态托管，这条规则会安静地失效，页面停在这一版，你怎么改数据都不变。</li>
@@ -35,7 +35,7 @@ import N15Nitro from './N15Nitro.vue'
       <li>给 <code>'/static/**'</code> 配了超长缓存头，却没让这些文件真正静态化，命中的仍是动态渲染的结果——缓存头加错了对象。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>四类路径的策略分派</h2>
     <p>
       第一步，先把路径分清楚。用 <code>routeRules</code> 一次声明四类：<code>'/'</code> 走 <code>prerender: true</code>（SSG），<code>'/blog/**'</code> 走 <code>swr: 3600</code>（ISR，缓存一小时），<code>'/admin/**'</code> 走 <code>ssr: false</code>（SPA，仅客户端渲染），<code>'/api/**'</code> 配 <code>cors: true</code>；不匹配任何规则的路径则保持默认的「每次请求服务端渲染」。这就是<strong>混合渲染</strong>：同一个项目里 SSR、SSG、ISR、SPA 各就各位。
     </p>
@@ -55,13 +55,13 @@ import N15Nitro from './N15Nitro.vue'
       <strong>两个误区：</strong>以为 <code>routeRules</code> 配了就一定生效——<code>swr</code> 这类增量再生必须有一个持续运行的服务器进程来触发，纯静态托管下它不会工作；以为 <code>preset</code> 只是打包参数——它决定产物的形态与运行环境，切换部署目标时要同时核对构建命令与平台配置，否则会出现「构建成功却跑不起来」。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>能力清单与预设对应</h2>
     <figure class="lesson-figure">
       <figcaption>三个页签分别是「核心特性 / 部署目标 / 混合渲染」：先看 Nitro 提供的能力清单，再对照各 preset 与对应的构建命令，最后看 <code>routeRules</code> 的例子和 SSG / ISR / SPA / SSR 四种模式的对照——它演示的正是「一个项目里混着四种渲染策略」。</figcaption>
       <N15Nitro />
     </figure>
 
-    <h2>总结</h2>
+    <h2>服务端能力的声明化</h2>
     <p>
       Nitro 做的是把服务端这半边变成一件可声明、可移植的事：<code>routeRules</code> 让渲染策略按路径分开写，混合渲染因此成为可能；<code>nuxt build</code> 与 <code>nuxt generate</code> 决定要不要一份能跑的服务端产物；<code>preset</code> 决定这份产物最终落到哪个平台。策略留在代码里，平台只换一个参数。
     </p>

@@ -8,7 +8,7 @@ import F13Subtitle from './F13Subtitle.vue'
       <strong>开场问题：</strong>你用 <code>ffmpeg -i input.mp4 -i subtitle.srt -c copy -c:s mov_text output.mp4</code> 把字幕封进 MP4，命令几秒就跑完、文件几乎没变大，你满心以为字幕「进去了」；换到一台老播放器和某个上传平台上，画面下方却空空如也——字幕到底进没进去？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>三种字幕形态</h2>
     <p>
       字幕这件事，和「给画面贴一张图」完全不是一回事。它有三种截然不同的落法：<strong>外挂字幕</strong>是独立文件，播放时加载；<strong>内嵌字幕（软字幕）</strong>是把字幕封装成容器里的一条独立流，能开关、能切语言；<strong>烧录字幕（硬字幕）</strong>则是把文字直接渲染进画面像素里，成为图像的一部分。
     </p>
@@ -16,7 +16,7 @@ import F13Subtitle from './F13Subtitle.vue'
       旧办法往往只剩两条：要么<strong>直接烧录</strong>，可一旦烧进去就无法再移除，改一个字都得把整段视频重压一遍；要么<strong>干脆发外挂文件</strong>，可用户得自己找字幕、还得播放器肯加载。真正的问题是：<strong>怎样在「随时能关」与「一定看得到」之间做取舍，并为每种场景选对方式？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>字幕封装成流</h2>
     <p>
       最省事的做法是先把字幕<strong>封装成一条内嵌流</strong>，用 <code>-c copy</code> 原样搬运音视频、只给字幕换一个容器认可的编码，比如 MP4 里的 <code>mov_text</code>：
     </p>
@@ -27,7 +27,7 @@ import F13Subtitle from './F13Subtitle.vue'
       这个方案做对了一件事：<strong>字幕成了一条可开关的独立流</strong>——它不占画面、能多语言并存、代价极小（音视频走 <code>-c copy</code> 几乎不重编码），这正是「软字幕」的全部价值。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>播放器兼容问题</h2>
     <ul>
       <li>软字幕<strong>依赖于播放器肯不肯认</strong>。这就是开场那一幕的真相：字幕其实已经封进去了，只是那台旧播放器和那个平台不支持 <code>mov_text</code> 这条轨道，于是它<strong>一个字都不显示</strong>，看起来就像「没进去」。</li>
       <li><code>mov_text</code> 只支持很基础的样式。<strong>ASS 字幕里的定位、描边、动画在 MP4 里会大面积丢失</strong>，换成 MKV 才保得住。</li>
@@ -36,7 +36,7 @@ import F13Subtitle from './F13Subtitle.vue'
       <li>一个容器里塞了多条字幕轨时，默认导出哪一条并不确定，<strong>不显式指定就可能留下错误的那条</strong>。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>探测现有字幕</h2>
     <p>
       不推翻这三种方式，而是先补上「<strong>先看清楚有什么</strong>」这一层。动手前用 <code>ffprobe</code> 把字幕流列出来，看源文件里已经封了几条、什么编码：
     </p>
@@ -77,13 +77,13 @@ import F13Subtitle from './F13Subtitle.vue'
       <strong>两个常见误判：</strong>一是把「播放器没显示」当成「字幕没封进去」——多半只是该播放器不支持那条字幕流，用 <code>ffprobe</code> 一查便知；二是对 MP4 里的 <code>mov_text</code> 抱有样式的期待，ASS 的定位与动画在 MP4 中会丢，要保样式就换 MKV。另外，烧录字幕会增加编码工作量且不可逆，操作前一定留好原始文件。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>三条封装路线</h2>
     <figure class="lesson-figure">
       <figcaption>「外挂字幕」页签给出把独立 SRT/ASS 封装成内嵌流的写法，「内嵌字幕」页签演示多语言并列与选择特定轨道，「烧录字幕」页签则把 SRT 与 ASS 的烧录命令、内嵌字幕流烧录以及 <code>charenc=UTF-8</code> 编码处理一并列出；页面末尾还有一张 SRT、ASS、VobSub、WebVTT、TTML 的格式对比表。</figcaption>
       <F13Subtitle />
     </figure>
 
-    <h2>总结</h2>
+    <h2>观看需求先行</h2>
     <p>
       字幕先问一句「谁来看、要不要关」：要能开关、要多语言，就用软字幕把字幕封成独立流，并按容器选对编码（MP4 用 <code>mov_text</code>、MKV 用 <code>srt</code> 或 <code>ass</code>），多轨时用 <code>-map</code> 点名；只有目标平台完全不吃软字幕时，才用 <code>subtitles</code> 滤镜烧成硬字幕。别把播放器不显示误当成字幕没封进去，先 <code>ffprobe</code> 看一眼字幕流。
     </p>

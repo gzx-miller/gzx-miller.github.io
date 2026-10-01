@@ -8,7 +8,7 @@ import T20DiscriminatedUnion from './T20DiscriminatedUnion.vue'
       <strong>开场问题：</strong>订单有五种状态，每种状态各自带着不同的字段。你在某个 <code>switch</code> 里漏掉了一种，代码照常编译、照常上线，直到那条状态的数据在页面上显示成空白——编译器为什么没能提醒你？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>各状态独立字段</h2>
     <p>
       你在做一个订单详情页，订单有「待支付、已支付、已发货、已送达、已取消」五种状态，每种状态带的字段都不一样：已支付有支付方式，已发货有运单号，已取消有取消原因。于是你写了 <code>switch</code>，挨个处理。
     </p>
@@ -16,7 +16,7 @@ import T20DiscriminatedUnion from './T20DiscriminatedUnion.vue'
       麻烦在于：<code>switch</code> 天生是「写几个 <code>case</code> 就处理几个」。业务方今天加一个「退款中」状态，你改了类型、也改了大部分逻辑，唯独漏掉了页面上的某一处 <code>switch</code>。编译器不会拦你，这个遗漏会一直潜伏着，直到某条真实数据走到那个分支，才以空白或崩溃的形式冒出来。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>字符串状态判断</h2>
     <p>
       最省事的做法：给对象定义一个 <code>status</code> 字段，用字符串类型表示状态，业务代码里用 <code>if</code> 或 <code>switch</code> 判断它的取值。
     </p>
@@ -24,7 +24,7 @@ import T20DiscriminatedUnion from './T20DiscriminatedUnion.vue'
       这个做法承认了一个关键事实：<strong>状态是业务模型里最重要的信息，值得被单独表达出来</strong>。状态驱动着界面的分支和可执行的操作，先把它写清楚，是建模的第一步。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>字段堆叠的弊端</h2>
     <ul>
       <li><code>string</code> 太宽了，写错一个字母、传入一个根本不存在的状态，编译器都不会报错。</li>
       <li>各状态特有的字段只能都堆在同一个对象上、个个可选，访问前永远要判断「它到底有没有值」。</li>
@@ -32,7 +32,7 @@ import T20DiscriminatedUnion from './T20DiscriminatedUnion.vue'
       <li>新增状态时受影响的位置散落各处，没有一个清单告诉你「还有哪里没改」。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>判别字段的收窄</h2>
     <p>
       不推翻「用状态分流」，而是做两件事：<strong>让每个状态成为独立的类型、让各自的字段归位</strong>；再让编译器替我们盯住分支有没有漏。
     </p>
@@ -64,13 +64,13 @@ import T20DiscriminatedUnion from './T20DiscriminatedUnion.vue'
       这套建模方式几乎可以套在任何有明确状态流转的地方：订单、支付、工作流的节点、聊天消息的类型（文本、图片、语音）、表单的步骤。它的价值不在语法本身，而在于<strong>让「状态有哪些、每种状态带什么、处理是否齐全」这三件事同时被类型系统管起来</strong>。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>穷尽性检查兜底</h2>
     <figure class="lesson-figure">
       <figcaption>切换订单的各个状态，再看穷尽性检查与常见模式，体会 <code>default</code> 里的 <code>never</code> 如何兜底。</figcaption>
       <T20DiscriminatedUnion />
     </figure>
 
-    <h2>总结</h2>
+    <h2>状态集合的建模</h2>
     <p>
       可辨识联合把「一个值可能处于哪些状态、每种状态带什么数据」写进了类型。判别属性让每个分支都能被精确收窄，<code>never</code> 让遗漏的分支在编译期就暴露。状态越多、流转越复杂，这套写法的收益越大。
     </p>

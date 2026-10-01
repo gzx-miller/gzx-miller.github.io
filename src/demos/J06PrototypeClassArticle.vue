@@ -8,7 +8,7 @@ import J06PrototypeClass from './J06PrototypeClass.vue'
       <strong>开场问题：</strong>三个课程实例都能调用同一个 <code>summary()</code>，可你从来没有在任何一份实例对象上写过这个方法——它到底存放在哪里？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>方法共享需求</h2>
     <p>
       你在写一个课程模型：每节课都有标题、课时，以及一段「标题 · 课时」形式的简介。页面上一千节课就是一千个实例，而这段简介的逻辑对每一节课都完全一样。
     </p>
@@ -16,7 +16,7 @@ import J06PrototypeClass from './J06PrototypeClass.vue'
       如果每个实例都自带一份简介函数，就等于把同一段函数体复制了一千遍，内存被白白占掉，而且每改一次格式，都要重新创建所有实例才能生效。还有一种更常见的麻烦：这节课和「直播课」唯一的差别是简介前面多一个前缀，如果靠复制构造函数里的初始化代码来实现，两边会从此各自演化，改一处忘一处。所以这里需要一种结构，能<strong>让多个对象共享同一份行为，同时各自持有自己的数据</strong>。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>实例各自挂载</h2>
     <p>
       最直接的做法：用构造函数初始化实例，并在构造函数里给每个实例挂上方法。写 <code>function Course(title, hours) { this.title = title; this.summary = function () { ... } }</code>，然后用 <code>new</code> 创建对象。
     </p>
@@ -24,7 +24,7 @@ import J06PrototypeClass from './J06PrototypeClass.vue'
       这个方案做对了一件事：<strong>每个实例都能调用自己的 <code>summary()</code>，行为确实跟着实例走</strong>，调用形状也和后来 class 的写法一致。方向没问题，问题在于「把方法挂在实例上」这个选择。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>内存线性上涨</h2>
     <ul>
       <li>方法体是每个实例各自一份副本，实例越多重复的函数越多，内存占用随实例数量线性上涨。</li>
       <li>数据字段和行为混在同一层，从对象上打印出来分不清哪些是状态、哪些是能力。</li>
@@ -32,7 +32,7 @@ import J06PrototypeClass from './J06PrototypeClass.vue'
       <li>想做「直播课 = 课程 + 额外简介方式」这种分层，只能靠把父级构造函数里的初始化代码复制一遍。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>原型对象挂载</h2>
     <p>
       改进的第一步是分工：<strong>把实例自己该有的字段留在构造函数里，把行为搬到 <code>prototype</code> 上</strong>。当对象在自身找不到某个属性时，会顺着内部的 <code>[[Prototype]]</code> 链接去它的原型上继续找，还找不到就再往上找一层，直到链的尽头。整条链上的方法被所有实例共享——一份代码谁都调得到，第一条不足就此解决。
     </p>
@@ -49,13 +49,13 @@ import J06PrototypeClass from './J06PrototypeClass.vue'
       实践中还有两条边界值得记住。第一，<strong>优先组合而不是把继承拉得很深</strong>：继承层数一多，一个属性从哪儿来要靠翻好几层，行为也容易被某一层悄悄覆盖，把能力拆成独立对象再组合进来通常更灵活、副作用更少。第二，需要真正私有、外部完全访问不到的字段时，用 <code>#name</code> 语法，它不参与原型共享，每个实例各自一份。此外 <code>Object.create</code> 能按指定原型直接创建对象、<code>Object.setPrototypeOf</code> 能事后改写原型，它们让这条链可以被手动操控，但改写已有对象的原型会影响后续所有查找路径，用的时候要格外谨慎。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>继承链方法调用</h2>
     <figure class="lesson-figure">
       <figcaption>看实例调用的简介方法其实来自父类原型，而子类用 super 在它前面又追加了「直播课」前缀。</figcaption>
       <J06PrototypeClass />
     </figure>
 
-    <h2>总结</h2>
+    <h2>行为共享机制</h2>
     <p>
       原型链解决的，是多个对象如何共享同一份行为：数据各自持有、方法挂在链上共享，而 class 与 extends 只是这套委托机制更好看的外衣。
     </p>

@@ -8,7 +8,7 @@ import E12Security from './E12Security.vue'
       <strong>开场问题：</strong>你做了个笔记应用，正文是富文本编辑器。测试时同事粘进来一段从网页复制的 HTML，里面藏了一个看不见的 <code>&lt;img src=x onerror="require('child_process').exec('calc')"&gt;</code>。保存、刷新——你本机的计算器弹了出来。一个网页里的 XSS，凭什么能在你的应用里执行系统命令？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>脚本注入风险</h2>
     <p>
       Electron 的渲染进程本质就是一个 Chromium 窗口，里面跑着你的页面和用户的输入。只要这里有 XSS，就等于有人在你的应用里执行任意脚本。真正决定后果的是另一件事：<strong>这段脚本手里有多少权限</strong>。如果渲染进程还带着 Node 能力，那它就能直接 <code>require('child_process')</code> 执行系统命令——XSS 升级成了 RCE（远程代码执行），而主进程是唯一还能信任的边界。
     </p>
@@ -19,7 +19,7 @@ import E12Security from './E12Security.vue'
       所以问题变成：怎样把渲染进程的能力收得只剩「渲染」，同时把注入与导航都挡在边界之外？
     </p>
 
-    <h2>最小方案</h2>
+    <h2>节点能力关闭</h2>
     <p>
       最直接的一步：创建窗口时改 <code>webPreferences</code>——<code>nodeIntegration: false</code>、<code>contextIsolation: true</code>、<code>webSecurity: true</code>，需要的能力只通过 <code>preload</code> 加 <code>contextBridge</code> 显式暴露。
     </p>
@@ -27,7 +27,7 @@ import E12Security from './E12Security.vue'
       这个方案做对了一件事：<strong>它把「渲染进程能不能碰 Node」从默认开放改成了默认关闭</strong>，你要什么再明确开口。渲染进程从此只是一个网页，页面里跑再怪的脚本也拿不到 <code>require</code>。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>隔离失效缺口</h2>
     <ul>
       <li>只关 <code>nodeIntegration</code> 不够：<code>contextIsolation</code> 若为 <code>false</code>，页面和 preload 在同一上下文里，页面可以污染 <code>Object.prototype</code> 之类的原型，让你写在校验里的判断悄悄失效。</li>
       <li>没有 CSP：隔离做得再好，页面里照样能内联执行 <code>&lt;script&gt;</code>、从远程拉脚本，XSS 本身还在。</li>
@@ -37,7 +37,7 @@ import E12Security from './E12Security.vue'
       <li>依赖不体检：某个包爆出已知漏洞你不会知道，攻击面在悄悄扩大。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>最小权限配置</h2>
     <p>
       第一步先把「最小权限」落进 <code>webPreferences</code>：<code>nodeIntegration: false</code>、<code>contextIsolation: true</code>、<code>webSecurity: true</code>，<code>sandbox</code> 保持默认开启。这是地基，后面所有措施都建立在「渲染进程没有额外权限」之上。
     </p>
@@ -57,13 +57,13 @@ import E12Security from './E12Security.vue'
       最后一条最容易被漏掉：<strong>渲染进程要当成「随时可能被攻破」来对待</strong>，所以主进程是信任边界——所有经 IPC 传进主进程的参数都要校验，不能因为「这是我自己页面发的」就照单全收。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>安全清单核对</h2>
     <figure class="lesson-figure">
       <figcaption>逐条对照安全检查清单（绿勾=已达标、红叉=待修），再读下方代码示例中 BrowserWindow 与 CSP 的正确写法，确认 <code>nodeIntegration</code> / <code>contextIsolation</code> / <code>webSecurity</code> 与 CSP 各自该设成什么。</figcaption>
       <E12Security />
     </figure>
 
-    <h2>总结</h2>
+    <h2>渲染权限收敛</h2>
     <p>
       安全加固的核心，是把渲染进程的权限压到最小：默认关掉 Node、开启上下文隔离、用 preload 白名单暴露能力，再用 CSP、导航拦截与依赖审计把注入的后果封死在渲染进程里。记住主进程是信任边界，渲染进程送来的一切都要当成不可信。
     </p>

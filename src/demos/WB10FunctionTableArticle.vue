@@ -8,7 +8,7 @@ import WB10FunctionTable from './WB10FunctionTable.vue'
       <strong>开场问题：</strong>计价台要根据用户当前选的促销方式，在「加价、满减、打折、拆分」四个函数之间挑一个来调用。选哪个是<strong>运行时</strong>才知道的——用户点了按钮，模块拿到一个数字。函数名字没法写死在 WAT 里，那模块怎么凭一个运行时数字，找到并调用对应的函数？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>运行期决定调用</h2>
     <p>
       静态调用从来不是问题：直接写 <code>call $add</code>，调用哪个函数编译期就定死了。麻烦在于促销方式是用户点击决定的，模块运行时手里只有一个数字 <code>op</code>（0/1/2/3），想知道它对应哪个函数。而 Wasm 里没有「可以把函数存进变量里的函数指针」，也没有反射可以按名字查函数。
     </p>
@@ -16,7 +16,7 @@ import WB10FunctionTable from './WB10FunctionTable.vue'
       退一步，用一长串 <code>if</code> / <code>else</code> 分支，每个分支里 <code>call</code> 一个写死的函数行不行？代价一层层加：每新增一种运算就得改代码、重新编译；分支越铺越长，模块跟着膨胀；更要命的是，<strong>宿主完全没法在运行时替换某个实现</strong>——你想在不停机的情况下换成新算法，根本无从下手。问题于是收敛成一句：<strong>「调用哪个函数」这件事，能不能变成一个运行时可查、甚至可改的索引？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>函数表构造</h2>
     <p>
       造一张<strong>函数表</strong>——一个按索引存放函数引用的数组。<code>(table 4 funcref)</code> 声明 4 个槽，再用 <code>(elem (i32.const 0) $add $sub $mul $div)</code> 把四个函数依次填进去。调用时不写函数名，而是用 <code>call_indirect</code> 按索引去表里取函数执行。
     </p>
@@ -24,7 +24,7 @@ import WB10FunctionTable from './WB10FunctionTable.vue'
       这个方案做对了一件事：<strong>它把「调用哪个函数」从编译期写死的名字，变成了运行时可以变化的索引</strong>。运行到哪一步、用哪个函数，全由那个数字决定。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>顺序错位风险</h2>
     <ul>
       <li>索引对应哪个函数，纯靠约定——第 0 项是 <code>add</code>，全凭 <code>elem</code> 的填充顺序保证，一旦顺序写错就整体错位。</li>
       <li>表里各函数签名如果不一样呢？某个槽放的是 <code>(i32) -&gt; i32</code>，调用点却按 <code>(i32, i32) -&gt; i32</code> 去调，会发生什么？</li>
@@ -32,7 +32,7 @@ import WB10FunctionTable from './WB10FunctionTable.vue'
       <li>宿主能不能看见这张表，甚至直接改写其中一项？</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>表项类型与填充</h2>
     <p>
       先补「表里放什么、怎么填」。表元素的类型统一是 <strong><code>funcref</code></strong>（函数引用，一种引用类型），用 <code>(elem …)</code> 段在实例化时填充：位置 0 到 3 依次是 <code>add</code>、<code>sub</code>、<code>mul</code>、<code>div</code>。<code>dispatch(op, a, b)</code> 里先把 <code>op</code> 压上操作数栈，它待会儿要当索引用。
     </p>
@@ -49,13 +49,13 @@ import WB10FunctionTable from './WB10FunctionTable.vue'
       <strong>别把它当静态调用看：</strong><code>call_indirect</code> 的类型校验发生在<strong>运行时</strong>——表里函数签名与声明的 <code>type</code> 不符、或索引越界，都会在那一刻抛异常，而不是像静态 <code>call</code> 那样由校验器提前挡下。用之前先确认索引合法、类型一致。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>索引分发现象</h2>
     <figure class="lesson-figure">
       <figcaption>在四个促销运算之间切换、改一改 A / B，看 <code>dispatch(op, a, b)</code> 如何按索引分发；再点「改写第 0 项为 sub」，验证 JS 改表之后同一个 <code>dispatch(0, …)</code> 的行为也变了。</figcaption>
       <WB10FunctionTable />
     </figure>
 
-    <h2>总结</h2>
+    <h2>间接调用与校验</h2>
     <p>
       函数表把函数引用按索引排成一列，模块用 <code>call_indirect</code> 在运行时按索引调用并顺手校验签名，于是「调用哪个函数」从编译期写死变成了运行时可定；表还能导出，宿主用 <code>table.get</code> / <code>table.set</code> 读写表项，热替换与插件化就建立在这一点上。
     </p>

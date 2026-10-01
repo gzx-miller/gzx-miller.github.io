@@ -8,7 +8,7 @@ import U12UiFeedback from './U12UiFeedback.vue'
       <strong>开场问题：</strong>提交订单的流程里，你写了 <code>uni.showLoading({ title: '提交中' })</code>，请求回来后再 <code>uni.showToast({ title: '提交成功' })</code>。真机上用户只看到转圈转了一秒多才消失，那个「提交成功」根本没露面——两句提示明明都调了，为什么第二句像没执行？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>三端原生弹窗</h2>
     <p>
       三端各有各的原生弹窗：小程序有 <code>wx.showToast</code> 那套，App 有自己的原生提示，H5 又是浏览器里的 div。如果每个页面都自己写一个 <code>&lt;div class="dialog"&gt;</code>，你会立刻遇到遮罩层级互相压、点击穿透、被软键盘顶飞、安全区不适配这一串问题。uni-app 的做法是提供一套统一的反馈 API，把它们分别映射到各端的原生控件。
     </p>
@@ -19,7 +19,7 @@ import U12UiFeedback from './U12UiFeedback.vue'
       问题于是落到一句：<strong>这几类反馈，各自该在什么时机用，同时出现在屏幕上时又该按什么规则排先后？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>随处调用的提示</h2>
     <p>
       最省事的用法：哪里需要提示，就在哪里 <code>uni.showToast({ title: '报名成功' })</code>。
     </p>
@@ -27,7 +27,7 @@ import U12UiFeedback from './U12UiFeedback.vue'
       这个方案做对了一件事：<strong>它用一行代码换来了一个跨端一致、无需自己维护层级、还会自动消失的提示</strong>。对「结果已经发生，告诉用户一声」这种单向通知，它完全够用——不用写遮罩、不用写定时器、不用担心三端样式跑偏。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>提示与遮罩层级</h2>
     <ul>
       <li>耗时操作里转圈和 toast 挨着写，toast 被 loading 的全屏遮罩压在下面，直到 loading 自己超时才露出来，用户以为提示没出现。</li>
       <li><code>showLoading</code> 之后忘了 <code>hideLoading</code>，转圈一直挂着，界面谁也点不动，用户只能杀进程重开。</li>
@@ -36,7 +36,7 @@ import U12UiFeedback from './U12UiFeedback.vue'
       <li><code>showToast</code> 的 <code>title</code> 写了一大段话，真机上被截成几个字，关键信息丢了一半。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>通知与询问之分</h2>
     <p>
       不推翻这几个 API，而是先给它们<strong>分时机</strong>。这四类是两种截然不同的东西，按「要不要等用户回话」一刀切开：
     </p>
@@ -62,13 +62,13 @@ import U12UiFeedback from './U12UiFeedback.vue'
       <strong>一个常见的自伤：</strong>把 <code>showLoading</code> 当成页面的全局开关，多个请求同时在跑时，先回来的那个调了 <code>hideLoading</code>，把还没结束的请求的转圈也一起关掉了。要么用一个计数记录进行中的请求数、归零才收，要么干脆不用全屏 loading 遮罩，改用行内骨架屏。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>四类提示的节奏</h2>
     <figure class="lesson-figure">
       <figcaption>依次点四个按钮：「轻提示」看它自动出现又自动消失；「提交订单」会先转圈、结束后<strong>先收转圈再弹成功</strong>；「删除确认」先问你再动手；「更多操作」从底部选一项。留意每一种的阻断感差别。</figcaption>
       <U12UiFeedback />
     </figure>
 
-    <h2>总结</h2>
+    <h2>反馈类型的次序</h2>
     <p>
       交互反馈的关键不是会用哪个 API，而是<strong>分清「通知」还是「询问」，再处理它们的先后</strong>：toast 与 loading 是单向通知、modal 与 actionSheet 是双向询问；loading 会挡住 toast，所以耗时流程必须「先 hideLoading 再 showToast」；modal 一定要判 <code>res.confirm</code>。震动和音效可以加分，但它们在三端的能力参差，不能当作主要反馈。
     </p>

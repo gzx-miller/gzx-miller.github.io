@@ -8,7 +8,7 @@ import C03Flexbox from './C03Flexbox.vue'
       <strong>开场问题：</strong>我想让卡片里的文字垂直居中，写了 <code>vertical-align: middle</code>，浏览器一点反应都没有——为什么这个「居中」不管用？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>并排卡片对齐难题</h2>
     <p>
       你在排一份课程卡片列表：左边一张封面图、右边标题与简介，需要图撑满卡片高度、标题贴顶、底部一行「查看详情」贴右，卡片之间还要均匀留缝、放不下时自动换行。用传统写法拼了半天，卡片之间总有几像素对不齐的空白缝，怎么都消不干净。
     </p>
@@ -19,7 +19,7 @@ import C03Flexbox from './C03Flexbox.vue'
       更本质地说，这类需求都属于「一维排列」：元素沿着一根线依次摆开，只是在线上的对齐方式、间距、伸缩比例不同。传统方案没有为这根线提供统一的抽象，于是每种对齐都要各找各的办法，才有了拼凑感。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>内联块的并排写法</h2>
     <p>
       最朴素的做法：让子元素 <code>display: inline-block</code>，父级用 <code>text-align: center</code> 控制水平位置，间距靠 <code>margin</code> 一个个加。
     </p>
@@ -27,7 +27,7 @@ import C03Flexbox from './C03Flexbox.vue'
       它做对了<strong>「把元素当成排列单位」这件事</strong>：子项并排了，水平对齐也有了。当只有两三个元素、位置也简单时，这套写法完全能跑。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>行内块的空白缝隙</h2>
     <ul>
       <li>inline-block 之间会多出空隙：HTML 里换行产生的空白字符被当成了内容，卡片之间凭空多几像素缝。</li>
       <li>垂直居中做不到：<code>text-align</code> 只管水平方向，<code>vertical-align</code> 是给行内元素对齐基线的，管不了盒子在容器里的上下位置。</li>
@@ -36,7 +36,7 @@ import C03Flexbox from './C03Flexbox.vue'
       <li>换行、间距、对齐各管各的，稍微复杂一点就开始互相打架。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>弹性盒模型的引入</h2>
     <p>
       不推翻「并排排列」，而是换一套有明确轴向的模型：给容器写 <code>display: flex</code>，它的直接子元素立刻变成「flex 项目」。关键在于它引入了<strong>两条轴</strong>——主轴由 <code>flex-direction</code> 决定，默认 <code>row</code> 是横向排列，改成 <code>column</code> 就变纵向。
     </p>
@@ -65,13 +65,13 @@ import C03Flexbox from './C03Flexbox.vue'
       还要把分工说清楚：<strong>Flexbox 是一维布局</strong>，处理一行或一列内部的排列与分配；页面级的二维骨架（同时要管行和管列）应该交给 Grid。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>两轴职责的对照</h2>
     <figure class="lesson-figure">
       <figcaption>切换主轴方向与两轴对齐，观察 justify-content 与 align-items 各自影响哪根轴。</figcaption>
       <C03Flexbox />
     </figure>
 
-    <h2>总结</h2>
+    <h2>主轴与交叉轴分工</h2>
     <p>
       Flexbox 用「一根主轴、一根交叉轴」把排列讲清楚了：主轴对齐交给 justify-content，交叉轴对齐交给 align-items，空间不足用 flex-wrap 换行、gap 留缝，剩余空间用 <code>flex: 1</code> 分配。垂直居中、等分宽度、均匀间距这些曾经要靠 hack 的事，现在各归各位。
     </p>

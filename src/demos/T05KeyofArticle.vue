@@ -8,7 +8,7 @@ import T05Keyof from './T05Keyof.vue'
       <strong>开场问题：</strong>设置面板要按配置项名字读值，写 <code>preferences['theme']</code> 没问题，可手滑写成 <code>preferences['themes']</code> 只会静默拿到 <code>undefined</code>——有没有办法让拼错的键名根本编译不过？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>按键名动态取值</h2>
     <p>
       设置面板里有主题、密度、语言三项配置，每一项既要能读值，也要能按名字被动态访问。你希望函数接收一个「键名」参数，再按键取值，这样就不必为每一项各写一个读取函数。
     </p>
@@ -16,7 +16,7 @@ import T05Keyof from './T05Keyof.vue'
       麻烦出在键名的类型上：如果把它写成 <code>string</code>，那么 <code>readSetting('themes')</code> 这种拼错也能通过编译，错误直到运行时才以 <code>undefined</code> 的形式冒出来；而即使拼对了，返回值类型也说不清。所以真正要解决的是：<strong>动态访问对象属性时，如何避免键名拼写错误，并让返回值类型同步精确</strong>。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>字符串键名入参</h2>
     <p>
       最省事的做法，是接受一个字符串键名，直接去对象上取值：
     </p>
@@ -27,7 +27,7 @@ import T05Keyof from './T05Keyof.vue'
       它做对了一件很实用的事：<strong>函数确实实现了「按名字动态取值」</strong>，调用方不必为每一项写一个专用函数，设置面板的每一行都能复用同一条读取路径。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>错键的静默失效</h2>
     <ul>
       <li>键名类型是 <code>string</code>，任何拼写都能传入，错字要到运行时才暴露成 <code>undefined</code>。</li>
       <li><code>preferences[key]</code> 的返回类型只能退成宽泛的联合，甚至被认为是 <code>any</code>。</li>
@@ -35,7 +35,7 @@ import T05Keyof from './T05Keyof.vue'
       <li>没有单一来源描述「合法的键有哪些」，键名散落在各处，改名时无法被编译器追踪。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>键与字符串契约</h2>
     <p>
       把这些不足归纳起来，本质是：<strong>对象属性和字符串之间缺少一层契约</strong>。对象类型明明写清了有哪些字段，可一旦改用字符串去访问，这层信息就断掉了——键名和返回值类型同时失守。键名一旦拼错，编译器不但拦不住，还会把返回值一并放行成宽泛类型，错误于是被藏得更深。
     </p>
@@ -68,13 +68,13 @@ import T05Keyof from './T05Keyof.vue'
       把参数类型写成 <code>K extends keyof T</code>，是动态访问的通用防御姿势：<strong>先固化合法的键，再按键取值</strong>。键与值的类型都来自同一份模型，谁改了模型，所有受牵连的位置都会被编译器点出来。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>返回值随键变化</h2>
     <figure class="lesson-figure">
       <figcaption>切换不同的配置键，观察读取函数的返回结果如何随键名变化。</figcaption>
       <T05Keyof />
     </figure>
 
-    <h2>总结</h2>
+    <h2>合法键锁定机制</h2>
     <p>
       <code>keyof</code> 与索引访问类型，把「对象有哪些合法键、每个键对应什么类型」交还给类型系统。<code>keyof</code> 给出键的联合，<code>T[K]</code> 给出值的类型，把两者写进函数签名，动态属性访问就能同时拿到灵活性与精确性，拼错的键名在编辑阶段就被拦下。
     </p>

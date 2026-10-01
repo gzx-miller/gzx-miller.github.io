@@ -2,7 +2,7 @@
   <LlmArticle>
     <div class="llm-question"><strong>开场问题：</strong>模型眼里的「字」是什么？为什么 strawberry 数不对 r 的个数？</div>
 
-    <h2>提出问题</h2>
+    <h2>文字怎么变成可查的 token</h2>
     <p>前两课从头到尾摆弄的都是「词向量」——一串数字。可键盘上敲进去的「我 是 一只 小猫」是文字，不是数字，中间缺了一步：<strong>谁把文字变成向量？</strong>模型内部藏着一张<strong>有限</strong>的查找表，文字进来就查——查到哪个单元，就取出对应那一行向量。但表必须是有限的，不可能为每一种文字串都留一行，所以文字进门的第一步，必须先切成「表里查得到的单元」。这一步叫<strong>分词（tokenize）</strong>，切出来的每一块就是一个 <code>Token</code>。</p>
     <div class="llm-box warn">
       <strong>副作用</strong>：问顶尖模型「strawberry 里有几个字母 r？」，它常一本正经答「2 个」，正确答案是 3 个。不是它语文没学好——<code>strawberry</code> 常常整块就是表里的一个 token、不可分割。模型眼里它不是 10 个字母，而是一坨整体，就像你把「中国」当一个词，从不去数它有几个笔画——那 3 个 r 藏在整体内部，对模型根本不可见。
@@ -35,7 +35,7 @@
     <p>GPT-4 的词表（tiktoken，约 10 万 token）以英文语料为主，中文占比较小。后果是同样的意思中文往往要花更<strong>多 token</strong>：英文「The quick brown fox」= 4 tokens，中文同义句可能要 8 tokens——上下文窗口能放的汉字更少，按 token 计费也更贵。</p>
     <p>既然 token 不对应字符，模型就栽在一些只跟字母有关的任务上，根源全是一个：<strong>它看不见 token 内部的字母</strong>。例如数字母（一个 token 里的 r 数不清）、逆序拼写（把 HELLO 倒成 OLLEH 要逐字符操作）、押韵 / 藏头（每行首字母拼成词常对不齐）。这些不是智力问题，而是 tokenization 的<strong>固有盲区</strong>。缓解思路是让模型访问字符级信息，或干脆用字节级 tokenizer——但代价又回到「序列太长」那堵墙上，仍是权衡。</p>
 
-    <h2>总结</h2>
+    <h2>分词是流水线的第一道工序</h2>
     <p>模型看到的不是文字，是 token 的<strong>整数编号</strong>。按词切会爆词表、按字符切序列太长，BPE 折中——从字符出发、反复合并最频繁的相邻对。本课要点：两条朴素路的墙；子词折中（常见整块、生僻拆片段、永不完全不认识）；BPE 的「数频率 → 合并 → 重复」规则；真正输入是 文本 → token → 整数 ID → 向量；以及 token 内部字符不可见带来的数字母、逆序、藏头等既有盲区。</p>
     <div class="llm-term"><span class="term-name">「Tokenizer 分词器」</span>是指把文本切成有限词表里可查到的 token（主流是 BPE 子词切法：从字符出发反复合并高频相邻对）并映射成整数 ID、再经嵌入表转为向量的第一道工序；正因模型看到的是 token 而非字符，strawberry 才能数错 r、中文也需更多 token。</div>
   </LlmArticle>

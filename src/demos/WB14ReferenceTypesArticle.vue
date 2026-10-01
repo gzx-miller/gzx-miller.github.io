@@ -8,7 +8,7 @@ import WB14ReferenceTypes from './WB14ReferenceTypes.vue'
       <strong>开场问题：</strong>你把一个会员对象交给 Wasm 的 <code>identity</code> 函数，它什么也没做、原样返回。你在 JS 里用 <code>===</code> 一比，两个引用<strong>相等</strong>——对象跨过 Wasm 边界跑了一个来回，居然没被复制。可你明明记得，数值类型跨边界都是按值拷贝的。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>值类型拷贝局限</h2>
     <p>
       值类型（<code>i32</code>、<code>f64</code>）跨边界是按值拷贝，这很好理解：数字小，复制一份没负担。但会员对象、DOM 节点、缓存句柄这些没法拆成几个数字。硬要传，看上去只有两条老路。
     </p>
@@ -16,7 +16,7 @@ import WB14ReferenceTypes from './WB14ReferenceTypes.vue'
       第一条是序列化进线性内存：对象里一旦含有函数、DOM 引用或循环引用，<code>JSON.stringify</code> 直接报错，根本序列化不了；就算能序列化，拿回来也只是个副本，<code>===</code> 不再成立，而且每次调用都要把大对象整个拷一遍。第二条是干脆不传：把所有对象逻辑都留在 JS 侧，那模块就永远够不着宿主对象。真正的问题因此是：<strong>能不能只传一个「引用 / 句柄」，让模块把它持有住，却不复制对象本身？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>外部引用类型</h2>
     <p>
       答案是引用类型里的 <strong><code>externref</code></strong>。把函数签名写成 <code>(param $obj externref) (result externref)</code>，模块就可以在栈上持有这个引用，也能把它原样传回——它<strong>传的是句柄，不是对象</strong>。
     </p>
@@ -24,7 +24,7 @@ import WB14ReferenceTypes from './WB14ReferenceTypes.vue'
       这个方案做对了一件事：<strong>它把「对象的身份」而不是「对象的内容」交给模块</strong>。一次传递是常数开销，和对象多大、多复杂都无关；对象里有函数、有 DOM 节点也无所谓，因为压根没打算复制它。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>引用内部不可读</h2>
     <ul>
       <li>模块拿到 <code>externref</code> 也<strong>读不了它的内部</strong>：<code>externref</code> 是不透明（opaque）的，想在 Wasm 里取 <code>obj.name</code> 根本做不到。</li>
       <li>释放引用是个真问题：模块持有期间这个 JS 对象不能被回收，引用类型要让引擎参与垃圾回收，生命周期比自增的数字类型复杂。</li>
@@ -32,7 +32,7 @@ import WB14ReferenceTypes from './WB14ReferenceTypes.vue'
       <li>环境支持：引用类型是较新的提案，老的引擎或工具链可能根本不认这个签名。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>同一引用判定</h2>
     <p>
       先补<strong>「传的确实是同一个引用」</strong>。<code>identity</code> 把收到的 <code>externref</code> 原样返回，JS 用 <code>===</code> 一判定就相等——这说明全程没有发生拷贝。这一步是后面所有用法的立足点：模块保管的，就是宿主那个对象本人。
     </p>
@@ -52,13 +52,13 @@ import WB14ReferenceTypes from './WB14ReferenceTypes.vue'
       <code>externref</code> 传的是引用而不是拷贝，但它并不「转移所有权」：对象仍旧归 JS 所有，模块只是暂时持有。要让引擎知道这段持有关系、从而正确回收，就依赖引用类型参与的这套 GC 机制。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>往返同一性</h2>
     <figure class="lesson-figure">
       <figcaption>点「传入 Wasm 并返回」，看判定结果是「引用完全一致」——同一个会员对象绕过模块一圈，<code>===</code> 仍然成立，说明全程没有复制。</figcaption>
       <WB14ReferenceTypes />
     </figure>
 
-    <h2>总结</h2>
+    <h2>不复制引用场景</h2>
     <p>
       <code>externref</code> 让模块能持有并原样传回一个 JS 对象的引用而不复制它，适合把 DOM 节点、缓存句柄、回调上下文这类对象交给模块保管；模块读不了它的内部，要操作就回调 JS。<code>funcref</code> 是它的兄弟，只能指向函数、也是函数表的元素类型；再往前的 WasmGC 提案则让 Wasm 能直接操作结构体与数组对象。
     </p>

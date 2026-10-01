@@ -8,7 +8,7 @@ import W18Instancing from './W18Instancing.vue'
       <strong>开场问题：</strong>你想画一片草地：几百棵草，每棵都用同一份几何数据。你写了个循环，对每一棵设置一次它的位置和旋转 uniform，再调用一次 <code>drawElements</code>。草是长出来了，帧率却掉到了个位数。你第一反应是三角形太多，于是把草的三角形砍掉一半——帧率几乎没动。为什么把「看起来最重」的几何变少了，画面反而没变快？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>逐次绘制开销</h2>
     <p>
       问题出在那个循环本身。当几何体完全相同、每个物体只有「位置和旋转」不同时，逐个 draw 让 CPU 承担了大量<strong>与几何无关</strong>的开销：
     </p>
@@ -21,7 +21,7 @@ import W18Instancing from './W18Instancing.vue'
       问题于是落到：<strong>当几何完全一致、只有逐物体的变换不同时，怎么让 GPU 一次就把它们全画出来？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>逐实例顶点属性</h2>
     <p>
       把「每个实例之间的不同」也变成一种顶点属性。给每个实例准备一份数据（位置、旋转），存进一块单独的缓冲；再用<strong>属性除数（divisor）</strong>告诉 GPU：这个属性前进一步的条件不是「画完一个顶点」，而是「画完一整个实例」——设成 <code>divisor = 1</code> 就是这个意思。最后用一次带实例数的绘制调用，把 N 个实例一次提交。
     </p>
@@ -29,7 +29,7 @@ import W18Instancing from './W18Instancing.vue'
       这个方案做对了一件事：<strong>它把 N 次重复的 draw call 压成了一次，并把逐实例的差异从「每次都要重设的 uniform」挪进了顶点属性</strong>。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>属性除数缺失</h2>
     <ul>
       <li><strong>不设 divisor 会全叠在一起。</strong>如果实例属性仍按逐顶点（<code>divisor = 0</code>）推进，那么同一份几何的每个顶点读到的都是缓冲开头的几个值，N 个物体全部长到同一个位置、同一个角度上，看上去只画了一个。</li>
       <li><strong>WebGL1 里没有这个原生 API。</strong>得先 <code>getExtension('ANGLE_instanced_arrays')</code>，方法名还带 <code>ANGLE</code> 后缀（<code>vertexAttribDivisorANGLE</code> / <code>drawElementsInstancedANGLE</code>），拿不到扩展就只能退回逐个绘制。</li>
@@ -37,7 +37,7 @@ import W18Instancing from './W18Instancing.vue'
       <li><strong>不是所有场景都省钱。</strong>如果每个物体的几何各不相同，或实例数量很少，实例化带来的收益并不明显，有时还不如干脆把几何合并成一个大网格。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>实例数据打包</h2>
     <p>
       先把逐实例数据打包好。把每个实例的「位置（3 个 float）+ 旋转（1 个 float）」按固定步长排进一块缓冲（本课每个实例一行 64 字节），一次加载进 <code>instVBO</code>。
     </p>
@@ -57,13 +57,13 @@ import W18Instancing from './W18Instancing.vue'
       <strong>四条边界：</strong><code>divisor = 1</code> 表示「每实例推进一次」、<code>divisor = 0</code> 表示逐顶点，两者由此把属性分成逐顶点与逐实例两类；WebGL1 必须走 <code>ANGLE_instanced_arrays</code> 扩展（API 带 <code>ANGLE</code> 后缀），WebGL2 才有同名原生 API，记得做扩展检测与回退；实例属性会占用 attribute 槽位，受 <code>GL_MAX_VERTEX_ATTRIBS</code> 约束；实例化适合草地、雨滴、粒子、网格阵列这类「大量相同几何」，几何各异时要另想办法（合批或图集）。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>绘制次数的骤降</h2>
     <figure class="lesson-figure">
       <figcaption>拖动「实例数量」滑块看到数百个立方体，切换「实例化渲染 / 逐个绘制」，盯着画面右下角的 Draw Call 计数与 FPS——实例化时它恒为 1，逐个绘制时它等于实例数。</figcaption>
       <W18Instancing />
     </figure>
 
-    <h2>总结</h2>
+    <h2>一次提交多实例</h2>
     <p>
       实例化渲染把「N 个相同几何、N 次提交」变成「N 个相同几何、一次提交」。做法是把逐实例的差异做成顶点属性，再用属性除数把它标成「每实例推进一次」；一次 draw call 里，GPU 就替你把这份几何复制了 N 遍，只是每遍换了一行实例数据。
     </p>

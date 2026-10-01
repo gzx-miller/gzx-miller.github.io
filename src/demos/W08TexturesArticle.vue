@@ -8,7 +8,7 @@ import W08Textures from './W08Textures.vue'
       <strong>开场问题：</strong>你把一张带文字的 Logo 贴到正方形上，运行时发现整张图上下颠倒，字全反了。你在图片软件里把它翻正再传，本地看着好了，可换个设备或换个 WebGL 环境又反了回来——你改的是「图」，错的却是「坐标」。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>逐顶点颜色的局限</h2>
     <p>
       你已经学会用颜色填满一个网格：每个顶点带一个颜色，光栅化时插值，片段着色器直接输出。现在想让网格显示一张图片。最直接的做法是把图片的像素颜色一个个写进顶点数据——但这条路会立刻暴露三笔隐藏成本：
     </p>
@@ -21,7 +21,7 @@ import W08Textures from './W08Textures.vue'
       真正的问题是：<strong>怎么让「网格长什么样」和「图长什么样」这两件事解耦，各管各的？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>UV坐标属性</h2>
     <p>
       给每个顶点除了位置之外再加一个二维坐标 <code>aUV</code>，取值范围 <code>0</code> 到 <code>1</code>。顶点着色器把它作为 varying <code>vUV</code> 转发给片段着色器，光栅化时硬件会<strong>在多个顶点的 UV 之间自动插值</strong>；片段着色器拿插值出来的 UV 去采样纹理：
     </p>
@@ -32,7 +32,7 @@ import W08Textures from './W08Textures.vue'
       这个方案做对了一件事：<strong>图片只上传一次进 GPU 显存</strong>，之后每个像素按自己那份 UV 去取色。换一个网格，纹理本身不用动；换一张图，几何也不用重做。纹理是上传到显存、通过 UV 坐标贴到几何体表面的图像数据，像素与顶点从此各归各位。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>上下颠倒的成因</h2>
     <ul>
       <li><strong>方向颠倒。</strong>UV 的 <code>(0, 0)</code> 在左下、V 向上，而纹理图像的第一行却在顶部——两者的 y 轴方向相反，直接把 UV 用上去，图就是上下翻的。</li>
       <li><strong>边缘拉伸。</strong>UV 一旦超出 <code>[0, 1]</code>，越界该怎么取色没定义，默认会把边缘像素一路拉出去，形成难看的拖尾条纹。</li>
@@ -40,7 +40,7 @@ import W08Textures from './W08Textures.vue'
       <li><strong>采样到空白。</strong>图片是异步加载的，如果没等解码完成就调用 <code>texImage2D</code> 上传，传进去的可能是一片空白。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>越界采样的处理</h2>
     <p>
       问题不是「UV 用错了」，而是「越界的 UV 该怎么算」和「UV 怎么变换」这两件事没说清。一层层补上：
     </p>
@@ -60,13 +60,13 @@ import W08Textures from './W08Textures.vue'
       <strong>两个容易踩的坑：</strong>其一，纹理的 y 轴方向与 WebGL 屏幕坐标相反（图像第一行对应纹理顶部，而 UV 原点在左下），所以上传前通常在 CPU 端把图片上下翻转，或在采样时把 V 反过来；其二，图片是异步加载的，<strong>务必在 <code>texImage2D</code> 之前确认解码完成</strong>，否则上传的是空白数据，画面会一片黑或一片白。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>平铺与偏移观察</h2>
     <figure class="lesson-figure">
       <figcaption>拖动 UV 平铺滑杆让图片重复铺满整块四边形，再用偏移滑杆移动画面，勾选 UV 网格就能看到每个像素实际用了哪一组 UV 取色。</figcaption>
       <W08Textures />
     </figure>
 
-    <h2>总结</h2>
+    <h2>纹理映射的职责</h2>
     <p>
       纹理映射把「图长什么样」和「网格长什么样」拆开了：顶点只负责带上 <code>0</code> 到 <code>1</code> 的 UV，光栅化时插值，片段着色器按 UV 采样。<strong>方向颠倒、边缘拉伸、平铺出缝，几乎都能归到 UV 与 wrap 这两处没对齐。</strong>
     </p>

@@ -8,7 +8,7 @@ import N03DynamicRoute from './N03DynamicRoute.vue'
       <strong>开场问题：</strong>课程详情页的地址是 <code>/courses/3</code>，你在页面里写 <code>if (route.params.id === 3)</code> 判断「这是第三门课」，它却从来不成立；你再写 <code>route.params.id + 1</code>，本以为得到 4，结果拼出了字符串 <code>'31'</code>。地址栏里那个明明是数字的 3，取出来到底变成了什么？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>数据驱动的页面</h2>
     <p>
       一个课程详情页要服务无数条数据。如果每条数据都得对应一个自己的页面文件，产品让你上十门课，你就得新建十个文件——数据量一涨，文件数跟着线性膨胀，显然不可维护。你真正需要的，是<strong>一个文件按「路径的形状」匹配一整类 URL，并把其中会变的那一段作为参数接出来</strong>。
     </p>
@@ -16,7 +16,7 @@ import N03DynamicRoute from './N03DynamicRoute.vue'
       旧的替代方案各有代价。用查询串 <code>/course?id=3</code>，一个文件确实够用，但 URL 只表达了「某个页面带了个参数」，像 <code>/docs/guide/installation</code> 这样的层级关系无从体现，对搜索引擎和分享链接也不友好；自己动手解析路径字符串、写正则去匹配，不但容易写错，还等于在框架的路由匹配之外又维护了一套平行逻辑，两边容易打架。于是问题落到一句：<strong>怎么让一个文件接住一整类 URL，并把变动的那一段干净地交出来？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>查询串的做法</h2>
     <p>
       最省事的做法：用查询串。写一个 <code>pages/course.vue</code>，所有数据都走 <code>/course?id=3</code>，组件里用 <code>useRoute().query.id</code> 把参数取出来。
     </p>
@@ -24,7 +24,7 @@ import N03DynamicRoute from './N03DynamicRoute.vue'
       这个方案做对了一件重要的事：<strong>它把「变动的那一部分」从页面里抽了出来，变成了参数</strong>，于是同一个文件能服务所有 id。但它把资源地址退化成了「一个固定页面加一串参数」，URL 不再表达「这就是第 3 号资源的地址」。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>语义与层级缺失</h2>
     <ul>
       <li><code>/course?id=3</code> 语义弱，搜索引擎与分享卡片都读不出这是一个具体资源的地址。</li>
       <li>表达不了层级：<code>/docs/guide/installation</code> 这种多段路径，查询串完全无能为力。</li>
@@ -32,7 +32,7 @@ import N03DynamicRoute from './N03DynamicRoute.vue'
       <li>想在「访问之前」就校验参数是否合法，查询串方案没有一个自然的挂载点。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>方括号标可变段</h2>
     <p>
       不推翻「把变动部分抽成参数」，而是让<strong>路径本身</strong>来承载这个参数——用方括号把文件名的某一段标成可变段。分三步补齐。
     </p>
@@ -52,13 +52,13 @@ import N03DynamicRoute from './N03DynamicRoute.vue'
       <strong>同一路径别写两份：</strong>不要让 <code>[id].vue</code> 和 <code>[id]/index.vue</code> 同时存在——二者的路由是等价的，框架里只会有一份生效，容易让人搞不清到底走的哪个文件。先统一约定，再动手写页面。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>单段与多段取值</h2>
     <figure class="lesson-figure">
       <figcaption>在两个输入框里分别改路径：左边验证 <code>[id].vue</code> 的单段参数与类型转换，右边看 <code>[...slug].vue</code> 把多段路径拆成数组。</figcaption>
       <N03DynamicRoute />
     </figure>
 
-    <h2>总结</h2>
+    <h2>参数取值的类型</h2>
     <p>
       动态路由把「一类地址」和「一个文件」对应了起来：方括号标出可变的那一段，命中后从 <code>params</code> 取值。要带走的关键判断只有一条——<strong>参数值永远是字符串</strong>，参与数值运算前先转换；而单段参数给字符串、catch-all 给数组，这个差别决定了你该怎么消费它。
     </p>

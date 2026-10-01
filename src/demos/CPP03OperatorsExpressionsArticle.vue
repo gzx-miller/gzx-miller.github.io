@@ -8,7 +8,7 @@ import CPP03OperatorsExpressions from './CPP03OperatorsExpressions.vue'
       <strong>开场问题：</strong>你想判断变量 <code>a</code> 里某些二进制位是否全为 0，写下 <code>if (a &amp; mask == 0)</code>，结果不管 <code>a</code>、<code>mask</code> 取什么，这个分支要么永远不进、要么永远进——代码看着像「先按位与、再比较」，编译器却按另一套理解执行。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>一行式的运算次序</h2>
     <p>
       一行表达式里可以塞进很多运算符：<code>a + b * c</code>、<code>p &amp;&amp; q || r</code>、<code>x &lt;&lt; 1 &amp; 3</code>。人读的时候靠直觉——从左到右、按数学习惯来；但机器必须有一套毫不含糊的规则，否则同一行代码在不同编译器下能算出不同结果。
     </p>
@@ -22,7 +22,7 @@ import CPP03OperatorsExpressions from './CPP03OperatorsExpressions.vue'
       所以问题落到：<strong>一行复杂表达式里同时出现算术、比较、位、逻辑、赋值，到底按什么顺序算成什么类型？哪些写法干脆是「没定义结果」的？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>直觉读法失效</h2>
     <p>
       最省事的做法：相信从左到右、相信数学直觉来读。<code>a &amp; mask == 0</code> 读起来就像 <code>(a &amp; mask) == 0</code>；<code>1/2</code> 读起来就该是 0.5。
     </p>
@@ -33,7 +33,7 @@ import CPP03OperatorsExpressions from './CPP03OperatorsExpressions.vue'
       问题在于，一旦把位运算符、逻辑运算符和比较运算符混在一行，「直觉」会和真正的规则悄悄错开，而且错得毫无提示。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>位运算优先级意外</h2>
     <ul>
       <li><code>a &amp; mask == 0</code> 实际等价于 <code>a &amp; (mask == 0)</code>——因为 <code>==</code> 的优先级高于 <code>&amp;</code>。<code>mask == 0</code> 先算出一个 0 或 1，再和 <code>a</code> 按位与，判断的语义就彻底变了味。</li>
       <li><code>char c1 = 100, c2 = 200; char sum = c1 + c2;</code>，<code>sum</code> 得不到 300——因为 <code>c1 + c2</code> 先被提升成 <code>int</code> 得到 300，再赋回 <code>char</code> 时才截断溢出，报错的位置和你以为的不一样。</li>
@@ -42,7 +42,7 @@ import CPP03OperatorsExpressions from './CPP03OperatorsExpressions.vue'
       <li><code>1 &lt;&lt; 32</code> 对一个 32 位的 <code>int</code> 是未定义，因为位移位数超过了类型的位宽。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>显式括号分组</h2>
     <p>
       不推翻「表达式能一行写完」，而是把这几条规则一层层补上，让每一层各自管住一类意外。先补的第一层是<strong>分组</strong>，因为它决定了后面两层在讨论什么。
     </p>
@@ -62,13 +62,13 @@ import CPP03OperatorsExpressions from './CPP03OperatorsExpressions.vue'
       <strong>位移的两个硬约束：</strong><code>&lt;&lt;</code> 和 <code>&gt;&gt;</code> 的操作数必须是整数类型，且右操作数必须非负、并且小于左操作数的位宽。违反这两条（例如对 32 位 <code>int</code> 写 <code>1 &lt;&lt; 32</code>）都是未定义行为，不是「结果为零」。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>陷阱与修正对照</h2>
     <figure class="lesson-figure">
       <figcaption>在「优先级 / 代码示例 / 常见陷阱」三个页签里，先对着优先级表看位运算排在哪个位置，再逐条对照四个陷阱的错误写法与修正写法。</figcaption>
       <CPP03OperatorsExpressions />
     </figure>
 
-    <h2>总结</h2>
+    <h2>表达式求值三要素</h2>
     <p>
       一行表达式的结果由三件事共同决定：<strong>优先级决定怎么分组、整数提升与算术转换决定用多少位算、求值顺序决定谁先真的执行</strong>。别背优先级，混用场景一律加括号；别去依赖没被规定的求值顺序，同一个变量不要在一行里又读又改。
     </p>

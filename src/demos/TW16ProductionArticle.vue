@@ -8,7 +8,7 @@ import TW16Production from './TW16Production.vue'
       <strong>开场问题：</strong>开发时还好好的按钮样式，一上线就没了颜色；我去产物里搜类名，发现它压根没被生成——到底是我写错了，还是构建器「没看见」它？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>主题标签动态颜色</h2>
     <p>
       你在给课程卡片做主题标签：不同状态显示不同颜色，于是写了一段拼接逻辑，通过变量拼出 <code>bg-orange-600</code>、<code>bg-green-600</code> 这样的类名。本地开发一切正常，可打包上线后，标签全变成了「裸奔」的样式。你去构建产物里搜，发现这些类名根本没有出现在生成的 CSS 里。
     </p>
@@ -16,7 +16,7 @@ import TW16Production from './TW16Production.vue'
       这就是生产的另一面：<strong>Tailwind 生成样式的方式，和你运行时怎么想没有关系。</strong>它不是去运行你的代码、观察你最终加了哪些类，而是在构建时把你的源码<strong>当作纯文本</strong>来「扫描」，找出其中出现的、完整的候选类名，再为这些类按需生成 CSS。理解这句话，就理解了生产排查的全部钥匙。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>安全名单补救</h2>
     <p>
       遇到「类名缺失」的第一个反应，通常是加一个安全名单（safelist），把所有可能用到的类名都列进去，一劳永逸。这个方案对的地方在于，<strong>它确实能让这些类名出现在产物里</strong>，问题立刻被「压」下去了。
     </p>
@@ -24,7 +24,7 @@ import TW16Production from './TW16Production.vue'
       但它治标不治本，而且副作用很大：safelist 是一张静态清单，它会<strong>无条件地把列进去的类全部生成</strong>，无论页面是否真的用到。<code>bg-orange-600</code> 到 <code>bg-orange-900</code> 全列一遍，产物体积立刻膨胀，而你真正的设计问题——「为什么类名要让运行时来拼」——被完全掩盖了。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>变量拼接的盲区</h2>
     <ul>
       <li>用变量拼接出的类名，在扫描时不存在完整字符串，构建器看不见，自然不生成。</li>
       <li>大范围的 safelist 会掩盖架构问题，并让 CSS 产物无谓地膨胀。</li>
@@ -33,7 +33,7 @@ import TW16Production from './TW16Production.vue'
       <li>类名缺失与体积过大这两类问题，往往被混在一起盲目试错，缺少系统定位顺序。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>类名完整性硬要求</h2>
     <p>
       不推翻「按需生成」，而是顺着它的机制去解决问题。既然<strong>扫描的对象是文本、类名必须完整出现</strong>，那么第一个动作就是把动态拼接改成<strong>完整静态字符串</strong>。与其 <code>bg-${color}-600</code>，不如建一张受控映射表，把 <code>state</code> 映射到写死的完整类名字符串上——这样每个类名都在源码里「完整可见」，扫描器一眼就能找到。
     </p>
@@ -63,13 +63,13 @@ import TW16Production from './TW16Production.vue'
       把它串成一套排查顺序：<strong>确认模板文件位于自动检测范围内 → 对特殊来源用 <code>@source</code> 注册明确路径 → 分析产物体积，修复动态拼接与过宽的内联来源 → 在产物中搜索关键类名验证。</strong>这套顺序的价值在于，它让「类名缺失」和「体积过大」这两类问题，从靠猜变成有据可循。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>候选源与产出对照</h2>
     <figure class="lesson-figure">
       <figcaption>拖动滑块增加扫描文件数量，观察候选源与最终生成 CSS 之间的关系。</figcaption>
       <TW16Production />
     </figure>
 
-    <h2>总结</h2>
+    <h2>文本扫描机制</h2>
     <p>
       生产排查的核心，是牢牢记住 Tailwind 的工作方式：<strong>扫描的是文本，类名必须完整出现</strong>。动态拼接要改成完整静态字符串，扫描不到的来源要用 <code>@source</code> 纳入，范围过宽要用 <code>@source not</code> 排除，而 safelist 只是掩盖问题的止痛药，不是解药。
     </p>

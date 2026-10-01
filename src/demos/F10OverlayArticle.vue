@@ -8,7 +8,7 @@ import F10Overlay from './F10Overlay.vue'
       <strong>开场问题：</strong>你想给视频右上角贴个台标，写下 <code>ffmpeg -i input.mp4 -i logo.png -vf overlay=W-w-20:20 output.mp4</code>，两个文件明明都在 <code>-i</code> 里给出来了，命令却报错说 <code>overlay</code> 的第二个输入没接上。为什么 <code>-vf</code> 只「看见」了一路画面？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>多路画面合成</h2>
     <p>
       给视频加台标、做画中画、拼多画面，本质上是同一件事：<strong>把两路原本独立的画面合成到一路输出</strong>。一路当底图（背景），一路贴上去（前景），位置和出现时机由你说了算。
     </p>
@@ -16,7 +16,7 @@ import F10Overlay from './F10Overlay.vue'
       旧办法是绕开命令行：用后期软件手动叠加、导出；或者在播放器里开画中画。这两条路都有必须由人扛的隐藏成本：<strong>一是不可脚本化</strong>，几百条视频、还要对每条应用同一个台标时，人工叠一遍毫无性价比；<strong>二是不可控</strong>，播放器的画中画根本无法导出成文件，水印什么时候出现、停在哪个角落，也不是你能指定的。所以真正的问题是：<strong>怎样让多个输入在同一张滤镜图里汇合，并精确控制前景贴在哪儿、什么时候出现？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>前景叠加背景</h2>
     <p>
       最直接的写法是用 <code>overlay</code> 滤镜，它的基本语法是<strong>用方括号写出背景与前景两路输入，再接滤镜本身</strong>：
     </p>
@@ -27,7 +27,7 @@ import F10Overlay from './F10Overlay.vue'
       它做对了一件事：<strong>把前景画面贴到背景画面上，位置完全由 <code>x</code> / <code>y</code> 决定</strong>，坐标原点 <code>(0,0)</code> 在画面左上角，向右、向下为正。这正是所有叠加效果的最小骨架。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>单路滤镜限制</h2>
     <ul>
       <li>它<strong>不能配 <code>-vf</code> 用</strong>。<code>-vf</code> 只会把滤镜作用在第一条视频流上，第二个输入压根没进入滤镜图，于是 <code>overlay</code> 找不到它的第二路输入，直接报错——这就是开场命令失败的原因。</li>
       <li>位置表达式里有两组尺寸变量，很容易取错：<code>W</code> / <code>H</code> 是<strong>背景（主输入）</strong>的宽高，<code>w</code> / <code>h</code> 是<strong>前景</strong>的宽高。取错一组，画中画就会贴偏甚至跑出画面。</li>
@@ -36,7 +36,7 @@ import F10Overlay from './F10Overlay.vue'
       <li>两路输入长度不一样时，输出会跟着较长的那一路一直跑，短的那路结束后前景是消失、重复还是直接收尾，默认行为未必是你想要的。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>复杂滤镜图标注</h2>
     <p>
       不推翻 <code>overlay</code>，而是先解决「两路怎么进同一张图」这个前提。答案是把滤镜写进<strong>复杂滤镜图 <code>-filter_complex</code></strong>，并且用<strong>流标签</strong>显式引用每一路输入：
     </p>
@@ -83,13 +83,13 @@ import F10Overlay from './F10Overlay.vue'
       <strong>三条容易踩的边界：</strong>两路输入必须走 <code>-filter_complex</code> 并用 <code>[0:v]</code> / <code>[1:v]</code> 打标签，<code>-vf</code> 只认第一路；<code>overlay</code> 的坐标原点在<strong>左上角</strong>，<code>W</code> / <code>H</code> 指背景、<code>w</code> / <code>h</code> 指前景，别混；想让输出在较短的那路结束时停止，加 <code>shortest=1</code>，需要控制辅助输入结束后的行为则用 <code>eof_action</code>。另外透明水印必须先 <code>format=rgba</code>，否则 alpha 会被丢弃。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>从角标到画中画</h2>
     <figure class="lesson-figure">
       <figcaption>「基础叠加」页签给出右上、左下、居中以及带透明度的画中画命令；「画中画」页签展示动态移入、多路叠加与加边框的进阶写法；「水印添加」页签则把静态水印、半透明水印、限时显示和滚动水印一并列出，末尾还附了 <code>x</code> / <code>y</code>、<code>enable</code>、<code>shortest</code> 等参数释义。</figcaption>
       <F10Overlay />
     </figure>
 
-    <h2>总结</h2>
+    <h2>输入路数判定</h2>
     <p>
       叠加的关键是先想清楚「有几路输入、怎么在同一张滤镜图里汇合」。两路输入走 <code>-filter_complex</code> 并用 <code>[0:v]</code> / <code>[1:v]</code> 打标签，前景要先 <code>scale</code> 定大小、<code>format=rgba</code> 保透明，再用 <code>overlay=x:y</code> 定位在左上角原点的坐标系里；想控制时间，就用 <code>enable</code> 表达式或让坐标随 <code>t</code> 变化。记住 <code>W</code> / <code>H</code> 是背景、<code>w</code> / <code>h</code> 是前景，位置就不会算错。
     </p>

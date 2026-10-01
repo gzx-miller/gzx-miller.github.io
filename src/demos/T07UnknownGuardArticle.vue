@@ -8,7 +8,7 @@ import T07UnknownGuard from './T07UnknownGuard.vue'
       <strong>开场问题：</strong>把接口返回的 JSON 用 <code>as Course</code> 断言成业务类型，本地一切正常，上线后某天字段少了半个，页面直接白屏——断言明明过了，怎么会崩？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>外部数据的来源</h2>
     <p>
       你的数据来源几乎都不在自己手里：接口响应、用户导入的文件、<code>localStorage</code> 里存的上一次状态。这些数据在到达你的业务代码之前，类型标注对它们<strong>没有任何约束力</strong>——类型只在编译期存在，编译器看不到运行时收到的究竟是一串合法 JSON 还是一段被改坏的字符串。
     </p>
@@ -16,7 +16,7 @@ import T07UnknownGuard from './T07UnknownGuard.vue'
       真正的代价出在信任的时机上。只要在拿到数据的第一行就把它当成业务类型使用，那么往后每一次取值、每一次调用都建立在「它一定是对的」这个未经检验的假设上。假设一旦不成立，错误不会停在你写下断言的地方，而是飘到很远的地方才炸开——报错的行号离真正的原因十万八千里。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>解析后的断言</h2>
     <p>
       最省事的做法：直接断言。解析之后写一句 <code>const data = JSON.parse(text) as Course</code>，剩下的代码就把 <code>data</code> 当 <code>Course</code> 用。
     </p>
@@ -24,7 +24,7 @@ import T07UnknownGuard from './T07UnknownGuard.vue'
       这个方案确实做对了一件事：<strong>它让编辑器能给出字段提示</strong>。在这之后写 <code>data.title</code> 不会再被标红，补全也能列出来，开发体验立刻顺畅。如果数据来源可信，这样做毫无问题。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>断言放行的代价</h2>
     <ul>
       <li><code>as</code> 只是给编译器「我说它是」的承诺，<strong>运行时一次检查都不会做</strong>，字段缺失时它照样放行。</li>
       <li>用 <code>any</code> 接收更糟，等于主动关掉这条数据链路上所有的类型检查。</li>
@@ -33,7 +33,7 @@ import T07UnknownGuard from './T07UnknownGuard.vue'
       <li>崩溃时堆栈落在使用数据的地方，而不是它被引入的地方，排查方向被打乱。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>未知类型的接收</h2>
     <p>
       不推翻「我要用这份数据」，而是先承认它<strong>暂时还不能被相信</strong>。第一步是把外部输入一律接收为 <code>unknown</code>——它意味着「这里有个值，但我们对它一无所知」，任何直接取值都会被编译器拦下，逼你先做检查。
     </p>
@@ -53,13 +53,13 @@ import T07UnknownGuard from './T07UnknownGuard.vue'
       再深一层，嵌套结构不要指望一次断言扫过。把校验拆成若干细粒度谓词——先判断是不是对象，再判断某个字段是不是数组，再判断数组元素的形状——逐层组合。结构复杂到一定程度时，可以引入 schema 工具（如 zod、valibot），让校验规则直接推导出类型，省去手写谓词。最后补一条工程习惯：<strong>为关键接口写一批非法输入的测试用例</strong>，用损坏的数据构造场景，确认守卫返回假而不是放行。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>校验失败的拦截</h2>
     <figure class="lesson-figure">
       <figcaption>改一改输入框里的 JSON，看守卫在校验失败时如何拒绝放行。</figcaption>
       <T07UnknownGuard />
     </figure>
 
-    <h2>总结</h2>
+    <h2>信任的显式校验</h2>
     <p>
       处理不可信数据的关键，是让「相信」这一步显式发生。外部输入先收成 <code>unknown</code>，用类型守卫在运行时真正检查结构与类型，检查通过后再交给业务逻辑——断言换不来安全，只有真实执行过的校验才能。
     </p>

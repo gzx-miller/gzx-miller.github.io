@@ -8,7 +8,7 @@ import T23TypeLevelProgramming from './T23TypeLevelProgramming.vue'
       <strong>开场问题：</strong>前端用 <code>userName</code>、后端要 <code>user-name</code>，运行时写个转换函数谁都会；可我要的是「转换之后那套键」在<strong>类型上</strong>也精确存在，让写错字段名当场报错——类型层面怎么写一段转换逻辑？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>编译期机械转换</h2>
     <p>
       前后端联调时总有一批机械转换：字段名要在 camelCase 与 kebab-case 之间来回、字符串要裁掉空格、字符串 <code>'5'</code> 有时要当成数字类型 <code>5</code> 用、两个数字类型要比较大小。这些逻辑用 JavaScript 写起来毫不费力，你却希望它们的<strong>产物也能被类型系统精确描述</strong>——只有那样，调用方写错字段名才会在编译期报错。
     </p>
@@ -16,7 +16,7 @@ import T23TypeLevelProgramming from './T23TypeLevelProgramming.vue'
       如果做不到，代价立刻显现：转换后的结构只能靠 <code>Record&lt;string, unknown&gt;</code> 之类的宽类型兜底，键名拼错、大小写写反都不会被拦下；数值比较、字符串裁剪这类约束也只能留到运行时判断，错误被推迟到了生产环境。你真正想要的，是<strong>把校验从运行时前移到编译期</strong>。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>函数配手写类型</h2>
     <p>
       最省事的做法：运行时函数加手写类型。写一个 <code>convertKeys</code> 在运行时把键改成 kebab-case，再在旁边手动抄一份转换后的对象类型，告诉调用方「大概是这些键」。
     </p>
@@ -24,7 +24,7 @@ import T23TypeLevelProgramming from './T23TypeLevelProgramming.vue'
       这个方案并非全错：<strong>它至少承认了「转换后的结构应该有一个类型」</strong>，调用方也算有了提示。只要字段不多、改动不频繁，它能撑住。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>双份事实漂移</h2>
     <ul>
       <li>两份事实必然漂移：运行时函数改了转换规则，手写的那份类型不会跟着改。</li>
       <li>数值比较、字符串去空格、字符串数字转数字这类逻辑，手写类型根本没地方表达。</li>
@@ -32,7 +32,7 @@ import T23TypeLevelProgramming from './T23TypeLevelProgramming.vue'
       <li>无法沉淀成可复用、可测试的类型工具，每个文件各写各的。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>逻辑的类型层移植</h2>
     <p>
       不推翻「类型要有转换」，而是让<strong>类型自己去执行这段逻辑</strong>。把运行时的 <code>if-else</code> 翻译成条件类型，就是类型层面的三元表达式：
     </p>
@@ -58,13 +58,13 @@ import T23TypeLevelProgramming from './T23TypeLevelProgramming.vue'
       <strong>别为了炫技写体操。</strong>类型体操是手段不是目的，可读性永远优先，业务代码里要克制使用；复杂类型会受实例化深度限制，务必给出可读的具名别名并补上注释；为类型工具的输入输出各写一组类型断言用例，把行为锁住、防止后续改动让它悄悄退化；真正好用的技巧应该沉淀进团队的类型工具库，而不是在各个业务文件里重复实现。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>内置实现写法</h2>
     <figure class="lesson-figure">
       <figcaption>切换「映射类型 / 条件类型 / 模板字面量 / 进阶技巧」标签，看同一批工具类型的内置实现与手写推导结果。</figcaption>
       <T23TypeLevelProgramming />
     </figure>
 
-    <h2>总结</h2>
+    <h2>类型级编程边界</h2>
     <p>
       类型级编程，是把条件类型、映射类型、模板字面量类型、递归与 <code>infer</code> 组合起来，在编译期完成判断、循环、字符串变换乃至算术（借元组长度当数字）。它让类型本身承担校验与派生，把错误挡在编译阶段；但它是手段而非目的，越复杂的类型越要衡量可读性，能写成直白声明的，就不要写成体操。
     </p>

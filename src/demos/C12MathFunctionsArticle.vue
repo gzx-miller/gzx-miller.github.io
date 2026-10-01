@@ -8,7 +8,7 @@ import C12MathFunctions from './C12MathFunctions.vue'
       <strong>开场问题：</strong>内容区要「占满剩下的宽度」，可旁边还有一条固定 240px 的侧栏——写 <code>width: 100%</code> 会溢出，写死像素又不随屏幕变化，这两种量难道不能写在同一条声明里？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>相对量加临界点需求</h2>
     <p>
       你在排一个经典的左右布局：左侧栏宽度固定，右侧内容区吃掉剩余空间，四周还要留一点内边距。类似的需求到处都是——标题字号要随视口增长，但别在超大屏上失控；正文宽度要舒服，小屏铺满、大屏收口。
     </p>
@@ -16,7 +16,7 @@ import C12MathFunctions from './C12MathFunctions.vue'
       这些需求有个共同点：<strong>尺寸既要"相对"，又要"有界"</strong>。可纯 CSS 的一个属性值，过去只能表达其中一样——要么是像 <code>100%</code> 这样的相对量，要么是像 <code>240px</code> 这样的绝对值。想让它们组合，或者给一个相对值套上上下限，你只能靠一堆媒体查询分段兜底，尺寸一变就要同步改好几处，漏一个就错位。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>百分比打底的做法</h2>
     <p>
       最朴素的做法：用百分比打底，再用媒体查询在几个临界点分段修正。
     </p>
@@ -24,7 +24,7 @@ import C12MathFunctions from './C12MathFunctions.vue'
       这个方案确实做对了一件事：<strong>它同时表达了相对量和临界点</strong>。在每段尺寸区间里用固定的规则，结果是可预测的、纯 CSS 的，不依赖任何脚本。当尺寸只有简单两三档时，这套写法直观又稳。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>混合单位无法运算</h2>
     <ul>
       <li>像 <code>100% 减去 32px</code> 这种<strong>混合单位</strong>的运算，在属性值里根本写不出来。</li>
       <li>每一个「不超过」或「不小于」的界限，都要单独配一条媒体查询。</li>
@@ -32,7 +32,7 @@ import C12MathFunctions from './C12MathFunctions.vue'
       <li>公式一旦调整，所有相关断点都得跟着改，维护成本随尺寸数量上升。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>属性值内的算式</h2>
     <p>
       不推翻「相对量加临界点」，而是把这层计算<strong>直接写进属性值</strong>——CSS 提供了一组数学函数。
     </p>
@@ -64,13 +64,13 @@ import C12MathFunctions from './C12MathFunctions.vue'
       <strong>最常写错的语法：</strong><code>calc()</code> 中 <code>+</code> 和 <code>-</code> 两侧<strong>必须留空格</strong>，否则会被当成符号而非运算符；<code>*</code> 和 <code>/</code> 没有这个限制。另外，<code>clamp()</code> 的理想值通常用视口单位（如 <code>vw</code>），上下界用固定值；公式出错时，多数情况是<strong>单位没对上</strong>——在开发者工具里确认结果被解析成了具体的计算值，而不是原样保留的表达式。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>参数拖动下的形态</h2>
     <figure class="lesson-figure">
       <figcaption>依次切换 calc、min、max、clamp，拖动参数看盒子如何在"相减"与"区间约束"之间变化。</figcaption>
       <C12MathFunctions />
     </figure>
 
-    <h2>总结</h2>
+    <h2>数学函数的职责划分</h2>
     <p>
       数学函数把「相对量 + 临界点」这件事收进了一条声明：<code>calc()</code> 负责混合单位运算，<code>min()</code> 给上限、<code>max()</code> 给下限，<code>clamp()</code> 一步限定区间。它们还能配合 CSS 变量，把自适应尺寸写成可复用的公式——过去要靠好几段媒体查询拼出来的响应式，现在一行就能表达。它们不只是省代码的语法糖，而是把响应式里「相对量加边界」的意图，直接写进了属性值本身。
     </p>

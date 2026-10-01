@@ -8,7 +8,7 @@ import D19ChildProcess from './D19ChildProcess.vue'
       <strong>开场问题：</strong>你把用户上传的视频转码写成一行 <code>exec('ffmpeg -i ' + filename + ' out.mp4')</code>。小文件测试通过，上线后大文件一律报 <code>maxBuffer exceeded</code>；更吓人的是，有一天用户把文件名改成 <code>a.mp4; rm -rf ~</code>，命令竟然照单全收。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>拼接命令的风险</h2>
     <p>
       在 Node 里跑外部命令是很常见的需求：调用 <code>git</code>、<code>ffmpeg</code>、系统脚本，或者干脆把一段重活丢给另一个程序去扛。这本身没错，错在你<strong>把所有外部调用都当成「传一个命令字符串」</strong>。这条路藏着几笔你必须自己承担的账：
     </p>
@@ -22,7 +22,7 @@ import D19ChildProcess from './D19ChildProcess.vue'
       <strong>执行外部命令到底有几种姿势，该怎么按场景选？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>整条命令的执行</h2>
     <p>
       最直接的是 <code>exec(command, callback)</code>：扔进去一条完整的 shell 命令字符串，回调里拿到 <code>(error, stdout, stderr)</code>。
     </p>
@@ -30,7 +30,7 @@ import D19ChildProcess from './D19ChildProcess.vue'
       它对在了一件事：<strong>对「一条短命令、小输出、只关心最终结果」的场景，它是最顺手的一行代码</strong>。你不必关心流、不必自己拼事件，命令跑完，结果就摆在回调里。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>注入与缓冲溢出</h2>
     <ul>
       <li><code>exec('convert ' + userInput)</code>，用户把 <code>userInput</code> 传成 <code>a.jpg; rm -rf ~</code>，后半句就被 shell 执行了——注入成立。</li>
       <li><code>exec</code> 默认把 <code>stdout</code> 攒到 <span class="lesson-kv">1 MB</span> 上限，<code>git log</code> 全量或 <code>ffmpeg</code> 的滚动日志一超就报错，你只看到一句 <code>maxBuffer exceeded</code>。</li>
@@ -39,7 +39,7 @@ import D19ChildProcess from './D19ChildProcess.vue'
       <li>忘了监听 <code>error</code> 和 <code>exit</code>，命令根本不存在时父进程毫无察觉，任务静默消失。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>四种执行姿势</h2>
     <p>
       不推翻 <code>exec</code>，而是按「<strong>走不走 shell</strong>」和「<strong>输出是一整段还是流</strong>」这两个维度，把 API 拆成四种，各管一段：
     </p>
@@ -59,13 +59,13 @@ import D19ChildProcess from './D19ChildProcess.vue'
       <strong>安全底线：</strong>只要命令里可能掺进外部输入，就不要用 <code>exec</code> 做字符串拼接，改用 <code>execFile</code> / <code>spawn</code> 的「可执行文件 + 参数数组」形式；如果非要用 shell，也必须对参数做严格白名单校验，而不是靠转义字符去赌。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>三种跑法的输出对比</h2>
     <figure class="lesson-figure">
       <figcaption>切换 spawn / fork / exec 三个页签，点运行，对比它们的代码与输出形态：流式逐行输出、IPC 一问一答、一次性返回结果，各自适合什么样的任务。</figcaption>
       <D19ChildProcess />
     </figure>
 
-    <h2>总结</h2>
+    <h2>外壳与输出的取舍</h2>
     <p>
       <code>child_process</code> 的价值是把「执行外部程序」这件事拆成四种可控的姿势：<code>exec</code> 顺手但走 shell、缓冲输出，<code>execFile</code> 绕过 shell 最安全，<code>spawn</code> 流式读长输出，<code>fork</code> 靠 IPC 跑 Node 模块。选型的核心只有两条：<strong>要不要经过 shell</strong>、<strong>输出是一整段还是流</strong>；再配上超时与 <code>error</code> / <code>exit</code> 监听，子进程才不至于变成脱缰的野马或僵尸。
     </p>

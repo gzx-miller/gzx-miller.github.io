@@ -8,7 +8,7 @@ import V12CSS from './V12CSS.vue'
       <strong>开场问题：</strong>你只在登录按钮的样式里写了 <code>.btn { border-radius: 8px }</code>，本意是只改那一个按钮；结果整个站点里所有用 <code>.btn</code> 的按钮全变了圆角——你改的是「一个组件」，却动了「一份全局规则」。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>样式三种诉求</h2>
     <p>
       样式里有三种反复出现的诉求：<strong>把品牌色、间距收进变量</strong>，改一处生效全局；<strong>用嵌套写清层级</strong>，不再手写一长串选择器；<strong>让组件之间互不污染</strong>，一个按钮的改动不牵连别人。可惜浏览器早年对这三种诉求都不给支持——CSS 里没有变量也没有嵌套，而「隔离」只能靠人肉约定命名前缀。
     </p>
@@ -16,7 +16,7 @@ import V12CSS from './V12CSS.vue'
       于是需要引入一条<strong>「样式编译管线」</strong>：源码里写「给人看的样式」，经过一串转换，输出「浏览器认识、兼容各版本、类名已隔离」的 CSS。旧办法要人承担的成本很明确：每个兼容前缀都得手写一遍；变量要在每个文件里手动 import；类名全靠自觉，谁写错了前缀谁就制造全局污染。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>插件链串联</h2>
     <p>
       最直接的入口是 <strong>PostCSS</strong>：它本身不处理任何语法，只负责「把 CSS 喂给一串插件、再把插件处理过的 CSS 吐出来」。Vite 会自动读取项目根目录的 <code>postcss.config.js</code>（或 <code>vite.config.ts</code> 里的 <code>css.postcss</code>），把里面的插件链应用到<strong>所有</strong>样式上。例如挂上 <code>autoprefixer</code>，它会按目标浏览器自动补齐 <code>-webkit-</code>、<code>-moz-</code> 前缀。
     </p>
@@ -24,7 +24,7 @@ import V12CSS from './V12CSS.vue'
       这个方案做对了一件事：<strong>它把「写给人看的 CSS」和「发给浏览器的 CSS」拆成了两步</strong>。你只管写，兼容与生成交给插件链。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>预处理器语法缺口</h2>
     <ul>
       <li>PostCSS 只认识 CSS。你在样式里写 <code>$brand</code>，或者写 <code>&amp;:hover</code> 这种嵌套语法，它既不认识，浏览器也不认识。</li>
       <li>变量想在组件之间共享，仍只能每个样式文件手动 import 一次，漏一个就报 <code>$brand is undefined</code>。</li>
@@ -32,7 +32,7 @@ import V12CSS from './V12CSS.vue'
       <li>若把实际样式（而不是变量）塞进 <code>additionalData</code>，它会被重复注入到每一个样式文件，产物里同一段规则出现几十遍。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>Sass变量注入</h2>
     <p>
       先补「预处理器」。装一个 <code>sass</code>，就能直接在 <code>&lt;style lang="scss"&gt;</code> 里写变量与嵌套，Vite 会自动把它编译成 CSS 再交给 PostCSS。注意这是一条<strong>两级管线</strong>：预处理器在前（Sass/Less 编译成 CSS），PostCSS 在后（普通 CSS 变成兼容 CSS）。也正因为 Vite 不内置编译器，预处理器必须自己安装，没装 <code>sass</code> 时写 <code>&lt;style lang="scss"&gt;</code> 会直接报错。
     </p>
@@ -49,13 +49,13 @@ import V12CSS from './V12CSS.vue'
       最后补「可调试」。开发阶段打开 <code>css.devSourcemap</code>，浏览器 DevTools 里看到的样式就能直接定位回源码文件，而不是编译后的中间产物。另外，Tailwind 这类工具链<strong>走 PostCSS 接入即可</strong>，不需要再额外安装专门的 Vite 插件。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>类名隔离机制</h2>
     <figure class="lesson-figure">
       <figcaption>切 postcss / preprocessor / modules 三个页签：先看 PostCSS 插件链怎么写，再看 Sass 变量如何全局注入，最后看 CSS Modules 的类名是怎么被隔离的。</figcaption>
       <V12CSS />
     </figure>
 
-    <h2>总结</h2>
+    <h2>可插拔编译管线</h2>
     <p>
       样式这件事，Vite 给的是<strong>一条可插拔的编译管线</strong>：预处理器把 Sass/Less 变成 CSS，PostCSS 插件链再把 CSS 变成兼容可用的 CSS，而隔离则由 <code>scoped</code> 或 <code>module</code> 承担。你要做的判断很简单——<strong>变量与嵌套交给人写，兼容与隔离交给管线</strong>，别把实际样式塞进注入配置里。
     </p>

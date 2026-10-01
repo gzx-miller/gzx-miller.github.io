@@ -8,7 +8,7 @@ import SC09ValuesUnits from './SC09ValuesUnits.vue'
       <strong>开场问题：</strong>写下 <code>$gap: 100px + 1rem</code> 编译顺利通过，换成 <code>$dur: 100px + 1s</code> 却直接报错——同样是「数字加数字」，凭什么一个能算、一个不能？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>数值携带单位</h2>
     <p>
       你在维护一套组件的间距系统，希望把设计稿的像素值和代码里的 rem 值统一成变量管理。于是这边写 <code>$space: 1rem</code>，那边写 <code>$radius: 8px</code>，心里把它们都当成「数字」——反正都要参与加减乘除。直到某天编译器用一行红字拦住了你。
     </p>
@@ -16,7 +16,7 @@ import SC09ValuesUnits from './SC09ValuesUnits.vue'
       真正的问题不在运算符，而在「数字」这个词本身。<strong>Sass 眼里的数字不是裸露的量，而是「数值 + 单位」的组合</strong>，单位决定了这个数字属于哪个维度。搞不清这套规则，你会反复遇到两种相反的事故：明明该能加的却报错，明明该报错的却被悄悄绕过。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>装饰化假设</h2>
     <p>
       最省事的假设是：Sass 的数字就是普通数字，单位只是贴在后面的装饰，运算时把数值算完、再随手拼个单位即可。这个假设确实对了一半——<strong>它承认了「值可以参与运算」</strong>。这正是 Sass 相对纯 CSS 的优势：设计常量能在编译期合并、推导，而不是靠人肉誊抄。
     </p>
@@ -24,7 +24,7 @@ import SC09ValuesUnits from './SC09ValuesUnits.vue'
       只靠人工纪律也一样能撑住：所有间距都只用 px，所有字号都只用 rem，谁也不跟谁混着算。在短小的样式表里，这条约定能管用很久。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>单位运算报错</h2>
     <ul>
       <li>如果单位只是装饰，<code>100px + 1s</code> 就该算成 <code>101</code>，可它偏偏报错——说明单位真的参与检查。</li>
       <li>如果数字只有一种类型，<code>10px * 0</code> 应当得到一个裸的 <code>0</code>，结果却仍带着单位。</li>
@@ -33,7 +33,7 @@ import SC09ValuesUnits from './SC09ValuesUnits.vue'
       <li>「只用 px」「只用 rem」的纪律一放进团队协作就会松动，没人能靠自觉守住全局。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>类型化值系统</h2>
     <p>
       放弃「Sass 数字就是数字」这个假设，改成<strong>Sass 有一套带类型的值系统</strong>。每个值都归属一个类型：数字、字符串、颜色、布尔、<code>null</code>、List、Map，各自有各自的运算规则；而数字额外携带单位，参与运算时执行<strong>单位代数</strong>。不确定一个表达式实际是什么类型，就用 <code>meta.type-of</code> 直接问它：
     </p>
@@ -55,13 +55,13 @@ import SC09ValuesUnits from './SC09ValuesUnits.vue'
       <strong>不要用 <code>#{}</code> 绕过本应失败的单位检查。</strong>一旦把不兼容的运算强行拼成字符串，错误就被藏进了产物里，你得到一个既无法再计算、也无法维护的死值。要让问题在编译期暴露，就得让它照常报错。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>跨单位换算</h2>
     <figure class="lesson-figure">
       <figcaption>拖动滑块改变 rem 值，观察 px 与 rem 如何在同一长度维度上换算。</figcaption>
       <SC09ValuesUnits />
     </figure>
 
-    <h2>总结</h2>
+    <h2>编译期类型校验</h2>
     <p>
       Sass 的值系统把「类型」和「单位」都变成编译期能检查的东西：同维度单位自动换算，异维度运算直接失败，零也保留单位。理解了单位代数，你就能区分「真的能算」和「只是看起来能算」，把维度错误挡在构建阶段。
     </p>

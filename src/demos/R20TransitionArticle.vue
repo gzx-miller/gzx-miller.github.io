@@ -8,7 +8,7 @@ import R20Transition from './R20Transition.vue'
       <strong>开场问题：</strong>你在一个有一百多门课程的搜索框里连着敲「并发」两个字，手指明明很快，输入框却像被拖住——第一个字的结果还没渲染完，第二个字已经打上去了，于是框里的字符迟迟不肯出现。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>同一优先级的两类更新</h2>
     <p>
       输入框是受控的，每次 <code>onChange</code> 都用 <code>setKeyword</code> 更新状态，而这个关键词同时驱动两件事：<strong>输入框自己要显示这个值，结果区域要拿它去过滤一百多条数据</strong>。两件事由同一次状态更新引发，也就落在了同一个优先级上，必须一起同步走完——输入框想立刻更新，却被排在它后面的昂贵筛选拖住了。
     </p>
@@ -19,7 +19,7 @@ import R20Transition from './R20Transition.vue'
       问题于是明确：<strong>当一次输入会触发昂贵的列表渲染时，怎么让输入框始终保持流畅响应？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>昂贵筛选的延后处理</h2>
     <p>
       最省事的一招是把两件事拆开：输入框的值用一次 <code>setState</code> 同步更新，保证键入即时可见；昂贵的列表筛选则用 <code>setTimeout(() =&gt; setFiltered(...), 0)</code> 推到下一个宏任务，先让浏览器把输入框画出来，再去做重活。
     </p>
@@ -27,7 +27,7 @@ import R20Transition from './R20Transition.vue'
       这个方案确实做对了一件事：<strong>它承认了「输入」和「结果」可以有不同的更新节奏</strong>，并且优先把最小的那一笔（输入框）先提交出去。方向是对的。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>固定延迟的抢占缺失</h2>
     <ul>
       <li>延迟是<strong>固定</strong>的：快机器上一会儿就干完了，却还要白等；慢机器上即使延迟是 0 也照样卡住下一次输入。</li>
       <li>无法被抢占。连打几个字，之前的筛选任务一个个排着队，<strong>新的输入并不能把它们叫停</strong>，结果只会越来越滞后。</li>
@@ -36,7 +36,7 @@ import R20Transition from './R20Transition.vue'
       <li>换成 <code>requestAnimationFrame</code> 也不解决根子——它只是把活挪到某个时机，<strong>并没有区分更新的紧急程度</strong>。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>内建优先级调度</h2>
     <p>
       不推翻「两个节奏」，而是把「手动延迟」换成 React 内建的优先级调度。React 给出的是 <code>useTransition()</code>，它返回一对值 <code>[isPending, startTransition]</code>。用法是：<strong>把那次昂贵、但不紧急的状态更新包进 <code>startTransition</code> 里</strong>，告诉 React「这次更新可以低优先级、慢慢来」；而文本框自身的状态更新留在外面，保持紧急同步。
     </p>
@@ -56,13 +56,13 @@ import R20Transition from './R20Transition.vue'
       <strong>最容易踩反的一处：</strong>控制文本输入的那个 <code>setState</code> <strong>必须保持紧急同步，绝不能包进 <code>startTransition</code></strong>，否则连键入都会失去即时反馈，输入框开始「吃字」——这恰好把要解决的问题反了过来。另外，<code>useDeferredValue</code> 是 <code>useTransition</code> 的声明式替代，适合不需要显式控制触发时机的场景；过渡更新的收益要以实际测量为准，若拆细后反而失去批处理优势，就该回退。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>输入即时与列表延后</h2>
     <figure class="lesson-figure">
       <figcaption>在 150 门课程的搜索框里快速输入：列表标题会临时变成「正在更新列表…」、面板整体变淡，而输入框里的字符始终即时出现，验证紧急输入没有被低优先级的筛选挡住。</figcaption>
       <R20Transition />
     </figure>
 
-    <h2>总结</h2>
+    <h2>更新紧急度的划分</h2>
     <p>
       <code>useTransition</code> 补上的不是「怎么把活做快」，而是「<strong>哪笔更新更紧急</strong>」：把昂贵而不急的更新交给 <code>startTransition</code>，React 便会在紧急输入到来时中断它、给它让路，事后再把结果补齐。输入保持紧急、结果降级为过渡，界面就流畅了。
     </p>

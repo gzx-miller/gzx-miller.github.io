@@ -8,7 +8,7 @@ import CPP23ExceptionHandling from './CPP23ExceptionHandling.vue'
       <strong>开场问题：</strong>你写了一个读取配置的函数，失败时返回 <code>-1</code>。调用方忘了写 <code>if</code> 判断，程序就带着这个 <code>-1</code> 一路往下跑——它不会在这里报错，而是过一会儿在完全不相干的另一行以崩溃的形式暴露出来。错误为什么要跑这么远才被发现？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>失败报告的机制</h2>
     <p>
       函数经常会失败：文件打不开、内存不够、参数越界。于是每个函数都得面对一个问题：<strong>我怎么把自己失败了这件事告诉调用者？</strong>
     </p>
@@ -25,7 +25,7 @@ import CPP23ExceptionHandling from './CPP23ExceptionHandling.vue'
       所以真正的问题是：<strong>能不能让「出错」变成一件无法被顺手忽略的事，并且让它自动沿着调用栈往上传，直到遇到愿意处理它的人？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>错误码的逐层传递</h2>
     <p>
       最朴素的做法：定义一个约定的错误码，函数出错时返回它，每一层都 <code>if</code> 一下，不是成功值就往上返回。
     </p>
@@ -33,7 +33,7 @@ import CPP23ExceptionHandling from './CPP23ExceptionHandling.vue'
       这个做法做对了一件重要的事：<strong>它把「会失败」写进了接口</strong>。调用者从签名和文档里就知道「这个函数是有可能失败的」，而不是误以为它一定成功。这份「错误是正常流程的一部分」的诚实态度，必须保留。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>漏判错误码的后果</h2>
     <ul>
       <li>调用方漏写判断时，<code>int n = parse(text);</code> 拿到 <code>-1</code> 也照常参与后面的运算，得到一个荒谬的结果，而且崩在离现场很远的地方。</li>
       <li>错误码占用了返回值的通道。一个既想返回计算结果、又想报告失败状态的函数，被逼着把结果改成出参，或者不得不引入全局变量。</li>
@@ -41,7 +41,7 @@ import CPP23ExceptionHandling from './CPP23ExceptionHandling.vue'
       <li>想区分多种错误只能靠约定几个数字，<code>-1</code>、<code>-2</code>、<code>-3</code>……一旦文档没跟上，就没人读得懂这些数字了。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>抛出后的自动传播</h2>
     <p>
       不推翻「失败必须被报告」，而是换一种报告方式：<strong>不去「返回」错误，而是让错误沿着调用栈自己往上冲，直到有人接住它。</strong>
     </p>
@@ -70,13 +70,13 @@ import CPP23ExceptionHandling from './CPP23ExceptionHandling.vue'
       <strong>性能的真相：</strong>现代实现遵循「零开销原则」——只要异常不抛出，几乎没有任何运行时代价，代价只在真正 <code>throw</code> 的那一刻付出。所以「异常慢」并不是拒绝它的理由；但异常也不该被当作普通的流程控制频繁使用，那会让代码体积膨胀、分支预测变差。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>多级捕获的匹配序</h2>
     <figure class="lesson-figure">
       <figcaption>看三层 <code>catch</code> 的排列：<code>processFile</code> 抛出自定义的 <code>MyException</code> 后，最先被 <code>const MyException&amp;</code> 这一层接住；把它的顺序和下面的 <code>std::exception</code> 对调，就会看到更泛的那一层把具体异常截走。</figcaption>
       <CPP23ExceptionHandling />
     </figure>
 
-    <h2>总结</h2>
+    <h2>异常的上升通道</h2>
     <p>
       异常处理把「失败」从一个可以被人忽略的返回值，变成了一条会自己闯到处理者面前的通道。错误一旦抛出就离开现场，沿途的中间函数无需搬运，RAII 顺手把资源收拾干净；到了 <code>catch</code> 这一层，你按从派生类到基类的顺序接住它，并明确自己提供的是基本、强还是不抛异常承诺。要记住的底线只有一条：构造函数可以抛，析构函数绝不能抛。
     </p>

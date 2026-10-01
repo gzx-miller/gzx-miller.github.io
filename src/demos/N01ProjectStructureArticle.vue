@@ -8,7 +8,7 @@ import N01ProjectStructure from './N01ProjectStructure.vue'
       <strong>开场问题：</strong>你克隆下一个 Nuxt 项目，想找它的入口：没有 <code>main.js</code>，没有 <code>App.vue</code>，也翻不到任何写着 <code>path: '/about'</code> 的路由配置——可它照样跑了起来，页面一个不少。这些「接线」代码，究竟是谁写的？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>手工接线的负担</h2>
     <p>
       在一个普通 Vue 单页应用里，应用长什么样、有哪些页面、组件从哪来，全靠手写的接线代码交代：<code>main.js</code> 里 <code>createApp</code> 挂载，<code>router/index.ts</code> 里一条条注册路由，每个页面顶部再 import 上它用到的组件。这些代码本身不产出任何业务价值，却必须有人写、有人维护。
     </p>
@@ -16,7 +16,7 @@ import N01ProjectStructure from './N01ProjectStructure.vue'
       麻烦的是，这些成本会随着项目变大而放大。新增一个页面要同时改文件和路由表，漏一处就 404；组件路径越深，<code>../../../components/</code> 这样的 import 越容易写错；新人想搞清一个功能的落点，得顺着一串 import 才能摸到源头。于是问题变成：<strong>能不能让「文件放在哪个目录」本身就说明「它是干什么的」，把人从接线里解放出来？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>约定写进文档</h2>
     <p>
       最省事的做法：目录照样自己定，只是把规矩写进 README——页面放 <code>pages/</code>、组件放 <code>components/</code>、工具放 <code>utils/</code>，接线代码还是手写，但位置照着文档来。
     </p>
@@ -24,7 +24,7 @@ import N01ProjectStructure from './N01ProjectStructure.vue'
       这个方案做对了一件根本的事：<strong>它承认「目录结构应当表达职责」</strong>。放对位置的文件，别人一眼能猜到它是页面还是组件。要说问题，就出在「规矩」两个字上——它是纸面的，不是机器执行的。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>文档约束失效</h2>
     <ul>
       <li>README 不参与构建：新人把页面文件误放进 <code>components/</code>，构建不会报错，直到有人访问发现 404，才知道位置放错了。</li>
       <li>每个项目都要重新定义一套目录规矩，彼此不通用，换一个项目就得重新学一遍布局。</li>
@@ -32,7 +32,7 @@ import N01ProjectStructure from './N01ProjectStructure.vue'
       <li>「文档说该这么放」和「代码确实这么放」是两套东西，时间一长必然漂移。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>框架扫描机制</h2>
     <p>
       不推翻「用目录表达职责」，而是把口头约定变成框架亲自执行的规则：Nuxt 在启动时扫描一批<strong>名字固定</strong>的目录，每个目录绑定一项明确职责，文件放进去就自动生效，不需要任何中心化的注册文件。
     </p>
@@ -53,13 +53,13 @@ import N01ProjectStructure from './N01ProjectStructure.vue'
       <strong>动手前先查内置：</strong>Nuxt 已经把大量能力做成自动导入的内置函数，例如服务端引擎里的 <code>h3</code>、数据获取的 <code>useFetch</code>。决定装一个依赖之前，先确认是不是已经有内置方案，免得重复造轮子、徒增包体积。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>目录职责对照</h2>
     <figure class="lesson-figure">
       <figcaption>在「目录约定 / 自动导入 / 核心配置」三个页签间切换，逐张对照每个目录的职责，以及 nuxt.config.ts 里的核心配置项。</figcaption>
       <N01ProjectStructure />
     </figure>
 
-    <h2>总结</h2>
+    <h2>结构升级为契约</h2>
     <p>
       这一课讲的其实是把「目录」升级成「契约」：文件放进约定目录，框架就替你做掉路由、导入、注册这些接线工作，只留下 <code>nuxt.config.ts</code> 一处集中配置。于是「东西放哪」和「它怎么生效」第一次成了同一件事。
     </p>

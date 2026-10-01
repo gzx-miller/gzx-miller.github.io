@@ -8,7 +8,7 @@ import VF01FirstFlow from './VF01FirstFlow.vue'
       <strong>开场问题：</strong>我在 Vue3 项目里想画一张学习路径图，用一堆绝对定位的 <code>div</code> 摆好了节点，可连线怎么都对齐不上——难道一定要自己算坐标、画折线、处理缩放吗？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>流程图常见形态</h2>
     <p>
       流程图是前端非常常见的一类界面：审批流、依赖关系、学习路径、组织架构，本质上都是「一堆方块，再加上方块之间的连线」。第一反应通常是手工实现：用绝对定位的 <code>div</code> 当节点、用 <code>svg</code> 或 <code>canvas</code> 画线，位置自己写死。
     </p>
@@ -16,7 +16,7 @@ import VF01FirstFlow from './VF01FirstFlow.vue'
       这套做法的代价会随着图变大而迅速显现。节点一挪动，所有连到它的线都要重算；用户一旦缩放平移画布，屏幕坐标与画布坐标就分家了，你写下的每一个坐标都要判断「现在是处在哪个坐标系里」。更麻烦的是，拖动、框选、删除、连线这些交互，全部要自己从零实现一遍。<strong>结果就是：大部分时间花在画布引擎上，而不是花在业务图形上。</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>节点加连线模型</h2>
     <p>
       最朴素的做法，也是手工派会先写出来的版本：节点是定好 <code>top/left</code> 的方块，连线是一条从一个节点中心指向另一个节点中心的直线。这个模型本身没有错——<strong>它做对了一件关键的事：承认了「节点是一个带坐标的方块，连线是两点之间的一条路径」</strong>。真正的信息只有两部分：谁来、连谁。剩下的都是渲染细节。
     </p>
@@ -24,7 +24,7 @@ import VF01FirstFlow from './VF01FirstFlow.vue'
       既然信息只有两部分，那有没有可能我们只声明这两部分，把渲染和交互全部交出去？
     </p>
 
-    <h2>发现不足</h2>
+    <h2>位置变化的连锁</h2>
     <ul>
       <li>拖动节点后连线不会自己重算，必须监听位置变化并重新绘制，节点越多越难维护。</li>
       <li>缩放与平移要自己维护 <code>transform</code> 和坐标系，屏幕坐标换成画布坐标极易算错。</li>
@@ -32,7 +32,7 @@ import VF01FirstFlow from './VF01FirstFlow.vue'
       <li>节点内容一复杂，文档流的布局规则和画布坐标就混在一起，谁也说不清位置从哪来。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>声明与渲染分离</h2>
     <p>
       不推翻「节点 + 连线」这个模型，而是把「画」和「算」彻底拆开：<strong>业务只负责声明数据，画布引擎负责把它渲染出来并接管交互</strong>。Vue Flow 就是按这个思路设计的，它把图拆成两组数据。
     </p>
@@ -55,13 +55,13 @@ import VF01FirstFlow from './VF01FirstFlow.vue'
       最后是数据回写的礼节。直接改 <code>nodes[0].position.x</code> 这类数组元素也会生效，但更推荐<strong>整体替换数组、或者走实例方法</strong>，这样每一次变更的来源都清晰可追踪。事件参数也要留意：<code>@node-click</code> 收到的是<strong>单个事件对象</strong>（包含 <code>event</code> 与 <code>node</code>），业务字段统一从 <code>node.data</code> 里取，而不是从事件对象顶层取。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>数据与视口联动</h2>
     <figure class="lesson-figure">
       <figcaption>拖动节点、滚轮缩放、点一下节点，观察数据与视口如何联动。</figcaption>
       <VF01FirstFlow />
     </figure>
 
-    <h2>总结</h2>
+    <h2>图由数据描述</h2>
     <p>
       第一个流程图要建立的心智模型只有一句话：<strong>用 <code>nodes</code> 和 <code>edges</code> 描述图，其余交给画布</strong>。安装 <code>@vue-flow/core</code>、引入两套官方样式、准备两组数组并双向绑定，你就得到了一个可拖拽、可缩放的流程图；位置、路径、视口状态全部由实例接管，业务只需改数据。
     </p>

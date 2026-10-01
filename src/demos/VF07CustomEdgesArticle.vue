@@ -8,7 +8,7 @@ import VF07CustomEdges from './VF07CustomEdges.vue'
       <strong>开场问题：</strong>请假审批流里「主管 → 老板」这条是驳回、「主管 → 休假成功」这条是通过，可两条线都灰扑扑一根，读图的人根本分不出哪条被驳回了。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>审批流状态分支</h2>
     <p>
       你画的是一张请假审批流程图：员工提交、主管审批，之后分两路——通过就走「休假成功」，驳回就送「老板特批」。三条线都老老实实连好了，可它们在画面上完全一样。麻烦在于：<strong>「通过」和「驳回」是两种截然不同的业务结果，理应在图上就看得出来</strong>，现在却只能靠节点名字去脑补。
     </p>
@@ -16,7 +16,7 @@ import VF07CustomEdges from './VF07CustomEdges.vue'
       代价很实在。审批人一眼扫过去，分不清哪条是正常出口、哪条是异常出口，这张图等于白画。上一课给边加了颜色和箭头能解决一部分，但一旦标签要显示「通过 ✓」「驳回 ✗」这种带状态、要换色、以后还可能点一下展开详情的结构，默认的 SVG 文本标签就彻底不够用了。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>状态写进标签</h2>
     <p>
       最省事的做法，还是把状态塞进默认边的 <code>label</code>：给它写死一串「通过」或「驳回」。
     </p>
@@ -24,7 +24,7 @@ import VF07CustomEdges from './VF07CustomEdges.vue'
       这个方案对在：<strong>状态只要不变，这样确实能看</strong>，而且完全不用碰渲染逻辑，改一个字段名就行。它把「状态」和「展示」做了最直接的绑定。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>文字标签局限</h2>
     <ul>
       <li>默认 <code>label</code> 是 SVG 文本，只能渲染文字，做不出圆角胶囊、背景色、图标这类结构。</li>
       <li>通过和驳回的线色本应不同，但改文案并不改线色，两个维度是割裂的。</li>
@@ -32,7 +32,7 @@ import VF07CustomEdges from './VF07CustomEdges.vue'
       <li>状态更新往往要手动重建整条边，背离了「改数据即改图」的范式。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>连线渲染接管</h2>
     <p>
       不推翻「用状态驱动连线」，而是把连线的渲染权也收回来。做法和自定义节点同构：给 <code>edge.type</code> 起一个自定义名，比如 <code>approval</code>，再用同名插槽 <code>#edge-approval</code> 接管它的画法。
     </p>
@@ -55,13 +55,13 @@ import VF07CustomEdges from './VF07CustomEdges.vue'
       收口时再看一眼数据流：只改 <code>edge.data</code>，线的颜色与标签文案就会响应式更新，不需要手动重绘。这正是自定义连线的价值——<strong>渲染形态由你定，驱动方式仍然是数据</strong>。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>线色与标签联动</h2>
     <figure class="lesson-figure">
       <figcaption>点两个按钮切换「主管 → 老板」「主管 → 休假」的状态，看线色与标签一起变。</figcaption>
       <VF07CustomEdges />
     </figure>
 
-    <h2>总结</h2>
+    <h2>自定义插槽画法</h2>
     <p>
       自定义连线把「线的画法」交还给你：类型名对上 <code>#edge-类型名</code> 插槽，坐标由插槽给出，路径交给 <code>getBezierPath</code> 计算，HTML 标签挂到 <code>EdgeLabelRenderer</code> 这个悬层上。别忘了保留官方 class 与内联属性，剩下的就交给 <code>edge.data</code>——业务状态一变，线的颜色和文案自动跟上。
     </p>

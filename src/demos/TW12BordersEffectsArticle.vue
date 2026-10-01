@@ -8,7 +8,7 @@ import TW12BordersEffects from './TW12BordersEffects.vue'
       <strong>开场问题：</strong>给课程卡片加一圈选中边框，我用 <code>border-2</code> 一加，卡片竟然整体变宽了、把旁边的卡片顶开；换成阴影后好看多了，可键盘 Tab 过来时，我却完全看不出焦点落在哪张卡上。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>三类视觉需求并存</h2>
     <p>
       还是那个课程卡片列表。做交互时，你同时冒出三个视觉需求：第一，卡片之间要有一条<strong>静态边界</strong>，让人一眼看出「这是一张独立的卡」；第二，鼠标悬停或卡片被选中时，它要<strong>浮起来</strong>，和背景拉开层次；第三，用户用键盘 Tab 切换时，当前聚焦的卡片必须有<strong>清晰可见的焦点</strong>。
     </p>
@@ -16,7 +16,7 @@ import TW12BordersEffects from './TW12BordersEffects.vue'
       三个需求，看起来都能用「加一圈线」解决。但 Tailwind 提供的三件工具——<code>border</code>、<code>outline</code> / <code>ring</code>、<code>box-shadow</code>——并不是一回事。它们在<strong>是否参与布局</strong>、<strong>画在哪里</strong>、<strong>表达什么语义</strong>上有本质差别。搞不清这一点，就会出现「加了边框整块变宽」和「焦点看不见」这类看似矛盾的问题。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>统一边框的做法</h2>
     <p>
       最省事的做法，是统一用 <code>border</code>：静态状态写 <code>border border-stone-200</code>，选中状态改成 <code>border-2 border-orange-500</code>。这个方案对的地方在于，它<strong>确实建立了边界</strong>，卡片分组一目了然，静态边界的部分完全达标。
     </p>
@@ -24,7 +24,7 @@ import TW12BordersEffects from './TW12BordersEffects.vue'
       问题出在「所有需求都靠 border」这个统一思路上。border 会为选中状态额外增加一条线的宽度，卡片尺寸随之变化；如果还想用阴影表达悬浮，又会发现阴影和边框同时存在时，视觉厚度对不上，像贴了两层皮。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>边框占位引发位移</h2>
     <ul>
       <li><code>border</code> 参与盒模型、占据布局空间，从 1px 加到 2px 会让卡片实际尺寸变化，触发旁边的元素位移。</li>
       <li>用换 border 颜色来表达「选中」，一旦聚焦状态也用 border，两种状态就会互相覆盖、难以共存。</li>
@@ -32,7 +32,7 @@ import TW12BordersEffects from './TW12BordersEffects.vue'
       <li>界面上到处叠阴影，层级越多越乱，反而削弱了信息结构。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>工具职责划分</h2>
     <p>
       不推翻「用线条建立边界」，而是给三个需求各找一件<strong>语义匹配</strong>的工具。三者的分工可以这样理解：<strong>border 参与盒模型、占据布局空间</strong>，是一块元素「实实在在的边框」，因此适合做<strong>静态边界与分组</strong>；<strong>outline 与 ring 绘制在元素外侧、不挤占布局</strong>，所以当你想强调某个元素又不希望它改变尺寸时，它们才是正确选择，<strong>键盘焦点就是最典型的场景</strong>；<strong>box-shadow 表达层级深度</strong>，让元素看起来「离背景多远」，用于浮层与卡片的高度感。
     </p>
@@ -49,13 +49,13 @@ import TW12BordersEffects from './TW12BordersEffects.vue'
       最后回到键盘走查这件事上：<strong>用键盘 Tab 走一遍页面，确认每个可聚焦元素都有清晰可见的焦点样式。</strong>这一步不能省，因为焦点可见性是键盘用户使用产品的前提，而它偏偏是鼠标用户永远不会注意到的地方。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>三种边界方案差异</h2>
     <figure class="lesson-figure">
       <figcaption>切换 border、ring、shadow 三种方式，观察它们对布局的影响与各自承担的视觉语义。</figcaption>
       <TW12BordersEffects />
     </figure>
 
-    <h2>总结</h2>
+    <h2>边界与焦点分工</h2>
     <p>
       边界、焦点与层级，是三件不同的事，就该用三件不同的工具。border 参与布局、负责静态边界；outline 与 ring 不占空间、负责焦点；box-shadow 表达深度、负责浮层高度。记住「焦点不能只靠低对比阴影」和「不要堆砌过多阴影层级」，界面就会既清晰又有秩序。
     </p>

@@ -8,7 +8,7 @@ import C19BEM from './C19BEM.vue'
       <strong>开场问题：</strong>你只想把课程卡片里标题的字重调一下，改了一条 <code>.title</code>，结果列表页、详情页、侧边栏的标题全跟着变了——同一个类名，凭什么到处都在用？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>相似卡片的样式冲突</h2>
     <p>
       设想你在维护一套课程站的卡片组件：课程卡片、讲师卡片、文章卡片长得差不多，都是「标题 + 描述 + 角标」的结构。第一版很好写，你随手写下 <code>.card .title</code>、<code>.card .desc</code>，页面立刻有了样子。
     </p>
@@ -16,7 +16,7 @@ import C19BEM from './C19BEM.vue'
       麻烦在三个月后出现。产品要加一种「专栏卡片」，它复用了 <code>.title</code> 这个类名；你为了让专栏标题变粗，写了 <code>.column .title</code>；隔壁同事要评论标题变灰，又写了 <code>.comment .title</code>。从此每次调整「标题」，你都得先把全站所有叫 <code>title</code> 的地方数一遍。<strong>不掌握命名与组织方法的代价，就是样式表会随着功能叠加不断互相污染：改一处、坏一片，删一个类名要先搜索整个项目，最后所有人靠 <code>!important</code> 硬压。</strong>这不是审美问题，而是「一个项目能不能被多人长期维护」的问题。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>后代选择器的写法</h2>
     <p>
       最朴素的做法，就是顺着 HTML 结构写后代选择器：卡片是 <code>.card</code>，标题是它下面的 <code>.title</code>，于是 <code>.card .title { font-weight: 600 }</code>。
     </p>
@@ -24,7 +24,7 @@ import C19BEM from './C19BEM.vue'
       它做对了一件重要的事：<strong>样式与结构对得上号</strong>。读代码的人一眼就能把这条规则映射回 DOM，不需要任何额外约定；在只有一个卡片组件的早期项目里，这套写法又快又直观，完全够用。这一点值得先承认——后面所有的改动，都是在保留它「一眼看懂」优点的前提下，解决它管不住范围的问题。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>绑定结构的代价</h2>
     <ul>
       <li>选择器绑死了 DOM 结构，一旦把标题从 <code>.card</code> 内部挪到外层，样式整段失效。</li>
       <li>后代选择器会叠加特异性，<code>.card .title</code> 压不过 <code>.card .header .title</code>，越写越长，最后只能上 <code>!important</code>。</li>
@@ -33,7 +33,7 @@ import C19BEM from './C19BEM.vue'
       <li>没有人能判断某个类名是否还被引用，样式表只增不减。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>类名命名的规范</h2>
     <p>
       不推翻「用类名描述结构」，而是给类名定一套<strong>不许重复、不许嵌套</strong>的语法。这就是 BEM：<strong>Block</strong> 是可独立复用的组件，写作 <code>.card</code>；<strong>Element</strong> 是块的组成部分，用双下划线连接，写作 <code>.card__title</code>、<code>.card__body</code>、<code>.card__footer</code>；<strong>Modifier</strong> 是变体或状态，用双连字符连接，写作 <code>.card--featured</code>、<code>.card--large</code>、<code>.card__title--highlight</code>。
     </p>
@@ -56,13 +56,13 @@ import C19BEM from './C19BEM.vue'
       <strong>命名规范只有落地才有意义。</strong>如果团队里有人不遵守，规范带来的可预测性会立刻归零；所以约定要写进协作文档，并用 lint 规则强制执行——例如禁止用后代选择器书写组件样式、限制选择器嵌套深度。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>三套架构的对照</h2>
     <figure class="lesson-figure">
       <figcaption>切换 BEM / OOCSS / SMACSS 三页，对照同一条卡片结构的三套组织思路。</figcaption>
       <C19BEM />
     </figure>
 
-    <h2>总结</h2>
+    <h2>多人协作的样式秩序</h2>
     <p>
       CSS 架构要解决的不是「怎么写样式」，而是「怎么让几十个人、几年时间写下的样式不互相打架」。BEM 用 <code>Block__Element--Modifier</code> 让命名自带归属、层级扁平、特异性恒定；OOCSS 把结构与皮肤拆成可组合的类；SMACSS 按角色给样式表分区；CSS Modules 则用哈希局部作用域从机制上兜底。
     </p>

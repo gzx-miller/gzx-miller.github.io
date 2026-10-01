@@ -8,7 +8,7 @@ import L03OutputParser from './L03OutputParser.vue'
       <strong>开场问题：</strong>你让模型「推荐三门课」，它回了一段漂亮的编号列表。你顺手写下 <code>result.length</code> 想看有几门课，屏幕上却跳出 <code>47</code>——那是这段话的字符数，不是课程数。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>自由文本与字段落差</h2>
     <p>
       模型只会输出<strong>自由文本</strong>，而程序想要的是<strong>字段</strong>：课程名、难度、适合人群。一头是散文，另一头是 <code>.map()</code>、<code>.filter()</code>、入库——中间横着一条鸿沟。旧办法只能靠手写解析来填：
     </p>
@@ -21,7 +21,7 @@ import L03OutputParser from './L03OutputParser.vue'
       问题落成一句：<strong>能不能让模型按程序要的形状输出，再用一个统一的解析器把它变成带类型的对象？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>链尾解析器的挂载</h2>
     <p>
       最省事的做法是在链尾挂一个 <code>StringOutputParser</code>：<code>prompt.pipe(model).pipe(parser)</code>，<code>invoke</code> 之后直接得到一个字符串，不用再手动 <code>.content</code>。
     </p>
@@ -29,7 +29,7 @@ import L03OutputParser from './L03OutputParser.vue'
       这个方案做对了一件事：<strong>把 AIMessage 拆包成了纯文本</strong>。你从此拿到的是一段可以正常拼接、正常打印的字符串，而不是一个对象。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>正则兜底残留负担</h2>
     <ul>
       <li>拿到的还是字符串：想取「第三门课的难度」，照样得回去写正则，开头那个问题原样还在。</li>
       <li>模型不知道你要什么形状：你心里想要 JSON，它却回了一段带解释的散文，因为你从没把「要什么格式」写进提示词。</li>
@@ -37,7 +37,7 @@ import L03OutputParser from './L03OutputParser.vue'
       <li>格式随温度漂移：想要模型稳定输出结构化内容，默认温度通常不够用。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>输出格式显式约定</h2>
     <p>
       不推翻「链尾接解析器」，而是先给模型一个明确的形状。第一步补<strong>格式指令</strong>：让解析器自动把「该按什么格式输出」注入到提示词里，模板中留一个 <code>{format_instructions}</code> 占位即可。先补它，是因为不先约定「期望的格式」，后面解析什么都是在猜。
     </p>
@@ -54,13 +54,13 @@ import L03OutputParser from './L03OutputParser.vue'
       <strong>别忘了这一层：</strong>schema 越复杂，模型越容易偏离。结构化输出是「大概率成立」而不是「一定成立」，所以降温和失败兜底不是可选项。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>三类解析结果的对照</h2>
     <figure class="lesson-figure">
       <figcaption>在 String / List / Structured 三个页签之间切换：左边同一段「原始输出」不动，右边分别被解析成纯文本、字符串数组、带 name / level / audience 字段的对象数组；Structured 页下面还会显示它对应的那段 Zod schema。</figcaption>
       <L03OutputParser />
     </figure>
 
-    <h2>总结</h2>
+    <h2>模型与程序的形状对齐</h2>
     <p>
       解析器做的事，是在模型和程序之间搭一座形状对齐的桥：先让模型知道该输出什么格式，再用 schema 把文本收成一个带类型的对象。台阶是「先约定格式、再定义类型、再稳住温度、最后兜底」，缺了哪一级，桥都会晃。
     </p>

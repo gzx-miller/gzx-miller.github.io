@@ -8,7 +8,7 @@ import S19PiniaActions from './S19PiniaActions.vue'
       <strong>开场问题：</strong>下单要请求接口、要点亮 loading、要处理失败、还要防止旧请求覆盖新订单——这些逻辑全塞在组件里，一个按钮点下去要牵扯十几行代码，真的没有更集中的写法吗？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>订单流程散乱</h2>
     <p>
       你在做「秋日咖啡馆」的订单系统：用户点「提交订单」后要调接口下单，下单过程中按钮要显示「提交中」，成功后要切到订单列表，失败要弹提示；订单还要从「待处理」一路流转到「制作中」「配送中」「已完成」。此刻这些逻辑都写在组件的 <code>submitOrder</code> 里。
     </p>
@@ -16,7 +16,7 @@ import S19PiniaActions from './S19PiniaActions.vue'
       麻烦很快显形：另一处「再来一单」按钮也要下单，于是同样的请求、loading、错误处理又被复制了一份；订单状态流转的规则也散在组件里，<strong>「什么状态能改成什么状态」这条业务规则，居然需要读组件模板才能还原</strong>。你开始怀疑：改状态这件事，是不是不该由组件来做？
     </p>
 
-    <h2>最小方案</h2>
+    <h2>组件直改状态</h2>
     <p>
       最直接的做法：组件里拿到 store 之后，直接改它的 <code>state</code>，请求逻辑也一并写在组件的方法里。
     </p>
@@ -24,7 +24,7 @@ import S19PiniaActions from './S19PiniaActions.vue'
       它做对了一件事：<strong>组件本来就是表达用户意图的地方，点「提交订单」就该在这里被触发</strong>。但这只解决了「触发」，没有解决「谁负责改状态」。让组件直接写 store 的字段，等于把状态修改的入口开得到处都是，任何组件都能偷偷改一把，状态从哪来、为什么变，就再也说不清了。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>修改入口分散</h2>
     <ul>
       <li>状态修改逻辑分散在各个组件，同一份业务被重复实现。</li>
       <li>loading、错误提示这类状态要在每个调用点各自维护。</li>
@@ -33,7 +33,7 @@ import S19PiniaActions from './S19PiniaActions.vue'
       <li>没有统一入口，日志、埋点、监控无从挂接。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>入口收拢一处</h2>
     <p>
       不推翻「组件表达意图」，而是<strong>把状态修改的入口收到一处</strong>。Pinia 里这个入口叫 action：它就是一个定义在 store 里的普通函数，<strong>通过赋值直接修改 state</strong>。注意，相比 Vuex 这里已经没有了 mutations 那一层——同步和异步的状态修改，统一都写在 action 里。
     </p>
@@ -58,13 +58,13 @@ import S19PiniaActions from './S19PiniaActions.vue'
       <strong>怎么判断逻辑该不该进 action：</strong>问一句「这段逻辑离开组件还成立吗」。下单、校验库存、流转状态这些与界面无关的规则，离开组件依然成立，属于 store；而「弹哪个提示、跳哪个路由」是界面的选择，留在组件。按这条线切，业务规则可复用也可测，界面只管表达。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>整条流程驱动</h2>
     <figure class="lesson-figure">
       <figcaption>点几份餐提交订单，再逐步推进状态，观察 action 如何驱动整条订单流程。</figcaption>
       <S19PiniaActions />
     </figure>
 
-    <h2>总结</h2>
+    <h2>唯一修改入口</h2>
     <p>
       Pinia 的 Action 是修改状态的唯一入口：不再有 mutations，同步与异步的改动都写进 action。它让「组件表达意图、store 负责改数据」这条分工落到实处，也让 loading、错误处理、流程组合与调用拦截都有了统一的落脚点。
     </p>

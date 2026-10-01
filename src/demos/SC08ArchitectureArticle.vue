@@ -8,7 +8,7 @@ import SC08Architecture from './SC08Architecture.vue'
       <strong>开场问题：</strong>样式文件写到两千行，想改个按钮的圆角得在里面翻半天；更吓人的是，我把一条看起来没人用的规则删掉，整个首页的间距都塌了——样式到底该怎么「分家」，才不会互相牵连？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>样式只增不减</h2>
     <p>
       项目刚起步时，一个 <code>main.css</code> 撑得住。但样式是<strong>只增不减</strong>的资产：功能越加越多，令牌、组件、页面各自的规则全堆在一起，文件越滚越大。
     </p>
@@ -16,7 +16,7 @@ import SC08Architecture from './SC08Architecture.vue'
       真正的麻烦不是「文件大」，而是<strong>关系不可见</strong>：你无法回答「这个变量被谁用了」「这条规则删掉会影响哪些页面」，只能靠改完刷新页面看有没有坏。维护成本就这样从「读代码」变成了「反复试错」。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>拼装为单文件</h2>
     <p>
       最省事的做法：把所有样式写进一个文件，或者用原生 <code>@import</code> 把几个文件按顺序拼起来。
     </p>
@@ -27,7 +27,7 @@ import SC08Architecture from './SC08Architecture.vue'
       这个方案对在哪？小项目里它最简单：浏览器一次请求拿到全部样式，没有构建步骤，<strong>书写顺序就是层叠顺序</strong>，所见即所得。规模不大时，它确实是正确答案。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>顺序依赖隐患</h2>
     <ul>
       <li>顺序即依赖：样式结果取决于文件拼接顺序，依赖关系是隐式的，改顺序就可能出问题。</li>
       <li>全局命名空间：所有成员都在同一层，谁都能引用谁，边界形同虚设。</li>
@@ -36,7 +36,7 @@ import SC08Architecture from './SC08Architecture.vue'
       <li>编译参数散落在各人的命令行里，本地和流水线的产物可能不一致。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>职责分层依赖图</h2>
     <p>
       要解决「关系不可见」，就得把样式从「一串按顺序排列的文件」升级为<strong>一张显式的模块依赖图</strong>。先按职责分层，让每层只依赖它下面的一层：
     </p>
@@ -77,13 +77,13 @@ import SC08Architecture from './SC08Architecture.vue'
       <strong>两条实践提醒：</strong>不要照搬目录模板——规模小的项目保持扁平反而更好，分层是为了解决规模问题，不是目的本身；迁移旧项目时，先用 <strong>Sass Migrator</strong> 完成机械改写（比如把 <code>@import</code> 换成 <code>@use</code>），再逐步收紧模块边界，不要一次动太多。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>构建入口与目录</h2>
     <figure class="lesson-figure">
       <figcaption>切换构建入口，看目录树与最终编译命令如何随页面变化。</figcaption>
       <SC08Architecture />
     </figure>
 
-    <h2>总结</h2>
+    <h2>隐性关系显化</h2>
     <p>
       架构这件事，说到底是在规模化之后<strong>把隐式的东西显式化</strong>：目录按职责分层，依赖用 <code>@use</code>／<code>@forward</code> 声明成图，入口只装配不写样式，编译命令用 npm script 固定下来。这样「谁用了谁」「删掉会怎样」才有答案，样式才敢在增长中继续演进。
     </p>

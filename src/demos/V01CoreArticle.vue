@@ -8,7 +8,7 @@ import V01Core from './V01Core.vue'
       <strong>开场问题：</strong>新同事克隆完仓库敲下 <code>npm run dev</code>，两秒不到页面就开了；你随后敲 <code>npm run build</code>，进度条却跑了半分钟才结束——同一个工具，为什么启动快得离谱、打包又慢得像在干活？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>整图重建的开销</h2>
     <p>
       你接手一个已经很大的前端项目，光源码目录就有几千个模块。用传统打包器时，每次改一行代码都要先把整张依赖图重新打成一个 bundle，冷启动按秒计，改得越多等得越久。真正折磨人的不是第一次启动，而是<strong>它把「打包」这件事排在了你写代码之前</strong>：你只是想看一个按钮的颜色，却要为整个项目的打包时间买单。
     </p>
@@ -16,7 +16,7 @@ import V01Core from './V01Core.vue'
       更麻烦的是，这些成本都得由人扛：依赖图越大启动越慢、改一行触发全量重编译、日常开发的时间被机器吃掉。根子在于传统工具只把源码当成「构建的输入」——它预设了必须先打包，浏览器才能运行。可浏览器真的需要你替它打包吗？<strong>能不能让浏览器自己按需取用源码？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>源码直出浏览器</h2>
     <p>
       顺着这个问句往下想，最朴素的做法是：干脆不打包，把源码原样交给浏览器。现代浏览器早就原生支持 ES 模块，你在文件里写 <code>import</code>，它自己就会去请求那个模块。于是启动时服务器不做任何编译，<strong>模块按需加载，用到哪个才请求哪个</strong>。
     </p>
@@ -24,7 +24,7 @@ import V01Core from './V01Core.vue'
       这个方案做对了一件事：<strong>放开了「先打包再运行」这个并不必要的前置依赖</strong>。冷启动因此不再随项目规模增长，改一个文件也只需要重新处理那一个文件。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>裸模块名盲区</h2>
     <ul>
       <li>浏览器不认识「裸模块名」：你在源码里写 <code>import { ref } from 'vue'</code>，浏览器不知道 <code>vue</code> 该去哪里找，直接抛 <code>Failed to resolve module specifier</code>。</li>
       <li>浏览器不认识 <code>.vue</code> 和 <code>.ts</code>：这些不是它能执行的文件类型，原样返回只会得到语法错误。</li>
@@ -32,7 +32,7 @@ import V01Core from './V01Core.vue'
       <li>生产环境不能沿用这套：让每个用户按需拉几百个请求，首屏体验会很差。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>依赖预构建补位</h2>
     <p>
       不推翻「源码直接交给浏览器」，而是按顺序补掉它跑不通的地方。第一个要解决的是「裸模块名找不到」，因为那是页面上第一个报错。Vite 启动时会用 esbuild 把依赖预先处理一遍，并把源码里的 <code>import 'vue'</code> 改写成指向 <code>/node_modules/.vite/deps/vue.js</code> 的真实路径——这一步就是<strong>依赖预构建</strong>，只在依赖或锁文件变化时重做一次。
     </p>
@@ -58,13 +58,13 @@ import V01Core from './V01Core.vue'
       <strong>部署前先验证：</strong><code>npm run build</code> 之后用 <code>vite preview</code> 以生产行为跑一遍 <code>dist/</code>。开发服务器和生产产物的行为可能不同，别等到上线才发现。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>引擎对比与配置</h2>
     <figure class="lesson-figure">
       <figcaption>在三个页签间切换：先看核心概念卡片，再对着对比表看 Vite 与 Webpack 在启动、HMR、冷启动上的差距，最后读一眼驱动两个引擎的那份配置长什么样。</figcaption>
       <V01Core />
     </figure>
 
-    <h2>总结</h2>
+    <h2>开发阶段免打包</h2>
     <p>
       Vite 快，不是因为把打包做得更快，而是因为<strong>开发阶段根本不需要打包</strong>。它把工程拆成两条链路：开发用浏览器原生 ESM 按需加载源码、就地即时编译，生产才切回 Rollup 做完整的优化打包。理解了这个「双引擎」结构，后面的配置、插件、HMR 都只是往这两条链路上加东西。
     </p>

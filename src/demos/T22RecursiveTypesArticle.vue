@@ -8,7 +8,7 @@ import T22RecursiveTypes from './T22RecursiveTypes.vue'
       <strong>开场问题：</strong>配置对象一层套一层，我想在只读的那一侧定义一个「所有层级都只读」的版本，可 <code>Readonly&lt;Config&gt;</code> 只锁住了最外面那层——难道每加深一层，就得手工把每一层都写一遍吗？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>嵌套配置双重用途</h2>
     <p>
       你在做一个后台配置系统：一份配置对象里嵌着应用信息、主题设置、功能开关，再往里还嵌着一层。同一份结构你要在两种场景用它——<strong>编辑侧允许改，下游消费侧必须只读</strong>；此外「深度可选」用来表达局部补丁，「深度必填」用来表达带默认值的完整数据。
     </p>
@@ -16,7 +16,7 @@ import T22RecursiveTypes from './T22RecursiveTypes.vue'
       问题就出在「深度」两个字上。内置的 <code>Readonly</code>、<code>Partial</code>、<code>Required</code> 都<strong>只作用于一层</strong>：套上 <code>Readonly</code> 之后，顶层属性不可写了，可第二、第三层依旧可写，改起来照样不报错。而像文件目录树、任意深度的 JSON 这种结构，层级根本没法预先枚举——你连手写都写不完，更别说维护。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>单层工具能力局限</h2>
     <p>
       最直接的做法：用内置工具做一层转换，剩下的层级手工展开。需要只读就写 <code>Readonly&lt;Config&gt;</code>，发现第二层还能改，就再给第二层套一个 <code>Readonly</code>，逐层补齐；深度可选、深度必填同理，各手抄一份。
     </p>
@@ -24,7 +24,7 @@ import T22RecursiveTypes from './T22RecursiveTypes.vue'
       这个方案做对了一件重要的事：<strong>它承认了「同一份结构需要多套读写语义」</strong>。对结构很浅的对象来说，套一层 <code>Readonly</code> 确实就把它挡住了，简单直接，也够用。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>深层层级未锁定</h2>
     <ul>
       <li><code>Readonly</code> 只作用一层，<code>config.app.settings.debug</code> 依然可写，改了也不报错。</li>
       <li>树形结构与 JSON 的层数无法预先枚举，手写版本根本写不完。</li>
@@ -32,7 +32,7 @@ import T22RecursiveTypes from './T22RecursiveTypes.vue'
       <li>对象新增一层嵌套时，所有手写版本都得补，遗漏的层级编译器不会提醒你。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>类型自我引用</h2>
     <p>
       不推翻「多套读写语义」，而是让类型<strong>引用自己</strong>。递归思想的第一次出场其实很朴素——描述一棵树时，子节点的类型就是节点自身：
     </p>
@@ -64,13 +64,13 @@ import T22RecursiveTypes from './T22RecursiveTypes.vue'
       <strong>递归必须能终止。</strong>递归类型一定要有可退出的分支，否则会无限递归、把类型实例化压得越来越深；编译器对类型实例化深度是有限制的，嵌套极深或递归过重时会直接报错。对性能敏感的递归类型，控制在必要深度即可，超过三层嵌套的复杂转换，宁可交给现成的工具库。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>文件树与深度映射</h2>
     <figure class="lesson-figure">
       <figcaption>展开文件树感受结构自身的递归，再切到「深度映射类型」看 <code>DeepReadonly</code>、<code>DeepPartial</code>、<code>DeepRequired</code> 如何一层层生效。</figcaption>
       <T22RecursiveTypes />
     </figure>
 
-    <h2>总结</h2>
+    <h2>递归终止条件</h2>
     <p>
       递归类型的价值，是让「结构描述」和「结构转换」都跟着层级自己走：在定义里引用自身，就能描述树与 JSON 这类无固定深度的结构；在映射类型里递归自己，就能把只读、可选、必填这类转换一口气铺满每一层。只要保证有可退出的分支，编译器就会按规则的终止路径收敛——而函数成员那类不该被递归的角色，要记得单独放行。
     </p>

@@ -8,7 +8,7 @@ import R21ImperativeHandle from './R21ImperativeHandle.vue'
       <strong>开场问题：</strong>搜索页上有个「清空并聚焦」按钮，点它，输入框里的字被清掉、光标同时跳进去——可这个按钮长在父组件里，输入框却是子组件 <code>&lt;SearchInput /&gt;</code> 渲染的。父组件要按自己的时机命令子组件「聚焦、清空、把当前值报回来」，这份控制权是怎么跨过组件边界的？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>跨组件命令需求</h2>
     <p>
       父组件常常需要对外层包着的子组件做几件很具体的事：让里面的输入框获得焦点、把内容清空、把当前输入读出来。这些动作有一个共同点——它们都是<strong>命令式</strong>的：不是「输入框此刻应该显示什么」，而是「现在去执行某个动作」。声明式的 props 擅长描述前者，描述后者就很别扭。
     </p>
@@ -19,7 +19,7 @@ import R21ImperativeHandle from './R21ImperativeHandle.vue'
       三种做法都得由人小心维护：透传会让子组件的内部结构变成父组件的依赖，标志位方案要维护一堆「一次性请求」的清理逻辑。所以要回答的是：<strong>能不能给父组件一个只暴露必要动作的「遥控器」，而不是把整间屋子都交出去？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>引用直通内部元素</h2>
     <p>
       最直接的一步：让子组件把外部传进来的 ref 直接交给内部那个输入框——<code>&lt;input ref={inputRef} /&gt;</code>。父组件于是可以写 <code>searchRef.current.focus()</code>，光标应声落进搜索框。
     </p>
@@ -27,7 +27,7 @@ import R21ImperativeHandle from './R21ImperativeHandle.vue'
       这个方案做对了一件事：<strong>它承认「聚焦、清空、读取」这些动作确实需要一条跨组件的引用通道</strong>。声明式写法里没有 <code>focus</code> 这种 prop，只有先把底层元素交出去，父组件才够得着。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>封装边界遭破坏</h2>
     <ul>
       <li>父组件拿到的是整个 <code>HTMLInputElement</code>：它可以随手写 <code>searchRef.current.value = 'x'</code>，绕过受控组件的 <code>onChange</code>，于是 DOM 上的值和组件里的 state 当场对不上。</li>
       <li>子组件的结构只要动一下——把 <code>&lt;input&gt;</code> 换成 <code>&lt;textarea&gt;</code>、或多包一层容器——父组件的 <code>searchRef.current.focus()</code> 就可能在运行时报错，父组件被迫盯着子组件的实现细节。</li>
@@ -35,7 +35,7 @@ import R21ImperativeHandle from './R21ImperativeHandle.vue'
       <li>「暴露整个节点」等于让封装失效：子组件不再是黑盒，谁都能改它的任何属性，复用与重构都被绑住。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>自定义句柄接口</h2>
     <p>
       不推翻「用 ref 建一条通道」，而是换掉<strong>交给父组件的东西</strong>：不再给整个 DOM 节点，而是一个只含几个方法的<strong>自定义对象</strong>。<code>useImperativeHandle</code> 干的就是这件事——它把 ref 的指向从「内部元素」重定向成「你定义的对象」。
     </p>
@@ -56,13 +56,13 @@ import R21ImperativeHandle from './R21ImperativeHandle.vue'
       <strong>别忘了 React 19 的变化：</strong>ref 现在可以像普通 prop 一样被函数组件直接接收，写 <code>function SearchInput({ ref })</code> 也成立，不再是 <code>forwardRef</code> 的专属能力；但无论哪种写法，「限定暴露哪些方法」这件事始终由 <code>useImperativeHandle</code> 负责。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>三按钮交互表现</h2>
     <figure class="lesson-figure">
       <figcaption>在搜索框里随便输点字，然后只用三个按钮驱动它：「聚焦搜索框」让光标跳进去，「清空并聚焦」清掉内容再聚焦，「读取当前值」把子组件里的 <code>query</code> 取出来显示——父组件全程碰不到那个 input 节点。</figcaption>
       <R21ImperativeHandle />
     </figure>
 
-    <h2>总结</h2>
+    <h2>传能力而非实现</h2>
     <p>
       当父组件要「命令」子组件做某件事时，别把整个内部元素交出去，交给它一个只含必要动作的句柄。<code>useImperativeHandle</code> 把 ref 从 DOM 节点重定向成自定义对象，父组件能调的方法就是子组件愿意暴露的那几个——通道里流的是能力，不是实现。
     </p>

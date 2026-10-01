@@ -8,7 +8,7 @@ import SC07Extend from './SC07Extend.vue'
       <strong>开场问题：</strong>信息、成功、危险三种通知，外壳的圆角、内边距、边框完全一样，只有配色不同；可我复制了三份声明，设计说把圆角调小一点，我又得改三次——有没有办法只写一次，让三种通知共用它？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>同族各自实现</h2>
     <p>
       通知、按钮、表单控件这类元素有个共同点：它们<strong>在语义上属于同一族</strong>，只是变体不同。一个 <code>.notice-info</code> 和一个 <code>.notice-success</code>，本质上都是「通知」，共享同一套外壳声明，差异只在颜色。
     </p>
@@ -16,7 +16,7 @@ import SC07Extend from './SC07Extend.vue'
       用复制的方式维护，代价会随变体数量放大：三份声明改一处要同步三处，改漏一个就出现视觉不一致；而且这种「它们其实是同一种东西」的事实，被复制这个动作彻底掩盖了——读代码的人看不出这几条规则本该绑在一起。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>分组选择器合并</h2>
     <p>
       原生 CSS 其实已经提供了合并手段：把共享的声明写成一条分组选择器。
     </p>
@@ -27,7 +27,7 @@ import SC07Extend from './SC07Extend.vue'
       这个方案对在哪？它<strong>只输出一条规则，产物没有任何重复</strong>，三种变体共用同一份声明，改圆角只改这一处。这是最干净、最不需要工具介入的合并方式。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>合并关系模糊</h2>
     <ul>
       <li>共享声明与各自声明被拆到两条规则里，谁覆盖谁，全靠书写顺序和特异性去猜。</li>
       <li>差异一多，分组就碎成好几段：配色一段、间距一段、状态样式一段，反而更难读。</li>
@@ -35,7 +35,7 @@ import SC07Extend from './SC07Extend.vue'
       <li>想让某个元素单独拥有这套外壳，原生写法只能给 HTML 补一个基类，标记和样式被强行绑在一起。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>占位符与继承</h2>
     <p>
       要表达「同类不同变体」的语义，Sass 提供了<strong>占位选择器 <code>%</code></strong> 配合 <strong><code>@extend</code></strong>。把公共声明写进一个以 <code>%</code> 开头的选择器：
     </p>
@@ -100,13 +100,13 @@ import SC07Extend from './SC07Extend.vue'
       <strong>两句话记住边界：</strong>只想共享一组声明时，Mixin 通常更直观，因为它的结果只取决于调用点，不会被别的选择器牵连；而对确定性要求高的场合，优先选 Mixin——<code>@extend</code> 会在整个样式表里寻找匹配的占位符并合并，在大型项目中容易波及你没想到的选择器。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>外壳归并同族</h2>
     <figure class="lesson-figure">
       <figcaption>切换三种通知，看 <code>%notice-base</code> 的外壳如何被 <code>@extend</code> 合并进同一族。</figcaption>
       <SC07Extend />
     </figure>
 
-    <h2>总结</h2>
+    <h2>继承混入分工</h2>
     <p>
       <code>@extend</code> 与占位符回答的是「同类不同变体」该怎么写：公共部分放进 <code>%placeholder</code>（它自己不产出 CSS），变体用 <code>@extend</code> 并入同一条规则，语义清晰、产物不重复。当你需要的只是「把一组声明搬过来」，或者要求行为完全可预测，那该用 Mixin——<strong>先想清楚是「同一类东西」还是「同一段声明」，再决定用哪一个</strong>。
     </p>

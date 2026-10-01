@@ -8,7 +8,7 @@ import X11RouteHandlers from './X11RouteHandlers.vue'
       <strong>开场问题：</strong>课程站要对外提供一个「按关键词查课程」的 JSON 接口，给小程序和第三方调用——可页面本身已经能取到数据了，为什么还要专门做一份接口？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>页面取数的封闭</h2>
     <p>
       页面能拿到数据，不等于别人能拿到数据。页面用的取数逻辑，要么是服务端渲染时直接查库，要么是写死在组件里的假数据；它们都只服务于「这一个页面」，没有对外的稳定形状。当小程序、移动端、第三方平台也想用这些数据时，你需要的是一个标准的、能被 curl 直接调用的 HTTP 接口。
     </p>
@@ -16,7 +16,7 @@ import X11RouteHandlers from './X11RouteHandlers.vue'
       还有一类需求更棘手：接收第三方平台推送过来的 Webhook。它是外部服务主动<strong>发请求给你</strong>，你必须有一个能收 POST 的地址。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>跨域直调的便利</h2>
     <p>
       最省事的做法，是让前端直接去调对方的开放接口：组件里写 <code>fetch('https://third-party.com/api/...')</code>，由浏览器自己完成请求。
     </p>
@@ -24,7 +24,7 @@ import X11RouteHandlers from './X11RouteHandlers.vue'
       它在「只是想显示别人的数据」时确实够用——<strong>浏览器天然就能发起跨域请求</strong>，不需要我们自己维护服务器。只要接口公开、没有密钥，这几乎零成本。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>直连三方的风险</h2>
     <ul>
       <li>密钥泄露：调用第三方接口需要的 API Key 会写进前端代码，等于公开。</li>
       <li>无法对外提供接口：别人想调用你的数据，你却没有一个稳定的地址。</li>
@@ -32,7 +32,7 @@ import X11RouteHandlers from './X11RouteHandlers.vue'
       <li>没有统一治理：鉴权、限流、入参校验、错误码，散落在各处无从统一。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>服务端接口层</h2>
     <p>
       我们需要一个「服务端的接口层」。在 App Router 里，这件事由 Route Handler 承担：在 <code>app/api/</code> 下创建固定命名的 <code>route.ts</code>，<strong>目录层级即接口路径</strong>。文件里导出与 HTTP 方法同名的函数，就对应一个处理入口：
     </p>
@@ -72,13 +72,13 @@ import X11RouteHandlers from './X11RouteHandlers.vue'
       还要记住，Route Handler 与渲染页面走的是不同的入口：它不参与页面渲染，只负责处理请求并返回一个响应。理解这一点，就不容易把「读数据渲染页面」和「对外提供接口」两件事混在一起。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>单文件多方法</h2>
     <figure class="lesson-figure">
       <figcaption>逐个点开各 HTTP 方法，看同一个 route.ts 如何分别响应不同请求。</figcaption>
       <X11RouteHandlers />
     </figure>
 
-    <h2>总结</h2>
+    <h2>对外接口的补位</h2>
     <p>
       Route Handler 补上了「服务端对外接口」这一层：在 <code>app/api/</code> 下按目录层级写 <code>route.ts</code>，导出同名方法处理请求，用 <code>NextResponse</code> 返回 JSON、状态码与响应头，动态段与查询串各归其位。它和 Server Action 不是替代关系，而是「给外人用的 API」与「给自家表单用的函数」的分工。
     </p>

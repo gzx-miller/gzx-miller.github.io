@@ -8,7 +8,7 @@ import SC06Selectors from './SC06Selectors.vue'
       <strong>开场问题：</strong>卡片组件要悬停抬升、键盘聚焦描边、精选态换边框色、RTL 下右对齐——我把 <code>.lesson-card</code> 这个类名在样式里写了四五遍，哪天重构改名，就得全文件搜索替换，还得赌自己一处都没漏。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>类名重复书写</h2>
     <p>
       组件样式大多是「在组件类名后面接着写」：悬停是冒号伪类，变体是 BEM 修饰符，上下文是放在前面的祖先条件。它们全都从属于同一个组件，但在 CSS 里没有「从属」这个概念——只有一条条完整的选择器。
     </p>
@@ -16,7 +16,7 @@ import SC06Selectors from './SC06Selectors.vue'
       于是每次增加一个状态或变体，你都要把组件类名再抄一遍。代价不是打字多，而是<strong>组件身份被复制到各处</strong>：改名要全局替换、前缀抄错一个字母就默默失效，而像 RTL 这种「上下文写在前面」的关系，用前缀的方式根本表达不出来。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>四条规则手写</h2>
     <p>
       最直接的做法，原生 CSS 全部写全：
     </p>
@@ -36,7 +36,7 @@ import SC06Selectors from './SC06Selectors.vue'
       这个做法对在哪？它写出来的<strong>就是编译产物的真身</strong>，所见即所得，没有任何抽象层。任何一条选择器都能被全文搜索到，静态分析工具也能读懂它的含义。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>重命名的传播成本</h2>
     <ul>
       <li>组件类名被重复写了好几遍，改名要全局替换，漏一处就留下一条死规则。</li>
       <li>前缀靠字符串复制维持，多写或少写一个字符不会报错，只会静默失效。</li>
@@ -44,7 +44,7 @@ import SC06Selectors from './SC06Selectors.vue'
       <li>状态、变体、上下文三类关系都平铺在顶层，组件的边界在代码里消失了。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>父选择器折叠</h2>
     <p>
       Sass 给了两件工具。第一件是<strong>父选择器 <code>&amp;</code></strong>：它代表「当前外层选择器」。把上面四条规则折进组件块：
     </p>
@@ -70,13 +70,13 @@ import SC06Selectors from './SC06Selectors.vue'
       如果确实需要更精细的选择器组合，Sass 提供了 <code>sass:selector</code> 模块，其中的 <code>selector.append</code>、<code>selector.nest</code>、<code>selector.unify</code> 能以可读的方式拼接、嵌套与合并选择器，比手写字符串拼接更安全。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>选择器写法对比</h2>
     <figure class="lesson-figure">
       <figcaption>点一下卡片切换选中态，对照右侧代码里 &amp; 生成的三种选择器写法。</figcaption>
       <SC06Selectors />
     </figure>
 
-    <h2>总结</h2>
+    <h2>身份与命名分工</h2>
     <p>
       父选择器解决的是「组件身份被反复复制」的问题：用 <code>&amp;</code> 把状态、变体、上下文都挂回组件块，改类名只改一处。插值解决的则是「名字要算出来」的问题，但它是双刃剑，用得越深，代码越难搜、越难重构。一句话：<strong>&amp; 用在结构上，插值用在不得不动态的地方。</strong>
     </p>

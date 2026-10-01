@@ -8,7 +8,7 @@ import K10LifecycleRef from './K10LifecycleRef.vue'
       <strong>开场问题：</strong>弹窗一打开就想让输入框自动聚焦，可代码刚跑就报错——那个输入框那时候还不存在吗？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>弹窗聚焦需求</h2>
     <p>
       你在做一个弹窗表单：弹窗弹出后，光标要自动落在第一个输入框里，同时卡片上显示「已停留 N 秒」的计时。前一件事需要碰到真实的输入框元素，后一件事需要启动一个每秒执行一次的计时器。
     </p>
@@ -16,7 +16,7 @@ import K10LifecycleRef from './K10LifecycleRef.vue'
       两件事都指向同一个问题：<strong>组件的「一生」分不同阶段，代码写在哪个阶段，能不能碰到 DOM、会不会留下垃圾，结果完全不同</strong>。搞不清时机，就会一边拿不到元素，一边泄漏资源。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>脚本顶层写法</h2>
     <p>
       最省事的做法：在脚本顶层直接写 <code>inputRef.value?.focus()</code>，紧接着 <code>setInterval</code> 启动计时器，反正逻辑都在一个文件里。
     </p>
@@ -24,7 +24,7 @@ import K10LifecycleRef from './K10LifecycleRef.vue'
       这个方案做对了一件基础的事：<strong>它承认了代码需要一个执行入口</strong>。启动逻辑集中在一处，读起来也直观。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>空引用与残留</h2>
     <ul>
       <li>脚本执行时组件还没渲染成真实 DOM，模板引用仍是 <code>null</code>，聚焦这一步直接落空。</li>
       <li>组件被销毁后计时器还在跑，回调继续执行，形成内存与性能的双重泄漏。</li>
@@ -32,7 +32,7 @@ import K10LifecycleRef from './K10LifecycleRef.vue'
       <li>看不出「创建」与「清理」的对应关系，时间一长没人说得清哪些资源还活着。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>生命周期时机</h2>
     <p>
       不推翻「要有启动入口」，而是按<strong>组件进入页面、更新、离开页面</strong>的时机，把代码放到对应的<strong>生命周期钩子</strong>里。
     </p>
@@ -53,13 +53,13 @@ import K10LifecycleRef from './K10LifecycleRef.vue'
       再补一层理解：组件的一生不止「挂载」一个节点。数据变化会引起更新，此时 <code>onUpdated</code> 会被反复调用——<strong>它是用来做更新之后的收尾，而不是用来修改状态的</strong>，在里面对状态再赋值很容易造成循环。至于卸载前的 <code>onBeforeUnmount</code> 与完全卸载后的 <code>onUnmounted</code>，差别在于前者执行时 DOM 还在，适合做最后的数据清理与断开连接；后者则确认组件已经离开，用于核对资源确实回收。把「创建」与「释放」成对写在同一个关注点里，代码的可信度会高出很多。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>回收情况观察</h2>
     <figure class="lesson-figure">
       <figcaption>看输入框如何自动聚焦、计时器如何累加；反复挂载卸载，确认资源被正确回收。</figcaption>
       <K10LifecycleRef />
     </figure>
 
-    <h2>总结</h2>
+    <h2>钩子引用分工</h2>
     <p>
       生命周期钩子描述组件进入页面、更新和离开页面的时机；模板引用让组件在必要时访问真实 DOM。需要 DOM 就等 <code>onMounted</code>，需要清理就在卸载前释放资源，创建与销毁成对出现，组件才不会留下尾巴。
     </p>

@@ -8,7 +8,7 @@ import E05AppLifecycle from './E05AppLifecycle.vue'
       <strong>开场问题：</strong>你在 <code>app.whenReady()</code> 之前就写了 <code>new BrowserWindow</code>，程序直接报错"应用就绪前不能创建窗口"；另一个更常见的场景是——用户连点五下图标，任务栏里冒出五个一模一样的窗口，一起抢着写同一份配置。为什么"什么时候能做某件事"这么较真？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>生命周期时序约束</h2>
     <p>
       桌面应用有一串绕不开的时序问题：创建窗口前要等应用就绪，退出前要先把数据清理干净，macOS 上关掉窗口并不等于退出应用。这些时机只要有一个踩偏，结果就是白屏、丢数据，或者重复启动好几个实例。
     </p>
@@ -19,7 +19,7 @@ import E05AppLifecycle from './E05AppLifecycle.vue'
       所以要问的是：应用从启动到退出，中间有一串事件，谁在什么时候告诉你"现在可以创建窗口了""现在要走了"？
     </p>
 
-    <h2>最小方案</h2>
+    <h2>就绪后创建窗口</h2>
     <p>
       最朴素的做法：用 <code>app.whenReady()</code> 拿到一个 Promise，在它 resolve 之后才创建第一个窗口——<code>app.whenReady().then(createWindow)</code>。
     </p>
@@ -27,7 +27,7 @@ import E05AppLifecycle from './E05AppLifecycle.vue'
       这个方案做对了一件事：<strong>它把"应用初始化完成"这个时机变成了一个可等待的信号</strong>。你不必再猜主进程什么时候能建窗口，等 Promise 就行，报错那句"就绪前不能创建窗口"自然消失。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>全窗关闭后去留</h2>
     <ul>
       <li>只等就绪远远不够：所有窗口关掉之后该干什么？不处理的话，Windows 上窗口关光了进程还挂着，或者 macOS 上本该驻留却被误退。</li>
       <li>用户能重复启动应用：再开一份，两个进程同时写同一份配置或数据库，数据直接互相覆盖。</li>
@@ -35,7 +35,7 @@ import E05AppLifecycle from './E05AppLifecycle.vue'
       <li>如果关窗就真的销毁窗口，那些想做成"点 X 隐藏到托盘继续跑"的常驻应用根本实现不了。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>平台退出去留判断</h2>
     <p>
       先补最影响正确性的平台退出差异。<code>window-all-closed</code> 里判断平台：<code>process.platform !== 'darwin'</code> 时才 <code>app.quit()</code>，Windows 与 Linux 关窗即退出；macOS 保留进程，并在 <code>activate</code>（点 Dock 图标）时，若发现没有窗口就重建一个。这一条把"关窗"和"退出"从"必然绑定"拆成了"分平台决定"。
     </p>
@@ -58,13 +58,13 @@ import E05AppLifecycle from './E05AppLifecycle.vue'
       <strong>两个容易翻车的地方：</strong><code>before-quit</code> 里的 <code>preventDefault</code> 只能拦一次，若不设标志位就再调 <code>app.quit()</code>，会陷入反复触发；另外，写退出逻辑前先想清楚目标平台——macOS 默认关窗不退出，直接套 Windows 的写法会把用户的应用意外关掉。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>跨平台行为观测</h2>
     <figure class="lesson-figure">
       <figcaption>先在上面切换 macOS / Windows / Linux，再点「模拟生命周期」，观察 <code>window-all-closed</code> 之后是走向 <code>activate</code> 重建窗口，还是走向 <code>quit</code> 直接退出。</figcaption>
       <E05AppLifecycle />
     </figure>
 
-    <h2>总结</h2>
+    <h2>启动退出时间表</h2>
     <p>
       应用生命周期是一份时间表：<code>whenReady</code> 之后才创建窗口，<code>window-all-closed</code> 决定去还是留，<code>before-quit</code> 与 <code>will-quit</code> 负责清理，单实例锁拦住重复启动。把每个时机该做的事放对位置，启动和退出这两个最容易出问题的阶段就稳了。
     </p>

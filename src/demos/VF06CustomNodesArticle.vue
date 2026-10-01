@@ -8,7 +8,7 @@ import VF06CustomNodes from './VF06CustomNodes.vue'
       <strong>开场问题：</strong>想让流程图上每个节点直接显示课程名、讲师、课时和「基础／进阶」徽标，可默认节点只有一行文字——难道要把这些信息拼成一长串塞进那行标签里？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>默认节点容量</h2>
     <p>
       默认节点的长相很朴素：它就是 <code>node.data.label</code> 里那行文本，撑起一个方块。现在业务要的是一张课程卡片——标题、讲师、课时、阶段徽标各有各的位置和样式。如果不动渲染，只往数据里堆字符串，得到的永远只是「一行字」。
     </p>
@@ -16,7 +16,7 @@ import VF06CustomNodes from './VF06CustomNodes.vue'
       这不是排版好不好看的问题，而是<strong>默认节点的表达能力有硬上限</strong>：它压根没打算承载结构化的业务信息。继续凑合，凡是带卡片、带徽标、带状态的需求，一个都做不了。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>信息拼进标签</h2>
     <p>
       最朴素的做法，是把信息拼成一串文本塞进 label：<code>组合式 API · 小松鼠 · 12 节 · 基础</code>。
     </p>
@@ -24,7 +24,7 @@ import VF06CustomNodes from './VF06CustomNodes.vue'
       这个方案做对了一件根本的事：<strong>它证明 node.data 可以携带任意业务信息</strong>，数据层根本不用改——title、teacher、lessons、stage 这些字段照存不误。问题只出在显示层完全没跟上。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>纯文本排版局限</h2>
     <ul>
       <li>一行纯文本没有排版，讲师、课时、阶段挤在一起，扫读成本很高。</li>
       <li>「基础／进阶」本该用不同颜色的徽标区分，字符串做不到。</li>
@@ -32,7 +32,7 @@ import VF06CustomNodes from './VF06CustomNodes.vue'
       <li>想再放图标、进度条、按钮这类结构时，字符串方案彻底到顶。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>外观交给插槽</h2>
     <p>
       不推翻「信息放在 data 里」，而是把<strong>数据与外观彻底分开</strong>：数据照旧进 <code>node.data</code>，外观则交给一个属于我们自己的模板。
     </p>
@@ -63,13 +63,13 @@ import VF06CustomNodes from './VF06CustomNodes.vue'
       最后一个容易被忽略的是尺寸规划：卡片宽度、层间距要预先定好（本课约 180 宽的卡片、明显大于卡片高度的层距），否则连线会在卡片之间斜穿，观感很乱。把尺寸当成布局契约的一部分，图才耐看。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>卡片选中联动</h2>
     <figure class="lesson-figure">
       <figcaption>点任意课程卡片，看选中描边与右侧详情栏如何联动。</figcaption>
       <VF06CustomNodes />
     </figure>
 
-    <h2>总结</h2>
+    <h2>数据与外观分工</h2>
     <p>
       自定义节点的要害，是把「数据」和「长什么样」拆开：业务字段留在 <code>node.data</code>，外观交给同名插槽 <code>#node-类型名</code>，选中与拖拽态从插槽参数里读。再在卡片边缘声明 Handle，连接行为与内置节点无缝衔接——一行文字的节点，就此长成了能承载业务的卡片。
     </p>

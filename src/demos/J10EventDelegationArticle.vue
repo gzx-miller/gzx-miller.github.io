@@ -8,7 +8,7 @@ import J10EventDelegation from './J10EventDelegation.vue'
       <strong>开场问题：</strong>给列表里 100 个按钮各绑一个点击事件，新增第 101 个按钮时它却毫无反应——为什么新来的节点总是不听使唤？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>列表按钮绑定</h2>
     <p>
       你在做一个课程列表：每一行都有按钮，点击切换选中状态。最直觉的写法是遍历所有行，给每个按钮绑定一个监听器。一开始没问题，直到列表变得很长——几百个监听器常驻内存；更糟的是列表会动态增删，每插入一行你都得记得重新绑一次，一旦漏掉，那个新按钮就成了「哑巴」。
     </p>
@@ -16,7 +16,7 @@ import J10EventDelegation from './J10EventDelegation.vue'
       要解决它，得先回答一个问题：<strong>点击一个按钮时，这个事件到底经过了哪些元素？</strong>答案涉及 DOM 的事件传播机制。理解了它，你就能把「给每个子节点绑监听」换成「在父节点守株待兔」，一次性解决绑定数量和动态节点两个难题。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>逐节点绑定</h2>
     <p>
       最直接的做法：遍历子节点，逐个 <code>addEventListener('click', ...)</code>，每个监听器只负责自己那一行。逻辑简单，谁被点谁响应，彼此独立。
     </p>
@@ -24,7 +24,7 @@ import J10EventDelegation from './J10EventDelegation.vue'
       这个方案做对了一件事：<strong>它把「监听」和「元素」一一对应</strong>，心智负担低。当列表很短、而且是静态的，这确实是最清楚的写法。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>监听器数量开销</h2>
     <ul>
       <li>监听器数量等于子节点数量，列表越长内存占用越高，绑定开销也越大。</li>
       <li>动态插入的新节点不会自动拥有事件，必须手动再绑一次，容易漏。</li>
@@ -32,7 +32,7 @@ import J10EventDelegation from './J10EventDelegation.vue'
       <li>同一套处理逻辑被重复绑定 N 次，代码里全是重复的事件注册。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>父容器统一监听</h2>
     <p>
       换一个视角：既然点击子元素时，事件会经过它的祖先，那不如<strong>在稳定的父容器上监听一次</strong>，让冒泡把事件送到这里，再判断「到底点到了谁」。这就是事件委托。
     </p>
@@ -60,13 +60,13 @@ import J10EventDelegation from './J10EventDelegation.vue'
       还有一个前提不能忘：<strong>不是所有事件都会冒泡</strong>。<code>focus</code>、<code>blur</code>、<code>scroll</code> 这类事件不参与冒泡，委托在冒泡阶段就收不到它们。这种情况下要么改用捕获阶段监听，要么换用会冒泡的替代事件（例如用 <code>focusin</code> 代替 <code>focus</code>）。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>单监听器演示</h2>
     <figure class="lesson-figure">
       <figcaption>点按钮切换课程，注意父容器只挂了一个监听器，却能响应所有子元素。</figcaption>
       <J10EventDelegation />
     </figure>
 
-    <h2>总结</h2>
+    <h2>事件委托原则</h2>
     <p>
       事件委托利用冒泡，把「给 N 个子节点各绑一个监听器」变成「在父节点挂一个」。它把监听器数量从 N 降到 1，并让动态新增的节点自动拥有交互能力——代价是你要靠 <code>closest</code> 和 <code>target</code> 亲手把真实目标认出来。
     </p>

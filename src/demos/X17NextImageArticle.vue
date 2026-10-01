@@ -8,7 +8,7 @@ import X17NextImage from './X17NextImage.vue'
       <strong>开场问题：</strong>本地图片用得好好的，把 <code>src</code> 换成 CDN 地址却直接报错；而且明明给了宽高，图片加载时那块区域还是先塌下去再被撑开——明明就是放一张图，为什么要这么多讲究？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>图片使用的讲究</h2>
     <p>
       你在做课程站的详情页，一页里排着十几张封面图：首屏一张大图，下面跟着一串卡片。上线前你随手用了最朴素的 <code>&lt;img&gt;</code> 标签，本地开发一切正常，可到真机上总有人反馈「页面一开始是空的，图片一出来整页就往下跳」，还有人说流量跑得特别快。
     </p>
@@ -16,7 +16,7 @@ import X17NextImage from './X17NextImage.vue'
       图片看起来只是「放一张图」，但它同时牵扯三件独立的事：<strong>文件多大</strong>、<strong>什么时候开始下载</strong>、<strong>没下载完时占多大位置</strong>。这三件事既决定加载快不快，也决定用户第一次看到页面时它稳不稳。原生标签把这三件事全部交给你手工拍板，而问题的根源恰恰就在这里。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>标签直接引用</h2>
     <p>
       最直接的做法是用原生标签：把地址和替代文本写进 <code>src</code> 与 <code>alt</code>，浏览器就会去取图并渲染。它简单、无依赖，浏览器对它的理解也最透彻，一张图确实能立刻显示出来。
     </p>
@@ -24,7 +24,7 @@ import X17NextImage from './X17NextImage.vue'
       这个方案做对的是最底层的一层：<strong>图片能不能显示，只取决于 URL 和网络</strong>。但它把「优化」完全留给了你自己——尺寸是你选的、格式是你导出的、加载时机是浏览器猜的，占位高度则是「加载完才知道」。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>原生标签的缺口</h2>
     <ul>
       <li>一张 2000px 宽的原图，在手机上只显示 360px，多出来的字节白白下载，浪费带宽与等待时间。</li>
       <li>源文件通常是 JPEG/PNG，不会按浏览器能力自动转成体积更小的 WebP/AVIF。</li>
@@ -33,7 +33,7 @@ import X17NextImage from './X17NextImage.vue'
       <li>想「手机上给窄图、桌面上给宽图」，得自己手写 <code>srcset</code> 与 <code>sizes</code>，容易写错也容易忘。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>自动优化的组件</h2>
     <p>
       不推翻原生标签，而是给「放一张图」补上一层自动化的优化：Next.js 的 <code>next/image</code>。你仍然只是写一个图片组件，但它会<strong>按设备生成合适尺寸的 AVIF/WebP、默认懒加载，并按你给的尺寸预留位置</strong>。
     </p>
@@ -56,13 +56,13 @@ import X17NextImage from './X17NextImage.vue'
       <strong>两个容易踩的坑：</strong>远程图片不配置 <code>remotePatterns</code> 会在运行时报错，而不是构建时就提醒你；另外 <code>width</code> 与 <code>height</code> 要按<strong>实际展示大小</strong>来设，源图再大也只按这个尺寸处理，设得过大等于白白增加带宽与处理开销。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>能力清单的补齐</h2>
     <figure class="lesson-figure">
       <figcaption>对照下面这份清单，看看一张图从「能显示」到「显示得好」还需要补哪些能力。</figcaption>
       <X17NextImage />
     </figure>
 
-    <h2>总结</h2>
+    <h2>默认行为的覆盖</h2>
     <p>
       图片优化的本质，是把「多大、何时下、占多大位置」从人的手工决策，变成组件能自动完成的默认行为。本地图用 <code>import</code>、远程图配白名单，尺寸用 <code>width</code> 与 <code>height</code> 或 <code>fill</code> 交代清楚，首图加 <code>priority</code>、其余交给懒加载——加载变快，抖动也随之消失。
     </p>

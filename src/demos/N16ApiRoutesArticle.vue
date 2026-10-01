@@ -8,7 +8,7 @@ import N16ApiRoutes from './N16ApiRoutes.vue'
       <strong>开场问题：</strong>你想给页面加一个后端接口，于是新建了 <code>server/api/hello.ts</code>，里面只写了一个返回对象的函数。你没有装 Express、没有写 <code>app.get('/api/hello', handler)</code>，也没有在任何一个地方「注册」过这个路由，可浏览器里请求 <code>/api/hello</code> 竟然直接通了——这个接口到底是被谁登记进去的？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>框架路由的显式登记</h2>
     <p>
       在传统的 Node 后端里，「一个 URL 对应一段代码」这件事必须显式登记。你用 Express 写接口，路由表就是那个中枢：<code>app.get('/api/hello', handler)</code>、<code>app.post('/api/users', handler)</code>，每加一个接口都要在这里多写一行。路由表和处理函数分居两处，接口一多，它就成了一份需要维护的清单。
     </p>
@@ -19,7 +19,7 @@ import N16ApiRoutes from './N16ApiRoutes.vue'
       于是问题落到：<strong>能不能让「文件本身」就是端点，路径由文件在目录里的位置推导出来，连允许的 HTTP 方法也由文件名写清楚？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>文件即端点的约定</h2>
     <p>
       在项目根目录建一个 <code>server/api/</code> 目录，按想要的路径在里面放文件。文件内容只做一件事：默认导出一个 <code>defineEventHandler</code> 处理函数，返回什么，接口就响应什么。
     </p>
@@ -30,7 +30,7 @@ import N16ApiRoutes from './N16ApiRoutes.vue'
       这个方案做对了一件事：<strong>路径不再写第二遍</strong>。文件在哪儿，接口就在哪儿，路由表被文件系统取代了。这条约定和 Nuxt 的 <code>pages/</code> 路由是同一套心智模型——目录结构即路径结构，你只是把「页面」换成了「接口」。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>默认响应所有方法</h2>
     <ul>
       <li>只按文件推导路径，默认<strong>对所有 HTTP 方法都响应</strong>：<code>GET</code>、<code>POST</code>、<code>DELETE</code> 打进来都命中同一个 handler，一个删除接口被 GET 也能触发。</li>
       <li>参数还没着落：查询串和请求体是两种形态，不区分来源就会把请求体当查询串去取，拿到的是 <code>undefined</code>。</li>
@@ -38,7 +38,7 @@ import N16ApiRoutes from './N16ApiRoutes.vue'
       <li>想返回一个 404 却只能 <code>throw new Error()</code>，它一律变成 500「服务器内部错误」，前端拿不到你想表达的状态码。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>后缀对方法的限定</h2>
     <p>
       不推翻「文件即端点」，而是在文件名与处理函数上<strong>一层层补约定</strong>。
     </p>
@@ -58,13 +58,13 @@ import N16ApiRoutes from './N16ApiRoutes.vue'
       <strong>一个容易踩的坑：</strong>不带方法后缀的处理文件会对各种 HTTP 方法都做出响应。写删除、修改这类有副作用的接口时一定要加 <code>.delete.ts</code> / <code>.put.ts</code> 后缀，否则一个普通的 GET 请求就能触发写操作——这类问题在本地测试里几乎不会暴露，上线后却可能被爬虫误触发。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>三种接口写法的并置</h2>
     <figure class="lesson-figure">
       <figcaption>三个页签分别是「GET 接口 / RESTful 方法 / 参数与工具」：先看最朴素的单文件接口，再看同一资源用 <code>.get.ts</code> / <code>.post.ts</code> / <code>.delete.ts</code> 拆开的样子，最后看参数与响应工具清单。右边的「模拟 API 调用」有三个按钮，点 <code>GET /api/hello</code>、<code>GET /api/users</code> 看返回的 JSON，点「模拟 404」看 <code>createError</code> 抛出的错误结构长什么样。</figcaption>
       <N16ApiRoutes />
     </figure>
 
-    <h2>总结</h2>
+    <h2>端点推导的约定收益</h2>
     <p>
       <code>server/api/</code> 把后端接口变成了文件系统约定的产物：目录位置决定路径，文件后缀决定方法，导出 <code>defineEventHandler</code> 决定行为。你因此少维护一张路由表，也少了一次「路径写两遍」的机会；参数与错误则统一从 h3 的工具进出，接口的进出形态在文件层面就写清楚了。
     </p>

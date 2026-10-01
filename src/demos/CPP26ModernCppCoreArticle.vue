@@ -8,7 +8,7 @@ import CPP26ModernCppCore from './CPP26ModernCppCore.vue'
       <strong>开场问题：</strong>你写了一个「把容器里每个数翻倍」的循环：<code>for (auto x : nums) x *= 2;</code>。循环跑完，你打印 <code>nums</code>，里面一个数都没变——<code>auto</code> 明明推断了类型，为什么改不动原数组？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>类型推导的引入</h2>
     <p>
       问题出在「让编译器替你写类型」这件事上。C++ 的类型名经常又长又难写：想遍历一个 <code>map</code> 要找 <code>std::map&lt;std::string, int&gt;::iterator</code>，lambda 的类型根本没法写出来；而且手写类型时几乎必然踩到别的坑——比如 <code>for (int i = 0; i &lt; v.size(); ++i)</code>，<code>size()</code> 返回的是无符号的 <code>size_t</code>，和 <code>int</code> 一比就弹出有符号/无符号比较的警告。
     </p>
@@ -16,7 +16,7 @@ import CPP26ModernCppCore from './CPP26ModernCppCore.vue'
       于是现代 C++ 给了一条出路：<strong>让编译器从初始化表达式里把类型推出来</strong>。可一旦类型由编译器决定，「它到底推出了什么」就成了你必须知道的事——你写出来的只是 <code>auto x</code>，实际得到的可能是一个副本、一个 <code>const</code> 值，或者一个引用。推导规则不透明，代码就会背着你变味。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>关键字的默认推导</h2>
     <p>
       最省事的用法：需要类型名的地方一律写 <code>auto</code>。<code>auto i = v.size();</code> 让 <code>i</code> 直接拿到 <code>size_t</code>，比较警告消失；<code>auto it = m.find(k);</code> 省掉了那串迭代器全名。
     </p>
@@ -24,7 +24,7 @@ import CPP26ModernCppCore from './CPP26ModernCppCore.vue'
       这个方案做对了一件事：<strong>让变量类型和初始化它的表达式保持一致</strong>。你不再手抄一个可能抄错的类型名，而是让编译器照着右边推导——类型不会写反，将来改容器类型时左边也不用跟着改。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>推导丢引用问题</h2>
     <ul>
       <li><code>for (auto x : nums) x *= 2;</code> 里的 <code>x</code> 是元素的<strong>副本</strong>，改的是副本，原数组纹丝不动——这正是开场那个「改不动」的根源。</li>
       <li><code>auto x = i;</code> 如果 <code>i</code> 是 <code>const int&amp;</code>，推导出的 <code>x</code> 却是普通的 <code>int</code>：<strong>顶层 <code>const</code> 和引用会被 <code>auto</code> 剥掉</strong>，你以为拿到了引用，其实做了一次拷贝。</li>
@@ -32,7 +32,7 @@ import CPP26ModernCppCore from './CPP26ModernCppCore.vue'
       <li><code>auto</code> 只能靠初始化表达式推导，所以<strong>不能声明「待会儿再赋值」的变量</strong>：<code>auto x;</code> 直接编译错误。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>引用与常量的补充</h2>
     <p>
       不推翻 <code>auto</code>，而是承认「推导默认丢掉引用和 <code>const</code>」这个事实，然后按<strong>你想对元素做什么</strong>补上修饰符。你要修改元素，就写 <code>auto&amp;</code>；只读遍历，就写 <code>const auto&amp;</code> 免得拷贝；确实要一份独立副本，才写裸的 <code>auto</code>。这样「是拷贝还是引用」就在代码里明说了，而不是靠 <code>auto</code> 的默认行为替你决定。
     </p>
@@ -49,13 +49,13 @@ import CPP26ModernCppCore from './CPP26ModernCppCore.vue'
       <strong>两条最容易踩的线：</strong><code>auto</code> 推导时<strong>会剥掉顶层 <code>const</code> 和引用，但不会剥掉指针所指向对象的 <code>const</code></strong>（<code>const int* p</code> 用 <code>auto*</code> 推出后仍指向 <code>const int</code>）；另外范围 <code>for</code> 遍历时若在循环体里增删容器元素，会让 <code>begin()/end()</code> 持有的迭代器失效，这是另一类崩溃来源。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>几种推导写法对照</h2>
     <figure class="lesson-figure">
       <figcaption>对照看几种写法的实际效果：<code>for (auto&amp; elem : vec) elem *= 2;</code> 带着 <code>&amp;</code> 才真正改到原容器，<code>auto</code> 推成的迭代器省掉了冗长类型名，结构化绑定一次拆出 <code>name</code> 与 <code>score</code>，<code>nullptr</code> 则替代了 <code>NULL</code>。</figcaption>
       <CPP26ModernCppCore />
     </figure>
 
-    <h2>总结</h2>
+    <h2>视图与副本的取舍</h2>
     <p>
       <code>auto</code> 的价值是「类型跟着初始化表达式走」，代价是它默认<strong>把引用和顶层 <code>const</code> 丢掉</strong>。于是用法只剩一条判断：你想要的是视图还是副本——要改就 <code>auto&amp;</code>，只读就 <code>const auto&amp;</code>，真要副本才写 <code>auto</code>。范围 <code>for</code>、结构化绑定、统一初始化和 <code>nullptr</code> 都朝同一方向：把类型与转换的判断，从「人手抄」挪到「编译器查」。
     </p>

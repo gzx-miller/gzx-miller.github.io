@@ -8,7 +8,7 @@ import CPP11CopyControl from './CPP11CopyControl.vue'
       <strong>开场问题：</strong>你写了一个自己管理字符串内存的类，主函数里只有两句 <code>String s1("Hello"); String s2 = s1;</code>，程序却在退出、两个对象析构的那一刻崩溃，报出 double free——一次看起来最无害的拷贝，怎么会在收尾时炸掉？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>资源管理类的拷贝</h2>
     <p>
       你希望类能自己管住一块堆内存：构造函数里 <code>new char[]</code>，对象拿着这个 <code>char* data</code>。这样的类写出来很自然，直到你把它拷贝一次——<strong>拷贝一个对象，到底应该拷贝什么？</strong>
     </p>
@@ -24,7 +24,7 @@ import CPP11CopyControl from './CPP11CopyControl.vue'
       所以要问的是：<strong>一个管理资源的类，该怎样定义"复制"这件事，才能让每个对象都有自己的一份资源？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>默认逐成员拷贝</h2>
     <p>
       最省事的做法是：一个特殊成员函数都不写，完全交给编译器生成的默认版本。它的行为是<strong>逐成员拷贝</strong>——把 <code>length</code> 数值抄一份，把 <code>data</code> 指针值也抄一份。
     </p>
@@ -32,7 +32,7 @@ import CPP11CopyControl from './CPP11CopyControl.vue'
       这个方案确实做对了一件事：<strong>对不含资源的类，逐成员拷贝完全正确</strong>。比如一个只装 <code>int x, y</code> 的 <code>Point</code>，拷贝之后两个对象各有一份独立的坐标，你一辈子都不用为此操心。问题只出在"成员是资源"的类上。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>浅拷贝的双重释放</h2>
     <ul>
       <li>默认拷贝是<strong>浅拷贝</strong>：<code>s2 = s1</code> 之后，<code>s2.data</code> 和 <code>s1.data</code> 指向同一块堆内存。改 <code>s2</code> 的内容，<code>s1</code> 也跟着变。</li>
       <li>析构时 <code>s1</code> 先 <code>delete[] data</code> 释放了这块内存，<code>s2</code> 析构时又对同一地址再释放一次，得到 double free 或堆损坏——这就是开场那次崩溃。</li>
@@ -40,7 +40,7 @@ import CPP11CopyControl from './CPP11CopyControl.vue'
       <li>错误会成片出现：函数按值传参、返回临时对象、往容器里 <code>push_back</code>，每一次拷贝都在复制这枚"共享的指针"。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>三法则的补齐</h2>
     <p>
       不推翻"成员逐个处理"，而是把两个动作显式写出来：<strong>分配的资源要释放、拷贝的应该是内容而不是指针</strong>。
     </p>
@@ -70,13 +70,13 @@ import CPP11CopyControl from './CPP11CopyControl.vue'
       <strong>自赋值比你想的更常见：</strong>不要以为只有 <code>a = a</code> 才算。当 <code>*p = *q</code> 里的 <code>p</code> 和 <code>q</code> 恰好指向同一个对象时，赋值运算符收到的两个引用就是同一个对象。任何"先释放、后读取"的实现，都必须先做自赋值检查。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>拷贝日志的顺序</h2>
     <figure class="lesson-figure">
       <figcaption>顺着这段 String 代码看四类日志的先后：构造、拷贝构造、拷贝赋值、析构分别在什么时候打印，再对照拷贝赋值里那句自赋值检查，想清楚少了它会怎样。</figcaption>
       <CPP11CopyControl />
     </figure>
 
-    <h2>总结</h2>
+    <h2>复制语义的自主定义</h2>
     <p>
       拷贝控制本质上是在回答"这个类的对象该怎么复制"。一旦类自己持有一份资源，就得亲手定下析构、拷贝构造、拷贝赋值三件事（Rule of Three）；把"释放旧资源、深拷贝新资源、处理自赋值、返回 <code>*this</code>"做对之后，再用 copy-and-swap 让它更稳、用移动语义让它更快，或者干脆让成员全是 RAII 类型，做到 Rule of Zero。
     </p>

@@ -8,7 +8,7 @@ import CPP13Polymorphism from './CPP13Polymorphism.vue'
       <strong>开场问题：</strong>一个容器里同时装着圆和矩形，循环里只有一句 <code>shape-&gt;area()</code>，圆却算出圆的面积、矩形算出矩形的面积——同一个变量名、同一行代码，运行时怎么会跑到两个不同的函数里去？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>按类型分别实现</h2>
     <p>
       你要写一段"统一处理一批图形"的逻辑：不管它是圆还是矩形，都要能算面积、能把自己画出来。最省事的做法是按类型分头写：圆的循环处理圆，矩形的循环处理矩形，加一种图形就再加一段。它带来的隐藏成本有三笔：
     </p>
@@ -21,7 +21,7 @@ import CPP13Polymorphism from './CPP13Polymorphism.vue'
       所以要问的是：<strong>能不能让"该调用哪个函数"这件事，在运行时根据对象的真实类型自动决定，而不是靠人在代码里写死？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>类型标签分支</h2>
     <p>
       最省事也真的能跑的做法，是在基类里放一个<strong>类型标签</strong>字段，调用处用分支分派：
     </p>
@@ -32,7 +32,7 @@ import CPP13Polymorphism from './CPP13Polymorphism.vue'
       这个方案做对了一件要紧的事：<strong>它承认了"该调用哪个实现，取决于对象的实际类型"</strong>。在没有虚函数的世界里，这正是唯一可行的办法，逻辑上没毛病。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>分派点漏改的后果</h2>
     <ul>
       <li>新增一种图形后，每一个分派点都得进去补一个分支，任何一处漏改，这种图形在那里就会走进错误分支或默认分支。</li>
       <li>它只覆盖你事先枚举过的类型；第三方定义的新类型根本放不进来，除非回头改这段代码。</li>
@@ -40,7 +40,7 @@ import CPP13Polymorphism from './CPP13Polymorphism.vue'
       <li>如果把标签去掉、只留一个基类指针，而函数又不是虚的，那么通过指针调用时编译器只看得到"指向基类"，永远调基类版本。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>虚函数的引入</h2>
     <p>
       不推翻"按实际类型选实现"，而是把这件事从你手写的分支交给语言：在基类的函数前加 <code>virtual</code>，在派生类的重写版本上用 <code>override</code>。于是 <code>shape-&gt;area()</code> 这一句，运行时能自己落到对的实现上。这就是<strong>动态绑定</strong>。
     </p>
@@ -68,13 +68,13 @@ import CPP13Polymorphism from './CPP13Polymorphism.vue'
       <strong>把虚函数想象成"能搜索类型"是常见误解：</strong>运行时并没有去查找对象的类型再挑选函数；一切在编译期就安排成了一张按类固定的函数地址表，运行期做的只是"顺着 vptr 查表、间接调用"。另外，把派生对象按值装进存放基类对象的容器会触发切片，多态会当场失效——容器里要放指针或智能指针。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>调用分派的实证</h2>
     <figure class="lesson-figure">
       <figcaption>看 <code>shapes</code> 里同时装着圆和矩形，循环里只有一句 <code>shape-&gt;draw()</code> 与 <code>shape-&gt;area()</code>：找出是哪一句让两种图形各自落到自己的实现上，体会"调用只有一处、实现却各不相同"。</figcaption>
       <CPP13Polymorphism />
     </figure>
 
-    <h2>总结</h2>
+    <h2>运行期的动态分派</h2>
     <p>
       多态是把"该调用哪个函数"从编译期的手写分支，推迟到运行期由对象的真实类型决定。关键字只有 <code>virtual</code> 与 <code>override</code>，机制则是一张类级别的 vtable 加每个对象里的 vptr；再配上纯虚函数定义接口、虚析构保证清理，你就能做到"新增一种类型，而不用回头改动老代码"。
     </p>

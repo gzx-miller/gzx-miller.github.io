@@ -8,7 +8,7 @@ import E08Dialog from './E08Dialog.vue'
       <strong>开场问题：</strong>用户在选择文件的对话框里点了"取消"，你的代码照常往下走，<code>result.filePaths[0]</code> 拿到的是 <code>undefined</code>，读取文件时当场崩溃——对话框明明返回了结果，为什么它是个空壳？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>文件路径获取</h2>
     <p>
       桌面应用经常要向用户要一个文件路径：打开时让他选，保存时让他定位置，做危险操作前还要弹一个确认框。你想在页面里自己实现，很快就会发现寸步难行：用 HTML 的 <code>&lt;input type="file"&gt;</code> 只能拿到一个浏览器封装的 <code>File</code> 对象，<strong>拿不到真实的文件系统绝对路径</strong>，而桌面应用恰恰需要这个路径去读写磁盘。
     </p>
@@ -19,7 +19,7 @@ import E08Dialog from './E08Dialog.vue'
       所以要问的是：怎样向用户要到文件路径或一次确认，并且把结果<strong>可靠地</strong>拿回主进程？
     </p>
 
-    <h2>最小方案</h2>
+    <h2>打开对话框调用</h2>
     <p>
       最直接的做法是 <code>await dialog.showOpenDialog(win, { properties: ['openFile'] })</code>，再从返回结果里取 <code>filePaths</code>。
     </p>
@@ -27,7 +27,7 @@ import E08Dialog from './E08Dialog.vue'
       这个方案做对了一件事：<strong>拿到的是真实的文件系统绝对路径，而且对话框由操作系统原生绘制、自带真正的模态</strong>。它必须写在主进程——<code>dialog</code> 是主进程模块，渲染进程里根本没有它。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>取消结果判空</h2>
     <ul>
       <li>不判断 <code>result.canceled</code>：用户点"取消"时 <code>filePaths</code> 是空数组，<code>filePaths[0]</code> 得到 <code>undefined</code>，下游拿去读文件直接崩。</li>
       <li>把 <code>dialog</code> 写在渲染进程：那里没有这个模块，导入就是 <code>undefined</code>，调用即报错；它也不该接触系统资源。</li>
@@ -36,7 +36,7 @@ import E08Dialog from './E08Dialog.vue'
       <li>调用时不传窗口参数：对话框不附着到任何窗口，父窗口还能被操作，模态名存实亡。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>三类返回结构</h2>
     <p>
       第一件事是<strong>把三个 API 的返回结构分清楚，并且永远先判空</strong>：
     </p>
@@ -62,13 +62,13 @@ import E08Dialog from './E08Dialog.vue'
       <strong>记住两条硬边界：</strong>渲染进程不能直接使用 <code>dialog</code>，必须经 preload + IPC 交给主进程；同步版本（<code>showOpenDialogSync</code> 等）会阻塞主进程，一律避免。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>页签切换对照</h2>
     <figure class="lesson-figure">
       <figcaption>切换「打开文件 / 保存文件 / 消息框」三个页签各点一次，看下方返回的是路径还是按钮索引——然后想象点"取消"时这些值会变成什么样。</figcaption>
       <E08Dialog />
     </figure>
 
-    <h2>总结</h2>
+    <h2>返回结构解读</h2>
     <p>
       原生对话框把"向用户要路径、要一次确认"交给系统，但代价是你必须读懂它的返回结构：打开取 <code>filePaths</code>、保存取 <code>filePath</code>、消息框取 <code>response</code>，且<strong>每一步都先看 <code>canceled</code></strong>。把窗口实例传进去让对话框正确附着，再用 preload + IPC 把它封成渲染进程只认的简单方法，这套机制就既好用又安全。
     </p>

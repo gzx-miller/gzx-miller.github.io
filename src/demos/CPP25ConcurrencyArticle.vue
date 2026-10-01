@@ -8,7 +8,7 @@ import CPP25Concurrency from './CPP25Concurrency.vue'
       <strong>开场问题：</strong>你开了十个线程，每个线程只做一件事——把同一个计数器加一。十次加法，结果当然是十。可反复运行，结果在 7 到 10 之间跳，偶尔还会是 8——同一个程序、同一份输入，为什么每次的答案都不一样？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>非原子自增的成因</h2>
     <p>
       多线程的目的是让几件事真的同时进行。但一旦两个线程访问<strong>同一块内存</strong>，事情就变了：<code>++counter</code> 在你眼里是一条语句，在机器眼里却是三步——读出来、加一、写回去。两个线程各自读到 7，各自算出 8，各自写回 8，于是一次加法凭空消失了。
     </p>
@@ -25,7 +25,7 @@ import CPP25Concurrency from './CPP25Concurrency.vue'
       所以问题是：<strong>能不能让「开一个线程」「保护一块共享数据」「等某个条件成立」都有类型安全、能自动清理的语言级原语？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>线程对象的生命周期</h2>
     <p>
       最朴素的做法：<code>std::thread t(func, args...);</code> 启动一个线程，然后在主线程里 <code>t.join();</code> 等它跑完。
     </p>
@@ -33,7 +33,7 @@ import CPP25Concurrency from './CPP25Concurrency.vue'
       这个方案做对了一件关键的事：<strong>它把「线程」变成了一个普通的对象</strong>。既然是个对象，就能用对象的那套办法管它——这条思路和前面几课的 RAII、移动语义是同一个方向。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>数据竞争与线程收尾</h2>
     <ul>
       <li>两个线程同时执行 <code>++counter</code>，读到同一个旧值再各自写回，一次自增被覆盖掉，十次加法只加出了 7 或 8。</li>
       <li>一个 <code>std::thread</code> 对象如果既没 <code>join</code> 也没 <code>detach</code> 就被销毁，析构函数会直接调用 <code>std::terminate</code>，整个进程当场结束。</li>
@@ -42,7 +42,7 @@ import CPP25Concurrency from './CPP25Concurrency.vue'
       <li>想让后台任务算完并把结果拿回来，<code>std::thread</code> 根本没有「取结果」这个接口。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>互斥锁与条件变量</h2>
     <p>
       不推翻「用对象管线程」，而是承认线程最大的危险在于<strong>共享数据的访问顺序</strong>，然后一个一个问题去补。
     </p>
@@ -77,13 +77,13 @@ import CPP25Concurrency from './CPP25Concurrency.vue'
       <strong>三条最容易踩的线：</strong>没有任何同步就并发读写同一块内存，是<strong>数据竞争</strong>，在标准里属于未定义行为；别把耗时操作放进临界区，锁内的每一毫秒都在让其他线程排队；<code>std::lock_guard</code> 不能在作用域中途手动 <code>unlock</code>，需要这种灵活性就换 <code>std::unique_lock</code>。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>锁守卫的保护范围</h2>
     <figure class="lesson-figure">
       <figcaption>看代码里两种保护方式的分工：<code>printThreadId</code> 用 <code>std::lock_guard&lt;std::mutex&gt;</code> 保证多线程打印不交错，十个线程各自 <code>++counter</code> 也被同一把锁包住，最后计数器稳定输出 10 而不是 7、8。</figcaption>
       <CPP25Concurrency />
     </figure>
 
-    <h2>总结</h2>
+    <h2>共享数据的同步</h2>
     <p>
       并发的难点从来不是「怎么开线程」，而是<strong>多个线程碰到同一块内存时，谁先谁后由不得你</strong>。C++11 的答案是把这件事交给几个各有分工的 RAII 原语：用 <code>std::mutex</code> 配 <code>lock_guard</code> 圈出临界区，用 <code>std::lock</code> 一次性锁多把锁避免死锁，用条件变量带循环地等条件，用 <code>std::async</code> 拿回带异常的返回值。剩下的规矩就三条：有共享就有同步、别忘了 join、别在锁里干重活。
     </p>

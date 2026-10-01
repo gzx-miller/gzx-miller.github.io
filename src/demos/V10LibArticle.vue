@@ -8,7 +8,7 @@ import V10Lib from './V10Lib.vue'
       <strong>开场问题：</strong>你发布了一个 Vue 组件库。同事装进项目后，组件能显示但交互全乱——点按钮没反应。排查半天才发现：页面上同时加载了<strong>两份 Vue</strong>，一份是他的应用自带的，一份是你的库打包进去的。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>未知消费环境</h2>
     <p>
       你要写一个「给别人用」的库，而别人的环境是未知的：有人用 Vite/webpack 按 ESM 引入，有人直接在 HTML 里挂 CDN 的 <code>&lt;script&gt;</code>，还有人在 Node 里 <code>require</code>。同时，一个 Vue 组件库有个绝不能踩的雷——<strong>Vue 不能被你自己打进库里</strong>，否则使用方的应用和你的库各带一份 Vue，两套响应式系统互不认识，交互就会像开头那样全部错乱。
     </p>
@@ -16,7 +16,7 @@ import V10Lib from './V10Lib.vue'
       若照搬打包应用的方式去构建库，人要付出的隐藏成本是：产物格式单一，只有一种引用方式能用；框架依赖被整份打进去，制造多实例；类型声明与包入口字段要人手工对齐，漏一个使用者就报错。于是问题变成：<strong>怎么一次构建同时产出多种模块格式，并把框架依赖留给使用方提供？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>应用式打包</h2>
     <p>
       最直接的想法：像打包应用一样构建，产出一个 bundle 发出去。
     </p>
@@ -24,7 +24,7 @@ import V10Lib from './V10Lib.vue'
       这个方案做对了一件事：<strong>库的代码确实被收敛成了可发布的文件</strong>，能装进任意项目里被引用。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>单一格式局限</h2>
     <ul>
       <li>格式单一：产物若是 CJS，CDN 的 <code>&lt;script&gt;</code> 用不了；若是 UMD，Node 的 <code>require</code> 又要绕。使用者被格式绑死。</li>
       <li>框架重复：<code>vue</code> 被打进库产物，使用方自己也有一份，页面上出现两个 Vue 实例，响应式与插件注册全部错乱。</li>
@@ -32,7 +32,7 @@ import V10Lib from './V10Lib.vue'
       <li>类型与入口对不上：有产物却没有 <code>.d.ts</code>，或 <code>package.json</code> 的入口字段指向不存在的文件，使用者一装就红。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>多格式并行输出</h2>
     <p>
       先补「一次输出多种格式」。Vite 的 <code>build.lib</code> 让你一次构建产出多种模块格式，用 <code>formats</code> 列出 <code>['es', 'cjs', 'umd']</code>，用 <code>fileName</code> 按格式生成文件名。三种格式各有归属：<strong>ESM</strong> 给现代打包器按需引入，<strong>UMD</strong> 给 CDN 的 <code>&lt;script&gt;</code> 直接用，<strong>CJS</strong> 给 Node 的 <code>require</code>。一份源码，三种消费方式。
     </p>
@@ -49,13 +49,13 @@ import V10Lib from './V10Lib.vue'
       <strong>两条必守的线：</strong>框架依赖要用 <code>external</code> 加 <code>peerDependencies</code> 双保险，绝不能打进产物，否则使用方页面会出现两份 Vue；库的 CSS 不会随 JS 自动生效，必须由使用方手动引入，务必写进文档。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>格式与发布字段</h2>
     <figure class="lesson-figure">
       <figcaption>切 config / output / publish 三个页签，看 <code>lib</code> 配置怎么写、会产出哪几种格式，以及发布到 npm 需要哪些 <code>package.json</code> 字段。</figcaption>
       <V10Lib />
     </figure>
 
-    <h2>总结</h2>
+    <h2>消费环境适配</h2>
     <p>
       库模式做的事，是让一份源码适配所有消费环境：用 <code>build.lib</code> 一次输出 ESM / UMD / CJS 三种格式，用 <code>external</code> 加 <code>globals</code> 把框架依赖让给使用方，用 <code>package.json</code> 的入口字段与 <code>peerDependencies</code> 把「从哪引、谁提供依赖」交代清楚。库不是应用，它的产物要服务于你见不到的使用者。
     </p>

@@ -8,7 +8,7 @@ import TW19Interactivity from './TW19Interactivity.vue'
       <strong>开场问题：</strong>后台活动列表里，我想让鼠标移到某一行时行内「立即报名」按钮才浮现，于是给按钮本身加了 <code>hover:opacity-100</code>——结果按钮一直不出现，因为鼠标根本没悬在它上面。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>整行悬停的按钮</h2>
     <p>
       你在做一个后台活动列表：每行有活动名、时间、剩余名额和一个「立即报名」按钮。产品希望界面干净——按钮平时隐藏，鼠标移到整行上才出现，指向性更明确。同时你还在同一个页面里做了另外两件事：卡片悬停时标题变橙、复选框勾选后旁边的文字变成强调色。
     </p>
@@ -16,7 +16,7 @@ import TW19Interactivity from './TW19Interactivity.vue'
       这三件事的视觉需求都很普通，但它们触发的源头并不相同：标题变色的源头是<strong>父级卡片</strong>被悬停，文字变色的源头是<strong>同级的复选框</strong>被勾选，而按钮浮现的源头又是一整行。你发现自己写的 <code>hover:</code> 要么挂错了元素，要么干脆对不上——因为 <code>hover:</code> 只描述「这个元素自己被悬停」，它管不了别人。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>逐元素状态样式</h2>
     <p>
       最直接的做法，是给每个需要变的东西各写一份状态样式：按钮写 <code>hover:bg-orange-600</code>，标题写 <code>hover:text-orange-600</code>，文字写 <code>hover:text-orange-700</code>。单个元素自己响应鼠标，这套写法完全正确，而且最直观。
     </p>
@@ -24,7 +24,7 @@ import TW19Interactivity from './TW19Interactivity.vue'
       它做对的是<strong>把状态和元素绑在一起</strong>：谁的样式变，就把状态前缀写在谁身上。当交互局限在元素自身时，这是最短的路径，不需要任何额外约定。问题一旦跨到「一个元素的状态影响另一个元素」，这份写法立刻失效，因为你需要的是描述元素之间的<strong>关系</strong>。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>元素关系的盲区</h2>
     <ul>
       <li><code>hover:</code> 只作用于元素自身，父级悬停没法让子元素变色，兄弟勾选也没法让文字变色。</li>
       <li>全靠鼠标：键盘用户用 Tab 走到按钮上时，永远看不到「浮现」的按钮，功能等于对他关上了门。</li>
@@ -36,7 +36,7 @@ import TW19Interactivity from './TW19Interactivity.vue'
       归根到底，状态样式写重复只是表层问题，核心是<strong>缺少描述元素间状态关系的机制</strong>：如何表达「当祖先处于某状态，影响这个后代」和「当前面的兄弟处于某状态，影响后面的兄弟」。
     </p>
 
-    <h2>迭代</h2>
+    <h2>状态变体的补全</h2>
     <p>
       先把「自身状态」这一类补全。变体的本质，是把 <code>hover</code>、<code>focus</code>、<code>active</code>、<code>disabled</code>、<code>checked</code> 这些伪类编码成前缀，编译时展开成对应的选择器。补齐时有一条底线：<strong>键盘可达优先</strong>，焦点圈用 <code>focus-visible</code> 而不是 <code>focus</code>，这样键盘用户看得见、鼠标用户不被打扰。
     </p>
@@ -62,13 +62,13 @@ import TW19Interactivity from './TW19Interactivity.vue'
       <li>用键盘 Tab 走到每个控件，确认焦点环清晰可见且不被遮挡。</li>
     </ol>
 
-    <h2>动手试试</h2>
+    <h2>卡片与行联动</h2>
     <figure class="lesson-figure">
       <figcaption>依次试「状态变体」「Group 组状态」「其他伪类」三个页签，重点体会卡片与表格行的联动。</figcaption>
       <TW19Interactivity />
     </figure>
 
-    <h2>总结</h2>
+    <h2>关系写进标记</h2>
     <p>
       状态变体解决的从来不只是「少写几行 CSS」，而是把状态与元素的关系写进标记：自己变用 <code>hover:</code> / <code>focus-visible:</code>，祖先影响后代用 <code>group-*</code>，前置兄弟影响后续兄弟用 <code>peer-*</code>，结构顺序用 <code>first:</code> / <code>odd:</code>。记住 group 要目标在后代里、peer 要目标在后面，联动就不会再莫名其妙失效。
     </p>

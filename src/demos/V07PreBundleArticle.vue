@@ -8,7 +8,7 @@ import V07PreBundle from './V07PreBundle.vue'
       <strong>开场问题：</strong>你 <code>npm install lodash</code> 后写下 <code>import debounce from 'lodash/debounce'</code>，本地一刷新直接白屏，控制台甩出一句 <code>require is not defined</code>——浏览器明明支持 ESM，为什么一个正常安装的包会当场崩掉？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>旧格式依赖兼容</h2>
     <p>
       浏览器只认 ESM，而 npm 上大量包是用 CommonJS/UMD 写的——它们内部用的是 <code>require</code> 和 <code>module.exports</code>，浏览器不认识。麻烦还不止格式：很多包内部被拆成了成百上千个小模块（比如 <code>lodash-es</code> 一个函数一个文件），就算格式没问题，浏览器也得为它们发起成百上千次请求。
     </p>
@@ -16,7 +16,7 @@ import V07PreBundle from './V07PreBundle.vue'
       如果退回「把依赖整体打包」的老办法，人要付出的隐藏成本是：每次冷启动都要<strong>重新打包整个依赖图</strong>，项目越大启动越慢；任何一个文件改动都要重新构建，热更新的延迟随依赖规模一起增长。于是问题变成：能不能既保留原生 ESM 的按需加载，又同时避开 CommonJS 和模块碎片这两个坑？
     </p>
 
-    <h2>最小方案</h2>
+    <h2>启动期依赖翻译</h2>
     <p>
       最直接的想法：启动时先把 <code>node_modules</code> 里的依赖统一「翻译」一遍，用极快的 esbuild 把 CommonJS/UMD 统统转成 ESM。
     </p>
@@ -24,7 +24,7 @@ import V07PreBundle from './V07PreBundle.vue'
       这个方案做对了一件事：<strong>让浏览器有办法加载任何来源的包</strong>，无论它是 CommonJS 还是 UMD，转换之后都能当作标准 ESM 被 <code>import</code> 进来。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>请求瀑布成因</h2>
     <ul>
       <li>只转格式不够：<code>lodash-es</code> 内部几百个文件转完还是几百个，浏览器仍要发几百次请求，Network 面板像瀑布一样往下排，首屏照样慢。</li>
       <li>每次启动都跑一遍，冷启动并没有变快，只是把代价从「打包业务源码」转移到了「处理依赖」。</li>
@@ -32,7 +32,7 @@ import V07PreBundle from './V07PreBundle.vue'
       <li>有些包本就是规整 ESM、模块又少，硬走一遍预构建反而多此一举。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>格式转换实现</h2>
     <p>
       先补「格式化」。预构建的第一件事确实是格式转换：esbuild 把 CommonJS/UMD 转成浏览器能直接加载的 ESM，<code>require is not defined</code> 就此消失。
     </p>
@@ -58,13 +58,13 @@ import V07PreBundle from './V07PreBundle.vue'
       <strong>两条边界：</strong>预构建只处理<strong>第三方依赖</strong>，业务源码不参与，所以 <code>include</code> 里绝不能写 <code>src</code> 下的路径；产物是带 hash 的缓存，依赖升级或行为诡异时，先把 <code>node_modules/.vite</code> 删掉再重启，能排除一大半「改了没生效」的怪问题。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>预构建动机与配置</h2>
     <figure class="lesson-figure">
       <figcaption>切 why / config / esbuild 三个页签，看预构建为什么必要、在 <code>optimizeDeps</code> 里怎么配置，以及底层的 esbuild 还能做哪些转换。</figcaption>
       <V07PreBundle />
     </figure>
 
-    <h2>总结</h2>
+    <h2>开发期依赖预处理</h2>
     <p>
       依赖预构建是开发服务器为第三方依赖做的一次性「预处理」：用极快的 esbuild 把 CommonJS 转成 ESM、把碎片模块合并成单文件，再把结果按 hash 缓存起来供后续启动复用。它只服务于开发阶段的加载效率，业务源码不参与，生产构建也不走这条路。
     </p>

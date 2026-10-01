@@ -8,7 +8,7 @@ import V02Config from './V02Config.vue'
       <strong>开场问题：</strong>本地调试想要 sourcemap 和固定端口，线上却必须关掉 sourcemap、换个压缩器。每次发版前你都手动翻配置文件改这几行，直到有一次忘了关 sourcemap，把整份源码映射连同 <code>.map</code> 一起传上了 CDN。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>两环境配置分歧</h2>
     <p>
       这类需求看起来很小：开发时想要热更新友好、能定位到源码；生产时想要体积小、不暴露内部结构。可它们全落在同一个文件里——<code>vite.config.ts</code>。配置项少时你还能靠记忆改；一旦有了 <code>server</code>、<code>build</code>、<code>resolve</code>、<code>css</code> 几十个字段，<strong>「不同环境要不同设置」就变成了一场手工切换</strong>。
     </p>
@@ -16,7 +16,7 @@ import V02Config from './V02Config.vue'
       手工切换的成本是隐性的：改配置容易漏掉某个字段；维护两份配置文件又得在命令里加 <code>--config</code> 切换，很容易跑错；把环境判断散写成一堆三元表达式，读起来也不知道哪段属于哪个环境。说到底，问题是：<strong>能不能用一份配置，按当前环境自动给出不同的结果？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>静态配置对象</h2>
     <p>
       最直接的做法：在项目根目录建一个 <code>vite.config.ts</code>，导出一个普通对象，把 <code>server</code>、<code>build</code>、<code>resolve.alias</code>、<code>plugins</code> 一次写清楚。
     </p>
@@ -24,7 +24,7 @@ import V02Config from './V02Config.vue'
       这个方案做对了一件事：<strong>它把散落在命令行参数里的配置收拢到了一个入口</strong>。Vite 启动时会自动找到它，不需要你额外指定路径。配置项有了统一的归属，这是后面一切的前提。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>写死取值的局限</h2>
     <ul>
       <li>静态对象没法按环境分支：<code>build.sourcemap</code> 只能写死成 <code>true</code> 或 <code>false</code>，开发想要、生产不想要的需求直接卡住。</li>
       <li>写成 <code>sourcemap: process.env<span>.NODE_ENV !== 'production'</span></code> 这类表达式，会散落到每个字段上，字段一多就没人看得懂。</li>
@@ -32,7 +32,7 @@ import V02Config from './V02Config.vue'
       <li>想「构建分析时才加可视化插件」，静态对象里根本没有地方放这段条件逻辑。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>配置函数的类型推导</h2>
     <p>
       先解决「配置要有类型」。用 Vite 导出的 <code>defineConfig</code> 把对象包起来，返回值会获得完整的类型推导，字段拼错时编辑器当场标红，而不是等到构建才发现被静默忽略。
     </p>
@@ -55,13 +55,13 @@ import V02Config from './V02Config.vue'
       <strong>两个高频字段：</strong><code>resolve.alias</code> 用来配 <code>@</code> 之类的路径别名；<code>css.preprocessorOptions</code> 可以往每个 SCSS 文件里注入全局变量或 <code>@use</code>。函数式配置返回空对象也不会丢默认行为，因为深度合并只在「你写了的字段」上覆盖。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>基础与进阶配置</h2>
     <figure class="lesson-figure">
       <figcaption>切换 basic / advanced / env 三个页签，对照看基础配置、别名与分包这类进阶配置，以及环境变量是怎么接进配置里的。</figcaption>
       <V02Config />
     </figure>
 
-    <h2>总结</h2>
+    <h2>函数形态的转折</h2>
     <p>
       配置文件是 Vite 的项目级入口，真正让它灵活的转折，是从「导出一个对象」变成「导出一个函数」。函数接收 <code>{ command, mode }</code>，按环境返回不同配置，返回值再由 Vite 与默认配置深度合并。于是开发与生产的分歧集中在一个地方表达，不再散落成一堆没人看得懂的三元表达式。
     </p>

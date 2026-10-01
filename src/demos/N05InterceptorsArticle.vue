@@ -8,7 +8,7 @@ import N05Interceptors from './N05Interceptors.vue'
       <strong>开场问题：</strong>二十个接口都要返回同一套 <code>{ code, data, timestamp }</code> 外壳，你在每个控制器方法里各写了一遍；产品突然说「再加一个 <code>duration</code> 字段」，你只能挨个接口改过去——有没有办法不改业务代码，就把响应统一包装起来？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>统一响应契约</h2>
     <p>
       你在写一个课程 API。前端和运维都跟你有约定：所有响应必须是 <code>{ code, data, timestamp }</code> 的统一结构，方便前端一处解包；同时线上想统计每个接口的耗时，好在监控里看出哪个接口变慢了。
     </p>
@@ -16,7 +16,7 @@ import N05Interceptors from './N05Interceptors.vue'
       这两件事本身都不难，难的是它们<strong>和业务无关，却要在每个接口上各发生一次</strong>。接口只有两三个时，顺手在返回值里包一层、在方法开头记一个时间戳就完了；可当接口涨到几十个，同一段包装代码就复制了几十份，契约一变就得全线回归，还总有人漏改。不解决它，你要付的代价是：<strong>契约的统一性靠自觉维护，而不是靠框架保证</strong>。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>手动包装与计时</h2>
     <p>
       最省事的做法，是在每个处理器里手动完成：方法开头写 <code>const started = Date.now()</code>，返回前把结果包成 <code>{ code: 0, data, timestamp, duration }</code>。
     </p>
@@ -24,7 +24,7 @@ import N05Interceptors from './N05Interceptors.vue'
       它做对了一件很关键的事：<strong>响应确实被统一打包了，耗时也确实被记了下来</strong>。在接口数量少、结构还稳定的时候，这个做法完全够用，逻辑还全在一处，读起来一目了然。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>样板代码的重复</h2>
     <ul>
       <li>样板代码在每个处理器里重复，几十个接口就是几十份几乎相同的包装逻辑。</li>
       <li>契约一变（加字段、改字段名）就得全量修改，极易漏改，回归成本高。</li>
@@ -32,7 +32,7 @@ import N05Interceptors from './N05Interceptors.vue'
       <li>想给<strong>所有接口</strong>统一加一层缓存、审计或限流时，找不到共同的入口，只能再复制一遍。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>拦截器的位置</h2>
     <p>
       不推翻「包装与记时」，而是把它们从业务方法里<strong>搬到一个能同时看到「请求」与「响应」的位置</strong>——这正是拦截器（Interceptor）要解决的问题。它是一类横切关注点的织入点：在不修改业务代码的前提下，于处理器执行的前后各插一段逻辑。
     </p>
@@ -69,13 +69,13 @@ import N05Interceptors from './N05Interceptors.vue'
       拦截器与守卫、管道是互补的三层：<strong>守卫</strong>决定请求「能不能进」（放行决策），<strong>管道</strong>决定参数「合不合法」（校验转换），<strong>拦截器</strong>决定「进出的前后怎么处理」（包装、计时、缓存）。各管一段，职责分明。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>请求前后执行序</h2>
     <figure class="lesson-figure">
       <figcaption>点「发起请求」，看拦截器的前置、处理器与后置 <code>map</code> 依次执行，最后收拢成统一响应。</figcaption>
       <N05Interceptors />
     </figure>
 
-    <h2>总结</h2>
+    <h2>横切逻辑收敛</h2>
     <p>
       拦截器把「响应包装、耗时统计、日志、缓存」这类横切关注点从业务方法里抽了出来，收敛到一处。它借助 Observable 数据流，在 <code>next.handle()</code> 前后分别织入前置与后置逻辑，让业务代码只关心业务。契约的稳定因此不再靠自觉，而是由框架的织入点来保证。
     </p>

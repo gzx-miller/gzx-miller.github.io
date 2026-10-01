@@ -8,7 +8,7 @@ import S02PiniaSetupStore from './S02PiniaSetupStore.vue'
       <strong>开场问题：</strong>在组件里把课程列表从 Store 解构出来，勾选「已完成」之后页面纹丝不动，可打开开发者工具一看，Store 里的数据明明已经变了——为什么改了却不刷新？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>计划页状态诉求</h2>
     <p>
       你在做一个学习计划模块。页面上要显示三门课程、总时长和一个完成率百分比，用户还能报名新课程、勾选某门课为已完成。数据放在一个 Store 里，多个页面都要用到它——这符合「跨组件共享的业务状态」这条标准。
     </p>
@@ -16,7 +16,7 @@ import S02PiniaSetupStore from './S02PiniaSetupStore.vue'
       于是问题落在写法上。这个 Store 里既有依赖别的状态算出来的值（总时长、完成率），也有一组操作数据的方法（报名、切换完成）。它们在概念上是三类不同的东西，却要挤在同一个对象里描述。与此同时，组件里怎么把 Store 的数据取出来用，也决定了它还能不能跟着更新——这正是开场那个「数据变了页面不动」的来由。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>对象式仓库写法</h2>
     <p>
       最省事的做法：用对象式 Store，把 <code>state</code>、<code>getters</code>、<code>actions</code> 三块分别写清楚；组件里则用解构取值，写出 <code>const { courses } = store</code>。
     </p>
@@ -24,7 +24,7 @@ import S02PiniaSetupStore from './S02PiniaSetupStore.vue'
       这个方案做对了两件事：<strong>它把 state、getter、action 的边界摆得很清楚</strong>，新手一眼就知道哪块写数据、哪块写派生值、哪块写操作；同时，解构写法让模板里可以直接写 <code>courses</code>，不用到处带 <code>store.</code> 前缀，干净不少。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>解构快照失真</h2>
     <ul>
       <li>解构出来的 <code>courses</code> 只是一次性快照，它记下了当时的那个值，后续 Store 里的变更不再触发页面重新渲染。</li>
       <li>派生值同样中招：<code>totalMinutes</code>、<code>completionRate</code> 一起解构出来后，也失去了跟随变化的能力，页面显示的永远是第一次算出来的结果。</li>
@@ -32,7 +32,7 @@ import S02PiniaSetupStore from './S02PiniaSetupStore.vue'
       <li>组件里读写路径不统一：读的时候用解构变量，调用方法时又得切回 <code>store.enroll()</code>，看代码时要在两种风格之间来回切换。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>函数式仓库写法</h2>
     <p>
       先修好组织方式：改用 <strong>Setup Store</strong>，也就是让 <code>defineStore</code> 的第二个参数变成一个函数，在函数体里用组合式 API 描述这个 Store，最后把要对外的东西返回出去。写法是 <code>defineStore('learning', () =&gt; { ... })</code>，回调里 <code>ref</code> 表达 state、<code>computed</code> 表达 getter、普通函数表达 action。它和写组件用的是同一套语法，现成的组合式函数可以直接搬进来，逻辑组织不再割裂。
     </p>
@@ -55,13 +55,13 @@ import S02PiniaSetupStore from './S02PiniaSetupStore.vue'
       顺便澄清一个常见混淆：state 与 getter 在组件里都不是「值」，而是可以持续读取的响应式来源。state 由你写入，getter 则由它依赖的 state 推导出来——完成率这类派生值不应该再单独存一份，否则就有了第二个事实来源，两边一旦不同步就会打架。<code>storeToRefs</code> 之所以把两者一起解构成 ref，正是因为它们都需要保留这种「持续读取」的能力；而 action 只是操作入口，调用一次就结束，本来就没有需要保留的状态。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>报名触发刷新</h2>
     <figure class="lesson-figure">
       <figcaption>点「报名 Zustand 课程」看课程数、总时长与完成率是否同步刷新，再勾选一门课验证完成率变化。</figcaption>
       <S02PiniaSetupStore />
     </figure>
 
-    <h2>总结</h2>
+    <h2>组合式写法回归</h2>
     <p>
       Setup Store 把 Store 的写法拉回到组合式 API 这一套：用 <code>ref</code> 写状态、用 <code>computed</code> 写派生值、用函数写操作，与组件保持同一心智模型。取数时只要记住那条分界线——<code>storeToRefs</code> 负责会变的 state 和 getter，方法直接解构——就不会再遇到「数据变了页面不动」这种看似灵异的现象。
     </p>

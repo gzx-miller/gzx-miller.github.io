@@ -8,7 +8,7 @@ import CPP15TemplatesBasics from './CPP15TemplatesBasics.vue'
       <strong>开场问题：</strong>你先写了 <code>int max(int a, int b)</code>，用来取两个整数里大的那个；第二天要比较两个 <code>double</code>，就把函数复制一份、把 <code>int</code> 全换成 <code>double</code>；再过几天又要比较两个字符串，又复制一份——同一个"取较大值"的算法，为什么每换一种类型都得重抄一遍？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>多类型逻辑的重复</h2>
     <p>
       你想写一段"取较大值"的代码，它能用在 int 上、double 上，甚至用在你自己定义的日期或金额上。最朴素的做法就是给每种类型各写一个同名函数（函数重载）。
     </p>
@@ -25,7 +25,7 @@ import CPP15TemplatesBasics from './CPP15TemplatesBasics.vue'
       所以要问的是：<strong>能不能只写一份与类型无关的实现，让编译器为每种实际用到的类型自动生成对应版本？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>重载的多份实现</h2>
     <p>
       最省事的办法是老老实实写重载：<code>int max(int, int)</code>、<code>double max(double, double)</code>、字符串版本各来一份。
     </p>
@@ -33,7 +33,7 @@ import CPP15TemplatesBasics from './CPP15TemplatesBasics.vue'
       这个方案做对了一件事：<strong>调用语法是统一的</strong>——<code>max(3, 7)</code> 和 <code>max(3.14, 2.71)</code> 用的是同一个名字，调用方不必关心底层是哪份实现。剩下的问题，全在"实现被复制了多份"上。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>新增类型的维护成本</h2>
     <ul>
       <li>几份实现里算法一模一样，只有类型不同；这本身就是一种重复，违反"改一处、生效一处"。</li>
       <li>新增类型要再抄一份，抄的时候还容易抄错（把某处的 <code>int</code> 漏改成 <code>double</code>）。</li>
@@ -41,7 +41,7 @@ import CPP15TemplatesBasics from './CPP15TemplatesBasics.vue'
       <li>重载决议全靠人维护，每个版本的比较语义必须手动保持一致，编译器帮不上忙。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>类型作为模板参数</h2>
     <p>
       不推翻"一份逻辑服务多种类型"，而是让<strong>类型本身也变成一个参数</strong>——这就是模板。先看函数模板：
     </p>
@@ -77,13 +77,13 @@ import CPP15TemplatesBasics from './CPP15TemplatesBasics.vue'
       <strong>模板不会替你把类型"猜圆"：</strong>实参类型不一致（如 <code>max(3, 3.14)</code>）会直接推导失败，必须显式指定模板参数或先统一类型；另外模板定义别拆进 .cpp 单独编译，那样非常容易变成链接错误，而不是你预期中的编译错误。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>模板实例化的产物</h2>
     <figure class="lesson-figure">
       <figcaption>看同一份 <code>max</code> 如何被 <code>max(3, 7)</code> 与 <code>max(3.14, 2.71)</code> 分别实例化成整数版和浮点版，以及 <code>Pair&lt;int&gt;</code> 和特化后的 <code>Pair&lt;std::string&gt;</code> 各自长什么样——一份模板，实例出多份具体代码。</figcaption>
       <CPP15TemplatesBasics />
     </figure>
 
-    <h2>总结</h2>
+    <h2>泛化的参数机制</h2>
     <p>
       模板把"类型"也变成了参数。函数模板在调用时由实参推导出类型、由编译器实例化出具体函数；类模板必须显式写出参数，且成员函数按需实例化。它换来的是一份逻辑服务无数类型，代价则是定义必须让编译器看见（因此放在头文件），并且推导、特化各有各的规则和边界。
     </p>

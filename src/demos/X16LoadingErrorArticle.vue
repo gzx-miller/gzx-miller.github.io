@@ -8,7 +8,7 @@ import X16LoadingError from './X16LoadingError.vue'
       <strong>开场问题：</strong>后台点进某篇文章详情，接口忽然挂了——为什么整页直接白屏，连一句「出错了，请重试」都不给，反而要用户自己刷新整个网站？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>页面的多种状态</h2>
     <p>
       任意一个真实页面，除了「正常显示」之外，至少还有三种状态：<strong>还在加载、出错了、内容不存在</strong>。课程站里这些场景天天发生——列表数据要等、接口偶尔超时、用户点进一个已删除的文章。如果只写了「成功」这一条路径，剩下三种状态就全砸在用户脸上了。
     </p>
@@ -16,7 +16,7 @@ import X16LoadingError from './X16LoadingError.vue'
       更糟的是「白屏」：当组件里抛出一个没人接住的错误，React 会卸载整棵子树，用户看到的是一片空白，连发生了什么都不知道。一个成熟的站，必须让页面学会<strong>体面地失败</strong>。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>每页自管状态</h2>
     <p>
       最省事的做法是在每个页面里自己管状态：加一个 <code>loading</code> 变量，请求前置真、请求完置假；再 <code>try/catch</code> 一下错误，捕获到就把 <code>error</code> 渲染成一句提示。
     </p>
@@ -24,7 +24,7 @@ import X16LoadingError from './X16LoadingError.vue'
       它做对的地方是<strong>意识到状态不止一种</strong>——页面不只是「有数据」和「没数据」，还有中间那段等待、以及处理失败的余地。这个认知是一切的基础。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>手写状态的疏漏</h2>
     <ul>
       <li>样板重复：每个页面都要重写一遍 loading 与 error 的变量和判断。</li>
       <li>接不住抛错：组件渲染过程中抛出的错误，<code>try/catch</code> 管不到，直接白屏。</li>
@@ -32,7 +32,7 @@ import X16LoadingError from './X16LoadingError.vue'
       <li>根布局兜底缺失：如果连最外层布局都出错，上面页面级的处理都来不及生效。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>约定文件的接管</h2>
     <p>
       与其在每个页面里重复这套逻辑，不如<strong>把几种状态交给一组约定文件去接管</strong>。它们按目录就近匹配，写法固定，放在哪一层就在哪一层生效。
     </p>
@@ -61,13 +61,13 @@ import X16LoadingError from './X16LoadingError.vue'
       <strong>重试按钮的边界：</strong><code>reset</code> 只会重新渲染出错的那一段，能治好「偶发的网络抖动」。但如果失败的根因一直存在（比如后端持续返回 500），用户会陷入「点了又错」的循环。这种时候要做的是<strong>降级</strong>——给一段静态提示或备用内容，而不是无限重试同一个必然失败的请求。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>四类异常的归属</h2>
     <figure class="lesson-figure">
       <figcaption>分别在加载、出错、404 与根级崩溃四种情况下，看哪一个约定文件接管了界面。</figcaption>
       <X16LoadingError />
     </figure>
 
-    <h2>总结</h2>
+    <h2>就近匹配的兜底</h2>
     <p>
       让页面「体面地失败」，靠的不是在每个页面里重复写状态判断，而是四个按目录就近匹配的约定文件：<code>loading.tsx</code> 管加载、<code>error.tsx</code> 管错误与重试、<code>not-found.tsx</code> 管 404、<code>global-error.tsx</code> 管根布局兜底。错误逐层向上冒泡，<code>error.tsx</code> 必须是客户端组件且接不住同级布局的错误；重试治的是偶发故障，持续故障要靠降级。
     </p>

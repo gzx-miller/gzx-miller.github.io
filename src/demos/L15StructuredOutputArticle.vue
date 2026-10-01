@@ -8,7 +8,7 @@ import L15StructuredOutput from './L15StructuredOutput.vue'
       <strong>开场问题：</strong>你要从用户的一段话里抽出「课程名、讲师、时长、标签」填进表单，让模型返回 JSON。它回了一段「好的，以下是提取结果」，外面还裹着 Markdown 代码块，末尾加了句「希望对你有所帮助」——你的 <code>JSON.parse</code> 当场崩掉。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>模型输出可控性</h2>
     <p>
       你希望模型的输出能被程序直接消费：一个对象，字段固定、类型明确。可模型只会「说话」——它会加寒暄、加 Markdown 代码块、把数字写成「45 分钟」这样的字符串。
     </p>
@@ -24,7 +24,7 @@ import L15StructuredOutput from './L15StructuredOutput.vue'
       要回答的是：<strong>怎么才能让模型不是「尽量」返回结构化数据，而是保证返回的对象符合你定义的结构？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>语法合法基本保证</h2>
     <p>
       最朴素的做法：打开 <strong>JSON Mode</strong>——在请求里把 <code>response_format</code> 设为 <code>json_object</code>，在提示词里把字段结构写清楚，收到后 <code>JSON.parse</code>。
     </p>
@@ -32,7 +32,7 @@ import L15StructuredOutput from './L15StructuredOutput.vue'
       这个方案做对了一件事：<strong>它用模型层的能力兜住了「合法 JSON」这条底线</strong>。输出至少是能解析的 JSON，不再夹带 Markdown 代码块和寒暄。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>字段正确性的盲区</h2>
     <ul>
       <li>JSON Mode 只保证「是合法 JSON」，不保证「字段对不对」：它完全可能把时长写成字符串「45 分钟」，或干脆漏掉讲师字段。</li>
       <li>字段结构全靠提示词里的文字约束，字段一多、层级一深，模型就开始漏字段、改字段名。</li>
@@ -40,7 +40,7 @@ import L15StructuredOutput from './L15StructuredOutput.vue'
       <li>每次拿到结果都得手写一层运行时校验，重复且容易漏。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>机器可读的结构声明</h2>
     <p>
       不推翻「用 JSON 传结构」，而是把「结构」从提示词里的自然语言，升级成机器可读的 schema——用 <strong>Zod</strong> 定义。
     </p>
@@ -62,13 +62,13 @@ import L15StructuredOutput from './L15StructuredOutput.vue'
       <strong>别把「能解析」当成「数据正确」：</strong>JSON Mode 与函数调用不是等价的替代品——前者只保证「是 JSON」，字段结构仍由提示词约束；后者由 schema 驱动，格式可靠性更高。结构化输出也不是 100% 成功，模型偶尔仍会填错类型或漏字段，所以第四步的失败处理不能省。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>两种模式解析对照</h2>
     <figure class="lesson-figure">
       <figcaption>点「JSON Mode」与「Function Calling」，看同一段原始文本在两种模式下解析出的结果；再点「模拟校验失败」，看 Zod 在时长不是 number、标签不是字符串数组时，怎么把问题精确定位出来。</figcaption>
       <L15StructuredOutput />
     </figure>
 
-    <h2>总结</h2>
+    <h2>可解析与正确的差距</h2>
     <p>
       结构化输出解决的是「让模型吐出程序能直接吃的数据」。要点是把结构从提示词里的文字描述，升级成机器可读的 schema：用 Zod 定义一次，既做运行时校验又做类型推导；优先走 <code>withStructuredOutput</code> 的函数调用路径，必要时才回退 JSON Mode，并为解析失败留好重试的路。
     </p>

@@ -8,7 +8,7 @@ import WB02WatBinary from './WB02WatBinary.vue'
       <strong>开场问题：</strong>你手上只有一个编译好的 <code>math.wasm</code>，想把里面那个常量 10 改成 20。可你没有源码，文件又是一长串十六进制——<strong>到底该改哪个字节，改完又怎么知道没把它改坏？</strong>
     </div>
 
-    <h2>提出问题</h2>
+    <h2>字节与文本互译</h2>
     <p>
       你要在「机器看的字节」和「人看的文字」之间来回翻译：既要读懂一份二进制里写了什么，也要能让手改的结果重新变回合法模块。
     </p>
@@ -16,7 +16,7 @@ import WB02WatBinary from './WB02WatBinary.vue'
       旧办法是拿肉身直接读十六进制，成本有三：操作码全是数字，人脑记不住哪条对应哪条指令；在文本里改一行，二进制里可能牵动一整段的长度前缀；改完无法验证，只能丢给引擎看它报不报错。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>反编译为文本</h2>
     <p>
       最朴素的做法：用 <code>wasm2wat</code> 把 <code>.wasm</code> 反编译成可读文本，看懂它、在文本上改，再用 <code>wat2wasm</code> 编译回二进制。
     </p>
@@ -24,7 +24,7 @@ import WB02WatBinary from './WB02WatBinary.vue'
       这个方案做对了最关键的一件事：<strong>文本和二进制是同一件事的两面，可以互相翻译</strong>。你不再需要拿眼睛去啃字节，而是先在「图纸」上想清楚，再让它自动落成字节。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>行数与字节错位</h2>
     <ul>
       <li>一行 WAT 可能对应好几个字节（<code>local.get $a</code> 是 <code>20 00</code> 两个字节），按行数根本对不齐。</li>
       <li>不认识操作码，就没法在二进制里手工定位、修改某条指令。</li>
@@ -32,7 +32,7 @@ import WB02WatBinary from './WB02WatBinary.vue'
       <li>段的长度是字节数：你插入一条指令，就要同步改正长度前缀，改错一位整段作废。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>映射表分层对应</h2>
     <p>
       不推翻「翻译」，而是把翻译拆成一张<strong>映射表</strong>，一层层对上。第一层，模块头和根节点对应：文本最外层的 <code>(module ...)</code>，对应二进制的魔数加版本 <code>00 61 73 6d 01 00 00 00</code>。文本换了行、加了缩进、写了注释，二进制一个字节都不多——<strong>注释和空白不占任何空间</strong>。
     </p>
@@ -54,13 +54,13 @@ import WB02WatBinary from './WB02WatBinary.vue'
       调试任何来路不明的 <code>.wasm</code>，第一件事都是 <code>wasm2wat</code> 反编译出来读一遍——<strong>文本即图纸</strong>，看懂了图纸再决定动不动字节。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>指令与字节高亮</h2>
     <figure class="lesson-figure">
       <figcaption>左侧是 <code>add</code> 模块的 WAT 源码，点右侧任意一条指令，会高亮它在二进制里对应的操作码字节。</figcaption>
       <WB02WatBinary />
     </figure>
 
-    <h2>总结</h2>
+    <h2>文本与字节等价</h2>
     <p>
       WAT 是可读文本，二进制是它的紧凑编码，两者一一对应。<code>wat2wasm</code> 向下编译、<code>wasm2wat</code> 向上还原；指令名对应固定操作码（<code>local.get</code>=0x20、<code>i32.add</code>=0x6a、<code>end</code>=0x0b），函数名落到导出段，签名落到类型段。拿到一份二进制，先用文本还原成图纸，再决定动不动它。
     </p>

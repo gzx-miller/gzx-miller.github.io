@@ -8,7 +8,7 @@ import S13TanStackQuery from './S13TanStackQuery.vue'
       <strong>开场问题：</strong>一个课程页上，顶部导航和主列表都要显示课程。两个组件各自 <code>useEffect</code> + <code>fetch</code> 拉一遍，页面一打开控制台里就出现两条一模一样的请求；你把列表切走再切回来，它又请求一次。更窘的是你点「乐观报名」给某人 +1，界面立刻变了，可一刷新人数又跳回原样。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>远程副本误管</h2>
     <p>
       这些数据有个共同点：<strong>它们的「事实来源」在服务器上，本地这份只是抄来的副本</strong>。可你一直用管理本地状态的那套工具在管它——<code>useState</code> 存 <code>data</code>、<code>useEffect</code> 去取。于是几个必须由人承担的成本冒了出来。
     </p>
@@ -19,7 +19,7 @@ import S13TanStackQuery from './S13TanStackQuery.vue'
       所以要回答的是：<strong>服务端数据既然天生是「放在远端、可能过期、别人也会改」的缓存，能不能用一套专门管缓存的机制来管它——按 key 自动去重、按新鲜度决定要不要重取、写入后统一失效对齐？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>手写取数三态</h2>
     <p>
       最朴素的做法：还是 <code>useEffect</code> 里 <code>fetch</code>，把结果 <code>set</code> 进 <code>useState</code>，再自己维护 <code>loading</code> / <code>error</code> 两个标志。这个方案做对了一件事：<strong>它明确区分了「加载中、出错、拿到数据」三种界面状态</strong>——这恰恰是本地状态和远程数据混在一起时最容易搞乱的地方。
     </p>
@@ -27,7 +27,7 @@ import S13TanStackQuery from './S13TanStackQuery.vue'
       错的地方在于，它把一份远程数据的副本当成了组件的私有财产。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>分散取数四坑</h2>
     <ul>
       <li>两个组件各挂一次，就发两次同样的请求；组件一卸载缓存也没了，切回来只能重新请求。</li>
       <li>没有「新鲜度」概念：服务端已经改了数据，本地这份仍旧当新数据用；或者每次挂载都无条件重取，请求频率失控。</li>
@@ -35,7 +35,7 @@ import S13TanStackQuery from './S13TanStackQuery.vue'
       <li>想手动刷新只能把整页重新挂载，没法只让这一份数据失效——失效的粒度太粗。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>以缓存方式管理</h2>
     <p>
       不推翻「fetch + 三种状态」，而是把远程数据当成<strong>按 key 索引的缓存</strong>，再给它补上过期时间与去重。一层层补下来：
     </p>
@@ -50,13 +50,13 @@ import S13TanStackQuery from './S13TanStackQuery.vue'
       <strong>最容易踩的一脚：</strong>服务端状态和本地 UI 状态要分开管。把远程数据再复制一份进 <code>useState</code> 当「第二事实来源」，就又回到两份副本互相打架的老路——缓存已有的事实来源，界面直接读它。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>缓存标签与计数</h2>
     <figure class="lesson-figure">
       <figcaption>盯住顶部的「缓存状态」标签在新鲜 / 过期 / 请求中之间切换，注意「请求次数」计数：点「重新获取」它 +1 并短暂进入请求中；点「标记过期」把它变黄，表示这份缓存不再新鲜；点某一行的「乐观报名」，人数会立刻 +1——代表请求还没回来、界面已经先动了。</figcaption>
       <S13TanStackQuery />
     </figure>
 
-    <h2>总结</h2>
+    <h2>副本新旧判定</h2>
     <p>
       管理服务端数据的难点不在「怎么发请求」，而在「这份远程副本该算新还是旧、谁在读它、写完怎么对齐」。把远程数据当缓存，用 <code>queryKey</code> 给它一个身份，用 <code>staleTime</code> / <code>gcTime</code> 控制新鲜与回收，用 <code>useMutation</code> 的乐观更新与失效收尾写入——组件只管声明「我要读哪个 key」，去重、重取、回滚都由缓存层自动完成。
     </p>

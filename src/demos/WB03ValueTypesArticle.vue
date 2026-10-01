@@ -8,7 +8,7 @@ import WB03ValueTypes from './WB03ValueTypes.vue'
       <strong>开场问题：</strong>结算代码把 <code>0.1</code> 连加十次。用 <code>f64</code> 算，得到 1；同一段逻辑换成 <code>f32</code>，结果是 <code>0.99999994</code>。更让人意外的是，你把一个 64 位订单号塞进 <code>i64</code> 参数，浏览器直接抛 <code>TypeError</code>——同样是「一个数」，为什么换个类型结果就变了，甚至根本传不进去？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>数值类型的多样</h2>
     <p>
       你要让 JS 和 Wasm 交换数值。JS 只有一种数字类型（双精度 <code>number</code>），Wasm 却有好几种，而且<strong>每一种都必须显式声明</strong>。旧办法是「反正都是数，随便传」，成本有三：类型对不上时，模块在实例化阶段就被验证器拒绝；有些值用 <code>number</code> 根本表达不了，硬传会静默丢位；浮点精度被降级时，没有任何提示。
     </p>
@@ -16,7 +16,7 @@ import WB03ValueTypes from './WB03ValueTypes.vue'
       所以真正要解决的是：<strong>在两种类型系统之间，什么值配什么类型、边界上又会发生什么换算？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>统一双精度方案</h2>
     <p>
       最朴素的做法：凡是小数都用 <code>f64</code>，反正在 JS 里 <code>number</code> 就是 64 位双精度。
     </p>
@@ -24,7 +24,7 @@ import WB03ValueTypes from './WB03ValueTypes.vue'
       这个方案做对了一件事：<strong><code>f64</code> 与 JS 的 <code>number</code> 位宽一致，能无损互传</strong>，绝大多数普通计算交给它确实没问题。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>双精度的边界</h2>
     <ul>
       <li><code>i64</code> 参数或返回值不能用 <code>number</code> 传，必须用 <code>BigInt</code>，否则当场抛 <code>TypeError</code>。</li>
       <li>整数一旦超过 <code>2^53</code>，放进 <code>number</code> 就已经丢了精度，而 <code>f64</code> 也装不下这么大的整数。</li>
@@ -32,7 +32,7 @@ import WB03ValueTypes from './WB03ValueTypes.vue'
       <li>Wasm 没有字符串、对象、<code>null</code> 这些高层类型，它们都得绕道内存或引用类型来表达。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>四种标量类型</h2>
     <p>
       不推翻「用数值沟通」，而是先认清手里到底有几块积木。Wasm 的标量数值类型只有四种：<code>i32</code>、<code>i64</code>、<code>f32</code>、<code>f64</code>（此外还有 128 位向量 <code>v128</code> 与引用类型，那是后话）。所有签名、局部变量、内存读写，都只能在这几种里选。
     </p>
@@ -58,13 +58,13 @@ import WB03ValueTypes from './WB03ValueTypes.vue'
       <strong>「反正都是数」是这里最大的坑：</strong><code>i64</code> 不用 <code>BigInt</code> 会直接报错；<code>f32</code> 不是「小一号的 <code>f64</code>」，它的误差会在累加里越滚越大；而 <code>f64</code> 也扛不住超过 <code>2^53</code> 的整数。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>真实返回值的验证</h2>
     <figure class="lesson-figure">
       <figcaption>四张类型卡片列出 <code>i32</code> / <code>i64</code> / <code>f32</code> / <code>f64</code> 的位数与用途，下方真调用一次模块里的 <code>mul(6, 7)</code> 与 <code>fadd(1.5, 2.25)</code>，对比整数与浮点两条路径。</figcaption>
       <WB03ValueTypes />
     </figure>
 
-    <h2>总结</h2>
+    <h2>类型位宽与用途</h2>
     <p>
       Wasm 的标量类型只有 <code>i32</code>、<code>i64</code>、<code>f32</code>、<code>f64</code> 四种，且所有签名、局部变量、内存读写都必须显式声明。类型集中在类型段，函数按索引引用，验证器据此做安全检查。跨边界时记住三条：<code>i64</code> 必须配 <code>BigInt</code>，<code>f32</code> 会丢精度，超过 <code>2^53</code> 的整数别指望 <code>number</code>。
     </p>

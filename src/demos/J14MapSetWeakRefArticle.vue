@@ -8,7 +8,7 @@ import J14MapSetWeakRef from './J14MapSetWeakRef.vue'
       <strong>开场问题：</strong>用普通对象给每个 DOM 节点存一份元数据，页面上的节点早就移除了，为什么内存占用不降反升？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>去重集合与对象字典</h2>
     <p>
       你手头有两件事：一是收集「不能重复」的标签集合，二是建一本「字典」，用某个对象当键、把它的附加数据存起来——典型场景就是给每个 DOM 节点挂一份自己的元数据。用最常见的数组和普通对象就能先跑起来，但这里埋着两颗雷：<strong>语义不对</strong>和<strong>内存漏</strong>。
     </p>
@@ -16,7 +16,7 @@ import J14MapSetWeakRef from './J14MapSetWeakRef.vue'
       这两颗雷都不是「写错了代码」，而是「用了不匹配的工具」。容器的默认规则和你的真实意图不一致时，程序往往能跑，却在长期运行里慢慢出问题——数据被悄悄覆盖，或者内存一点点涨上去。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>数组与对象的组合</h2>
     <p>
       最省事的做法：标签用数组存，字典用普通对象 <code>{}</code> 当，键取节点的某个 <code>id</code>，值放数据。
     </p>
@@ -27,7 +27,7 @@ import J14MapSetWeakRef from './J14MapSetWeakRef.vue'
       这个方案做对了一件事：<strong>零学习成本、随手能写</strong>，数组能装、对象能查，小规模下确实够用。先用它把功能跑通、再回头换更合适的容器，这个顺序本身并没有错。真正的问题不在「能不能存」，而在它默认的规则和你想要的行为并不一致。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>对象键的字符串化</h2>
     <ul>
       <li>对象键会被字符串化：一旦直接拿对象当键，它会被转成 <code>"[object Object]"</code>，所有对象键撞成同一个，互相覆盖。</li>
       <li>数组不会去重：同一个标签加两次，你得自己每次遍历检查一遍 <code>has</code>，麻烦且容易漏。</li>
@@ -35,7 +35,7 @@ import J14MapSetWeakRef from './J14MapSetWeakRef.vue'
       <li>顺序与污染：普通对象的键顺序不保证，还会把原型链上的属性一起带进来。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>映射与集合的替换</h2>
     <p>
       <strong>第一层，用 Map 和 Set 换掉对象和数组。</strong><code>Map</code> 允许任意类型做键——包括对象、函数——用<strong>引用相等</strong>命中，不会像普通对象那样把键字符串化，因此不同对象不会互相覆盖；它还保持插入顺序，<code>size</code> 直接可读，需要按插入顺序遍历、或频繁增删键时，比普通对象更合适。<code>Set</code> 一句话保证值唯一，<code>add</code> 自动去重，省掉手写的 <code>has</code> 检查。
     </p>
@@ -63,13 +63,13 @@ import J14MapSetWeakRef from './J14MapSetWeakRef.vue'
       <code>WeakRef</code> 与 <code>FinalizationRegistry</code> 能拿到对象的弱引用、并在回收时收到通知，但<strong>垃圾回收的时机不可预测</strong>，绝不能把关键业务逻辑压在这上面。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>自动去重与任意键</h2>
     <figure class="lesson-figure">
       <figcaption>点标签试试：<code>Set</code> 自动去重，<code>Map</code> 用任意类型做键。</figcaption>
       <J14MapSetWeakRef />
     </figure>
 
-    <h2>总结</h2>
+    <h2>语义能力与生命周期</h2>
     <p>
       Map 与 Set 提供的是对象、数组不具备的<strong>明确语义</strong>（任意键、保序、唯一）；弱引用集合解决的则是生命周期——让附加数据跟着被附加的对象一起消失。选型时先问自己一句：我要的到底是语义，还是生命周期？
     </p>

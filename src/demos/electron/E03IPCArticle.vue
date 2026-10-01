@@ -8,7 +8,7 @@ import E03IPC from './E03IPC.vue'
       <strong>开场问题：</strong>界面里点一下按钮，想读一个本地配置文件；主进程里明明握着 <code>fs</code>，你在渲染进程里照着写 <code>fs.readFile</code> 却直接报 <code>undefined</code>——两个进程之间，一次"函数调用"到底是怎么发生的？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>跨进程调用诉求</h2>
     <p>
       你的界面住在渲染进程里，能力长在主进程里。你真正想做的事只有一件：<strong>在页面点一下按钮，跨进程调用一个函数并拿到返回值</strong>。
     </p>
@@ -19,7 +19,7 @@ import E03IPC from './E03IPC.vue'
       于是问题落到一句上：两个互相看不见内存的进程，怎么才能既"调用并拿到结果"，又"单向地通知对方一件事"？
     </p>
 
-    <h2>最小方案</h2>
+    <h2>字符串通道约定</h2>
     <p>
       最朴素的做法是约定一个字符串通道名，两边对着它收发消息。渲染进程发：<code>ipcRenderer.send('save-data', data)</code>；主进程收：<code>ipcMain.on('save-data', (event, data) =&gt; { ... })</code>。
     </p>
@@ -30,7 +30,7 @@ import E03IPC from './E03IPC.vue'
       但 <code>send/on</code> 是单向的——消息一发出去就结束，发的人拿不到"处理完了没、结果是什么"。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>单向通道缺回值</h2>
     <ul>
       <li>读文件这类"我要拿到内容"的场景，<code>send/on</code> 拿不到返回值，只能让主进程再发一条消息回来（<code>event.reply</code>），你得写两段代码自己把请求和响应配起来。</li>
       <li>手动配对在并发下会串线：连发两次请求，回来两条回复，你分不清哪条对应哪次——如果两次读的是不同文件，结果就错位了。</li>
@@ -38,7 +38,7 @@ import E03IPC from './E03IPC.vue'
       <li>主进程收到的永远是渲染进程递来的任意数据，一旦当真使用，就等于信任了不可信的一方。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>请求响应配对机制</h2>
     <p>
       先补"请求-响应"，因为"调用并拿到结果"是最常见的需求。引入一对新 API：渲染进程 <code>ipcRenderer.invoke(channel, ...args)</code>，主进程 <code>ipcMain.handle(channel, handler)</code>。<code>invoke</code> 返回 Promise，<code>handler</code> 的返回值就是它 resolve 出来的值，一次请求自动对应一次响应。
     </p>
@@ -61,13 +61,13 @@ import E03IPC from './E03IPC.vue'
       <strong>两个容易忽略的点：</strong>IPC 会序列化数据，<strong>不要拿它搬运整份大文件</strong>，正确做法是传文件路径、由主进程去读写；另外，渲染进程不要直接裸用 <code>ipcRenderer</code>，所有 IPC 都应经预加载脚本封装成白名单接口再交给页面。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>两种通道日志对照</h2>
     <figure class="lesson-figure">
       <figcaption>切换「invoke/handle」与「send/on」两个模式，各点一次「发送 IPC 消息」，对照日志里请求与响应的往返——注意 invoke 模式能一路等到返回值，send 模式则是发出去就结束。</figcaption>
       <E03IPC />
     </figure>
 
-    <h2>总结</h2>
+    <h2>通道消息翻译层</h2>
     <p>
       IPC 做的事，是把"跨进程的函数调用"翻译成"带名字的通道消息"。要拿到结果就用 <code>invoke/handle</code>，只做通知就用 <code>send/on</code>，通道两端约定统一的数据信封、并默认对方给的数据不可信——通信才会又稳又安全。
     </p>

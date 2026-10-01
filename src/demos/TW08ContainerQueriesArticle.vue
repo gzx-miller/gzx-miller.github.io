@@ -8,7 +8,7 @@ import TW08ContainerQueries from './TW08ContainerQueries.vue'
       <strong>开场问题：</strong>同一张课程卡放在宽屏主区里明明排得很好，塞进窄侧栏后立刻挤成一团——我按屏幕宽度写的响应式规则，为什么换个位置就全错了？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>卡片的多重容器环境</h2>
     <p>
       你封装了一张「组合式函数实战」课程卡：窄的时候上图下文、宽的时候横向排列。这张卡会出现在三个地方——宽大的主内容区、窄窄的侧栏、以及弹出的对话框。结构一模一样，可用宽度却差了好几倍。
     </p>
@@ -16,7 +16,7 @@ import TW08ContainerQueries from './TW08ContainerQueries.vue'
       问题就出在这里：卡片的排布本应由<strong>自己拿到多少宽度</strong>决定，可你手上唯一的条件判断依据是「整个视口有多宽」。视口很宽、卡片却挤在侧栏里的情况，它完全无法表达。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>视口断点写法</h2>
     <p>
       先按视口断点写：<code>md:flex-row</code>，意思是「屏幕宽到中等时横向排列」。在主内容区里看起来完全正确。
     </p>
@@ -24,7 +24,7 @@ import TW08ContainerQueries from './TW08ContainerQueries.vue'
       它做对的是一件看起来很接近的事：<strong>让组件的结构随宽度变化</strong>。在「组件宽度约等于视口宽度」的场景里，这套写法确实够用，也不必推翻。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>侧栏复用的失效</h2>
     <ul>
       <li>组件复用到侧栏时失效：视口明明很宽，卡片却只有 260px，横向布局直接把文字挤成一条缝。</li>
       <li>组件对「自己所在的环境」毫无感知，复用位置一变就要重新调一遍样式。</li>
@@ -32,7 +32,7 @@ import TW08ContainerQueries from './TW08ContainerQueries.vue'
       <li>断点数值照搬视口那一套，但侧栏的临界宽度和整页的临界宽度根本不是一回事。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>转向容器查询</h2>
     <p>
       换一个判断依据：不看视口，看<strong>组件自己所在容器</strong>的宽度。这就是容器查询——<code>@container</code> 在父级建立查询上下文，子元素再用容器变体按「最近匹配容器」的宽度切换样式。写进 CSS 就是给容器加 <code>container-type: inline-size</code>。
     </p>
@@ -61,13 +61,13 @@ import TW08ContainerQueries from './TW08ContainerQueries.vue'
       <li>把组件放进不同宽度的侧栏，验证它按实际空间而不是整页宽度响应。</li>
     </ol>
 
-    <h2>动手试试</h2>
+    <h2>容器宽度驱动朝向</h2>
     <figure class="lesson-figure">
       <figcaption>拖动滑杆改变组件容器的宽度，看这张课程卡在竖排与横排之间切换。</figcaption>
       <TW08ContainerQueries />
     </figure>
 
-    <h2>总结</h2>
+    <h2>判断依据转移</h2>
     <p>
       容器查询把响应式的判断依据从「整页多宽」换成「我占多宽」。组件因此真正做到自顾自：放进主区横排、塞进侧栏竖排，一份代码适应多种空间。它和视口断点是分工——组件归容器管，页面归视口管。
     </p>

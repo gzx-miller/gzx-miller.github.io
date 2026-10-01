@@ -8,7 +8,7 @@ import S07JotaiAsyncAtoms from './S07JotaiAsyncAtoms.vue'
       <strong>开场问题：</strong>你照着上一课的思路，给课程列表写了个派生原子：<code>const coursesAtom = atom(async (get) =&gt; { const res = await fetch('/api/courses'); return res.json() })</code>。组件里一句 <code>useAtomValue(coursesAtom)</code> 跑起来，页面直接白了，控制台只冒出一句「A component suspended while responding to synchronous input」。你没写任何加载逻辑，它凭什么白屏？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>异步取数三难</h2>
     <p>
       拉一份远程列表，实际要同时管三件事：值还没到的时候显示什么、请求失败了怎么办、什么时候该重新拉一次。而上一课的同步派生原子只管「读到就现算」，它默认值总是立刻可得——它不负责回答「值在路上时界面怎么办」。
     </p>
@@ -19,7 +19,7 @@ import S07JotaiAsyncAtoms from './S07JotaiAsyncAtoms.vue'
       所以要回答的是：<strong>能不能让异步数据也像派生原子一样，由依赖图自动决定何时重算、何时失效；而「加载中 / 出错」这些状态，交给一个统一的边界去展示，而不是散落在每个组件里？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>读取函数异步化</h2>
     <p>
       最朴素的做法：Jotai 允许读取函数<strong>返回一个 Promise</strong>——把上面的 <code>coursesAtom</code> 写成 <code>async</code> 函数就成了「异步原子」。就这么一行，异步这件事被收进了原子本身。
     </p>
@@ -27,7 +27,7 @@ import S07JotaiAsyncAtoms from './S07JotaiAsyncAtoms.vue'
       这个方案做对了一件事：<strong>组件侧完全不用改</strong>。它依然只写 <code>useAtomValue(coursesAtom)</code>，不需要自己 <code>useEffect</code>、不需要自己维护 loading 字段。数据怎么来、什么时候该来，都归原子管。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>边界缺失白屏</h2>
     <ul>
       <li>没有 <code>Suspense</code> 边界包着：Promise 未决时组件会「挂起」，而周围没人接手，于是就出现了开场那样的白屏。</li>
       <li>想在组件里手写 <code>if (!courses) return &lt;p&gt;加载中&lt;/p&gt;</code>：没用——挂起发生在渲染期间，你的判断语句根本没机会执行，控制权已经被上层的边界拿走了。</li>
@@ -36,7 +36,7 @@ import S07JotaiAsyncAtoms from './S07JotaiAsyncAtoms.vue'
       <li>只想着成功路径：一旦 <code>await fetch</code> 失败、Promise 被拒绝，错误不会被 fallback 吃下，而是继续往上抛。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>等待与失效归属</h2>
     <p>
       不推翻「异步原子」这条主线，而是给它补上两块拼图：一块是<strong>等待期间的展示</strong>由谁负责，另一块是<strong>何时失效重算</strong>由谁决定。
     </p>
@@ -55,13 +55,13 @@ import S07JotaiAsyncAtoms from './S07JotaiAsyncAtoms.vue'
       <strong>两条必须记住的边界：</strong>异步原子一旦被读取就会<strong>挂起</strong>，必须配一个 <code>Suspense</code> 边界，否则页面白屏；atom 要<strong>定义在组件外部</strong>，若在渲染中新建，每次渲染都是一个新原子，缓存与去重全部失效，会反复发起请求。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>后备界面的替换</h2>
     <figure class="lesson-figure">
       <figcaption>页面一进来会先显示「异步 Atom 加载中…」，约半秒后课程列表才出现——这就是 Suspense 后备界面被真实内容替换的过程。再点一次「重新读取」，观察它重新挂起又恢复：刷新靠的是把 <code>refreshAtom</code> 加一，让异步原子失效重算。</figcaption>
       <S07JotaiAsyncAtoms />
     </figure>
 
-    <h2>总结</h2>
+    <h2>取数与展示分工</h2>
     <p>
       异步原子把「取数据」也做成了一种派生：读取函数返回 Promise，求值时自然挂起，由外层的 Suspense 边界展示后备界面。重新加载不再是手动清缓存，而是改变一个被读取的刷新原子，让依赖图自动把它标为失效、重新执行。加载与失败的展示交给边界，重算的时机交给依赖，组件只需订阅结果。
     </p>

@@ -8,7 +8,7 @@ import F24Metadata from './F24Metadata.vue'
       <strong>开场问题：</strong>你只是用 <code>-c copy</code> 把一段测试视频转封装了一下，想缩点体积再发给外部；对方打开后告诉你，文件「标题」里还留着你本机的内部文件名和一段拍摄备注——你明明只搬了数据，这些东西是怎么跟着过去的？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>容器元数据构成</h2>
     <p>
       媒体文件除了音视频码流，容器里还挂着一小块<strong>描述这件事本身的文字</strong>：标题、作者、版权、备注、语言、用的什么编码器。它们叫元数据，是一组键值对，和画面声音分开存放。你想做的无非三件事：给成品写上标题与版权；把不该带走的（拍摄设备、原始文件名、位置）清掉；给一段长视频加章节，让人能直接跳到第 3 节。
     </p>
@@ -16,7 +16,7 @@ import F24Metadata from './F24Metadata.vue'
       手工改的代价在于：这些信息藏在你平时看不到的地方，改没改、改对没改对，眼睛都看不出来；而且它们<strong>会随转封装一起被继承</strong>，你以为在「精简文件」，其实是在「原样搬运」；同一个信息在不同容器里的叫法还不一样，写错名字命令不报错、结果也不生效。所以要回答的是：<strong>怎么把描述信息读出来、精确地改，并确认改的就是你以为的那一项？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>写入标签命令</h2>
     <p>
       写一个标签只多一个参数：<code>ffmpeg -i input.mp4 -metadata title="My Video" -metadata artist="Director" -c copy output.mp4</code>。
     </p>
@@ -24,7 +24,7 @@ import F24Metadata from './F24Metadata.vue'
       它做对了一件关键的事：<strong>元数据和音视频码流是分开存的，所以改它不需要重编码</strong>。配上 <code>-c copy</code>，几秒就输出完，画质一个像素都不动，标签却写进去了。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>元数据整体继承</h2>
     <ul>
       <li><code>-c copy</code> 默认把原文件的元数据<strong>整个继承</strong>下来：你写的 <code>title</code> 只是覆盖了同名的那一项，原来的备注、内嵌文件名、编码器串照样在——这正是开场那次泄露。</li>
       <li>标签名跟着容器走：同一个信息在 MP4 里叫什么、在 MKV 里叫什么，未必一致。写了容器不认的名字，命令照样成功退出，播放器里却什么都没有。</li>
@@ -34,7 +34,7 @@ import F24Metadata from './F24Metadata.vue'
       <li>就算写进去了，某些播放器也不显示章节；MP4 对章节的支持还很有限，MKV 才完整。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>改动前后校验</h2>
     <p>
       不推翻 <code>-metadata</code>，而是补上它前后两端：改之前先把现状看清楚，改之后再把结果核对一遍。
     </p>
@@ -72,13 +72,13 @@ import F24Metadata from './F24Metadata.vue'
       最后一层补「校验」。写完别信命令没报错——把上面第一条里的 <code>ffprobe</code> 命令对着输出文件再跑一遍，确认三件事：想写的标签<strong>确实出现了</strong>，不想留的敏感项<strong>确实消失了</strong>，章节的起止时间与实际内容对得上。这一遍核对只要几秒，却能挡住大部分「以为改了其实没改」的返工。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>读写操作页签</h2>
     <figure class="lesson-figure">
       <figcaption>切换「查看元数据 / 编辑元数据 / 章节标记」三个页签，先看 ffprobe 怎么把标签读出来，再看 <code>-metadata</code> 的写法与常用标签表，最后看章节文件的结构。</figcaption>
       <F24Metadata />
     </figure>
 
-    <h2>总结</h2>
+    <h2>标签与码流分离</h2>
     <p>
       元数据是容器层的小块键值对，和码流分开存，所以用一个 <code>-metadata</code> 加 <code>-c copy</code> 就能零画质损失地改写。麻烦都在两端：改之前要看清有哪些标签，改之后要用 <code>ffprobe</code> 复核；而 <code>-map_metadata</code> 决定继承多少旧数据，是「清干净」还是「只改一项」，动手前必须先想明白。
     </p>

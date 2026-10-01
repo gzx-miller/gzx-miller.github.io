@@ -8,7 +8,7 @@ import CPP22RAII from './CPP22RAII.vue'
       <strong>开场问题：</strong>一段打开文件、读几行、写几行的代码，正常路径里你老老实实写了 <code>close()</code>，可某个中间分支提前 <code>return</code> 了。程序没有任何报错，直到跑了几个小时突然抛出一句 <code>Too many open files</code>——那个文件句柄到底丢在哪条路径上？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>资源的借还与泄漏</h2>
     <p>
       文件句柄、内存、互斥锁、网络连接，这些资源都有一个共同点：它们是<strong>借来的</strong>，用完了必须还。而「借」和「还」是两次相隔很远的调用，中间隔着你整个函数的逻辑。
     </p>
@@ -24,7 +24,7 @@ import CPP22RAII from './CPP22RAII.vue'
       所以问题不是「怎么记得写释放语句」，而是：<strong>能不能让「释放」不再依附于某条代码路径，而是绑定到某个东西的生死上？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>逐条出口的手动释放</h2>
     <p>
       最朴素的做法：每申请一个资源，就紧跟一句对应的释放调用，然后在写完函数后，从头到尾把所有 <code>return</code>、<code>break</code>、<code>throw</code> 的出口都人工过一遍，确认每一处都还上了。
     </p>
@@ -32,7 +32,7 @@ import CPP22RAII from './CPP22RAII.vue'
       这个做法做对了一件根本的事：<strong>它承认了「获取」与「释放」必须严格成对</strong>——一次获取配一次释放，多也不行少也不行。这条铁律是对的，后面所有的机制都只是换一种方式去保障它。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>提前返回与异常泄漏</h2>
     <ul>
       <li>出现 <code>if (bad) return -1;</code> 这样的提前返回时，释放语句在函数尾部，控制流直接跳过——一次资源泄漏。</li>
       <li>抛出异常时控制流跳到外层 <code>catch</code>，函数尾部那几行清理代码永远不执行，泄漏照旧，而且此时你正在处理另一个错误，很难注意到。</li>
@@ -40,7 +40,7 @@ import CPP22RAII from './CPP22RAII.vue'
       <li>代码一改就得重新核对。你新加了一条 <code>continue</code> 分支，也就新增了一条出口，而没有任何工具会提醒你去补释放语句。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>构造获取析构释放</h2>
     <p>
       不推翻「获取与释放必须成对」，而是换一个人来负责这件事：<strong>让编译器负责，办法是把资源的生死绑到对象的生死上</strong>。这就是 <strong>RAII</strong>——资源获取即初始化。规矩只有两条：<strong>在构造函数里获取资源</strong>，<strong>在析构函数里释放资源</strong>。
     </p>
@@ -66,13 +66,13 @@ import CPP22RAII from './CPP22RAII.vue'
       <strong>两个会直接终止程序的操作：</strong>在析构函数里让异常逃出来（尤其栈展开期间），以及让一个既没 <code>join</code> 也没 <code>detach</code> 的 <code>std::thread</code> 对象被销毁。两者都会调用 <code>std::terminate</code>，不是「结果可能不对」，是当场崩掉。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>句柄与锁的自动释放</h2>
     <figure class="lesson-figure">
       <figcaption>看两个 RAII 例子：<code>FileHandle</code> 在构造时打开文件、析构时自动关闭并打印「文件已关闭」，<code>std::lock_guard&lt;std::mutex&gt;</code> 在构造时加锁、离开作用域自动解锁——都没有一行手动清理。</figcaption>
       <CPP22RAII />
     </figure>
 
-    <h2>总结</h2>
+    <h2>作用域与释放时机</h2>
     <p>
       RAII 把「什么时候释放资源」这个问题，从「人要在每条退出路径上记得写」变成了「对象什么时候离开作用域」。获取放进构造函数，释放放进析构函数，于是正常返回、提前 return、抛异常三种情况共用同一条清理路径。你少写的那些 <code>close()</code> 和 <code>unlock()</code>，正是最容易漏、后果最重的那些。
     </p>

@@ -8,7 +8,7 @@ import VF05EdgeStyles from './VF05EdgeStyles.vue'
       <strong>开场问题：</strong>订单流程图里「锁定库存」和「核销优惠券」两条支线都汇到「仓库打包」，可画出来五条线长得一模一样——哪条是主线、哪条是绕过分支，凭什么让我一眼看出来？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>订单图边数据</h2>
     <p>
       你在画一张订单履约流程图。数据模型其实已经很清楚：<code>nodes</code> 摆好节点，<code>edges</code> 用 <code>source</code> 与 <code>target</code> 写好连接关系，画布照着把线一根根拉出来。麻烦出现在下一句——<strong>这些线全长一个样</strong>：同样的弧度、同样的粗细、同样没有方向。于是这张图只能「看得到结构」，却「读不出信息」：哪条是正常主流程、哪条是异常绕行、数据往哪个方向流，全靠盯着节点位置去猜。
     </p>
@@ -16,7 +16,7 @@ import VF05EdgeStyles from './VF05EdgeStyles.vue'
       如果不给线赋予形态，流程图就退化成一堆连线的集合，节点越多越没人愿意看。真正要解决的是：<strong>怎么让「关系」本身也携带语义</strong>，让读图的人不用点开任何节点就能分清主次。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>默认连线省事</h2>
     <p>
       最省事的做法是接受默认：所有边都交给 Vue Flow 自己画。连线路径它会根据两个节点的位置自动算出一条贝塞尔曲线，起止点、弧度都不需要你操心。
     </p>
@@ -24,7 +24,7 @@ import VF05EdgeStyles from './VF05EdgeStyles.vue'
       这个方案对在一件事上：<strong>它先保证了「连对」</strong>。只有 edges 的关系数据是准确的，后面才有谈样式的余地；反过来先急着调外观、关系却连错了，等于在一张错图上精装修。图只有三五个节点时，默认形态确实够用。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>方向提示缺失</h2>
     <ul>
       <li>五条线一个样，主路径和分支路径没有视觉差异，阅读顺序全靠人脑补。</li>
       <li>没有任何方向提示，谁指向谁得靠节点左右位置反推，绕行的分支尤其容易读反。</li>
@@ -32,7 +32,7 @@ import VF05EdgeStyles from './VF05EdgeStyles.vue'
       <li>想统一调整所有新连线的形态，却没有全局出口，只能挨个 edge 去改 <code>type</code>。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>连线表达三件套</h2>
     <p>
       不推翻默认连线，而是给每条边装上「表达三件套」——<strong>路径、装饰、全局默认</strong>。
     </p>
@@ -91,13 +91,13 @@ import VF05EdgeStyles from './VF05EdgeStyles.vue'
       还有两处细节值得记牢。其一，<code>MarkerType</code> 枚举要从 <code>@vue-flow/core</code> 正确导入，手拼箭头字符串很容易踩上符号错误；其二，默认边的 <code>label</code> 渲染在 SVG 文本层，纯文字场景够用，一旦标签里要塞按钮、输入框这类结构，就得换成自定义连线加 <code>EdgeLabelRenderer</code>，那正是下一课要讲的事。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>五种路径差异</h2>
     <figure class="lesson-figure">
       <figcaption>切换顶部按钮看五种路径的差异，再留意「用了券」那条被单独点亮的边。</figcaption>
       <VF05EdgeStyles />
     </figure>
 
-    <h2>总结</h2>
+    <h2>关系表达可视化</h2>
     <p>
       连线的形态，本质上是把「关系」从结构升级成表达。<code>type</code> 选路径、<code>label</code> 写条件、<code>animated</code> 提主次、<code>markerEnd</code> 标方向、<code>style</code> 做区分，全局则用 <code>:default-edge-options</code> 兜底。记住默认值只管新连线、老边只认自己的 <code>type</code>，这张图就从「能看」变成了「能读」。
     </p>

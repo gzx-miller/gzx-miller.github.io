@@ -8,7 +8,7 @@ import R22ForwardRef from './R22ForwardRef.vue'
       <strong>开场问题：</strong>报名表里有姓名和邮箱两个输入框，你把它们封装成了自定义组件 <code>&lt;TextInput label="姓名" /&gt;</code>。提交时如果没填，你想让第一个输入框自动聚焦——于是给组件挂上 <code>ref={nameRef}</code>。挂了，可点下提交，<code>nameRef.current</code> 却是 <code>null</code>。ref 明明传进去了，为什么子组件里拿不到它指向的元素？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>数据与引用之别</h2>
     <p>
       先把 ref 和 props 的区别说清楚。props 是<strong>往里灌的数据</strong>：你写 <code>label="姓名"</code>，子组件就收到这个字符串，数据一变，组件重新渲染。ref 不一样，它是一根<strong>指向实例或元素的引用通道</strong>：父组件拿着它，是为了之后<em>主动</em>去够到子组件里的某个真实对象——比如那个 DOM 输入框；它本身的变化并不会触发谁重新渲染。两者语义完全不同。
     </p>
@@ -22,7 +22,7 @@ import R22ForwardRef from './R22ForwardRef.vue'
       所以要回答的是：<strong>能不能让一个自定义组件既保留自己的封装，又把这个「指向内部元素」的引用，顺顺当当地交到父组件手上？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>包裹式引用转发</h2>
     <p>
       最朴素也真的能跑的做法：用 <code>forwardRef</code> 把这个组件包一层，然后把它收到的 ref 直接接到内部的真实元素上——<code>const TextInput = forwardRef(function TextInput(props, ref) { ... return &lt;input ref={ref} {...props} /&gt; })</code>。父组件于是能 <code>nameRef.current.focus()</code>、读 <code>nameRef.current.value</code>。
     </p>
@@ -30,7 +30,7 @@ import R22ForwardRef from './R22ForwardRef.vue'
       这个方案做对了一件事：<strong>它点明了「ref 需要被显式转发」</strong>。包裹之后，第二个参数就是外部传进来的那根引用；你把它接到哪个元素，父组件就够到哪个元素。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>未包裹则失效</h2>
     <ul>
       <li>不包裹 <code>forwardRef</code> 就把 ref 写上去：ref 被 React 截走，组件函数收不到它，<code>nameRef.current</code> 永远是 <code>null</code>——你会误以为是自己的 <code>useRef</code> 写错了。</li>
       <li>把 ref 转发到最底层的 <code>&lt;input&gt;</code> 后，父组件拿到的是整个 DOM 元素，能随意写 <code>.value</code>、改 <code>className</code>，绕过受控逻辑，让 DOM 和组件 state 对不上。</li>
@@ -39,7 +39,7 @@ import R22ForwardRef from './R22ForwardRef.vue'
       <li>直接 <code>nameRef.current.value</code> 读值、写值：读的是 DOM 上的当前值，而不是组件里那份受控 state，一旦两者不同步就会出现「界面显示的和提交的不一致」。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>独立转发链路</h2>
     <p>
       不推翻「ref 要转发」，而是把它做成一套明确的规则：<strong>ref 是引用，不是数据；它该走一条专门的转发链，而不是混进 props 里。</strong>
     </p>
@@ -57,13 +57,13 @@ import R22ForwardRef from './R22ForwardRef.vue'
       <strong>两个容易踩的点：</strong>只转发到 DOM 节点时，父组件对子组件<strong>内部实现的依赖并没有消失</strong>——子组件把 <code>&lt;input&gt;</code> 换掉，父组件的 <code>.focus()</code> 就可能失效；想彻底隔离，就把两者配合起来，用 <code>useImperativeHandle</code> 只暴露意图明确的方法。另外，受控组件里别用 <code>ref.current.value</code> 去写值，那不会触发 <code>onChange</code>，会让 DOM 与 state 脱节。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>焦点回送验证</h2>
     <figure class="lesson-figure">
       <figcaption>在「姓名 / 邮箱」两个自定义输入框里试试：什么都不填直接点「提交」，看父组件用 <code>nameRef</code> 把焦点送回第一个框；填好提交后点「重置」，两个框被清空并重新聚焦——全程父组件只拿着 ref，不碰子组件内部。</figcaption>
       <R22ForwardRef />
     </figure>
 
-    <h2>总结</h2>
+    <h2>显式接力通道</h2>
     <p>
       ref 默认交给宿主元素，自定义函数组件却不会自动接住它——<code>forwardRef</code> 就是那条显式的接力通道，把外层引用一步步送到你指定的内部对象上。记住 props 送的是数据、ref 送的是引用：数据变化驱动渲染，引用只供父组件主动去够。
     </p>

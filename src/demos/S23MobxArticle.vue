@@ -8,7 +8,7 @@ import S23Mobx from './S23Mobx.vue'
       <strong>开场问题：</strong>你给「探索森林」写了一个方法，里面依次改了物品列表、体力、经验三样东西。跑起来一看，日志里同一个统计值被重算了十几次，列表也重渲染了好几轮——一次业务动作，凭什么通知了这么多次？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>领域对象拆散</h2>
     <p>
       这些字段本来是同一个领域对象的一部分：一个「探险家」有物品、体力、经验，还有从它们算出来的完成度、稀有物列表。可你一直把它们当成互不相干的一堆 <code>useState</code> 值，于是成本全冒了出来。
     </p>
@@ -19,7 +19,7 @@ import S23Mobx from './S23Mobx.vue'
       所以要回答的是：<strong>能不能把「领域对象」直接变成可观察的——数据和行为长在一起，改字段时自动通知真正用到它的人，并且一次动作里的多次修改能合成一次通知？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>普通类封装</h2>
     <p>
       最朴素的做法：写一个普通 class，把数据和行为都装进去——<code>this.items.push(...)</code>、<code>this.energy -= 10</code>，派生值用 getter 写 <code>get discoveredCount() { return this.items.filter(i =&gt; i.discovered).length }</code>。这个方案做对了一件事：<strong>状态和行为内聚在同一个对象里</strong>，领域逻辑不必再散落到组件中。
     </p>
@@ -27,7 +27,7 @@ import S23Mobx from './S23Mobx.vue'
       但它对视图是「哑」的：改了字段，React 完全不知情。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>赋值界面无响应</h2>
     <ul>
       <li>普通 class 里改字段，界面停在旧值不动，因为没有任何机制把这个变更告诉 React。</li>
       <li>改用一堆 <code>useState</code> 逐字段同步：一个动作里改三处就 <code>set</code> 三次，触发三轮渲染，重复计算也躲不掉。</li>
@@ -35,7 +35,7 @@ import S23Mobx from './S23Mobx.vue'
       <li>各处随手 <code>store.energy -= 10</code>，区分不出「这是一个业务动作」还是「某处的临时一改」，出了 bug 回溯不到具体动作。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>可观察与缓存</h2>
     <p>
       不推翻「class 收纳状态与行为」，而是让它的成员<strong>变成可观察的</strong>，再补上缓存与事务。一层层来：
     </p>
@@ -50,13 +50,13 @@ import S23Mobx from './S23Mobx.vue'
       最后把与隔壁 Valtio 的差异说清。两者都靠追踪做细粒度更新，但底座不同：Valtio 用 Proxy 包一个普通对象，写就是直接赋值、读走的是不可变快照，依赖在「读快照」那一刻收集，追踪退场后没有独立的派生/事务层；MobX 则直接读可观察对象本身，没有快照层，追踪发生在每次被观察函数执行时，并且额外提供 <code>computed</code> 缓存与 action 事务。一句话——Valtio 更像「给 React 一张不可变快照」，MobX 更像「把面向对象的领域模型整体变透明可观察」。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>单轮更新表现</h2>
     <figure class="lesson-figure">
       <figcaption>在「探索」页点「开始探索」，一次动作里同时消耗体力、可能发现新物种、加经验——留意它只更新一轮，而不是每改一个字段就抖一下；切到「图鉴」看发现进度和分类完成度随动作变化，切到「统计」看「稀有以上」的数量与总收集数，这些都是带缓存的派生值。</figcaption>
       <S23Mobx />
     </figure>
 
-    <h2>总结</h2>
+    <h2>响应式通知机制</h2>
     <p>
       MobX 把普通对象（尤其 class 实例）包装成一张可观察图谱：字段是 observable，派生值用带缓存的 computed，修改集中在 action 里做，<code>observer</code> 组件只订阅自己渲染时真正读到的那些字段。一次 action 的多次赋值合并成一次通知，重复读取命中 computed 缓存——细粒度更新与「一次动作通知一次」同时拿到，代价是你要理解「谁被追踪、何时重跑」。
     </p>

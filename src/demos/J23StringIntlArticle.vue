@@ -8,17 +8,17 @@ import J23StringIntl from './J23StringIntl.vue'
       <strong>开场问题：</strong>搜索框里你用 <code>indexOf</code> 判断关键词有没有命中，日期用字符串拼成 <code>2026-10-01</code>——功能都能跑，可一到中文排序和不同地区的价格显示，就总有人报「显示得不对」。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>搜索高亮与地区格式</h2>
     <p>
       你做一个课程搜索加详情页，要完成两件事：一是在课程标题里搜索关键词并高亮出来，二是把课程价格和开课日期按用户所在地的习惯显示。看上去都是「摆弄文本」的小事，背后却是两种性质完全不同的问题——<strong>怎么在同一套字符规则里精确地查找、替换、拼接</strong>，以及<strong>同一个日期和金额，怎么按不同地区的习惯呈现</strong>。
     </p>
 
-    <h2>最小方案</h2>
+    <h2>手写查找与截取</h2>
     <p>
       先用最熟的手段：<code>str.indexOf(kw) !== -1</code> 判断是否包含，<code>str.substring(a, b)</code> 截一段，<code>str.replace(/x/g, 'y')</code> 做全局替换，日期手动拼成年月日、月份用 <code>padStart</code> 补零。它做对了一件实事：<strong>不依赖任何额外的库</strong>，字符串自带的方法就能完成大部分操作。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>下标判断的语义缺陷</h2>
     <ul>
       <li><code>indexOf</code> 返回的是下标，判断「包含」还得拿它和 <code>-1</code> 比较，语义绕着走，一不留神就把条件写反。</li>
       <li><code>replace</code> 只替换第一个匹配，除非正则带上 <code>g</code> 标志；而用正则匹配用户输入的关键词前，还得先转义里面的特殊字符，漏一步就出错。</li>
@@ -27,7 +27,7 @@ import J23StringIntl from './J23StringIntl.vue'
       <li>还有一个容易忽略的坑：<code>'👍'.length</code> 是 2。字符串按 UTF-16 代码单元计数，不按人眼看到的字符计数，用下标或 <code>charAt</code> 取「第一个字符」会把一个 emoji 劈成半个。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>字符串方法与格式升级</h2>
     <p>
       先把「返回下标」升级成「直接回答布尔」：<code>includes</code>、<code>startsWith</code>、<code>endsWith</code> 一看就知道在问什么。需要拿到<strong>所有</strong>匹配而不只是第一个时，用 <code>matchAll</code>——它有一个硬性前提：正则必须带 <code>g</code> 标志，否则直接抛错；而且它返回的是迭代器而不是数组，要用 <code>for...of</code> 消费，或 <code>Array.from</code> 收成数组再用。
     </p>
@@ -47,13 +47,13 @@ import J23StringIntl from './J23StringIntl.vue'
       最后补上两个「不想自己拼」的场景：<code>Intl.Collator</code> 提供符合语言习惯的字符串比较器，用它排中文，胜过直接按代码单元大小比较的默认顺序；<code>Intl.RelativeTimeFormat</code> 直接输出「3 天前」「in 2 hours」这类相对时间文案。它们与前面两个格式化器共享同一个思路——<strong>地区规则不该由业务代码维护，交给运行时更准、更稳</strong>。
     </p>
 
-    <h2>动手试试</h2>
+    <h2>筛选高亮与地区输出</h2>
     <figure class="lesson-figure">
       <figcaption>在搜索框里输入 <code>vue</code>，看 <code>includes</code> 与 <code>replaceAll</code> 如何完成筛选和高亮；下方同时对比同一个金额与日期在不同 locale 下的输出。</figcaption>
       <J23StringIntl />
     </figure>
 
-    <h2>总结</h2>
+    <h2>运行时提供的规则支持</h2>
     <p>
       字符串方法与 Intl 解决的是同一类问题的两端：「在同一套字符规则里精确地查找与修改」交给字符串方法和正则，「按地区习惯呈现」交给 Intl。前者要记住字符串不可变、<code>replace</code> 的全局语义、以及 emoji 的代码单元陷阱；后者意味着本地化词表不该由你维护，声明 locale 就够了。
     </p>

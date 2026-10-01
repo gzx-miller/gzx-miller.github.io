@@ -8,7 +8,7 @@ import N08UseAsyncData from './N08UseAsyncData.vue'
       <strong>开场问题：</strong>聊天页里，用户点开 A 会话，还没加载完又点了 B，接着又点回 A。三个请求都发出去了，最后屏幕上显示的消息却来自 B——明明你最新点的是 A。代码没错，只是手指比接口快了一点。
     </div>
 
-    <h2>提出问题</h2>
+    <h2>复杂异步的编排需求</h2>
     <p>
       你想在组件里跑一段<strong>不那么简单的异步逻辑</strong>：有时要先算出参数再请求、有时要同时拉好几个接口、有时要对返回结果换算一下再用、有时还得控制「并发时谁生谁死」。最朴素的写法仍然是 <code>onMounted</code> 里 <code>await</code>，而它的代价比想象中多。
     </p>
@@ -19,7 +19,7 @@ import N08UseAsyncData from './N08UseAsyncData.vue'
       于是问题落到：<strong>能不能有一个比 <code>useFetch</code> 更底层的 API，让我自己掌控 key、并发策略、数据转换和请求时机？</strong>
     </p>
 
-    <h2>最小方案</h2>
+    <h2>手动键的调用形式</h2>
     <p>
       最朴素的写法是：<code>const { data, pending, error, refresh } = await useAsyncData('users', () =&gt; $fetch('/api/users'))</code>。
     </p>
@@ -27,7 +27,7 @@ import N08UseAsyncData from './N08UseAsyncData.vue'
       它做对了一件事：<strong>把「异步逻辑」和「响应式状态」拆开了</strong>。你只提供两样东西——一把 key 和一个返回 Promise 的处理函数；至于加载态、错误态、以及结果如何在服务端与客户端之间传递，全交给它。因为 key 由你自己给，你也就第一次有了「控制同一份数据怎么被缓存、怎么被复用」的抓手。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>键冲突与数据覆盖</h2>
     <ul>
       <li>key 得你自己保证<strong>全局唯一</strong>。两个地方写出相同的 key，后写的会覆盖前者的数据，而且不报错。</li>
       <li>默认情况下，同一个 key 的并发请求可能各跑各的；快速切换时，先发的旧请求后返回，会<strong>覆盖</strong>掉新请求的结果——就是开场的竞态。</li>
@@ -36,7 +36,7 @@ import N08UseAsyncData from './N08UseAsyncData.vue'
       <li>一个不重要的统计接口若也用默认方式（阻塞导航），整个路由切换都得等它。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>四层控制力的补齐</h2>
     <p>
       不推翻这套用法，而是顺着「key → 并发 → 数据形状 → 时机与缓存」的顺序，一层层补足控制力。
     </p>
@@ -50,13 +50,13 @@ import N08UseAsyncData from './N08UseAsyncData.vue'
       <strong>三个易混点：</strong>key 必须<strong>全局唯一</strong>，撞 key 会静默覆盖数据；<code>lazy</code> 只管导航是否等待、不管请求时机，跳过首次执行要用 <code>immediate: false</code>；<code>default</code> 的返回类型要与最终数据兼容，否则模板里还是会冒出 <code>undefined</code>。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>同段代码的选项差异</h2>
     <figure class="lesson-figure">
       <figcaption>依次切到「基本用法 / 去重策略 / 数据转换 / Lazy 模式」四个页签，看同一段 <code>useAsyncData</code> 挂上不同选项后代码与行为的差别，再对照底部的 useFetch 与 useAsyncData 对比表。</figcaption>
       <N08UseAsyncData />
     </figure>
 
-    <h2>总结</h2>
+    <h2>缓存并发的控制权</h2>
     <p>
       <code>useAsyncData</code> 把控制权交还给你：一把手动指定的 key 决定缓存与去重，<code>dedupe</code> 决定并发时共享还是取消，<code>transform</code> 与 <code>default</code> 负责数据形状，<code>lazy</code> 决定导航要不要等。当你需要的不只是「取一个 URL」，而是「编排一段异步逻辑」时，它才是那把更合手的工具。
     </p>

@@ -8,7 +8,7 @@ import D05Streams from './D05Streams.vue'
       <strong>开场问题：</strong>导出一个 2GB 的报表，「先生成完整内容再写文件」的写法把进程内存顶到几个 GB、最后被系统杀掉；改成按块写，内存稳定在几十 MB——写的是同一个文件，内存凭什么差出几百倍？
     </div>
 
-    <h2>提出问题</h2>
+    <h2>整份读入的内存压力</h2>
     <p>
       你要把「产出得快」和「消耗得慢」两端接起来：一边生成或读取数据，一边把它写到文件或网络。最省事的做法是把数据整个准备好再交付——<code>readFile</code> 一把读进来，或者拼成一个完整字符串再 <code>writeFile</code>。
     </p>
@@ -19,7 +19,7 @@ import D05Streams from './D05Streams.vue'
       所以问题落到一句话：怎样让数据<strong>边产边消</strong>，既不随数据量吃光内存，又能在消费不过来时自动踩一脚刹车？
     </p>
 
-    <h2>最小方案</h2>
+    <h2>三类流的分工</h2>
     <p>
       用 Node 的<strong>流</strong>。可读流（<code>Readable</code>）分块产出数据，可写流（<code>Writable</code>）分块写入，转换流（<code>Transform</code>）在中间把每一块改一下形态；两端用 <code>pipe</code> 或 <code>pipeline</code> 接起来。
     </p>
@@ -27,7 +27,7 @@ import D05Streams from './D05Streams.vue'
       这个方案做对了一件最本质的事：<strong>它把「整份数据」拆成了「一个接力棒式的数据块」</strong>。任一时刻在内存里只有有限几块，而不是整份数据——于是内存占用与数据总量解耦，首字节也能尽早给出。
     </p>
 
-    <h2>发现不足</h2>
+    <h2>内部缓冲的堆积</h2>
     <ul>
       <li>光把两端「接起来」还不够：消费者慢、生产者快时，<code>write()</code> 塞进去的数据会在内部缓冲区越堆越多，直到撑爆内存。</li>
       <li>手工 <code>pipe</code> 链条<strong>错误处理很脆</strong>：中间某一段报错，它不会自动把上游关掉，已经打开的文件句柄或连接就可能一直泄漏。</li>
@@ -35,7 +35,7 @@ import D05Streams from './D05Streams.vue'
       <li>忽略 <code>write()</code> 的返回值，会让背压形同虚设：它返回 <code>false</code> 是在说「我满了，先别写了」，不理会它就等于一直硬塞。</li>
     </ul>
 
-    <h2>迭代</h2>
+    <h2>背压机制的生效</h2>
     <p>
       先让<strong>背压</strong>真正生效，因为它是这套方案的灵魂。写侧调用 <code>writable.write(chunk)</code>，返回 <code>false</code> 就表示内部缓冲已达上限（由 <code>highWaterMark</code> 界定），此时应停下生产、等 <code>'drain'</code> 事件再继续；读侧 <code>push()</code> 返回 <code>false</code> 则是「消费者还没消化完，先别读了」的信号。它的本质是——<strong>用返回值把下游的压力一路传回上游，让生产主动放慢</strong>，而不是把数据堆在内存里。
     </p>
@@ -55,13 +55,13 @@ import D05Streams from './D05Streams.vue'
       <strong>两个背压信号，记牢方向：</strong><code>write()</code> 返回 <code>false</code> → 暂停写入，等 <code>'drain'</code>；<code>push()</code> 返回 <code>false</code> → 暂停读取，稍后再推。它们都是「我这侧满了」的反馈，而不是错误。
     </div>
 
-    <h2>动手试试</h2>
+    <h2>数据块的逐段落地</h2>
     <figure class="lesson-figure">
       <figcaption>点「流式导出报表」，看数据块一块接一块落下来——这就是分块产出，而不是等整份报表拼好再一次性给出。</figcaption>
       <D05Streams />
     </figure>
 
-    <h2>总结</h2>
+    <h2>大数据的低内存搬运</h2>
     <p>
       流解决的是「大块数据怎么低内存地搬运」这件事：数据被拆成块逐段流过，<strong>背压用返回值把下游的压力传回上游、让生产自动放慢</strong>，而 <code>pipeline</code> 把各段串成一条线、任一环出错就销毁整条链路并释放资源。只要数据大到不该整体进内存，就该用流。
     </p>
