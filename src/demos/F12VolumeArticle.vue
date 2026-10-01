@@ -8,7 +8,7 @@ import F12Volume from './F12Volume.vue'
       <strong>开场问题：</strong>你给三条素材统一加上 <code>-af "volume=2.0"</code> 想把声音都提起来，导出后一条震得人耳朵疼、一条听着刚好、还有一条依然偏小——同一个「翻倍」，为什么结果差这么多？
     </div>
 
-    <h2>增益系数的本质</h2>
+    <h2>采样值乘增益</h2>
     <p>
       音量滤镜的本质很朴素：<strong>把音频的每个采样值乘上一个系数</strong>。乘 0.5 是减半，乘 2.0 是翻倍，写成分贝就是 <code>-6dB</code> 与 <code>+6dB</code>。它处理的是「这一个文件相对它自己」的增减，压根不知道这段声音原本有多响。
     </p>
@@ -16,7 +16,7 @@ import F12Volume from './F12Volume.vue'
       于是「让不同视频听起来一样大」这件事，只能让人来扛。旧办法无非两条：一条是<strong>逐条试听、手动试系数</strong>——素材一多就没法收场，而且换个人听结果又不一样；另一条是靠<strong>耳朵挑静音段来修剪</strong>——既慢又容易漏。真正的问题是：<strong>怎样让一批响度各异的素材，输出后听起来是同一个音量？</strong>
     </p>
 
-    <h2>倍数与分贝写法</h2>
+    <h2>音量滤镜增益参数</h2>
     <p>
       最直接的写法就是用 <code>volume</code> 滤镜，参数既可以是倍数，也可以是分贝：
     </p>
@@ -30,7 +30,7 @@ import F12Volume from './F12Volume.vue'
       这个方案做对了一件事：<strong>增益是精确、可复现的</strong>——你说乘多少就乘多少，同一段素材跑两遍结果完全一致，比在剪辑软件里凭手感拖音量条靠谱得多。
     </p>
 
-    <h2>固定增益的盲区</h2>
+    <h2>固定增益偏差</h2>
     <ul>
       <li><code>volume</code> 是<strong>固定增益，不是「听感对齐」</strong>。源文件本身偏小的那条，乘 2.0 之后仍然偏小；源文件本来就满的那条，乘 2.0 直接冲破上限——于是出现开场里「一条震耳、一条刚好、一条偏小」的分裂结果。</li>
       <li>增益过头会<strong>削波失真（Clipping）</strong>：采样值一旦越过最大值就被硬切平，波形被切掉的那部分<strong>永久无法还原</strong>。你没法靠「再调小一点」把已经切掉的声音补回来。</li>
@@ -39,7 +39,7 @@ import F12Volume from './F12Volume.vue'
       <li>修剪静音也好不到哪去：没有现成的检测手段时，只能人肉快进，长视频里漏掉几段静音几乎不可避免。</li>
     </ul>
 
-    <h2>测量后对齐响度</h2>
+    <h2>峰值测量前置</h2>
     <p>
       不推翻 <code>volume</code>，而是先补上「<strong>动手之前先测量</strong>」这一层。调音量前，先用 <code>volumedetect</code> 把当前峰值报出来：
     </p>
@@ -74,13 +74,13 @@ import F12Volume from './F12Volume.vue'
       <strong>两条必须记住的边界：</strong>其一，<code>volume</code> 的分贝与倍数是两种不同单位，<code>volume=0.5</code> 是减半（约 -6dB），<code>volume=-3dB</code> 是降低 3 分贝，别把「倍」当「dB」；其二，<strong>削波不可逆</strong>，任何增益前都要先用 <code>volumedetect</code> 探峰值，必要时再串一个 <code>limiter</code> 兜住上限。想「让文件听起来一样响」时不要用 <code>volume</code> 硬拉，改用 <code>loudnorm</code>。
     </div>
 
-    <h2>两套调整方案</h2>
+    <h2>网络与广播响度</h2>
     <figure class="lesson-figure">
       <figcaption>「基础调整」页签列出 <code>volume</code> 的倍数与分贝写法；「响度标准化」页签给出 <code>loudnorm</code> 的网络视频（<code>-16 LUFS</code>）与广播（<code>-24 LUFS</code>）两套参数，并列出 YouTube、Netflix、Apple Music 等平台各自的响度标准；「高级处理」页签再补上动态范围压缩、降噪、语音增强与多音轨选择，末尾还有一条条踩坑提示。</figcaption>
       <F12Volume />
     </figure>
 
-    <h2>相对与绝对之分</h2>
+    <h2>相对增益与响度</h2>
     <p>
       音量这件事要分清两个层次：<code>volume</code> 是「对当前文件乘一个数」，是相对增益，改不了不同素材之间的响度差；<code>loudnorm</code> 是「把最终响度收敛到某个目标」，处理的是听感上的一致。要用 <code>volume</code> 就永远先测峰值、防止削波；要让一批视频听起来一样响，就把目标交给 <code>loudnorm</code>。
     </p>

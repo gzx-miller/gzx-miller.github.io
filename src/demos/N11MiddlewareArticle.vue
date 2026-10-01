@@ -8,7 +8,7 @@ import N11Middleware from './N11Middleware.vue'
       <strong>开场问题：</strong>你在 <code>middleware/auth.ts</code> 里写好了「没登录就跳登录页」的判断，文件规规矩矩放在 <code>middleware/</code> 目录下。可切到 <code>/admin</code> 一试——没登录照样进去了，控制台连一条中间件日志都没有。文件名对了、目录对了、逻辑也没写错，它为什么一声不吭地被跳过了？
     </div>
 
-    <h2>跳转前的拦截时机</h2>
+    <h2>导航拦截时机</h2>
     <p>
       你要处理的是同一类需求：进后台之前先看登录态，进详情页之前先看权限，每次导航顺手记一次埋点。它们有个共同点——<strong>都得发生在「页面开始渲染」之前</strong>，判断得早，才不会先渲染出一个不该被看到的页面再补救。
     </p>
@@ -19,7 +19,7 @@ import N11Middleware from './N11Middleware.vue'
       于是问题落到：<strong>能不能有一种「写在文件里、由页面按需挂载、在导航前执行」的拦截方式？</strong>
     </p>
 
-    <h2>文件创建与默认导出</h2>
+    <h2>中间件文件定义</h2>
     <p>
       先在 <code>middleware/</code> 下建一个文件，默认导出 <code>defineNuxtRouteMiddleware((to, from) =&gt; { ... })</code>，在函数里写判断；再在需要用它的页面里写 <code>definePageMeta({ middleware: 'auth' })</code>，把文件名当成名字引用过来。
     </p>
@@ -27,7 +27,7 @@ import N11Middleware from './N11Middleware.vue'
       这个方案做对了一件事：<strong>约定即注册</strong>。文件放进 <code>middleware/</code> 就自动被收录，文件名就是它的名字，页面按名引用即可，不用再去维护一张路由表，也不用在配置文件里登记。逻辑集中在一处，页面按需挂载。
     </p>
 
-    <h2>页面声明的必要性</h2>
+    <h2>页面声明与挂载</h2>
     <ul>
       <li><strong>命名中间件默认不生效。</strong>文件放对目录不等于会执行，页面必须在 <code>definePageMeta</code> 里声明它；漏了声明不报错，只是安静地不跑——开场那一幕就是这么来的。</li>
       <li>一个页面要跑多个判断，就得写成数组 <code>middleware: ['auth', 'admin']</code>，执行顺序就是数组顺序；写反了（先查权限、后查登录）时，前面的中间件拿不到已经确定的登录态而误判。</li>
@@ -35,7 +35,7 @@ import N11Middleware from './N11Middleware.vue'
       <li>名字对不上同样不报错：文件叫 <code>auth.ts</code>，页面里却引用 <code>'authGuard'</code>，中间件被安静地跳过。</li>
     </ul>
 
-    <h2>全局与页面的分级</h2>
+    <h2>全局中间件注册</h2>
     <p>
       先补上「全站都要跑」的那一类。把无差别生效的逻辑放进以 <code>.global</code> 结尾的文件，例如 <code>middleware/stats.global.ts</code>，它会自动对所有路由生效，不需要任何页面声明。至此三类中间件的顺序也定下来了：<strong>全局中间件 → 页面声明的命名中间件（按数组顺序）→ 内联中间件</strong>。
     </p>
@@ -61,7 +61,7 @@ import N11Middleware from './N11Middleware.vue'
       <strong>两个常见误区：</strong>用返回布尔值冒充结果——<strong>放行就是「不返回」</strong>，拦截要用 <code>navigateTo</code> 或 <code>abortNavigation</code>，返回 <code>true</code> / <code>false</code> 不会产生任何拦截效果；把只有浏览器才有的 API（<code>window</code>、<code>localStorage</code>）写进中间件——客户端导航时看着正常，服务端渲染那一次会直接出错。
     </div>
 
-    <h2>命名全局与内联写法</h2>
+    <h2>三类中间件对照</h2>
     <figure class="lesson-figure">
       <figcaption>切换「命名中间件 / 全局中间件 / 页面内联中间件」三个页签，对照它们的定义代码与使用方式，就能看清「哪种放哪个目录、要不要在页面里声明」；下方表格列出 <code>navigateTo</code> 与 <code>abortNavigation</code> 三个导航控制方法的用法。</figcaption>
       <N11Middleware />

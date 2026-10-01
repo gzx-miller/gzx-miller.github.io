@@ -8,7 +8,7 @@ import V16PluginDev from './V16PluginDev.vue'
       <strong>开场问题：</strong>你想在构建时把版本号注入代码，顺手写了个只在 <code>transform</code> 里做一次字符串替换的插件。挂上去之后本地开发从秒开变成了十几秒才响应，改一行样式要转半天——这个插件明明只替换了<strong>一个</strong>占位符，怎么会把整个项目拖垮？
     </div>
 
-    <h2>构建期内容注入</h2>
+    <h2>构建期信息注入</h2>
     <p>
       你遇到的需求都很具体：想在代码里直接 <code>import</code> 一个 <code>.md</code> 文件把它当组件渲染，想把版本号这类信息在构建时注进去，想给开发服务器加一个自定义接口。这些事现有插件都办不到，因为它们不在别人的设计目标里。
     </p>
@@ -24,7 +24,7 @@ import V16PluginDev from './V16PluginDev.vue'
       这个方案做对了一件事：<strong>它把「对模块代码的批量改写」收进了一个标准接口</strong>。开发时每个模块请求都会经过它，构建时也会经过它；不再需要脚本、不再需要两套逻辑。
     </p>
 
-    <h2>逐模块调用开销</h2>
+    <h2>逐模块转换成本</h2>
     <ul>
       <li><code>transform</code> 会被<strong>每个模块</strong>调用一次。只按后缀判断就处理，等于连 <code>node_modules</code> 里的依赖也要过一遍正则——这正是开场里开发服务器变慢的原因。</li>
       <li>光改代码不够：想给 <code>resolve.extensions</code> 加一项、想加一个开发接口，<code>transform</code> 全都做不到。</li>
@@ -32,7 +32,7 @@ import V16PluginDev from './V16PluginDev.vue'
       <li>插件没写 <code>name</code> 或与别人重名，报错时日志里只有一句无名的 warning，根本定位不到是谁干的。</li>
     </ul>
 
-    <h2>两类钩子分工</h2>
+    <h2>两类钩子职责</h2>
     <p>
       先补「钩子分类」。插件对象能挂两类钩子，各管一摊：<strong>Vite 独有钩子</strong>服务于开发服务器、HTML 与 HMR——<code>config</code> 改配置、<code>configResolved</code> 拿最终配置、<code>configureServer</code> 加中间件、<code>transformIndexHtml</code> 改 HTML、<code>handleHotUpdate</code> 处理热更新；<strong>Rollup 兼容钩子</strong>服务于模块的解析、加载与转换——<code>resolveId</code>、<code>load</code>、<code>transform</code>。一次模块请求流经的先后顺序大致是：
     </p>
@@ -55,13 +55,13 @@ import V16PluginDev from './V16PluginDev.vue'
       <strong>两条必守的线：</strong><code>transform</code> 是高频钩子，务必先按 <code>id</code> 过滤、非目标文件立即 <code>return null</code>，否则一个无关插件就能拖慢整个开发服务器；插件 <code>name</code> 必须唯一，否则报错时你根本分不清是哪个插件出的问题。
     </div>
 
-    <h2>骨架与示例结构</h2>
+    <h2>骨架结构与发布</h2>
     <figure class="lesson-figure">
       <figcaption>切 hooks / example / publish 三个页签，看一个插件骨架里有哪些钩子、注入版本号的最小示例怎么写，以及发布到 npm 的命名与包结构规范。</figcaption>
       <V16PluginDev />
     </figure>
 
-    <h2>函数式插件约定</h2>
+    <h2>函数式插件实现</h2>
     <p>
       自定义插件就是「返回一个带 <code>name</code> 与钩子对象的函数」：Vite 独有钩子管开发服务器、HTML 与 HMR，Rollup 兼容钩子管模块的解析、加载与转换。写它的关键不在堆钩子，而在两件事——用 <code>resolveId</code> 加 <code>load</code> 造出虚拟模块，以及让高频的 <code>transform</code> 先把无关文件挡在门外。
     </p>

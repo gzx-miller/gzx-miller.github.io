@@ -8,7 +8,7 @@ import E10Upload from './E10Upload.vue'
       <strong>开场问题：</strong>用户传了个 8MB 的 PDF 上去，转了一分钟才收到「文件过大」的报错——为什么不能在选中的那一刻就拦住？还有那个 <code>accept</code>，明明写了却挡不住用户改后缀？
     </div>
 
-    <h2>拖拽上传的应用场景</h2>
+    <h2>拖拽上传场景需求</h2>
     <p>
       后台里几乎都绕不开上传：课程资料、发票、头像、批量导入表格。你希望的是一个「拖进来就收下」的区域，用户把文件往上一扔，页面立刻开始处理。可真正要写出这段体验，要考虑的事情比想象中多得多。
     </p>
@@ -16,7 +16,7 @@ import E10Upload from './E10Upload.vue'
       <strong>不掌控这些细节的代价是双向的</strong>：对用户，是选了不合适的大文件、等半天才被告知失败，白白浪费网速和时间；对系统，是一个不该进来的文件已经跑到了服务端的校验层才被拒，白白占了带宽和存储。真正划算的拦截应该发生在文件「还没离开浏览器」的时候——而这正是上传组件必须做对的核心。
     </p>
 
-    <h2>原生文件选择框</h2>
+    <h2>原生文件选择入口</h2>
     <p>
       最朴素的做法：放一个 <code>input type="file"</code>，监听它的 change 事件拿到 <code>files</code>，再自己拼一个表单数据发出去，同时用一串 <code>span</code> 把已选文件列出来。
     </p>
@@ -24,7 +24,7 @@ import E10Upload from './E10Upload.vue'
       它做对了一件最基本的事：<strong>把本地文件和浏览器里的数据接上了</strong>。用户选中文件、代码拿到 File 对象，这就有了后续一切——校验、上传、展示列表，全都建立在「先拿到这个对象」之上。
     </p>
 
-    <h2>拖放支持的成本</h2>
+    <h2>拖放事件与列表维护</h2>
     <ul>
       <li>原生 input 只能点选，想支持把文件拖进来还得自己接一整套拖放事件。</li>
       <li>已选文件的列表要自己写、自己维护，删除某一条也要自己同步数组。</li>
@@ -33,7 +33,7 @@ import E10Upload from './E10Upload.vue'
       <li>「先选好、确认后再统一提交」这种流程没法自然表达。</li>
     </ul>
 
-    <h2>上传钩子的业务判断</h2>
+    <h2>上传钩子业务判断</h2>
     <p>
       不推翻「先拿到 File 对象」，而是把这一整套交给 <code>el-upload</code>，你只需在几个钩子上填业务判断。
     </p>
@@ -53,13 +53,13 @@ import E10Upload from './E10Upload.vue'
       <strong>一个最容易误解的点：</strong><code>auto-upload=false</code> 只是「暂不上传」，<strong>文件此刻已经进入列表了</strong>，并不是不接收。最终仍必须显式发起上传，否则用户选完了、界面也显示了，服务端却什么都没收到——这种「看着像成功、其实没提交」的错最坑人。
     </div>
 
-    <h2>超限与类型的拦截</h2>
+    <h2>超限类型当场拦截</h2>
     <figure class="lesson-figure">
       <figcaption>把文件拖进区域，试试超 5MB 或类型不符时会不会当场被拦下，再试着一次放进第 4 个文件。</figcaption>
       <E10Upload />
     </figure>
 
-    <h2>浏览器内前置校验</h2>
+    <h2>离开浏览器前校验</h2>
     <p>
       文件上传的核心不是那个拖拽区域好不好看，而是<strong>把校验提前到文件离开浏览器之前</strong>：类型与大小交给 <code>before-upload</code> 拦截，数量交给 <code>limit</code> 与 <code>on-exceed</code>，列表交给 <code>file-list</code> 托管。记住 <code>accept</code> 只管过滤提示、<code>auto-upload=false</code> 不等于不上传，就不会写出「看着传了、其实没传」的流程。
     </p>

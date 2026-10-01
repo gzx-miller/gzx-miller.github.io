@@ -8,7 +8,7 @@ import R12ExternalStore from './R12ExternalStore.vue'
       <strong>开场问题：</strong>导航栏的角标显示未读数 <code>3</code>，切到工作台统计却还是 <code>2</code>——同一份数据，同一个页面，两处显示的数字居然对不上。
     </div>
 
-    <h2>外部数据源的来源</h2>
+    <h2>React外部数据源</h2>
     <p>
       这类数据的源头根本不在 React 里：它可能是一个全局计数器、一个 <code>WebSocket</code> 连接推来的消息、浏览器 API 的状态，或者某个状态库自己在 React 之外维护的对象。React 只负责把它们画出来，可它<strong>无法感知这些值的改变</strong>——你改了外部变量，React 不会自动重渲染。
     </p>
@@ -19,7 +19,7 @@ import R12ExternalStore from './R12ExternalStore.vue'
       抽象出来就是一个问句：<strong>React 如何可靠地读取自身状态系统之外、会随时间变化的数据？</strong>
     </p>
 
-    <h2>各自订阅的副本</h2>
+    <h2>组件独立订阅副本</h2>
     <p>
       最直接的做法：让每个用到这份数据的组件各自 <code>useState</code> 存一份，再在 <code>useEffect</code> 里向外部数据源订阅，变化时调用 <code>setState</code> 把新值同步进来。
     </p>
@@ -27,7 +27,7 @@ import R12ExternalStore from './R12ExternalStore.vue'
       这个方案做对了一件事：<strong>它把外部变化通过 <code>setState</code> 拉进了 React 的更新循环</strong>，React 终于有机会重渲染了。当外部数据源只有一个消费者、更新也不频繁时，这套写法完全能跑。
     </p>
 
-    <h2>读取版本的错位</h2>
+    <h2>并发渲染快照错位</h2>
     <ul>
       <li>两个组件各自订阅、各自 <code>setState</code>，更新先后不一，某一次渲染里它们可能读到外部值的<strong>不同时刻版本</strong>，界面自相矛盾。</li>
       <li>并发渲染会把一次渲染拆开、甚至中途作废，<code>useEffect</code> 的订阅时机与读取时机脱节，读到「半旧半新」的值。</li>
@@ -36,7 +36,7 @@ import R12ExternalStore from './R12ExternalStore.vue'
       <li>取消订阅函数写错、忘了返回、或在错误的分支里返回，组件卸载后仍会收到通知，造成泄漏与报错。</li>
     </ul>
 
-    <h2>专用接口的统一读取</h2>
+    <h2>订阅接口统一读取</h2>
     <p>
       不推翻「订阅」，而是把这件事交给一个专用接口，让 React 亲自管理读取时机：<code>useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)</code>。外部数据源只负责两件事——保存一份不可变快照、维护监听器集合。组件把 <code>subscribe</code> 和 <code>getSnapshot</code> 交给 React，由 React 决定在什么时刻、以什么方式读取。
     </p>
@@ -56,13 +56,13 @@ import R12ExternalStore from './R12ExternalStore.vue'
       还有两处细节要一起补上：做服务端渲染时提供 <code>getServerSnapshot</code>，保证服务端与水合阶段拿到一致的初始内容；订阅返回的取消函数要<strong>真正生效</strong>，让组件卸载后不再收到通知。把这两点补齐，state 库、浏览器 API、框架级缓存这些场景就都能用同一套接口讲清楚。
     </p>
 
-    <h2>双面板数值同步</h2>
+    <h2>双面板数值一致</h2>
     <figure class="lesson-figure">
       <figcaption>点几次「外部 Store +1」，看两个独立面板是否始终显示同一个数字、最近更新时间是否同步刷新。</figcaption>
       <R12ExternalStore />
     </figure>
 
-    <h2>同份数据的读取时机</h2>
+    <h2>读取时机与一致性</h2>
     <p>
       读取 React 之外的数据，难点不在「读」，而在「什么时候读、大家读到的是不是同一份」。<code>useSyncExternalStore</code> 用 <code>subscribe</code> 管变化、用 <code>getSnapshot</code> 管快照，再靠 <code>Object.is</code> 相等这份契约换来并发渲染下的一致视图——外部数据因此不会在界面上自相矛盾。
     </p>

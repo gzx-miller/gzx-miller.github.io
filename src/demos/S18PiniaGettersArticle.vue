@@ -8,7 +8,7 @@ import S18PiniaGetters from './S18PiniaGetters.vue'
       <strong>开场问题：</strong>商品总数、均价、低库存、购物车合计，四五个组件各自算了一遍同样的结果——为什么同一份「派生数据」要重复计算这么多次？
     </div>
 
-    <h2>多组件重复算</h2>
+    <h2>多组件重复计算</h2>
     <p>
       你在做「秋日森林小铺」的商品页：顶部要显示商品总数与均价，侧栏要看低库存商品，购物车要算合计金额，分类筛选还要按类别把商品分组。这些数字有个共同点——<strong>它们都不是新的状态，而是从已有的商品与购物车数据里算出来的</strong>。
     </p>
@@ -16,7 +16,7 @@ import S18PiniaGetters from './S18PiniaGetters.vue'
       于是你很自然地在每个用到它的组件里各写了一个 <code>computed</code>：商品列表页算一遍总数，统计卡片又算一遍，购物车再算一遍合计。刚开始没问题，直到某天「均价」的规则从「四舍五入」改成「保留两位小数」——你不得不在好几个文件里翻找同一段算法。
     </p>
 
-    <h2>组件层各算</h2>
+    <h2>组件内各自计算</h2>
     <p>
       最省事的做法：把派生逻辑留在组件层，谁需要就在谁的 <code>computed</code> 里算一次。
     </p>
@@ -54,13 +54,13 @@ import S18PiniaGetters from './S18PiniaGetters.vue'
       <strong>解构时的小提醒：</strong>直接从 store 上解构状态会丢掉响应式，取状态与 getter 要用 <code>storeToRefs</code>；而 action 是普通函数，直接解构即可。分不清时记住一句——<strong>需要保持响应式的用 <code>storeToRefs</code>，只是调用动作的直接取</strong>。
     </div>
 
-    <h2>统计合计自动更新</h2>
+    <h2>统计与合计更新</h2>
     <figure class="lesson-figure">
       <figcaption>切换分类、加购商品，观察 store 里的 getter 如何自动更新统计与购物车合计。</figcaption>
       <S18PiniaGetters />
     </figure>
 
-    <h2>带参则缓存失效</h2>
+    <h2>带参缓存失效</h2>
     <p>
       Pinia 的 Getter 本质上就是计算属性：它把「从状态派生出的结果」集中放进 store，让统计、筛选、分组、金额这些结果只定义一次、处处共享，还天然带着缓存。记住三条——依赖不变不重算、保持纯函数无副作用、返回函数的 getter 会失去缓存。
     </p>

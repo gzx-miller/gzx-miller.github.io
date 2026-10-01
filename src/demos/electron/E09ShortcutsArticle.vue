@@ -8,7 +8,7 @@ import E09Shortcuts from './E09Shortcuts.vue'
       <strong>开场问题：</strong>你给应用做了个"按 Ctrl+Shift+K 唤起窗口"的功能，用 <code>globalShortcut.register</code> 注册。上线后有人反馈按了没反应——那个组合被输入法抢先占用了，而 <code>register</code> 返回的 <code>false</code> 你根本没看；更糟的是，有人退出应用后这个键在别的软件里也失灵了，只能重启电脑。
     </div>
 
-    <h2>后台唤起诉求</h2>
+    <h2>未聚焦唤起需求</h2>
     <p>
       你希望应用不在前台时也能被一个按键唤起——比如全局截图、快速记一笔。但渲染进程里能监听的只有 <code>keydown</code>，而它<strong>只在窗口聚焦时收到事件</strong>：用户一切到别的软件，你的按键监听就是死的。
     </p>
@@ -19,7 +19,7 @@ import E09Shortcuts from './E09Shortcuts.vue'
       所以要问的是：怎样让按键在应用未聚焦时也能触发，并且不抢占、不残留？
     </p>
 
-    <h2>主进程内注册</h2>
+    <h2>系统级按键注册</h2>
     <p>
       最直接的写法是在主进程里调 <code>globalShortcut.register('CommandOrControl+Shift+K', callback)</code>，放在 <code>app.whenReady()</code> 之后注册。
     </p>
@@ -27,7 +27,7 @@ import E09Shortcuts from './E09Shortcuts.vue'
       这个方案做对了一件事：<strong>它拿到的是系统级的按键监听，应用不在前台也能被触发</strong>。<code>CommandOrControl</code> 前缀还能自动跨平台——macOS 上是 ⌘、其他系统是 Ctrl。
     </p>
 
-    <h2>键位冲突失灵</h2>
+    <h2>键位冲突与重复注册</h2>
     <ul>
       <li>不看 <code>register</code> 的返回值：键位被别的应用占用时返回 <code>false</code>，回调根本不触发，而你毫不知情，用户按了没反应只能来投诉。</li>
       <li>不检测是否已注册：同一个键位注册两次，第二次静默失败或覆盖，行为变得不确定。</li>
@@ -37,7 +37,7 @@ import E09Shortcuts from './E09Shortcuts.vue'
       <li>回调里直接操作某个窗口变量：用户切走期间窗口可能已被关闭，回调触发时操作的是已销毁的窗口。</li>
     </ul>
 
-    <h2>冲突检查与注销</h2>
+    <h2>注册校验与退出注销</h2>
     <p>
       第一步，<strong>注册前检查、注册后校验</strong>。先用 <code>globalShortcut.isRegistered(accel)</code> 看这个键是否已被占用，再调 <code>register</code> 并用它的布尔返回值确认是否成功；一旦失败，就给用户一个降级提示（换个键、或告知"该键已被占用"），<strong>绝不强行覆盖别人的键位</strong>。
     </p>
@@ -68,7 +68,7 @@ import E09Shortcuts from './E09Shortcuts.vue'
       <E09Shortcuts />
     </figure>
 
-    <h2>全局注册归属</h2>
+    <h2>全局注册归属边界</h2>
     <p>
       要让按键在应用未聚焦时也生效，就得用主进程的 <code>globalShortcut</code>：注册前用 <code>isRegistered</code> 查冲突、用返回值确认成败，退出时在 <code>will-quit</code> 里 <code>unregisterAll</code> 释放。它和菜单上的 <code>accelerator</code> 是两回事——前者是系统级资源、要自己管生命周期，后者交给菜单系统、只在聚焦时生效。
     </p>

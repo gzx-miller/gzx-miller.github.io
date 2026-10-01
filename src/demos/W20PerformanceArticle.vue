@@ -8,7 +8,7 @@ import W20Performance from './W20Performance.vue'
       <strong>开场问题：</strong>应用上线后，有用户在老手机上反馈卡顿。你打开代码，第一反应是「模型面数太多」，于是把三角形砍掉一半——帧率几乎没动。你又怀疑着色器太复杂，把它简化成只输出一个纯色——还是卡。折腾了半天，你甚至不知道下一步该改哪里。为什么「看起来最重」的地方，往往不是真正的瓶颈？
     </div>
 
-    <h2>多环节的耗时分布</h2>
+    <h2>帧时间耗时分布</h2>
     <p>
       因为一帧的时间是被好几个<strong>相互独立</strong>的环节瓜分的，而「卡」只说了结果，没有说在哪一环：
     </p>
@@ -24,7 +24,7 @@ import W20Performance from './W20Performance.vue'
       所以问题不是「怎么优化」，而是先要回答：<strong>这一帧到底卡在哪一环，我凭什么这么判断？</strong>
     </p>
 
-    <h2>帧时间测量方法</h2>
+    <h2>帧率测量指标</h2>
     <p>
       先把「测量」建起来。用 <code>requestAnimationFrame</code> 驱动渲染循环，在循环里用相邻两帧的时间差算出帧时间与 FPS，同时统计三个关键数字：<strong>draw call 数</strong>、<strong>三角形总数</strong>、<strong>显存占用</strong>（缓冲与纹理的估算）。
     </p>
@@ -32,7 +32,7 @@ import W20Performance from './W20Performance.vue'
       这个方案做对了一件事：<strong>它把「感觉卡」变成了「哪个指标越界」</strong>。有了这几个数，判断就有了落点——draw call 高通常指向 CPU 瓶颈，三角形和采样量高通常指向 GPU 瓶颈，显存大则可能落进带宽瓶颈。
     </p>
 
-    <h2>单一指标的误判</h2>
+    <h2>单一指标误判</h2>
     <ul>
       <li><strong>单看一个数说明不了问题。</strong>只看到 FPS 是 30，你分不清它是设备本该如此的 30，还是被拖累出来的 30，必须把优化开 / 关两种状态摆在一起对比。</li>
       <li><strong>draw call 的代价与三角形无关。</strong>这正是砍面数没用的原因——draw call 有固定的 CPU 与驱动开销，几十次提交，每次都要走一遍状态校验，不管你让每次画多少三角形。</li>
@@ -40,7 +40,7 @@ import W20Performance from './W20Performance.vue'
       <li><strong>帧时间本身会抖。</strong>单帧耗时受调度影响很大，看一两帧没有意义，得看一段时间内的趋势。</li>
     </ul>
 
-    <h2>绘制次数优先削减</h2>
+    <h2>绘制调用削减</h2>
     <p>
       先削最大头——draw call。它有两条路，本课都能亲手拨：<strong>实例化</strong>，把重复几何的逐实例差异做成属性，一次 draw 画完 N 个；<strong>合批（batching）</strong>，把多个分散的小网格合并进一个大的 index buffer，一次性画出来。两者都把 N 次提交压成 1 次，也正是本课 draw call 计数变化的来源。
     </p>
@@ -66,7 +66,7 @@ import W20Performance from './W20Performance.vue'
       <W20Performance />
     </figure>
 
-    <h2>测改循环的闭环</h2>
+    <h2>测改循环闭环</h2>
     <p>
       性能优化不是「哪里有代码就改哪里」，而是一个「先测、再改、再测」的闭环。先建立起 FPS、帧时间、draw call、显存这几个指标，确认瓶颈落在 CPU 提交、GPU 渲染还是带宽哪一环；再对症下手——最常见、最直接的一刀就是削减 draw call（实例化或合批），接着管好纹理的显存与带宽，最后拒绝每帧重建缓冲这类隐形浪费。
     </p>

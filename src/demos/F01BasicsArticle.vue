@@ -8,7 +8,7 @@ import F01Basics from './F01Basics.vue'
       <strong>开场问题：</strong>你把一个 <code>.mp4</code> 文件的后缀直接改成 <code>.mkv</code>，播放器照样能放，画质一点没变——那 FFmpeg 里那句「转格式」，到底在转什么东西？
     </div>
 
-    <h2>容器与内容之分</h2>
+    <h2>容器与流分层</h2>
     <p>
       你以为 <code>.mp4</code> 是一种「视频格式」，可它其实只是一个<strong>盒子</strong>。同一个 MP4 文件里，可能装着 H.264 的视频加 AAC 的音频，也可能装着 H.265 加另一条音轨。真正决定画面怎么被压缩的，是盒子里的<strong>编码</strong>，而不是盒子的名字。
     </p>
@@ -16,7 +16,7 @@ import F01Basics from './F01Basics.vue'
       于是问题就来了：拿到一个陌生文件时，你往往说不清它内部到底是什么。旧办法有三笔隐藏成本落在你身上——靠后缀判断，只能看到盒子，看不到里面的编码；靠播放器右键属性，字段少、还不精确，更没法塞进脚本；不看结构就直接下命令，多音轨、多字幕时该保留哪条全靠猜。所以要回答的是：<strong>一个媒体文件由哪几层组成，而一条 FFmpeg 命令又是怎么把「读什么、做什么、写到哪」讲清楚的？</strong>
     </p>
 
-    <h2>输入输出两参数</h2>
+    <h2>命令两端参数</h2>
     <p>
       最省事的写法只占两个位置：<code>ffmpeg -i input.mp4 output.avi</code>。FFmpeg 会根据输出后缀自动推断目标容器，再自动挑一组默认编码器把文件转出来。
     </p>
@@ -24,7 +24,7 @@ import F01Basics from './F01Basics.vue'
       这个写法做对了一件实实在在的事：<strong>它用 <code>-i</code> 把「输入」和「其余指令」分开了</strong>，让你不用记一堆开关也能得到一个能播的文件。只求「先转出来再说」的时候，它完全够用。
     </p>
 
-    <h2>未知后缀的报错</h2>
+    <h2>输出格式识别失败</h2>
     <ul>
       <li>把输出后缀写成一个 FFmpeg 不认识的扩展名，命令会直接报 <code>Unable to find a suitable output format</code>——它认不出你想要的盒子。</li>
       <li>后缀改成 <code>.mkv</code> 但内容仍是 MP4 的那次实验说明，<strong>改名字只换了标签、没有换盒子</strong>，更没碰过里面的编码。</li>
@@ -32,7 +32,7 @@ import F01Basics from './F01Basics.vue'
       <li>不知道 <code>-i</code> 前后选项含义不同，把「作用于输入」的参数写到输出位置，命令的行为会完全变样。</li>
     </ul>
 
-    <h2>文件的三层结构</h2>
+    <h2>媒体文件三层结构</h2>
     <p>
       不推翻这条命令，而是先把「文件由什么组成」想清楚，再看命令为什么这样排。一个媒体文件从上到下分三层：<strong>容器</strong>（Container，如 MP4、MKV、AVI）只负责封装；<strong>编解码器</strong>（Codec，如 H.264、H.265）负责压缩与解压；<strong>流</strong>（Stream）是容器里的独立轨道，通常一条视频流、一到多条音频流、零到多条字幕流。再往上还有两个尺度：<strong>帧</strong>是单张画面，<strong>码率</strong>是每秒平均数据量——它们和容器、编解码器一起，构成你理解 FFmpeg 的几大核心概念，本课先建立直觉，具体的帧率与码率调节留到后面几课。
     </p>
@@ -52,13 +52,13 @@ import F01Basics from './F01Basics.vue'
       <strong>最容易混的一处：</strong>容器格式不等于编码格式。MP4 这个盒子今天装 H.264、明天也能装 H.265。看到后缀只能知道盒子，想知道内容必须去查流。另外，Windows 上装完 FFmpeg 要把 <code>bin</code> 目录加进 PATH 环境变量，否则命令行根本找不到 <code>ffmpeg</code> 这个命令。
     </div>
 
-    <h2>三页签分层导览</h2>
+    <h2>分层概念导览</h2>
     <figure class="lesson-figure">
       <figcaption>切换「核心概念 / 安装方法 / 命令结构」三个页签：先建立容器、编解码器、流的直觉，再看一条命令是怎么被拆开的。</figcaption>
       <F01Basics />
     </figure>
 
-    <h2>读写的选项划分</h2>
+    <h2>输入输出选项划分</h2>
     <p>
       一个媒体文件是「容器装流、流有编码」的分层结构，而 <code>-i</code> 前后的选项分别管读和写。把这两件事记牢，你再看任何一条 FFmpeg 命令，都能说清每个参数站在哪一边、管的是输入还是输出。
     </p>

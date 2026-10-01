@@ -8,7 +8,7 @@ import U08RpxUnits from './U08RpxUnits.vue'
       <strong>开场问题：</strong>你照着一份宽 750 的设计稿，把标注原样写成 <code>px</code>：卡片宽 <code>690px</code>、圆角 <code>24px</code>、边距 <code>30px</code>。在 375 宽的模拟器里看着刚好，换到 414 宽的手机，卡片两侧各溢出一截被裁掉；再看平板，留白又宽得离谱。
     </div>
 
-    <h2>绝对尺寸的痛点</h2>
+    <h2>固定像素多屏维护</h2>
     <p>
       你想要的很朴素：同一套尺寸，在不同屏幕上「看起来一样」。最直接的做法是写死 <code>px</code>。可这样做，三份成本全落到你身上。
     </p>
@@ -19,7 +19,7 @@ import U08RpxUnits from './U08RpxUnits.vue'
       于是问题有了形状：<strong>有没有一个单位，能让「屏幕宽度 = 750」，从而让标注直接照抄、尺寸自动等比缩放？</strong>
     </p>
 
-    <h2>宽度百分比方案</h2>
+    <h2>宽度百分比自适应</h2>
     <p>
       最省事的替代是用百分比：宽度写 <code>100%</code>，相对父容器算，天然随屏幕变化。
     </p>
@@ -27,7 +27,7 @@ import U08RpxUnits from './U08RpxUnits.vue'
       这个方案做对了一件事：<strong>占比类尺寸确实不再写死</strong>，一个顶栏设成 <code>width: 100%</code>，在哪种屏幕上都能铺满。
     </p>
 
-    <h2>百分比的能力边界</h2>
+    <h2>百分比适用边界</h2>
     <ul>
       <li>高度、字号、圆角、边框没法用百分比——百分比相对父容器算，圆角写成 <code>50%</code> 会变成随元素大小变化的椭圆，而不是固定的圆。</li>
       <li>百分比只跟父容器挂钩，跟「屏幕宽」没有直接关系，嵌套层级一变，比例就错。</li>
@@ -35,7 +35,7 @@ import U08RpxUnits from './U08RpxUnits.vue'
       <li>想在 JS 里按屏幕宽算出一个像素值时，还得自己监听屏幕尺寸变化，绕远路。</li>
     </ul>
 
-    <h2>rpx等比规则</h2>
+    <h2>rpx等比换算规则</h2>
     <p>
       真正的答案是一个专门的单位：<code>rpx</code>。它规定<strong>任意设备上，屏幕宽度恒等于 750rpx</strong>。换句话说，<span class="lesson-kv">1rpx = 屏幕宽度 ÷ 750</span>。
     </p>
@@ -56,13 +56,13 @@ import U08RpxUnits from './U08RpxUnits.vue'
       <strong>混用风险：</strong>把 <code>px</code> 和 <code>rpx</code> 混在同一个元素上时，只有 <code>rpx</code> 那一半在缩放，视觉比例会被拉歪；字号若一律用 <code>rpx</code>，在超大屏上会大到失衡，通常要给字号设上限或直接用 <code>px</code>。需要在 JS 里拿到像素值写进样式时，用 <code>uni.upx2px(n)</code> 把 <code>rpx</code> 换算成当前设备的 <code>px</code>。
     </div>
 
-    <h2>色条的等比缩放</h2>
+    <h2>色条等比缩放演示</h2>
     <figure class="lesson-figure">
       <figcaption>拖动「模拟设备宽度」滑块，看三条不同 <code>rpx</code> 宽的色条如何随屏幕宽度整体等比缩放、相对比例始终不变。</figcaption>
       <U08RpxUnits />
     </figure>
 
-    <h2>设计稿的等比落地</h2>
+    <h2>三类单位职责划分</h2>
     <p>
       <code>rpx</code> 把「屏幕宽度」固定切成 750 份，设计稿标注就能原样落地，尺寸随设备等比缩放。它解决的是绝对尺寸的适配，<code>px</code> 留给固定物理尺寸，<code>flex</code> 与百分比负责布局——三者各管一段，混用之前先想清楚谁在缩放。
     </p>

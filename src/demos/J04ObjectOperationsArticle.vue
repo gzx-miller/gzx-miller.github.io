@@ -8,7 +8,7 @@ import J04ObjectOperations from './J04ObjectOperations.vue'
       <strong>开场问题：</strong>资料卡上只把姓名从一个对象里读出来、换了个新名字，结果交回去的对象里 <code>role</code> 和 <code>city</code> 全没了——我只想改一个字段，其余的字段去哪了？
     </div>
 
-    <h2>资料卡更新需求</h2>
+    <h2>资料卡字段更新</h2>
     <p>
       你在做一张用户资料卡，上面三个字段：姓名、城市、角色。用户改了姓名，你要把新的资料交给组件重新渲染，同时希望表单上「取消」按钮还能回到改之前的样子。
     </p>
@@ -16,7 +16,7 @@ import J04ObjectOperations from './J04ObjectOperations.vue'
       如果直接在原对象上赋值——也就是写 <code>profile.name = 新值</code>——改动看起来最省事，代价却立刻出现：旧的那份数据已经不存在了，「取消」无处可回；如果这个对象被两个组件共享，一次编辑会让另一个组件也重组；框架层面也无法判断「这次的数据和上次是不是同一份」，因为引用没变，变化就藏在了对象内部。所以这里需要的是一件明确的事：<strong>在不修改原对象的前提下，得到一份更新后的新对象</strong>。
     </p>
 
-    <h2>逐字段复制</h2>
+    <h2>逐字段手动复制</h2>
     <p>
       最朴素的做法是手动逐字段复制：声明一个新对象，把 <code>name</code>、<code>city</code>、<code>role</code> 一个个抄进去，最后把要改的那个字段写成新值。
     </p>
@@ -24,7 +24,7 @@ import J04ObjectOperations from './J04ObjectOperations.vue'
       这个方案做对了一件事：<strong>它确实产生了一个新对象</strong>，原对象原封不动，这样一来「取消」有据可依、框架也能看到引用变化。方向是对的，麻烦出在写法上。
     </p>
 
-    <h2>字段遗漏与污染</h2>
+    <h2>漏抄字段隐患</h2>
     <ul>
       <li>字段一多就要写十几行赋值，将来给对象新增一个字段时最容易漏抄，而漏抄不会报错，只会让这个字段悄悄变成 <code>undefined</code>。</li>
       <li>读取时满屏都是 <code>profile.name</code>、<code>profile.city</code>，模板里带上前缀之后越写越长，深层字段还要逐层判断中间对象是否存在。</li>
@@ -32,7 +32,7 @@ import J04ObjectOperations from './J04ObjectOperations.vue'
       <li>嵌套结构更棘手：想更新 <code>address.city</code> 时直接赋值，改到的其实是原对象里那个内层对象，原数据还是被污染了。</li>
     </ul>
 
-    <h2>解构与展开</h2>
+    <h2>解构与展开语法</h2>
     <p>
       第一处改进针对「读」：用解构赋值按属性名一次性把需要的字段取成局部变量。写 <code>const { name, city } = profile</code>，左边靠名字与右边对齐，与写在哪个位置无关；数组则按位置解构，写成 <code>const [first, second] = list</code>。解构还支持默认值：属性不存在或为 <code>undefined</code> 时给一个兜底，省掉一整行判断。
     </p>
@@ -49,7 +49,7 @@ import J04ObjectOperations from './J04ObjectOperations.vue'
       最后是边界的取舍：需要一份彻底独立、连嵌套结构和 <code>Date</code>、<code>Map</code> 都复制出来的副本时，用 <code>structuredClone</code>；如果只是想让新对象的第一层与原来互不影响，展开语法就够，而且更快。判断标准很简单：<strong>我接下来会不会去改嵌套结构？不会的话，浅拷贝就够了；会的话，就沿路径逐层展开。</strong>
     </p>
 
-    <h2>姓名输入验证</h2>
+    <h2>姓名字段更新验证</h2>
     <figure class="lesson-figure">
       <figcaption>在姓名输入框里改几个字，看名字被解构出来、转成大写，而城市与角色仍原样保留在新对象里。</figcaption>
       <J04ObjectOperations />

@@ -8,7 +8,7 @@ import W01WebGLContext from './W01WebGLContext.vue'
       <strong>开场问题：</strong>你把 Canvas 2D 里那句 <code>ctx.fill()</code> 的思路原样搬进 WebGL，想画一个三角形，结果画布全黑、控制台却一个字都不报——代码没错、也没崩，为什么就是什么都没有？
     </div>
 
-    <h2>二维绘图惯性</h2>
+    <h2>二维绘图心智</h2>
     <p>
       Canvas 2D 让你觉得「画东西」是理所当然的：<code>beginPath</code>、<code>moveTo</code>、<code>lineTo</code>、<code>fill</code>，四行就有了一个三角形。可换成 WebGL，同样一个三角形却要写上几十行：取上下文、写两段着色器源码、编译、链接、建缓冲、传数据，最后才敢调用一次 <code>drawArrays</code>。
     </p>
@@ -24,7 +24,7 @@ import W01WebGLContext from './W01WebGLContext.vue'
       所以真正要问的是：<strong>一次绘制，到底要让哪些部件按什么顺序各就各位，GPU 才会画出东西？</strong>
     </p>
 
-    <h2>绘图上下文获取</h2>
+    <h2>获取图形上下文</h2>
     <p>
       最省事的想法是：先把「入口」拿到手，剩下的以后再说。<code>canvas.getContext('webgl')</code> 会返回一个 <code>WebGLRenderingContext</code>，你就把它当成「那个什么都能干的对象」，需要什么都在它身上找。
     </p>
@@ -32,7 +32,7 @@ import W01WebGLContext from './W01WebGLContext.vue'
       这个方案做对了一件很关键的事：<strong><code>WebGLRenderingContext</code> 确实是所有 GPU 操作的唯一入口</strong>。编译着色器、创建缓冲、上传数据、发起绘制，全都挂在同一个对象上。如果这里返回 <code>null</code>（浏览器不支持 WebGL），后面的一切都无从谈起，早点判空反而能省掉一堆迷惑。
     </p>
 
-    <h2>空有入口局面</h2>
+    <h2>上下文与绘制落差</h2>
     <ul>
       <li>只拿到上下文，屏幕上仍然只有 <code>clearColor</code> 刷出的底色——GPU 不知道该在哪、用什么颜色画，它会直接跳过绘制。</li>
       <li>你把着色器源码当普通字符串传进去，<code>COMPILE_STATUS</code> 却是 <code>false</code>，而函数并不抛异常，错误被藏在 <code>getShaderInfoLog</code> 里。</li>
@@ -40,7 +40,7 @@ import W01WebGLContext from './W01WebGLContext.vue'
       <li>顶点坐标以一个普通 JavaScript 数组传进去，GPU 根本读不到——它只认显存里的缓冲对象。</li>
     </ul>
 
-    <h2>管线装配流程</h2>
+    <h2>渲染管线装配</h2>
     <p>
       不推翻「上下文是入口」这一点，而是沿着这条入口把管线一段段接起来。<strong>WebGL 的启动流程本质上是一条固定顺序的装配线</strong>，缺任何一环，最后的 <code>drawArrays</code> 都画不出东西。
     </p>

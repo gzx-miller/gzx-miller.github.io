@@ -8,7 +8,7 @@ import CPP14OperatorOverloading from './CPP14OperatorOverloading.vue'
       <strong>开场问题：</strong>你写了个二维向量类，很想直接写 <code>v1 + v2</code>，还想让 <code>std::cout &lt;&lt; v1</code> 能打印它，可 <code>+</code> 一写出来编译器就报错——变量明明是你亲手定义的类，为什么 <code>+</code> 的直觉在这里不成立？
     </div>
 
-    <h2>自定义类型的运算</h2>
+    <h2>自定义类型运算</h2>
     <p>
       你希望自定义类型用起来像内置类型：分数能相加、日期能比较、向量能打印。最朴素的方式是给类加成员函数：<code>v.add(other)</code> 做加法、<code>v.print()</code> 做输出。
     </p>
@@ -25,7 +25,7 @@ import CPP14OperatorOverloading from './CPP14OperatorOverloading.vue'
       所以要问的是：<strong>能不能让自定义类型也支持 <code>+</code>、<code>==</code>、<code>&lt;&lt;</code> 这些运算符，而且行为符合大家对这个运算符的直觉？</strong>
     </p>
 
-    <h2>成员函数式运算</h2>
+    <h2>成员函数实现运算</h2>
     <p>
       最省事的做法，就是把运算都写成普通成员函数：<code>Vector add(const Vector&amp; other) const</code>、<code>bool equals(const Vector&amp; other) const</code>、<code>void print() const</code>。
     </p>
@@ -33,7 +33,7 @@ import CPP14OperatorOverloading from './CPP14OperatorOverloading.vue'
       它做对了一件实实在在的事：<strong>把运算的语义收进了类型自己的接口里</strong>——逻辑正确、可以复用，也不需要用户去碰私有成员。问题只在于，这些接口没有"长成运算符的样子"。
     </p>
 
-    <h2>链式调用的可读性</h2>
+    <h2>链式调用可读性</h2>
     <ul>
       <li><code>v1.add(v2)</code> 缺失表达力；连续运算如 <code>a + b + c</code> 写成 <code>a.add(b).add(c)</code>，一眼看不出是"三数相加"。</li>
       <li><code>std::cout &lt;&lt; x</code> 无法写成成员函数，因为左操作数是 <code>std::ostream</code> 而不是你的类型。</li>
@@ -41,7 +41,7 @@ import CPP14OperatorOverloading from './CPP14OperatorOverloading.vue'
       <li>用户要面对一长串方法名，使用体验和内置类型割裂开来。</li>
     </ul>
 
-    <h2>运算符外壳改造</h2>
+    <h2>引入运算符重载</h2>
     <p>
       不推翻这些函数，只是给它们换上运算符的"外壳"：把函数名从 <code>add</code> 改成 <code>operator+</code>，语言就允许你用 <code>v1 + v2</code> 来调用它。这就是<strong>运算符重载</strong>——不是发明新语法，而是让自定义类型接入已有的运算符。
     </p>
@@ -95,7 +95,7 @@ import CPP14OperatorOverloading from './CPP14OperatorOverloading.vue'
       <CPP14OperatorOverloading />
     </figure>
 
-    <h2>重载的语义与选型</h2>
+    <h2>重载语义与选型</h2>
     <p>
       运算符重载不是造语法，而是给自定义类型一个和内置类型一致的表达方式。选对它该做成员还是全局（看左操作数是不是本类、要不要对称性），守住每个运算符约定俗成的语义（算术返回新对象、复合赋值返回引用、比较成对实现、<code>&lt;</code> 满足严格弱序），你的类型就能自然地融进 <code>+</code>、<code>==</code>、<code>&lt;&lt;</code> 这些表达式里。
     </p>

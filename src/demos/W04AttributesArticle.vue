@@ -29,7 +29,7 @@ import W04Attributes from './W04Attributes.vue'
       这个方案做对了一件事：<strong>它认出了「全局共享」这一种粒度</strong>，并把它的成本压到了最低。当一份数据整次绘制都保持不变时，用 <code>uniform</code> 就是标准答案。
     </p>
 
-    <h2>全局量逐顶点盲区</h2>
+    <h2>全局数据边界</h2>
     <ul>
       <li>逐顶点的位置或颜色用 <code>uniform</code> 根本表达不了：三个顶点会拿到同一个坐标，三角形退化成一个点，颜色也只剩一块。</li>
       <li>想把逐顶点数据硬塞进一个 <code>uniform</code> 数组，还得在着色器里自己按下标取值，绕了一大圈，远不如属性直观。</li>
@@ -53,13 +53,13 @@ import W04Attributes from './W04Attributes.vue'
       <strong>两个易错点：</strong><code>uniform</code> 必须在 <code>useProgram</code> <strong>之后</strong>设置才会生效，顺序反了它就不会作用到当前程序上；另外要留意 <code>attribute</code> / <code>varying</code> 是 WebGL1 的旧关键字，WebGL2 的 <code>#version 300 es</code> 已改用 <code>in</code> / <code>out</code>，入门阶段先按 WebGL1 的写法对照更直观。
     </div>
 
-    <h2>两种手法对比</h2>
+    <h2>两种输入对比</h2>
     <figure class="lesson-figure">
       <figcaption>拖动「Uniform 时间」滑杆或开启自动动画，看同一个 uTime 如何驱动所有顶点一起波动；再勾选/取消「使用 attribute 顶点颜色」，对比「顶点各自带色、插值出的渐变」与「按时间动态计算的全局色」，并对照下方的三张变量卡片与数据流向图。</figcaption>
       <W04Attributes />
     </figure>
 
-    <h2>输入通道选择依据</h2>
+    <h2>输入通道选择</h2>
     <p>
       往着色器里送数据，先看它的粒度：每个顶点都不一样，就用 <code>attribute</code>；整次绘制都相同，就用 <code>uniform</code>；要从顶点阶段交到像素阶段、还希望它自动过渡，就用 <code>varying</code>。选对通道，值既传得进去，也不会有多余的重复上传。
     </p>

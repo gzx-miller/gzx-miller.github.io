@@ -8,7 +8,7 @@ import C13ViewportUnits from './C13ViewportUnits.vue'
       <strong>开场问题：</strong>移动端用 <code>height: 100vh</code> 做整屏首屏，底部却总有一截被浏览器地址栏盖住——明明写的是「一整屏高度」，为什么到手却不满？
     </div>
 
-    <h2>尺寸基准的疑问</h2>
+    <h2>尺寸基准选择</h2>
     <p>
       你在做一个落地页：首屏 hero 区要占满整屏，下面是一个「刚好能放下 20 个字符」的搜索框，再往上还有一套按钮尺寸，希望用户放大字号时整体跟着变大。三件小事，全都卡在同一个决定上——<strong>长度的基准取谁</strong>。
     </p>
@@ -16,7 +16,7 @@ import C13ViewportUnits from './C13ViewportUnits.vue'
       拿 <code>16px</code> 这样的定值去写，屏幕一变、设备一换就追不上；可一旦换成相对单位，又得先回答「相对于什么」。单位选择不是记忆题，而是一道基准题：<strong>基准定错，算出来的尺寸就永远差一口气</strong>。不掌握它，你会得到被遮挡的首屏、靠猜宽度的输入框，以及一改字号就散架的布局。
     </p>
 
-    <h2>像素写死的方案</h2>
+    <h2>全用像素写法</h2>
     <p>
       最省事的做法：所有尺寸一律用像素。<code>height: 640px</code>、<code>width: 300px</code>、<code>font-size: 16px</code>。这个方案做对了一件事：<strong>基准是死的，结果就确定</strong>。设计稿标多少就写多少，屏幕上量出来分毫不差。
     </p>
@@ -24,7 +24,7 @@ import C13ViewportUnits from './C13ViewportUnits.vue'
       在固定尺寸的屏幕上，这套写法完全够用。麻烦出在「屏幕不是固定的」这个前提上。
     </p>
 
-    <h2>跨屏失效的固定值</h2>
+    <h2>固定值跨屏失效</h2>
     <ul>
       <li>设备宽度从 320px 到 1440px 不等，写死 300px 的卡片在宽屏里显得孤零零，在窄屏里又可能溢出。</li>
       <li>「占满一整屏」这个需求用像素根本表达不了——你并不知道对方屏幕有多高。</li>
@@ -32,7 +32,7 @@ import C13ViewportUnits from './C13ViewportUnits.vue'
       <li>用户把浏览器默认字号调大以看得更清楚时，你写死的 16px 纹丝不动，可访问性直接失守。</li>
     </ul>
 
-    <h2>基准随环境而变</h2>
+    <h2>基准改为视口</h2>
     <p>
       不推翻「用数值描述尺寸」，而是把「基准」从常量换成环境。第一个自然的想法是百分比，但百分比量的是<strong>包含块</strong>，遇到「想要视口的高度」这种诉求时，根元素本身就没有一个更高的参照物了。所以需要一组直接以视口为基准的单位：<code>vw</code> 与 <code>vh</code>，各占视口宽度、视口高度的 <span class="lesson-kv">1%</span>。<code>width: 100vw</code> 就是整屏宽，<code>height: 100vh</code> 就是整屏高。
     </p>
@@ -65,13 +65,13 @@ import C13ViewportUnits from './C13ViewportUnits.vue'
       <strong>一条实践红线：</strong>字号与间距尽量不要用绝对单位。缩放与用户偏好场景下，绝对单位会让布局彻底失去弹性——该跟着字号走的地方，请交给 <code>rem</code> 与 <code>em</code>。
     </div>
 
-    <h2>不同基准的尺寸差</h2>
+    <h2>不同基准对照</h2>
     <figure class="lesson-figure">
       <figcaption>逐项切换单位按钮，看同一个盒子在不同基准下的实际尺寸差在哪。</figcaption>
       <C13ViewportUnits />
     </figure>
 
-    <h2>单位背后的基准</h2>
+    <h2>各类单位基准</h2>
     <p>
       选单位的本质是选基准：视口相关的交给 <code>vw</code> / <code>vh</code>，移动端全屏改用 <code>dvh</code>；可全局缩放的用 <code>rem</code>，随字号联动的内距用 <code>em</code>；要定字符数就交给 <code>ch</code>；组件要看的是容器而不是视口，那就用 <code>cqw</code> / <code>cqh</code>。基准选对，自适应几乎是自动发生的。
     </p>

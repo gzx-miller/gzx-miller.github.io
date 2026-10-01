@@ -8,7 +8,7 @@ import V08Build from './V08Build.vue'
       <strong>开场问题：</strong>你只改了一个页面的文案，重新构建上线；用户刷新后，浏览器却把整个 2MB 的入口包从头下载了一遍——为什么改一个字，要让所有人把整个应用重下？
     </div>
 
-    <h2>开发生产两阶段</h2>
+    <h2>开发生产差异</h2>
     <p>
       开发阶段 Vite 按模块加载源码，生产阶段要切换成 Rollup，把源码打包成少量静态文件。可一旦打包，所有代码就被塞进了少数几个 bundle，于是两个后果同时出现：<strong>任意一处改动都会改变整个 bundle 的内容哈希，用户手里的缓存全部失效</strong>；<strong>首屏必须下载整个 bundle</strong>，哪怕其中大部分页面和组件当前根本用不到。
     </p>
@@ -32,7 +32,7 @@ import V08Build from './V08Build.vue'
       <li>无法按需加载：像「关于我们」这类低频页面，没必要在首页就下载。</li>
     </ul>
 
-    <h2>动态导入懒加载</h2>
+    <h2>动态导入分割</h2>
     <p>
       先补「按需加载」。代码分割的入口是动态 <code>import()</code>：把路由组件改成 <code>() =&gt; import('./views/Home.vue')</code>，Rollup 就会为每个动态 import 生成一个独立 chunk，首屏只加载首屏需要的部分，其余页面等用户真正进入时再下。这是所有分割的前提——<strong>缺少动态 <code>import()</code>，Rollup 只能产出单一大 chunk</strong>。
     </p>
@@ -55,7 +55,7 @@ import V08Build from './V08Build.vue'
       <V08Build />
     </figure>
 
-    <h2>稳定依赖单独成块</h2>
+    <h2>按变更频率分块</h2>
     <p>
       生产构建优化串起来是一条线：用动态 <code>import()</code> 让页面按需加载，用 <code>manualChunks</code> 把稳定的大依赖单独成块以便长期缓存，用 <code>minify</code> 决定每个文件的最终大小。核心判断只有一个——<strong>设法让「会变的东西」和「不变的东西」输出成不同的文件</strong>。
     </p>

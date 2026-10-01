@@ -8,7 +8,7 @@ import T01TypeInference from './T01TypeInference.vue'
       <strong>开场问题：</strong>课程表单里 <code>const name = 'Vue 3 实战'</code> 不写类型也能用，可剩余席位却得写成 <code>ref&lt;number | null&gt;(20)</code>——到底哪些类型可以让编译器自己猜，哪些必须亲手写明？
     </div>
 
-    <h2>字面值的推断</h2>
+    <h2>初始值类型推断</h2>
     <p>
       你在做一个课程发布表单，字段有课程名、价格、剩余席位。写下 <code>const name = 'Vue 3 实战'</code> 时，编辑器立刻知道它是字符串；再写一个数组、一个对象，结构也照样被识别出来。于是你很自然地想：既然编译器什么都能看出来，那干脆一个类型都不写，代码最干净。
     </p>
@@ -24,7 +24,7 @@ import T01TypeInference from './T01TypeInference.vue'
       这个方案做对了一件很重要的事：<strong>显而易见的类型不必重复书写</strong>。局部变量由初始值就能算出准确结构，再手写一遍只是噪音，而且还可能与真实类型不一致。TypeScript 的便利正来自这里——它是从值推出类型，而不是逼你到处写注解。
     </p>
 
-    <h2>边界处的失效</h2>
+    <h2>空数组与字面量类型</h2>
     <ul>
       <li>空数组推导成 <code>any[]</code>：<code>const list = []</code> 的元素类型彻底丢失，之后推入什么都放行。</li>
       <li><code>const</code> 推导出的是字面量类型：<code>const status = 'idle'</code> 被推成 <code>'idle'</code>，想让它承接 <code>'loading'</code>、<code>'done'</code> 根本做不到。</li>
@@ -65,13 +65,13 @@ import T01TypeInference from './T01TypeInference.vue'
       一句话收束这套取舍：<strong>只对必要的类型边界做显式标注，局部变量不重复写显而易见的类型</strong>。标注一旦只落在交界处，编译器就能在这些边界上替你盯着每一次赋值。
     </p>
 
-    <h2>写法差异对照</h2>
+    <h2>三种写法对照</h2>
     <figure class="lesson-figure">
       <figcaption>切换「自动推导 / 何时标注 / 类型收窄」三个标签，对照同一份表单写与不写标注的差别。</figcaption>
       <T01TypeInference />
     </figure>
 
-    <h2>推导与标注分工</h2>
+    <h2>推断与标注边界</h2>
     <p>
       类型推导与显式标注不是二选一，而是分工：编译器负责从初始值推断显而易见的类型，人负责在边界处拍板。局部常量放心交给推导，联合、可空、空数组与公共函数参数则显式写明——省下的注解是噪音，留下的标注才是契约。
     </p>

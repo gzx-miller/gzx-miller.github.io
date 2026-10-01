@@ -8,7 +8,7 @@ import R11DeferredValue from './R11DeferredValue.vue'
       <strong>开场问题：</strong>搜索框里连着敲「性能」两个字，光标明明跟得上你的手指，结果列表却慢了半拍——第一个字的结果还没出现，第二个字已经打完了，于是列表干脆停住不动。
     </div>
 
-    <h2>键入与筛选的绑定</h2>
+    <h2>键入驱动列表筛选</h2>
     <p>
       你在做一个按关键词筛选的长列表：输入框是受控的，每次 <code>onChange</code> 都用 <code>setKeyword</code> 更新状态，再拿这个关键词去过滤几百上千条数据。数据少时一切正常，数据一多，问题就冒出来。
     </p>
@@ -19,7 +19,7 @@ import R11DeferredValue from './R11DeferredValue.vue'
       于是问题被逼成一个明确的问句：<strong>当昂贵的结果区域需要重新渲染时，怎么让文本输入始终保持流畅响应？</strong>
     </p>
 
-    <h2>筛选防抖的做法</h2>
+    <h2>防抖定时器实现</h2>
     <p>
       最省事的做法是给筛选加一个防抖：输入变化时不立刻重算，而是起一个定时器，例如停手 <code>300ms</code> 之后再执行筛选；期间新的按键就清掉旧定时器重新计时。
     </p>
@@ -27,7 +27,7 @@ import R11DeferredValue from './R11DeferredValue.vue'
       这个方案确实做对了一件事：<strong>它承认了「输入」和「结果」可以有不同的更新节奏</strong>，把从键入到重算之间的耦合松开了。连续快速输入时，中间那些字符不会各触发一次昂贵计算。
     </p>
 
-    <h2>固定时长的适配缺陷</h2>
+    <h2>固定延迟适配缺陷</h2>
     <ul>
       <li>防抖是<strong>固定时长</strong>，和机器快慢无关：快机器 50ms 就能算完，却还要白等 250ms；慢机器 300ms 又根本不够，照样卡。</li>
       <li>连续输入时定时器被反复重置，结果永远贴在「上一次停顿」上，<strong>输入与结果长期不一致</strong>，用户看到的是越来越滞后的列表。</li>
@@ -36,7 +36,7 @@ import R11DeferredValue from './R11DeferredValue.vue'
       <li>更隐蔽的是，一旦顺手把 <code>keyword</code> 本身也一起防抖，<strong>连键入都会失去即时反馈</strong>，输入框开始「吃字」。</li>
     </ul>
 
-    <h2>内置调度的双值拆分</h2>
+    <h2>双值拆分与内置调度</h2>
     <p>
       不推翻「两个节奏」，只是把「手动定时器」换成 React 内建的调度：把关键词拆成两个值——<code>keyword</code> 由受控输入<strong>同步更新</strong>，保证键入即时可见；另一个 <code>deferredKeyword</code> 由 <code>useDeferredValue(keyword)</code> 生成，它允许落后于最新值，并在后台慢慢追赶。列表的筛选只订阅后者。
     </p>
@@ -56,13 +56,13 @@ import R11DeferredValue from './R11DeferredValue.vue'
       还要记住收益的边界：只有当结果区域的渲染<strong>明显较慢</strong>时它才有价值，几十条数据的小列表用与不用几乎无感；而且旧值与新值不一致的那一小段时间里，界面展示的确实是旧结果，需要靠视觉弱化把这件事说清楚。
     </p>
 
-    <h2>透明度变化与追赶</h2>
+    <h2>结果滞后与追平</h2>
     <figure class="lesson-figure">
       <figcaption>在输入框里快速敲「状态」或「性能」，观察结果区的透明度先变淡、随后追上最新关键词的过程。</figcaption>
       <R11DeferredValue />
     </figure>
 
-    <h2>紧急与不紧急的分离</h2>
+    <h2>更新优先级分离</h2>
     <p>
       输入卡顿的根源是「紧急的键入」和「不急的结果」被绑在同一个优先级上。<code>useDeferredValue</code> 让结果持有一个会落伍的旧值，把昂贵的重排推到你敲键的间隙里去做，还能被下一次输入打断。它优化的始终是<strong>调度</strong>，而不是工作量本身。
     </p>

@@ -8,7 +8,7 @@ import N10ClientOnly from './N10ClientOnly.vue'
       <strong>开场问题：</strong>你要在页面里放一个图表，这个库内部会拿 <code>document</code> 去量容器尺寸。本地 dev 跑得好好的，SSR 一开，服务端渲染到图表那一步直接抛出 <code>document is not defined</code>，整个页面变成 500。你只是想「让服务端跳过画图这一小块」，为什么会闹出这么大动静？
     </div>
 
-    <h2>仅浏览器可用的依赖</h2>
+    <h2>浏览器专属依赖</h2>
     <p>
       接上一课：SSR 里两端的执行环境不同，有些内容天生只能在浏览器里跑——直接操作 DOM 的图表库、依赖 <code>window</code> 与 <code>navigator</code> 的浏览器 API、以及「当前时间」这类动态值。把它们硬塞进 SSR，要么报错，要么 mismatch。旧办法各有代价。
     </p>
@@ -19,7 +19,7 @@ import N10ClientOnly from './N10ClientOnly.vue'
       于是问题落到：<strong>能不能只把「确实只能在浏览器跑的那一小块」摘出来、延后到客户端，其余部分照常 SSR？</strong>
     </p>
 
-    <h2>客户端判定的常量</h2>
+    <h2>客户端环境判定</h2>
     <p>
       最直接的判断是 <code>import.meta<span>.client</span></code>：在 setup 里写 <code>if (import.meta<span>.client</span>) { ... }</code>，把只该在浏览器执行的逻辑包起来。
     </p>
@@ -30,7 +30,7 @@ import N10ClientOnly from './N10ClientOnly.vue'
       但它只管得住「逻辑」，管不住「模板里那块要渲染的 DOM」。
     </p>
 
-    <h2>逻辑分支的结构盲区</h2>
+    <h2>模板结构注水失配</h2>
     <ul>
       <li><code>import.meta<span>.client</span></code> 只切 JS 分支。模板里基于它渲染出的结构，在服务端仍会生成一份<strong>不同</strong>的 DOM，照样可能 mismatch。</li>
       <li>在 setup 顶层用 <code>typeof(window) !== 'undefined'</code> 兜底，能防报错，但服务端与客户端首次渲染结构不同，mismatch 依然会发生。</li>
@@ -38,7 +38,7 @@ import N10ClientOnly from './N10ClientOnly.vue'
       <li>当第三方库需要的是「在应用启动时初始化一次」，而你把它塞进某个组件里判断，就会变成每个组件实例都要重复初始化。</li>
     </ul>
 
-    <h2>延迟对象的工具选择</h2>
+    <h2>延迟渲染工具选择</h2>
     <p>
       正确的做法是<strong>按「要推迟的是什么」来选工具</strong>，而不是一把梭。
     </p>
@@ -55,13 +55,13 @@ import N10ClientOnly from './N10ClientOnly.vue'
       <strong>两个常见误用：</strong>fallback 占位如果和最终内容差太多，会让页面在渲染完成的一刻<strong>跳一下</strong>（CLS）；为了省事直接给整页 <code>ssr: false</code>，则把首屏体验和 SEO 一起关掉了——客户端专属渲染应该只覆盖那一小块不兼容 SSR 的内容。
     </div>
 
-    <h2>加载前后的两行差异</h2>
+    <h2>加载前后内容差异</h2>
     <figure class="lesson-figure">
       <figcaption>看左侧「SSR + CSR」与「仅客户端」两行内容在页面加载前后的变化——标着「[服务端跳过]」的那行，就是只有浏览器才会出现的内容；再对照右侧四种客户端专属方案的写法和它们的适用场景表。</figcaption>
       <N10ClientOnly />
     </figure>
 
-    <h2>局部区域的浏览器接管</h2>
+    <h2>局部浏览器接管</h2>
     <p>
       客户端专属渲染不是「把 SSR 关掉」，而是「只把不兼容 SSR 的那一小块留给浏览器」：整块内容用 <code>&lt;ClientOnly&gt;</code> 加 fallback 占位，单次 API 调用用 <code>import.meta<span>.client</span></code> 分支，挂载后再写入的值交给 <code>onMounted</code>，需要全端初始化的库用 <code>*.client.ts</code>。用得越少，SSR 的首屏与 SEO 就保留得越完整。
     </p>

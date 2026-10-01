@@ -8,7 +8,7 @@ import K26EffectScope from './K26EffectScope.vue'
       <strong>开场问题：</strong>工作台里切换了工作区，旧工作区的监听日志还在往外冒，后台定时器还在每秒加数——明明已经「退出」了，它为什么还在工作？
     </div>
 
-    <h2>工作区副作用集合</h2>
+    <h2>工作区副作用聚合</h2>
     <p>
       你在做一个后台工作台。进入某个工作区时，它要做三件事：监听「当前工作区」这个状态，一旦变化就记录订阅目标；起一个定时器，每秒把同步次数加一；将来还要接一个 WebSocket 推送。离开工作区时，这三样东西都应该停掉。
     </p>
@@ -16,7 +16,7 @@ import K26EffectScope from './K26EffectScope.vue'
       麻烦在于这三样东西并不是同一类东西。<code>watchEffect</code> 是响应式副作用，Vue 知道它存在；而定时器、WebSocket、第三方订阅属于外部资源，Vue 完全不知道。于是一个很自然的问题浮出来：<strong>一组互相牵连的副作用，怎么才能被当成一个整体来启动和停止？</strong>
     </p>
 
-    <h2>卸载钩子的逐项清理</h2>
+    <h2>卸载钩子逐一清理</h2>
     <p>
       最省事的做法：在组件的 <code>setup</code> 里写 <code>watchEffect</code>，再起一个 <code>setInterval</code>，然后在 <code>onUnmounted</code> 里逐个清理——清定时器、停止监听。代码直白，一眼能看懂每个资源在哪创建、在哪释放。
     </p>
@@ -24,7 +24,7 @@ import K26EffectScope from './K26EffectScope.vue'
       这个方案做对了一件事：<strong>它意识到了「创建时必须配一份清理」</strong>。对于只有一个监听、一个定时器的小场景，这已经足够，而且没有任何额外概念要学。
     </p>
 
-    <h2>组件外清理盲区</h2>
+    <h2>组件外副作用泄漏</h2>
     <ul>
       <li>组件 <code>setup</code> 之外根本没有 <code>onUnmounted</code>：写在 service、可复用状态模块或插件里的 <code>watch</code>，找不到地方停掉它。</li>
       <li>「切换工作区」发生在同一个组件内部，组件并没有被卸载，<code>onUnmounted</code> 只在组件彻底消失时触发一次，切换那一下什么都清不掉。</li>
@@ -32,7 +32,7 @@ import K26EffectScope from './K26EffectScope.vue'
       <li>停止的粒度是「一个个停」，没有「这一组属于同一个业务模块」的表达，读代码的人无法一眼判断哪些副作用是绑在一起的。</li>
     </ul>
 
-    <h2>作用域对象整体启停</h2>
+    <h2>作用域整体启停</h2>
     <p>
       把「一组副作用」变成一个可以整体启停的对象，对应的工具就是 <code>effectScope</code>。调用 <code>effectScope()</code> 得到一个作用域，在它内部创建的 <code>computed</code>、<code>watch</code>、<code>watchEffect</code> 都会被收集进去；调用一次 <code>scope.stop()</code>，这一组副作用一起停止。
     </p>
@@ -53,13 +53,13 @@ import K26EffectScope from './K26EffectScope.vue'
       换个角度对比会更清楚：<code>onUnmounted</code> 回答的是「组件什么时候消失」，它绑定的是<strong>渲染生命周期</strong>；而 <code>effectScope</code> 回答的是「这组副作用什么时候该结束」，它绑定的是<strong>业务生命周期</strong>。两者很多时候恰好重合，所以组件内的小场景看不出差别；但只要出现「组件还在、业务已经结束」或「组件早已不在、业务仍在别处运行」的情况，前者就无能为力了。判断该不该引入作用域，看的就是这组副作用是否拥有独立的业务生命周期。
     </p>
 
-    <h2>监听与定时器收尾</h2>
+    <h2>启停与清理对照</h2>
     <figure class="lesson-figure">
       <figcaption>点「启动作用域」再切换工作区，最后点「停止并清理」，看监听与定时器是否一起收尾。</figcaption>
       <K26EffectScope />
     </figure>
 
-    <h2>生命周期的一致性保证</h2>
+    <h2>副作用生命周期</h2>
     <p>
       生命周期管理的难点从来不是「怎么停掉一个监听」，而是「怎么保证一组该一起生一起死的东西不会漏」。<code>effectScope</code> 把散落的副作用收进一个边界，<code>scope.stop()</code> 提供整体停止，<code>onScopeDispose</code> 补齐外部资源的清理——三者合起来，才让「进入业务模块时启动、退出时清理」成为一件可以放心交给代码的事。
     </p>

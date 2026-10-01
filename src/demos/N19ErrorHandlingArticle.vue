@@ -8,7 +8,7 @@ import N19ErrorHandling from './N19ErrorHandling.vue'
       <strong>开场问题：</strong>用户访问了一个不存在的地址，看到的是你站点完全没见过的默认英文报错页；另一个同事改坏了一个组件，线上用户页面直接白屏，而你的监控里安安静静——明明都叫「出错了」，一个发生在你没写的页面里，一个发生在你写的组件里，为什么它们落到了完全不同的地方，你一个都没接住？
     </div>
 
-    <h2>错误来源的三个层级</h2>
+    <h2>三类错误来源</h2>
     <p>
       一个 Nuxt 应用里的错误来自<strong>至少三个互不相同的层</strong>：路由层的 404 与 500（访问了不存在的路由，或服务端渲染时抛错）、Vue 组件的运行时错误（某次渲染或响应的执行里抛了异常）、以及接口请求的错误（请求后端失败或后端返回了错误状态）。
     </p>
@@ -19,7 +19,7 @@ import N19ErrorHandling from './N19ErrorHandling.vue'
       于是问题落到：<strong>404/500、组件运行时错误与接口错误分别该由谁来接，怎么让错误页长成自己的样子，又怎么在出错后把人送回正常流程？</strong>
     </p>
 
-    <h2>全局错误页的放置</h2>
+    <h2>全局错误页放置</h2>
     <p>
       在项目根目录放一个 <code>error.vue</code>，它接收一个包含 <code>statusCode</code>、<code>statusMessage</code>、<code>url</code> 的 <code>error</code> prop，用它统一渲染路由级错误页。
     </p>
@@ -27,7 +27,7 @@ import N19ErrorHandling from './N19ErrorHandling.vue'
       这个方案做对了一件事：<strong>错误页从「框架默认」变成了「你定义的一页」</strong>。所有路由级错误有了一个统一出口，你可以决定它长什么样、给什么文案、放什么操作按钮。
     </p>
 
-    <h2>脱离常规布局的页面</h2>
+    <h2>错误页脱离布局</h2>
     <ul>
       <li><code>error.vue</code> <strong>不经过常规布局渲染</strong>：直接放进去的页面缺少导航栏和页脚，看起来像是从站点里掉出来的一页。</li>
       <li>它只接路由与渲染级错误。Vue 组件运行时抛的异常未必走到这里，你没有机会知道它，更别说上报。</li>
@@ -35,7 +35,7 @@ import N19ErrorHandling from './N19ErrorHandling.vue'
       <li>想把用户从错误页带回首页，需要「清除错误状态 + 导航」两个动作，没有现成入口就只能让用户自己点返回。</li>
     </ul>
 
-    <h2>三层错误的逐层拦截</h2>
+    <h2>三层错误逐层拦截</h2>
     <p>
       不推翻 <code>error.vue</code>，而是<strong>按错误的层次逐层接住</strong>。
     </p>
@@ -55,13 +55,13 @@ import N19ErrorHandling from './N19ErrorHandling.vue'
       <strong>两个容易忽略的点：</strong>一是生产环境不要只依赖 <code>console</code> 日志，组件运行时错误必须通过 <code>vue:error</code> 之类钩子送到监控服务，否则线上白屏你无从知晓；二是 <code>error.vue</code> 里务必按 <code>statusCode</code> 分开处理，把 500 当成 404 展示，会让用户以为是自己输错了地址，也让排查失去最重要的那条线索。
     </div>
 
-    <h2>类型速查表的结构</h2>
+    <h2>类型速查表对照</h2>
     <figure class="lesson-figure">
       <figcaption>三个页签分别是「错误页面 / 错误钩子 / API 错误」，右侧固定一张「错误类型速查」表，把 404、500、API Error、Hydration Mismatch、Vue Runtime Error 各自「由谁接住」列了出来。先看每个页签的代码，再回到表里找它的行——用这张表就能把「哪一层错误归哪个机制管」对上号。</figcaption>
       <N19ErrorHandling />
     </figure>
 
-    <h2>分层错误链的结构</h2>
+    <h2>分层错误处理链</h2>
     <p>
       Nuxt 的错误处理是一条分层的链，而不是一个万能兜底：路由级 404/500 交给 <code>error.vue</code>，组件运行时错误经 <code>vue:error</code> 钩子捕获并上报，接口错误用 <code>useFetch</code> 的 <code>error</code> 或 <code>$fetch</code> 的 <code>try/catch</code> 就地处理，主动报错与状态清除则由 <code>createError</code> 和 <code>clearError</code> 成对完成。先问「这个错误发生在哪一层」，再选对应的出口。
     </p>

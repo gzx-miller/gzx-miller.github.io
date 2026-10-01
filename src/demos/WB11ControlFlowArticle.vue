@@ -8,7 +8,7 @@ import WB11ControlFlow from './WB11ControlFlow.vue'
       <strong>开场问题：</strong>你在 WAT 里手写一个从 1 累加到 <code>n</code> 的函数。写完循环体，很自然地想敲一句「跳回上面再算一次」——才发现 Wasm 的指令集里<strong>根本没有 goto</strong>。可它明明能跑循环、能做分支。没有跳转语句，循环和 <code>if</code> 到底是怎么写出来的？
     </div>
 
-    <h2>任意跳转代价</h2>
+    <h2>任意跳转验证代价</h2>
     <p>
       Wasm 被设计成编译目标，汇编里的 <code>jmp</code> / <code>goto</code> 可以做任意跳转，看起来最省事。可「能跳到任何地方」这件事，恰好是它不敢要的。
     </p>
@@ -16,7 +16,7 @@ import WB11ControlFlow from './WB11ControlFlow.vue'
       一旦允许任意跳转，代价就落到别人头上：验证器没法只看局部就确认代码安全，必须追着跳转目标把整张控制流图算出来，才能保证你不会跳进一段非法指令的中间；优化器难以把代码稳定地切成基本块，很多分析做不了；沙箱只靠边界检查兜底，跳转目标不可预测会让攻击面变大。而换个角度，循环又确实需要「跳回去」，分支也确实需要「按条件走不同的路」。于是问题收敛成一句：<strong>能不能有一种跳转，只允许在「看得见的块」里发生，跳出去之后就再也回不来？</strong>
     </p>
 
-    <h2>三种结构化块</h2>
+    <h2>结构化控制流</h2>
     <p>
       Wasm 给出的答案是<strong>结构化控制流</strong>：只有三种块——<code>block</code>、<code>loop</code>、<code>if/else</code>，再用 <code>br</code> / <code>br_if</code> 在这些块之间跳。跳转不写地址，只写标签所在的「深度」。
     </p>
@@ -24,7 +24,7 @@ import WB11ControlFlow from './WB11ControlFlow.vue'
       这个方案做对了一件事：<strong>它把跳转限定在嵌套的块结构里</strong>。<code>block</code> 定义一个块，<code>br</code> 一旦跳出这个块就直接落到块尾，再也回不去；<code>loop</code> 定义一个循环体，<code>br</code> 则跳到它的开头。控制流因此长成一棵可静态验证的树，验证和优化都能只看局部。
     </p>
 
-    <h2>相对深度数错</h2>
+    <h2>标签深度与嵌套</h2>
     <ul>
       <li><code>br</code> 后面不写名字，写的是<strong>深度</strong>：<code>br 0</code> 指最近的外层块，嵌套一深就极容易数错，跳到错的块上。</li>
       <li><code>if</code> 必须以 <code>end</code> 收尾；想让分支返回一个值，还得写上 <code>result</code> 类型，漏掉就类型对不上。</li>
@@ -32,7 +32,7 @@ import WB11ControlFlow from './WB11ControlFlow.vue'
       <li>递归是函数内部的 <code>call</code>，不在这套块结构里；每层递归占一个独立栈帧，<code>n</code> 稍大就可能触发栈溢出。</li>
     </ul>
 
-    <h2>块的补齐顺序</h2>
+    <h2>块结构逐层补齐</h2>
     <p>
       不推翻「块 + 跳转」，而是一层层把三种块补齐。先补 <code>block</code>：它的<strong>块尾就是跳出点</strong>，<code>block $exit … br $exit … end</code> 里那句 <code>br</code> 等价于 <code>break</code>，跳出去直接执行 <code>end</code> 之后的代码。
     </p>
@@ -54,13 +54,13 @@ import WB11ControlFlow from './WB11ControlFlow.vue'
       <strong>同一个 <code>br 0</code>，含义完全相反：</strong>它跳到的是「最近的外层结构」，而这个结构是 <code>loop</code> 还是 <code>block</code>，结果正好掉个头——在 <code>loop</code> 里是跳回开头（继续迭代），在 <code>block</code> 里是跳到结尾（跳出）。写之前先看清它外面套的是哪一种块。
     </div>
 
-    <h2>递归调用次数</h2>
+    <h2>递归调用次数观测</h2>
     <figure class="lesson-figure">
       <figcaption>拖动输入框改变 <code>n</code>，看 <code>fib(n)</code> 的结果和这次递归总共调用了多少次 <code>fib</code>；再对照左边的 WAT，找到 <code>if/else</code> 是在哪一步判断基线条件的。</figcaption>
       <WB11ControlFlow />
     </figure>
 
-    <h2>结构化跳转规则</h2>
+    <h2>可验证控制流树</h2>
     <p>
       Wasm 用 <code>block</code>、<code>loop</code>、<code>if/else</code> 三种结构化块替换掉了 goto，<code>br</code> 只按相对深度在块之间跳，控制流于是成为一棵可验证的树：分支交给 <code>if/else</code>，循环用 <code>loop</code> 加 <code>br_if</code>，跨函数复用交给 <code>call</code>，递归则是 <code>call</code> 自身。
     </p>

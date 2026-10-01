@@ -8,7 +8,7 @@ import L13Streaming from './L13Streaming.vue'
       <strong>开场问题：</strong>用户提了个问题，模型其实两秒就吐出了第一个字，可界面上整整转了八秒白屏，然后「唰」地一下整段答案全冒出来——用户以为卡死了，直接关掉了页面。
     </div>
 
-    <h2>整段返回等待模式</h2>
+    <h2>整段返回等待</h2>
     <p>
       问题出在你用的是 <code>await chain.invoke(...)</code>：它要等模型<strong>把整段话生成完</strong>才返回。一个两百字的回答，用户得盯着一片空白等好几秒；首 token 其实早就出来了，只是被 invoke 攒在手里，一个都没交给你。
     </p>
@@ -24,7 +24,7 @@ import L13Streaming from './L13Streaming.vue'
       要回答的是：<strong>一次调用到底该「一口气等结果」，还是「边生成边拿」？如果要边拿，怎么拿、又怎么知道手里这块是什么？</strong>
     </p>
 
-    <h2>完整字符串的返回</h2>
+    <h2>完整字符串返回</h2>
     <p>
       最朴素的方案：用 <code>invoke</code>。调用、等待、拿到一个完整的字符串。
     </p>
@@ -32,7 +32,7 @@ import L13Streaming from './L13Streaming.vue'
       这个方案做对了一件事：<strong>它给了「请求—响应」最直接的心智模型</strong>。一次调用换一个结果，代码最简单，短文本或不需要实时展示的场景毫无问题。
     </p>
 
-    <h2>首字生成传达延迟</h2>
+    <h2>首字传输延迟</h2>
     <ul>
       <li>首 token 早就生成了，invoke 却压着不发，用户端只能看到白屏，主观上就是慢。</li>
       <li>想显示「生成中」的光标、想让用户中途打断，invoke 都不给这个时机。</li>
@@ -57,7 +57,7 @@ import L13Streaming from './L13Streaming.vue'
       <strong>生产环境最常见的组合：</strong><code>stream</code> 拿 token + <code>handleLLMNewToken</code> 回调把 token 推给前端（回调与流式共用同一个触发点）。如果 token 来得比屏幕刷新还快，逐块更新 DOM 反而更卡，可以在回调里<strong>节流</strong>——攒够一小段再统一 flush 一次。
     </div>
 
-    <h2>三种调用方式的时差</h2>
+    <h2>三种调用方式</h2>
     <figure class="lesson-figure">
       <figcaption>切换 invoke / stream / astream_events 三个页签各点一次「运行」：invoke 会先静默两秒再整段蹦出，stream 逐字浮现，astream_events 则会在右侧日志里打出带 <code>run_id</code> 的 start / llm_chunk / end 事件。</figcaption>
       <L13Streaming />

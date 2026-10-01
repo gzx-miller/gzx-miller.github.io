@@ -8,7 +8,7 @@ import V14Proxy from './V14Proxy.vue'
       <strong>开场问题：</strong>本地前端跑在 <code>5173</code>、后端跑在 <code>3000</code>，浏览器控制台一条红色报错——<code>No 'Access-Control-Allow-Origin' header</code>；可你把同一个接口地址粘进浏览器地址栏敲回车，数据却好好地返回了。同样的请求，为什么地址栏行、页面里的 JS 却不行？
     </div>
 
-    <h2>同源策略限制</h2>
+    <h2>同源策略与预检</h2>
     <p>
       这背后的规则叫<strong>同源策略</strong>：浏览器只允许页面读取「协议 + 域名 + 端口」完全一致的资源，只要有一项不同就算跨源。跨源的请求会被浏览器拦下——简单请求拦截响应，复杂请求还要先发一次 <code>OPTIONS</code> 预检。所以地址栏能打开（它不执行脚本、不受这条策略约束），页面里的 JS 却拿不到数据。
     </p>
@@ -16,7 +16,7 @@ import V14Proxy from './V14Proxy.vue'
       要绕开它，无非两条路：让后端同意你跨源，或者让请求「看起来是同源的」。第一条路每次联调都要后端配合改 CORS 配置，沟通成本高；允许来源写宽了还会把线上暴露给任意站点；带上 Cookie 的凭证请求更要多处理一个头，极易踩坑。第二条路得在开发服务器上做文章——问题是，<strong>怎么让浏览器以为它在请求自己？</strong>
     </p>
 
-    <h2>前缀请求转发</h2>
+    <h2>前缀代理规则</h2>
     <p>
       最直接的做法：在 Vite 开发服务器的 <code>server.proxy</code> 里，把以 <code>/api</code> 开头的请求转发到后端 <code>http://localhost:3000</code>。
     </p>
@@ -24,7 +24,7 @@ import V14Proxy from './V14Proxy.vue'
       这个方案做对了一件事：<strong>浏览器眼里，请求始终是发给 <code>5173</code> 的同源地址</strong>，跨源从源头上就不成立。转发发生在开发服务器与后端这两台服务器之间，而<strong>服务器之间的请求不受浏览器同源策略约束</strong>——这正是代理能绕开跨域的根本原因。
     </p>
 
-    <h2>主机头不匹配</h2>
+    <h2>虚拟主机匹配</h2>
     <ul>
       <li>后端用虚拟主机识别站点，收到 <code>Host: localhost:5173</code> 会匹配不到站点，返回 404 或错误页。</li>
       <li>后端真实路径可能就是 <code>/users</code>，不带 <code>/api</code> 前缀，原样转发过去直接 404。</li>
@@ -59,7 +59,7 @@ import V14Proxy from './V14Proxy.vue'
       <V14Proxy />
     </figure>
 
-    <h2>跨源请求同源化</h2>
+    <h2>跨源转同源转发</h2>
     <p>
       开发代理的本质，是把「浏览器发出的跨源请求」改成「开发服务器替你发出的同源请求」：浏览器只看到 <code>5173</code>，转发由服务器完成，于是同源策略天然不触发。要记住的判断只有两条——<strong>代理只在开发环境生效，生产要靠服务端方案</strong>；以及 <code>changeOrigin</code> 改的是 Host 头、<code>rewrite</code> 改的是路径，别把两者混为一谈。
     </p>

@@ -8,7 +8,7 @@ import CPP19LambdaExpressions from './CPP19LambdaExpressions.vue'
       <strong>开场问题：</strong>你只是想让一串数字从大到小排，需要告诉 <code>std::sort</code>「谁该排在前面」。为了这一个判断，你不得不在文件另一头另外起一个命名函数 <code>bool cmp(int a, int b) { return a &gt; b; }</code>，再回到调用处把函数名填进去——参数和实现隔了半个文件，只为一个只用一次的小逻辑，为什么要写一个如此「正式」的函数？
     </div>
 
-    <h2>行为参数化需求</h2>
+    <h2>行为参数化引入</h2>
     <p>
       你要做的是把一段「行为」——比如「怎么比大小」「收到数据后干什么」——当成参数交给别人：交给算法做谓词，交给回调稍后调用，交给线程让它在另一边执行。最朴素的老办法是写命名函数，或者写一个函数对象（重载了 <code>operator()</code> 的类）。它能跑，但成本都落在你身上：
     </p>
@@ -22,7 +22,7 @@ import CPP19LambdaExpressions from './CPP19LambdaExpressions.vue'
       所以要问的是：<strong>能不能就在使用的地方，把这段「行为」直接写出来、连同它要用到的现场变量一起交给别人？</strong>
     </p>
 
-    <h2>命名函数作谓词</h2>
+    <h2>命名函数充当谓词</h2>
     <p>
       先照老办法来：写一个命名函数或函数对象传进去，比如 <code>std::sort(v.begin(), v.end(), cmp)</code>。
     </p>
@@ -30,7 +30,7 @@ import CPP19LambdaExpressions from './CPP19LambdaExpressions.vue'
       这个方案做对了一件根本的事：<strong>它承认「行为」本身也是一种可以传递的值</strong>——算法不关心你给的是一个函数、一个对象还是别的什么，只要它能被「调用」，就能拿来用。这一步是后面一切的前提；缺的只是「写的成本太高」和「看不见现场变量」这两点。
     </p>
 
-    <h2>局部变量的盲区</h2>
+    <h2>局部变量访问缺口</h2>
     <ul>
       <li>要为一个表达式级的逻辑写一整段函数定义，读的时候眼睛得在两个地方来回跳。</li>
       <li>命名函数够不到调用点的局部变量，像「按当前这个 <code>factor</code> 去乘」这种需求，只能靠传参曲线救国。</li>
@@ -38,7 +38,7 @@ import CPP19LambdaExpressions from './CPP19LambdaExpressions.vue'
       <li>散落的小函数挤占了命名空间，越写越难分辨哪些才是真正的业务接口。</li>
     </ul>
 
-    <h2>匿名函数与就地定义</h2>
+    <h2>就地定义匿名函数</h2>
     <p>
       先补最核心的一步：<strong>把行为就地写出来</strong>。这就是 lambda：<code>[](int a, int b) { return a &gt; b; }</code> 可以直接塞进 <code>std::sort</code> 的第三个参数，不用再另起名字。它的完整语法是 <code>[capture](params) -&gt; ret { body }</code>——中括号里是捕获列表，圆括号是参数，箭头后面是返回类型，最后是函数体。
     </p>
@@ -69,13 +69,13 @@ import CPP19LambdaExpressions from './CPP19LambdaExpressions.vue'
       最后补「一个 lambda 服务多种类型」。C++14 的<strong>泛型 lambda</strong> 允许参数写 <code>auto</code>：<code>[](auto a, auto b) { return a + b; }</code>，同一个 lambda 拿 <code>int</code> 调、拿 <code>double</code> 调都行。C++20 更进一步给了<strong>模板 lambda</strong>，可以用显式模板参数列表 <code>[]&lt;typename T&gt;(T x) { ... }</code> 来写，比单纯用 <code>auto</code> 更能做精确的类型约束与推导。
     </p>
 
-    <h2>捕获列表的可见范围</h2>
+    <h2>捕获列表与可见范围</h2>
     <figure class="lesson-figure">
       <figcaption>对着代码和捕获列表看：<code>[]</code>、<code>[factor]</code>、<code>[&amp;total]</code>、<code>[=]</code>、<code>[&amp;]</code>、<code>[this]</code> 各能看见什么、改得动什么——重点看值捕获的那份副本与外部变量如何互不影响。</figcaption>
       <CPP19LambdaExpressions />
     </figure>
 
-    <h2>可调用对象的本质</h2>
+    <h2>匿名可调用对象</h2>
     <p>
       lambda 把一段行为变成「就地可写、随手可传、还能带上现场变量」的匿名可调用物，它的真身是编译器生成的一个函数对象类型。写捕获时先问自己一句：<strong>这份数据要不要陪着 lambda 一起活下去？</strong>要，就用值捕获或初始化捕获；不要、且确定它的寿命足够长，才用引用捕获。默认捕获能少写几个字，但也顺手藏起了你真正依赖的东西。
     </p>

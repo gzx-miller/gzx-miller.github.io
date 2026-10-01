@@ -8,7 +8,7 @@ import T09IntersectionMixin from './T09IntersectionMixin.vue'
       <strong>开场问题：</strong>课程卡片既要 <code>id</code>、又要创建与更新时间、还要发布状态，而「带 id」「带时间戳」这些能力在别的模型里也要用——难道每种模型都得把这几个字段再抄一遍？
     </div>
 
-    <h2>跨模型的能力复用</h2>
+    <h2>跨模型能力复用</h2>
     <p>
       领域对象很少从零长成。课程卡片上「有 id」是一种能力，「有时间戳」是一种能力，「能发布」又是一种能力，这些能力往往是跨模型复用的：文章、用户、订单身上也各自需要时间戳和标识。描述这类对象时，我们想要的其实不是「继承自某个基类」，而是<strong>把几块能力拼装到一起</strong>。
     </p>
@@ -24,7 +24,7 @@ import T09IntersectionMixin from './T09IntersectionMixin.vue'
       这个方案做对了一件事：<strong>单文件里它非常直白</strong>。结构一眼看全，不需要理解任何组合规则，改字段也只需在一个地方动手。对只出现一次、又不打算复用的模型，这就是最合适的写法。
     </p>
 
-    <h2>继承链的脆弱</h2>
+    <h2>继承链脆弱性</h2>
     <ul>
       <li>一整块字段无法按能力拆开复用，「时间戳」要在每个模型里各抄一遍。</li>
       <li>换成继承链又会变得脆弱——改基类会牵连所有子类，且无法同时继承两个基类。</li>
@@ -32,7 +32,7 @@ import T09IntersectionMixin from './T09IntersectionMixin.vue'
       <li>当两个来源都定义了同名属性、而类型又对不上时，冲突不会显式暴露。</li>
     </ul>
 
-    <h2>交叉类型的拼装</h2>
+    <h2>交叉类型拼装</h2>
     <p>
       不推翻「把能力拼到一起」，而是换一种更贴合语义的拼装方式。先把可复用的能力各自拆成小接口：<code>WithId</code> 负责标识，<code>Timestamped</code> 负责创建与更新时间，<code>Publishable</code> 负责发布状态与发布日期。
     </p>
@@ -58,7 +58,7 @@ import T09IntersectionMixin from './T09IntersectionMixin.vue'
       <strong>克制一点：</strong>Mixin 链超过两层之后，类型推导会明显变慢，调试也更绕。能用组合表达的关系，优先用组合，而不是继续往链上叠。
     </div>
 
-    <h2>能力叠加的表现</h2>
+    <h2>多块能力叠加</h2>
     <figure class="lesson-figure">
       <figcaption>点按钮切换发布状态，感受交叉类型拼出的卡片同时具备多块能力。</figcaption>
       <T09IntersectionMixin />

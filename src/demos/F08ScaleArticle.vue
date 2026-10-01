@@ -8,7 +8,7 @@ import F08Scale from './F08Scale.vue'
       <strong>开场问题：</strong>同一段 480p 老素材，要放大到 1080p，你分别用 <code>flags=neighbor</code>、<code>flags=bilinear</code>、<code>flags=lanczos</code> 各导一版。目标分辨率一模一样，可 neighbor 那版人脸像马赛克方块，bilinear 那版糊成一团，lanczos 那版却明显更锐利。输出尺寸完全相同，画面凭什么差这么多？
     </div>
 
-    <h2>新像素的取值</h2>
+    <h2>新像素插值填充</h2>
     <p>
       缩放要回答的是一个很具体的问题：把一张小图铺成一张大图时，<strong>那些原本不存在的、夹在原像素之间的新像素，该填什么颜色？</strong>大图里绝大多数像素都不是原图里本来就有的，它们全靠「猜」，而怎么猜，就是缩放算法的全部内容。
     </p>
@@ -19,7 +19,7 @@ import F08Scale from './F08Scale.vue'
       所以真正的问题是：<strong>当画面被重新采样时，「缺失的像素」由谁来定、按什么规则定？而缩放又往往只是流水线上的一步，多步处理怎样串成一条可控的链条？</strong>
     </p>
 
-    <h2>目标宽高直写</h2>
+    <h2>目标尺寸直接指定</h2>
     <p>
       最直接的写法是指定目标宽高：
     </p>
@@ -30,7 +30,7 @@ import F08Scale from './F08Scale.vue'
       它做对了一件事：<strong>能把画面拉到任意目标尺寸，并且这件事是可脚本化的</strong>。你写下的 1920×1080 就是最终成片的尺寸，一万个文件都能用同一行命令跑，结果一致。
     </p>
 
-    <h2>默认插值偏软</h2>
+    <h2>双线性插值偏软</h2>
     <ul>
       <li>它用的是<strong>默认插值算法（bilinear）</strong>，放大时会把锐利的边缘摊平，越放大越软——这正是开场里那版「糊成一团」的来源。</li>
       <li>它<strong>只管尺寸，不管比例</strong>：源是 4:3、目标是 16:9 时，画面会被直接拉伸，人脸变胖、logo 变扁，而你并不知道该在哪里补上「保持比例」这一步。</li>
@@ -38,7 +38,7 @@ import F08Scale from './F08Scale.vue'
       <li>真实需求往往不止一步——「先裁掉黑边，再等比缩到 720p，再补边到目标画布」——单个 <code>scale</code> 摆不平，你还得知道怎么把这些动作<strong>接成一条链</strong>。</li>
     </ul>
 
-    <h2>滤镜链的串联</h2>
+    <h2>滤镜图串联顺序</h2>
     <p>
       不推翻 <code>scale</code>，而是先补上「多步怎么串」这一层，因为它决定了后面每一个参数的落点。FFmpeg 把一串滤镜连成的处理链叫<strong>滤镜图（filtergraph）</strong>，在 <code>-vf</code> 里用逗号分隔，<strong>前一个滤镜的输出就是后一个的输入</strong>，像水管一样依次流过：
     </p>
@@ -83,13 +83,13 @@ import F08Scale from './F08Scale.vue'
       <strong>两条最容易踩的边界：</strong><code>scale</code> 的 <code>out_color_matrix</code> / <code>out_range</code> <strong>只改写标记、不做换算</strong>，指望用它完成 HDR 到 SDR 的转换只会得到颜色错乱的结果，真正转换用 <code>colorspace</code> 或 <code>zscale</code>；HDR 素材缩放后一定要用 <code>ffprobe</code> 复查 <code>color_space</code> 与位深标记，元数据一旦缺失，播放器就会按 SDR 解析，画面整片发灰。
     </div>
 
-    <h2>六种算法差异</h2>
+    <h2>六种插值算法对照</h2>
     <figure class="lesson-figure">
       <figcaption>在「缩放算法」页签里对照六种算法（bilinear / bicubic / lanczos / spline / neighbor / gaussian）的速度、质量与适用场景，再用下面的对比命令亲自跑一遍 480p 放大到 1080p；「HDR 缩放」与「高级用法」两个页签则展示保持位深、指定色彩空间以及 <code>force_original_aspect_ratio</code> 的写法。</figcaption>
       <F08Scale />
     </figure>
 
-    <h2>插值规则选定</h2>
+    <h2>插值算法选型</h2>
     <p>
       缩放真正要决定的，是「新像素按什么规则猜出来」。把滤镜图理解成一条有方向的链，先想清楚是哪一步在做缩放、作用在多大的画面上；再按用途挑插值算法——放大用 <code>lanczos</code> / <code>bicubic</code>，缩小随便，像素风用 <code>neighbor</code>；最后记住 <code>scale</code> 只管尺寸、不改色彩，位深和 HDR 得用 <code>-pix_fmt</code> 与 <code>zscale</code> 另外照料。
     </p>

@@ -8,7 +8,7 @@ import X09DataFetching from './X09DataFetching.vue'
       <strong>开场问题：</strong>课程列表页打开时先闪一下空白，过一会儿才冒出内容——数据服务明明很快，为什么用户一定要盯着空屏等一轮请求？
     </div>
 
-    <h2>渲染等待数据</h2>
+    <h2>单页应用取数流程</h2>
     <p>
       你在做课程站的列表页：进入页面要展示一批课程，数据存在后端接口里。在单页应用里，这几乎是一套固定动作——页面组件先挂载，然后在 <code>useEffect</code> 里发请求，拿到数据再存进 <code>state</code>，界面才第一次真正有内容。整个过程用户看到的，是一段「先空、后满」的过渡。
     </p>
@@ -16,7 +16,7 @@ import X09DataFetching from './X09DataFetching.vue'
       这段过渡看起来只是「加载了一下」，但它的代价一直被默认接受了：首帧 HTML 里没有任何数据，浏览器必须先把脚本下载、执行，再发出请求、等响应回来，界面才会被填满。问题不在请求快不快，而在<strong>渲染的时机被排在了数据之后</strong>。
     </p>
 
-    <h2>浏览器取数流程</h2>
+    <h2>客户端取数实现</h2>
     <p>
       最省事的做法，是把这段「挂载后取数」的逻辑留在浏览器里：用 <code>const [posts, setPosts] = useState([])</code> 建一个空列表，再在 <code>useEffect</code> 中 <code>fetch('/api/posts')</code> 并把结果 <code>setPosts</code>。组件先渲染空列表，数据到了触发一次更新，列表补上。
     </p>
@@ -24,7 +24,7 @@ import X09DataFetching from './X09DataFetching.vue'
       这个方案做对了一件事：<strong>它把「页面」和「数据」解耦了</strong>——页面结构先出来，数据后到，两者互不阻塞对方的代码编写。当只有一处数据、用户体验要求不高时，它确实能用。
     </p>
 
-    <h2>挂载取数的短板</h2>
+    <h2>请求瀑布与重复</h2>
     <ul>
       <li>首屏空白或转圈：HTML 到达时没有数据，用户必须等浏览器完成一次请求往返。</li>
       <li>请求瀑布：父组件取完数据渲染子组件，子组件再发请求，一层层串行叠加。</li>
@@ -33,7 +33,7 @@ import X09DataFetching from './X09DataFetching.vue'
       <li>敏感逻辑无处安放：客户端代码会打包给用户，数据库、密钥、私密接口都不敢碰。</li>
     </ul>
 
-    <h2>服务端数据预取</h2>
+    <h2>取数移至渲染前</h2>
     <p>
       不推翻「取数据再渲染」，而是<strong>把取数搬到渲染之前、搬到服务端</strong>。App Router 里的页面默认就是 Server Component，可以直接写 async 函数并在组件里 <code>await</code>：
     </p>
@@ -73,13 +73,13 @@ import X09DataFetching from './X09DataFetching.vue'
       选哪种策略，本质上取决于三件事：数据多久变一次、用户能否接受短暂的不一致、以及变更能不能被明确地触发。首页内容可能一周才改一次，用定时重新验证最省心；库存、余额这类随时在变的数据，用 <code>no-store</code> 才稳妥；而后台一改就要立刻反映到前台的数据，则靠 <code>tags</code> 加 <code>revalidateTag</code> 的组合，让「哪里变了」这件事由业务代码说了算，而不是交给时间去猜。
     </p>
 
-    <h2>四种缓存差异</h2>
+    <h2>四种缓存策略对比</h2>
     <figure class="lesson-figure">
       <figcaption>切换四种缓存选项，观察同一段 fetch 在不同策略下的行为差异。</figcaption>
       <X09DataFetching />
     </figure>
 
-    <h2>数据先行的顺序</h2>
+    <h2>数据先行与缓存</h2>
     <p>
       数据获取这件事的核心矛盾是「渲染和数据谁先到位」。把它搬进 Server Component 直接 <code>await</code>，让数据先于 HTML 到达；再用手里的缓存选项，把「每次都取、多久变一次、何时主动失效」说清楚——首屏白屏和重复请求这两类问题就一起消失了。
     </p>

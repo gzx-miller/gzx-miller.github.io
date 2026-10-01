@@ -8,7 +8,7 @@ import TW05ThemeTokens from './TW05ThemeTokens.vue'
       <strong>开场问题：</strong>品牌色在十几处写成了同一个十六进制值，改一次品牌色就要全局搜索替换；我把它存成了 CSS 变量，工具类里却一个也用不上——规范到底要怎么才能既好改、又能被类名消费？
     </div>
 
-    <h2>规范值散落重复</h2>
+    <h2>硬编码值重复</h2>
     <p>
       你的项目里有一套视觉规范：品牌色是一种橙、显示字体是一种衬线体、大圆角固定是 1.5rem。这些值会反复出现在按钮、标签、卡片上。
     </p>
@@ -16,7 +16,7 @@ import TW05ThemeTokens from './TW05ThemeTokens.vue'
       现在规范要调整——品牌色变一点色相，圆角再大一点。如果这些值当初是当作「一次性数字」散落在各处的，你就要一处一处找、一处一处改，而且总会漏掉某个角落。真正想要的，是<strong>让这些值有一个单一来源，并且能直接生成日常使用的类名</strong>。
     </p>
 
-    <h2>初步的变量方案</h2>
+    <h2>原生CSS变量</h2>
     <p>
       第一反应是定义 CSS 变量：在 <code>:root</code> 里写 <code>--brand: #ea580c;</code>，然后到处用 <code>var(--brand)</code>。这确实做到了「单一来源」，改一处、全局跟着变。
     </p>
@@ -24,7 +24,7 @@ import TW05ThemeTokens from './TW05ThemeTokens.vue'
       它做对的是<strong>集中管理</strong>。问题在于，它只解决了「值在哪里」，没解决「值怎么用」：变量本身不会生成工具类，你还是得手写一段段 <code>background: var(--brand)</code>，工具类体系和变量体系成了两条互不相通的平行线。
     </p>
 
-    <h2>变量与工具类脱节</h2>
+    <h2>变量与工具类割裂</h2>
     <ul>
       <li>变量与工具类各自为政，同一套颜色要维护两份写法，很容易走偏。</li>
       <li>魔法数值仍然散落在各处：字号、圆角、断点，凡是没有变量的地方照旧是硬编码。</li>
@@ -32,7 +32,7 @@ import TW05ThemeTokens from './TW05ThemeTokens.vue'
       <li>变量名要是取成了具体色值（比如 <code>--orange-500</code>），将来整体换品牌色时，名字和数据就对不上了。</li>
     </ul>
 
-    <h2>令牌与变量的合并</h2>
+    <h2>令牌与变量合一</h2>
     <p>
       Tailwind v4 的 <code>@theme</code> 把这两件事合到一起：它用<strong>带命名空间的 CSS 变量</strong>定义设计令牌，编译器据此<strong>自动生成对应的工具类</strong>，而令牌本身又<strong>保留为运行时变量</strong>，可以被 <code>var()</code> 和 JavaScript 直接复用。
     </p>
@@ -58,13 +58,13 @@ import TW05ThemeTokens from './TW05ThemeTokens.vue'
       <li>在产物里核对生成的工具类名与令牌命名一致。</li>
     </ol>
 
-    <h2>一枚令牌多处驱动</h2>
+    <h2>单枚令牌多端驱动</h2>
     <figure class="lesson-figure">
       <figcaption>拖动滑杆改变品牌色相，看同一枚令牌如何同时驱动色板、按钮与颜色类。</figcaption>
       <TW05ThemeTokens />
     </figure>
 
-    <h2>单一来源与可消费</h2>
+    <h2>单一来源与消费性</h2>
     <p>
       设计令牌要解决的是「单一来源」和「可被消费」这两件事。变量只做到了前者，<code>@theme</code> 把后者也一起解决：写一次令牌，得到工具类、得到运行时变量、得到一个能整体调整的品牌色。关键是克制——把令牌当成设计系统对外暴露的接口，而不是收纳所有变量的箱子，只把真正稳定的约束放进去，规范才会既好改、又好用。
     </p>

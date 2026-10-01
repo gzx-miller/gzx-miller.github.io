@@ -8,7 +8,7 @@ import T10Conditional from './T10Conditional.vue'
       <strong>开场问题：</strong>接口响应有成功和失败两种形状，我想写一个类型只把「成功时的数据」取出来，结果它对着整个联合一起判断，一个成员都没提取到——为什么没有逐个成员分别处理？
     </div>
 
-    <h2>联合响应的拆分</h2>
+    <h2>联合响应拆分</h2>
     <p>
       响应类型往往是个联合：成功时是 <code>{ ok: true; data: T }</code>，失败时是 <code>{ ok: false; error: string }</code>。业务里真正关心的是「成功分支里那份 <code>data</code> 到底是什么类型」。你很自然地想为它写一个派生类型，把成功数据挖出来，可是一动手就发现：这件事得<strong>按类型形状做分支</strong>——如果它是这种形状就取 A，否则取 B。
     </p>
@@ -16,7 +16,7 @@ import T10Conditional from './T10Conditional.vue'
       类型层面过去没有这种能力，代价就是手工展开。每一种响应都手写一个提取类型，<code>UserResponse</code> 配一个 <code>UserData</code>，<code>CourseResponse</code> 再配一个 <code>CourseData</code>，逻辑完全一样却抄了无数遍。更麻烦的是遇到联合时，手写的类型根本不知道该针对哪个成员。
     </p>
 
-    <h2>写死的提取类型</h2>
+    <h2>手写提取类型</h2>
     <p>
       最省事的做法：为每种响应单独定义一个提取类型，把成功数据的形状直接写死。
     </p>
@@ -24,7 +24,7 @@ import T10Conditional from './T10Conditional.vue'
       这个方案做对了一件事：<strong>它把「提取」这件事明确表达了</strong>。类型名字本身就说明了意图，使用处也能得到正确的数据形状。在响应种类很少、又不怎么变化时，这样写清楚、直接，够用。
     </p>
 
-    <h2>逐个判断的缺失</h2>
+    <h2>逐个判断缺失</h2>
     <ul>
       <li>每新增一种响应就要重抄一份提取类型，逻辑重复且容易抄错。</li>
       <li>面对联合类型时，手写类型无法「逐个成员分别判断」，要么全中要么全不中。</li>
@@ -32,7 +32,7 @@ import T10Conditional from './T10Conditional.vue'
       <li>它无法对内层未知类型做捕获，遇到泛型容器只能放弃。</li>
     </ul>
 
-    <h2>条件类型的分派</h2>
+    <h2>条件类型分派</h2>
     <p>
       不推翻「按形状分支」，而是把这个分支动作<strong>交给语言本身</strong>。条件类型就是类型层面的 if-else，写作 <code>T extends U ? X : Y</code>：先判断 <code>T</code> 能否赋值给 <code>U</code>，是则取 <code>X</code>，否则取 <code>Y</code>。把它写成一个具名的类型别名，就得到了可以反复复用的判断规则。
     </p>
@@ -56,13 +56,13 @@ import T10Conditional from './T10Conditional.vue'
       回头再看开场那个提取成功数据的类型，就能写得又短又准：判断 <code>R</code> 是否满足「成功形状」，在匹配的分支里用 <code>infer</code> 把 <code>data</code> 捕获出来，其余情况归到 <code>never</code>。联合响应经过一分布式判断，成功数据自然就被摘了出来。
     </p>
 
-    <h2>成功分支的取数</h2>
+    <h2>成功分支提取</h2>
     <figure class="lesson-figure">
       <figcaption>点按钮切换成功与失败响应，看条件类型提取出的数据如何被使用。</figcaption>
       <T10Conditional />
     </figure>
 
-    <h2>分支判定规则</h2>
+    <h2>分支判定与分发</h2>
     <p>
       条件类型把「按类型形状分支」变成了语言内置的能力：<code>T extends U ? X : Y</code> 做判断，裸类型参数遇到联合会逐个分发，用 <code>[T]</code> 包裹即可切回整体判断，配合 <code>infer</code> 还能捕获内层类型。<code>Exclude</code>、<code>Extract</code>、<code>NonNullable</code> 这些工具，都是这套机制结出的果。
     </p>

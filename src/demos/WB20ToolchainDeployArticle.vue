@@ -8,7 +8,7 @@ import WB20ToolchainDeploy from './WB20ToolchainDeploy.vue'
       <strong>开场问题：</strong>你照教程把一段 C 代码用 Emscripten 编译出来，输出目录里除了 <code>.wasm</code>，还躺着一个同名 <code>.js</code>，开了线程的话还多一个 worker 脚本——你不知道该把哪些传上 CDN；换成 Rust 用 <code>wasm-pack build</code>，又冒出一个 <code>pkg/</code> 目录，里面 <code>.js</code>、<code>.wasm</code>、<code>.d.ts</code> 一应俱全。同样是「编译成 Wasm」，为什么不同工具链产出的文件长得完全不一样，上线时我到底要交付哪些？
     </div>
 
-    <h2>一包产物构成</h2>
+    <h2>产物构成与胶水层</h2>
     <p>
       因为 Wasm 从来不是「一个文件」，而是<strong>一包产物</strong>。Wasm 的运行时模型很克制：它只有整数、浮点和一块线性内存，<strong>没有字符串、没有对象、也不能直接碰 DOM</strong>。任何真实业务都要用到这些东西，于是工具链不得不额外生成一层 JS「<strong>胶水</strong>」，把 Wasm 的能力翻译给前端世界。不同语言、不同工具链需要翻译的东西多寡不同，产出的文件自然就不一样。
     </p>
@@ -24,7 +24,7 @@ import WB20ToolchainDeploy from './WB20ToolchainDeploy.vue'
       这个方案做对了一件事：<strong>它把「源码 → 二进制 → 可调用的实例」这条最短链路完整打通了，而且产物只有一个文件</strong>。理解了这一条，后面所有的「胶水」都只是围绕它做的补全。
     </p>
 
-    <h2>手写WAT的代价</h2>
+    <h2>手写WAT成本</h2>
     <ul>
       <li>真实业务几乎不可能手写 WAT：字符串处理、结构体、内存分配、和 DOM 或 JS 的交互，用底层指令写一遍的成本和风险都高得离谱。</li>
       <li>一旦换成 C/C++ 或 Rust，工具链就会<strong>额外产出 JS 胶水</strong>，产物从一个文件变成一包，你得先知道每个文件扮演什么角色，才不会漏传。</li>
@@ -32,7 +32,7 @@ import WB20ToolchainDeploy from './WB20ToolchainDeploy.vue'
       <li>服务器 MIME 配错，<code>instantiateStreaming</code> 会拒绝加载；打包器也未必认识 <code>.wasm</code>，需要单独配置成静态资源规则。</li>
     </ul>
 
-    <h2>工具链产出对照</h2>
+    <h2>工具链产出形态</h2>
     <p>
       先补<strong>编译这一步的运行原理，再逐一看各工具链的产出形态</strong>。链路本身是一样的：源码 → 编译器 → <code>.wasm</code> → <code>compile</code> 得到 Module → <code>instantiate</code> 注入导入得到实例 → 随静态资源部署。差别全在「用哪条工具链」上。
     </p>
@@ -61,13 +61,13 @@ import WB20ToolchainDeploy from './WB20ToolchainDeploy.vue'
       <strong>三个最常见的上线事故：</strong>其一，只部署了 <code>.wasm</code>，漏掉工具链生成的胶水 JS，页面加载即报错；其二，服务器 MIME 没配成 <code>application/wasm</code>，<code>instantiateStreaming</code> 被拒，你却在本地开发服务器上「一切正常」；其三，用了 <code>-pthread</code> 线程产物，却忘了配 COOP/COEP，线程直接起不来。
     </div>
 
-    <h2>五步流程走查</h2>
+    <h2>五步编译流程</h2>
     <figure class="lesson-figure">
       <figcaption>照着上图五步的进度走一遍：它演示了一条完整的「源码 → 编译器 → 二进制 → 编译为 Module → 实例化 Instance → 部署调用」链路，最后用 <code>instantiateStreaming</code> 边下载边编译，并调用 <code>add(2, 3)</code> 返回结果。留意顶部那个「模块体积」标记——它提醒你，这一环产出的字节数，正是上一课要优化的对象。</figcaption>
       <WB20ToolchainDeploy />
     </figure>
 
-    <h2>整包交付链路</h2>
+    <h2>整包交付与部署</h2>
     <p>
       一份 Wasm 应用的链路是「源码 → 编译器 → <code>.wasm</code> → <code>compile</code> 得 Module → <code>instantiate</code> 得实例 → 部署」。不同工具链的产物形态不同，差别全在胶水层：WAT 最干净，Emscripten 会带一个 JS 胶水（开线程再加 worker 脚本），Rust 的 <code>wasm-bindgen</code> 加 <code>wasm-pack</code> 会产出一个含 <code>.js</code>、<code>.wasm</code>、<code>.d.ts</code> 的 <code>pkg/</code> 目录。交付时要<strong>整包一起部署</strong>，服务器配好 <code>application/wasm</code> 与缓存，用 <code>instantiateStreaming</code> 加载；并牢记 Module 不可变、实例才带状态，同一份产物可被安全地多次实例化。
     </p>

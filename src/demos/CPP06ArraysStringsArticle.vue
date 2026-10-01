@@ -24,7 +24,7 @@ import CPP06ArraysStrings from './CPP06ArraysStrings.vue'
       所以真正要回答的是：能不能让「一块字符内存」和「它有多长」绑在同一个东西里，让谁都不会算错？
     </p>
 
-    <h2>手动缓冲区管理</h2>
+    <h2>裸缓冲区管理</h2>
     <p>
       最朴素但真的能跑的做法：手动开一个足够大的缓冲区，用 <code>\0</code> 结尾，用 <code>strlen</code> 数长度。
     </p>
@@ -37,7 +37,7 @@ import CPP06ArraysStrings from './CPP06ArraysStrings.vue'
       这个方案做对了一件很扎实的事：它立起了<strong>「字符串 = 一串字符 + 一个结束标记」</strong>这个模型。<code>strlen</code> 只要一路扫到 <code>\0</code> 就知道长度，输出函数也靠它知道何时停。在没有更好工具的年代，这套约定撑起了无数 C 程序。
     </p>
 
-    <h2>越界写入的后果</h2>
+    <h2>越界写入后果</h2>
     <ul>
       <li><code>char s[5] = "Hello";</code> 里源串是 5 个字符加一个 <code>\0</code>、共 6 字节，塞进 5 字节数组后 <code>\0</code> 被挤掉，之后任何按 C 字符串进行的操作都会一路读到数组外。</li>
       <li><code>strcpy(dst, src)</code> 在 <code>strlen(src) + 1 &gt; sizeof(dst)</code> 时照写不误，直接覆盖相邻内存——正是开场那个 bug。</li>
@@ -45,7 +45,7 @@ import CPP06ArraysStrings from './CPP06ArraysStrings.vue'
       <li>想拼接两段字符串，得自己 <code>strlen</code> 两边、算总长、确认缓冲区够大、再 <code>strcat</code>——每一步都能算错，且错一步就是内存被破坏。</li>
     </ul>
 
-    <h2>缓冲区与长度封装</h2>
+    <h2>缓冲区长度封装</h2>
     <p>
       不推翻「字符 + 结束标记」，而是把「缓冲区」和「长度」封进一个对象里。这就是 <code>std::string</code>：容量不够时它自己扩容，拼接用 <code>+</code>、比较用 <code>==</code>，长度随时 <code>size()</code> 可取。
     </p>
@@ -71,13 +71,13 @@ import CPP06ArraysStrings from './CPP06ArraysStrings.vue'
       <strong>别再用 <code>strcpy</code> / <code>strcat</code>：</strong>它们完全不看目标缓冲区多大。退而求其次可用 <code>strncpy</code> / <code>strncat</code>，但要记得自己补 <code>\0</code>；更省心的做法是根本不用它们，直接用 <code>std::string</code>。
     </div>
 
-    <h2>数组退化的代价</h2>
+    <h2>数组退化代价</h2>
     <figure class="lesson-figure">
       <figcaption>对照代码逐行核对：内置数组如何用初始化列表补零、数组退化到底丢掉了什么、C 风格字符串靠什么求长度，以及 <code>std::string</code> 的拼接、查找与 <code>c_str()</code>。</figcaption>
       <CPP06ArraysStrings />
     </figure>
 
-    <h2>长度交由类型管理</h2>
+    <h2>类型接管长度</h2>
     <p>
       数组与字符串这件事，说到底就是把「容量」和「长度」从人的记忆里搬进类型里。裸数组和 C 风格字符串把这两件事全交给你，<code>std::string</code> 与 <code>std::array</code> / <code>std::vector</code> 把它们接管过去——只要不与 C 风格接口打交道，你几乎不必再手算长度。
     </p>

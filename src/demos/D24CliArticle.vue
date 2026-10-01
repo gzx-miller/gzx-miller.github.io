@@ -8,7 +8,7 @@ import D24Cli from './D24Cli.vue'
       <strong>开场问题：</strong>你写了个部署脚本，约定用 <code>deploy --env prod --port 8080</code>。同事敲成了 <code>--port=8080</code>（用等号连写），脚本既不报错、也不退出，静默地套用了默认端口 3000，把服务发到了错误的环境；CI 里流水线一路绿灯——因为从退出码看，它「成功」了。
     </div>
 
-    <h2>参数字符串的本质</h2>
+    <h2>原始参数字符串</h2>
     <p>
       命令行工具得先读懂用户敲进来的参数，才谈得上干活。最原始的做法是直接摆弄 <code>process.argv</code>，可它交到你手上的只是一串没有结构的字符串，于是三笔成本全落到了你身上：
     </p>
@@ -29,7 +29,7 @@ import D24Cli from './D24Cli.vue'
       它做对了一件必须记住的事：<strong>认清了「用户参数从 <code>argv[2]</code> 开始」</strong>。<code>process.argv[0]</code> 是 node 可执行文件路径，<code>argv[1]</code> 是脚本自身路径，这两个都是运行时塞进来的，不是用户输入，必须跳过。这个认知后面无论用哪套方案都不能丢。
     </p>
 
-    <h2>等号与短选项失守</h2>
+    <h2>等号短选项解析</h2>
     <ul>
       <li>等号形式失守：<code>--port=8080</code> 被当成一个整体，键名成了 <code>port=8080</code>，值反而没了。</li>
       <li>短选项没处理：<code>-p 8080</code> 直接被忽略，因为循环只认 <code>--</code> 开头。</li>
@@ -39,7 +39,7 @@ import D24Cli from './D24Cli.vue'
       <li>不可扩展：每加一个参数就要改一段手写解析，越写越脆，边界情况永远补不完。</li>
     </ul>
 
-    <h2>现成解析工具的选用</h2>
+    <h2>内置解析工具</h2>
     <p>
       先补<strong>「不要手写解析」</strong>这件事。小工具用内置的 <code>util.parseArgs</code>，它会替你处理 <code>--key=value</code> 与 <code>--key value</code> 两种形态、区分布尔开关、并把未声明的未知参数报出来；功能更复杂的 CLI 再上 <code>commander</code> / <code>yargs</code> / <code>cac</code>，它们额外提供子命令、类型转换与自动生成的帮助信息。之所以先补它：手写解析的每一种形态都是一个坑，而标准库与成熟框架已经把这些形态收敛好了，这是投入产出比最高的一步。
     </p>
@@ -59,7 +59,7 @@ import D24Cli from './D24Cli.vue'
       <strong>发给自动化脚本用的 CLI，成败信号只认退出码。</strong>人看的是屏幕上的输出，CI 看的是你 <code>process.exit()</code> 传出去的整数。忽略这一点，等于让你的工具在流水线里永远「成功」。
     </div>
 
-    <h2>解析结果的观察</h2>
+    <h2>解析结果观察</h2>
     <figure class="lesson-figure">
       <figcaption>在上方输入框里改参数并观察下方的解析结果：试试 <code>--name 栗子 --age 3 --verbose</code>，再换成 <code>--port=8080</code>——你会看到等号形式被原样当成了键名、值丢了，这正是手写解析的典型漏洞；往下还能对照 commander / yargs / minimist / cac 四个库的定位。</figcaption>
       <D24Cli />

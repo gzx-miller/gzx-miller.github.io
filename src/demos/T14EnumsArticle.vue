@@ -16,7 +16,7 @@ import T14Enums from './T14Enums.vue'
       <strong>枚举不只是「一组常量」，它同时产出运行时的对象。</strong>这层运行时代价与伴随的行为，才是选型真正要权衡的地方。
     </p>
 
-    <h2>数字枚举的写法</h2>
+    <h2>数字枚举写法</h2>
     <p>
       先用<strong>数字枚举</strong>：<code>enum CourseStatus { Draft, Review, Published, Archived }</code>。成员依次是 0、1、2、3，写法最省事，比较大小也方便，<code>status &lt; CourseStatus.Archived</code> 这样的判断直接可用。
     </p>
@@ -24,7 +24,7 @@ import T14Enums from './T14Enums.vue'
       它做对了一件事：<strong>把「一组合法状态」收敛成单一来源，类型与取值共用同一个名字</strong>。这个目标完全正确，后面的方案也都在保留它。
     </p>
 
-    <h2>反向映射的代价</h2>
+    <h2>反向映射代价</h2>
     <ul>
       <li>数字枚举的值是数字，序列化到接口或日志后只剩下 <code>2</code>，脱离代码就失去意义。</li>
       <li>它会生成<strong>反向映射</strong>：除了 <code>CourseStatus.Draft → 0</code>，还多了 <code>CourseStatus[0] → 'Draft'</code>；用 <code>Object.entries</code> 遍历时会同时拿到两组键，必须额外过滤。</li>
@@ -59,13 +59,13 @@ import T14Enums from './T14Enums.vue'
       用 <code>Object.entries</code> 遍历数字枚举时，<strong>记得过滤反向映射产生的键</strong>（例如用 <code>isNaN(Number(key))</code> 判断），否则状态列表里会混进一堆数字键。
     </div>
 
-    <h2>取值与反向映射</h2>
+    <h2>两种枚举对照</h2>
     <figure class="lesson-figure">
       <figcaption>推进一步看看数字枚举的取值与反向映射，再切换难度，对照字符串枚举的可读性。</figcaption>
       <T14Enums />
     </figure>
 
-    <h2>枚举与联合之别</h2>
+    <h2>枚举与联合取舍</h2>
     <p>
       枚举与联合字面量解决的是同一件事：把有限的状态集合收敛成单一来源，让非法取值无法通过编译。区别在于枚举会产出运行时对象，数字枚举还带着反向映射与「任意数字都能赋值」的漏洞；<code>const enum</code> 会内联但不适合对外发布；<code>as const</code> 加联合字面量产物最轻，配合 <code>satisfies</code> 与 <code>Record</code> 还能反过来校验配置的完整性。
     </p>

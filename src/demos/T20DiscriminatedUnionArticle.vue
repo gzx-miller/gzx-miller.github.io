@@ -24,7 +24,7 @@ import T20DiscriminatedUnion from './T20DiscriminatedUnion.vue'
       这个做法承认了一个关键事实：<strong>状态是业务模型里最重要的信息，值得被单独表达出来</strong>。状态驱动着界面的分支和可执行的操作，先把它写清楚，是建模的第一步。
     </p>
 
-    <h2>字段堆叠的弊端</h2>
+    <h2>字段堆叠弊端</h2>
     <ul>
       <li><code>string</code> 太宽了，写错一个字母、传入一个根本不存在的状态，编译器都不会报错。</li>
       <li>各状态特有的字段只能都堆在同一个对象上、个个可选，访问前永远要判断「它到底有没有值」。</li>
@@ -32,7 +32,7 @@ import T20DiscriminatedUnion from './T20DiscriminatedUnion.vue'
       <li>新增状态时受影响的位置散落各处，没有一个清单告诉你「还有哪里没改」。</li>
     </ul>
 
-    <h2>判别字段的收窄</h2>
+    <h2>判别属性收窄</h2>
     <p>
       不推翻「用状态分流」，而是做两件事：<strong>让每个状态成为独立的类型、让各自的字段归位</strong>；再让编译器替我们盯住分支有没有漏。
     </p>
@@ -70,7 +70,7 @@ import T20DiscriminatedUnion from './T20DiscriminatedUnion.vue'
       <T20DiscriminatedUnion />
     </figure>
 
-    <h2>状态集合的建模</h2>
+    <h2>状态集合建模</h2>
     <p>
       可辨识联合把「一个值可能处于哪些状态、每种状态带什么数据」写进了类型。判别属性让每个分支都能被精确收窄，<code>never</code> 让遗漏的分支在编译期就暴露。状态越多、流转越复杂，这套写法的收益越大。
     </p>

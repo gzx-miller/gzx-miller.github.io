@@ -8,7 +8,7 @@ import U14CompositionApi from './U14CompositionApi.vue'
       <strong>开场问题：</strong>你把一个页面从 Options 写法迁到了 <code>&lt;script setup&gt;</code>，H5 上一路正常。可项目里有个老工具函数，要在任意地方调用 <code>this.$scope</code> 拿当前页面实例——你在 <code>&lt;script setup&gt;</code> 里翻遍了也找不到 <code>this</code>。一个没有 <code>this</code> 的组件，怎么拿到页面实例？
     </div>
 
-    <h2>选项式写法构成</h2>
+    <h2>选项式API结构</h2>
     <p>
       在 Options API 里，一切都有 <code>this</code>：<code>this.$scope</code> 是页面实例，<code>data</code> 是状态，生命周期就是 <code>onLoad</code> / <code>onShow</code> 这些同名方法挂在对象上。<strong>组合式 API 去掉了 <code>this</code></strong>：逻辑变成一堆普通函数，状态用 <code>ref</code> / <code>reactive</code>，生命周期从「对象里的方法」变成「导入进来的函数」。这一下冒出两个真实的组织问题：页面级的 <code>onLoad</code> 该从哪来？没有 <code>this</code>，又怎么拿到页面 / 应用实例？
     </p>
@@ -19,7 +19,7 @@ import U14CompositionApi from './U14CompositionApi.vue'
       问题于是变得明确：<strong>怎么用组合式 API 而不是 Options 来组织 uni-app 页面，页面级生命周期从哪导入，丢掉 <code>this</code> 之后实例又怎么取？</strong>
     </p>
 
-    <h2>沿用选项式写法</h2>
+    <h2>沿用选项式API</h2>
     <p>
       最朴素的方案就是先别动：继续用 Options API，页面照旧写 <code>data</code> / <code>methods</code> / <code>onLoad</code> / <code>onShow</code>。
     </p>
@@ -27,7 +27,7 @@ import U14CompositionApi from './U14CompositionApi.vue'
       这个方案做对了一件事：<strong>它是 uni-app 原生支持、稳定、所有老示例都这么写的形态</strong>。页面生命周期就是 <code>options</code> 里的同名方法，不需要任何导入，心智负担为零。对逻辑很少的单页，它完全够用，不迁也不丢人。
     </p>
 
-    <h2>同一功能散落四处</h2>
+    <h2>逻辑切分隐患</h2>
     <ul>
       <li>一个功能的状态、方法、生命周期被「选项」切到 <code>data</code> / <code>methods</code> / <code>onLoad</code> / <code>onShow</code> 四处，想读懂一个功能得来回跳。</li>
       <li>可复用逻辑只能塞进 mixin，多个 mixin 的同名数据/方法怎么合并规则隐晦，同名就会互相覆盖，出问题很难定位。</li>
@@ -35,7 +35,7 @@ import U14CompositionApi from './U14CompositionApi.vue'
       <li>想做点平台特有的事、需要页面实例时，Options 里还能 <code>this.$scope</code>，可一旦进到组合式，连 <code>this</code> 都没有，直接卡住。</li>
     </ul>
 
-    <h2>组合式页面组织</h2>
+    <h2>组合式API聚合</h2>
     <p>
       不推翻「用 Vue 写页面」，而是把组织方式换成 <code>&lt;script setup lang="ts"&gt;</code>。第一层，状态与派生值都写在同一个顶层作用域：状态用 <code>ref</code> / <code>reactive</code>，派生值用 <code>computed</code>。这里有一个省事的地方——<code>&lt;script setup&gt;</code> 里声明的变量和方法<strong>不需要手动 <code>return</code></strong>，模板直接就能用，这比写 <code>setup() { return {...} }</code> 干净得多。
     </p>
@@ -73,7 +73,7 @@ import U14CompositionApi from './U14CompositionApi.vue'
       <U14CompositionApi />
     </figure>
 
-    <h2>功能维度聚合</h2>
+    <h2>按功能聚合逻辑</h2>
     <p>
       <code>&lt;script setup&gt;</code> 把逻辑从「按选项分类」变成「按功能聚合」：状态用 <code>ref</code>、派生用 <code>computed</code>、页面生命周期从 <code>@dcloudio/uni-app</code> 导入，模板自动可见不用 <code>return</code>。丢掉 <code>this</code> 不是损失——实例用 <code>getCurrentInstance()</code> 取，数据用 <code>ref</code>，通信靠 <code>defineProps</code> / <code>defineEmits</code>，全局数据走 <code>getApp()</code> 或 store，然后把逻辑抽成 composable。唯一要记死的是：页面生命周期二选一、且在 setup 同步阶段注册。
     </p>

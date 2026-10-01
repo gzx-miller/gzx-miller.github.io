@@ -8,7 +8,7 @@ import S17PiniaPlugin from './S17PiniaPlugin.vue'
       <strong>开场问题：</strong>项目里有八个 store，每个都要写日志、每个都要存 localStorage、出了错都要上报——难道这些和业务无关的代码，真的要在每个 store 里各抄一遍吗？
     </div>
 
-    <h2>横切能力散落</h2>
+    <h2>横切关注点散落</h2>
     <p>
       你在做一个学习平台的登录日志与错误追踪：只要用户执行了关键操作（报名、退课、切换语言），就记一条日志；某个 store 的数据还要在刷新后保持住。最初只有一两个 store，你在它们各自内部写了点日志和持久化代码，还觉得挺顺手。
     </p>
@@ -16,7 +16,7 @@ import S17PiniaPlugin from './S17PiniaPlugin.vue'
       可当 store 长到第八个，事情变味了：<strong>日志逻辑被复制了八份，持久化代码被复制了八份，错误上报又被复制了八份</strong>。它们和「报名」「退课」这些真正的业务逻辑混在同一个文件里，谁改了公共格式，就得挨个改一遍，还总会漏掉某个新加的 store。你需要的其实是同一种东西，只是希望它能被「附加」到所有 store 上。
     </p>
 
-    <h2>逐仓库重复写</h2>
+    <h2>各仓库重复编写</h2>
     <p>
       最直接的做法：在每个 store 内部，各自写一份日志与持久化的代码。谁需要就在谁那里加一遍。
     </p>
@@ -33,7 +33,7 @@ import S17PiniaPlugin from './S17PiniaPlugin.vue'
       <li>这段横切逻辑本身没有被单独测过，出问题只能逐个 store 排查。</li>
     </ul>
 
-    <h2>统一插件挂点</h2>
+    <h2>统一插件挂载点</h2>
     <p>
       不推翻「每个 store 都要这些能力」，而是<strong>给它一个统一的挂载点</strong>。Pinia 提供的挂载点就是插件：用 <code>pinia.use(plugin)</code> 注册一个函数，<strong>这个函数会在每一个 store 被创建时执行一次</strong>，于是你可以在里面一次性为所有 store 接上增强逻辑。
     </p>

@@ -8,7 +8,7 @@ import N09WebSocketGateway from './N09WebSocketGateway.vue'
       <strong>开场问题：</strong>讲师在课堂里发了一条公告，另一个学员的页面却要刷新一下才出现——接收接口明明写得没问题，为什么对方总是「慢了一拍」？
     </div>
 
-    <h2>拉取模式的推送缺口</h2>
+    <h2>拉取模式推送缺口</h2>
     <p>
       你在做一个在线课堂：讲师发公告，房间里的学员要立刻看到。后端的查询接口 <code>GET /announcements</code> 完全正常，前端也确实拿到了数据。<strong>问题出在「什么时候去拿」上</strong>——HTTP 是「客户端发问、服务端回答」的模型，服务端没有通道把「有新公告了」这件事主动推给浏览器。
     </p>
@@ -16,7 +16,7 @@ import N09WebSocketGateway from './N09WebSocketGateway.vue'
       于是只剩两条路：让学员手动刷新，体验不可用；或者让浏览器不停地问「有没有新的」。后者看起来能用，但代价藏在看不见的地方——用户不发问的那一刻，变化就永远不会自己送上门。只要业务里有「服务端状态变更需要立刻通知客户端」的成分，这个矛盾就绕不开。
     </p>
 
-    <h2>定时轮询的实现</h2>
+    <h2>定时轮询拉取</h2>
     <p>
       最省事的做法：前端用 <code>setInterval</code> 每 3 秒调一次公告列表接口，拿到新数据就渲染，后端一行都不用改。
     </p>
@@ -24,7 +24,7 @@ import N09WebSocketGateway from './N09WebSocketGateway.vue'
       这个方案确实做对了一件事：<strong>它承认了「服务端必须把变化告诉客户端」这个需求</strong>。而且实现成本几乎为零——服务端不需要维持任何长连接状态，天然可以水平扩展；如果课堂只有几个人、公告一天没几条，它甚至能长期跑下去。
     </p>
 
-    <h2>间隔锁死与空跑开销</h2>
+    <h2>轮询间隔与空转开销</h2>
     <ul>
       <li>延迟被轮询间隔锁死：3 秒轮询就有最多 3 秒延迟，想更快只能缩短间隔，请求量成倍上涨。</li>
       <li>绝大多数请求是空跑——没有新公告时白问了，人多的时候这部分全是浪费。</li>
@@ -33,7 +33,7 @@ import N09WebSocketGateway from './N09WebSocketGateway.vue'
       <li>每次请求都要重走一遍完整的 HTTP 头与鉴权流程，长会话场景下的固定开销很明显。</li>
     </ul>
 
-    <h2>双向长连接的建立</h2>
+    <h2>双向长连接建立</h2>
     <p>
       不推翻「服务端主动推送」，而是把「反复发问」换成一条<strong>双向长连接</strong>：客户端连上之后连接不断开，双方随时可以往这条连接里写消息——这就是 WebSocket。NestJS 把这类服务抽象成<strong>网关</strong>，它是「长得像控制器、面向 WebSocket 的类」：同样登记在模块里、同样走依赖注入，只是入口从 HTTP 路由换成了消息事件。
     </p>
@@ -53,13 +53,13 @@ import N09WebSocketGateway from './N09WebSocketGateway.vue'
       最后是<strong>集群</strong>。前面的房间成员与在线人数都存在网关进程的内存里，一旦部署多个实例，学员 A 连在实例一、学员 B 连在实例二，<code>to(roomId).emit()</code> 只能推到同一实例上的连接，跨实例的广播就丢了。解决办法是接入 <strong>Redis 适配器</strong>，让消息经由 Redis 在实例之间转发，把「房间」从单机内存升级为集群共享状态。这是 WebSocket 从单机走向集群必须迈过的一道坎。
     </p>
 
-    <h2>公告广播的事件流向</h2>
+    <h2>公告广播事件流向</h2>
     <figure class="lesson-figure">
       <figcaption>填入房间与昵称后加入房间，再发一条公告，看事件如何从客户端流向网关并广播回房间。</figcaption>
       <N09WebSocketGateway />
     </figure>
 
-    <h2>主动推送的通道改造</h2>
+    <h2>主动推送通道改造</h2>
     <p>
       WebSocket 网关解决的是一件事：<strong>把「服务端主动推送」变成一条双向长连接</strong>。事件用 <code>@SubscribeMessage</code> 映射到方法，隔离用房间完成，连接的建立与断开用生命周期钩子管理。它和控制器共享同一套 DI 体系，所以从 HTTP 迁移过去时，变的只是入口，业务代码基本不动。
     </p>

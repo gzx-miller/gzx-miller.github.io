@@ -8,7 +8,7 @@ import WB06StringsInterop from './WB06StringsInterop.vue'
       <strong>开场问题：</strong>你在 JS 里写下 <code>const addr = 'squirrel hazelnut'</code>，想交给 Wasm 处理，可它导出的函数签名清一色是 <code>i32</code>、<code>f64</code> 这些数字类型——<strong>根本没有一个叫 string 的类型</strong>。这一串字符到底怎么塞得进去？
     </div>
 
-    <h2>类型系统无字符串</h2>
+    <h2>字符串类型受限</h2>
     <p>
       你想让宿主和模块之间传一段文本——收货地址、用户名、一段 JSON。麻烦在于 Wasm 的类型系统里压根没有字符串：它只有 <code>i32</code>、<code>i64</code>、<code>f32</code>、<code>f64</code> 这些数字，外加 <code>funcref</code>、<code>externref</code> 这些引用。为什么不加一个 string 类型？因为 Wasm 是给各种语言共用的编译目标，C 的字符串、Rust 的 <code>String</code>、Go 的 string 表示法各不相同，语言层面统一不划算，索性交给编译工具去约定。
     </p>
@@ -16,7 +16,7 @@ import WB06StringsInterop from './WB06StringsInterop.vue'
       于是问题落到你身上：<strong>一段本来就是「字符序列」的数据，怎么穿过一道只认数字的边界？</strong> 最笨的办法是把每个字符拆成一个单独的数字参数一个个传。它的成本很实在——字符数不固定，函数签名就没法固定；一千个字符要一千个参数，签名会膨胀到无法维护；就算传进去了，模块手里也只是一堆散落的数字，没有「这是一整段文本」的概念。
     </p>
 
-    <h2>起始地址传递</h2>
+    <h2>起始地址指针</h2>
     <p>
       换个思路：既然边界只认数字，而模块已经有一块按字节编号的线性内存，那就<strong>把字符串按编码写成一块字节，只把这块字节的起始地址——一个 <code>i32</code>——传过去</strong>。起始地址就是「指针」，模块顺着它就能摸到整段文本。
     </p>
@@ -24,7 +24,7 @@ import WB06StringsInterop from './WB06StringsInterop.vue'
       这个方案做对了一件事：<strong>它用已有的内存机制承载了任意长度的数据，把签名收敛成一个干净的 <code>(i32)</code></strong>。文本再长也不用改签名，模块拿到的也不再是散落的数字，而是一个能顺藤摸瓜的位置。
     </p>
 
-    <h2>终止符缺失后果</h2>
+    <h2>长度信息缺失</h2>
     <ul>
       <li>只给起始地址，<code>strlen</code> 从哪知道到哪里结束？没有终点，它会一直往下数，把内存里别的数据也当成字符串的一部分。</li>
       <li>JS 的字符串是 UTF-16 code unit，一个字符可能不只占一个字节。直接按 <code>charCodeAt</code> 逐字符写，得到的是错的字节序列。</li>
@@ -52,7 +52,7 @@ import WB06StringsInterop from './WB06StringsInterop.vue'
       <WB06StringsInterop />
     </figure>
 
-    <h2>字符串传参链路</h2>
+    <h2>跨边界字符串链路</h2>
     <p>
       字符串跨边界的完整链路只有这么几步：<strong>JS 用 <code>TextEncoder</code> 编码成 UTF-8 字节 → 写进线性内存并补 <code>\0</code> → 只传起始地址（指针）→ 模块按字节处理 → JS 用 <code>TextDecoder</code> 解码读回</strong>。Wasm 没有字符串类型，它认得的一直只是地址和字节。
     </p>

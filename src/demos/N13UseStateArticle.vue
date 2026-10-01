@@ -8,7 +8,7 @@ import N13UseState from './N13UseState.vue'
       <strong>开场问题：</strong>为了让主题在导航栏和设置页之间同步，你在 <code>composables/useTheme.ts</code> 的模块顶层写了 <code>const theme = ref('light')</code>，再导出 <code>useTheme()</code> 把它交出去。纯前端跑起来一切正常，两个组件都跟着变。上线开 SSR 后，同事把他的主题切成暗色，你刷新页面——第一眼看到的也是暗色。一个模块级的 ref，怎么就把两个人的界面搅到一起了？
     </div>
 
-    <h2>跨用户的状态串扰</h2>
+    <h2>模块级状态串扰</h2>
     <p>
       你要的很朴素：让主题、侧边栏开合、当前登录用户这类<strong>轻量状态</strong>在几个组件之间共享一份。共享这件事在纯浏览器里很容易，真正难的是它还得在服务端渲染下成立。
     </p>
@@ -27,7 +27,7 @@ import N13UseState from './N13UseState.vue'
       这个方案做对了一件事：<strong>状态不再寄存在模块内存里</strong>，而是挂在「当前这次请求（服务端）或当前这个应用实例（客户端）」的上下文上，用 key 当索引。两个组件用同一个 key，自然拿到同一份；不同请求各有各的上下文，也就天然隔离了。
     </p>
 
-    <h2>同名键的相互覆盖</h2>
+    <h2>同名键相互覆盖</h2>
     <ul>
       <li>key 只是一个普通字符串，没有任何命名空间：购物车和结算页都随手写了 <code>useState('count')</code>，两份本来无关的数据会变成同一份。</li>
       <li>初始化函数 <code>() =&gt; 'light'</code> <strong>只在该 key 第一次创建时执行</strong>：后面某个组件再写 <code>useState('theme', () =&gt; 'dark')</code>，传进去的默认值会被直接忽略。</li>
@@ -35,7 +35,7 @@ import N13UseState from './N13UseState.vue'
       <li>它本身没有 getters、没有 actions、没有 DevTools、也没有插件生态；把带异步请求和派生计算的复杂状态塞进去，只能手写一堆函数。</li>
     </ul>
 
-    <h2>命名空间式前缀</h2>
+    <h2>业务命名空间前缀</h2>
     <p>
       第一步先给 key 立规矩：加上业务命名空间，用 <code>'cart:count'</code>、<code>'user:theme'</code> 这样的形式，避免不同模块撞车。
     </p>
@@ -58,13 +58,13 @@ import N13UseState from './N13UseState.vue'
       <strong>两个容易踩的坑：</strong>用模块级 <code>ref</code> 或普通变量做共享状态——纯客户端下看不出问题，一开 SSR 就会跨请求串数据，这正是前面讲 SSR 时说的「跨请求污染」在共享状态上的具体形态；把 useState 当 store 用——它没有 action 和 getters，硬塞复杂逻辑只会写出一堆手工函数，该上 Pinia 的时候就要上。
     </div>
 
-    <h2>计数器按钮的联动</h2>
+    <h2>共享计数器联动</h2>
     <figure class="lesson-figure">
       <figcaption>两个「+1」按钮分别模拟组件 A 和组件 B 操作同一个共享计数器，点哪个都会让数字一起涨——这就是「同一个 key 拿到同一份状态」；再点「切换主题」看共享的主题值变化，右侧对照代码示例、SSR 数据流的四个步骤，以及 useState 与 Pinia 的对比表。</figcaption>
       <N13UseState />
     </figure>
 
-    <h2>共享与独立的取舍</h2>
+    <h2>状态共享与隔离</h2>
     <p>
       <code>useState</code> 把共享状态从模块内存搬到了「每次请求 / 每个应用实例」的上下文里，再用一个全局 key 把它找回来：key 相同就共享，请求不同就隔离，SSR 期间算出的值随 payload 下发、Hydration 时从 payload 恢复而不再重新初始化。它就是一层很薄的 SSR 安全共享，够用就用它，复杂了再交给 Pinia。
     </p>

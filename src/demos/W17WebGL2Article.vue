@@ -8,7 +8,7 @@ import W17WebGL2 from './W17WebGL2.vue'
       <strong>开场问题：</strong>你给场景里的每个着色器都设置同一组 uniform——时间、视口分辨率、强度。程序一多，性能分析里 CPU 侧的大头全花在一条条 <code>gl.uniform*</code> 调用上。你心想：数据明明就这三个数，打包成一块缓冲、上传一次、所有着色器共享，不就行了？可你在 WebGL1 里翻遍 API，也找不到「把一组 uniform 装进缓冲区」的接口。同一份数据，为什么只能一个字段一个字段地重复搬运？
     </div>
 
-    <h2>共享数据的逐个搬运</h2>
+    <h2>逐条设置开销</h2>
     <p>
       这批能力的缺失不是偶然——WebGL1 定格在 OpenGL ES 2.0 那一代，很多后来成为标配的东西，它要么没有，要么得靠扩展拼凑。
     </p>
@@ -24,7 +24,7 @@ import W17WebGL2 from './W17WebGL2.vue'
       问题由此落到一个很朴素的地方：<strong>能不能让一组 uniform 像顶点数据那样，被打包进一块缓冲区，一次上传、多个着色器共享？</strong>
     </p>
 
-    <h2>渲染上下文的升级</h2>
+    <h2>渲染上下文升级</h2>
     <p>
       把上下文升级到 WebGL2：用 <code>canvas.getContext('webgl2')</code> 拿到基于 OpenGL ES 3.0 的上下文。它一次性解锁了一整批能力——统一缓冲区（UBO）、3D 纹理、原生 VAO、整数纹理、Transform Feedback、多目标渲染（MRT）。
     </p>
@@ -69,7 +69,7 @@ import W17WebGL2 from './W17WebGL2.vue'
       <W17WebGL2 />
     </figure>
 
-    <h2>扩展能力的内置化</h2>
+    <h2>扩展能力内置化</h2>
     <p>
       WebGL2 的意义不是「多了几个函数」，而是把一批原本要靠扩展拼凑、甚至根本做不到的能力，变成语言本身的一部分。核心的那个转变最先发生：一组共享的 uniform 从「逐个搬运」变成「一块缓冲、一次上传」，语法随之换代，UBO、3D 纹理、原生 VAO 都在这一代成了标配。
     </p>

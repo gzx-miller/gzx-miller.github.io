@@ -8,7 +8,7 @@ import WB01WhatIsWasm from './WB01WhatIsWasm.vue'
       <strong>开场问题：</strong>同事丢给你一个 <code>codec.wasm</code>，说「直接调就行，比 JS 快十倍」。你用编辑器打开它——满屏十六进制，没有一行能读的代码，连里面有哪些函数、各要什么参数都看不出来。这段二进制凭什么能被浏览器执行，又凭什么能在没有源码的情况下被安全调用？
     </div>
 
-    <h2>源码依赖的成本</h2>
+    <h2>源码依赖成本</h2>
     <p>
       你想把一段计算密集的逻辑交给别人写好的模块去跑。最直接的办法是拿源码，复制进项目。但这条路夹着几件必须由你扛的成本：源码一旦分发就暴露了实现；同一份逻辑要为不同语言各写一遍；源码的体积和启动开销通常也远大于编译后的形式。
     </p>
@@ -55,7 +55,7 @@ import WB01WhatIsWasm from './WB01WhatIsWasm.vue'
       Wasm 的指令运行在一个<strong>虚拟 ISA</strong> 上，不绑定任何具体 CPU 的寄存器，所以同一份文件能在 x86、ARM、浏览器里跑——这才是「可移植」真正的含义。
     </div>
 
-    <h2>十六进制的拆解展示</h2>
+    <h2>十六进制拆解</h2>
     <figure class="lesson-figure">
       <figcaption>左侧是 <code>add</code> 模块的真实十六进制，右侧把它的每一段拆开标注；页面加载时会真的实例化一次，看到 <code>add(2, 3)</code> 的返回值。</figcaption>
       <WB01WhatIsWasm />

@@ -8,7 +8,7 @@ import L17VectorStore from './L17VectorStore.vue'
       <strong>开场问题：</strong>你照着教程，用内存向量库把课程检索 demo 跑得又快又顺。上线当天服务一重启，知识库全没了；等文档从几百条涨到几十万条，检索开始变慢、内存被吃满。代码一行没改，只是「向量存在哪、怎么挑」这两个当初随手做的决定，在规模面前塌了。
     </div>
 
-    <h2>存储与检索抉择</h2>
+    <h2>存储介质与召回策略</h2>
     <p>
       「把文本变成向量、再用相似度找最近的几条」这套机制没变。可一旦要真正落地，就会冒出两个必须由人做主的决定：<strong>向量存到哪种介质里</strong>，以及<strong>检索时凭什么规则把候选挑出来</strong>。
     </p>
@@ -24,7 +24,7 @@ import L17VectorStore from './L17VectorStore.vue'
       要回答的是：<strong>怎样按规模与运维条件选对向量存储，并配出一套能控制「召回质量」的检索策略？</strong>
     </p>
 
-    <h2>简易向量检索实现</h2>
+    <h2>基础向量检索</h2>
     <p>
       先用最简单的一种：内存向量库 <code>MemoryVectorStore</code>，配合单一路径的相似度检索，调 <code>similaritySearch(query, k)</code> 拿最相关的 k 条。
     </p>
@@ -32,7 +32,7 @@ import L17VectorStore from './L17VectorStore.vue'
       这个方案做对了一件事：<strong>它把「翻遍所有原文」变成了「在向量空间里找最近邻」</strong>，而且把接口收敛成同一个约定——不管后端是内存、Chroma 还是云端，调用的形状都是「给一句话、拿回几条」。这份约定要保留。
     </p>
 
-    <h2>内存存储的短板</h2>
+    <h2>内存易失与同质召回</h2>
     <ul>
       <li>内存存储不持久：服务重启索引清零，多实例之间各存各的，规模一大内存先扛不住。</li>
       <li>纯相似度 Top-K 会召回一堆「几乎一样」的块：同一段话被切成三块，三条结果内容雷同，反而挤掉了别的角度。</li>
@@ -41,7 +41,7 @@ import L17VectorStore from './L17VectorStore.vue'
       <li><code>topK</code> 和相似度阈值靠拍脑袋定：阈值太高召回为空，太低噪声满屏。</li>
     </ul>
 
-    <h2>后端与检索分层</h2>
+    <h2>后端选择与检索策略</h2>
     <p>
       不推翻「存向量、比相似度」，而是在后端与检索策略两层上分别补齐。
     </p>
@@ -61,7 +61,7 @@ import L17VectorStore from './L17VectorStore.vue'
       最后一条容易忘但代价最大：<strong>换嵌入模型必须重建全部索引</strong>。文档更新时也要用同一个嵌入模型增量重建，保证库里所有向量口径一致，否则检索质量会在某次「悄悄升级模型」之后整体跑偏。
     </p>
 
-    <h2>四类后端对比</h2>
+    <h2>四类向量后端对比</h2>
     <figure class="lesson-figure">
       <figcaption>点顶部四张卡片切换 Chroma / FAISS / Pinecone / pgvector，看各自的相似度度量差异；切「cosine / dot / l2」三个页签对比公式；再勾选「混合检索（向量 + 关键词）」，看得分低于 0.5 的文档被过滤掉、整体结果如何变干净。</figcaption>
       <L17VectorStore />

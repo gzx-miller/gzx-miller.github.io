@@ -8,7 +8,7 @@ import S05ZustandMiddleware from './S05ZustandMiddleware.vue'
       <strong>开场问题：</strong>你只想在课程进度跨过某个值那一刻上报一次埋点，于是写了 <code>useCourseStore.subscribe(cb)</code>。结果只要 Store 里任何一个字段动一下——未读数加一、弹窗开关切一次——回调都被调一遍，日志刷屏；更别扭的是回调只给你新状态，你根本不知道它是从多少跳上来的，也就判断不出「刚刚到底有没有跨过那条线」。
     </div>
 
-    <h2>横切杂活归属</h2>
+    <h2>横切能力归属</h2>
     <p>
       这份 Store 除了业务状态本身，还压着几件和业务无关的事：要能把数据存进 <code>localStorage</code>、要能接上 Redux DevTools 看每次改动、写更新时又想用 <code>state.progress += 20</code> 这种可变写法省掉一堆展开。这些能力有个共同点——它们和「进度是多少」这件事正交，几乎每个 Store 都要有，却都不属于某个具体的业务字段。
     </p>
@@ -19,7 +19,7 @@ import S05ZustandMiddleware from './S05ZustandMiddleware.vue'
       所以要回答的是：<strong>能不能在一个地方，给 Store 一次性挂上这些横切能力，而组件的消费方式一行都不用改；同时把「监听」收窄到某个切片，并能拿到它的前后两个值？</strong>
     </p>
 
-    <h2>高阶包裹模式</h2>
+    <h2>高阶函数包裹</h2>
     <p>
       最朴素的做法：<strong>中间件本质上是一个包裹 <code>create</code> 创建器的高阶函数</strong>。你写的业务创建器 <code>(set) =&gt; ({ progress: 0, advance: () =&gt; set(...) })</code> 原封不动，外面套一层 <code>subscribeWithSelector</code> 再交给 <code>create</code>：<code>create(subscribeWithSelector((set) =&gt; ({ ... })))</code>。
     </p>
@@ -37,7 +37,7 @@ import S05ZustandMiddleware from './S05ZustandMiddleware.vue'
       <li>升级了状态结构却没写 <code>version</code> 与 <code>migrate</code>：用户浏览器里存的还是老结构，反序列化后新字段是 <code>undefined</code>，页面拿到就崩。</li>
     </ul>
 
-    <h2>中间件层层叠加</h2>
+    <h2>中间件叠加次序</h2>
     <p>
       不推翻「中间件包裹创建器」这条主线，而是一层一层把能力补上，并且记住<strong>越靠外层的中间件，看到的越接近最终 store 的完整行为</strong>。
     </p>
@@ -55,7 +55,7 @@ import S05ZustandMiddleware from './S05ZustandMiddleware.vue'
       <strong>两条最容易踩的边界：</strong>中间件的<strong>组合顺序会改变行为与类型推导</strong>，不要凭感觉叠，按「改行为的在内、落盘与记录在外」来排；<code>persist</code> 的 <code>key</code> 必须是常量，状态结构一旦调整就要升 <code>version</code> 并写好 <code>migrate</code>，否则老用户浏览器里的旧数据会让新代码直接崩溃。
     </div>
 
-    <h2>快照逐条记录</h2>
+    <h2>进度快照逐条记录</h2>
     <figure class="lesson-figure">
       <figcaption>点「完成一阶段」，进度按 20% 一档往上加；右侧日志会逐条记下 <code>20% → 40%</code> 这样的前后快照。留意它是「按 progress 切片」订阅的——只有进度真的变了才出现一条新记录，其余状态怎么动都不会打扰它。</figcaption>
       <S05ZustandMiddleware />

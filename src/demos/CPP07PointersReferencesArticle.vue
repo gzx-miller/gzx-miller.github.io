@@ -8,7 +8,7 @@ import CPP07PointersReferences from './CPP07PointersReferences.vue'
       <strong>开场问题：</strong>手里有一个指向数组首元素的指针 <code>q</code>，你写下 <code>*(q + 1)</code>，本以为是把地址往后挪一个字节，结果它直接读到了第二个元素——这个「加一」，加的到底是什么？
     </div>
 
-    <h2>按值传参的限制</h2>
+    <h2>按值传参限制</h2>
     <p>
       你经常需要让函数去操作调用方的数据。可 C++ 默认<strong>按值传参</strong>，函数拿到的只是一份副本，在函数里改副本，原件纹丝不动。于是「怎么让函数真正操作到那个对象」成了必须回答的问题。
     </p>
@@ -40,7 +40,7 @@ import CPP07PointersReferences from './CPP07PointersReferences.vue'
       这个方案做对了一件事：它把<strong>「对象本身」和「对象的位置」分开了</strong>。传一个地址很便宜（一个指针大小），解引用之后又能直达原件，「复制太贵」和「改不到原件」两个问题一起解掉。
     </p>
 
-    <h2>指针的空悬风险</h2>
+    <h2>空指针与野指针</h2>
     <ul>
       <li>指针可以指向「什么都没有」：<code>int* p;</code> 未初始化时存的是随机值，解引用就是未定义行为。</li>
       <li>用法不顺手：每次访问都得写 <code>*p</code>，想让「像普通变量一样直接用」就做不到。</li>
@@ -48,7 +48,7 @@ import CPP07PointersReferences from './CPP07PointersReferences.vue'
       <li>类型上看不出「一定非空」：函数签名 <code>void f(int* p)</code> 根本没说明 <code>p</code> 能不能是 <code>nullptr</code>。</li>
     </ul>
 
-    <h2>引用作为别名</h2>
+    <h2>引用别名机制</h2>
     <p>
       先补「别名」这一层，这就是引用：
     </p>
@@ -73,13 +73,13 @@ import CPP07PointersReferences from './CPP07PointersReferences.vue'
       <strong>「引用不能重新绑定」这句要分清：</strong><code>r = 10</code> 并不是让 <code>r</code> 改去指向 10，而是把 10 赋给 <code>r</code> 所绑定的那个对象。想「改指向」只能用指针。
     </div>
 
-    <h2>解引用结果验证</h2>
+    <h2>解引用指针算术</h2>
     <figure class="lesson-figure">
       <figcaption>对照代码看解引用与指针算术的实际结果，再把下方对照表里指针与引用的差异一项项验过去。</figcaption>
       <CPP07PointersReferences />
     </figure>
 
-    <h2>地址与别名的分工</h2>
+    <h2>地址与别名分工</h2>
     <p>
       指针和引用是同一件事的两副面孔：都在描述「别处的某个对象」。指针是「可以换、可以为空的地址」，引用是「装成变量、不能改绑的别名」。要改原件又不复制，用引用；要表达可选或重定向，用指针；而 <code>p + n</code>、<code>p-&gt;m</code>、const 的先后顺序，都是围绕这个地址做文章。
     </p>

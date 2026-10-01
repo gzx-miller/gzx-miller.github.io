@@ -8,7 +8,7 @@ import S13TanStackQuery from './S13TanStackQuery.vue'
       <strong>开场问题：</strong>一个课程页上，顶部导航和主列表都要显示课程。两个组件各自 <code>useEffect</code> + <code>fetch</code> 拉一遍，页面一打开控制台里就出现两条一模一样的请求；你把列表切走再切回来，它又请求一次。更窘的是你点「乐观报名」给某人 +1，界面立刻变了，可一刷新人数又跳回原样。
     </div>
 
-    <h2>远程副本误管</h2>
+    <h2>服务端数据副本</h2>
     <p>
       这些数据有个共同点：<strong>它们的「事实来源」在服务器上，本地这份只是抄来的副本</strong>。可你一直用管理本地状态的那套工具在管它——<code>useState</code> 存 <code>data</code>、<code>useEffect</code> 去取。于是几个必须由人承担的成本冒了出来。
     </p>
@@ -27,7 +27,7 @@ import S13TanStackQuery from './S13TanStackQuery.vue'
       错的地方在于，它把一份远程数据的副本当成了组件的私有财产。
     </p>
 
-    <h2>分散取数四坑</h2>
+    <h2>分散取数代价</h2>
     <ul>
       <li>两个组件各挂一次，就发两次同样的请求；组件一卸载缓存也没了，切回来只能重新请求。</li>
       <li>没有「新鲜度」概念：服务端已经改了数据，本地这份仍旧当新数据用；或者每次挂载都无条件重取，请求频率失控。</li>
@@ -35,7 +35,7 @@ import S13TanStackQuery from './S13TanStackQuery.vue'
       <li>想手动刷新只能把整页重新挂载，没法只让这一份数据失效——失效的粒度太粗。</li>
     </ul>
 
-    <h2>以缓存方式管理</h2>
+    <h2>远程数据缓存化</h2>
     <p>
       不推翻「fetch + 三种状态」，而是把远程数据当成<strong>按 key 索引的缓存</strong>，再给它补上过期时间与去重。一层层补下来：
     </p>

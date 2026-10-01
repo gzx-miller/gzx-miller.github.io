@@ -8,7 +8,7 @@ import U09Easycom from './U09Easycom.vue'
       <strong>开场问题：</strong>项目里有 12 个页面，几乎每个页面都要用 <code>course-card</code>、<code>empty-state</code>、<code>nav-bar</code> 这几个组件，你在这 12 个文件顶部各手写了一遍 <code>import</code> 和注册；某天把其中一个组件改了名，漏改了一处引用路径，构建直接报错。
     </div>
 
-    <h2>手动引入的成本</h2>
+    <h2>逐页手动引入成本</h2>
     <p>
       高频组件到底该怎么引入？最原始的做法是<strong>每个页面手动 <code>import</code> 再注册</strong>。这么写，三份成本是隐蔽的。
     </p>
@@ -19,7 +19,7 @@ import U09Easycom from './U09Easycom.vue'
       问题因此变成：<strong>能不能让「用到什么组件」由模板自己决定，只要组件放在约定位置，就自动生效？</strong>
     </p>
 
-    <h2>全局注册方案</h2>
+    <h2>全局注册公共组件</h2>
     <p>
       先试全局注册：把所有公共组件在入口处一次性注册，页面里直接写标签。
     </p>
@@ -27,7 +27,7 @@ import U09Easycom from './U09Easycom.vue'
       这个方案做对了一件事：<strong>它确实省掉了每个页面的 <code>import</code></strong>，页面顶部干净了，标签也确实能直接用。
     </p>
 
-    <h2>主包体积的负担</h2>
+    <h2>主包体积与命名冲突</h2>
     <ul>
       <li>全局注册的组件无论用不用都会进主包，包里塞了一堆当前页根本没用的组件，首屏变慢。</li>
       <li>命名一旦冲突（两个组件都叫 <code>card</code>），后注册的覆盖先注册的，而且不报错，静默出错。</li>
@@ -35,7 +35,7 @@ import U09Easycom from './U09Easycom.vue'
       <li>局部注册的页面照样要写 <code>import</code> 和注册，重复问题一点没解决。</li>
     </ul>
 
-    <h2>目录约定的引入</h2>
+    <h2>目录约定替代注册</h2>
     <p>
       换一种思路：不要「注册」，要「约定」。<strong>easycom</strong> 规定，只要组件位于 <code>components/组件名/组件名.vue</code>，页面模板里就能直接写标签，既不用 <code>import</code>，也不用注册。框架在编译时扫描这个约定目录，命中的组件被<strong>异步加载、按需打包</strong>——用到的才进包，没用的不会被打进去。
     </p>
@@ -55,13 +55,13 @@ import U09Easycom from './U09Easycom.vue'
       那到底选 easycom 还是手动 <code>import</code>？判据其实很清楚：<strong>高频、跨页复用、又符合目录规范</strong>的组件，交给 easycom；<strong>只在个别页面用</strong>，或目录结构特殊不愿迁就约定的，手动 <code>import</code> 更直接；对包体极度敏感、组件又很少时，手动引入反而更可控。
     </p>
 
-    <h2>免引入的组件</h2>
+    <h2>免引入组件按需加载</h2>
     <figure class="lesson-figure">
       <figcaption>点课程卡片切换收藏，注意页面模板里直接写了 <code>&lt;course-card&gt;</code> 却没有 <code>import</code>——easycom 按 <code>components/组件名/组件名.vue</code> 的目录约定把它自动加载了进来。</figcaption>
       <U09Easycom />
     </figure>
 
-    <h2>约定式的引入</h2>
+    <h2>引入方式改为目录约定</h2>
     <p>
       easycom 把「引入组件」从每个页面的样板代码，变成了一条目录约定：路径对了，标签就能直接用，还能按需打包。它的前提是命名一致，例外交给 <code>pages.json</code> 里的 <code>custom</code> 正则；不满足约定、或只在少数页面用到的组件，手动引入依然更划算。
     </p>

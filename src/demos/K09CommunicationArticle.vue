@@ -8,7 +8,7 @@ import K09Communication from './K09Communication.vue'
       <strong>开场问题：</strong>页面主题色由最外层决定，可真正需要变色的标签藏在好几层组件深处——难道主题得一层层往下传？
     </div>
 
-    <h2>主题透传场景</h2>
+    <h2>顶层主题与深层消费</h2>
     <p>
       你在做一个课程站，需要「主题切换」：最外层选一个主题色，页面里任意深度的按钮、标签、提示条都要跟着变色。数据源头只有一个，使用它的组件却散落在很深的层级里。
     </p>
@@ -16,7 +16,7 @@ import K09Communication from './K09Communication.vue'
       麻烦在于：<strong>源头和使用者之间隔着好几层组件，而这些中间层根本不关心主题</strong>。中间的布局组件只是把子组件套起来，它们没有任何业务理由去碰这份数据。
     </p>
 
-    <h2>父子传值方式</h2>
+    <h2>属性下传与事件上抛</h2>
     <p>
       最直接的做法：父子之间用两条腿走路——<strong>props 往下传值、emits 往上通知</strong>。源头把主题作为 prop 交给儿子，儿子再交给孙子，一路传到需要它的那一层。
     </p>
@@ -24,7 +24,7 @@ import K09Communication from './K09Communication.vue'
       这个方案做对了核心的一件事：<strong>数据流单向、可追溯</strong>。谁传给了谁，顺着代码就能看明白。当层级只有一两层时，它足够清晰，也最容易调试。
     </p>
 
-    <h2>层层透传代价</h2>
+    <h2>中间层透传负担</h2>
     <ul>
       <li>中间层被迫当「二传手」，自己不用的数据也得原样接住再往下传。</li>
       <li>链条一深，加一个字段就要改动整条路径上的每一个组件。</li>
@@ -32,7 +32,7 @@ import K09Communication from './K09Communication.vue'
       <li>主题、语言、表单上下文这类「环境能力」本就不是父子关系，硬套逐层传值很别扭。</li>
     </ul>
 
-    <h2>跨层直达通道</h2>
+    <h2>依赖注入直达通道</h2>
     <p>
       不推翻单向数据流，而是给它加一条<strong>直达通道</strong>：由上层组件 <code>provide</code> 注入一份能力，任意深度的后代用 <code>inject</code> 取用，<strong>中间层完全无需感知</strong>。这就是依赖注入。
     </p>
@@ -75,13 +75,13 @@ import K09Communication from './K09Communication.vue'
       </tbody>
     </table>
 
-    <h2>深层跟随表现</h2>
+    <h2>主题切换深层跟随</h2>
     <figure class="lesson-figure">
       <figcaption>切换上方主题，观察深层子组件如何直接跟随变化。</figcaption>
       <K09Communication />
     </figure>
 
-    <h2>通信按距选型</h2>
+    <h2>组件通信选型原则</h2>
     <p>
       组件通信按距离选工具：父子之间用 props 向下、emits 向上，数据流单向清晰；跨越多层、又更像「环境能力」时，改用 provide 与 inject，让中间层彻底无感。记住注入值默认非响应式，传 <code>ref</code> 或 <code>reactive</code> 后代才会跟随变化。
     </p>

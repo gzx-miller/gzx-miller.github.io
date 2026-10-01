@@ -8,7 +8,7 @@ import F11Audio from './F11Audio.vue'
       <strong>开场问题：</strong>你只想把视频里音频的采样率从 48000 改成 44100，顺手写下 <code>ffmpeg -i input.mp4 -ar 44100 output.mp4</code>，跑完后发现文件比原片大了将近三倍，画面也比原来糊了——你明明只动了音频，画质为什么会跟着掉？
     </div>
 
-    <h2>音视频流分工</h2>
+    <h2>音视频独立流</h2>
     <p>
       一个音视频文件里，画面和声音是<strong>两条各自独立的流（stream）</strong>，彼此不知道对方的参数。视频流有分辨率、帧率、码率；音频流也有自己的一整套：<strong>采样率</strong>（每秒采样多少次，常见 44100Hz 或 48000Hz）、<strong>声道数</strong>（单声道、立体声、5.1 环绕声）、<strong>编码格式</strong>（AAC、MP3、Opus）与<strong>码率</strong>（决定音质和体积）。这四样凑齐，才算把一段声音描述清楚。
     </p>
@@ -16,7 +16,7 @@ import F11Audio from './F11Audio.vue'
       麻烦在于「统一」这件事必须由人扛。旧办法无非两条：一条是<strong>整段重新编码</strong>——为了改一个采样率，把好好的 H.264 画面也重压一遍，耗时翻倍、画质还掉了；另一条是<strong>干脆不处理</strong>——可不同来源的素材采样率、声道数五花八门，拼在一起就忽左忽右、忽大忽小。所以真正的问题是：<strong>怎样只改音频的参数，同时让视频原封不动？</strong>
     </p>
 
-    <h2>音频参数开关</h2>
+    <h2>采样率声道与码率</h2>
     <p>
       FFmpeg 给音频参数各配了一个开关：<code>-ar</code> 设采样率、<code>-ac</code> 设声道数、<code>-b:a</code> 设音频码率、<code>-c:a</code> 指定音频编码器。想改哪一样就写哪一样：
     </p>
@@ -27,7 +27,7 @@ import F11Audio from './F11Audio.vue'
       这个方案做对了一件事：<strong>它把音视频分开对待</strong>——你想动的是声音，那就只让音频这一路干活，画面走旁路。
     </p>
 
-    <h2>视频流被连带重编</h2>
+    <h2>视频连带重编码</h2>
     <ul>
       <li>漏写 <code>-c:v copy</code>，视频就会被<strong>连带重新编码</strong>。这正是开场那个「只改音频、画质却掉了」的结果：你没有对视频编码作任何声明，FFmpeg 默认把所有流都重新编一遍。</li>
       <li>改 <code>-ar</code> / <code>-ac</code> <strong>一定会触发音频重采样并重新编码</strong>，它做不到像 <code>-c copy</code> 那样「只搬家、不重做」。想无损只改这两个参数，技术上是不可能的。</li>
@@ -36,7 +36,7 @@ import F11Audio from './F11Audio.vue'
       <li>想让容器收下一段它不支持的音频编码，比如把 FLAC 塞进 MP4，<code>-c copy</code> 会<strong>直接报错退出</strong>，而不是帮你悄悄转码。</li>
     </ul>
 
-    <h2>探测后锁定画面</h2>
+    <h2>探测与画面锁定</h2>
     <p>
       不推翻这套参数，而是按顺序一层层补齐。第一层，<strong>先探测再动手</strong>。你不知道源文件是 48000 还是 44100、是双声道还是 5.1，就不该拍脑袋写命令，先让 <code>ffprobe</code> 把音频流参数报出来：
     </p>
@@ -74,13 +74,13 @@ import F11Audio from './F11Audio.vue'
       <strong>三个常见误区：</strong>一是以为 <code>-ar</code> / <code>-ac</code> 能无损，其实它们必然重采样重编码；二是改完音频忘了 <code>-c:v copy</code>，白白把画面重压一遍；三是把 <code>-c:a copy</code> 抽出的音轨随便起扩展名，内容和文件名对不上。想把立体声降到单声道又不想削波，别硬用 <code>-ac 1</code>，交给 <code>pan</code> 控制混音增益更稳。
     </div>
 
-    <h2>参数命令对照表</h2>
+    <h2>音频操作对照</h2>
     <figure class="lesson-figure">
       <figcaption>「基础操作」页签把改采样率、改声道、改码率、换编码与抽音轨的命令排成一张对照表；切到「编码格式」可以看到 aac、libfdk_aac、libmp3lame、libopus、flac 在质量与速度上的取舍，以及单声道到 7.1 的声道布局与对应 <code>-ac</code> 参数；「高级处理」页签再补上音频延迟、响度标准化与合并多音轨的写法。</figcaption>
       <F11Audio />
     </figure>
 
-    <h2>独立流处理原则</h2>
+    <h2>按流分别处理</h2>
     <p>
       音频处理的关键，是先把音视频当成两条独立的流：要改声音，就用 <code>-ar</code> / <code>-ac</code> / <code>-c:a</code> / <code>-b:a</code> 精确点名改什么，同时用 <code>-c:v copy</code> 把画面钉死不动。记住改采样率或声道一定伴随重采样与重编码，想无损只搬不重做，只有 <code>-c copy</code> 这一条路。
     </p>

@@ -8,7 +8,7 @@ import F22Batch from './F22Batch.vue'
       <strong>开场问题：</strong>你写了 for 循环批量转 200 个视频，挂机去吃饭；回来发现脚本停在第 12 个不动了，终端光标一闪一闪，像有什么东西在等输入。你在键盘上敲了几下回车，它才慢吞吞地继续往下走。
     </div>
 
-    <h2>批量处理需求</h2>
+    <h2>批量转码脚本需求</h2>
     <p>
       批量处理的需求听起来毫无技术含量：同一套参数，套用到一堆文件上。可手工做就是 200 遍命令，改一次参数还得从头再来，于是你想把它交给一个循环。
     </p>
@@ -16,7 +16,7 @@ import F22Batch from './F22Batch.vue'
       一旦交给脚本，成本就换了地方：命令里写死的部分要变成<strong>变量</strong>，输出文件名得从输入名派生出来；<strong>一个文件出错不能拖垮整批</strong>，而默认的循环偏偏会在失败或等待输入时停住；<strong>重跑必须安全</strong>，否则转过一遍的文件会被再转一遍、后缀越叠越长；单机串行跑 200 个文件时，多核 CPU 大部分时间在闲着。所以要回答的是：<strong>怎么让这批任务既跑得完、出错看得见，还能重复执行而不捅娄子？</strong>
     </p>
 
-    <h2>最简循环写法</h2>
+    <h2>Bash循环脚本</h2>
     <p>
       最朴素也真的能跑的一条：<code>for f in *.mp4; do ffmpeg -i "$f" -c:v libx264 -crf 23 "${f%.mp4}_converted.mp4"; done</code>。
     </p>
@@ -24,7 +24,7 @@ import F22Batch from './F22Batch.vue'
       它做对了一件很干净的事：<strong>把「一条命令」变成了「一条规则」</strong>。<code>*.mp4</code> 由 shell 展开成文件列表，<code>$f</code> 是当前文件，<code>${f%.mp4}</code> 表示「去掉 .mp4 后缀」的前缀替换，再拼上新后缀就成了输出名。文件名怎么变，规则都不用改。
     </p>
 
-    <h2>六处脚本隐患</h2>
+    <h2>引号缺失与标准输入</h2>
     <ul>
       <li><code>$f</code> 忘了加引号就完了：文件名含空格或中文时会被 shell 拆成好几个参数，FFmpeg 把后半截当成另一个输入，报出莫名其妙的错。</li>
       <li>没加 <code>-nostdin</code> 时，FFmpeg 会去抢标准输入；在循环或后台任务里它可能一直等不到输入而<strong>卡住整批</strong>，就是开场那一幕。</li>
@@ -34,7 +34,7 @@ import F22Batch from './F22Batch.vue'
       <li>重跑不安全：脚本再跑一遍，已转好的文件被重转一次，<code>_converted</code> 后缀还可能被再叠一层。</li>
     </ul>
 
-    <h2>补漏洞的顺序</h2>
+    <h2>命令验证与修补次序</h2>
     <p>
       不推翻循环，而是一层层补它的漏洞。顺序很讲究，因为「命令本身对不对」比「跑得快不快」重要得多。
     </p>
@@ -63,13 +63,13 @@ import F22Batch from './F22Batch.vue'
       <strong>并行数不是越大越好：</strong>转码同时吃 CPU 和磁盘，并行开太多会一起堵在磁盘 I/O 上，反而更慢，通常 <strong>2 到 4 个</strong>就够了。另外永远记得<strong>先拿两三个文件小批量试跑</strong>，确认输出名、参数、日志都对，再对全量下手。
     </div>
 
-    <h2>跨平台写法切换</h2>
+    <h2>三种脚本写法对照</h2>
     <figure class="lesson-figure">
       <figcaption>切换「Bash 脚本 / PowerShell / 并行处理」三个页签，对照同一件事在三种写法下的差别，再翻到注意事项，逐条对上上面讲的坑。</figcaption>
       <F22Batch />
     </figure>
 
-    <h2>批处理规则化</h2>
+    <h2>单命令到可复用规则</h2>
     <p>
       批量的本质不是「循环」这两个字，而是把一条命令变成一条可重复执行的规则：变量加引号保文件名安全，<code>-nostdin</code> 防卡住，<code>-f null -</code> 先验证命令，日志与失败清单让错误现形，幂等检查让重跑无害，最后一层才是用 <code>parallel</code> 或 <code>xargs -P</code> 把并发放出去。顺序反了，快也是白快。
     </p>

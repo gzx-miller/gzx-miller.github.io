@@ -8,7 +8,7 @@ import S11VuexMigration from './S11VuexMigration.vue'
       <strong>开场问题：</strong>一个用 Vuex 写了三年的购物车项目，改一个字段要在 <code>state</code>、<code>mutations</code>、<code>actions</code> 之间来回跳；想换成 Pinia，可线上功能天天在迭代，到底怎么换才不至于一换就崩？
     </div>
 
-    <h2>存量模块现状</h2>
+    <h2>存量Vuex模块</h2>
     <p>
       你要接手一个存量项目：它用 Vuex 组织状态，按业务拆成好几个 module，每个 module 都开了 <code>namespaced: true</code>，组件里靠 <code>mapState</code>、<code>mapActions</code> 取用。项目仍在持续迭代，每天都有人合代码。你心里有两个念头：Pinia 确实更顺手；可这套旧的还能跑，动它的风险看起来很大。
     </p>
@@ -24,7 +24,7 @@ import S11VuexMigration from './S11VuexMigration.vue'
       这个方案做对了一件重要的事：<strong>它承认目标形态是 Pinia 的独立 store，而不是继续往 Vuex 里糊补丁</strong>。方向没错，问题出在执行粒度——它把一次跨度很长、牵涉所有页面的改动，捆成了一个不可分割的整体。
     </p>
 
-    <h2>整体重写五险</h2>
+    <h2>整体重写风险</h2>
     <ul>
       <li>重写期间分支会不断积累冲突，越晚合并越难合。</li>
       <li>中途任何一步出问题都无法单独回滚，只能整体推倒。</li>
@@ -33,7 +33,7 @@ import S11VuexMigration from './S11VuexMigration.vue'
       <li>一次性重写容易顺手把无关行为一并「优化」，出问题难定位。</li>
     </ul>
 
-    <h2>按模块逐个换</h2>
+    <h2>逐模块迁移方案</h2>
     <p>
       不推翻「换成 Pinia」，而是把「一次全换」改成<strong>按模块逐个换</strong>。要做到这一点，先建一张概念映射表，让每一步都有明确的对应关系，而不是临场发挥。
     </p>

@@ -8,7 +8,7 @@ import R10Memoization from './R10Memoization.vue'
       <strong>开场问题：</strong>点「刷新外观」，只不过改了个和列表毫无关系的计数器，可整块课程列表跟着重渲染，渲染次数还往上跳。你给它套上 <code>memo</code> 再点一次——列表居然照旧重渲染。排查半天才发现：父组件每次渲染都新建了一个 <code>onChoose</code> 函数，浅比较永远不相等，memo 形同虚设。
     </div>
 
-    <h2>父组件渲染的连锁</h2>
+    <h2>父渲染引发级联</h2>
     <p>
       React 的默认行为是：<strong>父组件一渲染，它的所有子组件都重新执行</strong>。当父组件里有一点无关的更新（比如只改了主题计数），昂贵子树也会被牵连重算。旧办法要么完全不动、接受重复计算，要么把结果缓存在模块级变量里。
     </p>
@@ -16,7 +16,7 @@ import R10Memoization from './R10Memoization.vue'
       隐藏成本很具体：昂贵子树反复渲染会拖慢交互；大数组的筛选、排序每次渲染重算一遍；而用模块级变量缓存结果，不仅多实例会串台，还无法随输入变化而失效。所以要回答的是：<strong>能不能让「输入没变」的那部分工作被跳过，同时不改动程序的正确性？</strong>
     </p>
 
-    <h2>浅比较的跳过条件</h2>
+    <h2>浅比较与跳过渲染</h2>
     <p>
       最朴素的一步：给子组件套上 <code>React.memo</code>。
     </p>
@@ -24,7 +24,7 @@ import R10Memoization from './R10Memoization.vue'
       这个方案做对了一件事：<strong>当 props 用浅比较判断没有变化时，跳过这个子组件的重渲染</strong>——恰好命中「父组件更新、而子组件输入没变」这个场景。
     </p>
 
-    <h2>渲染中新建的引用</h2>
+    <h2>新建引用导致失效</h2>
     <ul>
       <li>只要 props 里有「每次渲染新建」的对象、函数或数组，浅比较就永远为 <code>false</code>，<code>memo</code> 完全失效——这正是开场里 <code>onChoose</code> 那个坑。</li>
       <li><code>useMemo</code> 的依赖数组写错（漏了 <code>level</code>），会把过期结果缓存下来：<code>level</code> 变了列表却不更新，界面看起来「卡住了」。</li>
@@ -32,7 +32,7 @@ import R10Memoization from './R10Memoization.vue'
       <li>把 <code>useMemo</code> 当成「保证只在依赖变化时才执行」的正确性工具——React 有权为省内存丢弃缓存重算，它只是性能提示。</li>
     </ul>
 
-    <h2>测量稳定缓存的顺序</h2>
+    <h2>先测量后缓存次序</h2>
     <p>
       按「先测量、再稳定、后缓存」的因果顺序分三层补上——顺序不能颠倒，否则容易白做。
     </p>
@@ -48,13 +48,13 @@ import R10Memoization from './R10Memoization.vue'
       <strong>别把 memo / useMemo / useCallback 当正确性工具：</strong>它们是优化提示，React 可以为了回收内存丢弃 <code>useMemo</code> 的缓存；任何「必须靠缓存才正确」的写法都是隐患。先有实测瓶颈，再谈记忆化。
     </div>
 
-    <h2>重渲染计数的停留</h2>
+    <h2>渲染次数停止增长</h2>
     <figure class="lesson-figure">
       <figcaption>先切换一次筛选级别，看列表确实重算；再反复点「刷新外观」——列表渲染次数停在原地，因为 items 和 onChoose 的引用都没变，memo 把这次无关更新挡在了外面。</figcaption>
       <R10Memoization />
     </figure>
 
-    <h2>三类缓存的层次分工</h2>
+    <h2>缓存组件与缓存计算</h2>
     <p>
       <code>memo</code>、<code>useMemo</code>、<code>useCallback</code> 是同一件事的三个层次：缓存组件、缓存计算、缓存引用。它们不改变正确性，只改变「哪些工作被跳过」；而跳过能不能命中，取决于你传下去的引用稳不稳定。顺序永远是先测量、再优化。
     </p>

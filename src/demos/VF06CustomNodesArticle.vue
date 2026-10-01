@@ -16,7 +16,7 @@ import VF06CustomNodes from './VF06CustomNodes.vue'
       这不是排版好不好看的问题，而是<strong>默认节点的表达能力有硬上限</strong>：它压根没打算承载结构化的业务信息。继续凑合，凡是带卡片、带徽标、带状态的需求，一个都做不了。
     </p>
 
-    <h2>信息拼进标签</h2>
+    <h2>标签文本拼接</h2>
     <p>
       最朴素的做法，是把信息拼成一串文本塞进 label：<code>组合式 API · 小松鼠 · 12 节 · 基础</code>。
     </p>
@@ -32,7 +32,7 @@ import VF06CustomNodes from './VF06CustomNodes.vue'
       <li>想再放图标、进度条、按钮这类结构时，字符串方案彻底到顶。</li>
     </ul>
 
-    <h2>外观交给插槽</h2>
+    <h2>外观渲染接管</h2>
     <p>
       不推翻「信息放在 data 里」，而是把<strong>数据与外观彻底分开</strong>：数据照旧进 <code>node.data</code>，外观则交给一个属于我们自己的模板。
     </p>
@@ -63,13 +63,13 @@ import VF06CustomNodes from './VF06CustomNodes.vue'
       最后一个容易被忽略的是尺寸规划：卡片宽度、层间距要预先定好（本课约 180 宽的卡片、明显大于卡片高度的层距），否则连线会在卡片之间斜穿，观感很乱。把尺寸当成布局契约的一部分，图才耐看。
     </p>
 
-    <h2>卡片选中联动</h2>
+    <h2>卡片选中态联动</h2>
     <figure class="lesson-figure">
       <figcaption>点任意课程卡片，看选中描边与右侧详情栏如何联动。</figcaption>
       <VF06CustomNodes />
     </figure>
 
-    <h2>数据与外观分工</h2>
+    <h2>字段模板分工</h2>
     <p>
       自定义节点的要害，是把「数据」和「长什么样」拆开：业务字段留在 <code>node.data</code>，外观交给同名插槽 <code>#node-类型名</code>，选中与拖拽态从插槽参数里读。再在卡片边缘声明 Handle，连接行为与内置节点无缝衔接——一行文字的节点，就此长成了能承载业务的卡片。
     </p>

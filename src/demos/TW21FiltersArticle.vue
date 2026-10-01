@@ -8,7 +8,7 @@ import TW21Filters from './TW21Filters.vue'
       <strong>开场问题：</strong>课程封面想做成「未解锁就变灰、悬停时盖一层毛玻璃标题栏」，我以为得让设计师再出两套图，可用户上传的封面根本没法定制——这类效果真的只能靠图片资源吗？
     </div>
 
-    <h2>封面滤镜需求</h2>
+    <h2>封面降饱和与毛玻璃</h2>
     <p>
       你在做课程列表：封面图来自后台上传，谁也不知道会是哪张。产品给了三条视觉要求——<strong>未解锁的课程，封面整体降饱和变灰</strong>；<strong>每张卡底部压一条半透明的毛玻璃标题栏</strong>，让白字在任意封面上都读得清；<strong>鼠标悬停时封面稍微提亮、加饱和</strong>，让人有「可点」的感觉。
     </p>
@@ -16,7 +16,7 @@ import TW21Filters from './TW21Filters.vue'
       这三条需求看似都是「对图片做处理」，其实底层机理完全不同：变灰是<strong>对元素本身</strong>应用滤镜；毛玻璃是<strong>对元素背后的内容</strong>做模糊；而叠加出层次感还可能用到<strong>混合模式</strong>。分不清这三者，就会以为是缺图片、缺素材。
     </p>
 
-    <h2>换图与遮罩方案</h2>
+    <h2>半透明遮罩与换图</h2>
     <p>
       最朴素的做法是改颜色：给灰掉的封面加一层半透明灰色遮罩，再让设计师针对「灰版」单独出一套图。悬停提亮就换一张调过色的图，毛玻璃就先截图做成 PNG 贴上去。
     </p>
@@ -24,7 +24,7 @@ import TW21Filters from './TW21Filters.vue'
       它做对的是<strong>表达了「同一张图在不同状态下要有不同观感」这个意图</strong>，在素材固定、数量很少的静态页面上也确实能跑通。但它把「视觉处理」外包给了设计资源，一旦图片来源变成用户上传，或者状态从两种变成四五种，这条路立刻走不通。
     </p>
 
-    <h2>状态增多资源翻倍</h2>
+    <h2>多状态资源成倍增长</h2>
     <ul>
       <li>每个状态都要一份图片资源，状态一多资源成倍增长，维护成本失控。</li>
       <li>用户上传的图片无法逐张再加工，遮罩方案又会把原始细节一起压暗。</li>
@@ -33,7 +33,7 @@ import TW21Filters from './TW21Filters.vue'
       <li>悬停提亮若换图，还会多一次资源加载，反而更卡。</li>
     </ul>
 
-    <h2>自身与背后滤镜</h2>
+    <h2>元素自身滤镜清单</h2>
     <p>
       先把「作用于元素自身」的滤镜用起来：<code>blur</code> 模糊、<code>brightness</code> 提亮压暗、<code>contrast</code> 对比度、<code>saturate</code> 饱和度、<code>grayscale</code> 灰度、<code>sepia</code> 复古、<code>invert</code> 反色。<strong>多个滤镜写在同一个元素的多个类上会合并成一条 <code>filter</code> 声明</strong>，所以「悬停时提亮又加饱和」直接写 <code>hover:brightness-110 hover:saturate-125</code> 就行，互不打架。
     </p>
@@ -56,13 +56,13 @@ import TW21Filters from './TW21Filters.vue'
       <li>在元素面板核对 <code>filter</code> 与 <code>backdrop-filter</code> 的合成结果是否符合预期。</li>
     </ol>
 
-    <h2>同图的多重质感</h2>
+    <h2>滤镜混合与背景滤镜</h2>
     <figure class="lesson-figure">
       <figcaption>切换「滤镜」「混合」「背景滤镜」三个页签，拖动参数看同一张图能变出多少种质感。</figcaption>
       <TW21Filters />
     </figure>
 
-    <h2>特效不换素材</h2>
+    <h2>图像特效实现路径</h2>
     <p>
       图片特效不必依赖额外素材：作用于元素自身的用 <code>filter</code>（多个类合并成一条声明），作用在元素背后的用 <code>backdrop-filter</code>（记得配半透明背景才看得见），图层之间叠色用 <code>mix-blend-*</code>。默认档位不够就上任意值，同时别忘了给 <code>backdrop</code> 留一个降级兜底。
     </p>

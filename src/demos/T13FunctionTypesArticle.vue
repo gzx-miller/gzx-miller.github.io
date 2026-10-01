@@ -8,7 +8,7 @@ import T13FunctionTypes from './T13FunctionTypes.vue'
       <strong>开场问题：</strong>同一个 <code>fetchCourse</code>，传单个 id 时返回课程详情、传 id 数组时返回列表，可返回值类型只能写成两者的联合——调用处每次都要再判断一次，编译器为什么帮不上忙？
     </div>
 
-    <h2>输入输出的错配</h2>
+    <h2>输入输出错配</h2>
     <p>
       你要写一个查询函数：传单个 <code>id</code> 时返回一份课程详情（带 <code>teacher</code>、<code>duration</code>），传 <code>id</code> 数组时返回一个课程列表。参数写成联合 <code>number | number[]</code> 当然能编译通过，但返回类型就变成了 <code>CourseDetail | Course[]</code>：拿到结果的一方根本不知道这次会得到哪一种，只能自己写判断，或者干脆断言。<strong>输入与输出之间的对应关系，在这里彻底丢失了。</strong>
     </p>
@@ -16,7 +16,7 @@ import T13FunctionTypes from './T13FunctionTypes.vue'
       还有一类更常见的问题：数据来自接口或本地 JSON，类型是 <code>unknown</code>。你想在校验通过之后把它安全地当业务类型使用，可写一个返回 <code>boolean</code> 的检查函数，编译器并不会因为「你检查过了」就改变对它的看法。
     </p>
 
-    <h2>函数形状的声明</h2>
+    <h2>函数类型与签名</h2>
     <p>
       先把函数形状本身写好。函数类型最简单的写法是类型表达式 <code>(x: number) =&gt; CourseDetail</code>；如果这个函数还得挂载额外属性（比如缓存、元信息），就换成调用签名：
       <code>interface Fetcher { (id: number): CourseDetail; cache: Map&lt;number, CourseDetail&gt; }</code>。后者描述的是「可调用的对象」，比单纯的箭头类型多了一层属性。
@@ -25,7 +25,7 @@ import T13FunctionTypes from './T13FunctionTypes.vue'
       至于两种输入形态的查询，先用一个更宽的类型顶上去：<code>function fetchCourse(input: number | number[]): CourseDetail | Course[]</code>。它做对了一件事：<strong>承认这个函数确实有两种输入与两种输出</strong>，实现里再按 <code>typeof input === 'number'</code> 分支处理，逻辑本身并没有错。
     </p>
 
-    <h2>联合返回的歧义</h2>
+    <h2>联合返回值歧义</h2>
     <ul>
       <li>返回值被合并成联合，调用方拿到结果后无法直接确定是哪一种，输入与输出的对应关系丢失了。</li>
       <li>想访问 <code>result.teacher</code> 还得先判断，或者退化成类型断言，安全边界又被绕了过去。</li>
@@ -33,7 +33,7 @@ import T13FunctionTypes from './T13FunctionTypes.vue'
       <li>判断逻辑散落在每个调用点，重复、易漏，还难以统一维护。</li>
     </ul>
 
-    <h2>重载签名的拆分</h2>
+    <h2>重载签名拆分</h2>
     <p>
       第一步，把「输入形状 → 输出类型」的对应关系写成多条<strong>重载签名</strong>：先声明 <code>function fetchCourse(id: number): CourseDetail</code>，再声明 <code>function fetchCourse(ids: number[]): Course[]</code>，最后才写真正带分支的实现签名。实现签名对外不可见，调用时命中的是前面那些签名——传单个 id 就精确得到 <code>CourseDetail</code>，传数组就精确得到 <code>Course[]</code>。
     </p>
@@ -76,13 +76,13 @@ import T13FunctionTypes from './T13FunctionTypes.vue'
       </tbody>
     </table>
 
-    <h2>调用前后的变化</h2>
+    <h2>调用结果差异</h2>
     <figure class="lesson-figure">
       <figcaption>点两个按钮分别走重载的两个分支，再输入一段 JSON 触发断言函数，感受调用前后类型的差别。</figcaption>
       <T13FunctionTypes />
     </figure>
 
-    <h2>签名里的对应关系</h2>
+    <h2>签名对应关系</h2>
     <p>
       函数类型的核心，是把「输入与输出的对应关系」写进签名里：需要附加属性就用调用签名，多种输入各自对应不同输出就用重载并按由具体到宽泛排序，消费 <code>unknown</code> 就用断言函数把校验与收窄合成一步。签名一旦精确，调用处的判断逻辑就都省下来了。
     </p>

@@ -8,7 +8,7 @@ import CPP02VariablesTypes from './CPP02VariablesTypes.vue'
       <strong>开场问题：</strong><code>int x = 3.14;</code> 编译器一声不吭，<code>x</code> 悄悄变成 3；可你把同样的意思写成 <code>int x{3.14};</code>，编译直接报错、拒绝生成程序——同一个 3.14 塞进 <code>int</code>，为什么两种写法一个静默截断、一个当场翻脸？
     </div>
 
-    <h2>隐式转换丢精度</h2>
+    <h2>静态类型约束</h2>
     <p>
       你要在程序里存一个价格，很自然地写 <code>double price = 19.9;</code>；要存一个数量，写 <code>int count = 10;</code>。C++ 是<strong>静态类型语言</strong>：每个变量在写下来的那一刻就要定死类型，编译器据此分配固定大小的内存、决定这串二进制到底该按整数还是按浮点去解释。静态类型最大的好处是很多错误在编译期就能发现，而不是等你运行到那一行才崩。
     </p>
@@ -22,7 +22,7 @@ import CPP02VariablesTypes from './CPP02VariablesTypes.vue'
       所以问题落到：<strong>面对一堆内置类型，我该怎么选、怎么初始化、怎么转换，才能让编译器替我把「丢信息」的风险挡在编译期？</strong>
     </p>
 
-    <h2>等号式初始化</h2>
+    <h2>等号初始化语法</h2>
     <p>
       最省事的做法：声明变量时统一用一个 <code>=</code>，类型和转换都交给编译器去配。<code>int x = 3.14;</code> 编译通过、能跑；<code>unsigned u = -1;</code> 也能通过，只是 <code>u</code> 变成了一个大正数。
     </p>
@@ -42,7 +42,7 @@ import CPP02VariablesTypes from './CPP02VariablesTypes.vue'
       <li>把一个超过 <code>2^31-1</code> 的 <code>long long</code> 塞进 <code>int</code>，高位被直接截掉，得到的值和你预期的毫无关系。</li>
     </ul>
 
-    <h2>花括号挡住窄化</h2>
+    <h2>花括号统一初始化</h2>
     <p>
       不推翻「类型由你自己选」，而是给「选」和「转」各加一道编译期闸门。先补的那一步是<strong>换一种初始化语法</strong>，因为它能立刻挡住最常见的窄化，成本最小。
     </p>
@@ -59,13 +59,13 @@ import CPP02VariablesTypes from './CPP02VariablesTypes.vue'
       最后补上<strong>作用域</strong>这一步：变量不是声明了就永远活着。块作用域 <code>{ }</code> 内的变量出了大括号就消失，让它活得尽量短能减少误用。C++17 起还可以把变量直接声明在 <code>if</code> 或 <code>switch</code> 的条件里，写成 <code>if (int x = foo(); x &gt; 0) {...}</code>，<code>x</code> 就只在 <code>if</code> 内部可见，用完即弃。
     </p>
 
-    <h2>初始化写法对照</h2>
+    <h2>初始化方式对照</h2>
     <figure class="lesson-figure">
       <figcaption>在「基本类型 / 初始化方式 / 类型转换」三个页签里，对照每种类型的大小与范围、三种初始化写法的差别，以及转换表里那几行「危险示例」各自会得到什么结果。</figcaption>
       <CPP02VariablesTypes />
     </figure>
 
-    <h2>类型选择的责任</h2>
+    <h2>类型选择责任</h2>
     <p>
       静态类型把「每个变量是什么」的权力交给你，也把责任交给你。选类型按范围和用途来，初始化优先用花括号让编译器挡住窄化，转换一律显式——这三条合起来，隐式转换带来的「静默丢数据」就被堵在了编译期，而不是留到你翻账单的时候才发现。
     </p>

@@ -8,7 +8,7 @@ import CPP28Modules from './CPP28Modules.vue'
       <strong>开场问题：</strong>某个头文件里藏着一句参数宏，另一个源文件只是 <code>#include</code> 了它，里面一个重名的变量忽然编译报错——你根本没碰那行代码，它怎么就坏了？
     </div>
 
-    <h2>文本粘贴式复用</h2>
+    <h2>预处理文本粘贴</h2>
     <p>
       根源在于 C++ 复用代码的方式：<code>#include</code> 不是「引用一个文件」，而是<strong>在预处理阶段把这个文件的全部文本原样粘进来</strong>。粘进来的东西不分你我，于是三笔成本全落到写代码的人身上。
     </p>
@@ -21,7 +21,7 @@ import CPP28Modules from './CPP28Modules.vue'
       所以问题是：<strong>能不能有一种「导入代码」的方式，只暴露你明确要分享的东西，既不泄漏宏，也不用重复解析？</strong>
     </p>
 
-    <h2>重复包含的防护</h2>
+    <h2>重复包含防护</h2>
     <p>
       最省事的补丁：给每个头文件套上 <code>#pragma once</code>（或传统的 include guard），保证它在同一个翻译单元里只被包含一次。
     </p>
@@ -37,7 +37,7 @@ import CPP28Modules from './CPP28Modules.vue'
       <li><strong>封装全靠约定。</strong>头文件里写的所有声明一律暴露给使用者，想藏起来的实现细节只能靠「别去用」来约束。</li>
     </ul>
 
-    <h2>模块的导出边界</h2>
+    <h2>模块导出边界</h2>
     <p>
       不推翻「复用代码」这个目标，而是把「文本粘贴」换成一种<strong>有边界、有导出声明</strong>的结构——这就是 C++20 的模块。它分成两种文件角色：模块接口文件（习惯叫 <code>.cppm</code> 或 <code>.ixx</code>）负责声明「我导出什么」，模块实现可以就写在接口文件里，也可以拆成实现分区。
     </p>

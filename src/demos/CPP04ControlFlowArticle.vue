@@ -8,7 +8,7 @@ import CPP04ControlFlow from './CPP04ControlFlow.vue'
       <strong>开场问题：</strong>你想删掉数组里所有偶数，用 C++11 的范围 for 写得很顺手：<code>for (int x : nums) { if (x % 2 == 0) nums.erase(...); }</code>，结果程序要么直接崩、要么漏删一部分——明明只是「边遍历边筛选」，为什么这个看起来更安全的新语法反而出了事？
     </div>
 
-    <h2>遍历中删除的崩溃</h2>
+    <h2>非结构化跳转</h2>
     <p>
       程序不能只会从上往下执行，它得能「按条件走不同的路」和「重复做同一件事」。最原始的控制靠 <code>goto</code> 加标签，但用多了代码会变成一张跳来跳去的网，读的人根本追不上执行流从哪来、到哪去。于是语言提供了结构化的分支与循环：<code>if/else</code> 二选一、<code>switch</code> 多路选一、<code>while</code> 与 <code>for</code> 重复执行。
     </p>
@@ -19,7 +19,7 @@ import CPP04ControlFlow from './CPP04ControlFlow.vue'
       所以问题落到：<strong>怎么让「按条件重复」这件事，既不用手数边界，又不容易在容器变动时踩空？</strong>
     </p>
 
-    <h2>手写循环与分支</h2>
+    <h2>手写分支循环</h2>
     <p>
       最朴素的做法：用 <code>if/else</code> 做分支、用 <code>switch</code> 做多路、用 <code>for (int i = 0; i &lt; size; i++)</code> 或 <code>while</code> 做循环，全部手动控制。
     </p>
@@ -30,7 +30,7 @@ import CPP04ControlFlow from './CPP04ControlFlow.vue'
       问题在于，每一处边界都由你亲手维护，漏掉任何一处都不会报错，只会让程序在某个特定输入下静默出错。
     </p>
 
-    <h2>贯穿执行与越界</h2>
+    <h2>贯穿执行越界</h2>
     <ul>
       <li><code>switch (day)</code> 里 <code>case 1:</code> 后面忘了 <code>break</code>，就会连同 <code>case 2:</code> 一起执行——你以为只打印「周一」，实际打印出一串。</li>
       <li><code>for (int i = 0; i &lt;= nums.size(); i++)</code> 手滑写成 <code>&lt;=</code>，最后一次循环访问的下标已经越界，读到的是不存在的元素。</li>
@@ -39,7 +39,7 @@ import CPP04ControlFlow from './CPP04ControlFlow.vue'
       <li>遍历时用 <code>auto x</code> 取值，每个元素都被复制一份，容器里装大对象时代价明显——而且你改 <code>x</code> 改的是副本，容器里的元素纹丝不动。</li>
     </ul>
 
-    <h2>边界交由语法兜底</h2>
+    <h2>条件分支完善</h2>
     <p>
       不推翻「结构化控制流」，而是把常见的边界判断一步步交给语法去兜底。先补分支这一层，因为它最容易出现「结构性错误」而不是「算错值」。
     </p>
@@ -62,13 +62,13 @@ import CPP04ControlFlow from './CPP04ControlFlow.vue'
       <strong>范围 for 最该记住的一条：</strong>它只是迭代器循环的语法糖，帮你免掉了手写下标，但<strong>没有</strong>替你处理「遍历中容器被修改」这件事。凡是循环体里可能 <code>erase</code> / <code>push_back</code>，就应该改用传统循环并手动管理迭代器。
     </div>
 
-    <h2>分支循环场景对照</h2>
+    <h2>循环分支写法对照</h2>
     <figure class="lesson-figure">
       <figcaption>在「分支 / 循环 / 范围 for」三个页签里，对照 <code>if-else</code> 与 <code>switch</code> 的写法、四种循环各自适用的场景，以及范围 for 三种取值写法（复制 / 只读引用 / 可改引用）的区别。</figcaption>
       <CPP04ControlFlow />
     </figure>
 
-    <h2>结构化控制流约束</h2>
+    <h2>结构化控制流</h2>
     <p>
       结构化控制流把 <code>goto</code> 的乱跳换成了清晰的分支与循环；选 <code>if</code> 还是 <code>switch</code>、<code>for</code> 还是 <code>while</code> 看场景。范围 for 让边界不必再手数，但它是语法糖不是护身符——<strong>遍历过程中容器被改，那条线依然要你自己守</strong>。
     </p>

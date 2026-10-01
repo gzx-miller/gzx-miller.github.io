@@ -8,7 +8,7 @@ import F02FormatConversion from './F02FormatConversion.vue'
       <strong>开场问题：</strong>你把一个两分钟的 4K MP4 换成 MKV 容器，已经做好等十分钟的准备，结果命令两秒就结束了，画质放大看也毫无差别——凭什么这么快？
     </div>
 
-    <h2>转换的三重含义</h2>
+    <h2>转格式三重含义</h2>
     <p>
       「转格式」其实是三件被混在一起的事：换成别的容器、换成别的编解码器、以及为了让老设备能放而调整参数。它们看起来都叫「转一下」，成本却差着几个数量级——只换外壳可以两三秒完成，动到编码就得按分钟算，而且有损。
     </p>
@@ -16,7 +16,7 @@ import F02FormatConversion from './F02FormatConversion.vue'
       如果你把这三件事当成同一个动作，代价是隐形的：明明只想换盒子，却把每条流都重编一遍，慢得离谱还白白损失画质；反过来，明明必须重编，却以为加个参数就行，结果报错。落到一个问句上：<strong>同样是「转格式」，什么时候只是换个盒子，什么时候必须把内容推倒重做？</strong>
     </p>
 
-    <h2>改后缀的默认行为</h2>
+    <h2>默认编码器行为</h2>
     <p>
       最省事的写法是不指定任何编码：<code>ffmpeg -i input.mp4 output.mkv</code>。
     </p>
@@ -24,7 +24,7 @@ import F02FormatConversion from './F02FormatConversion.vue'
       它做对了一件事：<strong>总能给你一个能播的文件</strong>。因为不指定编码时 FFmpeg 会走默认编码器，把每条流都重新编一遍，兼容性最稳。当你不管质量、只想「先拿到一个能用文件」时，这个方案是够用的。
     </p>
 
-    <h2>默认重编码代价</h2>
+    <h2>全流重编码开销</h2>
     <ul>
       <li>只是想把 MP4 换成 MKV 这种「换盒子」的活，它却把 4K 的每条流都重编，十分钟起步，画质还降了一档。</li>
       <li>默认编码器的选择不透明，你既不知道它挑了什么，也控制不了输出体积——同一个源可能一会儿暴涨、一会儿暴跌。</li>
@@ -32,7 +32,7 @@ import F02FormatConversion from './F02FormatConversion.vue'
       <li>反过来，当源编码其实与目标容器并不兼容时，不报错的假象会让你以为成功了，实际文件放不出来。</li>
     </ul>
 
-    <h2>转封装与转码之分</h2>
+    <h2>转封装与转码</h2>
     <p>
       不推翻它，而是先把「换盒子」和「换内容」拆成两种确定的动作。
     </p>
@@ -49,13 +49,13 @@ import F02FormatConversion from './F02FormatConversion.vue'
       <strong>两个边界要记住：</strong><code>-c copy</code> 搭配 <code>-ss</code> 裁剪时，定位依赖关键帧、并不精确，需要精确裁剪就得重新编码；另外，<code>-c copy</code> 只搬运数据包却不动参数，所以它<strong>无法</strong>顺带调整分辨率或码率——真要动这些，必须转码。
     </div>
 
-    <h2>命令分岔表现</h2>
+    <h2>两套命令对照</h2>
     <figure class="lesson-figure">
       <figcaption>切「转换示例 / 转封装 / 转码」三个页签，在命令生成器里改源格式、目标格式与是否转封装，观察命令在 <code>-c copy</code> 和 <code>-c:v libx264</code> 之间怎么切换。</figcaption>
       <F02FormatConversion />
     </figure>
 
-    <h2>封装与重编抉择</h2>
+    <h2>无损与有损取舍</h2>
     <p>
       「转格式」要先分清是换盒子还是换内容：<code>-c copy</code> 只重新封装，快而无损但受容器兼容性约束；不写 <code>copy</code> 就会重编码，慢而有损却能换任意编码、调任意参数。不确定就先试 copy，报错再转码。
     </p>

@@ -8,7 +8,7 @@ import WB13ImportCallbacks from './WB13ImportCallbacks.vue'
       <strong>开场问题：</strong>同一个 <code>counter.wasm</code>，收银台 A 要打印「库存量 3」这样的明细，收银台 B 要打印「第 3 件已入账」。你不想为了两套日志把二进制编译两份——同一份字节，凭什么能表现成两种完全不同的行为？
     </div>
 
-    <h2>宿主绑定风险</h2>
+    <h2>模块与宿主耦合</h2>
     <p>
       模块自己也常常需要「打印」「写存储」「发网络」这类能力。可要是把它依赖的那个具体实现写进 Wasm，模块就被绑死在一台宿主机上了：编译给浏览器用的产物未必能跑在 Node 里；改一行日志文案都要重编译整个 Wasm；想写单元测试时，也没办法把 <code>console.log</code> 换成一个默默收集日志的数组。
     </p>
@@ -16,7 +16,7 @@ import WB13ImportCallbacks from './WB13ImportCallbacks.vue'
       手工绕路的成本同样不低：把日志逻辑用导出函数暴露给 JS、让 JS 反复轮询去取——调用方要额外维护一套同步协议，模块一多就乱；或者干脆放弃，把宿主能力全留在 JS 侧，那模块又够不着了。核心问题于是很清楚：<strong>模块要怎么声明「我需要某个能力」，却完全不关心这个能力由谁、以什么方式提供？</strong>
     </p>
 
-    <h2>导入声明写法</h2>
+    <h2>导入声明语法</h2>
     <p>
       答案是<strong>导入（import）</strong>。模块开头写一句 <code>(import "env" "log" (func $log (param i32)))</code>，意思只是「我会调用一个叫 <code>env.log</code>、签名是 <code>(i32) -&gt; ()</code> 的函数」，实现一个字都不写。真正的 JS 函数，由宿主在实例化那一刻填进去。
     </p>
@@ -24,7 +24,7 @@ import WB13ImportCallbacks from './WB13ImportCallbacks.vue'
       这个方案做对了一件事：<strong>它把「要做什么」和「谁来做」拆开了</strong>——模块只依赖一个签名，行为由注入的实现决定。同一份二进制，注入明细日志就是收银台 A，注入累计入账就是收银台 B。
     </p>
 
-    <h2>签名不符崩溃</h2>
+    <h2>签名不符即失败</h2>
     <ul>
       <li><strong>签名必须完全对得上</strong>：模块声明的是 <code>(i32) -&gt; ()</code>，你递进去一个要返回值的函数，实例化会当场失败，抛 <code>LinkError</code>。</li>
       <li>回调是<strong>同步</strong>的：<code>emit()</code> 里的 <code>call $log</code> 会立刻执行 JS，如果 JS 里干了重活，整个 Wasm 就被卡在这一句上。</li>
@@ -32,7 +32,7 @@ import WB13ImportCallbacks from './WB13ImportCallbacks.vue'
       <li>高频回调有<strong>跨边界开销</strong>：每件商品都调一次 <code>log</code>，n 件就是 n 次 JS↔Wasm 往返，性能敏感处会拖慢。</li>
     </ul>
 
-    <h2>链接依赖签名</h2>
+    <h2>链接签名匹配</h2>
     <p>
       先补<strong>签名匹配</strong>。导入不是按名字「随便挂上」的，而是按<strong>签名</strong>链接：参数个数、类型、返回类型都要一致。名字对、类型不对，实例化直接失败。所以注入前先看清模块声明的类型，再照它写 JS 函数。
     </p>
@@ -52,13 +52,13 @@ import WB13ImportCallbacks from './WB13ImportCallbacks.vue'
       <strong>忘了会痛的一点：</strong>导入是<strong>同步</strong>调用且要求签名严格一致。别在回调里做异步或重活（会堵住 Wasm），也别指望引擎帮你把类型「修一修」——签名不匹配就是实例化失败，不是运行时容错。
     </div>
 
-    <h2>两实例日志差异</h2>
+    <h2>两实例日志对照</h2>
     <figure class="lesson-figure">
       <figcaption>分别点 A 侧的「入库 / 出库」和 B 侧的「加购 / 取消」，看同一份 <code>counter</code> 二进制在两个实例里，因为注入了不同的 <code>env.log</code>，吐出的是两套完全不同的日志。</figcaption>
       <WB13ImportCallbacks />
     </figure>
 
-    <h2>实现推迟到实例化</h2>
+    <h2>实现推迟至实例化</h2>
     <p>
       导入让模块只声明「我依赖某个签名的函数」，把实现推迟到宿主实例化的那一刻。同一份二进制配上不同的 JS 实现就能得到不同行为，宿主能力（日志、存储、网络）因此和业务逻辑解耦；签名不匹配会直接实例化失败，回调是同步的，复杂数据则要经内存或引用类型传递。
     </p>

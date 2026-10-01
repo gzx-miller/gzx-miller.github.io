@@ -8,7 +8,7 @@ import CPP22RAII from './CPP22RAII.vue'
       <strong>开场问题：</strong>一段打开文件、读几行、写几行的代码，正常路径里你老老实实写了 <code>close()</code>，可某个中间分支提前 <code>return</code> 了。程序没有任何报错，直到跑了几个小时突然抛出一句 <code>Too many open files</code>——那个文件句柄到底丢在哪条路径上？
     </div>
 
-    <h2>资源的借还与泄漏</h2>
+    <h2>资源申请与归还</h2>
     <p>
       文件句柄、内存、互斥锁、网络连接，这些资源都有一个共同点：它们是<strong>借来的</strong>，用完了必须还。而「借」和「还」是两次相隔很远的调用，中间隔着你整个函数的逻辑。
     </p>
@@ -24,7 +24,7 @@ import CPP22RAII from './CPP22RAII.vue'
       所以问题不是「怎么记得写释放语句」，而是：<strong>能不能让「释放」不再依附于某条代码路径，而是绑定到某个东西的生死上？</strong>
     </p>
 
-    <h2>逐条出口的手动释放</h2>
+    <h2>逐条出口手动释放</h2>
     <p>
       最朴素的做法：每申请一个资源，就紧跟一句对应的释放调用，然后在写完函数后，从头到尾把所有 <code>return</code>、<code>break</code>、<code>throw</code> 的出口都人工过一遍，确认每一处都还上了。
     </p>
@@ -40,7 +40,7 @@ import CPP22RAII from './CPP22RAII.vue'
       <li>代码一改就得重新核对。你新加了一条 <code>continue</code> 分支，也就新增了一条出口，而没有任何工具会提醒你去补释放语句。</li>
     </ul>
 
-    <h2>构造获取析构释放</h2>
+    <h2>构造获取与析构释放</h2>
     <p>
       不推翻「获取与释放必须成对」，而是换一个人来负责这件事：<strong>让编译器负责，办法是把资源的生死绑到对象的生死上</strong>。这就是 <strong>RAII</strong>——资源获取即初始化。规矩只有两条：<strong>在构造函数里获取资源</strong>，<strong>在析构函数里释放资源</strong>。
     </p>
@@ -66,7 +66,7 @@ import CPP22RAII from './CPP22RAII.vue'
       <strong>两个会直接终止程序的操作：</strong>在析构函数里让异常逃出来（尤其栈展开期间），以及让一个既没 <code>join</code> 也没 <code>detach</code> 的 <code>std::thread</code> 对象被销毁。两者都会调用 <code>std::terminate</code>，不是「结果可能不对」，是当场崩掉。
     </div>
 
-    <h2>句柄与锁的自动释放</h2>
+    <h2>句柄与锁自动释放</h2>
     <figure class="lesson-figure">
       <figcaption>看两个 RAII 例子：<code>FileHandle</code> 在构造时打开文件、析构时自动关闭并打印「文件已关闭」，<code>std::lock_guard&lt;std::mutex&gt;</code> 在构造时加锁、离开作用域自动解锁——都没有一行手动清理。</figcaption>
       <CPP22RAII />

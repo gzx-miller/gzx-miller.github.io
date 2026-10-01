@@ -16,7 +16,7 @@ import K18Teleport from './K18Teleport.vue'
       结果却事与愿违：遮罩只覆盖了卡片那一小块，超出的部分被裁掉了；或者虽然铺满了，却被页头、侧边栏压住了半截。你调大 <code>z-index</code> 也没用——它像是被关在某个看不见的盒子里，出不来。根子在于：<strong>弹窗的视觉需求（覆盖全屏、永远在最上层）和它的代码位置（写在卡片里）出现了矛盾</strong>。
     </p>
 
-    <h2>定位层级硬挤</h2>
+    <h2>绝对定位与层叠</h2>
     <p>
       最省事的做法：继续把弹窗留在原组件里，靠绝对定位把它挪出组件边界，再靠不断调大 <code>z-index</code> 往上挤，试图压过所有邻居。
     </p>
@@ -24,7 +24,7 @@ import K18Teleport from './K18Teleport.vue'
       这个方案做对了一件事：<strong>从逻辑上看，弹窗确实该归这张卡片管</strong>。它是「这张卡片触发的确认框」，它要读取卡片里的数据、响应用户的选择，把它就地写在组件里符合人对归属的直觉，数据和事件也都天然通畅。
     </p>
 
-    <h2>溢出裁剪困境</h2>
+    <h2>溢出裁剪与层叠上下文</h2>
     <ul>
       <li>父容器只要设了 <code>overflow: hidden</code>，弹窗超出的部分就会被<strong>直接裁掉</strong>，遮罩再也铺不满屏幕。</li>
       <li>父级一旦有 <code>transform</code>（比如某些动画或居中技巧），就会为它创建新的包含块，<strong><code>position: fixed</code> 会相对这个父级而非视口定位</strong>，弹窗位置立刻错乱。</li>
@@ -32,7 +32,7 @@ import K18Teleport from './K18Teleport.vue'
       <li>就算勉强解决，也得顺着祖先链一路去改 <code>overflow</code>、去拆 <code>transform</code>，把一个弹窗的样式问题扩散到整条组件链，牵一发而动全身。</li>
     </ul>
 
-    <h2>逻辑位置拆分</h2>
+    <h2>渲染位置外移</h2>
     <p>
       不推翻「弹窗归卡片管」这个直觉，而是把两件被强行绑在一起的事<strong>拆开</strong>：逻辑归属留在原组件体系里，实际渲染的 DOM 位置挪到别处。这正是 <code>Teleport</code> 做的事——它把组件的 DOM <strong>传送</strong>到指定的目标节点，通常就是 <code>body</code>。
     </p>
@@ -58,13 +58,13 @@ import K18Teleport from './K18Teleport.vue'
       弹窗之外，通知条、下拉浮层、全局抽屉这些需要「脱离父容器、覆盖全局」的浮层，也都在用 Teleport。只要某个元素明明属于某处逻辑、渲染上却必须逃出父容器，它就是 Teleport 的用武之地。
     </p>
 
-    <h2>节点挂载位置</h2>
+    <h2>弹窗挂载位置</h2>
     <figure class="lesson-figure">
       <figcaption>点「打开弹窗」，在元素面板里看看它是不是挂在了 <code>body</code> 下，而非卡片容器里。</figcaption>
       <K18Teleport />
     </figure>
 
-    <h2>归属位置解耦</h2>
+    <h2>逻辑与渲染解耦</h2>
     <p>
       Teleport 化解的是「逻辑归属」与「渲染位置」之间的矛盾：组件的响应式作用域、<code>props</code>、事件都留在原组件体系，实际 DOM 却渲染到 <code>body</code> 这样的目标节点。于是弹窗不再被父级的 <code>overflow: hidden</code> 裁剪、不被 <code>transform</code> 创建的包含块改变定位、也不困在父级层叠上下文里被 <code>z-index</code> 压住。弹窗、通知、下拉浮层、全局抽屉都常用它，而焦点陷阱、Esc 关闭、滚动锁定这些仍要另行处理。
     </p>

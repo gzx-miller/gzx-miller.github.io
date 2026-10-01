@@ -8,7 +8,7 @@ import CPP29DesignPatterns from './CPP29DesignPatterns.vue'
       <strong>开场问题：</strong>一个数据模块在「值变了」之后，要通知日志、界面、缓存三块各自更新。你直接在数据类里挨个调用它们的方法，功能也确实跑通了——可下周产品说「再加一个统计模块」，你就得回头改数据类的源码、重新编译。加一个听众而已，凭什么要动到它？
     </div>
 
-    <h2>通知与变更的耦合</h2>
+    <h2>通知与变更耦合</h2>
     <p>
       你原本只想做一件小事：「数据变了，让关心它的人知道」。但一旦把「通知谁」和「谁在变化」写死在一起，变化的一方和响应的一方就捆死了：新增一个响应者，要去改发布者；想临时停掉某个响应者，得进去改代码；想复用时，发现这段通知逻辑和具体业务缠在一起，根本拆不出来。
     </p>
@@ -16,7 +16,7 @@ import CPP29DesignPatterns from './CPP29DesignPatterns.vue'
       要把它解开，得先问一个问题：<strong>变化的一方，能不能只管「通知」，而完全不知道有哪些人在听？</strong>只要它不知道听众是谁，增删听众就不再需要动它。这正是「设计模式」要对付的形状——它不是要你背招式，而是<strong>把会变化的那一部分从稳定结构里剥出来</strong>。
     </p>
 
-    <h2>发布者的观察者清单</h2>
+    <h2>发布者观察者清单</h2>
     <p>
       最朴素的答案是用<strong>观察者模式</strong>：让发布者（<code>Subject</code>）持有一份观察者清单，提供 <code>attach</code> 登记、<code>notify</code> 广播两个方法；每个关心数据的人把自己登记进去，变化发生时统一收到通知。
     </p>
@@ -24,7 +24,7 @@ import CPP29DesignPatterns from './CPP29DesignPatterns.vue'
       这个方案做对了一件关键的事：<strong>它把「谁在听」从发布者的代码里拿走了</strong>。发布者只面对一份清单，「加一个模块」变成调用一次 <code>attach</code>，发布者的源码一行都不用改。
     </p>
 
-    <h2>观察者形式的局限</h2>
+    <h2>观察者形式局限</h2>
     <ul>
       <li><strong>观察者的形式太窄。</strong>如果沿用「定义一个抽象 <code>Observer</code> 基类、每个观察者继承它」的经典写法，就会出现大量只写一个方法的空壳类——明明只是一段逻辑，却被迫建一个类来承载它。</li>
       <li><strong>对象的生死没人管。</strong>清单里放裸指针时，若某个观察者在没有 <code>detach</code> 的情况下被销毁，下一次 <code>notify</code> 就会调用到一块已经释放的内存。</li>
@@ -32,7 +32,7 @@ import CPP29DesignPatterns from './CPP29DesignPatterns.vue'
       <li><strong>「谁来创建」的决策散落各处。</strong>到底 new 出哪一种具体类型，如果写在业务代码里，那么新增一种类型就要去找所有 new 的地方一起改。</li>
     </ul>
 
-    <h2>可调用对象的放宽</h2>
+    <h2>可调用对象放宽</h2>
     <p>
       不推翻观察者，而是一层层往上补，先补最紧的那步。
     </p>
@@ -53,13 +53,13 @@ import CPP29DesignPatterns from './CPP29DesignPatterns.vue'
       <strong>两个真实边界：</strong>单例虽然方便，但它把「全局状态」引进来了——测试时难以隔离，并行使用时又成了共享可变状态，能用依赖注入就别动不动上单例；另外用 lambda 或 <code>std::function</code> 当观察者时，要留意<strong>它捕获了什么</strong>：若捕获了某个已被销毁对象的引用，<code>notify</code> 时同样会访问到悬垂数据，形式变了，生命周期问题并没有自动消失。
     </div>
 
-    <h2>三种模式的职责</h2>
+    <h2>三种模式职责对照</h2>
     <figure class="lesson-figure">
       <figcaption>看这三个模式各自解决什么：<code>Singleton::getInstance()</code> 演示函数局部 <code>static</code> 的懒初始化单例，<code>createProduct('A')</code> 用工厂返回 <code>unique_ptr&lt;Product&gt;</code> 隐藏具体类型，<code>Subject</code> 用 <code>std::vector&lt;std::function&lt;void(int)&gt;&gt;</code> 让两个 lambda 都能当观察者。</figcaption>
       <CPP29DesignPatterns />
     </figure>
 
-    <h2>变化部分的剥离</h2>
+    <h2>稳定与变化分离</h2>
     <p>
       设计模式不是要先背熟的招式，而是<strong>把「会变化的那部分」从稳定结构里剥出来的结果</strong>。以「数据变化要通知谁」为例：观察者拿走了「谁在听」，智能指针拿走了「谁负责删」，工厂拿走了「创建哪一类」，单例只在确实需要唯一实例时才出现，策略则拿走了「用哪套算法」。你先把耦合逼到墙角，模式的名字往往自己就浮出来了。
     </p>

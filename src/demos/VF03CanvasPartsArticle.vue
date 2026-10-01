@@ -8,7 +8,7 @@ import VF03CanvasParts from './VF03CanvasParts.vue'
       <strong>开场问题：</strong>画布上的节点一多，用户把视口拖到很远的地方，就再也找不回自己的图了；页面上没有边界参照，也不知道当前缩放到了哪一层——这些总得自己写吗？
     </div>
 
-    <h2>画布导航三缺口</h2>
+    <h2>画布定位困境</h2>
     <p>
       你画的流程图已经能用了：节点可以拖、画布可以缩放平移。但真实用户会把它拖到任意地方。这时候三个问题会接连冒出来。第一，<strong>画面没有参照物</strong>——空白区域和节点区域长得一样，用户分不清自己是在图的中央还是飘在空旷的边角。第二，<strong>缩放层级失控</strong>——滚轮一不小心缩到很小，想回到刚好铺满的样子却只能凭手感试。第三，<strong>视口外的节点找不回来</strong>——图一大，用户根本不知道该往哪个方向拖，才能重新看见自己关心的那一块。
     </p>
@@ -16,7 +16,7 @@ import VF03CanvasParts from './VF03CanvasParts.vue'
       如果这三个能力都自己实现，等于又回到了手写画布引擎的老路。而它们其实是<strong>所有流程图共通的通用需求</strong>，没有理由每个人各写一遍。
     </p>
 
-    <h2>极简画布取舍</h2>
+    <h2>核心数据边界</h2>
     <p>
       最朴素的做法：什么都不加。让画布保持一片干净的背景，用户自己滚、自己拖。这个方案对在哪里？<strong>它承认了「画布主体只需要节点与连线」</strong>，附加元素确实不该混进核心数据模型里——这是对的克制，只是克制过了头。
     </p>
@@ -29,7 +29,7 @@ import VF03CanvasParts from './VF03CanvasParts.vue'
       <li>想给网格配色做主题适配时，发现根本没有可以绑定的入口。</li>
     </ul>
 
-    <h2>可插拔附加组件</h2>
+    <h2>可插拔画布组件</h2>
     <p>
       不推翻「画布主体只有节点与连线」，而是把这些能力做成<strong>可插拔的附加组件</strong>，按需引入。它们各自是独立的小包，样式也要分别引入：<code>@vue-flow/background</code> 提供背景图案，<code>@vue-flow/controls</code> 提供缩放控制条，<code>@vue-flow/minimap</code> 提供缩略图导航。
     </p>
@@ -49,7 +49,7 @@ import VF03CanvasParts from './VF03CanvasParts.vue'
       顺带一个命名迁移的提醒：<code>pattern-color</code>、<code>bg-color</code> 属于旧 props，当前版本新增的写法是 <code>color</code>；演示里仍用旧名也能跑通，但新代码建议跟上官方的 <code>color</code>。
     </p>
 
-    <h2>小地图与网格切换</h2>
+    <h2>小地图网格切换</h2>
     <figure class="lesson-figure">
       <figcaption>切换圆点与网格线，拖动右下角小地图导航，再切换站点主题看网格换色。</figcaption>
       <VF03CanvasParts />

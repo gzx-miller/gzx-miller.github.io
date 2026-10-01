@@ -8,7 +8,7 @@ import N06Composables from './N06Composables.vue'
       <strong>开场问题：</strong>你在 <code>composables/useCart.ts</code> 里写了购物车逻辑，页头用它显示商品数量、商品卡片用它负责加购。你以为这是「一处逻辑、一份状态」，结果在卡片上连点加购，页头的数字纹丝不动。更奇怪的是：这个函数页面里一行 import 都没写，却照样能调用——「免 import」和「状态不共享」这两件看起来矛盾的事，到底是怎么同时成立的？
     </div>
 
-    <h2>逻辑复用的诉求</h2>
+    <h2>响应式逻辑复用</h2>
     <p>
       你想让一段<strong>响应式逻辑</strong>在多个组件里复用：比如「点击加一、同时给出双倍值」这种计数逻辑，页头要用、侧栏也要用。旧办法有三种，各有各的隐性成本。
     </p>
@@ -19,7 +19,7 @@ import N06Composables from './N06Composables.vue'
       于是问题落到：<strong>能不能有一个约定好的地方，把这类「以 use 开头、封装一组响应式逻辑的函数」放进去，让它免手写 import 就能在任意组件复用，同时又不必强行把它变成全局单例？</strong>
     </p>
 
-    <h2>约定目录与复用</h2>
+    <h2>约定目录自动导入</h2>
     <p>
       约定就在这里：把函数放进 <code>composables/</code> 目录、名字以 <code>use</code> 开头，Nuxt 构建时会扫描到它，并在被引用的地方自动插入 import。函数内部用 <code>ref</code>、<code>computed</code> 建立状态，把加、减、重置这些操作作为函数一起返回，调用方直接解构使用即可。
     </p>
@@ -27,7 +27,7 @@ import N06Composables from './N06Composables.vue'
       这个方案做对了一件事：<strong>它把「逻辑」从「组件」里搬了出来</strong>。同一段 <code>useCounter</code> 既能被页头用，也能被侧栏用；而它待在哪个目录、叫什么名字，本身就已经说明了「这是一个可复用的组合式函数」，不需要你手写 import 去指路。
     </p>
 
-    <h2>每次调用新实例</h2>
+    <h2>每次调用生成新实例</h2>
     <ul>
       <li>每次调用 <code>useXxx()</code> 都会<strong>重新执行一遍函数体</strong>，得到一份全新的 <code>ref</code>。它不是全局单例：页头点加一，侧栏不会跟着变——这正是开场里那个「连点加购、页头不动」的原因。</li>
       <li>函数体在<strong>服务端和客户端都会执行一次</strong>。你在里面直接读 <code>localStorage</code> 或 <code>window</code>，服务端渲染时这些对象并不存在，整页就会报错。</li>
@@ -35,7 +35,7 @@ import N06Composables from './N06Composables.vue'
       <li>只有当它待在 <code>composables/</code> 目录、且名字以 <code>use</code> 开头时才会被自动导入；放到别处或忘了前缀，运行时就会提示函数不存在。</li>
     </ul>
 
-    <h2>边界条件补齐</h2>
+    <h2>复用逻辑边界补齐</h2>
     <p>
       不推翻这个方案，而是一层层把它的边界补上。
     </p>
@@ -49,13 +49,13 @@ import N06Composables from './N06Composables.vue'
       <strong>两个最容易踩的坑：</strong>其一，composable <strong>每次调用都是一份新状态</strong>，它解决的是「逻辑复用」，不是「状态共享」，需要共享就去用 <code>useState</code> 或 Pinia；其二，它会在两端各执行一次，任何<strong>浏览器专属对象</strong>——<code>window</code>、<code>document</code>、<code>localStorage</code>——都必须先判环境或推迟到 <code>onMounted</code> 之后再访问。
     </div>
 
-    <h2>组合函数试用</h2>
+    <h2>三个组合函数对照</h2>
     <figure class="lesson-figure">
       <figcaption>分别玩一下三个 composable：给 <code>useCounter</code> 点加一减一、切换 <code>useToggle</code>、在 <code>useLocalStorage</code> 的输入框里改写文字并保存——每一块界面都各自维护一份状态，彼此互不串扰。</figcaption>
       <N06Composables />
     </figure>
 
-    <h2>复用逻辑的约定</h2>
+    <h2>按需注入复用约定</h2>
     <p>
       在 Nuxt 里，<code>composables/</code> 目录加上 <code>use</code> 前缀，就是「免 import 复用逻辑」的约定：它把一段响应式逻辑从组件里抽出来，按需注入到任意调用方。但它既不是全局单例（每次调用一份新状态），又会在服务端和客户端各跑一次——<strong>把访问浏览器 API 的动作推迟到客户端</strong>，才是它能在 SSR 下稳稳工作的前提。
     </p>

@@ -8,7 +8,7 @@ import SC02Modules from './SC02Modules.vue'
       <strong>开场问题：</strong>我在令牌文件和卡片文件里各写了一遍同名的 <code>$radius</code>，编译一路顺利通过，可线上圆角时而大时而小——到底是哪一个赢了，凭什么由它赢？
     </div>
 
-    <h2>文件拆分连接</h2>
+    <h2>跨文件成员可见性</h2>
     <p>
       样式规模一涨，拆文件几乎是本能反应：令牌一份、按钮一份、卡片一份、页面入口一份。可拆开之后，一个问题立刻浮上来——<strong>文件之间怎么互相看见对方的变量和 Mixin？</strong>
     </p>
@@ -24,7 +24,7 @@ import SC02Modules from './SC02Modules.vue'
       它做对的地方值得承认：<strong>顺序即语义，写法极短</strong>。在只有两三个文件的阶段，这套「平铺」模型足够用，也最符合直觉——毕竟它模拟的就是「把几段文本拼到一起」这件事。
     </p>
 
-    <h2>扁平引入隐患</h2>
+    <h2>静默覆盖与私有性</h2>
     <ul>
       <li>它没有命名空间。所有成员都挤在一个大池子里，重名即静默覆盖，而谁覆盖谁由加载顺序决定，读代码根本看不出来。</li>
       <li>它没有私有性。一个文件里临时用的辅助变量，外部可以随手引用，于是「内部实现」被无意中变成了「对外契约」，改名就成了一次破坏性变更。</li>
@@ -33,7 +33,7 @@ import SC02Modules from './SC02Modules.vue'
       <li>更关键的是，<code>@import</code> 已经被官方弃用——继续沿着它组织代码，等于把技术债预支给了未来。</li>
     </ul>
 
-    <h2>模块边界契约</h2>
+    <h2>模块边界与契约</h2>
     <p>
       不推翻「拆文件」，而是给文件之间加上<strong>边界与契约</strong>。现代 Sass 的答案就是模块系统：<code>@use</code> 负责引入，<code>@forward</code> 负责重新导出。
     </p>
@@ -60,13 +60,13 @@ import SC02Modules from './SC02Modules.vue'
       <strong>一句话判断：</strong>如果一处引用看不出它来自哪个文件、改它会影响谁，那就是模块边界没画清。<code>@use</code> 用命名空间回答「从哪来」，<code>@forward</code> 用筛选导出回答「对外承诺什么」。
     </div>
 
-    <h2>前缀与裸名对比</h2>
+    <h2>命名空间前缀对照</h2>
     <figure class="lesson-figure">
       <figcaption>切换命名空间写法，对比 <code>tokens.$brand</code> 与裸名字 <code>$brand</code> 的区别。</figcaption>
       <SC02Modules />
     </figure>
 
-    <h2>依赖图成形</h2>
+    <h2>依赖图与公共接口</h2>
     <p>
       模块系统把「一堆互相偷看内部变量的文件」变成了「一张有方向、有边界的依赖图」。命名空间让来源显式，私有成员让实现自由，<code>@forward</code> 让公共 API 收窄且稳定——过去靠约定维持的隐式全局依赖，如今由语言本身保证。
     </p>

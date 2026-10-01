@@ -8,7 +8,7 @@ import V13TypeScript from './V13TypeScript.vue'
       <strong>开场问题：</strong>你把 <code>user.name</code> 手滑写成了 <code>user.nmae</code>，编辑器里红波浪线一片；你以为构建铁定过不了，结果 <code>vite build</code> 一路绿灯，直到线上用户看到页面上一片空白——类型错误明明标出来了，为什么构建完全不理它？
     </div>
 
-    <h2>类型检查成本</h2>
+    <h2>全量类型检查</h2>
     <p>
       想用 TypeScript，图的就是类型安全：接口写错、字段拼错、传参不匹配，最好在<strong>运行之前</strong>就被拦下。但类型检查是要花时间的——它得把整个项目的类型图扫一遍，才能判断某处调用是否成立。如果每次你改一行代码，开发服务器都先做一次全量类型检查再响应，那「秒级热更新」就没了。
     </p>
@@ -16,7 +16,7 @@ import V13TypeScript from './V13TypeScript.vue'
       于是 Vite 必须回答一个取舍：<strong>把 TypeScript 变成 JavaScript（转译）和判断类型对不对（检查），要不要合成一件事？</strong>旧的打包器把两者合在一起做——安全，但慢；而日常开发里，你绝大多数的编辑只是想刷新一下看看效果，为此每次都付出全量检查的代价并不划算。
     </p>
 
-    <h2>注解抹除转译</h2>
+    <h2>esbuild只转译</h2>
     <p>
       最直接的做法：交给 <code>esbuild</code> 只做转译——把类型注解整体擦掉，输出纯 JavaScript，一个类型都不看。
     </p>
@@ -24,7 +24,7 @@ import V13TypeScript from './V13TypeScript.vue'
       这个方案做对了一件事：<strong>它把「让代码能跑」这件事做到了毫秒级</strong>。esbuild 用 Go 编写、多核并行，转译速度远快于传统 JS 实现的工具，于是开发服务器可以做到改一行、几乎立刻响应。
     </p>
 
-    <h2>拼写缺陷漏检</h2>
+    <h2>构建跳过类型</h2>
     <ul>
       <li><code>user.nmae</code> 这种拼写错误，esbuild 压根不看，dev 不报、build 也不报——构建通过不等于类型无误。</li>
       <li>接口改了字段名，所有旧调用点都错了，但项目照常构建成功，问题一路留到线上才暴露。</li>
@@ -32,7 +32,7 @@ import V13TypeScript from './V13TypeScript.vue'
       <li><code>import.meta<span>.env</span>.VITE_XXX</code> 和 <code>.vue</code> 文件没有类型声明，编辑器满屏「找不到模块 / 属性不存在」。</li>
     </ul>
 
-    <h2>转译与检查分工</h2>
+    <h2>转译与检查分离</h2>
     <p>
       先补「把检查找回来，但不拖慢转译」。这里不推翻最小方案，而是<strong>给转译和检查各自分派合适的工具</strong>：转译仍交给 esbuild 保速度，检查交给 <code>vue-tsc --noEmit</code> 保正确性。<code>--noEmit</code> 表示只报类型错误、不产出文件，正好补上 esbuild 留下的那块空白。
     </p>
@@ -53,13 +53,13 @@ import V13TypeScript from './V13TypeScript.vue'
       <strong>两个容易忽略的限制：</strong>第一，<strong>构建成功不等于类型无误</strong>，务必把 <code>type-check</code> 接进构建或 CI；第二，esbuild 并非支持全部 TS 特性——<code>const enum</code>、<code>export =</code>、装饰器的 <code>emitDecoratorMetadata</code> 它都不支持，遇到要改成兼容写法。
     </div>
 
-    <h2>三种检查方案</h2>
+    <h2>三类检查对照</h2>
     <figure class="lesson-figure">
       <figcaption>切 config / vue / check 三个页签：先看 esbuild 的转译配置，再看 <code>&lt;script setup lang="ts"&gt;</code> 里怎么用接口与泛型，最后对比 <code>vue-tsc</code> 的三种类型检查方案。</figcaption>
       <V13TypeScript />
     </figure>
 
-    <h2>工具与时刻分派</h2>
+    <h2>工具与时机协作</h2>
     <p>
       Vite 对 TypeScript 的态度可以概括成一句：<strong>转译和检查是两件事，交给两个工具、跑在两个时刻</strong>。esbuild 负责把 TS 极速转成 JS（只擦类型、不检查），<code>vue-tsc --noEmit</code> 负责在构建与 CI 里把关类型。理解了这一点，你就不会再把「构建成功」当成「类型没问题」。
     </p>

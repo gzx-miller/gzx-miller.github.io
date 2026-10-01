@@ -24,7 +24,7 @@ import T08VueTyping from './T08VueTyping.vue'
       这个方案做对了一件事：<strong>组件能跑起来，运行时也能拿到默认值</strong>。在只是渲染几个文本的小组件里，这套写法完全够用，也不必引入额外的类型成本。
     </p>
 
-    <h2>两份声明的错位</h2>
+    <h2>两份声明错位</h2>
     <ul>
       <li>运行时声明和 TypeScript 类型是两份知识，改了一处容易忘记另一处，二者悄悄对不上。</li>
       <li>prop 的合法取值（如 <code>'small'</code> 这类字面量联合）没有约束，拼错字母不会报错。</li>
@@ -33,7 +33,7 @@ import T08VueTyping from './T08VueTyping.vue'
       <li>组合式函数若不写返回类型，解构出来的属性会退化成宽泛类型，丢失精确性。</li>
     </ul>
 
-    <h2>编译宏的类型推导</h2>
+    <h2>编译宏类型推导</h2>
     <p>
       不推翻「组件是对外接口」，而是让这四处边界<strong>各自带上精确类型</strong>。Vue 3 的编译宏能从泛型声明直接推导出模板里的类型，正好承接这件事。
     </p>
@@ -50,13 +50,13 @@ import T08VueTyping from './T08VueTyping.vue'
       还有两个细节值得一并记住。<strong>其一</strong>，父组件想引用子组件暴露出来的公开实例类型，可以用 <code>InstanceType&lt;typeof Comp&gt;</code>，从而在类型层面拿到子组件的方法与属性。<strong>其二</strong>，组件对外暴露的类型要尽量收窄，别把内部实现里那些复杂的中间类型泄漏给使用方——组件的类型既是文档，也是长期的公共契约，泄漏得越少，未来改动越自由。
     </p>
 
-    <h2>挂载后的引用访问</h2>
+    <h2>模板引用安全访问</h2>
     <figure class="lesson-figure">
       <figcaption>点按钮聚焦输入框，观察模板引用在挂载后如何被安全访问。</figcaption>
       <T08VueTyping />
     </figure>
 
-    <h2>各出口的类型约束</h2>
+    <h2>出入口类型约束</h2>
     <p>
       Vue 3 组件类型实践的落点，是让组件的每一处出入口都有类型：props 与 emits 用泛型声明约束形状，模板引用先声明可能为 <code>null</code> 再做守卫，组合式函数与计算属性标注返回类型。把这些边界补齐，错配就止步于编辑器，而不必等到运行时。
     </p>

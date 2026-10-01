@@ -8,7 +8,7 @@ import D13ExpressFastify from './D13ExpressFastify.vue'
       <strong>开场问题：</strong>用户列表接口上线后，响应里连密码哈希都一起返回给了前端；另一个创建接口，客户端漏传了 <code>email</code>，服务端一声不吭，往库里写了一条空记录——这两件事其实是同一类问题的两个方向。
     </div>
 
-    <h2>校验逻辑的分散</h2>
+    <h2>校验与序列化</h2>
     <p>
       你在写一个 Web 服务，每个接口都要做两件「和业务无关、却绝不能出错」的事：<strong>进来的数据要校验</strong>（字段在不在、类型对不对、该拒的拒），<strong>出去的数据要按约定序列化</strong>（只给客户端该看的字段，别把内部字段顺手带出去）。
     </p>
@@ -16,7 +16,7 @@ import D13ExpressFastify from './D13ExpressFastify.vue'
       这两件事有个共同点：它们对每个接口都成立，而且一旦漏掉一处就是一个真实事故——校验漏了，脏数据进库；序列化漏了，敏感字段出库。如果把判断分散到几十个处理函数里、靠人记得，出错只是时间问题。所以真正的问题是：<strong>能不能把「输入是什么、输出是什么」从命令式的代码里抽出来，写成一份框架能替你执行的契约？</strong>
     </p>
 
-    <h2>手写校验与裁剪</h2>
+    <h2>处理函数手写校验</h2>
     <p>
       最省事的做法，就是在每个处理函数里手写：进来先 <code>if (!req.body.email) return res.status(400).json({ error: 'email required' })</code>，出去前手动挑字段 <code>res.json({ id: user.id, name: user.name })</code>。
     </p>
@@ -24,7 +24,7 @@ import D13ExpressFastify from './D13ExpressFastify.vue'
       这个方案做对了一件事：<strong>校验和裁剪确实发生了，而且就写在逻辑旁边、改起来最直接</strong>。接口只有一两个、字段只有两三个时，它是最快能跑通的写法。
     </p>
 
-    <h2>复制校验的隐患</h2>
+    <h2>重复校验维护隐患</h2>
     <ul>
       <li>同样的校验代码在几十个处理函数里复制，改一条规则要改几十处，漏一处就是一个洞。</li>
       <li>裁剪输出靠手写 <code>res.json({...})</code>，新增一个内部字段时没人会记得同时更新每一处白名单，<code>password</code> 就是这样漏出去的。</li>
@@ -32,7 +32,7 @@ import D13ExpressFastify from './D13ExpressFastify.vue'
       <li>把校验、裁剪和业务揉在一个函数里，很难单独验证「契约」这一层是否可靠。</li>
     </ul>
 
-    <h2>中间件与声明式</h2>
+    <h2>中间件与声明式校验</h2>
     <p>
       不推翻「在请求边界做校验与序列化」，而是改变它们<strong>被表达、被执行的层次</strong>。两条主线各有各的走法。
     </p>
@@ -58,13 +58,13 @@ import D13ExpressFastify from './D13ExpressFastify.vue'
       那到底怎么选？没有绝对优劣，看你的诉求：生态成熟、要灵活、团队熟悉，Express 更顺；接口契约严格、想要 Schema 带来的验证与序列化加速、又需要内置结构化日志，Fastify 更合适。真要切换框架时，稳妥的路径是<strong>先保持路由与响应格式完全不变，让行为对齐，再做内部优化</strong>——否则你分不清变的是框架，还是接口本身。
     </p>
 
-    <h2>两种路由写法的对照</h2>
+    <h2>两种框架路由对照</h2>
     <figure class="lesson-figure">
       <figcaption>在 Express 与 Fastify 之间切换，对照同一组路由：一边是逐个 <code>app.use</code> 串起来的中间件链，一边是挂在路由上的 Schema 声明。</figcaption>
       <D13ExpressFastify />
     </figure>
 
-    <h2>请求处理的组织方式</h2>
+    <h2>请求处理组织方式</h2>
     <p>
       框架的差别，本质是「请求处理的组织方式」不同：Express 用顺序中间件链把通用逻辑串起来，Fastify 用生命周期钩子加 JSON Schema，把校验与序列化变成启动期编译、运行时执行的声明式契约。选型的关键不是谁更强，而是你的接口约束有多严、团队更熟哪一套。
     </p>

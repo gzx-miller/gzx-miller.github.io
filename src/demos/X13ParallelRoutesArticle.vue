@@ -8,7 +8,7 @@ import X13ParallelRoutes from './X13ParallelRoutes.vue'
       <strong>开场问题：</strong>后台仪表盘上有概览、统计卡片和通知中心三块数据，其中通知最慢——为什么它一慢，整个页面就都卡着不出来？
     </div>
 
-    <h2>多块内容的绑定</h2>
+    <h2>多区域数据耦合</h2>
     <p>
       你在做一个后台首页：主区显示概览，右上角是访问量统计，侧边是通知列表。三块数据来自不同接口，快慢不一。按最直觉的写法，这些内容会挤在同一个页面组件里依次取数、一起渲染。
     </p>
@@ -16,7 +16,7 @@ import X13ParallelRoutes from './X13ParallelRoutes.vue'
       于是体验变成了：本来能秒出的概览，也必须等最慢的通知请求回来才能显示；而且只要任何一块接口报错，整页就一起崩掉。问题不在数据本身，而在<strong>这几块内容被绑成了「一个不可分割的整体」</strong>。
     </p>
 
-    <h2>单组件顺序等待</h2>
+    <h2>单组件串行取数</h2>
     <p>
       最省事的做法，是在一个页面组件里把三份数据顺序 <code>await</code> 出来，再一起摆到布局上：概览在上、统计在右、通知在侧。代码集中，结构一眼能看全。
     </p>
@@ -24,7 +24,7 @@ import X13ParallelRoutes from './X13ParallelRoutes.vue'
       它做对的地方是<strong>直观</strong>：所有内容在一个文件里，谁在哪儿一目了然，页面小、数据少的时候维护成本最低。
     </p>
 
-    <h2>最慢模块的拖累</h2>
+    <h2>长尾延迟与故障传播</h2>
     <ul>
       <li>木桶效应：几份数据一起等，最慢的那块决定了整页的可看时间。</li>
       <li>零容错：任一接口抛错就整页崩，其他本来正常的内容也被连累。</li>
@@ -32,7 +32,7 @@ import X13ParallelRoutes from './X13ParallelRoutes.vue'
       <li>组件膨胀：随着面板变多，单个文件越来越长，职责全糊在一起。</li>
     </ul>
 
-    <h2>页面区域的拆分</h2>
+    <h2>并行路由插槽</h2>
     <p>
       要点不在于把数据取快，而在于<strong>把页面拆成几块能各自独立的区域</strong>。Parallel Routes 给的就是这套机制：用 <code>@</code> 前缀的目录定义「插槽」，插槽会作为 <code>props</code> 传给同一层的 <code>layout</code>。
     </p>
@@ -61,13 +61,13 @@ import X13ParallelRoutes from './X13ParallelRoutes.vue'
       <strong>两个易忘的坑：</strong>插槽目录名即 prop 名，<strong>重命名目录必须同步改 layout 的解构</strong>，否则插槽接不到就没内容；另外插槽不进入 URL，所以别指望用地址栏去访问某个插槽——它是布局内部的渲染区，不是独立路由。
     </div>
 
-    <h2>各自加载与兜底</h2>
+    <h2>插槽独立加载兜底</h2>
     <figure class="lesson-figure">
       <figcaption>观察主内容与两个插槽如何各自加载、各自兜底，互不拖累。</figcaption>
       <X13ParallelRoutes />
     </figure>
 
-    <h2>布局内的独立块</h2>
+    <h2>布局内独立插槽</h2>
     <p>
       Parallel Routes 解决的是「一个布局里要同时放几块独立内容」的问题：用 <code>@</code> 目录定义插槽，插槽以 props 形式进入 layout，各自拥有 loading、error、default 状态，于是加载、出错、兜底都能按块隔离。它不改变 URL，改变的只是布局内区域的<strong>独立性</strong>。
     </p>

@@ -8,7 +8,7 @@ import D09ErrorLogging from './D09ErrorLogging.vue'
       <strong>开场问题：</strong>用户传了一个不存在的课程 id，你的接口返回 500「服务器内部错误」；用户以为自己网不好、反复重试，运维却在告警群里排查一个根本不存在的「服务器故障」——一个再正常不过的业务错误，为什么会被当成系统崩溃？
     </div>
 
-    <h2>错误分类的缺失</h2>
+    <h2>双重职责与排查线索</h2>
     <p>
       服务跑起来就会出错，出错后你要<strong>同时</strong>做两件事：给调用方一个合适的响应，给自己留一条能排查的线索。最省事的做法是在请求入口统一 <code>try ... catch</code>，把异常 <code>console.log</code> 出来，一律返回 500。
     </p>
@@ -19,7 +19,7 @@ import D09ErrorLogging from './D09ErrorLogging.vue'
       问题落到一句话：错误该不该分出类别？给调用方的、和自己该留的，分别是什么？
     </p>
 
-    <h2>入口层的统一捕获</h2>
+    <h2>请求入口统一捕获</h2>
     <p>
       在请求入口包一层 <code>try ... catch</code>：捕获所有异常，打一条日志，返回 <code>500 { message: 'Internal Server Error' }</code>。
     </p>
@@ -27,7 +27,7 @@ import D09ErrorLogging from './D09ErrorLogging.vue'
       这个方案做对了一件最基础的事：<strong>给所有错误准备了统一出口</strong>——响应总能正常结束，进程也不会因为一个未捕获的异常直接挂掉。问题在于，它把「完全不同的两类错误」压成了同一种结果。
     </p>
 
-    <h2>混淆的两类错误</h2>
+    <h2>两类错误混淆</h2>
     <ul>
       <li>参数缺失、资源不存在这类<strong>本来就会发生</strong>的错误，和代码 bug、依赖崩溃这类<strong>不该发生</strong>的错误，被一起返回成 500，调用方无从判断能否重试。</li>
       <li><code>console.log(err)</code> 只留下堆栈，缺请求 ID、用户 ID 和入参，事后根本串不起来。</li>
@@ -36,7 +36,7 @@ import D09ErrorLogging from './D09ErrorLogging.vue'
       <li>日志里混进 token、密码、手机号，排查没帮上忙，先造成了一次越权泄漏。</li>
     </ul>
 
-    <h2>二分归类的依据</h2>
+    <h2>区分操作型错误</h2>
     <p>
       先把错误<strong>分成两类</strong>，因为后面所有处理都由这个分类决定：<strong>操作型错误</strong>是预期内、能对应调用方一个具体动作的问题——参数缺失、权限不足、资源不存在、下游超时；<strong>程序型错误</strong>是不该出现的 bug 或崩溃级故障。整个处理流程是这样的：
     </p>
@@ -65,13 +65,13 @@ import D09ErrorLogging from './D09ErrorLogging.vue'
       <strong>最容易被忽略的一点：</strong>未处理的 Promise 拒绝如果只是 <code>console.log</code> 后继续运行，等于把一个未知的坏状态留着不管；同样，任何时候都不要把 <code>err.stack</code> 或原始 <code>err.message</code> 直接返回给客户端——对外只给稳定错误码，堆栈留给服务端日志。
     </div>
 
-    <h2>可查的日志线索</h2>
+    <h2>结构化日志字段</h2>
     <figure class="lesson-figure">
       <figcaption>点「模拟请求失败」，看这条日志——它有稳定的错误码和请求 ID，而不是一段裸堆栈；对外则只回错误码，不暴露内部细节。</figcaption>
       <D09ErrorLogging />
     </figure>
 
-    <h2>分类与分别对待</h2>
+    <h2>错误分类与处置</h2>
     <p>
       错误处理的关键是「<strong>先分类、再分别对待</strong>」：操作型错误转成稳定的错误码和恰当的状态码，交给调用方去处理；程序型错误留下完整上下文后交给进程管理器重启；日志用固定字段的结构化形式记录，才查得动、也才追得下去。
     </p>

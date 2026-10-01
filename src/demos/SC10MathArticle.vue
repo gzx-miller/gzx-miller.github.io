@@ -24,7 +24,7 @@ import SC10Math from './SC10Math.vue'
       它们都做对了同一件事：<strong>把「列宽」当成一个可以被表达式描述的结果</strong>，而不是碰运气调出来的数。只要列数不变，两种写法都能跑起来。
     </p>
 
-    <h2>参数一变全废</h2>
+    <h2>参数变更数值失效</h2>
     <ul>
       <li>写死 <code>322.666px</code> 后，间距一改数字全废，容器尺寸一变更是无从下手。</li>
       <li>手写 <code>33.333%</code> 时忘了减去列间距，列与列直接挤在一起。</li>
@@ -56,13 +56,13 @@ import SC10Math from './SC10Math.vue'
       <strong>两个容易忽略的边界：</strong>浮点结果要依据 CSS 的真实需要决定是否舍入，别让长尾小数进入产物；百分比与单位的换算规则以 <code>sass:math</code> 文档为准，不要凭直觉手写转换系数——直觉算出来的数，往往就是布局在极端尺寸下错位的原因。
     </div>
 
-    <h2>列宽实时联动</h2>
+    <h2>列宽随参数变化</h2>
     <figure class="lesson-figure">
       <figcaption>拖动列数与间距滑块，看单列宽度按 <code>math.div</code> 的公式如何变化。</figcaption>
       <SC10Math />
     </figure>
 
-    <h2>编译运行时分野</h2>
+    <h2>编译与运行时分野</h2>
     <p>
       设计数学的可靠做法，是先分清「编译期算得出」和「只有运行时才算得出」。前者用 <code>sass:math</code> 明确求值，除法一律写 <code>math.div</code>；后者保留成 <code>calc()</code> 交给浏览器。把这条界线划清楚，公式既不会被写死，也不会在错误的地方求值。
     </p>

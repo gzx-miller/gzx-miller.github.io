@@ -8,7 +8,7 @@ import CPP08DynamicMemory from './CPP08DynamicMemory.vue'
       <strong>开场问题：</strong>服务跑了一整晚，内存占用只涨不降，重启一下就恢复；你翻遍代码，每一处 <code>new</code> 看起来都写对了——那这些借出去的内存，到底去哪了？
     </div>
 
-    <h2>动态内存的需求</h2>
+    <h2>动态内存需求</h2>
     <p>
       有些对象的大小要等运行时才知道：用户输入多长、这次读到多少条记录。有些对象的生命周期又不能跟着某一个作用域走：它要在多个函数甚至多个对象之间共享。栈上的自动变量这两件事都做不到——大小编译期固定、离开作用域就销毁。
     </p>
@@ -24,7 +24,7 @@ import CPP08DynamicMemory from './CPP08DynamicMemory.vue'
       所以问题落成一句：怎样才能安全地借还堆内存，既拿到「运行时才定的大小」和「跨作用域的生命周期」，又不把「记得还」变成人的负担？
     </p>
 
-    <h2>手动分配与释放</h2>
+    <h2>手动分配释放</h2>
     <p>
       最直接的做法：<code>new</code> 要一块，<code>delete</code> 还回去。
     </p>
@@ -65,13 +65,13 @@ import CPP08DynamicMemory from './CPP08DynamicMemory.vue'
       <strong><code>new[]</code> 一定要配 <code>delete[]</code>：</strong>对 <code>new[]</code> 出来的数组写 <code>delete arr</code>，不会正确地逐个析构元素，既漏掉了后面的对象，又可能破坏堆结构。此外，怀疑泄漏时可用工具定位：Linux 上的 Valgrind、Windows 上的 Dr. Memory，或编译期插桩的 AddressSanitizer。
     </div>
 
-    <h2>配对与悬垂验证</h2>
+    <h2>配对悬垂验证</h2>
     <figure class="lesson-figure">
       <figcaption>对照代码走一遍单个对象的「分配 → 释放 → 置空」，再看数组的 <code>new[]</code> / <code>delete[]</code> 如何配对，最后看被注释掉的悬垂与重复释放为什么会出事。</figcaption>
       <CPP08DynamicMemory />
     </figure>
 
-    <h2>内存释放的责任</h2>
+    <h2>内存释放责任</h2>
     <p>
       动态内存把「大小」和「生命周期」的决定权交给程序，代价是把「记得还」也交给你。<code>delete</code> 后置空只堵住一种误用，真正把这责任接过去的是智能指针和容器——所以现代 C++ 的答案不是「更小心地写 <code>new</code> / <code>delete</code>」，而是「尽量不写它们」。
     </p>

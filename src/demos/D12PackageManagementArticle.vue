@@ -8,7 +8,7 @@ import D12PackageManagement from './D12PackageManagement.vue'
       <strong>开场问题：</strong><code>package.json</code> 里写的是 <code>"axios": "^1.6.0"</code>，团队五个人各跑一次 <code>pnpm install</code>，装出来的却是五个不同的小版本——同一份代码，昨天构建还能过，今天在 CI 上挂了。
     </div>
 
-    <h2>依赖树的不确定性</h2>
+    <h2>声明式依赖解析</h2>
     <p>
       你在做一个应用，需要用到几十个第三方库。这些库自己又依赖别的库，层层叠下去，真正落到你机器上的可能是一棵几百个节点的依赖树。你不可能把这棵树手抄一遍，于是把「我要什么」写成声明，交给包管理器去解析。
     </p>
@@ -16,7 +16,7 @@ import D12PackageManagement from './D12PackageManagement.vue'
       关键在于，<code>package.json</code> 里写的从来不是「某一个确定版本」，而是<strong>一个允许移动的范围</strong>。<code>^1.6.0</code> 的意思是「1.6.0 及以上、但还不跨到 2.0.0 的任何版本」。于是同一份声明，在不同时间执行会解析出不同的结果。这就引出一个必须回答的问题：<strong>怎么保证每个人、每台机器、每次构建，装出来的都是同一棵树？</strong>
     </p>
 
-    <h2>版本号的精确锁定</h2>
+    <h2>精确锁定版本号</h2>
     <p>
       最省事的做法：把版本写死，<code>"axios": "1.6.0"</code>，不带任何 <code>^</code> 或 <code>~</code>。这样每次装的都是同一个版本，本地和 CI 自然一致。
     </p>
@@ -24,7 +24,7 @@ import D12PackageManagement from './D12PackageManagement.vue'
       这个方案做对了一件事：<strong>它抓住了问题的核心——差异来自「范围」</strong>。只要能固定住解析结果，可重复安装就成立。问题是，只固定「直接依赖」还远远不够。
     </p>
 
-    <h2>间接依赖的漂移</h2>
+    <h2>间接依赖漂移</h2>
     <ul>
       <li>你只钉住了自己写的直接依赖，它们的间接依赖（依赖的依赖）仍带着范围，照样会漂。</li>
       <li>把几十个直接依赖全部写死，版本一升级就要人工改一遍，既累又容易漏。</li>
@@ -32,7 +32,7 @@ import D12PackageManagement from './D12PackageManagement.vue'
       <li>就算今天碰巧一致，也说不清具体是怎么解析出来的——没有一份「当时到底装了哪些版本」的记录可以拿来对账。</li>
     </ul>
 
-    <h2>锁文件的记录作用</h2>
+    <h2>语义化版本与锁文件</h2>
     <p>
       不推翻「固定解析结果」，而是把它拆成两层：<strong>用范围表达意图，用锁文件记录结果</strong>。声明和结果各司其职，问题就解开了。
     </p>
@@ -58,13 +58,13 @@ import D12PackageManagement from './D12PackageManagement.vue'
       最后是依赖的日常维护。运行时真正用到的库进 <code>dependencies</code>，只在构建、测试阶段用的工具进 <code>devDependencies</code>，两者分开声明，生产环境才不会白装一堆工具。再定期做依赖审计（如 <code>pnpm audit</code>），发现已知漏洞就评估升级路径——把安全维护也纳入同一套「范围加锁文件」的秩序里。
     </p>
 
-    <h2>升级档位的对照</h2>
+    <h2>版本范围升级档位</h2>
     <figure class="lesson-figure">
       <figcaption>切换 <code>^4.1.0</code> / <code>~4.1.0</code> / <code>4.1.0</code>，看每种范围分别允许升到哪一档，再对照 CI 用的 <code>--frozen-lockfile</code>。</figcaption>
       <D12PackageManagement />
     </figure>
 
-    <h2>意图与结果的分离</h2>
+    <h2>意图与结果分离</h2>
     <p>
       可重复安装的诀窍，是把「意图」和「结果」分成两件事：<code>package.json</code> 里的范围只负责表达你愿意接受哪些升级，锁文件负责记录实际解析出的每一个精确版本。提交锁文件、CI 用冻结模式安装，本地、CI 与生产才会落在同一棵依赖树上。
     </p>

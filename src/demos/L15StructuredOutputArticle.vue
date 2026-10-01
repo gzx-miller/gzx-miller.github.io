@@ -24,7 +24,7 @@ import L15StructuredOutput from './L15StructuredOutput.vue'
       要回答的是：<strong>怎么才能让模型不是「尽量」返回结构化数据，而是保证返回的对象符合你定义的结构？</strong>
     </p>
 
-    <h2>语法合法基本保证</h2>
+    <h2>JSON语法保证</h2>
     <p>
       最朴素的做法：打开 <strong>JSON Mode</strong>——在请求里把 <code>response_format</code> 设为 <code>json_object</code>，在提示词里把字段结构写清楚，收到后 <code>JSON.parse</code>。
     </p>
@@ -32,7 +32,7 @@ import L15StructuredOutput from './L15StructuredOutput.vue'
       这个方案做对了一件事：<strong>它用模型层的能力兜住了「合法 JSON」这条底线</strong>。输出至少是能解析的 JSON，不再夹带 Markdown 代码块和寒暄。
     </p>
 
-    <h2>字段正确性的盲区</h2>
+    <h2>字段正确性校验</h2>
     <ul>
       <li>JSON Mode 只保证「是合法 JSON」，不保证「字段对不对」：它完全可能把时长写成字符串「45 分钟」，或干脆漏掉讲师字段。</li>
       <li>字段结构全靠提示词里的文字约束，字段一多、层级一深，模型就开始漏字段、改字段名。</li>
@@ -40,7 +40,7 @@ import L15StructuredOutput from './L15StructuredOutput.vue'
       <li>每次拿到结果都得手写一层运行时校验，重复且容易漏。</li>
     </ul>
 
-    <h2>机器可读的结构声明</h2>
+    <h2>机器可读结构</h2>
     <p>
       不推翻「用 JSON 传结构」，而是把「结构」从提示词里的自然语言，升级成机器可读的 schema——用 <strong>Zod</strong> 定义。
     </p>
@@ -68,7 +68,7 @@ import L15StructuredOutput from './L15StructuredOutput.vue'
       <L15StructuredOutput />
     </figure>
 
-    <h2>可解析与正确的差距</h2>
+    <h2>可解析与正确差距</h2>
     <p>
       结构化输出解决的是「让模型吐出程序能直接吃的数据」。要点是把结构从提示词里的文字描述，升级成机器可读的 schema：用 Zod 定义一次，既做运行时校验又做类型推导；优先走 <code>withStructuredOutput</code> 的函数调用路径，必要时才回退 JSON Mode，并为解析失败留好重试的路。
     </p>

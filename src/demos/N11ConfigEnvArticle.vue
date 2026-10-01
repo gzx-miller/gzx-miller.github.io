@@ -8,7 +8,7 @@ import N11ConfigEnv from './N11ConfigEnv.vue'
       <strong>开场问题：</strong>数据库密码一开始直接写在代码里，本地跑得好好的；换到生产要改一次、换回本地又要改回来，某次提交还把它带进了仓库——配置到底该放在哪？
     </div>
 
-    <h2>随环境变化的配置值</h2>
+    <h2>配置项随环境变化</h2>
     <p>
       几乎每个应用都会遇到同一类值：端口、数据库地址、Redis 过期时间、第三方密钥。它们的共同点是<strong>代码逻辑不变，值却随环境变化</strong>——本地连 <code>localhost</code>，生产连内网域名，测试用的又是另一套。这些值一旦写死在源码里，「同一份代码部署到多个环境」这件事就做不到了。
     </p>
@@ -16,7 +16,7 @@ import N11ConfigEnv from './N11ConfigEnv.vue'
       把配置抽出来是必然的，但抽到哪里、怎么读、读不到怎么办，每一步都有代价。处理不好，就会得到最难排查的一类问题：本地能跑，线上爆，而且现场离病因很远。
     </p>
 
-    <h2>配置文件的引入写法</h2>
+    <h2>环境变量文件读取</h2>
     <p>
       最省事的做法：把值放进 <code>.env</code> 文件，代码里用 <code>process.env.PORT</code> 这样的写法去读。
     </p>
@@ -24,7 +24,7 @@ import N11ConfigEnv from './N11ConfigEnv.vue'
       这一步做对的是最关键的一件事：<strong>配置与代码分离</strong>。同一份代码，部署时只要替换环境变量，行为就变了，本地开发与生产运行的差异不再靠改代码来切换。这是所有后续方案的基础，方向完全正确。
     </p>
 
-    <h2>散落读取的三重隐患</h2>
+    <h2>散落读取与类型隐患</h2>
     <ul>
       <li><code>process.env</code> 的读取散落在各个文件里，同一个配置项可能在多处出现，改一处漏一处。</li>
       <li>环境变量永远是字符串：<code>process.env.DB_PORT</code> 读出来是 <code>'5432'</code>，不手动转换就会参与字符串拼接而不是数值计算。</li>
@@ -34,7 +34,7 @@ import N11ConfigEnv from './N11ConfigEnv.vue'
       <li>每个模块都要单独引入一次 dotenv 之类的库，初始化顺序本身又成了新的隐患。</li>
     </ul>
 
-    <h2>统一读取的中间层</h2>
+    <h2>统一配置中间层</h2>
     <p>
       不推翻「环境变量」，而是给读取过程加一层统一的中间层。<code>ConfigModule.forRoot()</code> 在启动时读取环境文件并合并成一个配置对象，之后所有代码<strong>只跟这个对象打交道</strong>，不再直接碰 <code>process.env</code>。这一步把「到处读」收敛成「一处装配、处处注入」。
     </p>
@@ -54,13 +54,13 @@ import N11ConfigEnv from './N11ConfigEnv.vue'
       最后是启动校验。配置问题的理想暴露时机是<strong>应用启动的那一刻</strong>，而不是某次请求。用 Joi 或 class-validator 对配置对象声明校验规则，必填项缺失或格式不对就抛出错误、让进程直接起不来——这叫「快速失败」：一个起不来的实例，远比一个能启动、却会在半夜某个请求里崩掉的实例安全。
     </p>
 
-    <h2>环境切换的读值对比</h2>
+    <h2>开发生产读值对比</h2>
     <figure class="lesson-figure">
       <figcaption>切换开发与生产环境，对比 <code>ConfigService</code> 读到的值，再点一次启动校验，看必填项缺失时如何快速失败。</figcaption>
       <N11ConfigEnv />
     </figure>
 
-    <h2>读取过程的三道保险</h2>
+    <h2>类型校验与默认值</h2>
     <p>
       配置管理的本质，是把「随环境变化的值」从代码里请出来，并给读取过程加上类型、默认值与校验三道保险：<code>ConfigModule.forRoot()</code> 统一装配，配置工厂集中做转换与兜底，<code>ConfigService</code> 负责注入读取，启动校验保证缺失即失败。密钥只走环境变量与 Secret，永远不进仓库。
     </p>

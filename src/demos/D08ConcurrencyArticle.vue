@@ -8,7 +8,7 @@ import D08Concurrency from './D08Concurrency.vue'
       <strong>开场问题：</strong>你要给五千个用户批量发通知，一句 <code>Promise.all(users.map(send))</code> 让它们全部同时发出；结果下游短信网关当场限流把请求打了回来，本机还因为打开的文件连接太多报了 <code>EMFILE</code>。把并发降到「同时最多十个」，总耗时却几乎没变——并发更高，为什么反而更慢、还会把下游压垮？
     </div>
 
-    <h2>批量任务的发起</h2>
+    <h2>异步任务批量发起</h2>
     <p>
       你面前有一批互相独立的异步任务：批量发通知、批量读文件、批量调接口。逐个 <code>await</code> 要等前一个结束才做下一个，太慢；索性用 <code>Promise.all</code> 让它们一起出发，又换来另一种麻烦。
     </p>
@@ -19,7 +19,7 @@ import D08Concurrency from './D08Concurrency.vue'
       问题落到一句话：怎样在不牺牲太多吞吐的前提下，把「同时在做的事」控制在一个安全的数量以内？
     </p>
 
-    <h2>任务池与固定并发</h2>
+    <h2>固定并发任务池</h2>
     <p>
       用<strong>任务池</strong>的思路：准备一个任务队列，起固定数量的 worker（比如 2 个或 10 个），每个 worker 循环「从队列取一个任务 → <code>await</code> 它完成 → 再取下一个」，直到队列取空。
     </p>
@@ -27,7 +27,7 @@ import D08Concurrency from './D08Concurrency.vue'
       这个方案做对了一件核心的事：<strong>它把「无界并发」变成了「有界并发」</strong>。任意时刻在途的任务数恒等于 worker 数，与队列里还剩多少任务完全无关。
     </p>
 
-    <h2>并发度的估算困境</h2>
+    <h2>并发度容量估算</h2>
     <ul>
       <li>worker 数量拍脑袋定：设太大下游照样被打垮，设太小吞吐上不去，必须结合下游容量压测来定。</li>
       <li>任务失败若直接抛出，会让这个 worker 提前退出、后面没人继续取任务，一个「毒丸任务」就能阻塞整条流水线。</li>
@@ -36,7 +36,7 @@ import D08Concurrency from './D08Concurrency.vue'
       <li>worker 与队列的收尾没写干净，可能出现队列都空了、worker 还在空转等待。</li>
     </ul>
 
-    <h2>固定并发的拉取循环</h2>
+    <h2>拉取循环与有界并发</h2>
     <p>
       先<strong>固定 worker 数量</strong>：用 N 个并发的「拉取循环」替换掉一次性 <code>map</code>。为什么先做它——这是把并发从无界变有界的核心动作，后面所有优化都建立在它之上。
     </p>
@@ -59,13 +59,13 @@ import D08Concurrency from './D08Concurrency.vue'
       <strong>两个隐蔽的坑：</strong>无界的 <code>Promise.all</code> 不是「更快」，而是把压力转移给了下游与操作系统，可能触发限流或 <code>EMFILE</code>；而失败隔离做不到位时，一个任务抛错就会让整批停摆——并发控制的收益，一半来自提速，另一半来自这种「坏一个不坏一批」的稳健。
     </div>
 
-    <h2>在途并发的实时计数</h2>
+    <h2>在途任务数对照</h2>
     <figure class="lesson-figure">
       <figcaption>点「以并发 2 执行任务」，盯着「执行中」的数字看——它始终不超过 2，说明同时在途的任务被 worker 数量卡住了，而不是 6 个任务一起冲出去。</figcaption>
       <D08Concurrency />
     </figure>
 
-    <h2>可配置的并发上限</h2>
+    <h2>保护下游与并发上限</h2>
     <p>
       任务池把「并发」从一个形容词变成了一个可配置的数字：<strong>固定 worker 数、pull 领取任务、失败不中断、上限按下游容量定</strong>。提速的前提，是先保护下游。
     </p>

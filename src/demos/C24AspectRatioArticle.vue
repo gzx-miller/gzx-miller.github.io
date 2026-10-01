@@ -16,7 +16,7 @@ import C24AspectRatio from './C24AspectRatio.vue'
       上线后冒出两个问题。第一，图片还没下载完时容器的高度不对，<strong>图一加载出来，下面的内容整体往下跳，用户刚要点的地方被推走，甚至误触</strong>——这就是布局偏移。第二，为了消掉跳动你改用固定宽高，结果<strong>比例不同的图片被强行拉伸，人物都变形了</strong>。<strong>要跳出这个两难，得先意识到：「元素占多大地方」和「图片在盒子里怎么放」其实是两件事。</strong>把它们混在一起来解决，才会两头都做不好。
     </p>
 
-    <h2>固定像素宽高</h2>
+    <h2>固定像素尺寸</h2>
     <p>
       最朴素的做法是把尺寸写死：给图片 <code>width: 300px; height: 200px</code>。
     </p>
@@ -97,13 +97,13 @@ import C24AspectRatio from './C24AspectRatio.vue'
       <code>aspect-ratio</code> 负责在图片下载前就把空间占好，<code>object-fit: cover</code> 负责图片到位后铺满且不变形。<strong>两张拼图各管一段，缺一条都会退回开场的那个问题</strong>：只留 <code>aspect-ratio</code>，图片会被拉伸；只留 <code>object-fit</code>，加载时照样跳。
     </p>
 
-    <h2>比例推导高度</h2>
+    <h2>比值与填充对照</h2>
     <figure class="lesson-figure">
       <figcaption>先展开「比值演示」看不同宽高比如何由宽度推导高度，再逐个切换 object-fit 观察图片在盒子里的填充差异。</figcaption>
       <C24AspectRatio />
     </figure>
 
-    <h2>占位与填充分工</h2>
+    <h2>占位与填充分界</h2>
     <p>
       <code>aspect-ratio</code> 与 <code>object-fit</code> 解决的是两件相邻但不同的事。前者回答「这个盒子该占多大」——在布局阶段就由宽度推出高度，把位置提前留好，从而消掉布局偏移；后者回答「图片该怎么装进这个盒子」——<code>cover</code> 裁剪铺满、<code>contain</code> 完整留白、<code>fill</code> 拉伸变形、<code>none</code> 不缩放、<code>scale-down</code> 取较小者。两者配合，才是「加载前不跳、加载后不变形」的完整答案。
     </p>

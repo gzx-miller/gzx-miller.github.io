@@ -8,7 +8,7 @@ import U11PullRefresh from './U11PullRefresh.vue'
       <strong>开场问题：</strong>你在课程列表页快速往下滑，<code>onReachBottom</code> 连着触发了三次，第二页那 20 条被追加了三遍——同一个「事件循环」课程在列表里出现了三行；等你回头一看，下拉刷新还没跑完，它回来的第一页又把已经加载的第三页顶掉了，列表条数从 60 条一下退回 20 条。
     </div>
 
-    <h2>下拉刷新与触底</h2>
+    <h2>下拉刷新与触底加载</h2>
     <p>
       列表页的数据有两种典型更新：<strong>下拉刷新</strong>对应页面事件 <code>onPullDownRefresh</code>，<strong>触底加载</strong>对应 <code>onReachBottom</code>。前者是「把整份列表换成最新的」，后者是「在末尾接着追加下一页」。它们看起来只是两个回调，但踩下去就是一堆互相打架的状态。
     </p>
@@ -19,7 +19,7 @@ import U11PullRefresh from './U11PullRefresh.vue'
       问题于是很清楚：<strong>一个会反复触发、又要区分「替换」和「追加」的加载流程，用什么来保证同一时刻只做一件事、并且知道什么时候该停？</strong>
     </p>
 
-    <h2>分页拼接方案</h2>
+    <h2>分页页码拼接方案</h2>
     <p>
       先写最朴素的一版：在 <code>onReachBottom</code> 里把页码加一，调接口拿下一页，拼接到列表末尾。
     </p>
@@ -27,7 +27,7 @@ import U11PullRefresh from './U11PullRefresh.vue'
       这个方案做对了一件事：<strong>它只取用户需要的那一页，而不是一次性把几万条全拉回来</strong>。这正是信息流能无限滚动的底座——每次只下载增量，首屏不用等全集，流量和等待时间都按需增长。对「就两页数据」的小列表，这样写已经够了。
     </p>
 
-    <h2>重复触发的问题</h2>
+    <h2>重复触发与页码竞态</h2>
     <ul>
       <li>手指快速上滑时 <code>onReachBottom</code> 会连续触发，每次 <code>page</code> 都加一并发一次请求，同一个第二页被追加三遍，列表出现整段重复项。</li>
       <li>下拉刷新把 <code>page</code> 重置为 1，此时正在跑的加载更多回来，把第 2 页数据追加到了刚换成第一页的列表上，条数不降反增，顺序也乱了。</li>
@@ -36,7 +36,7 @@ import U11PullRefresh from './U11PullRefresh.vue'
       <li>刷新请求结束了却忘了调 <code>uni.stopPullDownRefresh</code>，下拉的动画一直挂在那儿弹不回去。</li>
     </ul>
 
-    <h2>状态开关的引入</h2>
+    <h2>加载状态开关引入</h2>
     <p>
       不推翻「分页取增量」，而是给它配一个能描述当前状态的小机器。第一层，先补上<strong>「正在加载」这个开关</strong>：进入加载前把 <code>loading</code> 置为 <code>true</code>，回来后置回 <code>false</code>；触底时先判断 <code>if (loading) return</code>。这就是<strong>防重入</strong>——同一时刻只允许一个加载在跑，连续触底的后几次会被直接挡回。
     </p>
@@ -67,13 +67,13 @@ import U11PullRefresh from './U11PullRefresh.vue'
       <strong>一个必须知道的边界：</strong><code>onReachBottom</code> 只有在页面内容超出屏幕、真正能滚动时才会触发。所以数据很少、凑不满一屏时，触底事件永远不来，第二页也就加载不了。这类「需要凑不满一屏也能继续取」的场景，要改用 <code>&lt;scroll-view&gt;</code> 的 <code>@scrolltolower</code>，自己做局部滚动并监听到底。
     </div>
 
-    <h2>加载中的按钮禁用</h2>
+    <h2>按钮禁用防重入</h2>
     <figure class="lesson-figure">
       <figcaption>点「下拉刷新」会重置到第一页、把最新课程插到顶部；点「滚动到底」会追加两条。注意两个按钮在各自加载中都被禁用了——这就是防重入，试着连点几次，列表只会变一次。</figcaption>
       <U11PullRefresh />
     </figure>
 
-    <h2>互斥状态防重入</h2>
+    <h2>互斥状态管理加载</h2>
     <p>
       下拉刷新和触底加载考的不是两个 API，而是<strong>用一组互斥状态把「反复触发」的加载流程管住</strong>：拿 <code>loading</code> 挡住重入，拿 <code>hasMore</code> 判断该不该停，拿各自的页码区分「替换」与「追加」，最后用空态和收尾把状态机每一步都放回原位。
     </p>

@@ -54,7 +54,7 @@ import WB02WatBinary from './WB02WatBinary.vue'
       调试任何来路不明的 <code>.wasm</code>，第一件事都是 <code>wasm2wat</code> 反编译出来读一遍——<strong>文本即图纸</strong>，看懂了图纸再决定动不动字节。
     </div>
 
-    <h2>指令与字节高亮</h2>
+    <h2>指令字节高亮</h2>
     <figure class="lesson-figure">
       <figcaption>左侧是 <code>add</code> 模块的 WAT 源码，点右侧任意一条指令，会高亮它在二进制里对应的操作码字节。</figcaption>
       <WB02WatBinary />

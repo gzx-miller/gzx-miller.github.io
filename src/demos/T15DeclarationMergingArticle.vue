@@ -16,7 +16,7 @@ import T15DeclarationMerging from './T15DeclarationMerging.vue'
       前一种还好办，在业务代码里断言一下就能过去；后一种更麻烦——你不可能去改第三方库的源码，下次升级还会被覆盖。真正想要的是：<strong>在自己这一侧、完全不触碰对方源码的前提下，把缺失的类型补上去</strong>。
     </p>
 
-    <h2>就地断言的变通</h2>
+    <h2>就地类型断言</h2>
     <p>
       最省事的做法是就地断言：<code>(window as any).__APP_VERSION__</code>。它马上能让编译通过，确实是「绕过类型检查」的一种手段。
     </p>
@@ -24,7 +24,7 @@ import T15DeclarationMerging from './T15DeclarationMerging.vue'
       要承认它的位置：当你只想临时读一个值、又完全不想引入任何配置时，这确实是最短的路径，它至少让你先跑起来。问题出在把这个手段当成方案之后。
     </p>
 
-    <h2>断言丢掉的安全</h2>
+    <h2>断言丢失安全</h2>
     <ul>
       <li>断言把类型安全直接丢掉了：拼错成 <code>__APP_VERISON__</code> 也不会报错，运行时才拿到 <code>undefined</code>。</li>
       <li>同一个属性每处都要断一次，写法啰嗦，还容易前后不一致。</li>
@@ -32,7 +32,7 @@ import T15DeclarationMerging from './T15DeclarationMerging.vue'
       <li>最关键的是：<strong>编译器本来可以知道这些属性存在，只是没人告诉它</strong>。</li>
     </ul>
 
-    <h2>声明合并的机制</h2>
+    <h2>声明合并机制</h2>
     <p>
       TypeScript 有一项特性专门用来回答这类问题：<strong>声明合并</strong>——多份分散的声明可以按规则拼成同一个实体，不必挤在一处写。
     </p>
@@ -69,13 +69,13 @@ import T15DeclarationMerging from './T15DeclarationMerging.vue'
       <strong>声明合并是「增强」，不是「覆盖」：</strong>同名接口会把成员并起来，无法删掉或否决对方已有的属性。如果两边对同一字段给出了互相冲突的类型，编译器会把它揪出来——这反而是发现建模问题的重要信号。
     </div>
 
-    <h2>两份声明的合并</h2>
+    <h2>合并结果查看</h2>
     <figure class="lesson-figure">
       <figcaption>点按钮查看合并后的配置与全局扩展，注意那四个属性其实来自两份同名的声明。</figcaption>
       <T15DeclarationMerging />
     </figure>
 
-    <h2>增强不覆盖原则</h2>
+    <h2>增强而不覆盖</h2>
     <p>
       声明合并让「扩展别人」不必修改别人的源码：同名接口把属性并起来，<code>namespace</code> 给类追加静态成员，<code>declare module</code> 与 <code>declare global</code> 则为第三方包和全局对象补齐类型。规矩只有三条——类与类不能直接合并，模块增强必须待在模块作用域里，全局增强只在带导入导出的文件中生效。
     </p>

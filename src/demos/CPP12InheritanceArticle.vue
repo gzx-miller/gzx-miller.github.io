@@ -8,7 +8,7 @@ import CPP12Inheritance from './CPP12Inheritance.vue'
       <strong>开场问题：</strong>你写了个按动物描述的函数 <code>void describe(Animal a)</code>，把一只 <code>Dog</code> 传进去，函数里让它叫一声，叫出来却是基类那句"发出声音"，而且函数里再也读不到狗自己的数据——一只 Dog 装进 Animal 之后，怎么像被削掉了一半？
     </div>
 
-    <h2>字段与行为的复用</h2>
+    <h2>字段与行为复用</h2>
     <p>
       你遇到的是复用问题：<code>Dog</code> 和 <code>Animal</code> 共享同一套字段（名字）与行为（构造、析构、说话的方式），只是狗要多一点自己的东西。最省事的办法，是把 <code>Animal</code> 的代码整段复制进 <code>Dog</code>，改掉类名。
     </p>
@@ -24,7 +24,7 @@ import CPP12Inheritance from './CPP12Inheritance.vue'
       所以要问的是：<strong>能不能让一个新类型"基于"已有类型去定义，既继承它的成员，又和它建立起可替换的关系？</strong>
     </p>
 
-    <h2>公有继承的写法</h2>
+    <h2>公有继承写法</h2>
     <p>
       最直接的写法是 <code>class Dog : public Animal { ... }</code>。这样 Dog 自动拥有了 Animal 的全部成员，还能往上添加自己的成员和自己的函数。
     </p>
@@ -32,7 +32,7 @@ import CPP12Inheritance from './CPP12Inheritance.vue'
       这个方案做对了一件关键的事：<strong>它把"是一种"这层关系写进了类型系统</strong>——<code>public</code> 继承表达的正是 is-a。于是凡需要 Animal 的地方（函数参数、容器元素）都能放 Dog，复用不必再靠复制粘贴。剩下要弄清的，是这份关系在内存和生命周期里究竟怎么运转。
     </p>
 
-    <h2>构造顺序的陷阱</h2>
+    <h2>构造顺序陷阱</h2>
     <ul>
       <li>派生类构造函数体里想用基类的 <code>name</code>，可它的值从哪来、什么时候就绪，说不清——构造顺序一旦弄反，就会读到未初始化的成员。</li>
       <li>用基类对象接住派生对象：<code>Animal a = dog;</code>，Dog 特有的成员被"切掉"，<code>a</code> 里只剩基类那部分——开场"少了一半"的现象就是这么来的。</li>
@@ -40,7 +40,7 @@ import CPP12Inheritance from './CPP12Inheritance.vue'
       <li>指望派生类改写基类行为，基类那个函数却是普通（非虚）函数，通过基类指针调用时调到的仍是基类版本。</li>
     </ul>
 
-    <h2>对象的内存构成</h2>
+    <h2>派生对象内存布局</h2>
     <p>
       不推翻"派生"，而是把这份关系一层层讲清楚。先看内存：<strong>派生类对象 = 基类子对象 + 派生类新增成员</strong>。正因为 Dog 内部真的"装"了一块完整的 Animal，<code>Animal* p = &amp;dog;</code> 才合法——指针只是记下地址，指向的仍是那只完整的狗。
     </p>
@@ -69,13 +69,13 @@ import CPP12Inheritance from './CPP12Inheritance.vue'
       <strong>按值传递会切片：</strong><code>void describe(Animal a)</code> 这种按值接收基类对象的函数，会把传进来的 Dog 切成 Animal；把派生对象放进存放基类对象的容器也一样。要保留派生身份或使用多态，参数和容器里都应该放<strong>基类的指针或引用</strong>，而不是基类对象本身。
     </div>
 
-    <h2>打印中的调用次序</h2>
+    <h2>基类指针调用</h2>
     <figure class="lesson-figure">
       <figcaption>对照代码里构造与析构的打印：<code>Dog dog("旺财")</code> 是先打印基类构造还是派生类构造？<code>delete</code> 时析构顺序又怎样？再留意通过基类指针调用 <code>speak()</code> 的结果。</figcaption>
       <CPP12Inheritance />
     </figure>
 
-    <h2>继承与对象身份</h2>
+    <h2>继承与类型关系</h2>
     <p>
       继承先回答"两个类型是什么关系"：公有继承表达 is-a，派生对象在内存里就是"基类子对象 + 新增成员"。构造从基类走到派生、析构反过来；要让基类指针正确清理和改写行为，析构要是虚的、重写要用 <code>override</code>；要保住派生对象的完整身份，就只能用指针或引用，一旦用基类对象按值接收，它就会被切片。
     </p>

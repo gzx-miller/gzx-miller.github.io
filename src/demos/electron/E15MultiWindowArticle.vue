@@ -8,7 +8,7 @@ import E15MultiWindow from './E15MultiWindow.vue'
       <strong>开场问题：</strong>用户连点了三下「关于」，你屏幕上就叠了三个一模一样的关于窗口——因为你每点一次就 <code>new BrowserWindow</code> 一次。更别扭的是，主窗口把主题切成深色后，设置窗口还亮着白底，两个窗口各说各话，像活在两个应用里。
     </div>
 
-    <h2>多窗口三难题</h2>
+    <h2>多窗口三类难题</h2>
     <p>
       多窗口应用比单窗口多出三件必须回答的事。<strong>谁是谁</strong>：同时存在好几个窗口实例，你怎么找到指定的那个、怎么保证同类窗口不重复弹。<strong>窗口之间怎么说话</strong>：主窗口改了主题，别的窗口怎么知道。<strong>窗口长什么样、在哪</strong>：用户拖过位置、调过大小，下次打开还还原不还原。
     </p>
@@ -19,7 +19,7 @@ import E15MultiWindow from './E15MultiWindow.vue'
       所以要问的是：怎样把「多个窗口」当成一个可管理的整体，让它们找得到、说得上话、状态还不丢？
     </p>
 
-    <h2>窗口映射表管理</h2>
+    <h2>窗口映射与集中管理</h2>
     <p>
       主进程里用一个 <code>Map</code> 集中持有所有窗口：创建后 <code>windows.set(win.id, { win, type })</code>，需要哪个窗口就按 <code>id</code> 取。
     </p>
@@ -27,7 +27,7 @@ import E15MultiWindow from './E15MultiWindow.vue'
       这个方案做对了一件事：<strong>它把「窗口实例」变成了一个可查询、可清理的集合</strong>，而不是一堆散落在角落里的变量。有了这张表，「找到某个窗口」和「关掉后把它忘掉」都成了明确的操作。
     </p>
 
-    <h2>单例控制缺位</h2>
+    <h2>单例缺失与引用残留</h2>
     <ul>
       <li>没有单例控制：同一个按钮点几下就 <code>new</code> 出几个同类窗口，用户想要的其实只是把已有的那个拉到前面。</li>
       <li><code>closed</code> 事件里不 <code>windows.delete(win.id)</code>：引用一直挂在 Map 上，GC 收不回，还会在你稍后对它 <code>send</code> 时抛错。</li>
@@ -37,7 +37,7 @@ import E15MultiWindow from './E15MultiWindow.vue'
       <li>窗口位置大小不保存：用户摆放的布局，重启就回去了。</li>
     </ul>
 
-    <h2>主进程中转中介</h2>
+    <h2>主进程转发与单例控制</h2>
     <p>
       先把「实例管理」补成可靠的。在 <code>Map</code> 之外加一层<strong>单例判断</strong>：开窗口前先查有没有同类窗口，有就 <code>win.focus()</code>（必要时先 <code>restore()</code>），没有才 <code>new BrowserWindow</code> 并存进 Map。这一步直接解决连点叠窗。
     </p>
@@ -57,13 +57,13 @@ import E15MultiWindow from './E15MultiWindow.vue'
       收尾是清理：每个窗口的 <code>closed</code> 事件里 <code>windows.delete(win.id)</code>，让引用和对象一起被回收；再配合 <code>window-all-closed</code> 处理「所有窗口都关了要不要退出应用」这个平台差异。
     </p>
 
-    <h2>开关与广播控制</h2>
+    <h2>开关切换与消息广播</h2>
     <figure class="lesson-figure">
       <figcaption>点每个窗口卡片上的「打开 / 关闭」管理它的生命周期，再点「广播消息到所有窗口」模拟主进程的定向推送与广播，观察窗口状态如何随开关同步变化。</figcaption>
       <E15MultiWindow />
     </figure>
 
-    <h2>三条职责归属</h2>
+    <h2>三项职责归属</h2>
     <p>
       多窗口管理的三件事各有归属：实例用主进程里的一个 <code>Map</code> 集中管理并加单例判断，通信一律走主进程中转（定向用 <code>webContents.send</code>、批量用 <code>getAllWindows()</code> 广播），共享状态以主进程为单一事实来源，窗口位置用 userData 存储持久化。别忘了在 <code>closed</code> 里删引用——这是不掉进内存泄漏的关键。
     </p>

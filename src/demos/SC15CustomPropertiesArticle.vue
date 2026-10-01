@@ -8,7 +8,7 @@ import SC15CustomProperties from './SC15CustomProperties.vue'
       <strong>开场问题：</strong>我想让用户能实时换主题色，于是写下 <code>:root { --brand: $brand; }</code>，结果页面一点颜色都没变，浏览器像是把这条声明当成了无效值——为什么 Sass 变量放进自定义属性里就「失灵」了？
     </div>
 
-    <h2>两套颜色体系</h2>
+    <h2>变量与自定义属性</h2>
     <p>
       你手里有两套颜色命名方式：一套是 Sass 变量 <code>$brand</code>，在编译期求值、编译完就从产物里消失；另一套是 CSS 自定义属性 <code>var(--brand)</code>，浏览器认识它，能参与级联与继承，也能被脚本随时改写。
     </p>
@@ -19,7 +19,7 @@ import SC15CustomProperties from './SC15CustomProperties.vue'
       不用自定义属性的代价同样清楚：要么放弃运行时切换，每换一次主题就重新编译一次 Sass；要么把品牌色硬编码进 JavaScript，让同一个色值在样式和脚本两处各维护一份，改一处忘一处。
     </p>
 
-    <h2>直接手写变量</h2>
+    <h2>直接手写CSS变量</h2>
     <p>
       最朴素的做法：干脆不用 Sass 变量，直接在样式里手写 CSS 变量。
     </p>
@@ -30,14 +30,14 @@ import SC15CustomProperties from './SC15CustomProperties.vue'
       这个方案做对了最关键的一件事：<strong>运行时体系是对的</strong>。浏览器认识 <code>var()</code>，变量能继承、能级联、能被 <code>element.style.setProperty</code> 覆盖，不需要重新编译，主题切换立刻生效。
     </p>
 
-    <h2>色值悄然分叉</h2>
+    <h2>色值双来源分叉</h2>
     <ul>
       <li>品牌色如今有两个来源：Sass 里的 <code>$brand</code> 和 CSS 里的 <code>#c45125</code>，改一处忘一处，色值悄悄分叉。</li>
       <li>设计令牌一多起来，把它们一个个手抄进 <code>:root</code> 既枯燥又容易抄错。</li>
       <li>想让 Sass 的计算结果——比如 <code>color.scale</code> 派生出的深色——也变成运行时变量，纯手写 CSS 根本表达不了这层计算。</li>
     </ul>
 
-    <h2>插值写入属性</h2>
+    <h2>插值写入自定义属性</h2>
     <p>
       关键的一步是让 Sass 去「写」这些自定义属性。但要注意一个坑：自定义属性的值在 Sass 眼里是<strong>任意 CSS 文本</strong>，默认会原样输出，不会替你求值。所以写 Sass 值进去时必须用插值 <code>#{$brand}</code>，把它显式地求出来：
     </p>
@@ -66,13 +66,13 @@ import SC15CustomProperties from './SC15CustomProperties.vue'
       最后别忘验证：用浏览器开发者工具查看该自定义属性在运行时的<strong>最终值</strong>——它经过级联与覆盖之后是什么，只有元素检查器能告诉你，编译产物里看到的只是初始值。
     </p>
 
-    <h2>改色免重编译</h2>
+    <h2>改色免重新编译</h2>
     <figure class="lesson-figure">
       <figcaption>切换运行时品牌色，看背景与文字如何随变量实时变化，全程不重新编译。</figcaption>
       <SC15CustomProperties />
     </figure>
 
-    <h2>编译与运行时接力</h2>
+    <h2>编译期与运行时接力</h2>
     <p>
       Sass 变量和 CSS 自定义属性各守一段：前者在编译期定义令牌、参与计算，后者在运行时承载主题、参与级联。让两者接力的方式就是插值——把 Sass 值显式写进自定义属性；遇到带引号的字符串再用 <code>meta.inspect</code> 保住表示。分清「编译期常量」与「运行时变量」，这套协作才不会互相打架。
     </p>

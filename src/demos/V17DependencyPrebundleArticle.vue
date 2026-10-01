@@ -8,7 +8,7 @@ import V17DependencyPrebundle from './V17DependencyPrebundle.vue'
       <strong>开场问题：</strong>你把某个依赖升级了一个版本，<code>package.json</code> 和 lockfile 都改过了，重启开发服务器——行为还是旧的。你翻遍业务代码也找不到线索，最后抱着试试看的心态删掉整个 <code>node_modules/.vite</code>，一重启，新版本生效了。明明依赖变了，Vite 为什么没察觉？
     </div>
 
-    <h2>预构建缓存代价</h2>
+    <h2>缓存复用成本</h2>
     <p>
       上一课你已经知道：预构建把依赖转成 ESM 合并成单文件，是为了让开发服务器快。但「快」是有代价的——它把结果<strong>缓存</strong>下来复用，而不是每次启动都重算。缓存一旦存在，就必须回答一个问题：这份产物还代表当前的依赖吗？
     </p>
@@ -24,7 +24,7 @@ import V17DependencyPrebundle from './V17DependencyPrebundle.vue'
       这个方案做对了一件事：<strong>它让第二次启动不必重算</strong>。开销被一次性付掉，后续启动直接读现成的文件。
     </p>
 
-    <h2>动态导入盲点</h2>
+    <h2>动态导入漏判</h2>
     <ul>
       <li>比对用的「说明」覆盖不全就会漏判：动态 <code>import()</code> 的依赖静态扫描发现不了，它压根不在缓存清单里，运行时才报 404。</li>
       <li>缓存是「要么整份有效、要么整份重算」，一条输入变了就全废，看不出是哪条引起的。</li>
@@ -32,7 +32,7 @@ import V17DependencyPrebundle from './V17DependencyPrebundle.vue'
       <li>启动变慢时，人第一反应是怀疑 CPU 或磁盘，很少想到是缓存失效后被反复重算。</li>
     </ul>
 
-    <h2>依赖指纹构成</h2>
+    <h2>失效条件构成</h2>
     <p>
       先补「缓存里到底存了什么」。<code>node_modules/.vite/deps/</code> 下每个依赖一个 <code>.js</code> 加一份 <code>.js.map</code>，另有一份 <code>_metadata.json</code>，记录当时的依赖列表与 hash、以及配置的指纹。启动时 Vite 拿当前情况算出指纹，和这份元数据一比：相同就跳过预构建，不同就整份重建。
     </p>
@@ -65,13 +65,13 @@ import V17DependencyPrebundle from './V17DependencyPrebundle.vue'
       <strong>两条容易踩的线：</strong><code>include</code> 里只能写第三方依赖，绝不能写 <code>src</code> 下的业务路径——预构建压根不处理业务源码；遇到「改了没生效」这类诡异现象，先 <code>--force</code> 重算一次，能排除一大半缓存问题，再回头看代码。
     </div>
 
-    <h2>状态标签流转</h2>
+    <h2>预构建状态流转</h2>
     <figure class="lesson-figure">
       <figcaption>切 核心概念 / 构建流程 / 配置示例 / 交互演示 四个页签，在演示里点「重新预构建」，看每个依赖的状态从「已缓存」经「构建中」再回到「已缓存」，以及进度条与总大小的变化。</figcaption>
       <V17DependencyPrebundle />
     </figure>
 
-    <h2>缓存失效判定</h2>
+    <h2>排障与重建策略</h2>
     <p>
       预构建快，是因为它把结果缓存了下来；缓存可信，是因为它记了一份指纹来比对。理解「哪些输入会让指纹失效」以及「哪些变化根本不在指纹里」，就握住了 <code>optimizeDeps</code> 的大部分排障钥匙——多数「改了没生效」，答案都是清缓存或 <code>--force</code>。
     </p>

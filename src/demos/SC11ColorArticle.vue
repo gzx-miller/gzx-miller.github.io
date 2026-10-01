@@ -8,7 +8,7 @@ import SC11Color from './SC11Color.vue'
       <strong>开场问题：</strong>想给品牌色做一个「悬浮时亮一点」的按钮，写下 <code>lighten($brand, 10%)</code>，浅色主题下挺自然——可一到深色主题就糊成一团。同样的「变亮 10%」，怎么就不灵了？
     </div>
 
-    <h2>单一主色派生</h2>
+    <h2>品牌主色派生</h2>
     <p>
       一套设计系统通常只有一个品牌主色，比如 <code>#e85d04</code>。但界面需要的颜色远不止一个：按钮要有默认态和悬浮态，提示框要有柔和背景，边框要比背景略深。你不希望每加一个状态就让设计师再手挑一个色值，于是想<strong>从这一个色值里算法派生出其余的颜色</strong>。
     </p>
@@ -16,7 +16,7 @@ import SC11Color from './SC11Color.vue'
       这条路不是偷懒，而是必要：如果每个状态色都靠人工指定，主色一改，整套配色就得跟着手工重调，一致性很快崩塌。真正的难点在于，派生的方式选错了，颜色看着「对了一点」，却可能同时踩坏对比度和可访问性。
     </p>
 
-    <h2>亮度旋钮调节</h2>
+    <h2>全局颜色函数</h2>
     <p>
       最直接的做法是给颜色「拧一个旋钮」：想让按钮亮一点就 <code>lighten($brand, 10%)</code>，想让背景柔和就 <code>lighten($brand, 40%)</code>。这类旧全局函数还包括 <code>darken</code>、<code>saturate</code>、<code>adjust-hue</code> 等，它们把颜色当成一个可调节的亮度盘。
     </p>
@@ -33,7 +33,7 @@ import SC11Color from './SC11Color.vue'
       <li>同一套算法用在深色模式上并不等价，忘记分别验证就会得到一版看不清的配色。</li>
     </ul>
 
-    <h2>颜色空间转换</h2>
+    <h2>颜色空间通道转换</h2>
     <p>
       不推翻「从品牌色派生」，而是换成 <code>sass:color</code> 模块的函数，在<strong>明确的颜色空间</strong>里读取和转换通道。三个最常用的函数各有清晰语义：
     </p>
@@ -58,13 +58,13 @@ import SC11Color from './SC11Color.vue'
       <strong>数学派生不能保证视觉可访问性。</strong><code>color.scale</code> 与 <code>color.adjust</code> 语义不同，混用会得到难以解释的色差；深浅两种主题下的派生色必须<strong>分别验证</strong>，因为同一算法在深色底上的对比度并不等价。
     </div>
 
-    <h2>通道缩放混合</h2>
+    <h2>通道缩放与混合</h2>
     <figure class="lesson-figure">
       <figcaption>拖动亮度滑块、切换不同的颜色函数，感受通道缩放与混合如何改变同一个基色。</figcaption>
       <SC11Color />
     </figure>
 
-    <h2>令牌扩展算法</h2>
+    <h2>设计令牌扩展配色</h2>
     <p>
       配色派生的意义，是把有限的品牌令牌扩展成完整的界面配色，同时不被「手挑色值」拖垮一致性。做法是用 <code>sass:color</code> 的 <code>scale</code> / <code>mix</code> / <code>adjust</code> 在明确的颜色空间里操作通道，再对结果做对比度验证，最后把合格的色值固化成令牌。
     </p>

@@ -8,7 +8,7 @@ import C15LogicalProperties from './C15LogicalProperties.vue'
       <strong>开场问题：</strong>阿拉伯语版本一上线，右上角的「热门」角标跑到了左边，文字间距也整体反了——同一套 CSS，为什么换个语言方向，布局就全乱套？
     </div>
 
-    <h2>多语言卡片的方向适配</h2>
+    <h2>多语言卡片适配</h2>
     <p>
       你在做一个会走向多语言的商品卡片：角标钉在「文字开始的那一侧」上角，内容左边留 16px 间距，左右内边距还不一样。用中文、英文都好端端的，可一旦切到阿拉伯语这种从右往左阅读的书写方向，整张卡片的视觉重心就翻了个面。
     </p>
@@ -16,7 +16,7 @@ import C15LogicalProperties from './C15LogicalProperties.vue'
       根子在于，你写的 <code>left</code>、<code>right</code> 是<strong>物理方向</strong>——它们钉死在屏幕上，与文字朝哪边流毫无关系。而用户真正想要的是<strong>逻辑方向</strong>：角标永远跟在「行首」那一侧，无论行首在左还是在右。不掌握这层区分，你就得为每个从右往左的语言再补一套镜像样式，卡片加一条规则，镜像也得跟着加一条——维护量翻倍，漏一条就出 bug。
     </p>
 
-    <h2>方向样式的直写</h2>
+    <h2>方向样式直写</h2>
     <p>
       最直白的写法：需要左边距就写 <code>margin-left: 16px</code>，左对齐就写 <code>text-align: left</code>，角标钉左上就写 <code>position: absolute; left: 0</code>。这套写法做对了一件大事：<strong>它在当前书写方向下语义准确、所见即所得</strong>。屏幕左边就是左边，改起来最直观。
     </p>
@@ -24,7 +24,7 @@ import C15LogicalProperties from './C15LogicalProperties.vue'
       只要项目只面向一种从左往右的语言，这就是最省心的方案。问题出在「只面向一种」这个假设上。
     </p>
 
-    <h2>语向切换后的返工</h2>
+    <h2>语向切换返工</h2>
     <ul>
       <li>切到 RTL，<code>left</code> 不会自动翻转成 <code>right</code>，所有方向性样式都要手写 <code>[dir=&quot;rtl&quot;]</code> 覆盖一遍。</li>
       <li>每新增一条物理方向样式，都必须补一条镜像规则，规则数量翻倍，还极容易漏掉。</li>
@@ -32,7 +32,7 @@ import C15LogicalProperties from './C15LogicalProperties.vue'
       <li>设计稿说「角标贴行首上角」，实现里却要翻译成 left 还是 right，沟通成本反复发生。</li>
     </ul>
 
-    <h2>文字流坐标的引入</h2>
+    <h2>文字流坐标模型</h2>
     <p>
       不推翻「描述方向」，而是把方向从<strong>屏幕坐标</strong>换成<strong>文字流坐标</strong>。CSS 用两个轴来表达：<code>inline</code> 轴是<strong>行内文字的走向</strong>，在从左往右的书写模式里就是左右；<code>block</code> 轴是<strong>块级堆叠的方向</strong>，也就是上下。每条轴又有 <code>start</code> 与 <code>end</code> 两端。于是「左边距」这类写法被替换成 <code>margin-inline-start</code>：在 LTR 里它等于 <code>margin-left</code>，在 RTL 里它自动等于 <code>margin-right</code>。
     </p>
@@ -67,13 +67,13 @@ import C15LogicalProperties from './C15LogicalProperties.vue'
       <strong>协作小建议：</strong>与设计沟通时，尽量用「行首 / 行尾、块首 / 块尾」这样的方向语义，而不是「左 / 右」。约定好语义后，落地时直接写逻辑属性，RTL 适配就几乎不需要额外工作。
     </div>
 
-    <h2>物理与逻辑的镜像</h2>
+    <h2>左右镜像对照</h2>
     <figure class="lesson-figure">
       <figcaption>切换 LTR / RTL，对比左右两张卡片：物理属性原地不动，逻辑属性自动镜像。</figcaption>
       <C15LogicalProperties />
     </figure>
 
-    <h2>对齐基准的替换</h2>
+    <h2>物理属性替换</h2>
     <p>
       物理属性钉在屏幕方向上，逻辑属性钉在文字流方向上。把 <code>left</code> / <code>right</code> 换成 <code>inline-start</code> / <code>inline-end</code>，把 <code>top</code> / <code>bottom</code> 换成 <code>block-start</code> / <code>block-end</code>，把 <code>width</code> / <code>height</code> 换成 <code>inline-size</code> / <code>block-size</code>，RTL 与垂直书写模式就能自动适配，不必再手写一套镜像覆盖。判断口诀只有一句：凡是带方向的样式，先问它相对的是「屏幕」还是「文字流」，后者就该用逻辑属性。
     </p>

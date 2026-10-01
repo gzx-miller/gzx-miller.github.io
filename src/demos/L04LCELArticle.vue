@@ -8,7 +8,7 @@ import L04LCEL from './L04LCEL.vue'
       <strong>开场问题：</strong>你在三个页面里都写了同样的三步——先格式化提示词、再调用模型、最后解析结果。现在想给整个流程加上「逐字返回」，你却发现没有一处能改：得在三个地方分别把 <code>invoke</code> 换成 <code>stream</code>，还要把解析逻辑跟着改三遍。
     </div>
 
-    <h2>组件连接的手写成本</h2>
+    <h2>连接逻辑手写</h2>
     <p>
       组件本身其实没问题：提示模板、模型、解析器各司其职，每一个都很清楚。问题出在<strong>它们之间的「连接」是用手写代码表达的</strong>——格式化完赋给一个变量，再把它传给模型，再把模型的输出传给解析器。
     </p>
@@ -24,7 +24,7 @@ import L04LCEL from './L04LCEL.vue'
       要问的是：<strong>能不能让「连接」本身成为一种可复用的对象，而不是散落在每段调用里的调用代码？</strong>
     </p>
 
-    <h2>三步流程函数封装</h2>
+    <h2>三步流程封装</h2>
     <p>
       最朴素的做法是把三步封进一个函数：<code>const p = await prompt.format(input)</code>，接着 <code>const r = await model.invoke(p)</code>，最后 <code>return parser.parse(r)</code>。
     </p>
@@ -32,7 +32,7 @@ import L04LCEL from './L04LCEL.vue'
       这个方案做对了一件事：<strong>多步流程被固定成了一个可重复调用的单元</strong>。你不再每次都从头拼一遍，调用方只看到「给输入、拿输出」。
     </p>
 
-    <h2>函数与模型强绑定</h2>
+    <h2>函数与模型耦合</h2>
     <ul>
       <li>想换模型只能进函数体去改，函数写一次就和某个模型绑死了。</li>
       <li>想整体跑流式做不到：函数里写死了 <code>invoke</code>，你没法从外部说「这条流程改用 <code>stream</code> 跑一遍」。</li>
@@ -40,7 +40,7 @@ import L04LCEL from './L04LCEL.vue'
       <li>想加一步就得改函数签名和内部逻辑，链越长越没人敢动。</li>
     </ul>
 
-    <h2>统一接口方法约定</h2>
+    <h2>统一接口约定</h2>
     <p>
       不推翻「把流程收成一个单元」，而是先统一接口。第一步补<strong>共同的方法约定</strong>：让每个组件都实现 <code>invoke</code>、<code>stream</code>、<code>batch</code> 三个方法。这样「调用模式」就从组件内部被抽出来，变成对所有组件都成立的一件事。先补它，是因为只有接口统一了，下一步的「串联」才有共同的语言。
     </p>
@@ -57,13 +57,13 @@ import L04LCEL from './L04LCEL.vue'
       最后补两个处理「形状」的工具：需要在不改动数据的前提下把原始输入顺手往下传，用 <code>RunnablePassthrough</code>；需要让同一份输入同时跑好几条支路，用 <code>RunnableParallel</code>，它的输出是一个以分支名命名成员的对象。调试时把链拆成两截，先验证上游输出再拼回去，能快速定位是哪一步出了问题。
     </p>
 
-    <h2>管道内数据流转</h2>
+    <h2>管道数据流转</h2>
     <figure class="lesson-figure">
       <figcaption>点「执行管道」，看数据依次流过 ChatPromptTemplate、ChatOpenAI、StringOutputParser，中间用 <code>.pipe()</code> 相连，每一步都列出它收到的输入和交出的输出；跑完再对照下方的等价写法。</figcaption>
       <L04LCEL />
     </figure>
 
-    <h2>连接关系的可复用化</h2>
+    <h2>组合关系复用</h2>
     <p>
       LCEL 把「组件怎么连」从手写调用提升成一种可复用的对象。接口统一（invoke / stream / batch）让调用模式可以整体切换，<code>.pipe()</code> 让数据按顺序流过，而整条链自己又是一个 Runnable——所以拆分、拼接、换模式都只动一处。
     </p>

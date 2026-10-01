@@ -8,7 +8,7 @@ import T21InferKeyword from './T21InferKeyword.vue'
       <strong>开场问题：</strong>函数写完了，我只想拿到它的「返回值类型」给别处复用，可照着实现再抄一遍类型总会和代码跑偏——有没有办法让类型自己去函数签名里，把那个类型抠出来？
     </div>
 
-    <h2>请求层类型复用</h2>
+    <h2>返回类型提取</h2>
     <p>
       你的项目里有一层请求函数：<code>fetchUser</code> 返回用户对象，<code>getOrders</code> 返回订单数组，<code>createProduct</code> 返回商品。接下来你会发现，这些「返回的东西的类型」到处都要用——接口层缓存要标注它、表单回填要接收它、单元测试要断言它、Mock 数据要造一份符合它的。
     </p>
@@ -16,7 +16,7 @@ import T21InferKeyword from './T21InferKeyword.vue'
       麻烦在于：这个类型是「推」出来的，不该是「抄」出来的。你一旦照着实现把返回值结构手写成一个新类型，代码与类型就变成了两份互相独立的事实：函数今天多返回一个 <code>email</code> 字段，你手写的那份不会跟着变，编辑器却依然当它是旧结构——<strong>类型检查带来的安全感成了假的</strong>。更别扭的是，有些类型压根抄不出来：<code>Promise</code> 里包着什么、数组里装的是什么、构造函数的实例长什么样，都得从别处的类型里反推。
     </p>
 
-    <h2>类型副本手抄</h2>
+    <h2>手写类型副本</h2>
     <p>
       最朴素的做法：手动复制。函数返回 <code>{ id: number; name: string }</code>，我就在旁边写一份 <code>type UserResult = { id: number; name: string }</code>；返回值是 <code>Promise&lt;User&gt;</code>，我就把 <code>User</code> 再单独定义一遍。
     </p>
@@ -24,7 +24,7 @@ import T21InferKeyword from './T21InferKeyword.vue'
       这个方案做对了最基础的一层：<strong>它承认「返回值类型」是一个值得被命名、被复用的东西</strong>，也确实让调用方有类型可用。只要函数不再变，这份手写类型就是对的；项目规模很小的时候，它甚至够用。
     </p>
 
-    <h2>副本漂移风险</h2>
+    <h2>类型与实现分叉</h2>
     <ul>
       <li>两份事实必然漂移：实现改了返回值，手写的那份类型不会跟着改，编译期不报错，运行时结构却已经对不上。</li>
       <li>写法重复：同一个函数的返回类型，在缓存、表单、测试里各抄一遍，改一次要改四处。</li>
@@ -32,7 +32,7 @@ import T21InferKeyword from './T21InferKeyword.vue'
       <li>无法表达「关系」：手写的类型是死的，它不随入参变化，也无法从泛型参数派生，丢掉了类型之间本应有的关联。</li>
     </ul>
 
-    <h2>编译器匹配提取</h2>
+    <h2>条件类型与infer</h2>
     <p>
       不推翻「从函数签名取类型」，而是换一种取法：既然函数的形状在类型里是清晰的，就让编译器去<strong>匹配这个形状，并把匹配到的那部分反推出来</strong>。这就是条件类型加 <code>infer</code> 的写法：
     </p>
@@ -67,13 +67,13 @@ import T21InferKeyword from './T21InferKeyword.vue'
       <strong>四个必须记住的坑：</strong>第一，<code>infer</code> 只能出现在条件类型的 <code>extends</code> 分支里，不能脱离条件类型单独声明使用。第二，同一模式里可以有多个 <code>infer</code> 变量，各捕获一段。第三，<code>infer</code> 遇到函数重载时，取到的是<strong>最后一个实现签名的返回类型</strong>，用之前要留意。第四，<code>infer</code> 捕获到的变量只存在于条件类型的<strong>真分支</strong>内，在假分支里引用它会直接报错。
     </div>
 
-    <h2>四种提取模式对照</h2>
+    <h2>infer模式对照</h2>
     <figure class="lesson-figure">
       <figcaption>切换「返回类型 / Promise 解包 / 数组元素 / 参数类型」标签，对照看每种 <code>infer</code> 模式最终抠出来的结果。</figcaption>
       <T21InferKeyword />
     </figure>
 
-    <h2>内置工具依赖推导</h2>
+    <h2>内置工具类型推导</h2>
     <p>
       <code>infer</code> 把「从既有类型里取出子类型」这件事，从手抄变成了推导：把待提取的位置写成模式，编译器匹配后把 <code>infer</code> 反填进去，换不同的形状就能提取返回类型、参数元组、数组元素、Promise 内部类型与构造函数实例。它和递归一组合，正是 <code>ReturnType</code>、<code>Parameters</code>、<code>InstanceType</code>、<code>Awaited</code> 这一票内置工具的共同底座。
     </p>

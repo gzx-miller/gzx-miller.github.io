@@ -8,7 +8,7 @@ import VF10DragDrop from './VF10DragDrop.vue'
       <strong>开场问题：</strong>把左侧「审批」物料拖进右侧画布，明明是在鼠标位置松的手，节点却出现在左上角老远的地方；画布缩得越小，偏得越离谱——<code>clientX</code>、<code>clientY</code> 拿到的坐标到底是谁的坐标？
     </div>
 
-    <h2>拖放落点期待</h2>
+    <h2>拖放落点预期</h2>
     <p>
       低代码平台最核心的那个动作，说起来只有一句：从物料区拖一个形状到画布上。用户对它的期待很朴素——<strong>我松手的地方，就是它出现的地方</strong>。可这背后有一段容易被忽略的换算，做不好就是「拖哪儿都不对」。
     </p>
@@ -56,7 +56,7 @@ import VF10DragDrop from './VF10DragDrop.vue'
       还差一层体验。物料面板与画布各自加一点拖拽高亮：面板里的物料在按下时变个边框色，画布容器在 <code>dragenter</code> 时亮起、<code>dragleave</code> 时复原。用户于是知道「这里能放」，而不是悬在空中猜。至此，一次拖拽从视觉反馈到数据落点才算闭合。
     </p>
 
-    <h2>两次落点对比</h2>
+    <h2>缩放落点对比</h2>
     <figure class="lesson-figure">
       <figcaption>把左侧物料拖进画布，再缩放画布后重拖一次，对比状态栏里报出的落点坐标。</figcaption>
       <VF10DragDrop />

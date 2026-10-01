@@ -8,7 +8,7 @@ import WB16MultiThreading from './WB16MultiThreading.vue'
       <strong>开场问题：</strong>你给一张 4K 图片做批量滤镜，把重活交给了 Wasm，结果点下按钮的瞬间页面整个冻住，滚动条都拖不动；你以为是没并行，于是开 4 个 Worker 想提速，可在这台 8 核机器上总耗时只快了不到 2 倍——为什么「用了 Wasm」和「开了多线程」这两件事，都没拿到你预期的那几倍速度？
     </div>
 
-    <h2>单线程执行事实</h2>
+    <h2>实例单线程执行</h2>
     <p>
       先说清一个容易被宣传语盖住的事实：<strong>Wasm 模块本身是单线程执行的</strong>。一个实例永远只跑在一个线程上，你把它放进主线程，它就老老实实占住主线程；单核的活儿，谁跑都变不出并行。真正让你用上多核的不是 Wasm，而是<strong>把多个 Wasm 实例分别放进多个 Web Worker</strong>——每个 Worker 是一个独立线程，各自实例化同一份模块，同时开工。
     </p>
@@ -24,7 +24,7 @@ import WB16MultiThreading from './WB16MultiThreading.vue'
       这个方案做对了一件事：<strong>它把计算和 UI 分到了两个线程</strong>。主线程腾出手来继续响应点击、继续渲染，那个转圈的进度条终于能动了。当计算量不大、也不急着变快时，单 Worker 就是够用的。
     </p>
 
-    <h2>单核利用瓶颈</h2>
+    <h2>单核占用与重复编译</h2>
     <ul>
       <li>单 Worker 只占用一个核，任务再重也<strong>用不到机器剩下的核</strong>，总耗时不会随核数变短。</li>
       <li>每个显式创建的 Worker 都要<strong>重新获取并编译同一份 .wasm</strong>，模块越大、开的线程越多，这份重复编译的固定开销越显眼。</li>
@@ -33,7 +33,7 @@ import WB16MultiThreading from './WB16MultiThreading.vue'
       <li>手写的 Worker 创建、消息往返与回收散在各处，任务一多就难管，退出页面还容易留下没 <code>terminate</code> 的线程。</li>
     </ul>
 
-    <h2>线程池的预建</h2>
+    <h2>线程池按核预建</h2>
     <p>
       先补<strong>线程池</strong>。不再「来一个任务开一个 Worker」，而是启动时按核数预建一批常驻 Worker，数量取 <code>navigator.hardwareConcurrency</code>（别超过它，超了只是排队，收益递减）。每个 Worker 内部<strong>只实例化一次</strong>模块并常驻等待任务，主线程把活切成片分发给池子，干完不销毁、下个任务继续用。这样既吃满了多核，又把重复编译的开销摊平到整个会话。
     </p>
@@ -53,7 +53,7 @@ import WB16MultiThreading from './WB16MultiThreading.vue'
       最后补<strong>通信的顺手程度</strong>。主线程与 Worker 之间来回 <code>postMessage</code>、手动对 requestId 的写法很啰嗦，真实项目里常用 <code>comlink</code> 这类库把它包成「像调用普通函数一样」，省掉手写消息协议；至于「所有 Worker 都干完了吗」，用一个完成计数器汇总，收齐 N 个完成信号后再去读共享内存里的最终值，对比预期即可。
     </p>
 
-    <h2>并发补货对账</h2>
+    <h2>并发补货对账演示</h2>
     <figure class="lesson-figure">
       <figcaption>设好「店员数」和「每人补货次数」，点「并发补货」：看每个 Worker 各自实例化模块、并发开工并回报完成，最终共享库存精确等于「店员数 × 次数」。若顶部出现跨源隔离的警告，说明当前页面没开启 COOP/COEP，<code>SharedArrayBuffer</code> 不可用，这个并发演示就跑不起来——这正好印证了它有多依赖那两组响应头。</figcaption>
       <WB16MultiThreading />

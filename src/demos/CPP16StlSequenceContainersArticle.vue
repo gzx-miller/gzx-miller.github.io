@@ -8,7 +8,7 @@ import CPP16StlSequenceContainers from './CPP16StlSequenceContainers.vue'
       <strong>开场问题：</strong>你用一个列表维护「最新消息排最前」的缓冲区，每来一条就写 <code>vec.insert(vec.begin(), msg)</code>。本地测几十条消息时快得感觉不到，上线后数据涨到几万条，这个插入却让程序肉眼可见地卡住——同样是「插入一个元素」，为什么换个位置，耗时就像按元素个数成倍增长？
     </div>
 
-    <h2>固定数组的局限</h2>
+    <h2>内置数组局限</h2>
     <p>
       你要存一串同类型的元素，还要能随时按位置取出来用。最朴素的老办法是内置数组：<code>int arr[100]</code>。它能跑，但代价都压在人身上：
     </p>
@@ -22,7 +22,7 @@ import CPP16StlSequenceContainers from './CPP16StlSequenceContainers.vue'
       所以要问的是：<strong>能不能有一个容器，自己知道大小、能按位置读写、能在任意位置增删，还能在运行时长大？</strong>——而且，这个「任意位置增删」的代价，是不是在任何位置都一样？
     </p>
 
-    <h2>动态数组的扩容</h2>
+    <h2>vector动态扩容</h2>
     <p>
       最省事的答案就是 <code>std::vector&lt;int&gt;</code>：一块会自己长大的连续动态数组，用 <code>push_back</code> 往尾部追加，用 <code>v[i]</code> 按下标随机访问。
     </p>
@@ -30,7 +30,7 @@ import CPP16StlSequenceContainers from './CPP16StlSequenceContainers.vue'
       这个方案做对了一件关键的事：<strong>它是一段连续内存</strong>。元素挨着存放，所以按下标访问是常数时间，而且 CPU 缓存命中率极高——顺着 <code>v[i]</code> 从头读到尾，数据几乎是一整块搬进缓存的。尾部追加也是摊还常数时间。对「存一批、顺序处理一遍」这种最常见需求来说，vector 已经是最优解。
     </p>
 
-    <h2>头部插入的开销</h2>
+    <h2>头部插入开销</h2>
     <ul>
       <li>头部插入是 <code>O(n)</code>：<code>vec.insert(vec.begin(), x)</code> 要把后面<strong>每一个</strong>元素都往后挪一格。几万条数据，每次插入都挪几万下，瓶颈立刻出现。</li>
       <li>中间插入同样是 <code>O(n)</code>，越靠前越贵。</li>
@@ -38,7 +38,7 @@ import CPP16StlSequenceContainers from './CPP16StlSequenceContainers.vue'
       <li><code>size()</code> 和 <code>capacity()</code> 很容易混：前者是实际元素数，后者是当前分配出去、还能装多少。若用 <code>vec[i]</code> 去写一个下标大于等于 <code>size()</code> 的位置，那是未定义行为，不是「自动扩容」。</li>
     </ul>
 
-    <h2>按需选择容器</h2>
+    <h2>容器按需选型</h2>
     <p>
       不推翻 vector，而是给它补几个「按需换容器」的选项。第一个要补的是<strong>头部也要能高效进出</strong>——因为它最常出现。如果缓冲区要两端都能压入弹出，就用 <code>std::deque&lt;int&gt;</code>：它按分段连续的方式存数据，<code>push_front</code> 和 <code>push_back</code> 都是 <code>O(1)</code>，同时仍然支持随机访问。代价是它的内存不是一整块连续，随机访问要绕一层分段表，性能略低于 vector，也不如 vector 缓存友好。
     </p>
@@ -77,7 +77,7 @@ import CPP16StlSequenceContainers from './CPP16StlSequenceContainers.vue'
       <CPP16StlSequenceContainers />
     </figure>
 
-    <h2>顺序容器的取舍</h2>
+    <h2>顺序容器取舍</h2>
     <p>
       顺序容器的选择，本质是在「随机访问、增删位置、内存局部性」这三者之间取舍。<strong>默认选 vector</strong>；需要两端高效进出选 deque；需要中间任意位置 <code>O(1)</code> 增删选 list；连单向链表的指针开销都要省就选 forward_list。选定之后，还要按各自的迭代器失效规则来写遍历与增删——否则性能对了，程序照样会崩。
     </p>

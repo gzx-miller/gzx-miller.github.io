@@ -37,7 +37,7 @@ import W18Instancing from './W18Instancing.vue'
       <li><strong>不是所有场景都省钱。</strong>如果每个物体的几何各不相同，或实例数量很少，实例化带来的收益并不明显，有时还不如干脆把几何合并成一个大网格。</li>
     </ul>
 
-    <h2>实例数据打包</h2>
+    <h2>实例数据布局</h2>
     <p>
       先把逐实例数据打包好。把每个实例的「位置（3 个 float）+ 旋转（1 个 float）」按固定步长排进一块缓冲（本课每个实例一行 64 字节），一次加载进 <code>instVBO</code>。
     </p>
@@ -57,13 +57,13 @@ import W18Instancing from './W18Instancing.vue'
       <strong>四条边界：</strong><code>divisor = 1</code> 表示「每实例推进一次」、<code>divisor = 0</code> 表示逐顶点，两者由此把属性分成逐顶点与逐实例两类；WebGL1 必须走 <code>ANGLE_instanced_arrays</code> 扩展（API 带 <code>ANGLE</code> 后缀），WebGL2 才有同名原生 API，记得做扩展检测与回退；实例属性会占用 attribute 槽位，受 <code>GL_MAX_VERTEX_ATTRIBS</code> 约束；实例化适合草地、雨滴、粒子、网格阵列这类「大量相同几何」，几何各异时要另想办法（合批或图集）。
     </div>
 
-    <h2>绘制次数的骤降</h2>
+    <h2>绘制次数对比</h2>
     <figure class="lesson-figure">
       <figcaption>拖动「实例数量」滑块看到数百个立方体，切换「实例化渲染 / 逐个绘制」，盯着画面右下角的 Draw Call 计数与 FPS——实例化时它恒为 1，逐个绘制时它等于实例数。</figcaption>
       <W18Instancing />
     </figure>
 
-    <h2>一次提交多实例</h2>
+    <h2>单次提交多实例</h2>
     <p>
       实例化渲染把「N 个相同几何、N 次提交」变成「N 个相同几何、一次提交」。做法是把逐实例的差异做成顶点属性，再用属性除数把它标成「每实例推进一次」；一次 draw call 里，GPU 就替你把这份几何复制了 N 遍，只是每遍换了一行实例数据。
     </p>

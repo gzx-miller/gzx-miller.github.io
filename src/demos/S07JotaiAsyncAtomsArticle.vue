@@ -8,7 +8,7 @@ import S07JotaiAsyncAtoms from './S07JotaiAsyncAtoms.vue'
       <strong>开场问题：</strong>你照着上一课的思路，给课程列表写了个派生原子：<code>const coursesAtom = atom(async (get) =&gt; { const res = await fetch('/api/courses'); return res.json() })</code>。组件里一句 <code>useAtomValue(coursesAtom)</code> 跑起来，页面直接白了，控制台只冒出一句「A component suspended while responding to synchronous input」。你没写任何加载逻辑，它凭什么白屏？
     </div>
 
-    <h2>异步取数三难</h2>
+    <h2>异步取数三件事</h2>
     <p>
       拉一份远程列表，实际要同时管三件事：值还没到的时候显示什么、请求失败了怎么办、什么时候该重新拉一次。而上一课的同步派生原子只管「读到就现算」，它默认值总是立刻可得——它不负责回答「值在路上时界面怎么办」。
     </p>
@@ -55,7 +55,7 @@ import S07JotaiAsyncAtoms from './S07JotaiAsyncAtoms.vue'
       <strong>两条必须记住的边界：</strong>异步原子一旦被读取就会<strong>挂起</strong>，必须配一个 <code>Suspense</code> 边界，否则页面白屏；atom 要<strong>定义在组件外部</strong>，若在渲染中新建，每次渲染都是一个新原子，缓存与去重全部失效，会反复发起请求。
     </div>
 
-    <h2>后备界面的替换</h2>
+    <h2>后备界面替换过程</h2>
     <figure class="lesson-figure">
       <figcaption>页面一进来会先显示「异步 Atom 加载中…」，约半秒后课程列表才出现——这就是 Suspense 后备界面被真实内容替换的过程。再点一次「重新读取」，观察它重新挂起又恢复：刷新靠的是把 <code>refreshAtom</code> 加一，让异步原子失效重算。</figcaption>
       <S07JotaiAsyncAtoms />

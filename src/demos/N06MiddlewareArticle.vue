@@ -16,7 +16,7 @@ import N06Middleware from './N06Middleware.vue'
       如果不在请求链路的最前面统一处理，这些代码要么塞进每个处理器，要么散落各处重复一遍。更糟的是，日志需要在「匹配到具体路由之前」就记下来，CORS 需要在响应头里提前写入——这些时机是处理器方法内部根本够不着的。不解决它，你要付的代价是：<strong>横切逻辑与业务逻辑搅在一起，时机又对不上</strong>。
     </p>
 
-    <h2>控制器内日志</h2>
+    <h2>处理器内记录日志</h2>
     <p>
       最省事的做法，是直接在需要的那几个控制器方法里动手：方法开头写一行 <code>console.log(req.method, req.url)</code>，需要跨域就手动往响应头里塞 <code>Access-Control-Allow-Origin</code>。
     </p>
@@ -24,7 +24,7 @@ import N06Middleware from './N06Middleware.vue'
       它做对了一件实在事：<strong>日志和跨域确实被处理了，而且就写在你最熟悉的地方</strong>。接口少、需求临时时，这样最快，改动范围也最小。
     </p>
 
-    <h2>重复日志与时机偏差</h2>
+    <h2>日志重复与时机偏差</h2>
     <ul>
       <li>与路由无关的逻辑却按路由复制，几十个接口就是几十份相同的日志代码。</li>
       <li>时机不对：日志要求「请求刚进来」就记，而处理器执行时路由、参数都已经处理过一轮了。</li>
@@ -33,7 +33,7 @@ import N06Middleware from './N06Middleware.vue'
       <li>想给整体加一个访问审计时，只能一个个接口补，漏掉一个就是一条盲区。</li>
     </ul>
 
-    <h2>中间件的独立位置</h2>
+    <h2>中间件前置位置</h2>
     <p>
       不推翻「在业务前处理请求」，而是给它一个<strong>独立于路由、又站在最前面的位置</strong>——这就是中间件（Middleware）。它是请求生命周期的最外层，直接操作原始的 <code>req</code> / <code>res</code>，并且<strong>在守卫之前执行</strong>。只写一个 <code>use(req, res, next)</code> 方法，所有匹配到的请求都会经过它。
     </p>
@@ -62,13 +62,13 @@ import N06Middleware from './N06Middleware.vue'
       两个必须记住的点：其一，<code>next()</code> <strong>务必调用</strong>，异步逻辑完成后放行，否则请求会一直悬挂；其二，中间件适合日志、CORS、请求体解析、Cookie 解析这类与路由无关的横切逻辑，<strong>涉及鉴权与授权的判断应写进守卫</strong>，那里才有完整的上下文。
     </div>
 
-    <h2>链路穿透的回合</h2>
+    <h2>请求穿透链路演示</h2>
     <figure class="lesson-figure">
       <figcaption>点「发送请求」，看请求如何从中间件出发，层层穿过守卫、拦截器、管道与处理器，再沿原路返回。</figcaption>
       <N06Middleware />
     </figure>
 
-    <h2>最外层通用性</h2>
+    <h2>洋葱模型分层含义</h2>
     <p>
       中间件站在请求链路的最外层，用最少的约定（一个 <code>use</code> 方法加一次 <code>next()</code>）把日志、CORS、Cookie 解析这类与路由无关的横切逻辑集中起来。而「洋葱」的真正含义在于分工：每一层只管自己该管的事，越靠外越通用，越靠内越贴近业务。搞清层次，就知道某段逻辑到底该写在哪一层。
     </p>

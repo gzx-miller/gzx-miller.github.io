@@ -8,7 +8,7 @@ import J17OptionalNullish from './J17OptionalNullish.vue'
       <strong>开场问题：</strong>接口在大部分用户身上都会返回 <code>address</code>，于是 <code>res.data.user.address.city</code> 这一行长期平安无事；直到某个用户没填地址，同一行代码抛出 <code>Cannot read properties of undefined</code>，整页白屏——为什么「读一个字段」会把页面读崩？
     </div>
 
-    <h2>深层路径的读取风险</h2>
+    <h2>深层属性访问</h2>
     <p>
       你在做一张用户信息卡：头像来自 <code>res.data.user.profile.avatar.url</code>，城市来自 <code>res.data.user.address.city</code>，简介来自 <code>res.data.user.profile.bio</code>。这些字段全都来自接口，而接口给出的是一个<strong>形状不确定的对象</strong>：用户没填地址，<code>address</code> 这个键干脆不存在；权限不同，<code>profile</code> 可能整个都没返回。
     </p>
@@ -16,7 +16,7 @@ import J17OptionalNullish from './J17OptionalNullish.vue'
       问题就出在这里：JavaScript 读取一个深层字段时，是<strong>逐级取值</strong>的。它会先取 <code>res.data</code>，再取 <code>.user</code>，再取 <code>.address</code>，每一级都是在「上一个结果」上继续读属性。只要中间任何一级是 <code>undefined</code>，在它上面继续读属性就会抛 <code>TypeError</code>。也就是说，你要的其实是最后那一个字符串，却必须让前面每一级都真实存在——而接口并不保证这件事。
     </p>
 
-    <h2>逻辑与的逐层守卫</h2>
+    <h2>逻辑与逐层守卫</h2>
     <p>
       最朴素的做法是用逻辑与 <code>&amp;&amp;</code> 逐层守卫：每一级都为真才继续往下，否则整个表达式的值就是那个「假」的中间结果。
     </p>
@@ -27,7 +27,7 @@ import J17OptionalNullish from './J17OptionalNullish.vue'
       这个方案确实做对了一件事：<strong>它在每一级读取之前都先确认这一级存在</strong>，把「可能为空的路径」显式挡在了读取之前。方向完全正确，问题在于它的表达方式和判定标准都很粗糙。
     </p>
 
-    <h2>路径重复与假值误判</h2>
+    <h2>路径重复与假值</h2>
     <ul>
       <li>路径要抄一遍又一遍，<code>res.data.user.address</code> 在这一行里出现了四次；接口字段改名，你得把整条链从头对齐一次。</li>
       <li>守卫用的是<strong>真假值</strong>，不是「是否存在」。当 <code>city</code> 是一个合法的空字符串、或者某个计数值正好是 <code>0</code> 时，它会被 <code>&amp;&amp;</code> 当成「没有」，后面的读取被短路掉，你拿到的结果变成了上一级的对象本身。</li>
@@ -35,7 +35,7 @@ import J17OptionalNullish from './J17OptionalNullish.vue'
       <li>如果链末端是要调用的方法，守卫即使通过了，也不代表这个函数一定存在，直接调用照样抛错。</li>
     </ul>
 
-    <h2>可选链的短路读取</h2>
+    <h2>可选链短路语义</h2>
     <p>
       先解决「读取本身可能失败」。语言给出的答案是<strong>可选链</strong> <code>?.</code>：它在左侧为 <code>null</code> 或 <code>undefined</code> 时立即短路，整条表达式求值为 <code>undefined</code>；否则照常继续往下读。上面的长链于是变成 <code>res.data?.user?.address?.city</code>，路径只写一遍，每一级的判定也从「是不是真值」收紧成了<strong>「是不是空值」</strong>——这正是关键差别：<code>?.</code> 只对 <code>null</code> 和 <code>undefined</code> 短路，<code>0</code>、空字符串、<code>false</code> 都会继续往下访问。
     </p>
@@ -81,13 +81,13 @@ import J17OptionalNullish from './J17OptionalNullish.vue'
       逻辑赋值同样要选对运算符。用 <code>count ||= 10</code> 想要兜底时，一个合法的 <code>0</code> 会被替换成 10；想要「数为 0 也算有值」，就必须写 <code>count ??= 10</code>。判断标准始终是同一个：你要防的是「空值」，还是「假值」。
     </div>
 
-    <h2>缺失字段与赋值差异</h2>
+    <h2>兜底赋值运算符</h2>
     <figure class="lesson-figure">
       <figcaption>依次点击按钮，看可选链如何安全穿过缺失字段，再对比 <code>||=</code> 与 <code>??=</code> 的取值差异。</figcaption>
       <J17OptionalNullish />
     </figure>
 
-    <h2>空值判断的触发条件</h2>
+    <h2>空值安全与默认值</h2>
     <p>
       可选链、空值合并与逻辑赋值这三件事，共同把「字段可能不存在」这件接口常态收进了一行表达式：<code>?.</code> 负责让读取不崩，<code>??</code> 负责只在空值时兜底，<code>??=</code> 这一族负责把判断与赋值合并。它们的统一准则是<strong>只认 <code>null</code> 与 <code>undefined</code></strong>，而不是「假值」——记住这一点，就能同时避开崩溃和被误吞的 <code>0</code>。
     </p>

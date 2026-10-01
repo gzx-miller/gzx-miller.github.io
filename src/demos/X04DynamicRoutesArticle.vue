@@ -8,7 +8,7 @@ import X04DynamicRoutes from './X04DynamicRoutes.vue'
       <strong>开场问题：</strong>商品详情页只有一个文件 <code>app/products/[id]/page.tsx</code>，可全站有上万件商品——这个文件名里没写数字，页面又是怎么知道用户到底点开的是哪一件的？URL 后面那串 <code>?utm_source=xxx</code> 又该从哪里读？
     </div>
 
-    <h2>同类页面复用</h2>
+    <h2>同类页面规则化</h2>
     <p>
       电商站的商品详情页、内容站的分类页、搜索页，都有一个共同点：<strong>它们的「长相」是同一个，只是数据不同</strong>。你不会为每一件商品都建一个目录，而是希望一条规则覆盖一整类路径，运行时再根据实际地址取出参数，去查对应的数据。
     </p>
@@ -24,7 +24,7 @@ import X04DynamicRoutes from './X04DynamicRoutes.vue'
       这一步做对了最关键的事——<strong>用文件名表达「这一段是变量」</strong>，一条路由就能覆盖整类页面。只要路径只有一段可变、且这一段必然存在，这样写就足够。
     </p>
 
-    <h2>深路径捕获缺口</h2>
+    <h2>任意深度捕获</h2>
     <ul>
       <li>分类页的路径可能有任意多段，像 <code>/categories/electronics/phones</code>，单段 <code>[id]</code> 只能吃到一段。</li>
       <li>搜索页希望 <code>/search</code>、<code>/search/react</code>、<code>/search/react/hooks</code> 都能命中，尾段可有可无，普通方括号表达不了「可选」。</li>
@@ -76,7 +76,7 @@ import X04DynamicRoutes from './X04DynamicRoutes.vue'
       <X04DynamicRoutes />
     </figure>
 
-    <h2>两类参数分工</h2>
+    <h2>路径参数与查询串</h2>
     <p>
       动态路由这一课，本质是把「一类页面」压进一条规则：方括号捕获单段（字符串）、三点号捕获多段（数组）、双层方括号做可选捕获，路径参数走 <code>params</code>、附加信息走 <code>searchParams</code>。<code>generateStaticParams</code> 负责把已知参数预先静态化，而 Next.js 15+ 中这两个参数都是 Promise，记得用 <code>await</code> 解包。
     </p>

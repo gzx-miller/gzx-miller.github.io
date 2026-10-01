@@ -8,7 +8,7 @@ import X08StreamingSuspense from './X08StreamingSuspense.vue'
       <strong>开场问题：</strong>仪表盘上顶部标题和几个统计数字早就该出来了，可整页就是白屏不动，非要等最慢的那个图表接口返回才一起显示——为什么快的部分要被慢的拖住，不能先给用户看点东西？
     </div>
 
-    <h2>快慢模块的混排</h2>
+    <h2>快慢模块共存</h2>
     <p>
       一个页面里往往混着快慢悬殊的模块。头部标题几乎瞬间就绪，统计数字查一次数据库就能回来，而营收图表可能要调很慢的第三方接口。如果服务端坚持「把数据拿齐再一起发给浏览器」，那么<strong>整页的首屏时间就被最慢的那一环决定</strong>：快的部分明明能马上用，却只能陪着一起等。
     </p>
@@ -16,7 +16,7 @@ import X08StreamingSuspense from './X08StreamingSuspense.vue'
       矛盾在于：服务端渲染天然是「先算完、再输出 HTML」的线性流程，而各部分的就绪时间并不一致。要让用户尽早看到内容，就得允许 HTML <strong>分批地、按到达顺序</strong>送到浏览器，而不是攒成一大块。问题是，怎么在代码里表达「这一块可以先等、那一块先发」？
     </p>
 
-    <h2>全部等待再返回</h2>
+    <h2>整页等待策略</h2>
     <p>
       最小的一步，是承认「数据必须等」，于是整页一起 <code>await</code> 完再返回。它做对了一件事——<strong>实现简单、结果确定</strong>，页面要么完整出现，要么干脆还没出现，不会出现半成品。
     </p>
@@ -24,7 +24,7 @@ import X08StreamingSuspense from './X08StreamingSuspense.vue'
       但代价是把所有模块绑成同一根时间线：一个慢请求就会堵住整页，用户面对的是长时间白屏，而不是「先看到框架、再逐块填满」。
     </p>
 
-    <h2>整页等待的代价</h2>
+    <h2>最慢模块拖累</h2>
     <ul>
       <li>首屏被最慢的组件拖住，快组件只能陪跑，用户等待体感很差。</li>
       <li>没有「部分已就绪」的表达，无法先给用户一个骨架。</li>
@@ -32,7 +32,7 @@ import X08StreamingSuspense from './X08StreamingSuspense.vue'
       <li>多个互不依赖的数据块仍按串行等待，浪费并行的时间。</li>
     </ul>
 
-    <h2>流式输出改造</h2>
+    <h2>流式渲染改造</h2>
     <p>
       不推翻「服务端渲染」，而是把输出方式从「一次性」改为<strong>流式（Streaming）</strong>：服务端把已渲染的 HTML 分块发出去，浏览器边收边渲染。用户因此能很早看到骨架与已就绪的内容，慢的部分准备好再补上。
     </p>
@@ -71,13 +71,13 @@ import X08StreamingSuspense from './X08StreamingSuspense.vue'
       <strong>边界粒度要拿捏：</strong>拆分应<strong>按数据依赖</strong>来划，而不是越细越好。把一整段内容切成一堆极小的 <code>&lt;Suspense&gt;</code>，会产生大量小分块，增加调度与替换开销，反而拖慢。合理做法是把「同一份数据驱动的区域」放进一个边界。
     </div>
 
-    <h2>骨架替换过程</h2>
+    <h2>骨架占位与替换</h2>
     <figure class="lesson-figure">
       <figcaption>运行一遍流式过程，看骨架先返回、慢组件数据就绪后再被替换。</figcaption>
       <X08StreamingSuspense />
     </figure>
 
-    <h2>分块输出机制</h2>
+    <h2>分块输出与边界</h2>
     <p>
       流式渲染这一课，核心是让服务端「分块输出」而不是「攒完再发」：用 <code>&lt;Suspense&gt;</code> 边界把慢组件隔离出去，先返回 <code>fallback</code>，数据就绪后再流式替换。路由级的等待用 <code>loading.tsx</code>，页面内的慢模块用显式边界，多个边界并行还能让各区块各显各的。
     </p>

@@ -8,7 +8,7 @@ import S22Recoil from './S22Recoil.vue'
       <strong>开场问题：</strong>一个统计面板要显示「完成率」，它订阅的是整份 todo 数组。你勾掉一项，整份列表重渲染是应该的，可那个只显示 <code>3/5</code> 的小面板也跟着重渲染——它明明只关心完成数，凭什么数组一变它就得跟着跑一遍？
     </div>
 
-    <h2>两类状态混装</h2>
+    <h2>原始值与派生值</h2>
     <p>
       当状态被塞进一个大对象时，谁读这个大对象，谁就得在它<strong>任何</strong>字段变化时重渲染。可业务里的两类东西本不该捆在一起：文字是原始事实，字符数是算出来的；todo 数组是原始事实，完成率是算出来的。旧办法各有各的成本。
     </p>
@@ -19,7 +19,7 @@ import S22Recoil from './S22Recoil.vue'
       所以要回答的是：<strong>能不能让每个「事实」和每个「派生值」都成为独立的节点，节点之间靠「读取」连成一张有方向的依赖图，谁只读自己关心的节点，就只在那条链上被触发？</strong>
     </p>
 
-    <h2>原子粒度的状态</h2>
+    <h2>原子状态单元</h2>
     <p>
       最朴素的做法：Recoil 用 <code>atom</code> 把状态拆成最小单元——<code>const textState = atom({ key: 'textState', default: '' })</code>，组件里 <code>const [text, setText] = useRecoilState(textState)</code> 读写。这个方案做对了一件事：<strong>它把「一个大对象」拆成了可独立订阅的最小单元</strong>，改一个 atom 只惊动读它的组件。
     </p>
@@ -35,7 +35,7 @@ import S22Recoil from './S22Recoil.vue'
       <li>组件直接读整个数组 atom，哪怕只用到完成数，数组一变它照样重渲染，粒度又粗回去了。</li>
     </ul>
 
-    <h2>派生升为节点</h2>
+    <h2>派生提升为节点</h2>
     <p>
       不推翻「最小单元」，而是让<strong>派生也成为一种节点</strong>，并把节点连成一张有方向的图。一层层补上：
     </p>
@@ -51,13 +51,13 @@ import S22Recoil from './S22Recoil.vue'
       <strong>选型提醒：</strong>这类原子化方案与 React 生态深度绑定，主要面向 React 项目。同一个团队后来推出了新的原子化工具，采用前先确认它仍在积极维护，再决定是否落到生产。
     </div>
 
-    <h2>问候语实时联动</h2>
+    <h2>两节点共同派生</h2>
     <figure class="lesson-figure">
       <figcaption>在「探险者档案」里改昵称、点心情按钮，看顶部问候语跟着变——它由 <code>userNameAtom</code> 与 <code>userMoodAtom</code> 两个节点共同派生；再点「记录一次森林访问」，看等级徽章和进度条变化，这两者都派生自 <code>forestVisitsAtom</code>。切到「Atoms 原子」「Selectors 派生」两个页签，能逐个看到节点的当前值与它依赖了谁。</figcaption>
       <S22Recoil />
     </figure>
 
-    <h2>依赖关系成图</h2>
+    <h2>有向无环依赖图</h2>
     <p>
       Recoil 把状态切成最小 atom，再用 selector 表达派生，atom 与 selector 通过「谁读了谁」连成一张有向无环图。全局唯一的 key 让每个节点都能被任意组件引用，派生逻辑从此写一遍、处处可用；组件只订阅自己读到的节点，更新就沿着图里真正相关的那条链传播，而不是整棵树一起动。
     </p>

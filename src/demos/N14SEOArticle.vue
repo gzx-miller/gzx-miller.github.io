@@ -8,7 +8,7 @@ import N14SEO from './N14SEO.vue'
       <strong>开场问题：</strong>课程详情页里你写了 <code>document.title = course.name</code>，浏览器标签上标题确实跟着课程变了，你以为 SEO 这块已经收工。结果把链接贴进微信，分享卡片显示的却是站点首页那句默认标题和一张通用图；在搜索引擎里搜课程名，收录的也是首页。浏览器里明明看得见的标题，为什么爬虫和分享机器人看不到？
     </div>
 
-    <h2>外部机器的可读性</h2>
+    <h2>元信息与外部抓取</h2>
     <p>
       你要的是让每个页面的标题、描述、分享卡片跟着内容走：课程 A 显示 A，课程 B 显示 B，而且这些信息要能被外部机器读到。
     </p>
@@ -19,7 +19,7 @@ import N14SEO from './N14SEO.vue'
       于是问题落到：<strong>怎么让每个页面的 head 内容跟着页面数据走，而且它还要出现在「服务端直出的 HTML」里？</strong>
     </p>
 
-    <h2>页面头部的声明写法</h2>
+    <h2>头部元信息声明</h2>
     <p>
       在页面组件里调用 <code>useHead</code>，把标题和 meta 一次性声明进去，例如 <code>useHead({ title: '课程详情 - 小松鼠举栗子', meta: [{ name: 'description', content: 'Vue3 在线课程' }] })</code>。
     </p>
@@ -27,7 +27,7 @@ import N14SEO from './N14SEO.vue'
       这个方案做对了一件事：<strong>它不改 DOM，只是向当前渲染上下文「登记」这一页需要哪些 head 标签</strong>。SSR 渲染时这些登记项会被写进返回的 HTML，客户端导航时再同步到 DOM，两端结果一致。你在 setup 里只负责声明「要什么」，什么时候落到哪儿交给框架。
     </p>
 
-    <h2>标题的响应式绑定</h2>
+    <h2>标题响应式绑定</h2>
     <ul>
       <li>标题写成死字符串：所有课程页共用同一个标题，内容变了标题却不变。</li>
       <li>想把标题绑到响应式的课程名上——<code>useHead</code> 支持传 <code>ref</code> / <code>computed</code>，但值必须在 setup 期间就能读到；服务端渲染那一刻数据还没到，直出的就是一个空标题。</li>
@@ -36,7 +36,7 @@ import N14SEO from './N14SEO.vue'
       <li>最容易骗到自己的一条：在 DevTools 里看 head 一切正常就以为成了。DevTools 看的是运行后的 DOM，爬虫看的是服务端返回的那份源代码，两者不是一回事。</li>
     </ul>
 
-    <h2>默认值的分层覆盖</h2>
+    <h2>默认值分层覆盖</h2>
     <p>
       先<strong>分层</strong>：把全站共用的默认值放进 <code>nuxt.config.ts</code> 的 <code>app.head</code>（站点标题模板、全站描述、keywords），页面级再用 <code>useHead</code> 就地覆盖。默认值打底，页面只写差异，重复配置自然消失。
     </p>
@@ -53,13 +53,13 @@ import N14SEO from './N14SEO.vue'
       <strong>两个误区：</strong>用浏览器里的 DOM 判断 SEO——DevTools 显示的是 Hydration 之后的 DOM，能骗过你但骗不过爬虫，必须看「查看页面源代码」；在 <code>useHead</code> / <code>useSeoMeta</code> 里做异步请求或埋点——它会挂在服务端渲染的关键路径上，拖慢首屏还可能让输出不完整，副作用应该放到生命周期钩子里去做。
     </div>
 
-    <h2>输入变化下的即时预览</h2>
+    <h2>输入变化即时预览</h2>
     <figure class="lesson-figure">
       <figcaption>在上方两个输入框里改「页面标题」和「页面描述」，下方「实时预览 head 配置」会立刻跟着变，这就是响应式 SEO；再切换 useHead / 响应式 SEO / useSeoMeta 三个页签，对照三种写法的代码——尤其注意 useSeoMeta 的键名有多短。</figcaption>
       <N14SEO />
     </figure>
 
-    <h2>服务端源码中的登记</h2>
+    <h2>服务端源码登记</h2>
     <p>
       head 管理的关键在于「登记而不是改 DOM」：全站默认值放 <code>app.head</code>，页面级用 <code>useHead</code> 覆盖，传 <code>ref</code> / <code>computed</code> 就获得响应式，搜索引擎与分享所需的标签交给 <code>useSeoMeta</code> 的短键名一次写全。验证时只看服务端直出的源代码，别用浏览器里的 DOM 骗自己。
     </p>

@@ -8,7 +8,7 @@ import T02UnionNarrowing from './T02UnionNarrowing.vue'
       <strong>开场问题：</strong>订单卡片按状态显示「待付款 / 待发货 / 运输中」，可同事把判断写成 <code>status === 'payed'</code>，分支静默失效，界面卡在旧文案上——有没有办法让这种拼写错误根本进不了编译器？
     </div>
 
-    <h2>字符串状态写法</h2>
+    <h2>状态字符串硬编码</h2>
     <p>
       订单有一套状态：待付款、待发货、运输中。最自然的写法，是在比较、赋值、传给接口时到处写字符串 <code>'pending'</code>、<code>'paid'</code>、<code>'shipped'</code>，各写各的。
     </p>
@@ -16,7 +16,7 @@ import T02UnionNarrowing from './T02UnionNarrowing.vue'
       代价在第一个人手滑时就会显现：<strong>状态是一个有限的集合，但字符串是无限的</strong>。你无法阻止有人写入 <code>'refunded'</code>、<code>'PAID'</code> 或 <code>'payed'</code>。更糟的是，一个拼错的字符串不会报错，它只会让某个分支永远不生效——订单静静停在错误的文案里，而代码看起来一切正常。所以真正要解决的是：<strong>如何让非法的业务状态无法被创建，并在每个分支里被安全地处理</strong>。
     </p>
 
-    <h2>裸字符串比较</h2>
+    <h2>直接比较字符串</h2>
     <p>
       最省事的做法，就是直接拿字符串当状态用：<code>let status = 'pending'</code>，再配一句 <code>if (status === 'paid') {}</code>。
     </p>
@@ -32,7 +32,7 @@ import T02UnionNarrowing from './T02UnionNarrowing.vue'
       <li>新增一个状态后，遗漏处理的分支不会被指出来，只能靠人自己数。</li>
     </ul>
 
-    <h2>字面量联合列举</h2>
+    <h2>字面量联合类型</h2>
     <p>
       不推翻「状态就是一个值」，而是<strong>收窄它的取值范围</strong>。用字面量联合类型把订单的所有合法状态明确列举出来：
     </p>
@@ -65,13 +65,13 @@ import T02UnionNarrowing from './T02UnionNarrowing.vue'
       还有两处必须记住的细节。其一，<strong>收窄依靠相等比较</strong>，控制流越简单（<code>if/else</code>、<code>switch</code>），收窄结果越可预期，所以别在中间穿插会打断推断的写法。其二，<strong>不要在收窄之后又把它还原成宽泛类型</strong>，否则辛苦收来的精确信息当场丢失。最后，状态值的来源要收敛到一处：<strong>类型、常量与校验函数共享同一份字面量联合</strong>，任何人改状态都只改这一个地方。
     </p>
 
-    <h2>状态流转循环</h2>
+    <h2>订单状态流转</h2>
     <figure class="lesson-figure">
       <figcaption>点「流转到下一状态」，看联合类型如何把订单状态限制在合法取值之间循环。</figcaption>
       <T02UnionNarrowing />
     </figure>
 
-    <h2>取值清单统一</h2>
+    <h2>取值清单与收窄</h2>
     <p>
       联合类型做的事情，是把「这个值可能是什么」从散落各处的字符串收拢成一份清单；收窄做的事情，是让编译器顺着条件分支，把你带到一个又一个精确的分支里。合法状态只有一处定义，非法取值在编译期就被拦下，新增状态时遗漏的分支也无所遁形。
     </p>

@@ -8,7 +8,7 @@ import U05BuiltinComponents from './U05BuiltinComponents.vue'
       <strong>开场问题：</strong>你把一段在 Vue 里写好的页面原样复制进 uni-app：<code>&lt;div&gt;</code> 做布局、<code>&lt;span&gt;</code> 放文字、<code>&lt;img&gt;</code> 放头像。H5 预览一切正常，切到微信小程序，整页内容塌成了一个小点——<code>div</code> 在小程序里根本不认识。
     </div>
 
-    <h2>小程序视图体系</h2>
+    <h2>小程序视图层自绘</h2>
     <p>
       你想让同一套页面喂给小程序渲染，而小程序并不是浏览器：它<strong>没有文档流、没有 HTML 标签体系</strong>，视图层是自绘的。HTML 标签对它来说只是些不认识的字符串。
     </p>
@@ -16,7 +16,7 @@ import U05BuiltinComponents from './U05BuiltinComponents.vue'
       继续用 HTML 标签的代价很具体：<strong>div、span、img 只在 H5 生效</strong>，小程序里不渲染，布局当场崩掉；<strong>浏览器原生的 input、button 三端默认样式与行为都不一致</strong>，要分别写覆盖样式；再加上<strong>图片不给尺寸时各端默认表现不同</strong>，最容易把布局撑破。于是问题收成一句：既然不能直接用 HTML 标签，一套跨端 UI 到底该用什么来搭？
     </p>
 
-    <h2>容器与文本组件</h2>
+    <h2>容器文本组件对应</h2>
     <p>
       最朴素的做法：按"块级 / 行内"给出一一对应——用 <code>&lt;view&gt;</code> 替代 <code>&lt;div&gt;</code>，用 <code>&lt;text&gt;</code> 替代 <code>&lt;span&gt;</code>。
     </p>
@@ -24,7 +24,7 @@ import U05BuiltinComponents from './U05BuiltinComponents.vue'
       这个方案做对了一件事：<strong>它给出了最小可用的"容器 + 文本"两种单元</strong>，页面骨架能搭起来，数据也能照常绑上去——跨端的起点就此立住。
     </p>
 
-    <h2>图像按钮的缺位</h2>
+    <h2>图像按钮输入缺位</h2>
     <ul>
       <li>光有 view、text 不够用：图片、按钮、输入框都还没有对应物，<code>img</code> 在小程序里不识别，头像直接不显示。</li>
       <li>只给图片一个 URL 而不管尺寸时，小程序按默认 <code>320px × 240px</code> 渲染，一张小头像也能把整行撑开。</li>
@@ -32,7 +32,7 @@ import U05BuiltinComponents from './U05BuiltinComponents.vue'
       <li>各端 button 自带不同的默认外观，样式写死在一端，换一端就变形。</li>
     </ul>
 
-    <h2>五类内置组件</h2>
+    <h2>跨端基础组件清单</h2>
     <p>
       不推翻"用容器和文本搭页面"，而是把<strong>每一类元素都补上平台级等价物</strong>，凑齐一组跨端基础组件：
     </p>
@@ -53,13 +53,13 @@ import U05BuiltinComponents from './U05BuiltinComponents.vue'
       <strong>三条必须记住的边界：</strong>H5 端兼容 <code>div</code> 只是"顺带"，小程序端不识别，跨端务必用内置组件；<code>image</code> 不设宽高时在小程序里按 <code>320px × 240px</code> 渲染，务必显式设定；<code>input</code> 的 <code>type</code> 要按场景选，收数字就用 <code>number</code> 或 <code>digit</code>，别一律默认 text。
     </div>
 
-    <h2>组件的定位验证</h2>
+    <h2>组件定位与数据绑定</h2>
     <figure class="lesson-figure">
       <figcaption>先看五件套各自的定位说明，再在下方用 input 改昵称、点 button 报名，验证它们就是能绑定数据的普通组件。</figcaption>
       <U05BuiltinComponents />
     </figure>
 
-    <h2>内置组件的分工</h2>
+    <h2>内置组件职责划分</h2>
     <p>
       uni-app 用一套内置组件替代了 HTML 标签：view 管布局、text 管文本、image 管图片、button 与 input 管表单交互。它们不是"HTML 的别名"，而是会被编译到各端原生等价物的抽象层——记住这一点，就不会再写只在小程序里塌掉的页面。
     </p>

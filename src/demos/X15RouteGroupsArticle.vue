@@ -8,7 +8,7 @@ import X15RouteGroups from './X15RouteGroups.vue'
       <strong>开场问题：</strong>同一个项目里，营销页要有顶部大导航，后台管理要有侧边栏——它们共用一套代码，可为什么不能按「页面属于谁」来套外壳，而非得靠 URL 多带一层路径才能区分？
     </div>
 
-    <h2>外壳与地址解耦</h2>
+    <h2>布局外壳与URL解耦</h2>
     <p>
       课程站通常有两副面孔：面向访客的营销页（首页、关于、定价），和面向内部的后台（仪表盘、设置）。两边的导航、页脚、整体风格完全不同，但它们是同一个 Next.js 项目、共用同一套组件和工具函数。
     </p>
@@ -16,7 +16,7 @@ import X15RouteGroups from './X15RouteGroups.vue'
       麻烦在于，布局是跟着目录层级走的，而 URL 又不该因此变样——你不想为了「换一套外壳」就让地址栏多出一层 <code>/marketing</code> 之类的路径。开发中还常有内部组件要存放，既不能被当成页面，也不该污染路由。
     </p>
 
-    <h2>复制导航页脚</h2>
+    <h2>导航页脚逐页复制</h2>
     <p>
       最直白的做法是把导航和页脚直接写进每个页面里：营销页复制一份顶部大导航，后台页复制一份侧边栏。内部组件则随手放在 <code>app/</code> 下的某个目录里。
     </p>
@@ -24,7 +24,7 @@ import X15RouteGroups from './X15RouteGroups.vue'
       它在页面数量极少时确实能跑——<strong>每个页面自给自足，想怎么排就怎么排</strong>，不需要理解任何新概念。
     </p>
 
-    <h2>重复实现的混乱</h2>
+    <h2>重复代码与冗余路由</h2>
     <ul>
       <li>重复代码：导航改了要一处处同步，漏一处就样式打架。</li>
       <li>误生成路由：放在 <code>app/</code> 下的组件目录可能被当成页面路径，凭空多出路由。</li>
@@ -32,7 +32,7 @@ import X15RouteGroups from './X15RouteGroups.vue'
       <li>结构混乱：页面组件、内部组件、工具函数混在同一层，越写越难找。</li>
     </ul>
 
-    <h2>圆括号目录</h2>
+    <h2>圆括号路由分组</h2>
     <p>
       先解决「换外壳不改 URL」。Route Groups 用<strong>圆括号目录</strong>表达这件事：<code>(marketing)</code> 和 <code>(dashboard)</code> 这样的目录<strong>不参与 URL 生成</strong>，却可以各自拥有一个 <code>layout.tsx</code>。
     </p>
@@ -71,13 +71,13 @@ import X15RouteGroups from './X15RouteGroups.vue'
       判断要不要用路由组，标准很简单：当你希望「一组页面共享同一层布局、但地址里又不想多出这一层目录名」时，它就是答案；而若某个目录只是为了放代码、根本不该被访问，那就交给私有文件夹。
     </p>
 
-    <h2>两组路由切换</h2>
+    <h2>路由组外壳切换</h2>
     <figure class="lesson-figure">
       <figcaption>切换两组路由，看同一套代码如何在不改变 URL 的前提下套上不同外壳。</figcaption>
       <X15RouteGroups />
     </figure>
 
-    <h2>布局与内容分工</h2>
+    <h2>私有目录与布局</h2>
     <p>
       路由组用 <code>(group)</code> 让一组路由共用独立布局、却不改动 URL；私有文件夹用 <code>_folder</code> 把内部组件与工具从路由里摘出去。两者都服务于「整理工程结构」这个目标：一个管外壳的归属，一个管内容的边界。记住它们并不消除路径冲突，撞车会在构建时毫不含糊地报出来。
     </p>

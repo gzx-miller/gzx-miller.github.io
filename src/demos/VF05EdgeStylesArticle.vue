@@ -16,7 +16,7 @@ import VF05EdgeStyles from './VF05EdgeStyles.vue'
       如果不给线赋予形态，流程图就退化成一堆连线的集合，节点越多越没人愿意看。真正要解决的是：<strong>怎么让「关系」本身也携带语义</strong>，让读图的人不用点开任何节点就能分清主次。
     </p>
 
-    <h2>默认连线省事</h2>
+    <h2>默认连线绘制</h2>
     <p>
       最省事的做法是接受默认：所有边都交给 Vue Flow 自己画。连线路径它会根据两个节点的位置自动算出一条贝塞尔曲线，起止点、弧度都不需要你操心。
     </p>
@@ -32,7 +32,7 @@ import VF05EdgeStyles from './VF05EdgeStyles.vue'
       <li>想统一调整所有新连线的形态，却没有全局出口，只能挨个 edge 去改 <code>type</code>。</li>
     </ul>
 
-    <h2>连线表达三件套</h2>
+    <h2>路径装饰默认值</h2>
     <p>
       不推翻默认连线，而是给每条边装上「表达三件套」——<strong>路径、装饰、全局默认</strong>。
     </p>
@@ -97,7 +97,7 @@ import VF05EdgeStyles from './VF05EdgeStyles.vue'
       <VF05EdgeStyles />
     </figure>
 
-    <h2>关系表达可视化</h2>
+    <h2>连线表达语义</h2>
     <p>
       连线的形态，本质上是把「关系」从结构升级成表达。<code>type</code> 选路径、<code>label</code> 写条件、<code>animated</code> 提主次、<code>markerEnd</code> 标方向、<code>style</code> 做区分，全局则用 <code>:default-edge-options</code> 兜底。记住默认值只管新连线、老边只认自己的 <code>type</code>，这张图就从「能看」变成了「能读」。
     </p>

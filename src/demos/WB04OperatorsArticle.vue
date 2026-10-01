@@ -8,7 +8,7 @@ import WB04Operators from './WB04Operators.vue'
       <strong>开场问题：</strong>你读一段 WAT，函数体只有三行：<code>local.get $a</code>、<code>local.get $b</code>、<code>i32.add</code>。没有赋值，没有 <code>a + b</code> 这样的表达式，也没有一行写着「结果存到哪」。可它就是算出了两数之和——<strong>这些值从哪来，算完又去了哪？</strong>
     </div>
 
-    <h2>无变量的运算形式</h2>
+    <h2>无变量运算形式</h2>
     <p>
       你要看懂（或写出）一段 WAT 的运算。别的语言里，表达式自带中间结果的名字，你能一眼追踪每一步；Wasm 不这么写。旧办法是「把它当普通算式照抄」，成本有三：找不到中间值存在哪，读起来像断了链；分不清二元指令的左右操作数（<code>a</code>、<code>b</code> 谁被减）；不知道除零、移位越界这些边界会发生什么。
     </p>
@@ -33,7 +33,7 @@ import WB04Operators from './WB04Operators.vue'
       <li>整数与浮点是两套独立指令，<code>i32.add</code> 和 <code>f32.add</code> 操作码不同，混用会让验证失败。</li>
     </ul>
 
-    <h2>规则逐条推演</h2>
+    <h2>求值规则推演</h2>
     <p>
       不推翻「栈」，而是把它的规则说清，并逐条推演。规则只有两条：指令从<strong>栈顶</strong>取操作数，把结果<strong>压回栈顶</strong>；函数返回时以当前栈顶值为结果。
     </p>

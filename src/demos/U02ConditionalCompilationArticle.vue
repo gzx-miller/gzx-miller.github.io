@@ -8,7 +8,7 @@ import U02ConditionalCompilation from './U02ConditionalCompilation.vue'
       <strong>开场问题：</strong>你在页面里写了一个"分享给好友"的按钮，用 <code>// #ifdef MP-WEIXIN</code> 圈了起来。切到 H5 平台预览，这个按钮不仅不显示，翻遍打包产物也找不到它的任何一行——它不是运行时被藏起来了，而是压根没被编译进去。
     </div>
 
-    <h2>三端功能的分叉</h2>
+    <h2>三端平台能力分叉</h2>
     <p>
       你在做一套三端共用的代码：分享、保存海报、唤起支付，各个平台能做的事并不一样。顺手的老办法是在逻辑里写运行时判断，比如 <code>if (平台 === 'h5')</code> 走这个分支、否则走那个。功能确实能跑，但代价藏在看不见的地方。
     </p>
@@ -16,7 +16,7 @@ import U02ConditionalCompilation from './U02ConditionalCompilation.vue'
       第一，<strong>各端无关的分支照样会被打进所有端的产物</strong>，小程序的包里躺着 H5 的代码，包体白白变大。第二，<strong>只有某端才有的 API</strong>（比如微信的 <code>wx.shareAppMessage</code>）写进判断后，其它端仍要能编译通过、能加载，稍不留神就在运行时才炸。第三，差异一旦多起来，<strong>判断会层层嵌套</strong>，读代码要同时在脑子里模拟三端。于是问题落成一个明确的问句：能不能让"只属于某端的代码"，在它不该存在的那一端根本不存在？
     </p>
 
-    <h2>运行时读取平台</h2>
+    <h2>运行时平台判定</h2>
     <p>
       最朴素的做法：运行时判断当前平台，例如读 <code>uni.getSystemInfoSync().platform</code>，再决定走哪一段逻辑。
     </p>
@@ -24,7 +24,7 @@ import U02ConditionalCompilation from './U02ConditionalCompilation.vue'
       这个方案做对了一件事：<strong>它承认"不同平台的行为必须能分叉"</strong>，而且不依赖任何额外的构建配置——只要有平台信息，就能在同一处代码里做出选择，功能立刻可跑。
     </p>
 
-    <h2>包体未减的浪费</h2>
+    <h2>分支代码全量入包</h2>
     <ul>
       <li>分叉之后两边的代码<strong>仍然都会被打进每一端的产物</strong>，包体不为所动，等于把三端的代码全塞进一端的包里。</li>
       <li>某端专属的 API 写进判断里，其它端在编译和加载阶段依然要面对它，写错一个拼写就可能在<em>运行到那个分支时</em>才报错。</li>
@@ -32,7 +32,7 @@ import U02ConditionalCompilation from './U02ConditionalCompilation.vue'
       <li>运行时判断只能管到 JS 逻辑，<strong>模板结构和样式里的端差异它管不到</strong>——你想让某端多渲染一段 DOM，它无能为力。</li>
     </ul>
 
-    <h2>编译期条件分叉</h2>
+    <h2>编译期条件裁剪</h2>
     <p>
       不推翻"按平台分叉"，而是把分叉的时机<strong>从运行时提前到编译期</strong>：用注释式条件编译。把一段代码用 <code>// #ifdef MP-WEIXIN</code> 与 <code>// #endif</code> 包起来，编译器在为目标平台构建时决定这段代码的去留——非目标平台的分支<strong>直接不进产物</strong>。
     </p>
@@ -57,7 +57,7 @@ import U02ConditionalCompilation from './U02ConditionalCompilation.vue'
       <strong>三个必须守住的边界：</strong>条件编译是<strong>编译期行为</strong>，运行时看不到任何痕迹，别指望在真机上调它；每个 <code>#ifdef</code> / <code>#ifndef</code> 都<strong>必须有配对的 <code>#endif</code></strong>，一页里出现多次时要保证闭合关系正确，否则整段语法错乱；一段 <code>#ifdef</code> <strong>不能跨 script 与 template 之间包裹</strong>，它必须完整落在同一个区块内。差异逻辑一多，抽到外部文件再条件引入，可读性会好得多。
     </div>
 
-    <h2>平台槽位的增减</h2>
+    <h2>平台功能槽位增减</h2>
     <figure class="lesson-figure">
       <figcaption>点三个平台按钮，看哪些功能槽位出现、哪些整个消失——消失的那块不是被隐藏，而是编译期就不存在。</figcaption>
       <U02ConditionalCompilation />

@@ -8,7 +8,7 @@ import CPP24FileIO from './CPP24FileIO.vue'
       <strong>开场问题：</strong>你写了个往日志文件追加内容的程序，每轮跑完都检查「写成功了吗」，全都成功。可跑了几轮之后打开文件一看，里面<strong>只剩最后一轮</strong>的记录，前面几轮凭空消失了——明明每一轮都写成功了，是谁把文件清空的？
     </div>
 
-    <h2>外部设备的不可控性</h2>
+    <h2>外部设备不可控性</h2>
     <p>
       从文件读数据、往文件写数据，本质上是在跟一个<strong>外部设备</strong>打交道：它可能不存在、可能没权限、可能读到一半就到头了。这些情况都必须被感知和处理，否则你拿到的是「看起来正常、其实早就失败」的数据。
     </p>
@@ -25,7 +25,7 @@ import CPP24FileIO from './CPP24FileIO.vue'
       所以问题是：<strong>能不能让文件读写拥有和内存操作一样的类型安全，并且让文件的打开与关闭自动跟着对象的生死走？</strong>
     </p>
 
-    <h2>文件流的读写统一</h2>
+    <h2>文件流读写统一</h2>
     <p>
       最省事的做法：用 <code>std::ifstream</code> 打开文件读、<code>std::ofstream</code> 打开文件写，读取用 <code>&gt;&gt;</code>，写入用 <code>&lt;&lt;</code>，用完就让对象自然离开作用域。
     </p>
@@ -42,7 +42,7 @@ import CPP24FileIO from './CPP24FileIO.vue'
       <li>「读到文件尾」和「真的读失败」是两件不同的事，想分清楚就得去看流的状态，光看变量看不出来。</li>
     </ul>
 
-    <h2>打开模式与状态</h2>
+    <h2>打开模式与流状态</h2>
     <p>
       不推翻「用流读写文件」,而是把这套抽象的各个角落补齐。第一件要补的是<strong>打开模式</strong>，因为开场那个 bug 就出在这：<code>std::ios::in</code> 读、<code>std::ios::out</code> 写（默认带截断）、<code>std::ios::app</code> 追加、<code>std::ios::ate</code> 打开后定位到末尾、<code>std::ios::trunc</code> 截断、<code>std::ios::binary</code> 二进制。写日志要在后面接着写，就必须显式用 <code>app</code>。
     </p>
@@ -70,13 +70,13 @@ import CPP24FileIO from './CPP24FileIO.vue'
       最后两个边界值得记住。其一，文件流对象<strong>不能拷贝</strong>（拷贝构造和拷贝赋值都被删除了），但<strong>可以移动</strong>——用 <code>std::move</code> 把所有权转移给另一个流对象，这是第 21 课那套语义在标准库里的又一次落地。其二，C++17 起文件流的 <code>open</code> 可以接受 <code>std::filesystem::path</code>（来自 <code>&lt;filesystem&gt;</code>），对 Unicode 文件名的支持更好。
     </p>
 
-    <h2>读写与解析示例</h2>
+    <h2>三类读写接口对照</h2>
     <figure class="lesson-figure">
       <figcaption>看三段代码的对应关系：<code>ofstream</code> 用 <code>&lt;&lt;</code> 写两行、<code>ifstream</code> 配 <code>getline</code> 逐行读回来，最后 <code>istringstream</code> 把 <code>"42 3.14 Hello"</code> 一次拆成 int、double、string 三种类型。</figcaption>
       <CPP24FileIO />
     </figure>
 
-    <h2>流的统一抽象</h2>
+    <h2>流抽象与类型安全</h2>
     <p>
       文件 I/O 的核心不是那几个类，而是<strong>流</strong>这个统一抽象：屏幕、键盘、文件、内存字符串，统统是流，所以同一套 <code>&lt;&lt;</code> / <code>&gt;&gt;</code> 能通用的地方就通用，类型安全也就一并带上了。要用好它，只需盯住三件事——打开模式选对（追加别用成覆盖）、流状态随时查、生命周期交给 RAII。
     </p>

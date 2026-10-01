@@ -8,7 +8,7 @@ import R24EffectLifecycle from './R24EffectLifecycle.vue'
       <strong>开场问题：</strong>计时器面板上，点「开始」，秒数开始跳；点「暂停」，秒数停了——看着一切正常。可如果你在 Effect 里打印日志，会发现「暂停」这一下不只关掉了计时器：React 先跑了一次<strong>清理</strong>，紧接着又执行了一遍 <strong>Effect</strong>，而这一次它什么都没建就退了出来。你只是把 <code>running</code> 从 <code>true</code> 改成 <code>false</code>，为什么要「先拆旧的、再跑一遍新的」？
     </div>
 
-    <h2>创建与拆除时机</h2>
+    <h2>外部资源副作用</h2>
     <p>
       你需要的那几样东西——窗口尺寸的 <code>resize</code> 监听、每秒跳一次的计时器、网络在线的 <code>online</code> / <code>offline</code> 订阅——都是<strong>外部世界</strong>里的资源。它们不会自己跟着组件走：组件挂载了，没人替你加监听；组件卸载了，监听也不会自己消失。你得在合适的时候建、在合适的时候拆。
     </p>
@@ -19,7 +19,7 @@ import R24EffectLifecycle from './R24EffectLifecycle.vue'
       所以要回答的是：<strong>在挂载、依赖更新、卸载这几个时刻上，Effect 与它的清理函数分别按什么顺序执行，又各自带着哪一次渲染的值？</strong>
     </p>
 
-    <h2>三条时机规则</h2>
+    <h2>副作用执行时机</h2>
     <p>
       先把三条最基本的时机规则记牢：<strong>组件挂载并提交到 DOM 之后，Effect 跑第一次</strong>；<strong>依赖变化时，React 先跑上一次返回的清理函数，再跑新的 Effect</strong>；<strong>组件卸载时，跑最后一次清理</strong>。想让它只在挂载和卸载各跑一次，就把依赖数组写成空的 <code>[]</code>。
     </p>
@@ -27,7 +27,7 @@ import R24EffectLifecycle from './R24EffectLifecycle.vue'
       这个方案做对了一件事：<strong>它给「与外部世界同步」的动作划出了有始有终的一段区间</strong>——建在这里，拆也在这里，谁建的谁负责清，责任不再散落。
     </p>
 
-    <h2>空数组省略差异</h2>
+    <h2>依赖数组与省略</h2>
     <ul>
       <li>依赖写成空数组 <code>[]</code> 和干脆<strong>省略第二个参数</strong>是两回事：<code>useEffect(fn)</code> 每个渲染都会跑一次，和「只在挂载时跑」正好相反，很多人在这里踩坑。</li>
       <li>以为「某个值不影响要不要同步」就不写进依赖：可 Effect 体里读到的、清理函数里用到的响应式值都得列上，否则会读到<strong>过期的闭包</strong>。</li>
@@ -36,7 +36,7 @@ import R24EffectLifecycle from './R24EffectLifecycle.vue'
       <li>在清理函数里读取「最新」的状态：清理闭包绑定的是<strong>创建它的那次渲染</strong>的值，于是你打印出来的是旧值，容易误判成 bug。</li>
     </ul>
 
-    <h2>三种模式划分</h2>
+    <h2>三种副作用模式</h2>
     <p>
       不推翻三条时机规则，而是按「这段同步什么时候该重来」把 Effect 分成三种模式，各自对应演示里的一个组件。
     </p>
@@ -61,7 +61,7 @@ import R24EffectLifecycle from './R24EffectLifecycle.vue'
       <R24EffectLifecycle />
     </figure>
 
-    <h2>清理时机对称</h2>
+    <h2>建立与清理对称</h2>
     <p>
       Effect 的一生就三个时刻：挂载后第一次执行、依赖变化时先清理再重新执行、卸载时最后清理一次。把「建和拆」写成对称的一对，把影响它重来的值如实写进依赖数组，再按「这段同步什么时候该重来」选对依赖形态——「监听忘清」和「旧逻辑还在跑」这两类问题，从时机这一层就被堵住了。
     </p>

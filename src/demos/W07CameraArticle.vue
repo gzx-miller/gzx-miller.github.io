@@ -8,7 +8,7 @@ import W07Camera from './W07Camera.vue'
       <strong>开场问题：</strong>你做了个 3D 零件展示页，想让人绕到背面看看。你把<strong>模型本身</strong>转了过去，结果背是转过来了，可原本朝上的顶面跟着歪到了侧面——连从上方打来的光都好像跟着太阳一起转了。用户想动的是眼睛，你却动了物体。
     </div>
 
-    <h2>视角切换的实现</h2>
+    <h2>视角切换实现</h2>
     <p>
       你已经有了 View 矩阵，它负责把世界坐标变换到相机空间，本质就是把相机搬到原点、视线对齐轴。于是「换视角」这件事，最后都归结为一个问题：<strong>相机该放在哪、看向哪？</strong>
     </p>
@@ -24,7 +24,7 @@ import W07Camera from './W07Camera.vue'
       问题于是收束成一句：<strong>有没有一组参数，让「绕圈」和「缩放」各只改一个数，而且互不干扰？</strong>
     </p>
 
-    <h2>观察点与相机位</h2>
+    <h2>相机位置与朝向</h2>
     <p>
       最朴素也真能跑的做法：维护 <code>eye</code> 和 <code>target</code>，用 <code>lookAt(eye, target, up)</code> 生成 View 矩阵。想换视角就改 <code>eye</code>，把相机沿一个圆圈挪动，就能绕着物体转。
     </p>
@@ -32,7 +32,7 @@ import W07Camera from './W07Camera.vue'
       这个方案做对了一件事：<strong>它把「观察」和「被观察」分开了</strong>。改 View 矩阵不会碰模型数据，物体该在哪还在哪，视角变化只是换个机位。
     </p>
 
-    <h2>参数耦合与误差累积</h2>
+    <h2>参数耦合与误差</h2>
     <ul>
       <li>「转 30 度」这种对用户最自然的说法，落到 <code>eye</code> 上却变成三个坐标的联立修改，转久了还会累积误差。</li>
       <li>缩放和旋转共用同一组 x、y、z，想单独调一个，另外两个就会跟着漂。</li>
@@ -40,7 +40,7 @@ import W07Camera from './W07Camera.vue'
       <li>相机走到目标点正上方或正下方时，视线方向与 <code>up</code> 共线，<code>lookAt</code> 求出的坐标系退化，画面会突然翻转甚至整体消失。</li>
     </ul>
 
-    <h2>球坐标的引入</h2>
+    <h2>球坐标参数化</h2>
     <p>
       看清了病根——「相机在哪」用笛卡尔坐标描述不合适，于是换一组更贴合「看着一个东西绕圈」的参数：<strong>球坐标</strong>。用半径 <code>radius</code>、方位角 <code>theta</code>、仰角 <code>phi</code> 加上目标点 <code>target</code>，就能完整描述相机相对目标的位置。整个流程是：
     </p>
@@ -63,13 +63,13 @@ import W07Camera from './W07Camera.vue'
       还有一点要分清：View 矩阵只决定「从哪看」，<strong>不会修改模型数据本身</strong>。轨道相机适合围绕单个物体观察；如果你要做的是第一人称漫游，通常直接累加 yaw / pitch 与位移，而不是套用这套绕目标的球坐标。
     </p>
 
-    <h2>滑杆联动相机状态</h2>
+    <h2>滑杆控制相机状态</h2>
     <figure class="lesson-figure">
       <figcaption>分别拖动半径、方位角、仰角三个滑杆绕模型转圈与缩放，再移动观察点滑杆，看相机状态里 <code>eye</code> 的实时坐标怎么跟着变。</figcaption>
       <W07Camera />
     </figure>
 
-    <h2>相机与模型解耦</h2>
+    <h2>轨道相机解耦</h2>
     <p>
       轨道相机把「相机在哪」翻译成三个互相独立的旋钮——半径管远近、方位角管左右、仰角管上下，再用 <code>lookAt</code> 把它们收成一个 View 矩阵。<strong>换视角就是改参数，永远不用碰模型数据。</strong>
     </p>

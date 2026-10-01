@@ -8,7 +8,7 @@ import CPP21MoveSemantics from './CPP21MoveSemantics.vue'
       <strong>开场问题：</strong>你把一个装着几十万条日志的 <code>std::vector&lt;std::string&gt;</code> 从函数里返回、再赋给一个新变量，本以为只是「换个名字指向同一堆数据」，结果这一段肉眼可见地卡了两百毫秒——中间到底复制了什么？
     </div>
 
-    <h2>默认拷贝的高成本</h2>
+    <h2>默认拷贝高成本</h2>
     <p>
       C++ 的默认语义是<strong>拷贝</strong>。<code>T b = a;</code> 在编译器眼里没有任何歧义：它必须为 <code>b</code> 再准备一份和 <code>a</code> 一模一样的东西。如果 <code>T</code> 是持有堆内存的容器，这份「一模一样」意味着新申请一块同样大的内存，再把每个元素逐个复制过去。哪怕 <code>a</code> 只是函数里刚造出来、马上就销毁的临时对象，这份复制也照做不误。
     </p>
@@ -32,7 +32,7 @@ import CPP21MoveSemantics from './CPP21MoveSemantics.vue'
       这个方案做对了一件很关键的事：<strong>它证明了「转移资源」和「复制资源」是两种完全不同的操作</strong>，前者只需要搬指针并转移所有权，成本与数据量无关。这个认识是后面一切的起点。
     </p>
 
-    <h2>调用方遗漏的代价</h2>
+    <h2>隐式退化深拷贝</h2>
     <ul>
       <li>它完全依赖调用方记得写。<code>b.stealFrom(a);</code> 少写一次，代码不会报错，只是悄悄退化成深拷贝——你只会觉得「今天有点慢」，找不到原因。</li>
       <li>它对标准库类型毫无办法。你没法给 <code>std::vector</code> 或 <code>std::string</code> 添加成员函数，于是 <code>std::vector&lt;int&gt; v2 = v1;</code> 这条最常见的路径依旧只能拷贝。</li>
@@ -40,7 +40,7 @@ import CPP21MoveSemantics from './CPP21MoveSemantics.vue'
       <li>它缺少安全网：如果 <code>stealFrom</code> 之后忘了把 <code>other</code> 置空，两个对象就指向同一块内存，析构时这块内存被释放两次，程序直接崩溃。</li>
     </ul>
 
-    <h2>左值与右值划分</h2>
+    <h2>左值与右值分类</h2>
     <p>
       不推翻「偷资源比复制便宜」这个结论，而是解决它的前提问题：<strong>怎么让编译器自己判断一个对象「能不能被偷」。</strong>第一步是给表达式分类。
     </p>
@@ -74,13 +74,13 @@ import CPP21MoveSemantics from './CPP21MoveSemantics.vue'
       最后把尺度放到整个类上：如果一个类自定义了析构、拷贝构造、拷贝赋值、移动构造、移动赋值中的任何一个，通常就要把五个都考虑一遍，这叫 <strong>Rule of Five</strong>。而更好的做法是 <strong>Rule of Zero</strong>——让所有成员都是已经管好资源的 RAII 类型（下一课的主角），于是这个类一个特殊成员函数都不用写，移动与拷贝语义由成员自动合成，还不会写错。
     </p>
 
-    <h2>被移动对象的状态</h2>
+    <h2>被移动对象状态</h2>
     <figure class="lesson-figure">
       <figcaption>对照代码看 <code>std::move</code> 前后两个对象的状态：被移动的 <code>str1</code> 会变空、<code>vec1</code> 的 <code>size()</code> 归零，而 <code>str2</code>、<code>vec2</code> 拿到了全部数据。</figcaption>
       <CPP21MoveSemantics />
     </figure>
 
-    <h2>移动语义进类型</h2>
+    <h2>移动语义类型化</h2>
     <p>
       移动语义把「这个对象可以随便动」从人的口头约定，变成了类型系统里的一个类别。左值代表还要用，右值代表马上就没；右值引用让你只对右值开放「偷资源」的重载，<code>std::move</code> 负责把左值标记成右值，<code>std::forward</code> 负责在模板里原样保持这个标记。守住三条底线：标记 <code>noexcept</code>、别对返回值写 <code>std::move</code>、被移动后的对象只能析构或重新赋值。
     </p>

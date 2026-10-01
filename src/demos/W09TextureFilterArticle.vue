@@ -8,7 +8,7 @@ import W09TextureFilter from './W09TextureFilter.vue'
       <strong>开场问题：</strong>同一张棋盘纹理，铺满整屏时看着挺干净，可当相机一拉远、整块棋盘缩成指甲盖大小，画面开始「沙沙」抖动——你稍微动一下鼠标，纹理就闪成一片噪点，像信号不好。放大回去又恢复正常。
     </div>
 
-    <h2>最近采样的失真</h2>
+    <h2>最近邻采样失真</h2>
     <p>
       你已经能把纹理贴到网格上，也知道每个屏幕像素会按插值出来的 UV 去采样。但采样时到底该「取哪一个纹素」这件事，你还没做决定。默认地，显卡取离 UV 最近的那一个纹素。
     </p>
@@ -25,7 +25,7 @@ import W09TextureFilter from './W09TextureFilter.vue'
       所以真正的问题是：<strong>一次采样到底该取几个纹素、按什么权重合并？放大和缩小能分开处理吗？</strong>
     </p>
 
-    <h2>双线性插值方案</h2>
+    <h2>双线性插值采样</h2>
     <p>
       先解决放大。把采样方式从「取最近一个纹素」换成 <strong>LINEAR</strong>：取该点周围 <code>2 x 2</code> 的四个邻近纹素，按距离做双线性插值加权平均。
     </p>
@@ -33,7 +33,7 @@ import W09TextureFilter from './W09TextureFilter.vue'
       这个方案做对了一件事：<strong>它承认了「一个屏幕像素往往落在几个纹素中间」这个事实</strong>。放大时不再是一块块硬邦邦的方块，而是平滑过渡，边缘也不再锯齿分明。
     </p>
 
-    <h2>缩小时摩尔纹</h2>
+    <h2>缩小采样摩尔纹</h2>
     <ul>
       <li>缩小时 LINEAR 依然不够：当屏幕一个像素覆盖了 <code>4 x 4</code> 甚至更大的一片纹素时，只平均邻近 <code>2 x 2</code> 个，仍会漏掉大量信息，摩尔纹照旧。</li>
       <li>它预平均的范围是固定的 <code>2 x 2</code>，与「这个像素实际覆盖多大面积」无关，缩放比例一变就顾此失彼。</li>
@@ -41,7 +41,7 @@ import W09TextureFilter from './W09TextureFilter.vue'
       <li>放大与缩小被迫共用一套规则，而两者的需求其实正好相反。</li>
     </ul>
 
-    <h2>逐级缩小副本</h2>
+    <h2>多级渐远纹理</h2>
     <p>
       既然缩小的病根是「像素覆盖的面积远大于采样窗口」，那就从源头降低信息密度：给纹理预先准备一组逐级缩小的副本，也就是 <strong>Mipmap</strong>。缩小时硬件根据屏幕像素覆盖的纹素面积，自动挑一个大小合适的层级去采样。
     </p>
@@ -64,13 +64,13 @@ import W09TextureFilter from './W09TextureFilter.vue'
       <strong>三条边界：</strong>其一，<code>MAG_FILTER</code> <strong>只能</strong>设 <code>NEAREST</code> 或 <code>LINEAR</code>，不能带 <code>MIPMAP_</code> 后缀——放大时根本用不到更小的层。其二，WebGL1 里一条完整的 mip 链通常要求纹理尺寸为 2 的幂，否则过滤不完整；WebGL2 或 NPOT 扩展才允许非 2 次幂纹理带 mip。其三，斜视角下纹理仍会发糊，可用各向异性过滤（<code>EXT_texture_filter_anisotropic</code>）改善，属于进阶优化。
     </div>
 
-    <h2>锯齿和平滑对比</h2>
+    <h2>锯齿与平滑对比</h2>
     <figure class="lesson-figure">
       <figcaption>拖动缩放滑杆把纹理放大缩小，切换 NEAREST 与 LINEAR 对比方块锯齿和平滑边缘，再用层级滑杆单独查看某一 mip 层的清晰度。</figcaption>
       <W09TextureFilter />
     </figure>
 
-    <h2>放大缩小分别配置</h2>
+    <h2>放大缩小过滤</h2>
     <p>
       纹理过滤回答的是「一次采样取几个纹素、怎么加权」。<strong>放大靠 NEAREST 与 LINEAR 二选一，缩小则必须靠 Mipmap 逐级降采样，再加上跨层插值，才能压住摩尔纹与闪烁。</strong>两者需求相反，所以要分开配置。
     </p>

@@ -8,7 +8,7 @@ import N02FileRouting from './N02FileRouting.vue'
       <strong>开场问题：</strong>你新建一个 <code>pages/about.vue</code>，一个字都没注册路由，浏览器打开 <code>/about</code> 就能访问；把它重命名成 <code>pages/about-us.vue</code>，<code>/about</code> 立刻变成 404。从头到尾没有任何「路由配置」被改动过——那这张路由表到底存放在哪里？
     </div>
 
-    <h2>手写路由表</h2>
+    <h2>手工维护路由表</h2>
     <p>
       用过 Vue Router 的人都知道，路由表是一个你亲手写的 <code>routes</code> 数组：每条记录说明路径是什么、对应哪个组件。<strong>文件放在哪是一回事，URL 长什么样完全由这张表决定</strong>，两者并无必然联系。
     </p>
@@ -16,7 +16,7 @@ import N02FileRouting from './N02FileRouting.vue'
       这套写法把两三个成本交给了人来承担。新增一个页面要改两处——建文件、再往表里补一条，漏掉一处页面就打不开；路由表和页面文件会各自演化，看表不知道文件在哪，翻目录又不知道 URL 长什么样；等到重构时把目录改个名，还得回头逐个改表里的字符串路径。于是问题很清楚：<strong>能不能让文件的位置直接决定 URL，把路由表从「手写」变成「推导出来」？</strong>
     </p>
 
-    <h2>文件路径即路由</h2>
+    <h2>文件路径推导路由</h2>
     <p>
       最省事的做法：路由表还是手写，但给自己定一条硬规矩——<strong>文件路径就等于路由路径</strong>，<code>pages/about.vue</code> 一定对应 <code>/about</code>，命名照此对齐。
     </p>
@@ -24,7 +24,7 @@ import N02FileRouting from './N02FileRouting.vue'
       这个方案做对了一件关键的事：<strong>它承认了「路由路径应当可以从文件推导出来」</strong>。只要命名足够自律，路径就变得可预测。问题在于，这条规矩仍然靠人守，没有任何东西替你执行它。
     </p>
 
-    <h2>双处同步的负担</h2>
+    <h2>文件与路由表同步</h2>
     <ul>
       <li>仍要两处同步：建完文件还得回车去补路由记录，漏一处页面就打不开，且不会有任何报错提醒。</li>
       <li><code>routes</code> 数组是有序的，顺序会影响匹配结果，维护时得时刻留意排列。</li>
@@ -52,13 +52,13 @@ import N02FileRouting from './N02FileRouting.vue'
       还有两个便利要记住。开发模式下新增或重命名 <code>pages/</code> 里的文件会被自动监听并重建路由，<strong>不需要手动重启开发服务器</strong>。而方括号接出来的参数值始终是字符串——这一条下一课专门展开。
     </p>
 
-    <h2>路径与地址映射</h2>
+    <h2>路径与URL映射</h2>
     <figure class="lesson-figure">
       <figcaption>点选左侧的路由映射表，看每条文件路径如何对应成一个 URL，再对照右侧的静态、动态、catch-all 三类命名速查。</figcaption>
       <N02FileRouting />
     </figure>
 
-    <h2>路由表的投影化</h2>
+    <h2>路由表结构投影</h2>
     <p>
       文件路由把「路由表」从一份需要手动维护的清单，变成了 <code>pages/</code> 目录结构的投影：目录层级对应路径层级，<code>index.vue</code> 对应该层级的根。你只需要把文件放对地方，路径就自动成立，路由表也就永远和文件保持一致。
     </p>

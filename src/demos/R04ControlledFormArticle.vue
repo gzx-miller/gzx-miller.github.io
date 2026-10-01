@@ -8,7 +8,7 @@ import R04ControlledForm from './R04ControlledForm.vue'
       <strong>开场问题：</strong>你给姓名输入框传了 <code>value={form.name}</code>，满心以为能接管它的值，结果手指按下去一个字也敲不进去——输入框像被冻住了，控制台还飘出一句警告。为什么给输入框指定了值，它反而变得不能输入？
     </div>
 
-    <h2>字段状态的分头管理</h2>
+    <h2>字段状态分散管理</h2>
     <p>
       报名表要做两件事：收集姓名和学习方向，提交前校验姓名至少两个字。如果你每个字段都自己管一份 state、每个输入框都配一个独立的处理器，字段一多，代码里就散落着一堆相似的 <code>handleName</code> / <code>handleDirection</code>；校验逻辑也会四处生根，同一个「至少两个字」的规则可能被写在两个地方。
     </p>
@@ -19,7 +19,7 @@ import R04ControlledForm from './R04ControlledForm.vue'
       要回答的问题是：<strong>怎么让表单元素显示的值、你手里的数据、以及校验结果，全都指向同一个来源，并且由你亲手接管提交这个动作？</strong>
     </p>
 
-    <h2>状态驱动的输入值</h2>
+    <h2>唯一事实来源</h2>
     <p>
       最小的一步：让 React 的状态来当输入框唯一的事实来源。给它一个 <code>value</code> 决定显示什么，再给一个 <code>onChange</code> 在每次输入时把新值写回去：<code>value={form.name}</code> 配上 <code>onChange={(e) =&gt; setForm(...)}</code>。
     </p>
@@ -27,7 +27,7 @@ import R04ControlledForm from './R04ControlledForm.vue'
       这个方案做对了一件事：<strong>输入框里显示的内容，和你的 state 永远是同一个值</strong>。用户敲一个字符，事件先把值写进 state；state 一变，React 重新渲染，输入框显示的就是这份新值——显示与数据之间形成了一个闭环，你随时能读到、也能校验当前的输入。
     </p>
 
-    <h2>只读锁定与警告</h2>
+    <h2>缺失变更处理器</h2>
     <ul>
       <li>给了 <code>value</code> 却忘了给 <code>onChange</code>：输入框直接变成只读，怎么敲都不动，控制台还会警告「给了 value 却没有 onChange 处理器」。</li>
       <li><code>value</code> 一开始是 <code>undefined</code>、后来才变成字符串：输入框会在「不受控」和「受控」之间反复横跳，React 会警告你它的行为变得不可预测。</li>
@@ -35,7 +35,7 @@ import R04ControlledForm from './R04ControlledForm.vue'
       <li>提交时忘了阻止浏览器默认行为：点击提交会触发整页刷新，你刚填的内容连同 state 一起被清空。</li>
     </ul>
 
-    <h2>取值与变更的配对</h2>
+    <h2>值绑定与变更回调</h2>
     <p>
       第一层，把闭环补完整。<code>value</code> 和 <code>onChange</code> 是<strong>成对出现</strong>的：一个负责「显示什么」，一个负责「变了之后写去哪」。少了任何一半，输入框要么只读，要么失控，两者都不算受控。
     </p>
@@ -55,13 +55,13 @@ import R04ControlledForm from './R04ControlledForm.vue'
       <strong>受控表单的三条纪律：</strong><code>value</code> 与 <code>onChange</code> 必须成对；不要让 <code>value</code> 在 <code>undefined</code> 和字符串之间切换，那会让输入框在受控与非受控间跳变；提交一定要 <code>preventDefault()</code>，<code>disabled</code> 只是提示，真正的校验还得在提交时再做一次。
     </div>
 
-    <h2>同一份状态的联动</h2>
+    <h2>输入联动与提交校验</h2>
     <figure class="lesson-figure">
       <figcaption>在姓名和方向里输入：输入框显示的值全部来自同一份对象 state；姓名不足两个字时错误提示在渲染阶段即时算出，点提交时则被 <code>preventDefault()</code> 挡住整页刷新。</figcaption>
       <R04ControlledForm />
     </figure>
 
-    <h2>事实来源的单一性</h2>
+    <h2>受控闭环与字段聚合</h2>
     <p>
       受控表单的核心是让 state 成为输入框唯一的事实来源：<code>value</code> 决定显示什么，<code>onChange</code> 把变化写回去，两者合成一个闭环。把字段收进一个对象、用统一的处理器更新，再把能推导的校验留在渲染里现算——显示、数据、校验三者从此指向同一个来源。
     </p>

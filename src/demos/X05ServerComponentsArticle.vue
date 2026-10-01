@@ -8,7 +8,7 @@ import X05ServerComponents from './X05ServerComponents.vue'
       <strong>开场问题：</strong>在 <code>app/</code> 的页面里写 <code>useState</code> 或 <code>onClick</code>，编辑器立刻报错说不认识；可同一个文件里直接 <code>await</code> 查数据库却完全正常——这些组件到底跑在哪里，凭什么有的能力有、有的能力没有？
     </div>
 
-    <h2>取数与渲染分工</h2>
+    <h2>数据获取与渲染分离</h2>
     <p>
       你写一个课程列表页，需要先从数据库或内容文件里把课程取出来，再渲染成列表。在过去的前端开发里，这件事有两步固定的仪式：组件挂载后发起请求（<code>useEffect</code> 里 <code>fetch</code>），再用一个状态存返回结果，期间还要处理加载中和报错。数据拿回来之前，页面是一片空白。
     </p>
@@ -16,7 +16,7 @@ import X05ServerComponents from './X05ServerComponents.vue'
       更别扭的是，查数据库要用到连接串这类密钥，而前端代码会被下载到用户浏览器里，密钥不能下发。于是你不得不在中间再搭一层 API 服务转发。问题就变成：<strong>如果组件本来就在服务器上跑，它能不能直接取数据，省掉这一整圈绕路？</strong>
     </p>
 
-    <h2>空壳先行的方案</h2>
+    <h2>客户端取数流程</h2>
     <p>
       最朴素的做法，是承认「组件只在浏览器里跑」这个前提，老老实实走客户端取数：页面先渲染空壳，挂载后发请求，拿到数据再 <code>setState</code> 更新。这套做法做对了一件事——<strong>它把数据获取变成了组件生命周期的一部分</strong>，逻辑是自洽的。
     </p>
@@ -24,7 +24,7 @@ import X05ServerComponents from './X05ServerComponents.vue'
       但它的前提是「组件一定在浏览器里」。一旦接受这个前提，你就注定要多花一趟网络往返、多写一套加载态，还得为「浏览器做不到的事」额外加一层服务端。
     </p>
 
-    <h2>客户端取数短板</h2>
+    <h2>首屏空白与请求瀑布</h2>
     <ul>
       <li>首屏必然先空后填：HTML 先到、数据后到，用户看到的是一段等待过程。</li>
       <li>访问数据库或文件系统的密钥不能下发到浏览器，只能多搭一层 API 中转。</li>
@@ -33,7 +33,7 @@ import X05ServerComponents from './X05ServerComponents.vue'
       <li>敏感逻辑若写在客户端，等于把实现细节摊开给所有人看。</li>
     </ul>
 
-    <h2>服务端默认运行时</h2>
+    <h2>默认服务端组件</h2>
     <p>
       不推翻「组件」这个概念，而是给组件<strong>多一种运行环境</strong>。在 App Router 里，<code>app/</code> 目录下的组件<strong>默认就是 Server Component（服务端组件）</strong>，不需要任何声明。它们在服务器上渲染，产出的结果才发给浏览器，代码本身<strong>不进入前端 bundle</strong>。
     </p>
@@ -68,13 +68,13 @@ import X05ServerComponents from './X05ServerComponents.vue'
       <strong>调试小技巧：</strong>在组件里写一句 <code>console.log</code>，日志出现在终端就是服务端渲染，出现在浏览器控制台就是客户端渲染，比猜测可靠得多。
     </div>
 
-    <h2>两端能力对照</h2>
+    <h2>两端组件能力对照</h2>
     <figure class="lesson-figure">
       <figcaption>对比服务端与客户端组件各自的能力清单，看看哪些操作会直接被拦下。</figcaption>
       <X05ServerComponents />
     </figure>
 
-    <h2>渲染与取数合一</h2>
+    <h2>服务端取数与渲染</h2>
     <p>
       Server Component 把「取数据」和「渲染」重新合并回了一处：组件默认在服务端运行，可以 <code>await</code> 数据、访问数据库与密钥，且不占用前端 bundle；代价是不能使用客户端 Hook、事件与浏览器 API。需要交互时，就用 Server 取数、Client 接管的组合模式把两者拼起来。
     </p>

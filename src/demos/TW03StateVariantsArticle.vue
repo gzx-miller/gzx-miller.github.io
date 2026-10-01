@@ -8,7 +8,7 @@ import TW03StateVariants from './TW03StateVariants.vue'
       <strong>开场问题：</strong>卡片悬停时标题会变橙色，鼠标一移上去效果很好；可换成键盘 Tab 走一遍、或者用触屏点一下，同样「选中」了卡片，却什么反馈都没有——交互状态到底该怎么写才算完整？
     </div>
 
-    <h2>卡片多重交互状态</h2>
+    <h2>交互状态并存</h2>
     <p>
       你在做一个「小组报名」的课程卡：鼠标移上去时标题变色、出现「查看名额」的高亮；用户勾选「我已阅读报名须知」后，提交提示才亮起来；输入框聚焦时要有一圈清晰的焦点环。这些状态都发生在同一张卡片上，但触发条件各不相同。
     </p>
@@ -24,7 +24,7 @@ import TW03StateVariants from './TW03StateVariants.vue'
       它做对了一件重要的事：<strong>把「什么状态下该变成什么样」直接对应起来</strong>，不需要额外加一层运行时逻辑。问题出在，一旦状态种类变多，这套手写选择器就开始反过来支配你的结构。
     </p>
 
-    <h2>伪类写法重复</h2>
+    <h2>选择器重复与层级</h2>
     <ul>
       <li>同一个按钮的 hover、active、disabled 各写一段，状态一多，样式文件里全是重复选择器。</li>
       <li>父子联动必须给祖先补一个类，还得手动保证选择器层级和 DOM 结构一致，改一处容易漏一处。</li>
@@ -32,7 +32,7 @@ import TW03StateVariants from './TW03StateVariants.vue'
       <li>如果只写了 hover，键盘用户和触屏用户就拿不到任何反馈——信息被只挂在鼠标上了。</li>
     </ul>
 
-    <h2>状态前缀体系</h2>
+    <h2>状态变体前缀</h2>
     <p>
       Tailwind 把状态做成<strong>前缀</strong>：<code>hover:</code>、<code>focus:</code>、<code>active:</code>、<code>disabled:</code> 这些前缀在编译时展开成对应的伪类选择器。于是「悬停变色」就是 <code>hover:bg-orange-700</code>，状态和样式写在同一个类名上，不用再分别维护选择器与声明。
     </p>
@@ -58,13 +58,13 @@ import TW03StateVariants from './TW03StateVariants.vue'
       <li>用键盘 Tab 走一遍页面，确认焦点环清晰可见且没有被遮挡。</li>
     </ol>
 
-    <h2>三处状态触发点</h2>
+    <h2>悬停勾选与聚焦</h2>
     <figure class="lesson-figure">
       <figcaption>悬停卡片、勾选复选框、聚焦输入框，感受三种状态变体各自触发的位置。</figcaption>
       <TW03StateVariants />
     </figure>
 
-    <h2>元素关系联动</h2>
+    <h2>分组与同级联动</h2>
     <p>
       状态变体把「什么时候变」编码成前缀，让状态与样式待在一起；跨元素的联动则交给 group 与 peer，用 DOM 关系说话。动手之前先想清楚目标元素和状态元素在结构上是什么关系，比事后反复调试省力得多。
     </p>

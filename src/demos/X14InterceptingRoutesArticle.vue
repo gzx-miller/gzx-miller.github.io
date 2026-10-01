@@ -8,7 +8,7 @@ import X14InterceptingRoutes from './X14InterceptingRoutes.vue'
       <strong>开场问题：</strong>照片墙点击缩略图，希望弹窗看图、不离开列表；可这条大图链接要是发给朋友，点开又应该是一个能全屏看、能被搜索引擎收录的页面——同一个地址，怎么能既是弹窗又是整页？
     </div>
 
-    <h2>弹层与整页双态</h2>
+    <h2>弹窗与整页共存</h2>
     <p>
       你在做课程站的图片展示区：网格里排着缩略图，点击某张希望在当前页上方弹出一个浮层看大图，关掉后回到原来的位置。同时，这些图片各有自己的地址，用户会复制链接分享，甚至有人从搜索引擎直接点进来。
     </p>
@@ -16,7 +16,7 @@ import X14InterceptingRoutes from './X14InterceptingRoutes.vue'
       这就出现了一个矛盾：<strong>站内点击希望「不跳走」，站外访问希望「独立成页」</strong>。如果只做弹窗，分享出去的链接打开还是列表页；如果只做整页，站内点击就失去了流畅的浮层体验。
     </p>
 
-    <h2>状态控制的弹窗</h2>
+    <h2>组件状态控制弹窗</h2>
     <p>
       最省事的做法是用状态控制显隐：一个 <code>useState</code> 管住 <code>isOpen</code>，点击缩略图把它设为真，弹层出现；点关闭再设为假。图片地址直接写死在组件里。
     </p>
@@ -24,7 +24,7 @@ import X14InterceptingRoutes from './X14InterceptingRoutes.vue'
       它把「弹窗」这件事用最少的代码做到了——<strong>交互是即时的，不涉及任何路由跳转</strong>，视觉上完全满足站内浏览的需求。
     </p>
 
-    <h2>仅靠状态的缺陷</h2>
+    <h2>刷新丢失与历史错乱</h2>
     <ul>
       <li>URL 不变：弹窗打开时地址栏还是列表页，链接无法分享给具体某张图。</li>
       <li>刷新即丢：用户一刷新，弹窗状态没了，直接回到列表。</li>
@@ -32,7 +32,7 @@ import X14InterceptingRoutes from './X14InterceptingRoutes.vue'
       <li>无法深链接：想单独展示一张图，只能再做一套页面，重复劳动。</li>
     </ul>
 
-    <h2>拦截路由的机制</h2>
+    <h2>路由拦截机制</h2>
     <p>
       要同时满足两种体验，思路是：<strong>给同一份内容准备两个版本，由「怎么到达」来决定显示哪个</strong>。Intercepting Routes 正是干这个的——它用一组前缀符号拦截其他路由，让客户端导航命中的是「拦截版」，而直接访问或刷新命中的是「真实版」。
     </p>
@@ -69,13 +69,13 @@ import X14InterceptingRoutes from './X14InterceptingRoutes.vue'
       这套机制也解释了为什么它常和并行路由一起出现：拦截版需要一个「叠在内容之上」的插槽来承载，而并行路由正好提供了这个位置。两者配合，才让「同一个 URL 的两种打开方式」成立。
     </p>
 
-    <h2>两种到达的对比</h2>
+    <h2>两种到达路径对照</h2>
     <figure class="lesson-figure">
       <figcaption>从列表点进去看弹窗效果，再对比直接打开同一地址时的全屏页面。</figcaption>
       <X14InterceptingRoutes />
     </figure>
 
-    <h2>同址分流逻辑</h2>
+    <h2>同址双分支渲染</h2>
     <p>
       拦截路由让「点击导航」和「直接访问」走两条不同的渲染分支：客户端导航命中拦截版（弹窗），刷新或直接打开命中真实版（全屏），两者共享同一个可分享的 URL。目录层级要用 <code>(.)</code>、<code>(..)</code>、<code>(...)</code> 与真实路径对齐，关闭时用 <code>router.back()</code> 让浏览器历史替我们收尾。
     </p>

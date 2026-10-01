@@ -8,7 +8,7 @@ import D03FileSystem from './D03FileSystem.vue'
       <strong>开场问题：</strong>服务定时读一次配置目录，读的是几个小文件，用同步 API 一点感觉都没有；上线后目录里多了一个几 MB 的配置，只要它在读，服务对所有请求都卡住不动——读一个文件，凭什么叫整个服务陪它等？
     </div>
 
-    <h2>同步读取的阻塞</h2>
+    <h2>同步读取阻塞</h2>
     <p>
       你要在运行时读写文件：读一份配置、把结果落盘、遍历一个目录。文件系统 API 早就有同步版本，写下 <code>readFileSync</code> 就能直接拿到内容，为什么还要费劲用异步的？
     </p>
@@ -19,7 +19,7 @@ import D03FileSystem from './D03FileSystem.vue'
       于是问题变成：怎样读写文件，<strong>既不阻塞事件循环，又能把可预期的失败分类处理</strong>？
     </p>
 
-    <h2>承诺式接口的引入</h2>
+    <h2>异步接口引入</h2>
     <p>
       用内置的 <code>node:fs/promises</code>（也可以写成 <code>fs.promises</code>）。它的文件 API 都返回 Promise：<code>await readFile(path, 'utf8')</code> 拿到文本，<code>writeFile</code> 写文件，<code>mkdir</code> / <code>readdir</code> / <code>stat</code> 管目录和文件信息。
     </p>
@@ -27,7 +27,7 @@ import D03FileSystem from './D03FileSystem.vue'
       这个方案做对了一件本质的事：<strong>把「等磁盘」的过程交还给事件循环</strong>。发起读取后，Node 不会干等，而是去处理别的任务，磁盘好了再回来续上 <code>await</code> 之后的代码。你还能把多个读取用 <code>Promise.all</code> 交叠起来，总耗时接近最慢的那一个，而不是它们的和。
     </p>
 
-    <h2>返回值的数据形态</h2>
+    <h2>返回值数据形态</h2>
     <ul>
       <li><code>readFile</code> 不传编码时返回的是 <code>Buffer</code>，不是字符串——顺手拿去拼接或喂给 <code>JSON.parse</code>，会报错或得到乱码。</li>
       <li><code>readFile</code> 会把<strong>整个文件读进内存</strong>：拿它读一个 2GB 的日志，进程内存直接飙升，重则被 OOM 杀掉。</li>
@@ -56,13 +56,13 @@ import D03FileSystem from './D03FileSystem.vue'
       <strong>三条要守住的边界：</strong>同步文件 API 会阻塞事件循环，只适合启动初始化阶段少量使用，别放进请求路径；大文件一律走流；<code>readFile</code> 不传编码拿到的是 <code>Buffer</code>，不是字符串。
     </div>
 
-    <h2>并发发起统一收口</h2>
+    <h2>并发发起与统一收口</h2>
     <figure class="lesson-figure">
       <figcaption>点「读取配置目录」，看状态如何从「并发读取」走到完成，感受一次并发发起、统一收口的过程。</figcaption>
       <D03FileSystem />
     </figure>
 
-    <h2>异步读写的三要点</h2>
+    <h2>文件读写三要点</h2>
     <p>
       异步文件操作要同时做对三件事：<strong>把等待交给事件循环</strong>（用 <code>fs/promises</code> 而不是同步 API）、<strong>把互不依赖的读取并发起来</strong>（<code>Promise.all</code>）、<strong>把失败按 <code>err.code</code> 分类</strong>（<code>ENOENT</code> 兜底、<code>EACCES</code> 提示）。数据太大时，再换流。
     </p>

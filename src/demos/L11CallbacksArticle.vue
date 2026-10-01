@@ -8,7 +8,7 @@ import L11Callbacks from './L11Callbacks.vue'
       <strong>开场问题：</strong>线上用户抱怨「提了个问题，转了半天圈最后报了个错」。你翻遍日志，只找到一行「调用失败」——到底是检索慢、模型超时，还是输出解析挂了，完全看不出来。
     </div>
 
-    <h2>调用过程黑盒化</h2>
+    <h2>调用过程黑盒</h2>
     <p>
       你的链是 <code>prompt.pipe(model).pipe(parser)</code>，对外只暴露一个 <code>invoke</code>。它只给你两样东西：最后的返回值，或者一个异常。中间经过了哪些步骤、每一步花了多久、模型吐了多少 token，全都是不可见的黑盒。
     </p>
@@ -24,7 +24,7 @@ import L11Callbacks from './L11Callbacks.vue'
       要回答的是：<strong>能不能有一套不侵入业务代码的机制，在链执行的每个阶段自动告诉你「谁开始了、谁结束了、花了多久、吐了什么」？</strong>
     </p>
 
-    <h2>手动埋点计时打印</h2>
+    <h2>手动埋点与计时</h2>
     <p>
       最朴素的做法：在每一段调用前后手动加计时和打印。调用前记一个 <code>Date.now()</code>，收到结果后再打一条日志，把结果和耗时一起写下来。
     </p>
@@ -32,7 +32,7 @@ import L11Callbacks from './L11Callbacks.vue'
       这个方案做对了一件事：<strong>它承认了「执行过程本身就是一份有用的数据」</strong>。你不只关心最终答案，还关心它是怎么来的——从「只看结果」往前走了一步。
     </p>
 
-    <h2>并发下的日志混乱</h2>
+    <h2>并发日志混乱</h2>
     <ul>
       <li>你只能包住自己写的环节；模型内部的调用、逐 token 生成的时机，代码里没有任何地方让你插进去。</li>
       <li>同一个链被并发调用两次时，两次的日志交错打印，你无法把「这条日志」和「那次调用」对应起来。</li>
@@ -63,13 +63,13 @@ import L11Callbacks from './L11Callbacks.vue'
       <strong>两个必须记住的边界：</strong>回调里<strong>不要执行耗时操作</strong>——它跑在调用链路上，同步 IO 或大计算会直接拖慢真实的 LLM 调用；同时，回调只<strong>挂钩</strong>执行过程、<strong>不改变</strong>链的行为，它该返回什么还返回什么。
     </div>
 
-    <h2>带时间戳的事件流</h2>
+    <h2>时间戳事件流</h2>
     <figure class="lesson-figure">
       <figcaption>点「执行调用」，看一条链从 <code>handleChainStart</code> 开始，依次落下 <code>handleLLMStart</code>、一个个 <code>handleLLMNewToken</code>，最后 <code>handleLLMEnd</code>、<code>handleChainEnd</code>——时间线按真实触发顺序给出时间戳。</figcaption>
       <L11Callbacks />
     </figure>
 
-    <h2>无侵入的观测能力</h2>
+    <h2>无侵入可观测性</h2>
     <p>
       回调把「LLM 应用的执行过程」从黑盒变成一条带时间戳的事件流。你不用改一行业务代码，就能拿到每个阶段的输入输出、耗时和 token 用量——它同时也是排查线上问题、统计成本与实现流式输出的同一套底座。
     </p>

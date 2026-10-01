@@ -24,7 +24,7 @@ import CPP09ClassesObjects from './CPP09ClassesObjects.vue'
       所以真正要回答的是：怎样把数据和守护数据的规则封成一个整体，让外部只能通过与规矩一致的入口来改它？
     </p>
 
-    <h2>类与访问权限</h2>
+    <h2>类与访问控制</h2>
     <p>
       最直接的做法：用 <code>class</code> 造一个自定义类型，把数据成员和操作它们的成员函数写在一起，再用访问权限挡住直接访问。
     </p>
@@ -41,7 +41,7 @@ import CPP09ClassesObjects from './CPP09ClassesObjects.vue'
       <code>private</code> 的数据外部碰不到，只能走 <code>public</code> 的 <code>setAge</code>，那条「年龄在 0 到 150」的规矩就被守住了。这个方案做对了一件事：<strong>把「能怎么改」从每个调用者的自觉，变成了类型的定义</strong>。
     </p>
 
-    <h2>多对象的指向问题</h2>
+    <h2>对象归属歧义</h2>
     <ul>
       <li>光有访问权限还不够：<code>setAge</code> 里只写了 <code>age = a</code>，可同一个类能创建很多个对象，这句赋值到底改的是哪一个的 <code>age</code>？</li>
       <li><code>struct</code> 成员默认 <code>public</code>，<code>class</code> 成员默认 <code>private</code>；混用会让人对「这一行到底能不能访问」判断失误。</li>
@@ -49,7 +49,7 @@ import CPP09ClassesObjects from './CPP09ClassesObjects.vue'
       <li>类多起来之后 getter / setter 满天飞，成员函数放到类外定义时，限定写法还容易写错。</li>
     </ul>
 
-    <h2>隐式对象指针</h2>
+    <h2>隐式this指针</h2>
     <p>
       先补上「到底是哪个对象」。每个非静态成员函数都有一个隐式的 <code>this</code> 指针，指向调用它的那个对象：<code>p1.setAge(4)</code> 里 <code>this</code> 就是 <code>&amp;p1</code>，<code>p2.setAge(4)</code> 里就是 <code>&amp;p2</code>。所以同一份函数代码能作用到不同对象上，<code>this-&gt;age = a</code> 不过是 <code>(*this).age = a</code>。
     </p>
@@ -69,13 +69,13 @@ import CPP09ClassesObjects from './CPP09ClassesObjects.vue'
       <strong>给只读的 getter 都加上 <code>const</code>：</strong>const 成员函数里不能修改对象状态，也不能调用非 const 成员函数。加上 <code>const</code> 之后，它既能被 const 对象调用，也能被非 const 对象调用——少写一个 <code>const</code>，反而会限制住自己。
     </div>
 
-    <h2>访问控制与校验</h2>
+    <h2>成员访问与校验</h2>
     <figure class="lesson-figure">
       <figcaption>对照代码看数据如何被 <code>private</code> 挡住、<code>setAge</code> 如何守住「年龄在 0 到 150」的规矩，以及 const 成员函数能做什么、不能做什么。</figcaption>
       <CPP09ClassesObjects />
     </figure>
 
-    <h2>封装与守护职责</h2>
+    <h2>封装职责边界</h2>
     <p>
       类是「数据 + 守护数据的规则」的一个整体：访问权限决定谁能进哪个门，<code>this</code> 让同一份成员函数知道自己正作用于哪个对象，const 成员函数则把「我只读」写进类型。封装不只是把变量藏起来，而是让对象始终待在自己定义的合法状态里。
     </p>

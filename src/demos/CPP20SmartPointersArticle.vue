@@ -22,7 +22,7 @@ import CPP20SmartPointers from './CPP20SmartPointers.vue'
       所以要问的是：<strong>能不能让「释放」这件事不再依赖你手写的那几行，而是自动地、在所有退出路径上都发生？</strong>
     </p>
 
-    <h2>申请释放的手动配对</h2>
+    <h2>手动配对申请释放</h2>
     <p>
       最直接的做法是继续 <code>new</code> / <code>delete</code> 配对，或者用 <code>try</code> / <code>catch</code> 把 <code>delete</code> 保证执行一遍。
     </p>
@@ -30,7 +30,7 @@ import CPP20SmartPointers from './CPP20SmartPointers.vue'
       这个方案做对了一件事：<strong>它把「申请」和「释放」都摊在了明面上</strong>，你完全掌控时机，看得见每一次分配和回收。问题只在于——它把「保证每一步都成对」这个责任，整个交还给了人，而人恰恰是最不可靠的一环。
     </p>
 
-    <h2>提前返回的释放漏洞</h2>
+    <h2>提前返回释放漏洞</h2>
     <ul>
       <li>任意一条提前 <code>return</code> 或者中途抛出的异常，都能让那行 <code>delete</code> 彻底走不到。</li>
       <li>默认的拷贝是<strong>浅拷贝</strong>，两个对象析构时对同一块内存各 <code>delete</code> 一次，直接双重释放崩溃。</li>
@@ -38,7 +38,7 @@ import CPP20SmartPointers from './CPP20SmartPointers.vue'
       <li>函数交了裸指针出来，所有权归属完全靠文档和口头约定，调用方一不小心就漏删或者错删。</li>
     </ul>
 
-    <h2>三种所有权的划分</h2>
+    <h2>RAII与所有权划分</h2>
     <p>
       第一层要补的不是「更小心地写 delete」，而是换一个思路：<strong>让某个对象来替你看管那块堆内存，靠它自己的析构自动释放</strong>。这就是 RAII，而 <code>unique_ptr</code> 是它在动态内存上的最基本形态。你把 <code>unique_ptr</code> 当成一个<strong>栈对象</strong>来持有，它内部存着真正的堆指针；无论函数是正常返回、提前 <code>return</code>，还是抛异常退出，栈对象都会被析构，析构函数里替你 <code>delete</code>。<strong>释放时机从此挂在对象生命周期上，不再挂在某一行代码上。</strong>
     </p>
@@ -67,7 +67,7 @@ import CPP20SmartPointers from './CPP20SmartPointers.vue'
       <CPP20SmartPointers />
     </figure>
 
-    <h2>所有权归属的判断</h2>
+    <h2>所有权归属判定</h2>
     <p>
       智能指针把「释放内存」从你手写的某一行，搬到了对象的生命周期上，于是所有退出路径都被自动覆盖。默认用栈对象；需要堆对象就用 <code>unique_ptr</code>；确实要共享所有权才用 <code>shared_ptr</code>；共享里一旦成环，就用 <code>weak_ptr</code> 断环。原始指针从此只负责「看」，不负责「管」。
     </p>

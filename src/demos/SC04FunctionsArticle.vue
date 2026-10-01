@@ -8,7 +8,7 @@ import SC04Functions from './SC04Functions.vue'
       <strong>开场问题：</strong>间距是 8px、16px、24px、32px 这样一路递增的，我在十几个文件里手写了这些数字；后来基准从 8 改成 4，我只能全项目搜索数字挨个替换——既然它有规律，为什么规律没有被写下来？
     </div>
 
-    <h2>规律退化成数字</h2>
+    <h2>设计序列与字面量</h2>
     <p>
       设计系统里的间距、圆角、字号，通常是一套<strong>有比例关系</strong>的序列，而不是一堆互不相干的数。可落到代码里，它们往往退化成一串散落的字面量：第八步是多少，得心算；想加第九步，得照着上一步再加一个基准。规律存在于设计稿里，却没有存在于样式代码里。
     </p>
@@ -16,7 +16,7 @@ import SC04Functions from './SC04Functions.vue'
       这件事的代价同样是「改的时候才显现」的：基准一变，所有派生值都要重算；某处手算错了一个 4px，界面不会报错，只会看起来略微不对。更要紧的是，这些数字<strong>无法被校验</strong>——传入的是 <code>8px</code> 还是 <code>8</code>，编译器都照收不误，错误要等到肉眼发现。
     </p>
 
-    <h2>结果存成变量</h2>
+    <h2>结果存为变量</h2>
     <p>
       不用函数，最朴素的做法是把每一步的<strong>结果</strong>存成变量：<code>$space-1: 4px</code>、<code>$space-2: 8px</code> 一直到 <code>$space-10: 40px</code>，用的时候写 <code>padding: $space-4</code>。
     </p>
@@ -24,7 +24,7 @@ import SC04Functions from './SC04Functions.vue'
       这已经比裸数字进了一大步：<strong>值收敛到了一处</strong>，语义也从「16px」变成了「第 4 级间距」，改基准时至少知道该动谁。
     </p>
 
-    <h2>变量只存结果</h2>
+    <h2>变量与计算规则</h2>
     <ul>
       <li>变量存的是<strong>结果</strong>，不表达<strong>计算</strong>。第 7 级是多少，仍然要人去算，算错也无人发现。</li>
       <li>序列一旦要延长，就得手工再算一个值补进去；基准调整时，整套数值都要重算一遍。</li>
@@ -33,7 +33,7 @@ import SC04Functions from './SC04Functions.vue'
       <li>颜色、比例、换算等派生逻辑只能散落在各个文件里手写，重复且容易算错，也没有统一的验证入口。</li>
     </ul>
 
-    <h2>公式化封装</h2>
+    <h2>封装计算规则</h2>
     <p>
       把「结果」升级为「计算规则」，就是 <code>@function</code>：它接收参数，返回<strong>单个 Sass 值</strong>，内部可以嵌 <code>@if</code>、<code>@return</code> 等控制流。于是 <code>space(4)</code> 这样的调用取代了 <code>$space-4</code> 的查表，规律第一次被显式写进了代码。
     </p>
@@ -59,13 +59,13 @@ import SC04Functions from './SC04Functions.vue'
       <strong>一个判断口诀：</strong>要「算出一个值」用函数，要「产出一段声明」用 Mixin。混着用的后果是调用点看不出副作用——本该只是取值的地方，悄悄往产物里塞了规则。
     </div>
 
-    <h2>间距实时换算</h2>
+    <h2>间距步长实时换算</h2>
     <figure class="lesson-figure">
       <figcaption>拖动步数滑块，看 <code>space($step)</code> 如何把计算规则实时换算成间距。</figcaption>
       <SC04Functions />
     </figure>
 
-    <h2>算产职责分离</h2>
+    <h2>纯函数与单一职责</h2>
     <p>
       函数把设计规律从「一堆别人手算出来的数字」变成了「一条可调用、可校验、可复用的规则」。它只负责计算、不产出声明，输入非法就编译失败，同样参数永远得到同样的结果——做到这三点，样式里的魔法数字就基本消失了。
     </p>

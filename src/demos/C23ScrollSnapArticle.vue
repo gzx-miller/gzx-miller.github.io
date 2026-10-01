@@ -8,7 +8,7 @@ import C23ScrollSnap from './C23ScrollSnap.vue'
       <strong>开场问题：</strong>你写了个原生滚动轮播，用户松手后它总停在两张图中间，半张图卡在边上——怎么让滚动「自己停」在整页上？
     </div>
 
-    <h2>松手停位不准</h2>
+    <h2>松手整页停位</h2>
     <p>
       设想你在给课程详情页做一个移动端的图片画廊：一排封面横向排列，用户左右滑动切图，松手后应当稳稳停在某一整页上，而不是停在两张图之间露出半张。同类需求还有全屏分页的落地页、顶部的横向标签条。
     </p>
@@ -16,7 +16,7 @@ import C23ScrollSnap from './C23ScrollSnap.vue'
       不用 CSS 的方案，就得自己写脚本：监听 <code>scroll</code> 事件，读 <code>scrollLeft</code>，算出最近那一项的偏移量，再调用 <code>scrollTo</code> 把它「纠正」过去。<strong>这条路的代价，是一整套滚动手感的问题全要自己扛</strong>：手指还在惯性滑行时你强行 <code>scrollTo</code>，会和用户的动量打架，感觉像被抢了方向盘；<code>scroll</code> 事件在惯性滚动中一帧触发好几次，每帧都要算一次；触摸滑动、鼠标滚轮、键盘方向键的差异还得分别处理。而这些细节做不好的直接后果，就是用户觉得「这个轮播很别扭」。
     </p>
 
-    <h2>滚动后手动纠正</h2>
+    <h2>手动对齐点计算</h2>
     <p>
       最朴素的做法，就是上面那套「先滚、再纠正到最近的对齐点」：监听滚动停止，量出偏移量，除以单项宽度得到索引，再滚回索引对应的整数倍位置。
     </p>
@@ -24,7 +24,7 @@ import C23ScrollSnap from './C23ScrollSnap.vue'
       它做对了一件关键的事：<strong>找准了正确的思路——滚动本身交给浏览器，脚本只负责把停下来的位置对齐</strong>。这也正是 <code>Scroll Snap</code> 背后的模型，值得保留；要改的只是「由谁来做这件事」。
     </p>
 
-    <h2>对齐时机难判断</h2>
+    <h2>惯性滚动判定</h2>
     <ul>
       <li>需要自己判断「滚动是否结束」，判断早了会被惯性甩开，判断晚了用户已经看到错位。</li>
       <li>惯性滚动中频繁触发 <code>scroll</code>，每帧一次读取与写入，很容易掉帧。</li>
@@ -74,13 +74,13 @@ import C23ScrollSnap from './C23ScrollSnap.vue'
       最后两个实用细节。轮播通常不希望露出滚动条，可以用 <code>scrollbar-width: none</code>，再配合 <code>::-webkit-scrollbar { display: none }</code> 覆盖旧版内核——<strong>它只是把滚动条画没了，滚动能力本身不受影响</strong>。而全屏分页的落地页，本质就是让容器 <code>height: 100vh</code> 且 <code>scroll-snap-type: y mandatory</code>，每一节 <code>height: 100vh</code> 加 <code>scroll-snap-align: start</code>：一套纯 CSS 的「一屏一屏」翻页就完成了。
     </p>
 
-    <h2>三种吸附手感对比</h2>
+    <h2>吸附轴与严格度</h2>
     <figure class="lesson-figure">
       <figcaption>依次切换「水平强制 / 水平接近 / 垂直强制」，拖动看看三种吸附手感的差别。</figcaption>
       <C23ScrollSnap />
     </figure>
 
-    <h2>吸附手感交还浏览器</h2>
+    <h2>浏览器接管吸附</h2>
     <p>
       <code>Scroll Snap</code> 的价值在于把「滚动手感」这件很难做好的事交还给浏览器：容器用 <code>scroll-snap-type</code> 声明轴与严格度，子项用 <code>scroll-snap-align</code> 声明对齐点，中间不需要任何脚本参与。只要记住它需要 <code>overflow</code> 才会真正滚动、用 <code>scroll-padding</code> 避开吸顶导航、并在内容高度不齐时对 <code>mandatory</code> 保持警惕，原生轮播、画廊和分页滚动都能几行 CSS 写完。
     </p>

@@ -8,7 +8,7 @@ import S12Valtio from './S12Valtio.vue'
       <strong>开场问题：</strong>结算组件里你写下 <code>state.qty++</code>，既没调 <code>useState</code> 的 setter，也没 <code>dispatch</code>，数量、总价却都更新了；更怪的是，同一屏里那个输入框组件改自己的内容时，计数组件一次都没重渲染。它是怎么在没人通知的情况下知道该更新哪儿的？
     </div>
 
-    <h2>渲染触发前提</h2>
+    <h2>重渲染触发条件</h2>
     <p>
       React 的更新模型很明确：只有 <code>setState</code>（或 <code>dispatch</code>）才会触发重渲染，组件不过是「状态到界面」的纯函数。可业务里你最想要的写法，是让状态「就是个普通对象」——读时 <code>state.qty</code>，改时 <code>state.qty++</code>。这两种心智一直对不上，旧办法各有各的成本。
     </p>
@@ -19,7 +19,7 @@ import S12Valtio from './S12Valtio.vue'
       所以要回答的是：<strong>能不能让状态用最自然的普通对象写法直接读写，同时由系统自动追踪「谁读了哪一部分」，把重渲染收敛到真正依赖它的组件上？</strong>
     </p>
 
-    <h2>普通对象写法</h2>
+    <h2>普通对象式写法</h2>
     <p>
       最朴素的做法：状态就是一个普通对象，动作函数里直接改它——<code>function inc() { state.count++ }</code>。这个方案做对了一件事：<strong>状态的读写回到了零样板</strong>，没有 <code>reducer</code>、没有 <code>dispatch</code>、没有把状态塞进组件树。
     </p>
@@ -27,7 +27,7 @@ import S12Valtio from './S12Valtio.vue'
       问题在于，它对 React 是「哑」的：React 只认 <code>setState</code>，一个普通对象被改了，没有任何人知道，界面自然不动。
     </p>
 
-    <h2>变更无感现象</h2>
+    <h2>变更不触发渲染</h2>
     <ul>
       <li>执行 <code>inc()</code> 后，界面上的数字完全不变——因为 React 根本不知道这个普通对象被改过。</li>
       <li>想让它更新，你只好另造一个版本号 state，每次改动都 <code>setVersion(v =&gt; v + 1)</code>；漏写一次，界面就静默停在旧值。</li>
@@ -35,7 +35,7 @@ import S12Valtio from './S12Valtio.vue'
       <li>派生值继续用 <code>useMemo</code>：依赖仍靠人列，改的数据和列的依赖一旦对不上，就又回到那个「永远不刷新」的坑里。</li>
     </ul>
 
-    <h2>代理拦截读写</h2>
+    <h2>Proxy拦截读写</h2>
     <p>
       不推翻「普通对象」这个写法，而是给对象套一层 <strong>Proxy</strong>，把「读写」本身变成可拦截的动作。Valtio 的 <code>proxy(state)</code> 返回的就是一个被代理的对象：你写 <code>state.count++</code> 时，代理的写拦截器知道某个属性被改了。但此刻它还不知道「该通知谁」——所以关键的设计是：<strong>不追踪「写」，而是追踪「读」</strong>。
     </p>
@@ -52,7 +52,7 @@ import S12Valtio from './S12Valtio.vue'
       最后一层便利在于：组件之外的普通逻辑可以直接读写 proxy，这让它很适合接入调试与持久化——<code>subscribe</code> 能订阅任意路径的变化，想在某个字段变动时写日志或落盘，不必让它经过 React。
     </p>
 
-    <h2>实时与定格对比</h2>
+    <h2>实时更新与快照</h2>
     <figure class="lesson-figure">
       <figcaption>点「数量 +1」直接改写 proxy，看数量与总价实时变化；点「降价到 ¥79 / 恢复 ¥99」改单价；再点「snapshot()」把此刻的状态深拷贝成一条快照记录——直观感受「写代理、读快照」这套分工。</figcaption>
       <S12Valtio />

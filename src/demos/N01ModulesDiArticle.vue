@@ -8,7 +8,7 @@ import N01ModulesDi from './N01ModulesDi.vue'
       <strong>开场问题：</strong>课程控制器里写着 <code>this.courseService = new CourseService()</code>，一开始跑得好好的，可一旦要给 <code>CourseService</code> 换一个测试用的假实现，你就得改遍每一处 <code>new</code>——为什么 NestJS 非要我把依赖写成构造器参数，而不是自己动手创建？
     </div>
 
-    <h2>服务依赖链路</h2>
+    <h2>依赖注入调用链</h2>
     <p>
       你在写一个课程管理服务：<code>CourseController</code> 接收请求，交给 <code>CourseService</code> 处理业务，Service 再通过 <code>CourseRepository</code> 访问数据库。最直觉的写法是在控制器里直接 <code>new CourseService()</code>。可当你在另一个模块 <code>UserService</code> 里也要用到课程数据时，同样的 <code>new</code> 又得抄一遍。
     </p>
@@ -16,7 +16,7 @@ import N01ModulesDi from './N01ModulesDi.vue'
       麻烦会一层层叠加。<code>CourseService</code> 自己依赖 <code>CourseRepository</code>，而 Repository 又需要一条数据库连接——装配一个对象，得先知道它背后整条依赖链怎么拼。<strong>每一次使用的成本，都等于把整条依赖链重新走一遍</strong>。更糟的是单元测试：你想把一个假的 Service 塞进去，却因为它被 <code>new</code> 写死在类里而换不掉。这就是「不引入依赖注入」要付出的代价。
     </p>
 
-    <h2>就地创建对象</h2>
+    <h2>就地创建依赖</h2>
     <p>
       最省事的做法：谁用谁创建。控制器构造函数里直接 <code>new CourseService()</code>，用完即走，不欠人情。
     </p>
@@ -24,7 +24,7 @@ import N01ModulesDi from './N01ModulesDi.vue'
       这个方案做对了最基础的一件事：<strong>对象确实被造出来了，功能真的能跑</strong>。在一个只有一两个类、依赖只有一层的小脚本里，手动创建完全够用，不必上任何框架。问题只在规模变大之后才浮现——而工程里的代码几乎总会变大。
     </p>
 
-    <h2>重复拼装的代价</h2>
+    <h2>逐层重复拼装依赖</h2>
     <ul>
       <li>依赖链一深，每个使用者都要重复拼装。同一段「造 Repository、造 Service」的逻辑会散落在控制器、别的服务、测试代码里。</li>
       <li>想替换实现做不到：测试要用假 Service、生产要用真 Service，可类名被 <code>new</code> 写死，无法在运行时替换。</li>
@@ -32,7 +32,7 @@ import N01ModulesDi from './N01ModulesDi.vue'
       <li>模块边界不可见。「谁依赖谁」只能靠人肉读代码，架构一复杂就成了一团说不清的线。</li>
     </ul>
 
-    <h2>创建与使用解耦</h2>
+    <h2>创建使用职责分离</h2>
     <p>
       不推翻「对象需要被创建」这件事，而是把<strong>「创建」和「使用」拆开</strong>：使用方只声明「我需要一个 <code>CourseService</code>」，至于它从哪来、依赖谁、什么时候造，交给一个统一的容器负责。使用方不再伸手去造对象，而是等着对象被<strong>注入</strong>进来——这就是依赖注入（DI）。
     </p>
@@ -64,13 +64,13 @@ import N01ModulesDi from './N01ModulesDi.vue'
       还有三个进阶细节值得记住。模块<strong>默认是单例作用域（Singleton）</strong>，整棵依赖树共享同一批实例，这既省去了重复创建，也让连接池这类对象得以复用。若两个模块互相依赖（A 依赖 B、B 又依赖 A），需要 <code>forwardRef</code> 显式处理这个循环。若某个模块的导出希望对所有模块可见，用 <code>@Global()</code> 声明为全局模块，它 <code>exports</code> 的内容就不必被每个模块逐一 <code>imports</code>。
     </p>
 
-    <h2>模块四要素对照</h2>
+    <h2>模块配置四数组</h2>
     <figure class="lesson-figure">
       <figcaption>切换四个模块，看它们的 imports / controllers / providers / exports 分别在管什么。</figcaption>
       <N01ModulesDi />
     </figure>
 
-    <h2>依赖关系显影</h2>
+    <h2>容器接管与依赖地图</h2>
     <p>
       模块与依赖注入，本质是给「谁依赖谁」发一张显式的地图：<code>@Module</code> 的四个数组划清模块边界，构造器注入把「创建对象」的活儿从使用方手里收走、交给容器。代价是你要记住 <code>@Injectable()</code> 与 <code>providers</code> 缺一不可，换来的是可替换、可测试、可复用的对象关系。
     </p>

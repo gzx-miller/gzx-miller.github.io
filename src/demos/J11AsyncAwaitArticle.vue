@@ -16,7 +16,7 @@ import J11AsyncAwait from './J11AsyncAwait.vue'
       async/await 要解决的，正是这个「同步语义」与「异步执行」之间的落差。它让你用一行赋值、一段 try/catch，写出读起来像同步、跑起来是异步的代码。但代价是——你得同时掌握串行与并发两种节奏，否则很容易把本该并发的操作写成慢吞吞的串行。
     </p>
 
-    <h2>异步函数写法</h2>
+    <h2>async函数语法</h2>
     <p>
       最省事的做法：给函数加 <code>async</code>，在需要等结果的地方加 <code>await</code>，剩下的逻辑照常写。
     </p>
@@ -27,7 +27,7 @@ import J11AsyncAwait from './J11AsyncAwait.vue'
       但同样是两行 <code>await</code>，写法上只差一点，执行起来却差着一整段等待。<code>const a = await loadA()</code> 再 <code>const b = await loadB()</code>，是等完 A 才发出 B；而 <code>const [a, b] = await Promise.all([loadA(), loadB()])</code>，是两件事一起发出、一起等。这个差别，正是后面所有流控讨论的起点。
     </p>
 
-    <h2>串行等待代价</h2>
+    <h2>串行await退化</h2>
     <ul>
       <li>把多个互不依赖的 <code>await</code> 顺序写下去，就悄悄退化成了串行，总耗时变成各步之和。</li>
       <li>在循环里逐个 <code>await</code>，同样是一步等完再等下一步，明明可以一起发。</li>
@@ -35,7 +35,7 @@ import J11AsyncAwait from './J11AsyncAwait.vue'
       <li><code>await</code> 写多了，清理逻辑散落各处，出错时资源没释放。</li>
     </ul>
 
-    <h2>依赖关系判断</h2>
+    <h2>依赖关系判断依据</h2>
     <p>
       先记住两条底层事实。第一，<strong><code>async</code> 函数总是返回一个 Promise</strong>，函数里 <code>return</code> 的值会自动被包装成成功结果；第二，<strong><code>await</code> 会暂停当前函数的执行，直到 Promise 落定</strong>，成功就取出值、失败就抛出异常。正因为会「暂停」，连续几个 <code>await</code> 才天然是串行的——这正是问题的来源。
     </p>
@@ -62,13 +62,13 @@ import J11AsyncAwait from './J11AsyncAwait.vue'
       还有两个使用边界要记牢：<code>await</code> 只能出现在 <code>async</code> 函数内部，或者在 ES Module 的顶层使用；并且<strong>并发不等于无限并发</strong>，即使改用 <code>Promise.all</code> 一起发，也要留意接口限流与服务端承载能力，必要时控制并发数量。
     </p>
 
-    <h2>并发串行对比</h2>
+    <h2>并发与串行对照</h2>
     <figure class="lesson-figure">
       <figcaption>分别点「并发加载」与「串行加载」，对比两种节奏下日志出现的先后与快慢。</figcaption>
       <J11AsyncAwait />
     </figure>
 
-    <h2>执行节奏控制</h2>
+    <h2>执行节奏与并发控制</h2>
     <p>
       async/await 把异步流程写成了同步的样子：<code>async</code> 让函数返回 Promise，<code>await</code> 暂停并取出结果。真正决定性能的是节奏——有依赖就逐个 <code>await</code> 串行，无依赖就收集起来用 <code>Promise.all</code> 并发，再用 <code>try / catch / finally</code> 统一收口错误与清理。
     </p>
