@@ -195,28 +195,6 @@ useSeoMeta({
       </div>
     </section>
 
-    <section class="lesson-details">
-      <article v-if="currentLesson.principle">
-        <h2>原理</h2>
-        <p>{{ currentLesson.principle }}</p>
-      </article>
-      <article v-if="currentLesson.flow?.length">
-        <h2>处理流程</h2>
-        <ol>
-          <li v-for="step in currentLesson.flow" :key="step">{{ step }}</li>
-        </ol>
-      </article>
-      <article v-if="currentLesson.notes?.length">
-        <h2>注意事项</h2>
-        <ul>
-          <li v-for="note in currentLesson.notes" :key="note">{{ note }}</li>
-        </ul>
-      </article>
-      <article v-if="currentLesson.problem">
-        <h2>解决的问题</h2>
-        <p>{{ currentLesson.problem }}</p>
-      </article>
-    </section>
     <nav class="lesson-next" aria-label="下一章节">
       <div class="bottom-nav-row">
         <a
