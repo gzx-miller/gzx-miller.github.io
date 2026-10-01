@@ -60,7 +60,7 @@ onMounted(() => {
           <thead><tr><th>场景</th><th>推荐方式</th></tr></thead>
           <tbody>
             <tr><td>图表库（ECharts/D3）</td><td>ClientOnly 包裹</td></tr>
-            <tr><td>浏览器 API（window/navigator）</td><td>import.meta.client 判断</td></tr>
+            <tr><td>浏览器 API（window/navigator）</td><td>import.meta<span>.client</span> 判断</td></tr>
             <tr><td>第三方库不兼容 SSR</td><td>.client.ts 插件</td></tr>
             <tr><td>动态内容（时间/随机数）</td><td>onMounted 中赋值</td></tr>
           </tbody>

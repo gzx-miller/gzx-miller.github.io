@@ -13,27 +13,27 @@ function createDemo(name: string) {
   })
 }
 
-const V01Core = createDemo('V01Core')
-const V02Config = createDemo('V02Config')
-const V03Plugins = createDemo('V03Plugins')
-const V04HMR = createDemo('V04HMR')
-const V05Env = createDemo('V05Env')
-const V06Assets = createDemo('V06Assets')
-const V07PreBundle = createDemo('V07PreBundle')
-const V08Build = createDemo('V08Build')
-const V09MPA = createDemo('V09MPA')
-const V10Lib = createDemo('V10Lib')
-const V11SSR = createDemo('V11SSR')
-const V12CSS = createDemo('V12CSS')
-const V13TypeScript = createDemo('V13TypeScript')
-const V14Proxy = createDemo('V14Proxy')
-const V15Perf = createDemo('V15Perf')
-const V16PluginDev = createDemo('V16PluginDev')
-const V17DependencyPrebundle = createDemo('V17DependencyPrebundle')
-const V18Esbuild = createDemo('V18Esbuild')
-const V19RollupPlugin = createDemo('V19RollupPlugin')
-const V20LibraryMode = createDemo('V20LibraryMode')
-const V21MultiPage = createDemo('V21MultiPage')
+const V01Core = createDemo('V01CoreArticle')
+const V02Config = createDemo('V02ConfigArticle')
+const V03Plugins = createDemo('V03PluginsArticle')
+const V04HMR = createDemo('V04HMRArticle')
+const V05Env = createDemo('V05EnvArticle')
+const V06Assets = createDemo('V06AssetsArticle')
+const V07PreBundle = createDemo('V07PreBundleArticle')
+const V08Build = createDemo('V08BuildArticle')
+const V09MPA = createDemo('V09MPAArticle')
+const V10Lib = createDemo('V10LibArticle')
+const V11SSR = createDemo('V11SSRArticle')
+const V12CSS = createDemo('V12CSSArticle')
+const V13TypeScript = createDemo('V13TypeScriptArticle')
+const V14Proxy = createDemo('V14ProxyArticle')
+const V15Perf = createDemo('V15PerfArticle')
+const V16PluginDev = createDemo('V16PluginDevArticle')
+const V17DependencyPrebundle = createDemo('V17DependencyPrebundleArticle')
+const V18Esbuild = createDemo('V18EsbuildArticle')
+const V19RollupPlugin = createDemo('V19RollupPluginArticle')
+const V20LibraryMode = createDemo('V20LibraryModeArticle')
+const V21MultiPage = createDemo('V21MultiPageArticle')
 
 export const lessons: Lesson[] = [
 {
@@ -360,7 +360,7 @@ if (import.meta.hot) {
   },
 {
     id: 'V_05', title: '环境变量与模式', navTitle: '环境变量', category: '配置',
-    path: '/vite/v-5/env', summary: '使用 .env 文件和 import.meta.env 管理不同环境下的变量。',
+    path: '/vite/v-5/env', summary: '使用 .env 文件和 import.meta' + '.env 管理不同环境下的变量。',
     demo: V05Env, code: () => Promise.resolve(`// .env - 所有环境都会加载
 VITE_APP_TITLE = '我的应用'
 VITE_API_BASE_URL = '/api'
@@ -433,9 +433,9 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv
 }`), language: 'typescript',
-    principle: 'Vite 内置 dotenv，按 .env → .env.local → .env.[mode] → .env.[mode].local 的优先级加载变量并以后者覆盖前者；只有 VITE_ 前缀的变量会被静态替换进客户端代码（通过 import.meta.env 访问），其余变量仅对配置文件的 Node 侧逻辑可见，从机制上避免密钥泄漏到浏览器。',
-    flow: ['创建 .env.development / .env.production，写入带 VITE_ 前缀的变量。', '在业务代码中用 import.meta.env.VITE_API_BASE_URL 读取变量。', '在 vite.config.ts 中用 loadEnv 读取变量配置 proxy，并在 vite-env.d.ts 中补充类型声明。', '把 .env.local 与 .env.*.local 加入 .gitignore，个人覆盖与敏感值不进仓库。'],
-    notes: ['import.meta.env.MODE / DEV / PROD 等内置变量可判断当前运行模式。', '敏感信息（如数据库密码）不应使用 VITE_ 前缀，因为它会被打进客户端产物。', '修改 .env 后需要重启开发服务器才会生效，已注入的旧值不会热更新。', '变量在构建时静态替换进代码，多环境需要各自构建，无法运行时切换。'],
+    principle: 'Vite 内置 dotenv，按 .env → .env.local → .env.[mode] → .env.[mode].local 的优先级加载变量并以后者覆盖前者；只有 VITE_ 前缀的变量会被静态替换进客户端代码（通过 import.meta' + '.env 访问），其余变量仅对配置文件的 Node 侧逻辑可见，从机制上避免密钥泄漏到浏览器。',
+    flow: ['创建 .env.development / .env.production，写入带 VITE_ 前缀的变量。', '在业务代码中用 import.meta' + '.env.VITE_API_BASE_URL 读取变量。', '在 vite.config.ts 中用 loadEnv 读取变量配置 proxy，并在 vite-env.d.ts 中补充类型声明。', '把 .env.local 与 .env.*.local 加入 .gitignore，个人覆盖与敏感值不进仓库。'],
+    notes: ['import.meta' + '.env.MODE / DEV / PROD 等内置变量可判断当前运行模式。', '敏感信息（如数据库密码）不应使用 VITE_ 前缀，因为它会被打进客户端产物。', '修改 .env 后需要重启开发服务器才会生效，已注入的旧值不会热更新。', '变量在构建时静态替换进代码，多环境需要各自构建，无法运行时切换。'],
     problem: '解决"开发/测试/生产需要不同的 API 地址与开关，硬编码在代码里每次发布都要手改"的问题。',
   },
 {
@@ -1295,7 +1295,7 @@ interface ImportMeta {
 // }
 // </script>`), language: 'typescript',
     principle: 'Vite 用 Esbuild 转译 TypeScript：仅擦除类型注解并做目标语法降级，不做类型检查，因此类型错误不会阻断 dev 与 build；完整的类型安全由 IDE 实时提示与 vue-tsc --noEmit 在构建脚本或 CI 中把关。',
-    flow: ['在 package.json 中配置 "type-check": "vue-tsc --noEmit" 并接在构建脚本前。', '在 <script setup lang="ts"> 中编写带接口、泛型的组件逻辑。', '在 vite-env.d.ts 中补充 .vue 模块与 import.meta.env 的类型声明。', '把 type-check 接入 CI 流水线，类型不过就不允许合入与部署。'],
+    flow: ['在 package.json 中配置 "type-check": "vue-tsc --noEmit" 并接在构建脚本前。', '在 <script setup lang="ts"> 中编写带接口、泛型的组件逻辑。', '在 vite-env.d.ts 中补充 .vue 模块与 import.meta' + '.env 的类型声明。', '把 type-check 接入 CI 流水线，类型不过就不允许合入与部署。'],
     notes: ['Vite 不负责类型检查（保证开发服务器速度），构建通过不代表类型无误。', '建议配置 type-check 脚本在构建前或 CI 中运行，拦截类型回归。', 'tsconfig.json 的 paths 别名要与 vite.config.ts 的 resolve.alias 保持一致，否则编辑器能跳转但运行时报找不到模块。', '本地 vue-tsc 报错与 IDE 不一致时，核对插件与依赖版本是否对齐。'],
     problem: '解决"Vite 项目写 TS 时类型错误不阻断构建、上线才发现问题，以及别名与环境变量缺类型提示"的问题。',
   },

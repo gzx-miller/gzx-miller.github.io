@@ -15,7 +15,7 @@ const lifecycleSteps = [
 
 const hydrationIssues = [
   { problem: '服务端和客户端渲染结果不一致', cause: '使用了 Date.now()、Math.random()、window 等仅客户端 API', solution: '用 ClientOnly 包裹，或在 onMounted 中赋值' },
-  { problem: '访问浏览器 API 报错', cause: 'setup 在服务端执行，window/document 不存在', solution: '使用 import.meta.client 判断或 onMounted 后访问' },
+  { problem: '访问浏览器 API 报错', cause: 'setup 在服务端执行，window/document 不存在', solution: '使用 import.meta' + '.client 判断或 onMounted 后访问' },
   { problem: '第三方库不兼容 SSR', cause: '库内部直接操作 DOM', solution: '动态 import + ClientOnly，或只在插件中 client 端注册' },
   { problem: '内存泄漏', cause: '服务端未正确清理副作用', solution: '确保 onUnmounted 中清理定时器、监听器等' },
 ]

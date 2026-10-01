@@ -3158,3 +3158,315 @@ pre.code-block > code.hljs,
   border-color: rgba(246, 193, 90, 0.12);
   background: rgba(42, 30, 24, 0.6);
 }
+
+/* ============================================================
+   课程长文排版体系（全站共用）
+   ------------------------------------------------------------
+   以「LLM 原理」分类的长文视觉为基准抽出：暖橙章节标题、
+   开场问题卡、深色术语卡、圆形序号步骤、暖色表格、数值高亮。
+   新内容统一使用 .lesson-* 类名，与原 .llm-* 并存互不冲突。
+   ============================================================ */
+
+.lesson-article {
+  padding: 4px 2px;
+  color: var(--text);
+  font-size: 15.5px;
+  line-height: 1.9;
+}
+
+/* 章节标题 */
+.lesson-article h2 {
+  margin: 34px 0 12px;
+  padding-left: 12px;
+  border-left: 4px solid var(--leaf-orange);
+  color: var(--accent-strong);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.lesson-article > h2:first-child {
+  margin-top: 4px;
+}
+
+.lesson-article h3 {
+  margin: 22px 0 8px;
+  color: var(--chestnut);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.lesson-article h4 {
+  margin: 18px 0 6px;
+  color: var(--chestnut);
+  font-size: 15.5px;
+  font-weight: 700;
+}
+
+/* 段落与列表 */
+.lesson-article p {
+  margin: 12px 0;
+}
+
+.lesson-article strong {
+  color: var(--chestnut);
+  font-weight: 700;
+}
+
+.lesson-article a {
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+.lesson-article ul,
+.lesson-article ol {
+  margin: 10px 0 10px 22px;
+  padding-left: 6px;
+}
+
+.lesson-article li {
+  margin: 6px 0;
+}
+
+.lesson-article li::marker {
+  color: var(--leaf-orange);
+  font-weight: 700;
+}
+
+/* 内联代码 */
+.lesson-article code {
+  padding: 1px 6px;
+  border: 1px solid rgba(240, 138, 36, 0.3);
+  border-radius: 5px;
+  background: rgba(240, 138, 36, 0.14);
+  color: var(--accent);
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  font-size: 0.9em;
+}
+
+/* 开场问题卡 */
+.lesson-question {
+  margin: 20px 0;
+  padding: 14px 18px;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--leaf-orange);
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(255, 244, 230, 0.92), rgba(255, 232, 214, 0.86));
+  color: var(--chestnut);
+  font-size: 15px;
+}
+
+.lesson-question strong {
+  color: var(--accent);
+}
+
+/* 术语 / 小结卡 */
+.lesson-term {
+  margin: 16px 0;
+  padding: 16px 18px;
+  border-radius: 10px;
+  background: #1d1f27;
+  color: #e8e3d8;
+  font-size: 14.5px;
+}
+
+.lesson-term .term-name,
+.lesson-term strong {
+  color: #ffce9f;
+  font-weight: 700;
+}
+
+.lesson-term code {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffce9f;
+}
+
+/* 信息框 */
+.lesson-box {
+  margin: 14px 0;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(255, 250, 242, 0.78);
+}
+
+.lesson-box.warn {
+  border-left: 4px solid var(--leaf-orange);
+  background: rgba(255, 241, 230, 0.82);
+}
+
+.lesson-box.hint {
+  border-left: 4px solid var(--forest);
+  background: rgba(246, 251, 234, 0.82);
+}
+
+/* 数字推导 / 步骤列表 */
+.lesson-steps {
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+  list-style: none !important;
+  counter-reset: lessonstep;
+}
+
+.lesson-steps > li {
+  position: relative;
+  margin: 14px 0;
+  padding-left: 44px;
+  counter-increment: lessonstep;
+}
+
+.lesson-steps > li::before {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  display: flex;
+  width: 30px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--leaf-orange), #d9480f);
+  color: #fff;
+  content: counter(lessonstep);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* 表格 */
+.lesson-article table {
+  width: 100%;
+  margin: 14px 0;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.lesson-article th,
+.lesson-article td {
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.lesson-article th {
+  background: rgba(246, 193, 90, 0.28);
+  color: var(--chestnut);
+  font-weight: 700;
+}
+
+.lesson-article tbody tr:nth-child(even) td {
+  background: rgba(255, 248, 240, 0.6);
+}
+
+/* 数值 / 关键字高亮 */
+.lesson-kv {
+  display: inline-block;
+  padding: 1px 8px;
+  border: 1px solid rgba(232, 199, 106, 0.9);
+  border-radius: 6px;
+  background: rgba(251, 230, 180, 0.85);
+  color: #7a4f00;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.9em;
+}
+
+/* 交互演示插图：原小部件作为正文插图嵌入 */
+.lesson-figure {
+  margin: 20px 0;
+}
+
+.lesson-figure > figcaption {
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.lesson-figure .demo-card {
+  margin: 0;
+}
+
+/* 深色主题：lesson-* 长文 */
+[data-theme='dark'] .lesson-question {
+  border-color: rgba(246, 193, 90, 0.28);
+  background: linear-gradient(135deg, rgba(60, 40, 26, 0.92), rgba(48, 32, 22, 0.86));
+  color: var(--chestnut);
+}
+
+[data-theme='dark'] .lesson-box {
+  border-color: rgba(246, 193, 90, 0.18);
+  background: rgba(42, 30, 24, 0.72);
+}
+
+[data-theme='dark'] .lesson-box.warn {
+  background: rgba(232, 120, 74, 0.12);
+}
+
+[data-theme='dark'] .lesson-box.hint {
+  background: rgba(122, 181, 86, 0.12);
+}
+
+[data-theme='dark'] .lesson-article code {
+  border-color: rgba(246, 193, 90, 0.3);
+  background: rgba(246, 193, 90, 0.12);
+  color: var(--leaf-gold);
+}
+
+[data-theme='dark'] .lesson-article th {
+  background: rgba(74, 52, 40, 0.6);
+}
+
+[data-theme='dark'] .lesson-article tbody tr:nth-child(even) td {
+  background: rgba(42, 30, 24, 0.45);
+}
+
+[data-theme='dark'] .lesson-kv {
+  border-color: rgba(246, 193, 90, 0.35);
+  background: rgba(246, 193, 90, 0.14);
+  color: var(--leaf-gold);
+}
+
+/* 深色主题：llm-* 长文（原仅适配浅色，补齐深色可读性） */
+[data-theme='dark'] .llm-article {
+  color: var(--text);
+}
+
+[data-theme='dark'] .llm-question {
+  border-color: rgba(246, 193, 90, 0.28);
+  background: linear-gradient(135deg, rgba(60, 40, 26, 0.92), rgba(48, 32, 22, 0.86));
+  color: var(--chestnut);
+}
+
+[data-theme='dark'] .llm-box {
+  border-color: rgba(246, 193, 90, 0.18);
+  background: rgba(42, 30, 24, 0.72);
+}
+
+[data-theme='dark'] .llm-box.warn {
+  background: rgba(232, 120, 74, 0.12);
+}
+
+[data-theme='dark'] .llm-box.hint {
+  background: rgba(122, 181, 86, 0.12);
+}
+
+[data-theme='dark'] .llm-article code {
+  border-color: rgba(246, 193, 90, 0.3);
+  background: rgba(246, 193, 90, 0.12);
+  color: var(--leaf-gold);
+}
+
+[data-theme='dark'] .llm-article th {
+  background: rgba(74, 52, 40, 0.6);
+}
+
+[data-theme='dark'] .llm-article tbody tr:nth-child(even) td {
+  background: rgba(42, 30, 24, 0.45);
+}
+
+[data-theme='dark'] .llm-kv {
+  border-color: rgba(246, 193, 90, 0.35);
+  background: rgba(246, 193, 90, 0.14);
+  color: var(--leaf-gold);
+}

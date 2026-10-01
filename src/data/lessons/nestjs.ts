@@ -13,18 +13,18 @@ function createDemo(name: string) {
   })
 }
 
-const N01ModulesDi = createDemo('N01ModulesDi')
-const N02ControllersRoutes = createDemo('N02ControllersRoutes')
-const N03PipesValidation = createDemo('N03PipesValidation')
-const N04GuardsJwt = createDemo('N04GuardsJwt')
-const N05Interceptors = createDemo('N05Interceptors')
-const N06Middleware = createDemo('N06Middleware')
-const N07ExceptionFilter = createDemo('N07ExceptionFilter')
-const N08TypeOrmDb = createDemo('N08TypeOrmDb')
-const N09WebSocketGateway = createDemo('N09WebSocketGateway')
-const N10ScheduleTask = createDemo('N10ScheduleTask')
-const N11ConfigEnv = createDemo('N11ConfigEnv')
-const N12Microservices = createDemo('N12Microservices')
+const N01ModulesDi = createDemo('N01ModulesDiArticle')
+const N02ControllersRoutes = createDemo('N02ControllersRoutesArticle')
+const N03PipesValidation = createDemo('N03PipesValidationArticle')
+const N04GuardsJwt = createDemo('N04GuardsJwtArticle')
+const N05Interceptors = createDemo('N05InterceptorsArticle')
+const N06Middleware = createDemo('N06MiddlewareArticle')
+const N07ExceptionFilter = createDemo('N07ExceptionFilterArticle')
+const N08TypeOrmDb = createDemo('N08TypeOrmDbArticle')
+const N09WebSocketGateway = createDemo('N09WebSocketGatewayArticle')
+const N10ScheduleTask = createDemo('N10ScheduleTaskArticle')
+const N11ConfigEnv = createDemo('N11ConfigEnvArticle')
+const N12Microservices = createDemo('N12MicroservicesArticle')
 
 export const lessons: Lesson[] = [
   {

@@ -36,45 +36,45 @@ function createCodeLoader(path: string) {
   return loader
 }
 
-const N01ProjectStructure = createDemo('N01ProjectStructure')
+const N01ProjectStructure = createDemo('N01ProjectStructureArticle')
 const N01Code = createCodeLoader('N01ProjectStructure.vue')
-const N02FileRouting = createDemo('N02FileRouting')
+const N02FileRouting = createDemo('N02FileRoutingArticle')
 const N02Code = createCodeLoader('N02FileRouting.vue')
-const N03DynamicRoute = createDemo('N03DynamicRoute')
+const N03DynamicRoute = createDemo('N03DynamicRouteArticle')
 const N03Code = createCodeLoader('N03DynamicRoute.vue')
-const N04Layouts = createDemo('N04Layouts')
+const N04Layouts = createDemo('N04LayoutsArticle')
 const N04Code = createCodeLoader('N04Layouts.vue')
-const N05AutoImport = createDemo('N05AutoImport')
+const N05AutoImport = createDemo('N05AutoImportArticle')
 const N05Code = createCodeLoader('N05AutoImport.vue')
-const N06Composables = createDemo('N06Composables')
+const N06Composables = createDemo('N06ComposablesArticle')
 const N06Code = createCodeLoader('N06Composables.vue')
-const N07UseFetch = createDemo('N07UseFetch')
+const N07UseFetch = createDemo('N07UseFetchArticle')
 const N07Code = createCodeLoader('N07UseFetch.vue')
-const N08UseAsyncData = createDemo('N08UseAsyncData')
+const N08UseAsyncData = createDemo('N08UseAsyncDataArticle')
 const N08Code = createCodeLoader('N08UseAsyncData.vue')
-const N09SSR = createDemo('N09SSR')
+const N09SSR = createDemo('N09SSRArticle')
 const N09Code = createCodeLoader('N09SSR.vue')
-const N10ClientOnly = createDemo('N10ClientOnly')
+const N10ClientOnly = createDemo('N10ClientOnlyArticle')
 const N10Code = createCodeLoader('N10ClientOnly.vue')
-const N11Middleware = createDemo('N11Middleware')
+const N11Middleware = createDemo('N11MiddlewareArticle')
 const N11Code = createCodeLoader('N11Middleware.vue')
-const N12Plugins = createDemo('N12Plugins')
+const N12Plugins = createDemo('N12PluginsArticle')
 const N12Code = createCodeLoader('N12Plugins.vue')
-const N13UseState = createDemo('N13UseState')
+const N13UseState = createDemo('N13UseStateArticle')
 const N13Code = createCodeLoader('N13UseState.vue')
-const N14SEO = createDemo('N14SEO')
+const N14SEO = createDemo('N14SEOArticle')
 const N14Code = createCodeLoader('N14SEO.vue')
-const N15Nitro = createDemo('N15Nitro')
+const N15Nitro = createDemo('N15NitroArticle')
 const N15Code = createCodeLoader('N15Nitro.vue')
-const N16ApiRoutes = createDemo('N16ApiRoutes')
+const N16ApiRoutes = createDemo('N16ApiRoutesArticle')
 const N16Code = createCodeLoader('N16ApiRoutes.vue')
-const N17SSG = createDemo('N17SSG')
+const N17SSG = createDemo('N17SSGArticle')
 const N17Code = createCodeLoader('N17SSG.vue')
-const N18RuntimeConfig = createDemo('N18RuntimeConfig')
+const N18RuntimeConfig = createDemo('N18RuntimeConfigArticle')
 const N18Code = createCodeLoader('N18RuntimeConfig.vue')
-const N19ErrorHandling = createDemo('N19ErrorHandling')
+const N19ErrorHandling = createDemo('N19ErrorHandlingArticle')
 const N19Code = createCodeLoader('N19ErrorHandling.vue')
-const N20Modules = createDemo('N20Modules')
+const N20Modules = createDemo('N20ModulesArticle')
 const N20Code = createCodeLoader('N20Modules.vue')
 
 
@@ -319,21 +319,21 @@ export const lessons: Lesson[] = [
     navTitle: 'ClientOnly',
     category: '渲染',
     path: '/nuxt/n-10/client-only',
-    summary: '掌握 ClientOnly 组件、import.meta.client 判断与 .client.ts 后缀等客户端专属渲染方式。',
+    summary: '掌握 ClientOnly 组件、import.meta' + '.client 判断与 .client.ts 后缀等客户端专属渲染方式。',
     demo: N10ClientOnly,
     code: N10Code,
     language: 'vue',
     principle:
-      '部分内容只能在浏览器中渲染：直接操作 DOM 的图表库、依赖 window/navigator 的浏览器 API、以及时间/随机数等动态内容。Nuxt 提供多种客户端专属方案：用 <ClientOnly> 包裹仅在客户端渲染的子树并给出 fallback，用 import.meta.client 做编译时的端侧分支，用 onMounted 在挂载后再写入浏览器特有数据，或用 .client.ts 后缀让插件只在客户端加载。',
+      '部分内容只能在浏览器中渲染：直接操作 DOM 的图表库、依赖 window/navigator 的浏览器 API、以及时间/随机数等动态内容。Nuxt 提供多种客户端专属方案：用 <ClientOnly> 包裹仅在客户端渲染的子树并给出 fallback，用 import.meta' + '.client 做编译时的端侧分支，用 onMounted 在挂载后再写入浏览器特有数据，或用 .client.ts 后缀让插件只在客户端加载。',
     flow: [
       '遇到不兼容 SSR 的组件，用 <ClientOnly> 包裹，并在 #fallback 提供服务端占位。',
-      '需要访问浏览器 API 时，用 import.meta.client 分支或用 onMounted 在客户端赋值。',
+      '需要访问浏览器 API 时，用 import.meta' + '.client 分支或用 onMounted 在客户端赋值。',
       '需要在整个端侧初始化第三方库时，把插件命名为 *.client.ts 使其仅客户端注册。',
       '对同一个不兼容 SSR 的第三方库分别用 <ClientOnly> 与 .client.ts 接入，对比报错与占位效果。',
     ],
     notes: [
       '<ClientOnly> 的默认插槽仅客户端渲染，#fallback 插槽用于服务端渲染期间的占位内容。',
-      'import.meta.client 是编译期替换为 true/false 的常量，不会带来运行时判断开销。',
+      'import.meta' + '.client 是编译期替换为 true/false 的常量，不会带来运行时判断开销。',
       '过度使用客户端专属方案会削弱 SSR 的 SEO 与首屏性能，应仅针对确有必要的部分使用。',
       'fallback 内容需与客户端最终结构相仿，避免占位忽高忽低引起布局跳动（CLS）。',
     ],
