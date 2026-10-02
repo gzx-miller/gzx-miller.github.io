@@ -292,19 +292,6 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-.desc {
-  color: var(--muted);
-  margin-bottom: 16px;
-  line-height: 1.7;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 16px;
-}
-
 .canvas-wrap {
   display: flex;
   justify-content: center;
@@ -379,21 +366,6 @@ onUnmounted(() => {
   font-size: 10px;
   opacity: 0.8;
 }
-
-.checkbox-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-  cursor: pointer;
-  color: var(--text);
-  font-size: 14px;
-}
-
-.checkbox-item input {
-  accent-color: var(--accent);
-}
-
 .hint {
   margin: 4px 0 0;
   font-size: 12px;
@@ -449,16 +421,6 @@ onUnmounted(() => {
   color: var(--accent-strong);
   word-break: break-all;
 }
-
-.code-section {
-  margin-bottom: 16px;
-}
-
-.code-section h4 {
-  margin-bottom: 8px;
-  color: var(--chestnut);
-}
-
 .tips-box {
   background: rgba(246, 193, 90, 0.12);
   border: 1px solid var(--border);

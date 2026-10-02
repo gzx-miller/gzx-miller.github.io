@@ -283,17 +283,6 @@ h3 {
   color: #8b5e3c;
   font-size: 18px;
 }
-.subtitle {
-  margin: 0 0 16px;
-  color: #a0623a;
-  font-size: 13px;
-}
-.tabs {
-  display: flex;
-  gap: 4px;
-  margin-bottom: 16px;
-  border-bottom: 2px solid #e8c9a0;
-}
 .tabs button {
   padding: 8px 16px;
   border: none;
@@ -305,11 +294,7 @@ h3 {
   margin-bottom: -2px;
   transition: all 0.2s;
 }
-.tabs button.active {
-  color: #c8703c;
-  border-bottom-color: #c8703c;
-  font-weight: bold;
-}
+
 .tab-content {
   min-height: 300px;
 }
@@ -500,27 +485,5 @@ h3 {
   white-space: pre-wrap;
   color: #5a3e2b;
   font-family: Consolas, Monaco, monospace;
-}
-.knowledge-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-.knowledge-card {
-  padding: 14px;
-  background: #fff;
-  border: 1px solid #e8c9a0;
-  border-radius: 8px;
-}
-.knowledge-card h5 {
-  margin: 0 0 8px;
-  color: #c8703c;
-  font-size: 14px;
-}
-.knowledge-card p {
-  margin: 0;
-  font-size: 12px;
-  line-height: 1.6;
-  color: #5a3e2b;
 }
 </style>

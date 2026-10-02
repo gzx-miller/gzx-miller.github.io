@@ -94,14 +94,6 @@ function toggleStatus(edgeId: string) {
   background: var(--surface);
   overflow: hidden;
 }
-
-.vf-fallback {
-  height: 100%;
-  display: grid;
-  place-items: center;
-  color: var(--muted);
-}
-
 .vf-toolbar {
   display: flex;
   gap: 8px;
@@ -135,10 +127,5 @@ function toggleStatus(edgeId: string) {
 
 .edge-label.rejected {
   background: var(--leaf-red);
-}
-
-.vf-status {
-  color: var(--muted);
-  font-size: 0.9em;
 }
 </style>

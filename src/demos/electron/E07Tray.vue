@@ -84,7 +84,7 @@ tray.on('click', () => {
 
 <style scoped>
 .demo-container { padding: 24px; max-width: 800px; margin: 0 auto; }
-.desc { color: #666; margin-bottom: 20px; }
+
 .tray-controls { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
 .btn { background: #ff6b35; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
 .btn.secondary { background: #666; }

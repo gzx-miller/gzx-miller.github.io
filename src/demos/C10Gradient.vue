@@ -51,7 +51,7 @@ const angle = ref(135)
 .demo-desc { font-size: 13px; color: #868e96; margin-bottom: 16px; }
 .controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; font-size: 12px; margin-bottom: 16px; }
 .btn { padding: 6px 12px; border: 1px solid #ffd8a8; border-radius: 6px; background: #fff; cursor: pointer; font-size: 12px; }
-.btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
 .controls input[type="range"] { width: 100px; }
 .gradient-showcase { margin-bottom: 16px; }
 .gradient-box { height: 120px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 12px; font-weight: 600; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
@@ -59,7 +59,7 @@ const angle = ref(135)
 .preset { height: 80px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 12px; font-weight: 600; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
 .prop-table { border: 1px solid #ffd8a8; border-radius: 8px; overflow: hidden; font-size: 12px; }
 .prop-row { display: grid; grid-template-columns: 1fr 2fr; border-bottom: 1px solid #ffd8a8; }
-.prop-row:last-child { border-bottom: none; }
+
 .prop-row > span { padding: 5px 10px; }
-.prop-row.header { background: var(--primary); color: #fff; font-weight: 600; }
+
 </style>

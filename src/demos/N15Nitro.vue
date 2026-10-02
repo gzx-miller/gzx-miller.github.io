@@ -91,7 +91,7 @@ export default defineNuxtConfig({
 </template>
 
 <style scoped>
-.active { background: #e85d04; color: #fff; }
+
 table { border-collapse: collapse; width: 100%; }
 th, td { padding: 6px 8px; border: 1px solid #ddd; font-size: 12px; }
 th { background: #fff3e0; }

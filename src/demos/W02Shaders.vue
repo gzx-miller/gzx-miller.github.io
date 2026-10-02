@@ -246,19 +246,6 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-.desc {
-  color: var(--muted);
-  margin-bottom: 16px;
-  line-height: 1.7;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 16px;
-}
-
 .canvas-wrap {
   display: flex;
   justify-content: center;
@@ -299,37 +286,12 @@ onUnmounted(() => {
   width: 100%;
   accent-color: var(--accent);
 }
-
-.checkbox-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-  cursor: pointer;
-  color: var(--text);
-  font-size: 14px;
-}
-
-.checkbox-item input {
-  accent-color: var(--accent);
-}
-
 .hint {
   margin: 4px 0 0;
   font-size: 12px;
   color: var(--muted);
   line-height: 1.6;
 }
-
-.shader-section {
-  margin-bottom: 16px;
-}
-
-.shader-section h4 {
-  margin-bottom: 8px;
-  color: var(--chestnut);
-}
-
 .flow-diagram {
   border: 1px solid var(--border);
   border-radius: var(--radius);

@@ -120,7 +120,4 @@ app.get('/chat', async (req, res) => {
 .budget-row { display: flex; align-items: center; gap: 10px; font-size: 13px; color: #5a3e2b; }
 .budget-row input[type=range] { flex: 1; }
 .cost-val { font-weight: bold; color: #c8703c; white-space: nowrap; }
-.code-section { background: #fef9f3; border: 1px solid #e8c9a0; border-radius: 8px; padding: 12px; }
-.code-section h4 { margin: 0 0 8px; color: #8b5e3c; font-size: 14px; }
-.code-block { margin: 0; font-size: 12px; line-height: 1.6; white-space: pre-wrap; color: #5a3e2b; }
 </style>

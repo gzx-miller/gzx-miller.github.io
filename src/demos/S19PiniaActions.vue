@@ -333,12 +333,6 @@ const useOrderStore = defineStore('order', () =&gt; {
   font-weight: 600;
   transition: all 0.2s;
 }
-.tab-row button.active {
-  background: linear-gradient(135deg, #d94b26, #f08a24);
-  color: #fff;
-  border-color: #b7431f;
-}
-
 .menu-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -420,32 +414,11 @@ const useOrderStore = defineStore('order', () =&gt; {
   color: #dc2626 !important;
   border: 1px solid #dc2626 !important;
 }
-
-.empty-tip { text-align: center; color: #9c7a5f; padding: 30px 0; }
-
-.code-toggle { text-align: center; }
 .code-block pre { margin: 0; }
 .code-block code {
   font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
   font-size: 13px;
   line-height: 1.6;
   color: #7b351d;
-}
-
-.knowledge-points {
-  padding: 14px 18px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #f0f8e8, #e0eec8);
-  border-left: 4px solid #4b6d33;
-}
-.knowledge-points h5 { margin: 0 0 8px; color: #4b6d33; }
-.knowledge-points ul { margin: 0; padding-left: 20px; }
-.knowledge-points li { font-size: 13px; color: #5a6d40; line-height: 1.7; }
-.knowledge-points code {
-  background: #fffaf2;
-  padding: 1px 6px;
-  border-radius: 4px;
-  font-size: 12px;
-  color: #b7431f;
 }
 </style>

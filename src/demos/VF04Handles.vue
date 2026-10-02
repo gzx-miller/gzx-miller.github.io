@@ -108,14 +108,6 @@ const edges = ref<Edge[]>([])
   background: var(--surface);
   overflow: hidden;
 }
-
-.vf-fallback {
-  height: 100%;
-  display: grid;
-  place-items: center;
-  color: var(--muted);
-}
-
 .split-node {
   position: relative;
   width: 150px;
@@ -179,8 +171,6 @@ const edges = ref<Edge[]>([])
 }
 
 @media (max-width: 720px) {
-  .vf-layout {
-    grid-template-columns: 1fr;
-  }
+  
 }
 </style>

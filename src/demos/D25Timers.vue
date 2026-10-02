@@ -95,7 +95,7 @@ clearInterval(id)  // 停止</code></pre>
 <style scoped>
 .timer-log { margin: 0.8rem 0; font-size: 12px; line-height: 1.8; }
 .log-phase { display: inline-block; width: 100px; font-weight: 600; color: #e8590c; }
-.log-msg { color: #475569; }
+
 .log-nextTick, .log-Promise { background: #fff7ed; border-left: 3px solid #e8590c; padding-left: 4px; }
 .log-setTimeout, .log-setInterval, .log-setImmediate { background: #f8fafc; border-left: 3px solid #6366f1; padding-left: 4px; }
 .timer-compare { display: grid; gap: 8px; margin: 0.8rem 0; }

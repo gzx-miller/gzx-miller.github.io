@@ -77,8 +77,6 @@ const active = ref('will-change')
 .demo-desc { font-size: 13px; color: #868e96; margin-bottom: 16px; }
 .controls { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
 .btn { padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; background: #fff; cursor: pointer; font-size: 12px; }
-.btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-
 .perf-demo { margin-bottom: 16px; }
 .perf-box { padding: 10px 14px; border-radius: 6px; font-size: 12px; margin-bottom: 8px; }
 .perf-box.bad { background: #fff5f5; border: 1px solid #fa5252; color: #c92a2a; }
@@ -96,7 +94,7 @@ const active = ref('will-change')
 
 .prop-table { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; font-size: 12px; }
 .prop-row { display: grid; grid-template-columns: 1fr 2fr; border-bottom: 1px solid var(--border); }
-.prop-row:last-child { border-bottom: none; }
+
 .prop-row > span { padding: 5px 10px; }
-.prop-row.header { background: var(--primary); color: #fff; font-weight: 600; }
+
 </style>

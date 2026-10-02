@@ -86,13 +86,13 @@ console.log(result.response) // 0, 1, 2</pre>
 
 <style scoped>
 .demo-container { padding: 24px; max-width: 800px; margin: 0 auto; }
-.desc { color: #666; margin-bottom: 20px; }
+
 .dialog-types { display: flex; gap: 12px; margin-bottom: 20px; }
 .dialog-types button { padding: 10px 20px; border: 2px solid #e0e0e0; background: white; border-radius: 8px; cursor: pointer; }
 .dialog-types button.active { border-color: #ff6b35; color: #ff6b35; }
 .demo-buttons { margin-bottom: 20px; }
 .btn { background: #ff6b35; color: white; border: none; padding: 10px 24px; border-radius: 8px; cursor: pointer; }
-.result { background: #e8f5e9; padding: 12px; border-radius: 8px; margin-bottom: 20px; }
+
 .code-block { background: #f9f9f9; padding: 20px; border-radius: 12px; }
 .code-block pre { background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 8px; overflow-x: auto; font-size: 13px; }
 </style>

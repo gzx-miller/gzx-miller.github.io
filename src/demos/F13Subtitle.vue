@@ -120,27 +120,6 @@ const tips = [
 </template>
 
 <style scoped>
-.demo-card {
-  padding: 20px;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-  border-radius: 12px;
-  color: #e0e0e0;
-}
-.summary { color: #a0a0c0; margin-bottom: 16px; }
-.tab-btn {
-  padding: 8px 16px;
-  border: 1px solid #4a4a6a;
-  background: transparent;
-  color: #c0c0e0;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.tab-btn.active, .tab-btn:hover {
-  background: #6a5acd;
-  color: white;
-  border-color: #6a5acd;
-}
 table {
   width: 100%;
   border-collapse: collapse;

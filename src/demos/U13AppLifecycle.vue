@@ -96,13 +96,7 @@ function error() {
   color: var(--muted);
   font-size: 12px;
 }
-.log {
-  display: grid;
-  gap: 6px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
+
 .log li {
   border-radius: 8px;
   background: var(--surface);

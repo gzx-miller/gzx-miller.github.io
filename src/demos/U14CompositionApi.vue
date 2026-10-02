@@ -66,10 +66,7 @@ function onUnload() {
   font-size: 13px;
   white-space: nowrap;
 }
-.controls {
-  display: flex;
-  gap: 10px;
-}
+
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -100,13 +97,7 @@ function onUnload() {
   color: var(--muted);
   font-size: 13px;
 }
-.log {
-  display: grid;
-  gap: 6px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
+
 .log li {
   border-radius: 8px;
   background: var(--surface);

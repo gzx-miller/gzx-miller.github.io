@@ -97,7 +97,7 @@ autoUpdater.on('update-downloaded', () => {
 
 <style scoped>
 .demo-container { padding: 24px; max-width: 800px; margin: 0 auto; }
-.desc { color: #666; margin-bottom: 20px; }
+
 .btn { background: #ff6b35; color: white; border: none; padding: 10px 24px; border-radius: 8px; cursor: pointer; margin-bottom: 20px; }
 .status-panel { margin-bottom: 20px; }
 .status { padding: 12px; border-radius: 8px; font-weight: bold; }
@@ -113,6 +113,4 @@ autoUpdater.on('update-downloaded', () => {
 .code-block { background: #f9f9f9; padding: 20px; border-radius: 12px; margin-bottom: 20px; }
 .code-block pre { background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 8px; overflow-x: auto; font-size: 13px; }
 .tips { background: #e3f2fd; padding: 20px; border-radius: 12px; }
-.tips ul { margin: 0; padding-left: 20px; }
-.tips li { margin-bottom: 8px; line-height: 1.6; }
 </style>

@@ -121,7 +121,7 @@ const deploymentTargets = [
 </template>
 
 <style scoped>
-.active { background: #e85d04; color: #fff; }
+
 .step-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 13px; }
 .step-num { width: 22px; height: 22px; border-radius: 50%; background: #e85d04; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; }
 .code-block { background: #f5f0eb; padding: 10px; border-radius: 6px; font-size: 12px; white-space: pre-wrap; }

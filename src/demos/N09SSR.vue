@@ -75,7 +75,7 @@ const hydrationIssues = [
 </template>
 
 <style scoped>
-.active { background: #e85d04; color: #fff; }
+
 .timeline { padding-left: 10px; }
 .timeline-item { display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start; }
 .step-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; color: #fff; flex-shrink: 0; }

@@ -82,8 +82,6 @@ const result = await app.invoke({ query: '推荐 Vue3 入门课' })`
 </template>
 
 <style scoped>
-.run-btn { padding: 6px 16px; background: #c8703c; color: #fff; border: none; border-radius: 4px; cursor: pointer; margin-bottom: 12px; }
-.run-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 .graph-area { background: #fef9f3; border: 1px solid #e8c9a0; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
 .node-row { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
 .node-box { position: relative; display: flex; flex-direction: column; align-items: center; padding: 10px 14px; border: 2px solid #d4a574; border-radius: 8px; background: #fff; min-width: 90px; transition: all 0.2s; }
@@ -98,7 +96,4 @@ const result = await app.invoke({ query: '推荐 Vue3 入门课' })`
 .history-section h4 { margin: 0 0 8px; color: #8b5e3c; font-size: 14px; }
 .log-item { font-size: 12px; color: #5a3e2b; padding: 3px 0; border-bottom: 1px solid #f5ebe0; }
 .log-node { display: inline-block; min-width: 60px; font-weight: bold; color: #c8703c; font-family: monospace; margin-right: 6px; }
-.code-section { background: #fef9f3; border: 1px solid #e8c9a0; border-radius: 8px; padding: 12px; }
-.code-section h4 { margin: 0 0 8px; color: #8b5e3c; font-size: 14px; }
-.code-block { margin: 0; font-size: 12px; line-height: 1.6; white-space: pre-wrap; color: #5a3e2b; }
 </style>

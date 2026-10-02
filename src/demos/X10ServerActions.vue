@@ -99,7 +99,7 @@ const features = [
 <style scoped>
 .mini-code { background: #1e1e2e; color: #e0e0e0; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; line-height: 1.5; white-space: pre-wrap; }
 .detail-box { background: #fff8f0; padding: 10px; border-radius: 6px; border-left: 3px solid #e85d04; }
-.btn { background: #e85d04; color: #fff; border: none; padding: 6px 16px; border-radius: 4px; cursor: pointer; font-size: 13px; }
+
 .btn:disabled { opacity: 0.6; cursor: wait; }
 .log-box { background: #1e1e2e; color: #a0e0a0; padding: 10px; border-radius: 6px; font-family: monospace; font-size: 12px; margin-top: 8px; min-height: 120px; }
 .log-line { margin: 2px 0; }

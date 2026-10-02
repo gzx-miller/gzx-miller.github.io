@@ -136,13 +136,6 @@ label {
   color: #8f2f18;
   font-size: 22px;
 }
-
-.secondary {
-  border-color: #b7431f;
-  background: transparent;
-  color: #8f2f18;
-}
-
 .scope-log {
   min-height: 72px;
   margin: 0;

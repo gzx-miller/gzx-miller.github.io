@@ -62,7 +62,7 @@ store.clear()</pre>
 
 <style scoped>
 .demo-container { padding: 24px; max-width: 900px; margin: 0 auto; }
-.desc { color: #666; margin-bottom: 20px; }
+
 .storage-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px; }
 .storage-card { background: #f9f9f9; padding: 20px; border-radius: 12px; border: 1px solid #e0e0e0; }
 .storage-card h3 { margin: 0 0 8px 0; color: #333; }
@@ -71,6 +71,4 @@ store.clear()</pre>
 .code-block { background: #f9f9f9; padding: 20px; border-radius: 12px; margin-bottom: 20px; }
 .code-block pre { background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 8px; overflow-x: auto; font-size: 13px; }
 .tips { background: #e8f5e9; padding: 20px; border-radius: 12px; }
-.tips ul { margin: 0; padding-left: 20px; }
-.tips li { margin-bottom: 8px; line-height: 1.6; }
 </style>

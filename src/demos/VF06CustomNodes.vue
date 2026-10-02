@@ -118,14 +118,6 @@ function onNodeClick({ node }: NodeMouseEvent) {
   background: var(--surface);
   overflow: hidden;
 }
-
-.vf-fallback {
-  height: 100%;
-  display: grid;
-  place-items: center;
-  color: var(--muted);
-}
-
 .course-card {
   width: 180px;
   padding: 10px 12px;
@@ -186,8 +178,6 @@ function onNodeClick({ node }: NodeMouseEvent) {
 }
 
 @media (max-width: 720px) {
-  .vf-layout {
-    grid-template-columns: 1fr;
-  }
+  
 }
 </style>

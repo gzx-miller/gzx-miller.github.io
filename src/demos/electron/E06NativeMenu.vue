@@ -79,7 +79,7 @@ Menu.setApplicationMenu(menu)</pre>
 
 <style scoped>
 .demo-container { padding: 24px; max-width: 900px; margin: 0 auto; }
-.desc { color: #666; margin-bottom: 20px; }
+
 .menu-demo { margin-bottom: 20px; }
 .menu-bar { display: flex; background: #f5f5f5; padding: 8px; border-radius: 8px; gap: 4px; }
 .menu-item { position: relative; padding: 8px 16px; cursor: pointer; border-radius: 4px; }
@@ -90,10 +90,8 @@ Menu.setApplicationMenu(menu)</pre>
 .submenu-item { padding: 8px 16px; font-size: 13px; cursor: pointer; }
 .submenu-item:hover { background: #f5f5f5; }
 .submenu-item.separator { height: 1px; background: #e0e0e0; padding: 0; margin: 4px 0; }
-.result { background: #e8f5e9; padding: 12px; border-radius: 8px; margin-bottom: 20px; }
+
 .code-block { background: #f9f9f9; padding: 20px; border-radius: 12px; margin-bottom: 20px; }
 .code-block pre { background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 8px; overflow-x: auto; font-size: 13px; }
 .tips { background: #fff3e0; padding: 20px; border-radius: 12px; }
-.tips ul { margin: 0; padding-left: 20px; }
-.tips li { margin-bottom: 8px; line-height: 1.6; }
 </style>

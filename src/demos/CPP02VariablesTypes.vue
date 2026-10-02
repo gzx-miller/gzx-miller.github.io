@@ -141,30 +141,10 @@ const conversions = [
   line-height: 1.6;
   margin-bottom: 12px;
 }
-.tips-box {
-  background: #f0f7ff;
-  padding: 10px;
-  border-radius: 6px;
-  border-left: 3px solid #0891b2;
-  margin-top: 10px;
-}
+
 .tips-box.warning {
   border-left-color: #e85d04;
   background: #fff8f0;
-}
-.tab-btn {
-  padding: 5px 14px;
-  border: 1px solid #e0a06a;
-  border-radius: 4px;
-  background: #fff;
-  color: var(--text);
-  cursor: pointer;
-  font-size: 13px;
-}
-.tab-btn.active {
-  background: #e85d04;
-  color: #fff;
-  border-color: #e85d04;
 }
 table {
   width: 100%;

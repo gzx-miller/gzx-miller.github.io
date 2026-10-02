@@ -53,14 +53,6 @@ const edges = ref<Edge[]>([
   background: var(--surface);
   overflow: hidden;
 }
-
-.vf-fallback {
-  height: 100%;
-  display: grid;
-  place-items: center;
-  color: var(--muted);
-}
-
 .vf-legend {
   display: grid;
   gap: 6px;
@@ -87,10 +79,5 @@ const edges = ref<Edge[]>([
 
 .dot-output {
   background: var(--leaf-red);
-}
-
-.vf-status {
-  color: var(--muted);
-  font-size: 0.9em;
 }
 </style>

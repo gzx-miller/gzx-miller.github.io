@@ -93,7 +93,7 @@ const current = computed(() => importMap[selected.value])
 </template>
 
 <style scoped>
-.active { background: #e85d04; color: #fff; }
+
 table { border-collapse: collapse; }
 th, td { padding: 6px 10px; border: 1px solid #ddd; text-align: left; font-size: 13px; }
 th { background: #fff3e0; }

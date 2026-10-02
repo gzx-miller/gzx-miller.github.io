@@ -288,18 +288,13 @@ const selectedPattern = ref(0)
 </template>
 
 <style scoped>
-.mini-code { background: #1e1e2e; color: #e0e0e0; padding: 10px; border-radius: 6px; font-size: 12px; overflow-x: auto; line-height: 1.5; white-space: pre-wrap; }
+
 .mini-code.small { font-size: 11px; padding: 6px; margin: 0; }
-.result-box { background: #fff8f0; padding: 10px; border-radius: 6px; border-left: 3px solid #e85d04; }
+
 .result-box.idle { background: #fafafa; border-left-color: #aaa; }
 .result-box.loading { background: #fff8e1; border-left-color: #f59e0b; }
 .result-box.success { background: #f0fdf4; border-left-color: #10b981; }
 .result-box.error { background: #fef2f2; border-left-color: #ef4444; }
-.tips-box { background: #f0f7ff; padding: 10px; border-radius: 6px; border-left: 3px solid #0891b2; margin-top: 10px; }
-.tab-btn { padding: 5px 14px; border: 1px solid #e0a06a !important; border-radius: 4px; background: #fff !important; color: var(--text) !important; cursor: pointer; font-size: 13px; }
-.tab-btn.active { background: #e85d04 !important; color: #fff !important; border-color: #e85d04 !important; }
-.mini-btn { padding: 4px 12px; border: 1px solid #e0a06a; border-radius: 4px; background: #fff; cursor: pointer; font-size: 12px; }
-.mini-btn.active { background: #e85d04; color: #fff; border-color: #e85d04; }
 .load-btn { padding: 6px 18px; background: #e85d04; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; }
 .load-btn:disabled { background: #f0c8a0; cursor: not-allowed; }
 table { width: 100%; border-collapse: collapse; font-size: 12px; }

@@ -72,7 +72,4 @@ const fnResult = await fnLlm.invoke('提取课程信息')`
 .arrow { font-size: 22px; color: #c8703c; }
 .result-panel.error { border-color: #c8503c; background: #fef0ee; }
 .result-panel.error pre { color: #c8503c; }
-.code-section { background: #fef9f3; border: 1px solid #e8c9a0; border-radius: 8px; padding: 12px; }
-.code-section h4 { margin: 0 0 8px; color: #8b5e3c; font-size: 14px; }
-.code-block { margin: 0; font-size: 12px; line-height: 1.6; white-space: pre-wrap; color: #5a3e2b; }
 </style>

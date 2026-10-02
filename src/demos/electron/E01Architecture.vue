@@ -125,11 +125,7 @@ const architecture = ref({
   max-width: 900px;
   margin: 0 auto;
 }
-.description {
-  color: #666;
-  margin-bottom: 24px;
-  line-height: 1.6;
-}
+
 .architecture-diagram {
   display: flex;
   flex-direction: column;

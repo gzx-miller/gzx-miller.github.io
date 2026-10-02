@@ -63,7 +63,7 @@ new BrowserWindow({
 
 <style scoped>
 .demo-container { padding: 24px; max-width: 900px; margin: 0 auto; }
-.desc { color: #666; margin-bottom: 20px; }
+
 .security-check { margin-bottom: 20px; }
 .security-check h3 { margin: 0 0 12px 0; }
 .check-item { display: flex; align-items: flex-start; gap: 12px; padding: 16px; border-radius: 8px; margin-bottom: 8px; }
@@ -75,6 +75,4 @@ new BrowserWindow({
 .code-block { background: #f9f9f9; padding: 20px; border-radius: 12px; margin-bottom: 20px; }
 .code-block pre { background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 8px; overflow-x: auto; font-size: 13px; }
 .tips { background: #fff3e0; padding: 20px; border-radius: 12px; }
-.tips ul { margin: 0; padding-left: 20px; }
-.tips li { margin-bottom: 8px; line-height: 1.6; }
 </style>

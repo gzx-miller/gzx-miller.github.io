@@ -502,7 +502,7 @@ ext.drawElementsInstancedANGLE(
   gap: 20px;
 }
 @media (max-width: 720px) {
-  .demo-layout { grid-template-columns: 1fr; }
+  
 }
 .canvas-wrap {
   position: relative;
@@ -518,17 +518,7 @@ ext.drawElementsInstancedANGLE(
   max-width: 100%;
   height: auto;
 }
-.fps-badge {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: var(--chestnut);
-  color: #fff;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 600;
-}
+
 .drawcalls-badge {
   position: absolute;
   bottom: 8px;
@@ -574,10 +564,7 @@ ext.drawElementsInstancedANGLE(
   gap: 4px;
   font-size: 14px;
 }
-.control-item input[type="range"] {
-  width: 100%;
-  accent-color: var(--leaf-red);
-}
+
 .perf-stats {
   background: rgba(123, 53, 29, 0.06);
   border: 1px solid rgba(123, 53, 29, 0.15);
@@ -594,16 +581,6 @@ ext.drawElementsInstancedANGLE(
   color: var(--leaf-red);
   font-size: 16px;
 }
-.code-display {
-  background: rgba(123, 53, 29, 0.06);
-  border: 1px solid rgba(123, 53, 29, 0.15);
-  border-radius: 8px;
-  padding: 12px;
-}
-.code-display h5 {
-  margin: 0 0 8px;
-  color: var(--leaf-orange);
-}
 .code-display pre {
   margin: 0;
   font-size: 12px;
@@ -611,10 +588,7 @@ ext.drawElementsInstancedANGLE(
   overflow-x: auto;
   max-height: 120px;
 }
-.code-display code {
-  color: var(--forest);
-  font-family: ui-monospace, monospace;
-}
+
 .info-section {
   background: rgba(246, 193, 90, 0.1);
   border: 1px solid rgba(246, 193, 90, 0.3);

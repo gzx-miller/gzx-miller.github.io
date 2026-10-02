@@ -157,7 +157,7 @@ ipcRenderer.on('save-data-reply', (event, result) => {
 
 <style scoped>
 .demo-container { padding: 24px; max-width: 1000px; margin: 0 auto; }
-.description { color: #666; margin-bottom: 24px; line-height:1.6; }
+
 .mode-selector { display: flex; gap: 12px; margin-bottom: 24px; }
 .mode-selector button {
   padding: 10px 20px;
@@ -227,12 +227,7 @@ ipcRenderer.on('save-data-reply', (event, result) => {
   font-size: 32px;
   color: #ff6b35;
 }
-.log-panel {
-  background: #f9f9f9;
-  padding: 16px;
-  border-radius: 12px;
-  margin-bottom: 24px;
-}
+
 .log-panel h4 { margin: 0 0 12px 0; }
 .log-entries {
   background: #1e1e1e;
@@ -256,15 +251,7 @@ ipcRenderer.on('save-data-reply', (event, result) => {
 .code-example {
   margin-bottom: 24px;
 }
-.code-example pre {
-  background: #1e1e1e;
-  color: #d4d4d4;
-  padding: 16px;
-  border-radius: 8px;
-  overflow-x: auto;
-  font-size: 13px;
-  line-height: 1.6;
-}
+
 .best-practices {
   background: #e8f5e9;
   padding: 20px;

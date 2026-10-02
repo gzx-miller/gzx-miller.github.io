@@ -55,13 +55,7 @@ int main() {
 </template>
 
 <style scoped>
-.tips-box {
-  background: #f0f7ff;
-  padding: 10px;
-  border-radius: 6px;
-  border-left: 3px solid #0891b2;
-  margin-top: 10px;
-}
+
 table {
   width: 100%;
   border-collapse: collapse;

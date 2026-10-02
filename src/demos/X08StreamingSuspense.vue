@@ -86,7 +86,7 @@ export default async function SlowList() {
 <style scoped>
 .mini-code { background: #1e1e2e; color: #e0e0e0; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; line-height: 1.5; white-space: pre-wrap; }
 .detail-box { background: #fff8f0; padding: 10px; border-radius: 6px; border-left: 3px solid #e85d04; }
-.btn { background: #e85d04; color: #fff; border: none; padding: 6px 16px; border-radius: 4px; cursor: pointer; font-size: 13px; }
+
 .btn:hover { background: #c84d00; }
 .tag { padding: 1px 6px; border-radius: 3px; font-size: 11px; margin-left: 6px; }
 .tag.ok { background: #65a30d; color: #fff; }

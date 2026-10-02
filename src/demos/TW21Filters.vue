@@ -340,7 +340,7 @@ const backdropCode = `<span style="color:#7c7c99">// 背景滤镜（毛玻璃效
 </template>
 
 <style scoped>
-.tab-bar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+
 .tab-btn { padding: 6px 14px; border: 1px solid #e0a06a; border-radius: 6px; background: #fff; color: #5a2f22; cursor: pointer; font-size: 13px; transition: all 0.2s; }
 .tab-btn:hover { background: #fff3e0; }
 .tab-btn.active { background: #e85d04; color: #fff; border-color: #e85d04; }
@@ -367,8 +367,6 @@ const backdropCode = `<span style="color:#7c7c99">// 背景滤镜（毛玻璃效
 .f-control { display: flex; flex-direction: column; gap: 4px; }
 .f-control label { font-size: 12px; color: #9a3412; font-weight: 500; }
 .f-control input[type="range"] { accent-color: #ea580c; }
-
-.reset-btn { padding: 8px 16px; background: #fff; border: 2px solid #fed7aa; border-radius: 6px; color: #7c2d12; cursor: pointer; font-size: 13px; transition: all 0.2s; }
 .reset-btn:hover { background: #fef3c7; }
 
 .preset-filters h4 { margin: 0 0 12px; color: #7c2d12; }

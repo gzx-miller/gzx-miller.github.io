@@ -132,26 +132,10 @@ function onDrop(event: DragEvent) {
   background: var(--surface);
   overflow: hidden;
 }
-
-.vf-fallback {
-  height: 100%;
-  display: grid;
-  place-items: center;
-  color: var(--muted);
-}
-
 .vf-tip {
   color: var(--muted);
 }
-
-.vf-status {
-  color: var(--muted);
-  font-size: 0.9em;
-}
-
 @media (max-width: 720px) {
-  .vf-layout {
-    grid-template-columns: 1fr;
-  }
+  
 }
 </style>

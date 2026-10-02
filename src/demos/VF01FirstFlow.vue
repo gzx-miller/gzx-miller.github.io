@@ -69,16 +69,4 @@ function onNodeClick({ node }: NodeMouseEvent) {
   background: var(--surface);
   overflow: hidden;
 }
-
-.vf-fallback {
-  height: 100%;
-  display: grid;
-  place-items: center;
-  color: var(--muted);
-}
-
-.vf-status {
-  color: var(--muted);
-  font-size: 0.9em;
-}
 </style>

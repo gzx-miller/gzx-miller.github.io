@@ -288,7 +288,7 @@ const pseudoCode = `<span style="color:#7c7c99">// 首元素 / 尾元素</span>
 </template>
 
 <style scoped>
-.tab-bar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+
 .tab-btn { padding: 6px 14px; border: 1px solid #e0a06a; border-radius: 6px; background: #fff; color: #5a2f22; cursor: pointer; font-size: 13px; transition: all 0.2s; }
 .tab-btn:hover { background: #fff3e0; }
 .tab-btn.active { background: #e85d04; color: #fff; border-color: #e85d04; }

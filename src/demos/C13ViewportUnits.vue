@@ -54,7 +54,7 @@ const units = [
 .demo-desc { font-size: 13px; color: #868e96; margin-bottom: 16px; }
 .controls { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
 .btn { padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; background: #fff; cursor: pointer; font-size: 12px; }
-.btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
 .unit-demo { background: var(--primary-light); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 12px; min-height: 80px; }
 .demo-box { background: var(--primary); color: #fff; border-radius: 6px; padding: 10px; font-size: 12px; font-weight: 600; text-align: center; transition: all 0.3s; }
 .container-query-demo { container-type: inline-size; border: 1px dashed var(--primary); border-radius: 6px; padding: 8px; }
@@ -63,7 +63,7 @@ const units = [
 .unit-info strong { color: var(--primary); white-space: nowrap; }
 .prop-table { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; font-size: 12px; }
 .prop-row { display: grid; grid-template-columns: 1fr 1fr 2fr; border-bottom: 1px solid var(--border); }
-.prop-row:last-child { border-bottom: none; }
+
 .prop-row > span { padding: 5px 8px; }
-.prop-row.header { background: var(--primary); color: #fff; font-weight: 600; }
+
 </style>

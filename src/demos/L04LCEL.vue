@@ -68,9 +68,6 @@ async function runPipeline() {
 </template>
 
 <style scoped>
-.desc { color: #8b5e3c; font-size: 13px; margin-bottom: 8px; }
-.run-btn { padding: 6px 16px; background: #c8703c; color: #fff; border: none; border-radius: 4px; cursor: pointer; margin-bottom: 12px; }
-.run-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 .pipeline-flow { display: flex; align-items: flex-start; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
 .pipe-arrow { color: #c8703c; font-size: 13px; font-weight: bold; padding-top: 14px; font-family: monospace; }
 .pipe-step { border-radius: 8px; padding: 10px; min-width: 200px; }

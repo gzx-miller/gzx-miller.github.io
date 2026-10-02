@@ -101,25 +101,12 @@ const maxBar = computed(() => Math.max(...bars.value, 1))
 </template>
 
 <style scoped>
-.desc {
-  color: var(--muted);
-  line-height: 1.7;
-}
-
 .toolbar {
   display: flex;
   align-items: end;
   gap: 10px;
   flex-wrap: wrap;
 }
-
-.input-line {
-  display: grid;
-  gap: 6px;
-  color: var(--muted);
-  font-size: 13px;
-}
-
 .input-line input {
   min-width: 260px;
 }
@@ -191,18 +178,5 @@ const maxBar = computed(() => Math.max(...bars.value, 1))
   margin: 0;
   color: var(--muted);
   font-size: 13px;
-}
-
-.tips-box {
-  border-radius: 8px;
-  background: rgba(255, 218, 159, 0.24);
-  padding: 12px 16px;
-}
-
-.tips-box ul {
-  margin: 6px 0 0;
-  padding-left: 20px;
-  color: var(--muted);
-  line-height: 1.8;
 }
 </style>

@@ -78,7 +78,7 @@ const containerWidth = ref(400)
 .code-block { background: #1e1e2e; color: #cdd6f4; padding: 10px 12px; border-radius: 6px; font-size: 11px; line-height: 1.5; margin-bottom: 16px; overflow-x: auto; white-space: pre; }
 .prop-table { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; font-size: 12px; }
 .prop-row { display: grid; grid-template-columns: 1fr 2fr; border-bottom: 1px solid var(--border); }
-.prop-row:last-child { border-bottom: none; }
+
 .prop-row > span { padding: 5px 10px; }
-.prop-row.header { background: var(--primary); color: #fff; font-weight: 600; }
+
 </style>

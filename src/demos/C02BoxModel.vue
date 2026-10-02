@@ -74,8 +74,6 @@ const showCollapse = ref(false)
   background: #fff; cursor: pointer; font-size: 12px; transition: all 0.2s;
 }
 .btn:hover { background: var(--primary-light); }
-.btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-
 .box-row { display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; margin-bottom: 20px; }
 
 .box-visual[data-model="content-box"] .box-inner {

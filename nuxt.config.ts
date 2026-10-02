@@ -63,6 +63,7 @@ export default defineNuxtConfig({
     'highlight.js/styles/github.css',
     'nprogress/nprogress.css',
     '~/style.css',
+    '~/demos-shared.css',
   ],
   hooks: {
     // 构建前把生成的 sitemap.xml 写入 public/，nitro 构建时会一并拷入 .output/public

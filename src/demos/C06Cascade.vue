@@ -62,8 +62,6 @@ const active = ref('cascade')
 .demo-desc { font-size: 13px; color: #868e96; margin-bottom: 16px; }
 .controls { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
 .btn { padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; background: #fff; cursor: pointer; font-size: 12px; }
-.btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-
 .cascade-demo { margin-bottom: 16px; }
 .spec-box { padding: 12px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 12px; }
 .spec-text { font-weight: 600; }

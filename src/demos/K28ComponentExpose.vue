@@ -44,22 +44,4 @@ function clearChildSearch() {
 .demo-note {
   margin: 0;
 }
-
-.demo-kicker {
-  color: #8f2f18;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.secondary {
-  border-color: #b7431f;
-  background: transparent;
-  color: #8f2f18;
-}
-
-.demo-note {
-  color: #7c563f;
-  font-size: 13px;
-  line-height: 1.6;
-}
 </style>

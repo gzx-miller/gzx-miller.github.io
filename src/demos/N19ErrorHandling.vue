@@ -118,7 +118,7 @@ const errorTypes = [
 </template>
 
 <style scoped>
-.active { background: #e85d04; color: #fff; }
+
 .code-block { background: #f5f0eb; padding: 10px; border-radius: 6px; font-size: 12px; white-space: pre-wrap; }
 table { border-collapse: collapse; }
 th, td { padding: 5px 8px; border: 1px solid #ddd; font-size: 12px; }

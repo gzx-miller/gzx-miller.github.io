@@ -486,30 +486,6 @@ N_world = normalize(normalMatrix * N_local);
   background: radial-gradient(circle at 40% 35%, #2a1a0f 0%, #1a0f08 100%);
   display: block;
 }
-
-.glsl-snippet {
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 10px 12px;
-  background: var(--surface);
-  font-size: 12px;
-}
-
-.glsl-snippet strong {
-  color: var(--chestnut);
-  display: block;
-  margin-bottom: 6px;
-}
-
-.glsl-snippet pre {
-  margin: 0;
-  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
-  font-size: 12px;
-  line-height: 1.5;
-  color: var(--text);
-  white-space: pre-wrap;
-}
-
 .control-panel {
   display: grid;
   gap: 14px;
@@ -561,20 +537,6 @@ N_world = normalize(normalMatrix * N_local);
 .btn-group button:hover {
   border-color: var(--accent);
 }
-
-.checkbox-group label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  color: var(--text);
-  font-weight: 500;
-}
-
-.checkbox-group input[type='checkbox'] {
-  accent-color: var(--accent);
-}
-
 .info-section {
   border-top: 1px solid var(--border);
   padding-top: 16px;
@@ -584,30 +546,8 @@ N_world = normalize(normalMatrix * N_local);
   margin: 0 0 8px;
   color: var(--chestnut);
 }
-
-.info-text {
-  margin: 0 0 10px;
-  padding: 12px;
-  border-radius: 8px;
-  background: var(--surface);
-  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
-  font-size: 12px;
-  line-height: 1.6;
-  white-space: pre-wrap;
-  color: var(--text);
-}
-
-.info-note {
-  margin: 0;
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.7;
-}
-
 @media (max-width: 720px) {
-  .demo-layout {
-    grid-template-columns: 1fr;
-  }
+  
 }
 
 [data-theme='dark'] .gl-canvas {

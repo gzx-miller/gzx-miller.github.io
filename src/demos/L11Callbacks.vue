@@ -55,8 +55,6 @@ async function runCall() {
 </template>
 
 <style scoped>
-.run-btn { padding: 6px 16px; background: #c8703c; color: #fff; border: none; border-radius: 4px; cursor: pointer; margin-bottom: 12px; }
-.run-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 .timeline { display: flex; flex-direction: column; gap: 0; }
 .timeline-item { display: flex; align-items: flex-start; gap: 8px; padding: 6px 0; }
 .timeline-time { font-size: 11px; color: #a0623a; font-family: monospace; min-width: 50px; text-align: right; }

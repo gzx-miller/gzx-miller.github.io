@@ -203,7 +203,7 @@ function getStatusClass(status: string) {
 </template>
 
 <style scoped>
-.tab-bar { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+
 .tab-btn { padding: 5px 12px; border: 1px solid #e0a06a; border-radius: 4px; background: #fff; color: #5c4033; cursor: pointer; font-size: 13px; }
 .tab-btn.active { background: #e85d04; color: #fff; border-color: #e85d04; }
 .tips-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }

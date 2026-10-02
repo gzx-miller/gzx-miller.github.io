@@ -81,13 +81,8 @@ const buildConfig = ref({
 
 <style scoped>
 .demo-container { padding: 24px; max-width: 900px; margin: 0 auto; }
-.desc { color: #666; margin-bottom: 20px; }
-.platform-selector { display: flex; gap: 20px; margin-bottom: 20px; }
-.platform-selector label { cursor: pointer; }
 .config-panel { margin-bottom: 20px; }
 .config-panel h3 { margin: 0 0 12px 0; }
 .code-block { background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 8px; overflow-x: auto; font-size: 13px; margin-bottom: 20px; }
 .tips { background: #e8f5e9; padding: 20px; border-radius: 12px; margin-bottom: 20px; }
-.tips ul { margin: 0; padding-left: 20px; }
-.tips li { margin-bottom: 8px; line-height: 1.6; }
 </style>

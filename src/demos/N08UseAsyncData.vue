@@ -84,7 +84,7 @@ const { data, pending } = useLazyAsyncData(
 </template>
 
 <style scoped>
-.active { background: #e85d04; color: #fff; }
+
 .code-block { background: #f5f0eb; padding: 10px; border-radius: 6px; font-size: 12px; white-space: pre-wrap; }
 .desc-box { background: #f9f9f9; padding: 12px; border-radius: 6px; border-left: 3px solid #e85d04; min-height: 80px; }
 table { border-collapse: collapse; }

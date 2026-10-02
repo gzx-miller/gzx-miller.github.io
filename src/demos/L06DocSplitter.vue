@@ -57,7 +57,7 @@ const chunks = computed<Chunk[]>(() => {
 
 <style scoped>
 .config-row { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
-.config-row label { display: flex; align-items: center; gap: 6px; font-size: 14px; }
+
 .config-row input { padding: 4px 8px; border: 1px solid #d4a574; border-radius: 4px; width: 80px; }
 .chunk-count { font-size: 13px; color: #c8703c; font-weight: bold; }
 .source-doc { background: #fef9f3; border: 1px solid #e8c9a0; border-radius: 8px; padding: 10px; margin-bottom: 12px; }

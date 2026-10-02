@@ -116,7 +116,7 @@ async function callDemoApi(type: 'hello' | 'users' | 'error') {
 </template>
 
 <style scoped>
-.active { background: #e85d04; color: #fff; }
+
 .code-block { background: #f5f0eb; padding: 10px; border-radius: 6px; font-size: 12px; white-space: pre-wrap; }
 .result-box { background: #1a1a2e; color: #a5d6a7; padding: 10px; border-radius: 6px; min-height: 80px; font-size: 12px; }
 .result-box pre { margin: 0; }

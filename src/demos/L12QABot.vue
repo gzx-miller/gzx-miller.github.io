@@ -68,7 +68,7 @@ async function runQA() {
 </template>
 
 <style scoped>
-.desc { color: #8b5e3c; font-size: 13px; margin-bottom: 8px; }
+
 .qa-input { display: flex; gap: 8px; margin-bottom: 12px; }
 .qa-input input { flex: 1; padding: 8px; border: 1px solid #d4a574; border-radius: 4px; }
 .qa-input button { padding: 8px 16px; background: #c8703c; color: #fff; border: none; border-radius: 4px; cursor: pointer; }

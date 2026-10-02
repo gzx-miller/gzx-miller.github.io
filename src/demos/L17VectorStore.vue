@@ -107,7 +107,4 @@ const mmrResults = await store.maxMarginalRelevanceSearch('Vue3 教程', {
 .sim-bar-bg { flex: 1; height: 10px; background: #f5ebe0; border-radius: 5px; overflow: hidden; }
 .sim-bar { height: 100%; background: linear-gradient(90deg, #d4a574, #c8703c); border-radius: 5px; transition: width 0.3s; }
 .sim-score { font-size: 12px; font-weight: bold; color: #c8703c; min-width: 36px; text-align: right; }
-.code-section { background: #fef9f3; border: 1px solid #e8c9a0; border-radius: 8px; padding: 12px; }
-.code-section h4 { margin: 0 0 8px; color: #8b5e3c; font-size: 14px; }
-.code-block { margin: 0; font-size: 12px; line-height: 1.6; white-space: pre-wrap; color: #5a3e2b; }
 </style>

@@ -86,13 +86,6 @@ function replaceCatalog() {
 .demo-note {
   margin: 0;
 }
-
-.demo-kicker {
-  color: #8f2f18;
-  font-size: 12px;
-  font-weight: 700;
-}
-
 .change-count {
   color: #7c563f;
   font-size: 13px;
@@ -116,20 +109,7 @@ function replaceCatalog() {
 .product-row.selected {
   background: #ffe6c0;
 }
-
-.secondary {
-  border-color: #b7431f;
-  background: transparent;
-  color: #8f2f18;
-}
-
 .secondary:hover {
   background: #ffe6c0;
-}
-
-.demo-note {
-  color: #7c563f;
-  font-size: 13px;
-  line-height: 1.6;
 }
 </style>

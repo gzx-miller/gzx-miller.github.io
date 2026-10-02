@@ -53,7 +53,7 @@ function handleSend() {
 
 <style scoped>
 .config-row { display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
-.config-row label { display: flex; align-items: center; gap: 6px; font-size: 14px; }
+
 .config-row input { padding: 4px 8px; border: 1px solid #d4a574; border-radius: 4px; width: 120px; }
 .chat-area { border: 1px solid #e8c9a0; border-radius: 8px; padding: 12px; background: #fef9f3; }
 .chat-input-row { display: flex; gap: 8px; }
@@ -63,6 +63,6 @@ function handleSend() {
 .chat-response { margin-top: 12px; padding: 10px; background: #fff; border-radius: 6px; border-left: 3px solid #c8703c; }
 .role-label { font-size: 12px; color: #a0623a; font-weight: bold; }
 .chat-response p { margin: 4px 0 0; line-height: 1.6; }
-.cursor { animation: blink 0.8s infinite; }
+
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 </style>

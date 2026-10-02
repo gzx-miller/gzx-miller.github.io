@@ -127,10 +127,7 @@ function loadMore() {
 .dots span.on {
   background: #fff;
 }
-.controls {
-  display: flex;
-  gap: 10px;
-}
+
 .scroll {
   max-height: 140px;
   overflow: auto;

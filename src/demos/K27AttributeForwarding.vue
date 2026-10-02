@@ -66,13 +66,6 @@ const actionCount = ref(0)
 .attrs-demo p {
   margin: 0;
 }
-
-.demo-kicker {
-  color: #8f2f18;
-  font-size: 12px;
-  font-weight: 700;
-}
-
 :deep(.smart-action) {
   display: inline-flex;
   align-items: center;

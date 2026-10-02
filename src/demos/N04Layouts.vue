@@ -75,7 +75,7 @@ const customLayoutCode = `<!-- layouts/custom.vue -->
 </template>
 
 <style scoped>
-.active { background: #e85d04; color: #fff; }
+
 .layout-preview { border: 2px solid #e85d04; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; min-height: 180px; }
 .layout-preview:has(.layout-sidebar) { flex-direction: row; }
 .layout-header, .layout-footer { background: #fff3e0; padding: 8px; text-align: center; font-size: 13px; }

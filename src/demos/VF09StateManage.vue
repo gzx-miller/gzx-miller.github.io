@@ -119,22 +119,9 @@ async function refit() {
   background: var(--surface);
   overflow: hidden;
 }
-
-.vf-fallback {
-  height: 100%;
-  display: grid;
-  place-items: center;
-  color: var(--muted);
-}
-
 .vf-toolbar {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
-}
-
-.vf-status {
-  color: var(--muted);
-  font-size: 0.9em;
 }
 </style>

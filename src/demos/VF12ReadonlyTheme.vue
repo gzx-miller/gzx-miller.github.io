@@ -85,14 +85,6 @@ const edges = ref<Edge[]>([
   background: var(--surface);
   overflow: hidden;
 }
-
-.vf-fallback {
-  height: 100%;
-  display: grid;
-  place-items: center;
-  color: var(--muted);
-}
-
 .vf-toolbar {
   display: flex;
   gap: 8px;
@@ -106,10 +98,5 @@ const edges = ref<Edge[]>([
   border: 1px solid var(--border);
   color: var(--muted);
   font-size: 12px;
-}
-
-.vf-status {
-  color: var(--muted);
-  font-size: 0.9em;
 }
 </style>

@@ -122,8 +122,6 @@ for await (const event of eventStream) {
 .mode-tabs { display: flex; gap: 8px; margin-bottom: 10px; }
 .mode-tabs button { padding: 6px 14px; border: 1px solid #d4a574; border-radius: 4px; background: #fef9f3; cursor: pointer; font-size: 13px; font-family: monospace; }
 .mode-tabs button.active { background: #c8703c; color: #fff; border-color: #c8703c; }
-.run-btn { padding: 6px 16px; background: #c8703c; color: #fff; border: none; border-radius: 4px; cursor: pointer; margin-bottom: 12px; }
-.run-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 .columns { display: flex; gap: 12px; margin-bottom: 12px; }
 .col { flex: 1; }
 .col h4 { margin: 0 0 8px; color: #8b5e3c; font-size: 14px; }
@@ -131,7 +129,7 @@ for await (const event of eventStream) {
 .output-area { background: #fef9f3; border: 1px solid #e8c9a0; border-radius: 6px; padding: 12px; min-height: 100px; }
 .output-area p { margin: 0; font-size: 13px; line-height: 1.6; color: #5a3e2b; }
 .placeholder { color: #a0623a !important; font-style: italic; }
-.cursor { animation: blink 0.8s infinite; }
+
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 .event-log { background: #f0f7f2; border: 1px solid #a8d5b8; border-radius: 6px; padding: 8px; max-height: 160px; overflow-y: auto; }
 .event-item { display: flex; gap: 6px; padding: 3px 0; font-size: 11px; border-bottom: 1px solid #d4e8d4; }
@@ -141,7 +139,4 @@ for await (const event of eventStream) {
 .event-item.chunk .event-name { color: #c8703c; }
 .event-item.llm_chunk .event-name { color: #c8703c; }
 .event-data { color: #5a3e2b; font-family: monospace; }
-.code-section { background: #fef9f3; border: 1px solid #e8c9a0; border-radius: 8px; padding: 12px; }
-.code-section h4 { margin: 0 0 8px; color: #8b5e3c; font-size: 14px; }
-.code-block { margin: 0; font-size: 12px; line-height: 1.6; white-space: pre-wrap; color: #5a3e2b; }
 </style>

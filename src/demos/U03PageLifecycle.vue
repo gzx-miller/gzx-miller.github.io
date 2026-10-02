@@ -80,13 +80,7 @@ function unload() {
   background: var(--surface-soft);
   color: var(--muted);
 }
-.log {
-  display: grid;
-  gap: 6px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
+
 .log li {
   display: flex;
   gap: 10px;

@@ -400,13 +400,6 @@ onUnmounted(() => {
   gap: 16px;
   padding: 20px;
 }
-
-.layout {
-  display: grid;
-  grid-template-columns: 1fr 280px;
-  gap: 16px;
-}
-
 @media (max-width: 720px) {
   .layout {
     grid-template-columns: 1fr;
@@ -444,13 +437,6 @@ onUnmounted(() => {
   border-radius: 12px;
   pointer-events: none;
 }
-
-.controls {
-  display: grid;
-  gap: 12px;
-  align-content: start;
-}
-
 fieldset {
   padding: 12px;
   gap: 8px;
@@ -474,15 +460,6 @@ input[type='range'] {
   width: 100%;
   accent-color: var(--accent);
 }
-
-.toggle {
-  display: flex !important;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: var(--text) !important;
-}
-
 .info-section {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -494,20 +471,6 @@ input[type='range'] {
     grid-template-columns: 1fr;
   }
 }
-
-.info-block {
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 12px;
-  background: var(--surface-soft);
-}
-
-.info-block h4 {
-  margin: 0 0 8px;
-  color: var(--chestnut);
-  font-size: 13px;
-}
-
 .mini-code {
   margin: 0;
   padding: 10px;

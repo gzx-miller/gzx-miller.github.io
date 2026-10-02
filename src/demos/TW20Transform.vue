@@ -311,7 +311,7 @@ module.exports = {
 </template>
 
 <style scoped>
-.tab-bar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+
 .tab-btn { padding: 6px 14px; border: 1px solid #e0a06a; border-radius: 6px; background: #fff; color: #5a2f22; cursor: pointer; font-size: 13px; transition: all 0.2s; }
 .tab-btn:hover { background: #fff3e0; }
 .tab-btn.active { background: #e85d04; color: #fff; border-color: #e85d04; }
@@ -333,8 +333,6 @@ module.exports = {
 .transform-preview { height: 180px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #fef3c7, #fed7aa); border-radius: 10px; margin-bottom: 12px; position: relative; overflow: hidden; }
 .transform-preview::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, #fdba74 1px, transparent 1px); background-size: 20px 20px; opacity: 0.3; }
 .transform-box { font-size: 60px; transition: transform 0.1s ease-out; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1)); }
-
-.reset-btn { padding: 8px 16px; background: #fff; border: 2px solid #fed7aa; border-radius: 6px; color: #7c2d12; cursor: pointer; font-size: 13px; transition: all 0.2s; }
 .reset-btn:hover { background: #fef3c7; border-color: #fdba74; }
 
 .magic-items-section h4 { margin: 0 0 12px; color: #7c2d12; }

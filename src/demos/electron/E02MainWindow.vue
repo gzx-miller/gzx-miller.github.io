@@ -135,7 +135,7 @@ mainWindow.on('closed', () => {
 
 <style scoped>
 .demo-container { padding: 24px; max-width: 900px; margin: 0 auto; }
-.description { color: #666; margin-bottom: 24px; line-height:1.6; }
+
 .config-panel, .lifecycle-demo, .code-example, .security-notice {
   margin-bottom: 24px;
   padding: 20px;
@@ -202,15 +202,7 @@ mainWindow.on('closed', () => {
   justify-content: center;
   font-size: 12px;
 }
-.code-example pre {
-  background: #1e1e1e;
-  color: #d4d4d4;
-  padding: 16px;
-  border-radius: 8px;
-  overflow-x: auto;
-  font-size: 13px;
-  line-height: 1.6;
-}
+
 .security-notice {
   background: #fff3cd;
   border-color: #ffc107;

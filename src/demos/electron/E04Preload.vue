@@ -116,7 +116,7 @@ contextBridge.exposeInMainWorld('api', {
 
 <style scoped>
 .demo-container { padding: 24px; max-width: 1000px; margin: 0 auto; }
-.description { color: #666; margin-bottom: 24px; line-height:1.6; }
+
 .comparison {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -160,12 +160,7 @@ contextBridge.exposeInMainWorld('api', {
   font-size: 13px;
   line-height: 1.6;
 }
-.log-panel {
-  background: #f9f9f9;
-  padding: 16px;
-  border-radius: 12px;
-  margin-bottom: 24px;
-}
+
 .log-panel h3 { margin: 0 0 12px 0; }
 .log-entries {
   background: #1e1e1e;

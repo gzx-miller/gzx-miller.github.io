@@ -97,14 +97,6 @@ function removeSelected() {
   background: var(--surface);
   overflow: hidden;
 }
-
-.vf-fallback {
-  height: 100%;
-  display: grid;
-  place-items: center;
-  color: var(--muted);
-}
-
 .vf-toolbar {
   display: flex;
   gap: 10px;

@@ -58,7 +58,7 @@ const width = ref(1200)
 .code-block { background: #1e1e2e; color: #cdd6f4; padding: 12px; border-radius: 8px; font-size: 12px; line-height: 1.6; margin-bottom: 16px; overflow-x: auto; }
 .prop-table { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; font-size: 12px; }
 .prop-row { display: grid; grid-template-columns: 1fr 1fr 1fr; border-bottom: 1px solid var(--border); }
-.prop-row:last-child { border-bottom: none; }
+
 .prop-row > span { padding: 5px 8px; }
-.prop-row.header { background: var(--primary); color: #fff; font-weight: 600; }
+
 </style>

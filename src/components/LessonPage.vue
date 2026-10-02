@@ -141,6 +141,7 @@ useSeoMeta({
     ref="lessonPageRef"
     id="main-content"
     class="lesson-page"
+    :data-category="activeKnowledge"
     tabindex="-1"
   >
     <nav class="breadcrumb" aria-label="面包屑">
@@ -170,7 +171,7 @@ useSeoMeta({
       </div>
     </header>
 
-    <section v-if="currentLesson.demo" class="lesson-section">
+    <section v-if="currentLesson.demo" class="lesson-section lesson-demo">
       <ClientOnly>
         <component :is="currentLesson.demo" />
         <template #fallback>

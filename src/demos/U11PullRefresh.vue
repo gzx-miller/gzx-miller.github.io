@@ -38,10 +38,7 @@ async function onLoadMore() {
 </template>
 
 <style scoped>
-.controls {
-  display: flex;
-  gap: 10px;
-}
+
 .screen {
   overflow: hidden;
   border: 1px solid var(--border);

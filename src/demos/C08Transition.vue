@@ -43,7 +43,7 @@ const duration = ref(300)
 .demo-desc { font-size: 13px; color: #868e96; margin-bottom: 16px; }
 .controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; font-size: 12px; margin-bottom: 16px; }
 .btn { padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; background: #fff; cursor: pointer; font-size: 12px; }
-.btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
 .controls select { padding: 2px 4px; border: 1px solid var(--border); border-radius: 4px; font-size: 12px; }
 .controls input[type="range"] { width: 80px; }
 .anim-area { display: flex; justify-content: center; padding: 24px; margin-bottom: 12px; }
@@ -54,7 +54,7 @@ const duration = ref(300)
 .code-block { background: #1e1e2e; color: #cdd6f4; padding: 12px; border-radius: 8px; font-size: 12px; line-height: 1.6; margin-bottom: 16px; overflow-x: auto; }
 .prop-table { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; font-size: 12px; }
 .prop-row { display: grid; grid-template-columns: 1fr 1fr 1fr; border-bottom: 1px solid var(--border); }
-.prop-row:last-child { border-bottom: none; }
+
 .prop-row > span { padding: 5px 8px; }
-.prop-row.header { background: var(--primary); color: #fff; font-weight: 600; }
+
 </style>

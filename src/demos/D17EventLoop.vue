@@ -66,7 +66,7 @@ setImmediate(() => console.log('4. setImmediate'))
 <style scoped>
 .loop-log { margin: 0.8rem 0; font-size: 12px; line-height: 1.8; }
 .log-phase { display: inline-block; width: 90px; font-weight: 600; color: #e8590c; }
-.log-msg { color: #475569; }
+
 .log-nextTick, .log-nextTick² { background: #fff7ed; border-left: 3px solid #e8590c; padding-left: 4px; }
 .log-Promise, .log-Promise² { background: #f0fdf4; border-left: 3px solid #16a34a; padding-left: 4px; }
 .log-setTimeout, .log-setImmediate { background: #f8fafc; border-left: 3px solid #6366f1; padding-left: 4px; }

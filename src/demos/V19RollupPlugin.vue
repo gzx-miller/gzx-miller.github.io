@@ -299,7 +299,7 @@ const filteredHooks = computed(() => {
 </template>
 
 <style scoped>
-.tab-bar { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+
 .tab-btn { padding: 5px 12px; border: 1px solid #e0a06a; border-radius: 4px; background: #fff; color: #5c4033; cursor: pointer; font-size: 13px; }
 .tab-btn.active { background: #e85d04; color: #fff; border-color: #e85d04; }
 .mini-code { background: #1e1e2e; color: #e0e0e0; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; line-height: 1.6; white-space: pre-wrap; }
@@ -342,10 +342,10 @@ const filteredHooks = computed(() => {
 .file-item { display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: #fff; border-radius: 4px; font-size: 12px; animation: slideIn 0.3s ease forwards; opacity: 0; }
 @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
 .file-name { flex: 1; color: #78350f; font-family: monospace; }
-.file-size { color: #a16207; }
+
 .file-status { font-size: 11px; padding: 2px 6px; border-radius: 3px; background: #f3f4f6; color: #6b7280; }
 .file-status.transformed { background: #d1fae5; color: #065f46; }
-.empty-state { text-align: center; padding: 30px; color: #a16207; font-size: 13px; }
+
 h4 { color: #92400e; margin: 12px 0 8px 0; font-size: 15px; }
 small { color: #8a6d42; }
 </style>

@@ -64,11 +64,11 @@ const active = ref('demo')
 .badge.success { background: #d3f9d8; color: #2b8a3e; }
 .controls { display: flex; gap: 6px; }
 .btn { padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; background: #fff; cursor: pointer; font-size: 12px; }
-.btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
 .note { background: #fff3bf; border: 1px solid #ffd43b; border-radius: 6px; padding: 10px 12px; font-size: 12px; line-height: 1.6; }
 .prop-table { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; font-size: 12px; }
 .prop-row { display: grid; grid-template-columns: 1fr 2fr; border-bottom: 1px solid var(--border); }
-.prop-row:last-child { border-bottom: none; }
+
 .prop-row > span { padding: 5px 10px; }
-.prop-row.header { background: var(--primary); color: #fff; font-weight: 600; }
+
 </style>

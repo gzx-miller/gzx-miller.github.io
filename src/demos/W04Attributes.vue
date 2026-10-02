@@ -283,19 +283,6 @@ gl_FragColor = vec4(vColor, 1.0);</code></pre>
 </template>
 
 <style scoped>
-.desc {
-  color: var(--muted);
-  margin-bottom: 16px;
-  line-height: 1.7;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 16px;
-}
-
 .canvas-wrap {
   display: flex;
   justify-content: center;
@@ -336,21 +323,6 @@ gl_FragColor = vec4(vColor, 1.0);</code></pre>
   width: 100%;
   accent-color: var(--accent);
 }
-
-.checkbox-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-  cursor: pointer;
-  color: var(--text);
-  font-size: 14px;
-}
-
-.checkbox-item input {
-  accent-color: var(--accent);
-}
-
 .hint {
   margin: 4px 0 0;
   font-size: 12px;

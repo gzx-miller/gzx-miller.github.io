@@ -83,13 +83,7 @@ int main() {
   line-height: 1.6;
   margin-bottom: 12px;
 }
-.tips-box {
-  background: #f0f7ff;
-  padding: 10px;
-  border-radius: 6px;
-  border-left: 3px solid #0891b2;
-  margin-top: 10px;
-}
+
 ul {
   padding-left: 18px;
   font-size: 13px;

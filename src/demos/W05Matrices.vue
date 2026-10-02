@@ -375,19 +375,6 @@ void main() {
 </template>
 
 <style scoped>
-.desc {
-  color: var(--muted);
-  margin-bottom: 16px;
-  line-height: 1.7;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 16px;
-}
-
 .canvas-wrap {
   display: flex;
   justify-content: center;
@@ -549,16 +536,6 @@ void main() {
   background: rgba(246, 193, 90, 0.08);
   color: var(--muted);
 }
-
-.shader-section {
-  margin-bottom: 16px;
-}
-
-.shader-section h4 {
-  margin-bottom: 8px;
-  color: var(--chestnut);
-}
-
 .tips-box {
   background: rgba(246, 193, 90, 0.12);
   border: 1px solid var(--border);

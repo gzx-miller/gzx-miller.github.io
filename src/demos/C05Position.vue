@@ -47,8 +47,6 @@ const positions = ['static','relative','absolute','fixed','sticky']
 .demo-desc { font-size: 13px; color: #868e96; margin-bottom: 16px; }
 .controls { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
 .btn { padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; background: #fff; cursor: pointer; font-size: 12px; }
-.btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-
 .pos-viewport { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 16px; }
 .pos-scroll-area { height: 220px; overflow-y: auto; padding: 16px; }
 .pos-reference { position: relative; background: var(--primary-light); border: 2px dashed var(--border); border-radius: 8px; padding: 40px 16px 16px; min-height: 180px; }
@@ -65,7 +63,7 @@ const positions = ['static','relative','absolute','fixed','sticky']
 
 .prop-table { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; font-size: 12px; }
 .prop-row { display: grid; grid-template-columns: 1fr 1fr 1fr; border-bottom: 1px solid var(--border); }
-.prop-row:last-child { border-bottom: none; }
+
 .prop-row > span { padding: 5px 8px; word-break: break-all; }
-.prop-row.header { background: var(--primary); color: #fff; font-weight: 600; }
+
 </style>

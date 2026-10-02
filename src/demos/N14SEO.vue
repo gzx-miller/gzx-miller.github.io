@@ -110,7 +110,7 @@ useSeoMeta({
 </template>
 
 <style scoped>
-.active { background: #e85d04; color: #fff; }
+
 .form-group { margin-bottom: 8px; }
 .form-group label { font-size: 13px; font-weight: 500; display: block; margin-bottom: 2px; }
 .head-preview { background: #f9f9f9; padding: 10px; border-radius: 6px; font-size: 12px; }

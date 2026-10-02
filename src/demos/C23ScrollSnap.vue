@@ -37,8 +37,6 @@ const colors = ['#ff8787', '#ffc078', '#ffd43b', '#69db7c', '#66d9e8', '#a29bfe'
 .demo-desc { font-size: 13px; color: #868e96; margin-bottom: 16px; }
 .controls { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
 .btn { padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; background: #fff; cursor: pointer; font-size: 12px; }
-.btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-
 .scroll-demo {
   display: flex;
   gap: 12px;
@@ -70,7 +68,7 @@ const colors = ['#ff8787', '#ffc078', '#ffd43b', '#69db7c', '#66d9e8', '#a29bfe'
 
 .prop-table { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; font-size: 12px; margin-top: 16px; }
 .prop-row { display: grid; grid-template-columns: 1fr 2fr; border-bottom: 1px solid var(--border); }
-.prop-row:last-child { border-bottom: none; }
+
 .prop-row > span { padding: 5px 10px; }
-.prop-row.header { background: var(--primary); color: #fff; font-weight: 600; }
+
 </style>

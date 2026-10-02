@@ -77,7 +77,7 @@ const searchResults = computed(() => {
 .search-row { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
 .search-row input { padding: 6px 10px; border: 1px solid #d4a574; border-radius: 4px; flex: 1; min-width: 200px; }
 .query-vec { font-size: 12px; color: #a0623a; font-family: monospace; }
-.results-list { display: flex; flex-direction: column; gap: 6px; }
+
 .result-item { padding: 10px; border-radius: 6px; border: 1px solid #e8c9a0; background: #fef9f3; }
 .result-item.top { border-color: #c8703c; background: #fde8d0; }
 .result-header { display: flex; justify-content: space-between; margin-bottom: 4px; }

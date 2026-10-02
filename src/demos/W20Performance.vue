@@ -480,7 +480,7 @@ performance.now() 差值计算</code></pre>
   gap: 20px;
 }
 @media (max-width: 720px) {
-  .demo-layout { grid-template-columns: 1fr; }
+  
 }
 .left-panel {
   display: flex;
@@ -501,17 +501,7 @@ performance.now() 差值计算</code></pre>
   max-width: 100%;
   height: auto;
 }
-.fps-badge {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: var(--chestnut);
-  color: #fff;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 600;
-}
+
 .metrics-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -598,10 +588,7 @@ performance.now() 差值计算</code></pre>
 .control-item.checkbox input {
   width: auto;
 }
-.control-item input[type="range"] {
-  width: 100%;
-  accent-color: var(--leaf-red);
-}
+
 .control-item .hint {
   font-size: 12px;
   color: var(--muted);
@@ -649,16 +636,6 @@ performance.now() 差值计算</code></pre>
   line-height: 1.6;
   color: var(--text);
 }
-.code-display {
-  background: rgba(123, 53, 29, 0.06);
-  border: 1px solid rgba(123, 53, 29, 0.15);
-  border-radius: 8px;
-  padding: 12px;
-}
-.code-display h5 {
-  margin: 0 0 8px;
-  color: var(--leaf-orange);
-}
 .code-display pre {
   margin: 0;
   font-size: 12px;
@@ -666,10 +643,7 @@ performance.now() 差值计算</code></pre>
   overflow-x: auto;
   max-height: 100px;
 }
-.code-display code {
-  color: var(--forest);
-  font-family: ui-monospace, monospace;
-}
+
 [data-theme='dark'] .metric-card {
   background: rgba(42, 30, 24, 0.9);
   border-color: rgba(74, 52, 40, 0.5);
