@@ -9,6 +9,8 @@ const jsxCodeModules = import.meta.glob<string>('../../demos/react-jsx/*.jsx', {
 const stateCodeModules = import.meta.glob<string>('../../demos/state-react/*.js', { query: '?raw', import: 'default' })
 const jsCodeModules = import.meta.glob<string>('../../demos/js-code/*.js', { query: '?raw', import: 'default' })
 const tsCodeModules = import.meta.glob<string>('../../demos/ts-code/*.ts', { query: '?raw', import: 'default' })
+// 文案需要原样显示 import.meta 的 client 标记时用该常量拼接：直接写字面量会被压缩器折叠后命中 Nitro 的替换规则
+const metaClient = ['import', 'meta', 'client'].join('.')
 const styleCodeModules = import.meta.glob<string>('../../demos/style-code/*', { query: '?raw', import: 'default' })
 
 function createDemo(name: string) {
@@ -320,21 +322,21 @@ export const lessons: Lesson[] = [
     navTitle: 'ClientOnly',
     category: '渲染',
     path: '/nuxt/n-10/client-only',
-    summary: '掌握 ClientOnly 组件、import.meta' + '.client 判断与 .client.ts 后缀等客户端专属渲染方式。',
+    summary: `掌握 ClientOnly 组件、${metaClient} 判断与 .client.ts 后缀等客户端专属渲染方式。`,
     demo: N10ClientOnly,
     code: N10Code,
     language: 'vue',
     principle:
-      '部分内容只能在浏览器中渲染：直接操作 DOM 的图表库、依赖 window/navigator 的浏览器 API、以及时间/随机数等动态内容。Nuxt 提供多种客户端专属方案：用 <ClientOnly> 包裹仅在客户端渲染的子树并给出 fallback，用 import.meta' + '.client 做编译时的端侧分支，用 onMounted 在挂载后再写入浏览器特有数据，或用 .client.ts 后缀让插件只在客户端加载。',
+      `部分内容只能在浏览器中渲染：直接操作 DOM 的图表库、依赖 window/navigator 的浏览器 API、以及时间/随机数等动态内容。Nuxt 提供多种客户端专属方案：用 <ClientOnly> 包裹仅在客户端渲染的子树并给出 fallback，用 ${metaClient} 做编译时的端侧分支，用 onMounted 在挂载后再写入浏览器特有数据，或用 .client.ts 后缀让插件只在客户端加载。`,
     flow: [
       '遇到不兼容 SSR 的组件，用 <ClientOnly> 包裹，并在 #fallback 提供服务端占位。',
-      '需要访问浏览器 API 时，用 import.meta' + '.client 分支或用 onMounted 在客户端赋值。',
+      `需要访问浏览器 API 时，用 ${metaClient} 分支或用 onMounted 在客户端赋值。`,
       '需要在整个端侧初始化第三方库时，把插件命名为 *.client.ts 使其仅客户端注册。',
       '对同一个不兼容 SSR 的第三方库分别用 <ClientOnly> 与 .client.ts 接入，对比报错与占位效果。',
     ],
     notes: [
       '<ClientOnly> 的默认插槽仅客户端渲染，#fallback 插槽用于服务端渲染期间的占位内容。',
-      'import.meta' + '.client 是编译期替换为 true/false 的常量，不会带来运行时判断开销。',
+      `${metaClient} 是编译期替换为 true/false 的常量，不会带来运行时判断开销。`,
       '过度使用客户端专属方案会削弱 SSR 的 SEO 与首屏性能，应仅针对确有必要的部分使用。',
       'fallback 内容需与客户端最终结构相仿，避免占位忽高忽低引起布局跳动（CLS）。',
     ],
