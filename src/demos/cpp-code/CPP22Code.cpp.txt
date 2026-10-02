@@ -1,0 +1,30 @@
+#include <iostream>
+#include <fstream>
+
+// RAII 类示例：文件句柄
+class FileHandle {
+private:
+    std::fstream file;
+
+public:
+    FileHandle(const char* filename) {
+        file.open(filename, std::ios::out);
+    }
+
+    ~FileHandle() {
+        if (file.is_open()) {
+            file.close();
+        }
+    }
+};
+
+int main() {
+    try {
+        FileHandle file("test.txt");
+        // 函数结束时自动析构，文件被关闭
+    } catch (const std::exception& e) {
+        std::cout << "错误: " << e.what() << std::endl;
+    }
+
+    return 0;
+}

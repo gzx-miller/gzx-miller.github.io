@@ -1,0 +1,123 @@
+import { ChatOpenAI } from '@langchain/openai'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
+import { StringOutputParser } from '@langchain/core/output_parsers'
+import { RunnableSequence, RunnablePassthrough } from '@langchain/core/runnables'
+
+const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0.7 })
+const parser = new StringOutputParser()
+
+// 示例1: 三步链式 - 大纲生成 -> 内容展开 -> 摘要提炼
+const outlinePrompt = ChatPromptTemplate.fromTemplate(`
+请为"{topic}"生成一份课程大纲，包含5个主要章节。
+用数字编号列出每个章节的标题。
+`)
+
+const contentPrompt = ChatPromptTemplate.fromTemplate(`
+根据以下课程大纲，为每个章节展开详细内容：
+
+{outline}
+
+请详细描述每个章节的核心知识点。
+`)
+
+const summaryPrompt = ChatPromptTemplate.fromTemplate(`
+根据以下课程内容，提炼一份100字以内的课程摘要：
+
+{content}
+`)
+
+// 串联三个步骤
+const fullChain = RunnableSequence.from([
+  {
+    outline: outlinePrompt.pipe(model).pipe(parser),
+    topic: new RunnablePassthrough(),
+  },
+  {
+    content: (input) => contentPrompt.pipe(model).pipe(parser).invoke({ outline: input.outline }),
+    outline: (input) => input.outline,
+  },
+  {
+    summary: (input) => summaryPrompt.pipe(model).pipe(parser).invoke({ content: input.content }),
+    outline: (input) => input.outline,
+    content: (input) => input.content,
+  },
+])
+
+const result = await fullChain.invoke('LangChain.js 入门')
+console.log('大纲:', result.outline)
+console.log('摘要:', result.summary)
+
+// 示例2: 顺序链 - 前一步输出作为后一步输入
+const step1Prompt = ChatPromptTemplate.fromTemplate(
+  '把这句话翻译成英文: {text}'
+)
+const step2Prompt = ChatPromptTemplate.fromTemplate(
+  '把这句话改写得更诗意: {text}'
+)
+const step3Prompt = ChatPromptTemplate.fromTemplate(
+  '为这句话配一个标题: {text}'
+)
+
+const sequentialChain = step1Prompt
+  .pipe(model)
+  .pipe(parser)
+  .pipe((text) => ({ text }))
+  .pipe(step2Prompt)
+  .pipe(model)
+  .pipe(parser)
+  .pipe((text) => ({ text }))
+  .pipe(step3Prompt)
+  .pipe(model)
+  .pipe(parser)
+
+const title = await sequentialChain.invoke({ text: '春天来了，花儿都开了。' })
+console.log('诗意标题:', title)
+
+// 示例3: 分支链 - 根据条件选择不同路径
+import { RunnableBranch } from '@langchain/core/runnables'
+
+const classifyPrompt = ChatPromptTemplate.fromTemplate(`
+判断用户问题属于哪个类别（只返回类别名）：
+- 技术问题
+- 产品咨询
+- 投诉建议
+- 其他
+
+问题: {question}
+`)
+
+const techChain = ChatPromptTemplate.fromTemplate(
+  '作为技术支持工程师，回答: {question}'
+).pipe(model).pipe(parser)
+
+const productChain = ChatPromptTemplate.fromTemplate(
+  '作为产品顾问，回答: {question}'
+).pipe(model).pipe(parser)
+
+const complaintChain = ChatPromptTemplate.fromTemplate(
+  '作为客服经理，诚恳地回应: {question}'
+).pipe(model).pipe(parser)
+
+const defaultChain = ChatPromptTemplate.fromTemplate(
+  '作为通用助手，回答: {question}'
+).pipe(model).pipe(parser)
+
+const branch = RunnableBranch.from([
+  [(input) => input.category === '技术问题', techChain],
+  [(input) => input.category === '产品咨询', productChain],
+  [(input) => input.category === '投诉建议', complaintChain],
+  defaultChain,
+])
+
+const classifier = classifyPrompt.pipe(model).pipe(parser)
+
+const fullBranchChain = RunnableSequence.from([
+  {
+    question: (input: { question: string }) => input.question,
+    category: (input) => classifier.invoke({ question: input.question }),
+  },
+  branch,
+])
+
+const answer = await fullBranchChain.invoke({ question: '如何重置密码？' })
+console.log('回答:', answer)

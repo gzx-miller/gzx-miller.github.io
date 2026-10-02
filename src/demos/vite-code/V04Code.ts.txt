@@ -1,0 +1,70 @@
+// HMR API 手动使用示例
+// src/hmr-example.ts
+
+export const state = { count: 0 }
+
+export function increment() {
+  state.count++
+}
+
+// 接受自身的热更新
+if (import.meta.hot) {
+  import.meta.hot.accept((newModule) => {
+    // 模块更新时的回调
+    console.log('模块已更新:', newModule)
+    // 可以在这里做状态迁移
+  })
+}
+
+// ====================
+// 接受依赖模块的更新
+// ====================
+
+import { helper } from './helper'
+
+export function useHelper() {
+  return helper()
+}
+
+if (import.meta.hot) {
+  // 接受 ./helper 的更新
+  import.meta.hot.accept('./helper', (newHelper) => {
+    console.log('helper 模块已更新')
+    // 更新对 helper 的引用
+  })
+}
+
+// ====================
+// 自定义 HMR 边界处理
+// ====================
+
+// store.ts
+export const store = {
+  data: null
+}
+
+if (import.meta.hot) {
+  import.meta.hot.accept(() => {
+    // 热更新时保留状态
+    // 或执行清理工作
+  })
+  
+  // 热更新前的清理
+  import.meta.hot.dispose(() => {
+    console.log('模块即将被替换')
+  })
+}
+
+// ====================
+// Vue SFC 的 HMR（由 @vitejs/plugin-vue 自动处理）
+// ====================
+
+// Vite 会自动处理:
+// - <template> 更新: 重新渲染组件，不丢失状态
+// - <script setup> 更新: 销毁并重建组件，状态会丢失
+// - <style> 更新: 即时更新，无需刷新
+
+// 可以在组件中手动处理
+if (import.meta.hot) {
+  import.meta.hot.accept()
+}

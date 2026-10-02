@@ -1,0 +1,13 @@
+import math
+
+def softmax(logits, T=1.0):
+    # 取 e^(z/T) 消掉负数，再整体归一化
+    z = [v / T for v in logits]
+    ex = [math.exp(v - max(z)) for v in z]   # 减去最大值防溢出
+    s  = sum(ex)
+    return [v / s for v in ex]
+
+logits = [2.0, 1.0, 0.1]
+print(softmax(logits))        # 和 = 1 的三份概率
+print(softmax(logits, T=0.5)) # 更低温度：更“果断”
+print(softmax(logits, T=2.0)) # 更高温度：更“随机平均”

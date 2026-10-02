@@ -1,5 +1,6 @@
 import type { Component } from 'vue'
 import { defineAsyncComponent } from 'vue'
+import { restoreCodeSource } from './code-restore'
 
 const demoModules = import.meta.glob<Component>('../demos/*.vue', { import: 'default' })
 const vueCodeModules = import.meta.glob<string>('../demos/*.vue', { query: '?raw', import: 'default' })
@@ -40,5 +41,5 @@ export function createCodeLoader(path: string) {
     throw new Error(`未找到内容源码：${path}`)
   }
 
-  return loader
+  return () => loader().then(restoreCodeSource)
 }

@@ -1,0 +1,131 @@
+// Overmind 状态管理 - 分形架构
+
+import { createOvermind } from 'overmind'
+import { createHook } from 'overmind-react'
+
+// 定义状态、动作和 effects
+const config = {
+  state: {
+    user: {
+      isLoggedIn: false,
+      name: '',
+      token: '',
+    },
+    todos: [],
+    filter: 'all',
+  },
+  actions: {
+    setUser: ({ state }, user) => {
+      state.user = { ...user, isLoggedIn: true }
+    },
+    logout: ({ state }) => {
+      state.user = {
+        isLoggedIn: false,
+        name: '',
+        token: '',
+      }
+    },
+    addTodo: ({ state }, text) => {
+      state.todos.push({
+        id: Date.now(),
+        text,
+        completed: false,
+      })
+    },
+    toggleTodo: ({ state }, id) => {
+      const todo = state.todos.find((t) => t.id === id)
+      if (todo) {
+        todo.completed = !todo.completed
+      }
+    },
+    setFilter: ({ state }, filter) => {
+      state.filter = filter
+    },
+    async loadTodos({ state, effects }) {
+      const todos = await effects.api.getTodos()
+      state.todos = todos
+    },
+  },
+  effects: {
+    api: {
+      async getTodos() {
+        const response = await fetch('/api/todos')
+        return response.json()
+      },
+      async addTodo(text) {
+        const response = await fetch('/api/todos', {
+          method: 'POST',
+          body: JSON.stringify({ text }),
+        })
+        return response.json()
+      },
+    },
+    storage: {
+      saveToken(token) {
+        localStorage.setItem('token', token)
+      },
+      getToken() {
+        return localStorage.getItem('token')
+      },
+    },
+  },
+  // 派生值 (getters)
+  derived: {
+    completedTodos: ({ state }) =>
+      state.todos.filter((todo) => todo.completed),
+    activeTodos: ({ state }) =>
+      state.todos.filter((todo) => !todo.completed),
+    filteredTodos: ({ state }) => {
+      switch (state.filter) {
+        case 'active':
+          return state.activeTodos
+        case 'completed':
+          return state.completedTodos
+        default:
+          return state.todos
+      }
+    },
+  },
+}
+
+// 创建 Overmind 实例
+export const overmind = createOvermind(config)
+
+// React Hook
+export const useOvermind = createHook()
+
+// 使用示例
+import React from 'react'
+import { createRoot } from 'react-dom/client'
+import { Provider } from 'overmind-react'
+
+function TodoList() {
+  const { state, actions } = useOvermind()
+
+  return (
+    <section className="panel">
+      <h3>Todo 列表</h3>
+      <ul>
+        {state.filteredTodos.map((todo) => (
+          <li key={todo.id} onClick={() => actions.toggleTodo(todo.id)}>
+            {todo.completed ? '✓ ' : '○ '}{todo.text}
+          </li>
+        ))}
+      </ul>
+      <button onClick={() => actions.addTodo('新任务')}>添加</button>
+    </section>
+  )
+}
+
+function App() {
+  return (
+    <Provider value={overmind}>
+      <main className="app">
+        <p className="kicker">Overmind 分形状态</p>
+        <TodoList />
+      </main>
+    </Provider>
+  )
+}
+
+createRoot(document.getElementById('root')).render(<App />)

@@ -1,0 +1,17 @@
+# CRF 模式：高质量（接近视觉无损）
+ffmpeg -i input.mp4 -c:v libx264 -crf 18 output.mp4
+
+# CRF 默认质量（23 为默认值）
+ffmpeg -i input.mp4 -c:v libx264 -crf 23 output.mp4
+
+# H.265 编码（同等画质文件更小）
+ffmpeg -i input.mp4 -c:v libx265 -crf 28 output.mp4
+
+# CRF + 限制最大码率（防止峰值）
+ffmpeg -i input.mp4 -c:v libx264 -crf 23 -maxrate 3M -bufsize 6M output.mp4
+
+# CBR 恒定码率（适合流媒体）
+ffmpeg -i input.mp4 -c:v libx264 -b:v 3M -maxrate 3M -minrate 3M -bufsize 6M output.mp4
+
+# VBR 可变码率
+ffmpeg -i input.mp4 -c:v libx264 -b:v 2M -maxrate 3M -bufsize 4M output.mp4

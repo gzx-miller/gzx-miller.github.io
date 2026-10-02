@@ -1,6 +1,7 @@
 import type { Component } from 'vue'
 import { defineAsyncComponent } from 'vue'
 import type { Lesson } from '../lessons'
+import { restoreCodeSource } from '../code-restore'
 
 const demoModules = import.meta.glob<Component>('../../demos/*.vue', { import: 'default' })
 const vueCodeModules = import.meta.glob<string>('../../demos/*.vue', { query: '?raw', import: 'default' })
@@ -9,6 +10,7 @@ const stateCodeModules = import.meta.glob<string>('../../demos/state-react/*.js'
 const jsCodeModules = import.meta.glob<string>('../../demos/js-code/*.js', { query: '?raw', import: 'default' })
 const tsCodeModules = import.meta.glob<string>('../../demos/ts-code/*.ts', { query: '?raw', import: 'default' })
 const styleCodeModules = import.meta.glob<string>('../../demos/style-code/*', { query: '?raw', import: 'default' })
+const cppCodeModules = import.meta.glob<string>('../../demos/cpp-code/*', { query: '?raw', import: 'default' })
 
 function createDemo(name: string) {
   const loader = demoModules[`../../demos/${name}.vue`]
@@ -30,10 +32,12 @@ function createCodeLoader(path: string) {
           ? tsCodeModules
           : path.startsWith('style-code/')
             ? styleCodeModules
+            : path.startsWith('cpp-code/')
+              ? cppCodeModules
             : vueCodeModules
   const loader = modules[`../../demos/${path}`]
   if (!loader) throw new Error(`未找到内容源码：${path}`)
-  return loader
+  return () => loader().then(restoreCodeSource)
 }
 
 const CPP01Demo = createDemo('CPP01ProgramStructureArticle')
@@ -68,6 +72,37 @@ const CPP29Demo = createDemo('CPP29DesignPatternsArticle')
 const CPP30Demo = createDemo('CPP30CodingStandardsArticle')
 
 
+const CPP1Code = createCodeLoader('cpp-code/CPP1Code.cpp.txt')
+const CPP2Code = createCodeLoader('cpp-code/CPP2Code.cpp.txt')
+const CPP3Code = createCodeLoader('cpp-code/CPP3Code.cpp.txt')
+const CPP4Code = createCodeLoader('cpp-code/CPP4Code.cpp.txt')
+const CPP5Code = createCodeLoader('cpp-code/CPP5Code.cpp.txt')
+const CPP6Code = createCodeLoader('cpp-code/CPP6Code.cpp.txt')
+const CPP7Code = createCodeLoader('cpp-code/CPP7Code.cpp.txt')
+const CPP8Code = createCodeLoader('cpp-code/CPP8Code.cpp.txt')
+const CPP9Code = createCodeLoader('cpp-code/CPP9Code.cpp.txt')
+const CPP10Code = createCodeLoader('cpp-code/CPP10Code.cpp.txt')
+const CPP11Code = createCodeLoader('cpp-code/CPP11Code.cpp.txt')
+const CPP12Code = createCodeLoader('cpp-code/CPP12Code.cpp.txt')
+const CPP13Code = createCodeLoader('cpp-code/CPP13Code.cpp.txt')
+const CPP14Code = createCodeLoader('cpp-code/CPP14Code.cpp.txt')
+const CPP15Code = createCodeLoader('cpp-code/CPP15Code.cpp.txt')
+const CPP16Code = createCodeLoader('cpp-code/CPP16Code.cpp.txt')
+const CPP17Code = createCodeLoader('cpp-code/CPP17Code.cpp.txt')
+const CPP18Code = createCodeLoader('cpp-code/CPP18Code.cpp.txt')
+const CPP19Code = createCodeLoader('cpp-code/CPP19Code.cpp.txt')
+const CPP20Code = createCodeLoader('cpp-code/CPP20Code.cpp.txt')
+const CPP21Code = createCodeLoader('cpp-code/CPP21Code.cpp.txt')
+const CPP22Code = createCodeLoader('cpp-code/CPP22Code.cpp.txt')
+const CPP23Code = createCodeLoader('cpp-code/CPP23Code.cpp.txt')
+const CPP24Code = createCodeLoader('cpp-code/CPP24Code.cpp.txt')
+const CPP25Code = createCodeLoader('cpp-code/CPP25Code.cpp.txt')
+const CPP26Code = createCodeLoader('cpp-code/CPP26Code.cpp.txt')
+const CPP27Code = createCodeLoader('cpp-code/CPP27Code.cpp.txt')
+const CPP28Code = createCodeLoader('cpp-code/CPP28Code.cpp.txt')
+const CPP29Code = createCodeLoader('cpp-code/CPP29Code.cpp.txt')
+const CPP30Code = createCodeLoader('cpp-code/CPP30Code.cpp.txt')
+
 export const lessons: Lesson[] = [
 {
     id: 'CPP_1',
@@ -93,7 +128,7 @@ export const lessons: Lesson[] = [
     ],
     problem: '解决"C++ 程序是如何从源代码变成可执行文件的，以及如何理解编译和链接错误"的问题。',
     demo: CPP01Demo,
-    code: () => Promise.resolve(`#include <iostream>\n\n// 第一个 C++ 程序\nint main() {\n    std::cout << "Hello, C++!" << std::endl;\n    return 0;\n}`),
+    code: CPP1Code,
     language: 'cpp',
   },
 {
@@ -120,7 +155,7 @@ export const lessons: Lesson[] = [
     ],
     problem: '解决"如何选择合适的数据类型、理解变量作用域，以及安全地进行类型转换"的问题。',
     demo: CPP02Demo,
-    code: () => Promise.resolve(`#include <iostream>\n#include <limits>\n\nint main() {\n    int n = 100;\n    double d = 3.14159;\n    char c = 'A';\n    bool b = true;\n\n    // 统一初始化\n    int x{5};\n    // int bad{3.14};  // 编译错误！\n\n    // 类型转换\n    double pi = 3.14159;\n    int intPi = static_cast<int>(pi);\n\n    return 0;\n}`),
+    code: CPP2Code,
     language: 'cpp',
   },
 {
@@ -147,7 +182,7 @@ export const lessons: Lesson[] = [
     ],
     problem: '解决"如何理解复杂表达式的求值过程、避免运算符优先级陷阱和未定义行为"的问题。',
     demo: CPP03Demo,
-    code: () => Promise.resolve(`#include <iostream>\n\nint main() {\n    int a = 10, b = 3;\n    std::cout << a + b << std::endl;\n    std::cout << a / b << std::endl;\n    std::cout << a % b << std::endl;\n\n    int x = 0;\n    if (a > b && ++x) { }\n    std::cout << x << std::endl;\n\n    return 0;\n}`),
+    code: CPP3Code,
     language: 'cpp',
   },
 {
@@ -174,7 +209,7 @@ export const lessons: Lesson[] = [
     ],
     problem: '解决"如何选择合适的控制流语句、避免常见陷阱（如 switch 穿透、迭代器失效）"的问题。',
     demo: CPP04Demo,
-    code: () => Promise.resolve(`#include <iostream>\n#include <vector>\n\nint main() {\n    int score = 85;\n    if (score >= 90) {\n        std::cout << "优秀";\n    } else if (score >= 60) {\n        std::cout << "及格";\n    }\n\n    std::vector<int> nums = {1, 2, 3, 4, 5};\n    for (int num : nums) {\n        std::cout << num << " ";\n    }\n\n    return 0;\n}`),
+    code: CPP4Code,
     language: 'cpp',
   },
 {
@@ -201,7 +236,7 @@ export const lessons: Lesson[] = [
     ],
     problem: '解决"如何选择参数传递方式、设计清晰的函数接口，以及理解重载决议和递归实现"的问题。',
     demo: CPP05Demo,
-    code: () => Promise.resolve(`#include <iostream>\n#include <string>\n\nvoid byValue(int x) { x = 100; }\nvoid byReference(int& x) { x = 100; }\n\nint main() {\n    int x = 5;\n    byValue(x);\n    std::cout << x << std::endl;\n\n    byReference(x);\n    std::cout << x << std::endl;\n\n    return 0;\n}`),
+    code: CPP5Code,
     language: 'cpp',
   },
 {
@@ -228,7 +263,7 @@ export const lessons: Lesson[] = [
     ],
     problem: '解决"如何安全地处理字符串和数组、避免缓冲区溢出和数组退化问题"的问题。',
     demo: CPP06Demo,
-    code: () => Promise.resolve(`#include <iostream>\n#include <string>\n\nint main() {\n    std::string s1 = "Hello";\n    std::string s2 = "World";\n    std::string s3 = s1 + ", " + s2 + "!";\n    std::cout << s3 << std::endl;\n\n    int arr[5] = {1, 2, 3};\n    std::cout << arr[0] << std::endl;\n\n    return 0;\n}`),
+    code: CPP6Code,
     language: 'cpp',
   },
 {
@@ -255,7 +290,7 @@ export const lessons: Lesson[] = [
     ],
     problem: '解决"指针和引用有什么区别、如何选择、以及理解指针算术和 const 正确用法"的问题。',
     demo: CPP07Demo,
-    code: () => Promise.resolve(`#include <iostream>\n\nint main() {\n    int x = 42;\n    int* p = &x;\n    std::cout << *p << std::endl;\n    *p = 100;\n    std::cout << x << std::endl;\n\n    int& r = x;\n    r = 10;\n    std::cout << x << std::endl;\n\n    int* np = nullptr;\n    if (np != nullptr) { }\n\n    return 0;\n}`),
+    code: CPP7Code,
     language: 'cpp',
   },
 {
@@ -282,22 +317,7 @@ export const lessons: Lesson[] = [
     ],
     problem: '解决"如何安全地管理动态内存、避免内存泄漏和悬垂指针，以及何时应该使用智能指针"的问题。',
     demo: CPP08Demo,
-    code: () => Promise.resolve(`#include <iostream>
-
-int main() {
-    int* p = new int(42);
-    std::cout << *p << std::endl;
-    delete p;
-    p = nullptr;
-
-    int* arr = new int[5]{1, 2, 3, 4, 5};
-    for (int i = 0; i < 5; i++) {
-        std::cout << arr[i] << " ";
-    }
-    delete[] arr;
-
-    return 0;
-}`),
+    code: CPP8Code,
     language: 'cpp',
   },
 {
@@ -324,27 +344,7 @@ int main() {
     ],
     problem: '解决"如何用类实现封装、理解访问控制的作用，以及正确使用 this 指针和 const 成员函数"的问题。',
     demo: CPP09Demo,
-    code: () => Promise.resolve(`#include <iostream>
-#include <string>
-
-class Person {
-private:
-    std::string name;
-    int age;
-
-public:
-    Person(const std::string& n, int a) : name(n), age(a) {}
-
-    void introduce() const {
-        std::cout << "我叫 " << name << "，今年 " << age << " 岁。" << std::endl;
-    }
-};
-
-int main() {
-    Person p("栗子", 3);
-    p.introduce();
-    return 0;
-}`),
+    code: CPP9Code,
     language: 'cpp',
   },
 {
@@ -371,42 +371,7 @@ int main() {
     ],
     problem: '解决"如何控制对象的初始化和清理、理解对象生命周期，以及正确实现特殊成员函数"的问题。',
     demo: CPP10Demo,
-    code: () => Promise.resolve(`#include <iostream>
-#include <string>
-
-class Student {
-private:
-    std::string* name;
-
-public:
-    Student(const std::string& n) {
-        name = new std::string(n);
-    }
-
-    // 拷贝构造函数（深拷贝）
-    Student(const Student& other) {
-        name = new std::string(*other.name);
-    }
-
-    // 拷贝赋值运算符
-    Student& operator=(const Student& other) {
-        if (this != &other) {
-            delete name;
-            name = new std::string(*other.name);
-        }
-        return *this;
-    }
-
-    ~Student() {
-        delete name;
-    }
-};
-
-int main() {
-    Student s1("小明");
-    Student s2 = s1;
-    return 0;
-}`),
+    code: CPP10Code,
     language: 'cpp',
   },
 {
@@ -433,50 +398,7 @@ int main() {
     ],
     problem: '解决"如何正确处理含有资源的类的拷贝行为、避免浅拷贝陷阱，以及遵循 Rule of Three/Five"的问题。',
     demo: CPP11Demo,
-    code: () => Promise.resolve(`#include <iostream>
-#include <cstring>
-
-class String {
-private:
-    char* data;
-    size_t length;
-
-public:
-    // 构造函数
-    String(const char* str) {
-        length = std::strlen(str);
-        data = new char[length + 1];
-        std::strcpy(data, str);
-    }
-
-    // 拷贝构造函数（深拷贝）
-    String(const String& other) {
-        length = other.length;
-        data = new char[length + 1];
-        std::strcpy(data, other.data);
-    }
-
-    // 拷贝赋值运算符
-    String& operator=(const String& other) {
-        if (this != &other) {
-            delete[] data;
-            length = other.length;
-            data = new char[length + 1];
-            std::strcpy(data, other.data);
-        }
-        return *this;
-    }
-
-    ~String() {
-        delete[] data;
-    }
-};
-
-int main() {
-    String s1("Hello");
-    String s2 = s1;
-    return 0;
-}`),
+    code: CPP11Code,
     language: 'cpp',
   },
 {
@@ -503,37 +425,7 @@ int main() {
     ],
     problem: '解决"如何正确使用继承实现代码复用和多态、理解切片问题，以及避免构造析构中的常见错误"的问题。',
     demo: CPP12Demo,
-    code: () => Promise.resolve(`#include <iostream>
-#include <string>
-
-// 基类
-class Animal {
-public:
-    virtual void speak() const {
-        std::cout << "动物发出声音。" << std::endl;
-    }
-    virtual ~Animal() {}
-};
-
-// 派生类
-class Dog : public Animal {
-public:
-    void speak() const override {
-        std::cout << "汪汪！" << std::endl;
-    }
-};
-
-int main() {
-    Dog dog;
-    dog.speak();
-
-    // 多态
-    Animal* animal = new Dog();
-    animal->speak();
-    delete animal;
-
-    return 0;
-}`),
+    code: CPP12Code,
     language: 'cpp',
   },
 {
@@ -560,31 +452,7 @@ int main() {
     ],
     problem: '解决"如何实现运行时多态、理解虚函数表的机制，以及正确使用纯虚函数定义接口"的问题。',
     demo: CPP13Demo,
-    code: () => Promise.resolve(`#include <iostream>
-#include <memory>
-
-// 抽象基类
-class Shape {
-public:
-    virtual double area() const = 0;  // 纯虚函数
-    virtual ~Shape() {}
-};
-
-class Circle : public Shape {
-private:
-    double radius;
-public:
-    Circle(double r) : radius(r) {}
-    double area() const override {
-        return 3.14159 * radius * radius;
-    }
-};
-
-int main() {
-    std::unique_ptr<Shape> shape = std::make_unique<Circle>(5.0);
-    std::cout << "面积：" << shape->area() << std::endl;
-    return 0;
-}`),
+    code: CPP13Code,
     language: 'cpp',
   },
 {
@@ -611,33 +479,7 @@ int main() {
     ],
     problem: '解决"如何为自定义类型提供直观的运算符接口、遵循运算符重载的惯用法和语义规则"的问题。',
     demo: CPP14Demo,
-    code: () => Promise.resolve(`#include <iostream>
-#include <string>
-
-class Vector {
-private:
-    double x, y;
-
-public:
-    Vector(double x, double y) : x(x), y(y) {}
-
-    // 运算符重载：+
-    Vector operator+(const Vector& other) const {
-        return Vector(x + other.x, y + other.y);
-    }
-
-    // 运算符重载：<<（输出）
-    friend std::ostream& operator<<(std::ostream& os, const Vector& v) {
-        os << "(" << v.x << ", " << v.y << ")";
-        return os;
-    }
-};
-
-int main() {
-    Vector v1(1, 2), v2(3, 4);
-    std::cout << "v1 + v2 = " << v1 + v2 << std::endl;
-    return 0;
-}`),
+    code: CPP14Code,
     language: 'cpp',
   },
 {
@@ -664,33 +506,7 @@ int main() {
     ],
     problem: '解决"如何编写类型无关的通用代码、理解模板实例化机制，以及正确使用模板特化"的问题。',
     demo: CPP15Demo,
-    code: () => Promise.resolve(`#include <iostream>
-#include <string>
-
-// 函数模板
-template <typename T>
-T max(T a, T b) {
-    return a > b ? a : b;
-}
-
-// 类模板
-template <typename T>
-class Pair {
-private:
-    T first, second;
-public:
-    Pair(T a, T b) : first(a), second(b) {}
-    T getFirst() const { return first; }
-};
-
-int main() {
-    std::cout << max(3, 7) << std::endl;
-    std::cout << max(3.14, 2.71) << std::endl;
-
-    Pair<int> intPair(10, 20);
-    std::cout << intPair.getFirst() << std::endl;
-    return 0;
-}`),
+    code: CPP15Code,
     language: 'cpp',
   },
 {
@@ -717,25 +533,7 @@ int main() {
     ],
     problem: '解决"如何根据需求选择合适的 STL 顺序容器、理解各容器的性能特性和迭代器失效规则"的问题。',
     demo: CPP16Demo,
-    code: () => Promise.resolve(`#include <iostream>
-#include <vector>
-#include <deque>
-#include <list>
-
-int main() {
-    std::vector<int> vec = {1, 2, 3};
-    vec.push_back(4);
-
-    std::deque<int> dq;
-    dq.push_front(0);
-    dq.push_back(2);
-
-    std::list<int> lst = {1, 2, 3};
-    lst.push_front(0);
-    lst.push_back(4);
-
-    return 0;
-}`),
+    code: CPP16Code,
     language: 'cpp',
   },
 {
@@ -762,21 +560,7 @@ int main() {
     ],
     problem: '解决"如何选择合适的关联容器、理解有序与无序容器的性能差异，以及正确自定义键类型"的问题。',
     demo: CPP17Demo,
-    code: () => Promise.resolve(`#include <iostream>
-#include <map>
-#include <string>
-
-int main() {
-    std::map<std::string, int> ages;
-    ages["Alice"] = 25;
-    ages["Bob"] = 30;
-
-    for (const auto& [name, age] : ages) {
-        std::cout << name << ": " << age << std::endl;
-    }
-
-    return 0;
-}`),
+    code: CPP17Code,
     language: 'cpp',
   },
 {
@@ -803,24 +587,7 @@ int main() {
     ],
     problem: '解决"如何使用 STL 算法高效处理容器元素、理解迭代器类别要求，以及掌握 remove-erase 惯用法"的问题。',
     demo: CPP18Demo,
-    code: () => Promise.resolve(`#include <iostream>
-#include <vector>
-#include <algorithm>
-
-int main() {
-    std::vector<int> nums = {5, 2, 8, 1, 9, 3};
-
-    // 查找
-    auto it = std::find(nums.begin(), nums.end(), 8);
-
-    // 排序
-    std::sort(nums.begin(), nums.end());
-
-    // 累加
-    int sum = std::accumulate(nums.begin(), nums.end(), 0);
-
-    return 0;
-}`),
+    code: CPP18Code,
     language: 'cpp',
   },
 {
@@ -847,33 +614,7 @@ int main() {
     ],
     problem: '解决"如何在 C++ 中定义内联匿名函数、理解捕获列表的各种方式，以及避免 lambda 中的生命周期陷阱"的问题。',
     demo: CPP19Demo,
-    code: () => Promise.resolve(`#include <iostream>
-#include <vector>
-#include <algorithm>
-
-int main() {
-    std::vector<int> nums = {1, 2, 3, 4, 5};
-
-    // 基本 lambda
-    auto print = []() {
-        std::cout << "Hello from lambda!" << std::endl;
-    };
-    print();
-
-    // 带参数的 lambda
-    auto add = [](int a, int b) {
-        return a + b;
-    };
-    std::cout << "3 + 5 = " << add(3, 5) << std::endl;
-
-    // 值捕获
-    int factor = 2;
-    auto multiply = [factor](int x) {
-        return x * factor;
-    };
-
-    return 0;
-}`),
+    code: CPP19Code,
     language: 'cpp',
   },
 {
@@ -900,27 +641,7 @@ int main() {
     ],
     problem: '解决"如何安全地管理动态内存、理解智能指针的所有权语义，以及避免内存泄漏和双重释放"的问题。',
     demo: CPP20Demo,
-    code: () => Promise.resolve(`#include <iostream>
-#include <memory>
-
-int main() {
-    // unique_ptr：独占所有权
-    std::unique_ptr<int> up = std::make_unique<int>(42);
-
-    // shared_ptr：共享所有权
-    std::shared_ptr<int> sp1 = std::make_shared<int>(100);
-    {
-        std::shared_ptr<int> sp2 = sp1;  // 引用计数 +1
-    }  // sp2 析构，引用计数 -1
-
-    // weak_ptr：弱引用
-    std::weak_ptr<int> wp = sp1;  // 不增加引用计数
-    if (auto sp3 = wp.lock()) {  // 提升为 shared_ptr
-        std::cout << *sp3 << std::endl;
-    }
-
-    return 0;
-}`),
+    code: CPP20Code,
     language: 'cpp',
   },
 {
@@ -947,25 +668,7 @@ int main() {
     ],
     problem: '解决"如何利用移动语义避免不必要的拷贝、理解右值引用和通用引用的区别，以及正确实现移动操作"的问题。',
     demo: CPP21Demo,
-    code: () => Promise.resolve(`#include <iostream>
-#include <string>
-#include <vector>
-
-int main() {
-    // 移动语义：资源转移而非拷贝
-    std::string str1 = "Hello, World!";
-    std::string str2 = std::move(str1);  // 移动构造
-
-    std::cout << "str2: " << str2 << std::endl;
-    std::cout << "str1: " << str1 << std::endl;  // 空（被移动后）
-
-    // 移动赋值
-    std::vector<int> vec1 = {1, 2, 3, 4, 5};
-    std::vector<int> vec2;
-    vec2 = std::move(vec1);  // 移动赋值
-
-    return 0;
-}`),
+    code: CPP21Code,
     language: 'cpp',
   },
 {
@@ -992,36 +695,7 @@ int main() {
     ],
     problem: '解决"如何用对象生命周期自动管理资源、实现异常安全的代码，以及理解 RAII 在各种资源类型中的应用"的问题。',
     demo: CPP22Demo,
-    code: () => Promise.resolve(`#include <iostream>
-#include <fstream>
-
-// RAII 类示例：文件句柄
-class FileHandle {
-private:
-    std::fstream file;
-
-public:
-    FileHandle(const char* filename) {
-        file.open(filename, std::ios::out);
-    }
-
-    ~FileHandle() {
-        if (file.is_open()) {
-            file.close();
-        }
-    }
-};
-
-int main() {
-    try {
-        FileHandle file("test.txt");
-        // 函数结束时自动析构，文件被关闭
-    } catch (const std::exception& e) {
-        std::cout << "错误: " << e.what() << std::endl;
-    }
-
-    return 0;
-}`),
+    code: CPP22Code,
     language: 'cpp',
   },
 {
@@ -1048,34 +722,7 @@ int main() {
     ],
     problem: '解决"如何正确使用异常处理错误、理解异常安全保证级别，以及确保代码在异常存在时仍然正确"的问题。',
     demo: CPP23Demo,
-    code: () => Promise.resolve(`#include <iostream>
-#include <stdexcept>
-#include <fstream>
-
-// 自定义异常类
-class MyException : public std::runtime_error {
-public:
-    MyException(const std::string& msg) : std::runtime_error(msg) {}
-};
-
-void processFile(const std::string& filename) {
-    std::ifstream file(filename);
-    if (!file.is_open()) {
-        throw MyException("无法打开文件: " + filename);
-    }
-}
-
-int main() {
-    try {
-        processFile("nonexistent.txt");
-    } catch (const MyException& e) {
-        std::cout << "捕获自定义异常: " << e.what() << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << "捕获标准异常: " << e.what() << std::endl;
-    }
-
-    return 0;
-}`),
+    code: CPP23Code,
     language: 'cpp',
   },
 {
@@ -1102,34 +749,7 @@ int main() {
     ],
     problem: '解决"如何在 C++ 中进行文件读写、使用字符串流进行文本解析和类型转换，以及理解流的状态和错误处理"的问题。',
     demo: CPP24Demo,
-    code: () => Promise.resolve(`#include <iostream>
-#include <fstream>
-#include <sstream>
-
-int main() {
-    // 写入文件
-    std::ofstream outFile("example.txt");
-    outFile << "Hello, C++!" << std::endl;
-    outFile.close();
-
-    // 读取文件
-    std::ifstream inFile("example.txt");
-    std::string line;
-    while (std::getline(inFile, line)) {
-        std::cout << "读取: " << line << std::endl;
-    }
-
-    // 字符串流
-    std::string data = "42 3.14 Hello";
-    std::istringstream iss(data);
-    int num;
-    double pi;
-    std::string word;
-    iss >> num >> pi >> word;
-    std::cout << num << ", " << pi << ", " << word << std::endl;
-
-    return 0;
-}`),
+    code: CPP24Code,
     language: 'cpp',
   },
 {
@@ -1156,27 +776,7 @@ int main() {
     ],
     problem: '解决"如何在 C++ 中创建和管理线程、保护共享数据避免数据竞争，以及使用条件变量进行线程间通信"的问题。',
     demo: CPP25Demo,
-    code: () => Promise.resolve(`#include <iostream>
-#include <thread>
-#include <mutex>
-#include <vector>
-#include <future>
-
-int main() {
-    // 创建线程
-    std::thread t1([]() {
-        std::cout << "线程 1 正在执行" << std::endl;
-    });
-    t1.join();
-
-    // 使用 async 异步任务
-    std::future<int> result = std::async([]() {
-        return 42;
-    });
-    std::cout << "结果：" << result.get() << std::endl;
-
-    return 0;
-}`),
+    code: CPP25Code,
     language: 'cpp',
   },
 {
@@ -1206,29 +806,7 @@ int main() {
     ],
     problem: '解决"如何编写简洁、安全、现代化的 C++ 代码，充分利用 C++11/14/17 的语言特性提升开发效率"的问题。',
     demo: CPP26Demo,
-    code: () => Promise.resolve(`#include <iostream>
-#include <vector>
-#include <map>
-
-int main() {
-    // auto 类型推导
-    auto x = 42;
-    auto name = "栗子";
-
-    // 范围 for
-    std::vector<int> nums = {1, 2, 3, 4, 5};
-    for (auto& num : nums) {
-        num *= 2;
-    }
-
-    // 结构化绑定（C++17）
-    std::map<std::string, int> scores{{"Alice", 95}, {"Bob", 87}};
-    for (const auto& [name, score] : scores) {
-        std::cout << name << ": " << score << std::endl;
-    }
-
-    return 0;
-}`),
+    code: CPP26Code,
     language: 'cpp',
   },
 {
@@ -1255,7 +833,7 @@ int main() {
     ],
 
     demo: CPP27Demo,
-    code: () => Promise.resolve(`#include <iostream>\n\nconstexpr int factorial(int n) {\n    return (n <= 1) ? 1 : n * factorial(n - 1);\n}\n\nconsteval int alwaysCompileTime(int x) {\n    return x * 2;\n}\n\nint main() {\n    constexpr int result = factorial(10);\n    std::cout << "10! = " << result << std::endl;\n    \n    int x = 21;\n    int y = alwaysCompileTime(x);\n    std::cout << "alwaysCompileTime(21) = " << y << std::endl;\n    \n    return 0;\n}`),
+    code: CPP27Code,
     language: 'cpp',
     problem: '解决"如何将计算从运行期移到编译期、理解 constexpr/consteval/constinit 的适用场景与限制，以及利用编译期计算提升性能"的问题。',
   },
@@ -1282,7 +860,7 @@ int main() {
       '模块和 ABI：模块可能改变名称修饰（name mangling），导致不同编译器或不同版本之间的模块不兼容，标准库模块（import std;）有助于缓解此问题。',
     ],
     demo: CPP28Demo,
-    code: () => Promise.resolve(`// math.cppm - 模块接口\nexport module math;\n\nexport int add(int a, int b) {\n    return a + b;\n}\n\nexport int multiply(int a, int b) {\n    return a * b;\n}\n\n// main.cpp - 使用模块\nimport math;\nimport <iostream>;\n\nint main() {\n    std::cout << "3 + 4 = " << add(3, 4) << std::endl;\n    std::cout << "3 * 4 = " << multiply(3, 4) << std::endl;\n    return 0;\n}`),
+    code: CPP28Code,
     language: 'cpp',
     problem: '解决"如何理解 C++20 模块系统、它与传统头文件相比的优势，以及如何在项目中使用模块"的问题。',
   },
@@ -1309,7 +887,7 @@ int main() {
       '现代 C++ 中，许多模式可以用 lambda 和 std::function 简化（如策略、命令、观察者），不再需要严格的接口继承，代码更灵活。',
     ],
     demo: CPP29Demo,
-    code: () => Promise.resolve(`#include <iostream>\n#include <memory>\n#include <vector>\n#include <functional>\n\n// 单例模式\nclass Singleton {\nprivate:\n    Singleton() = default;\npublic:\n    static Singleton& instance() {\n        static Singleton s;\n        return s;\n    }\n    void hello() { std::cout << "Hello from Singleton" << std::endl; }\n};\n\n// 观察者模式\nclass Subject {\n    std::vector<std::function<void(int)>> observers;\npublic:\n    void attach(std::function<void(int)> obs) { observers.push_back(obs); }\n    void notify(int value) {\n        for (auto& obs : observers) obs(value);\n    }\n};\n\nint main() {\n    Singleton::instance().hello();\n    \n    Subject sub;\n    sub.attach([](int x) { std::cout << "Observer 1: " << x << std::endl; });\n    sub.attach([](int x) { std::cout << "Observer 2: " << x << std::endl; });\n    sub.notify(42);\n    \n    return 0;\n}`),
+    code: CPP29Code,
     language: 'cpp',
     problem: '解决"如何在 C++ 中实现常用设计模式、利用现代 C++ 特性简化模式实现，以及选择适合问题的设计模式"的问题。',
   },
@@ -1336,7 +914,7 @@ int main() {
       '跨平台 C++ 开发注意事项：字节序（用 <bit> 中的 endian）、字符编码（用 u8"" 字符串字面量、std::u8string、std::filesystem::path 的 unicode 支持）、编译器特定扩展（尽量使用标准特性，用预定义宏处理差异）。',
     ],
     demo: CPP30Demo,
-    code: () => Promise.resolve(`#include <iostream>\n#include <memory>\n#include <vector>\n\n// 好的做法：使用 RAII 和智能指针\nclass Resource {\n    std::unique_ptr<int[]> data;\npublic:\n    Resource() : data(std::make_unique<int[]>(100)) {}\n    void use() { data[0] = 42; }\n};\n\n// 不好的做法：裸指针\nvoid badPractice() {\n    int* p = new int[100];\n    // 如果这里抛异常，内存泄漏\n    delete[] p;\n}\n\nint main() {\n    Resource r;  // 自动管理内存\n    r.use();\n    \n    // 使用 const 正确\n    const std::vector<int> vec = {1, 2, 3};\n    // vec.push_back(4);  // 编译错误：vec 是 const\n    \n    return 0;\n}`),
+    code: CPP30Code,
     language: 'cpp',
     problem: '解决"如何编写高质量、可维护的 C++ 代码、避免常见陷阱，以及建立现代 C++ 工程的构建、测试和持续集成流程"的问题。',
   }

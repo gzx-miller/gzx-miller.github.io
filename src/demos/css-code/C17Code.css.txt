@@ -1,0 +1,72 @@
+/* z-index 基础：只在定位元素上生效 */
+.box-relative {
+  position: relative;
+  z-index: 10;
+  /* 需要 position 非 static 才生效 */
+}
+
+/* 创建层叠上下文的常见方式 */
+
+/* 方式 1：z-index + position */
+.context-1 {
+  position: relative;
+  z-index: 1;
+  /* 创建新的层叠上下文 */
+}
+
+/* 方式 2：opacity < 1 */
+.context-opacity {
+  opacity: 0.99;
+  /* 小于 1 创建新上下文 */
+}
+
+/* 方式 3：transform */
+.context-transform {
+  transform: translateZ(0);
+  /* 非 none 创建新上下文 */
+}
+
+/* 方式 4：filter */
+.context-filter {
+  filter: blur(0);
+  /* 非 none 创建新上下文 */
+}
+
+/* 方式 5：isolation: isolate */
+.context-isolate {
+  isolation: isolate;
+  /* 专门创建上下文，无视觉副作用 */
+}
+
+/* 方式 6：will-change */
+.context-willchange {
+  will-change: transform;
+  /* 声明即将变化的属性 */
+}
+
+/* 层叠顺序（从低到高）：
+   1. 背景和边框
+   2. 负 z-index
+   3. block 级元素
+   4. 浮动元素
+   5. inline/inline-block 元素
+   6. z-index: 0 或 auto
+   7. 正 z-index
+*/
+
+/* 经典问题：子元素 z-index 再高也无法超过父上下文外的元素 */
+.parent {
+  position: relative;
+  z-index: 1;
+  /* 创建了层叠上下文 */
+}
+.child {
+  position: relative;
+  z-index: 9999;
+  /* 只能在 parent 上下文内比较 */
+}
+.sibling {
+  position: relative;
+  z-index: 2;
+  /* 兄弟元素 z-index 更高，child 再高也没用 */
+}

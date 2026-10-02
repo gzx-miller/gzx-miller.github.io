@@ -1,0 +1,51 @@
+/* 通配选择器：匹配所有元素 */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* 类型选择器：匹配指定标签 */
+p {
+  line-height: 1.6;
+  color: #333;
+}
+
+/* 类选择器：匹配 class 包含指定值的元素 */
+.btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* ID 选择器：匹配 id 等于指定值的元素 */
+#header {
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* 属性选择器：匹配拥有指定属性的元素 */
+input[type="text"] {
+  border: 1px solid #ddd;
+  padding: 6px 10px;
+}
+
+/* 伪类选择器：匹配处于特定状态的元素 */
+a:hover {
+  color: #e8590c;
+  text-decoration: underline;
+}
+
+/* 伪元素选择器：匹配元素的某个部分 */
+p::first-letter {
+  font-size: 2em;
+  font-weight: bold;
+  float: left;
+  margin-right: 4px;
+}
+
+/* 组合器：子元素选择器 */
+.nav > li {
+  display: inline-block;
+  margin: 0 8px;
+}

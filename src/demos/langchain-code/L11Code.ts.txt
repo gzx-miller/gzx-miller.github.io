@@ -1,0 +1,138 @@
+import { ChatOpenAI } from '@langchain/openai'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
+import { StringOutputParser } from '@langchain/core/output_parsers'
+import { BaseCallbackHandler } from '@langchain/core/callbacks/base'
+
+// 示例1: 自定义 CallbackHandler
+class MyCallbackHandler extends BaseCallbackHandler {
+  name = 'my_callback_handler'
+
+  // 链开始时触发
+  async handleChainStart(chain: any, inputs: any, runId: string) {
+    console.log(`[链开始] runId: ${runId}`)
+    console.log(`  输入: ${JSON.stringify(inputs).slice(0, 100)}`)
+  }
+
+  // 链结束时触发
+  async handleChainEnd(outputs: any, runId: string) {
+    console.log(`[链结束] runId: ${runId}`)
+    console.log(`  输出: ${JSON.stringify(outputs).slice(0, 100)}`)
+  }
+
+  // LLM 调用开始时触发
+  async handleLLMStart(llm: any, prompts: string[], runId: string) {
+    console.log(`[LLM 开始] runId: ${runId}`)
+    console.log(`  提示词数量: ${prompts.length}`)
+  }
+
+  // LLM 生成新 token 时触发
+  async handleLLMNewToken(token: string, idx: number, runId: string) {
+    console.log(`[新 Token] ${token}`)
+  }
+
+  // LLM 调用结束时触发
+  async handleLLMEnd(output: any, runId: string) {
+    console.log(`[LLM 结束] runId: ${runId}`)
+    const tokenUsage = output.llmOutput?.tokenUsage
+    if (tokenUsage) {
+      console.log(`  Token 使用: prompt=${tokenUsage.promptTokens}, completion=${tokenUsage.completionTokens}, total=${tokenUsage.totalTokens}`)
+    }
+  }
+
+  // 错误时触发
+  async handleChainError(error: Error, runId: string) {
+    console.error(`[链错误] runId: ${runId}, 错误: ${error.message}`)
+  }
+
+  async handleLLMError(error: Error, runId: string) {
+    console.error(`[LLM 错误] runId: ${runId}, 错误: ${error.message}`)
+  }
+
+  // 工具调用回调
+  async handleToolStart(tool: any, input: string, runId: string) {
+    console.log(`[工具开始] 工具名: ${tool.name}, 输入: ${input.slice(0, 50)}`)
+  }
+
+  async handleToolEnd(output: string, runId: string) {
+    console.log(`[工具结束] 输出: ${output.slice(0, 50)}`)
+  }
+}
+
+const myHandler = new MyCallbackHandler()
+
+// 示例2: 在 invoke 中使用回调
+const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 })
+const prompt = ChatPromptTemplate.fromTemplate('解释{concept}')
+const parser = new StringOutputParser()
+
+const chain = prompt.pipe(model).pipe(parser)
+
+const result = await chain.invoke(
+  { concept: '回调函数' },
+  { callbacks: [myHandler] }
+)
+console.log('最终结果:', result)
+
+// 示例3: 在 stream 中使用回调（handleLLMNewToken）
+const streamResult = await chain.stream(
+  { concept: '流式输出' },
+  { callbacks: [myHandler] }
+)
+
+let fullText = ''
+for await (const chunk of streamResult) {
+  fullText += chunk
+}
+console.log('完整文本:', fullText)
+
+// 示例4: 创建模型时指定回调
+const modelWithCallback = new ChatOpenAI({
+  model: 'gpt-4o-mini',
+  callbacks: [myHandler],
+})
+
+// 示例5: 使用标签和元数据
+const chainWithTags = prompt.pipe(model).pipe(parser)
+
+const resultWithTags = await chainWithTags.invoke(
+  { concept: '标签系统' },
+  {
+    tags: ['production', 'v1.0'],
+    metadata: { user: 'user123', feature: 'explanation' },
+  }
+)
+
+// 示例6: 计算执行时间的回调
+class TimingCallbackHandler extends BaseCallbackHandler {
+  name = 'timing_handler'
+  private startTime: Record<string, number> = {}
+
+  async handleChainStart(_chain: any, _inputs: any, runId: string) {
+    this.startTime[runId] = Date.now()
+    console.log(`[开始] runId: ${runId}`)
+  }
+
+  async handleChainEnd(_outputs: any, runId: string) {
+    const duration = Date.now() - this.startTime[runId]
+    console.log(`[结束] runId: ${runId}, 耗时: ${duration}ms`)
+    delete this.startTime[runId]
+  }
+}
+
+const timingHandler = new TimingCallbackHandler()
+
+const timingResult = await chain.invoke(
+  { concept: '性能监控' },
+  { callbacks: [timingHandler] }
+)
+
+// 示例7: ConsoleCallbackHandler（内置调试用）
+import { ConsoleCallbackHandler } from '@langchain/core/tracers/console'
+
+const consoleHandler = new ConsoleCallbackHandler()
+
+// 用于调试时查看详细执行过程
+// const debugResult = await chain.invoke(
+//   { concept: '调试' },
+//   { callbacks: [consoleHandler] }
+// )

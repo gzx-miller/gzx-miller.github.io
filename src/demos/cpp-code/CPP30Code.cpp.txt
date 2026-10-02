@@ -1,0 +1,29 @@
+#include <iostream>
+#include <memory>
+#include <vector>
+
+// 好的做法：使用 RAII 和智能指针
+class Resource {
+    std::unique_ptr<int[]> data;
+public:
+    Resource() : data(std::make_unique<int[]>(100)) {}
+    void use() { data[0] = 42; }
+};
+
+// 不好的做法：裸指针
+void badPractice() {
+    int* p = new int[100];
+    // 如果这里抛异常，内存泄漏
+    delete[] p;
+}
+
+int main() {
+    Resource r;  // 自动管理内存
+    r.use();
+    
+    // 使用 const 正确
+    const std::vector<int> vec = {1, 2, 3};
+    // vec.push_back(4);  // 编译错误：vec 是 const
+    
+    return 0;
+}

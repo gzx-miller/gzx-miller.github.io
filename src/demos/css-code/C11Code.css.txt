@@ -1,0 +1,73 @@
+/* filter 滤镜：模糊 */
+.img-blur {
+  filter: blur(4px);
+}
+
+/* filter 滤镜：灰度 */
+.img-grayscale {
+  filter: grayscale(100%);
+}
+
+/* filter 滤镜：亮度 */
+.img-brightness {
+  filter: brightness(1.2);
+}
+
+/* filter 滤镜：对比度 */
+.img-contrast {
+  filter: contrast(1.5);
+}
+
+/* filter 滤镜：饱和度 */
+.img-saturate {
+  filter: saturate(2);
+}
+
+/* filter 滤镜：色相旋转 */
+.img-hue-rotate {
+  filter: hue-rotate(90deg);
+}
+
+/* filter 滤镜：反色 */
+.img-invert {
+  filter: invert(100%);
+}
+
+/* filter 滤镜：不透明度 */
+.img-opacity {
+  filter: opacity(50%);
+}
+
+/* filter 滤镜：阴影（不同于 box-shadow，可应用于透明图片） */
+.img-drop-shadow {
+  filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3));
+}
+
+/* 多个滤镜叠加 */
+.img-multi-filter {
+  filter: brightness(1.1) contrast(1.1) saturate(1.2);
+}
+
+/* mix-blend-mode 混合模式 */
+.blend-multiply {
+  mix-blend-mode: multiply;
+  /* 正片叠底 */
+}
+.blend-screen {
+  mix-blend-mode: screen;
+  /* 滤色 */
+}
+.blend-overlay {
+  mix-blend-mode: overlay;
+  /* 叠加 */
+}
+.blend-difference {
+  mix-blend-mode: difference;
+  /* 差值 */
+}
+
+/* backdrop-filter：背景模糊（毛玻璃效果） */
+.glass-card {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.7);
+}

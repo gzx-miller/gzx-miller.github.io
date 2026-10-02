@@ -1,0 +1,27 @@
+#include <iostream>
+#include <string>
+
+// 函数模板
+template <typename T>
+T max(T a, T b) {
+    return a > b ? a : b;
+}
+
+// 类模板
+template <typename T>
+class Pair {
+private:
+    T first, second;
+public:
+    Pair(T a, T b) : first(a), second(b) {}
+    T getFirst() const { return first; }
+};
+
+int main() {
+    std::cout << max(3, 7) << std::endl;
+    std::cout << max(3.14, 2.71) << std::endl;
+
+    Pair<int> intPair(10, 20);
+    std::cout << intPair.getFirst() << std::endl;
+    return 0;
+}

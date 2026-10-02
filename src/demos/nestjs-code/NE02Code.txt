@@ -1,0 +1,30 @@
+// course.controller.ts
+@Controller('courses')            // 路由前缀：/courses
+export class CourseController {
+  constructor(private readonly courseService: CourseService) {}
+
+  @Get()                          // GET /courses
+  findAll(@Query('tag') tag?: string) {
+    return this.courseService.findAll(tag)
+  }
+
+  @Get(':id')                     // GET /courses/:id
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.courseService.findOne(id)
+  }
+
+  @Post()                         // POST /courses
+  create(@Body() dto: CreateCourseDto) {
+    return this.courseService.create(dto)
+  }
+
+  @Patch(':id')                   // PATCH /courses/:id
+  update(@Param('id') id: string, @Body() dto: UpdateCourseDto) {
+    return this.courseService.update(id, dto)
+  }
+
+  @Delete(':id')                  // DELETE /courses/:id
+  remove(@Param('id') id: string) {
+    return this.courseService.remove(id)
+  }
+}

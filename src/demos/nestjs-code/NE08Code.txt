@@ -1,0 +1,29 @@
+// course.entity.ts —— 实体映射数据库表
+@Entity('courses')
+export class Course {
+  @PrimaryGeneratedColumn() id: number
+  @Column({ length: 100 }) title: string
+  @Column({ default: 0 }) capacity: number      // 课程容量
+  @Column({ default: 0 }) enrolled: number      // 已报名人数
+}
+
+// enrollment.service.ts —— 报名事务：检查名额 → 扣减 → 落库
+@Injectable()
+export class EnrollmentService {
+  constructor(
+    @InjectRepository(Course)
+    private readonly courseRepo: Repository<Course>,
+  ) {}
+
+  async enroll(courseId: number) {
+    // 事务保证三步操作要么全部成功，要么全部回滚
+    await this.courseRepo.manager.transaction(async (manager) => {
+      const course = await manager.findOneBy(Course, { id: courseId })
+      if (!course) throw new NotFoundException('课程不存在')
+      if (course.enrolled >= course.capacity) {
+        throw new BadRequestException('课程名额已满')
+      }
+      await manager.increment(Course, { id: courseId }, 'enrolled', 1)
+    })
+  }
+}

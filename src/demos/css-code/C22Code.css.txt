@@ -1,0 +1,58 @@
+/* :has() 基本用法：选择包含特定后代的元素 */
+
+/* 选择含有 .error 子元素的表单 */
+.form:has(.error) {
+  border-color: #fa5252;
+  background: #fff5f5;
+}
+
+/* 选择含有 img 的文章卡片 */
+.article-card:has(img) {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 12px;
+}
+
+/* 选择含有 :checked 的标签 */
+.label:has(input:checked) {
+  background: #e8590c;
+  color: #fff;
+  border-color: #e8590c;
+}
+
+/* 组合使用：选择不含有图片的卡片 */
+.card:not(:has(img)) {
+  padding: 16px;
+}
+
+/* 选择含有必填字段的表单组 */
+.form-group:has([required]) label::after {
+  content: ' *';
+  color: #fa5252;
+}
+
+/* 选择后面跟着特定兄弟元素的元素（选择前面的兄弟） */
+.title:has(+ .subtitle) {
+  margin-bottom: 4px;
+}
+.subtitle {
+  color: #868e96;
+  font-size: 14px;
+}
+
+/* 选择含有聚焦输入的容器 */
+.input-wrapper:has(input:focus) {
+  border-color: #e8590c;
+  box-shadow: 0 0 0 3px rgba(232, 89, 12, 0.1);
+}
+
+/* 选择含有 hover 子元素的父容器 */
+.nav-item:has(a:hover) {
+  background: #fff4e6;
+}
+
+/* 嵌套使用：含有含有... */
+/* .container:has(.card:has(.active)) { ... } */
+
+/* 注意：:has() 不能在 :has() 内部使用（浏览器限制）*/
+/* 注意：性能考虑，避免过度使用复杂的 :has() 选择器 */

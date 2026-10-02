@@ -1,0 +1,18 @@
+import numpy as np
+
+def relu(x): return np.maximum(0, x)
+
+# 前向：输入 -> 隐藏层 -> 输出，网络等价于一个带参数的大函数
+W1, b1 = np.random.randn(4, 2) * 0.1, np.zeros(4)   # 隐藏层 4 个神经元
+W2, b2 = np.random.randn(1, 4) * 0.1, np.zeros(1)   # 输出 1 个
+
+def forward(x):
+    h = relu(W1 @ x + b1)
+    return W2 @ h + b2
+
+for epoch in range(500):          # 训练 = 前向->算损失->求梯度->更新
+    y_pred = forward(x)
+    loss   = 0.5 * (y_pred - y) ** 2
+    # 反向传播求 dW1/dW2 后：param -= lr * grad（见 12、13 课）
+    # 更新 W1, W2, b1, b2 ...
+print(forward(x))                 # 逼近目标 y

@@ -1,0 +1,91 @@
+import React from 'react'
+import { createRoot } from 'react-dom/client'
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+  useSetRecoilState,
+} from 'recoil'
+
+const textState = atom({
+  key: 'textState',
+  default: '',
+})
+
+const charCountState = selector({
+  key: 'charCountState',
+  get: ({ get }) => {
+    const text = get(textState)
+    return text.length
+  },
+})
+
+const todoListState = atom({
+  key: 'todoListState',
+  default: [
+    { id: 1, text: '学习 Recoil', isComplete: false },
+    { id: 2, text: '理解 Atom', isComplete: true },
+  ],
+})
+
+const todoListStatsState = selector({
+  key: 'todoListStatsState',
+  get: ({ get }) => {
+    const todoList = get(todoListState)
+    const totalNum = todoList.length
+    const totalCompletedNum = todoList.filter((item) => item.isComplete).length
+    const totalUncompletedNum = totalNum - totalCompletedNum
+    const percentCompleted = totalNum === 0 ? 0 : (totalCompletedNum / totalNum) * 100
+    return {
+      totalNum,
+      totalCompletedNum,
+      totalUncompletedNum,
+      percentCompleted,
+    }
+  },
+})
+
+function TextInput() {
+  const [text, setText] = useRecoilState(textState)
+  const count = useRecoilValue(charCountState)
+
+  return (
+    <section className="panel">
+      <label className="field">
+        <span>输入文本</span>
+        <input value={text} onChange={(e) => setText(e.target.value)} />
+      </label>
+      <p>字符数: {count}</p>
+    </section>
+  )
+}
+
+function TodoListStats() {
+  const stats = useRecoilValue(todoListStatsState)
+  return (
+    <section className="panel">
+      <p>总数: {stats.totalNum}</p>
+      <p>已完成: {stats.totalCompletedNum}</p>
+      <p>未完成: {stats.totalUncompletedNum}</p>
+      <p>完成率: {stats.percentCompleted.toFixed(1)}%</p>
+    </section>
+  )
+}
+
+function App() {
+  return (
+    <RecoilRoot>
+      <main className="app">
+        <p className="kicker">Recoil 原子状态</p>
+        <div className="grid">
+          <TextInput />
+          <TodoListStats />
+        </div>
+      </main>
+    </RecoilRoot>
+  )
+}
+
+createRoot(document.getElementById('root')).render(<App />)

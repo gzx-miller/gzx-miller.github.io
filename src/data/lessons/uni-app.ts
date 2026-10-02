@@ -1,6 +1,7 @@
 import type { Component } from 'vue'
 import { defineAsyncComponent } from 'vue'
 import type { Lesson } from '../lessons'
+import { restoreCodeSource } from '../code-restore'
 
 const demoModules = import.meta.glob<Component>('../../demos/*.vue', { import: 'default' })
 const vueCodeModules = import.meta.glob<string>('../../demos/*.vue', { query: '?raw', import: 'default' })
@@ -20,7 +21,7 @@ function createCodeLoader(path: string) {
     ? uniCodeModules[`../../demos/${path}`]
     : vueCodeModules[`../../demos/${path}`]
   if (!loader) throw new Error(`未找到内容源码：${path}`)
-  return loader
+  return () => loader().then(restoreCodeSource)
 }
 
 const U01ProjectStructure = createDemo('U01ProjectStructureArticle')

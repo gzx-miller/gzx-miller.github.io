@@ -1,0 +1,166 @@
+// 基础 Link 用法
+// app/page.tsx
+import Link from 'next/link'
+
+export default function HomePage() {
+  return (
+    <nav>
+      {/* 基本链接 */}
+      <Link href="/about">关于我们</Link>
+
+      {/* 动态路由 */}
+      <Link href="/posts/123">文章详情</Link>
+
+      {/* 带查询参数 */}
+      <Link href="/search?q=nextjs">搜索 Next.js</Link>
+
+      {/* 外部链接 - 用原生 a 标签 */}
+      <a href="https://nextjs.org" target="_blank" rel="noopener noreferrer">
+        Next.js 官网
+      </a>
+    </nav>
+  )
+}
+
+// ============================================
+
+// Link 的高级属性
+import Link from 'next/link'
+
+export default function Navigation() {
+  return (
+    <nav>
+      {/* prefetch 控制预取行为 */}
+      <Link href="/dashboard" prefetch={true}>
+        仪表盘（进入视口即预取）
+      </Link>
+
+      <Link href="/settings" prefetch={false}>
+        设置（点击时才预取）
+      </Link>
+
+      {/* 替换当前历史记录 */}
+      <Link href="/dashboard" replace>
+        返回仪表盘（不留下历史记录）
+      </Link>
+
+      {/* 滚动到顶部 */}
+      <Link href="/blog" scroll={true}>
+        博客（默认滚动到顶部）
+      </Link>
+    </nav>
+  )
+}
+
+// ============================================
+
+// useRouter - 编程式导航（Client Component）
+'use client'
+
+import { useRouter } from 'next/navigation'
+
+export function NavigationButtons() {
+  const router = useRouter()
+
+  function goToDashboard() {
+    // 跳转到新页面
+    router.push('/dashboard')
+  }
+
+  function replaceToSettings() {
+    // 替换当前历史记录
+    router.replace('/settings')
+  }
+
+  function goBack() {
+    // 后退
+    router.back()
+  }
+
+  function goForward() {
+    // 前进
+    router.forward()
+  }
+
+  function refresh() {
+    // 刷新当前路由（清除 Router Cache）
+    router.refresh()
+  }
+
+  return (
+    <div>
+      <button onClick={goToDashboard}>去仪表盘</button>
+      <button onClick={replaceToSettings}>替换为设置页</button>
+      <button onClick={goBack}>后退</button>
+      <button onClick={goForward}>前进</button>
+      <button onClick={refresh}>刷新</button>
+    </div>
+  )
+}
+
+// ============================================
+
+// usePathname - 获取当前路径
+'use client'
+
+import { usePathname } from 'next/navigation'
+import Link from 'next/link'
+
+export function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
+  const pathname = usePathname()
+  const isActive = pathname === href
+
+  return (
+    <Link href={href} className={isActive ? 'active' : ''}>
+      {children}
+    </Link>
+  )
+}
+
+// ============================================
+
+// useSearchParams - 获取查询参数
+'use client'
+
+import { useSearchParams } from 'next/navigation'
+
+export function SearchResults() {
+  const searchParams = useSearchParams()
+  const query = searchParams.get('q')
+  const page = searchParams.get('page') || '1'
+
+  return (
+    <div>
+      <h1>搜索结果: {query}</h1>
+      <p>第 {page} 页</p>
+    </div>
+  )
+}
+
+// ============================================
+
+// redirect - 服务端重定向
+// app/dashboard/page.tsx
+import { redirect } from 'next/navigation'
+import { cookies } from 'next/headers'
+
+export default function DashboardPage() {
+  const cookieStore = cookies()
+  const session = cookieStore.get('session')
+
+  if (!session) {
+    // 服务端重定向到登录页
+    redirect('/login')
+  }
+
+  return <h1>仪表盘</h1>
+}
+
+// ============================================
+
+// permanentRedirect - 永久重定向（308）
+import { permanentRedirect } from 'next/navigation'
+
+export default function OldPage() {
+  permanentRedirect('/new-page')
+}

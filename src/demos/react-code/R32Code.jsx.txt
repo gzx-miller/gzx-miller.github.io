@@ -1,0 +1,96 @@
+import React from 'react'
+import { createRoot } from 'react-dom/client'
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query'
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000,
+      cacheTime: 10 * 60 * 1000,
+      refetchOnWindowFocus: false,
+    },
+  },
+})
+
+// 模拟 API
+const fetchCourses = () =>
+  new Promise((resolve) =>
+    setTimeout(() => resolve([
+      { id: 1, title: 'Vue 3 进阶', students: 120 },
+      { id: 2, title: 'React Hooks 实战', students: 85 },
+    ]), 500)
+  )
+
+const addCourse = (course) =>
+  new Promise((resolve) =>
+    setTimeout(() => resolve({ id: Date.now(), ...course }), 300)
+  )
+
+function CourseList() {
+  const queryClient = useQueryClient()
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['courses'],
+    queryFn: fetchCourses,
+  })
+
+  const mutation = useMutation({
+    mutationFn: addCourse,
+    onMutate: async (newCourse) => {
+      await queryClient.cancelQueries({ queryKey: ['courses'] })
+      const previousCourses = queryClient.getQueryData(['courses'])
+      queryClient.setQueryData(['courses'], (old) => [
+        ...old,
+        { id: Date.now(), ...newCourse },
+      ])
+      return { previousCourses }
+    },
+    onError: (err, newCourse, context) => {
+      queryClient.setQueryData(['courses'], context.previousCourses)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['courses'] })
+    },
+  })
+
+  if (isLoading) return <div>加载中...</div>
+  if (isError) return <div>错误: {error.message}</div>
+
+  return (
+    <section className="panel">
+      <h3>课程列表</h3>
+      <ul>
+        {data.map((course) => (
+          <li key={course.id}>
+            {course.title} - {course.students} 人
+          </li>
+        ))}
+      </ul>
+      <button
+        onClick={() =>
+          mutation.mutate({ title: '新课程', students: 0 })
+        }
+      >
+        {mutation.isLoading ? '添加中...' : '添加课程（乐观更新）'}
+      </button>
+    </section>
+  )
+}
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <main className="app">
+        <p className="kicker">TanStack Query 服务端状态</p>
+        <CourseList />
+      </main>
+    </QueryClientProvider>
+  )
+}
+
+createRoot(document.getElementById('root')).render(<App />)

@@ -1,0 +1,44 @@
+#include <iostream>
+#include <cstring>
+
+class String {
+private:
+    char* data;
+    size_t length;
+
+public:
+    // 构造函数
+    String(const char* str) {
+        length = std::strlen(str);
+        data = new char[length + 1];
+        std::strcpy(data, str);
+    }
+
+    // 拷贝构造函数（深拷贝）
+    String(const String& other) {
+        length = other.length;
+        data = new char[length + 1];
+        std::strcpy(data, other.data);
+    }
+
+    // 拷贝赋值运算符
+    String& operator=(const String& other) {
+        if (this != &other) {
+            delete[] data;
+            length = other.length;
+            data = new char[length + 1];
+            std::strcpy(data, other.data);
+        }
+        return *this;
+    }
+
+    ~String() {
+        delete[] data;
+    }
+};
+
+int main() {
+    String s1("Hello");
+    String s2 = s1;
+    return 0;
+}

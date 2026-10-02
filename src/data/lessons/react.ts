@@ -1,6 +1,7 @@
 import type { Component } from 'vue'
 import { defineAsyncComponent } from 'vue'
 import type { Lesson } from '../lessons'
+import { restoreCodeSource } from '../code-restore'
 
 const demoModules = import.meta.glob<Component>('../../demos/*.vue', { import: 'default' })
 const vueCodeModules = import.meta.glob<string>('../../demos/*.vue', { query: '?raw', import: 'default' })
@@ -9,6 +10,7 @@ const stateCodeModules = import.meta.glob<string>('../../demos/state-react/*.js'
 const jsCodeModules = import.meta.glob<string>('../../demos/js-code/*.js', { query: '?raw', import: 'default' })
 const tsCodeModules = import.meta.glob<string>('../../demos/ts-code/*.ts', { query: '?raw', import: 'default' })
 const styleCodeModules = import.meta.glob<string>('../../demos/style-code/*', { query: '?raw', import: 'default' })
+const reactCodeModules = import.meta.glob<string>('../../demos/react-code/*', { query: '?raw', import: 'default' })
 
 function createDemo(name: string) {
   const loader = demoModules[`../../demos/${name}.vue`]
@@ -30,10 +32,12 @@ function createCodeLoader(path: string) {
           ? tsCodeModules
           : path.startsWith('style-code/')
             ? styleCodeModules
+            : path.startsWith('react-code/')
+              ? reactCodeModules
             : vueCodeModules
   const loader = modules[`../../demos/${path}`]
   if (!loader) throw new Error(`未找到内容源码：${path}`)
-  return loader
+  return () => loader().then(restoreCodeSource)
 }
 
 const R01ComponentProps = createDemo('R01ComponentPropsArticle')
@@ -102,6 +106,12 @@ const R33Recoil = createDemo('S22RecoilArticle')
 const R34Mobx = createDemo('S23MobxArticle')
 const R35Overmind = createDemo('S24OvermindArticle')
 
+
+const R31Code = createCodeLoader('react-code/R31Code.jsx.txt')
+const R32Code = createCodeLoader('react-code/R32Code.jsx.txt')
+const R33Code = createCodeLoader('react-code/R33Code.jsx.txt')
+const R34Code = createCodeLoader('react-code/R34Code.js.txt')
+const R35Code = createCodeLoader('react-code/R35Code.js.txt')
 
 export const lessons: Lesson[] = [
 {
@@ -785,76 +795,7 @@ export const lessons: Lesson[] = [
 {
     id: 'R_31', title: 'Valtio 与 Proxy 响应式状态', navTitle: 'Valtio', category: '轻量 Store',
     path: '/react/r-31/valtio', summary: '用 Valtio 的 proxy/snapshot 模式管理 React 状态，理解 Proxy 响应式原理。',
-    demo: R31Valtio, code: () => Promise.resolve(`import React from 'react'
-import { createRoot } from 'react-dom/client'
-import { proxy, useSnapshot } from 'valtio'
-
-const state = proxy({
-  count: 0,
-  text: '',
-  user: {
-    name: 'Alice',
-    age: 25,
-  },
-})
-
-function inc() {
-  state.count++
-}
-
-function setText(text) {
-  state.text = text
-}
-
-function birthday() {
-  state.user.age++
-}
-
-function Counter() {
-  const snap = useSnapshot(state)
-  return (
-    <section className="panel">
-      <p className="metric">计数: {snap.count}</p>
-      <button onClick={inc}>增加</button>
-    </section>
-  )
-}
-
-function TextInput() {
-  const snap = useSnapshot(state)
-  return (
-    <label className="field">
-      <span>输入文本（不影响计数组件）</span>
-      <input value={snap.text} onChange={(e) => setText(e.target.value)} />
-    </label>
-  )
-}
-
-function UserProfile() {
-  const snap = useSnapshot(state.user)
-  return (
-    <section className="panel">
-      <p>{snap.name}, {snap.age} 岁</p>
-      <button onClick={birthday}>过生日</button>
-    </section>
-  )
-}
-
-function App() {
-  return (
-    <main className="app">
-      <p className="kicker">Valtio Proxy 响应式</p>
-      <div className="grid">
-        <Counter />
-        <TextInput />
-        <UserProfile />
-      </div>
-    </main>
-  )
-}
-
-createRoot(document.getElementById('root')).render(<App />)
-`), language: 'jsx',
+    demo: R31Valtio, code: R31Code, language: 'jsx',
     principle: 'Valtio 用 Proxy 包裹状态对象，直接赋值属性即触发更新，无需 Provider 与 reducer 样板代码；组件再用 useSnapshot 取到不可变快照用于渲染，快照层会自动追踪组件实际读到的路径，从而把重渲染收敛到真正依赖它的组件。',
     flow: ['用 proxy 创建响应式状态对象，跨组件共享引用。', '在组件或动作里直接修改 proxy 的属性（如 state.count++）。', '组件用 useSnapshot 读取并渲染，系统按所读路径自动收集依赖。', '去掉未使用的快照字段，确认依赖收集范围随之缩小。'],
     notes: ['Valtio 提供 subscribe 订阅任意路径的变化，便于接入调试或持久化。', '不要把 proxy 对象整体放进 React Context，快照隔离更适合组件消费。', 'useSnapshot 的可变性对象不宜作 props 长期保存，尽量保持组件使用模式一致。', 'valtio 状态在组件外可直接读写，适合接入调试工具或非 React 逻辑。'],
@@ -863,103 +804,7 @@ createRoot(document.getElementById('root')).render(<App />)
 {
     id: 'R_32', title: 'TanStack Query 服务端状态', navTitle: 'TanStack Query', category: '服务端状态',
     path: '/react/r-32/tanstack-query', summary: '用缓存策略、乐观更新和后台同步管理服务端数据状态。',
-    demo: R32TanStackQuery, code: () => Promise.resolve(`import React from 'react'
-import { createRoot } from 'react-dom/client'
-import {
-  QueryClient,
-  QueryClientProvider,
-  useQuery,
-  useMutation,
-  useQueryClient,
-} from '@tanstack/react-query'
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 5 * 60 * 1000,
-      cacheTime: 10 * 60 * 1000,
-      refetchOnWindowFocus: false,
-    },
-  },
-})
-
-// 模拟 API
-const fetchCourses = () =>
-  new Promise((resolve) =>
-    setTimeout(() => resolve([
-      { id: 1, title: 'Vue 3 进阶', students: 120 },
-      { id: 2, title: 'React Hooks 实战', students: 85 },
-    ]), 500)
-  )
-
-const addCourse = (course) =>
-  new Promise((resolve) =>
-    setTimeout(() => resolve({ id: Date.now(), ...course }), 300)
-  )
-
-function CourseList() {
-  const queryClient = useQueryClient()
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['courses'],
-    queryFn: fetchCourses,
-  })
-
-  const mutation = useMutation({
-    mutationFn: addCourse,
-    onMutate: async (newCourse) => {
-      await queryClient.cancelQueries({ queryKey: ['courses'] })
-      const previousCourses = queryClient.getQueryData(['courses'])
-      queryClient.setQueryData(['courses'], (old) => [
-        ...old,
-        { id: Date.now(), ...newCourse },
-      ])
-      return { previousCourses }
-    },
-    onError: (err, newCourse, context) => {
-      queryClient.setQueryData(['courses'], context.previousCourses)
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['courses'] })
-    },
-  })
-
-  if (isLoading) return <div>加载中...</div>
-  if (isError) return <div>错误: {error.message}</div>
-
-  return (
-    <section className="panel">
-      <h3>课程列表</h3>
-      <ul>
-        {data.map((course) => (
-          <li key={course.id}>
-            {course.title} - {course.students} 人
-          </li>
-        ))}
-      </ul>
-      <button
-        onClick={() =>
-          mutation.mutate({ title: '新课程', students: 0 })
-        }
-      >
-        {mutation.isLoading ? '添加中...' : '添加课程（乐观更新）'}
-      </button>
-    </section>
-  )
-}
-
-function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <main className="app">
-        <p className="kicker">TanStack Query 服务端状态</p>
-        <CourseList />
-      </main>
-    </QueryClientProvider>
-  )
-}
-
-createRoot(document.getElementById('root')).render(<App />)
-`), language: 'jsx',
+    demo: R32TanStackQuery, code: R32Code, language: 'jsx',
     principle: 'TanStack Query 把"服务端数据"看作缓存而非组件本地状态：staleTime 决定数据在多久内视为新鲜、期间不重复请求，gcTime 控制不再使用后的回收时机。useQuery 负责读取与缓存，useMutation 负责写入，配合乐观更新可在请求完成前先更新界面、失败时回滚。',
     flow: ['用 QueryClient 统一配置 staleTime、gcTime 与窗口聚焦时是否重取。', 'useQuery 以 courses 作为 queryKey 获取并缓存课程列表。', 'useMutation 上传新课程：onMutate 先写入乐观值，onError 回滚，onSettled 使缓存失效以对齐服务端。', '断网后提交，验证乐观更新被回滚且提示可重试。'],
     notes: ['服务端状态与本地 UI 状态分开管理，避免重复当"事实来源"。', 'queryKey 的结构直接决定缓存命中与失效粒度，需稳定且能标识查询语义。', 'staleTime 控制请求频率，gcTime 控制缓存保留时长；均需针对数据特性取值。', '失效策略按数据变化频率设计，频繁失效会让缓存形同虚设。'],
@@ -968,98 +813,7 @@ createRoot(document.getElementById('root')).render(<App />)
 {
     id: 'R_33', title: 'Recoil 原子状态与 Selector', navTitle: 'Recoil', category: '原子化状态',
     path: '/react/r-33/recoil', summary: '了解 Recoil 的 Atom 与 Selector 模型，理解原子化状态管理的细粒度更新。',
-    demo: R33Recoil, code: () => Promise.resolve(`import React from 'react'
-import { createRoot } from 'react-dom/client'
-import {
-  RecoilRoot,
-  atom,
-  selector,
-  useRecoilState,
-  useRecoilValue,
-  useSetRecoilState,
-} from 'recoil'
-
-const textState = atom({
-  key: 'textState',
-  default: '',
-})
-
-const charCountState = selector({
-  key: 'charCountState',
-  get: ({ get }) => {
-    const text = get(textState)
-    return text.length
-  },
-})
-
-const todoListState = atom({
-  key: 'todoListState',
-  default: [
-    { id: 1, text: '学习 Recoil', isComplete: false },
-    { id: 2, text: '理解 Atom', isComplete: true },
-  ],
-})
-
-const todoListStatsState = selector({
-  key: 'todoListStatsState',
-  get: ({ get }) => {
-    const todoList = get(todoListState)
-    const totalNum = todoList.length
-    const totalCompletedNum = todoList.filter((item) => item.isComplete).length
-    const totalUncompletedNum = totalNum - totalCompletedNum
-    const percentCompleted = totalNum === 0 ? 0 : (totalCompletedNum / totalNum) * 100
-    return {
-      totalNum,
-      totalCompletedNum,
-      totalUncompletedNum,
-      percentCompleted,
-    }
-  },
-})
-
-function TextInput() {
-  const [text, setText] = useRecoilState(textState)
-  const count = useRecoilValue(charCountState)
-
-  return (
-    <section className="panel">
-      <label className="field">
-        <span>输入文本</span>
-        <input value={text} onChange={(e) => setText(e.target.value)} />
-      </label>
-      <p>字符数: {count}</p>
-    </section>
-  )
-}
-
-function TodoListStats() {
-  const stats = useRecoilValue(todoListStatsState)
-  return (
-    <section className="panel">
-      <p>总数: {stats.totalNum}</p>
-      <p>已完成: {stats.totalCompletedNum}</p>
-      <p>未完成: {stats.totalUncompletedNum}</p>
-      <p>完成率: {stats.percentCompleted.toFixed(1)}%</p>
-    </section>
-  )
-}
-
-function App() {
-  return (
-    <RecoilRoot>
-      <main className="app">
-        <p className="kicker">Recoil 原子状态</p>
-        <div className="grid">
-          <TextInput />
-          <TodoListStats />
-        </div>
-      </main>
-    </RecoilRoot>
-  )
-}
-
-createRoot(document.getElementById('root')).render(<App />)
-`), language: 'jsx',
+    demo: R33Recoil, code: R33Code, language: 'jsx',
     principle: 'Recoil 以 Atom 为最小状态单元，Selector 是从一个或多个 atom 推导出的派生状态。组件用 useRecoilState/useRecoilValue 读写，每个 atom 独立追踪订阅；只有读取了变化原子或其派生链的组件才会更新，从而实现细粒度的组件级重渲染。',
     flow: ['用 atom 定义原始状态并指定全局唯一的 key。', '用 selector 的 get 读取依赖的 atom 构造派生值，如字符数、完成率。', '组件经 useRecoilState 读写 atom、useRecoilValue 订阅派生 selector 展示统计。', '只更新一个 atom，验证未依赖它的组件不重渲染。'],
     notes: ['Recoil 的状态图也支持异步 selector，并能配合 Suspense 使用。', '每个 atom/selector 独立维护订阅，更新粒度较其他全局 store 更细。', 'Recoil 与 React 生态深度绑定，主要面向 React 项目。', '选型时关注维护活跃度：同作者已有替代工具，评估后再采用 Recoil。'],
@@ -1068,97 +822,7 @@ createRoot(document.getElementById('root')).render(<App />)
 {
     id: 'R_34', title: 'MobX 响应式状态与 Observable', navTitle: 'MobX', category: '结构化状态',
     path: '/react/r-34/mobx', summary: '理解 MobX 的 Observable 响应式模型，掌握 action、computed 和 observer 的协作方式。',
-    demo: R34Mobx, code: () => Promise.resolve(`import { makeAutoObservable, runInAction, configure } from 'mobx'
-
-configure({ enforceActions: 'always' })
-
-// Store 定义
-class TodoStore {
-  todos = []
-  filter = 'all'
-
-  constructor() {
-    makeAutoObservable(this, {}, { autoBind: true })
-  }
-
-  get completedTodos() {
-    return this.todos.filter((todo) => todo.completed)
-  }
-
-  get activeTodos() {
-    return this.todos.filter((todo) => !todo.completed)
-  }
-
-  get filteredTodos() {
-    switch (this.filter) {
-      case 'active':
-        return this.activeTodos
-      case 'completed':
-        return this.completedTodos
-      default:
-        return this.todos
-    }
-  }
-
-  get completedCount() {
-    return this.completedTodos.length
-  }
-
-  addTodo(text) {
-    this.todos.push({
-      id: Date.now(),
-      text,
-      completed: false,
-    })
-  }
-
-  toggleTodo(id) {
-    const todo = this.todos.find((t) => t.id === id)
-    if (todo) {
-      todo.completed = !todo.completed
-    }
-  }
-
-  setFilter(filter) {
-    this.filter = filter
-  }
-
-  async loadTodos() {
-    const response = await fetch('/api/todos')
-    const data = await response.json()
-    runInAction(() => {
-      this.todos = data
-    })
-  }
-}
-
-// 使用示例
-const store = new TodoStore()
-
-console.log('初始 todos:', store.todos.length)
-
-store.addTodo('学习 MobX')
-store.addTodo('理解 Observable')
-
-console.log('添加后 todos:', store.todos.length)
-console.log('已完成数量:', store.completedCount)
-
-store.toggleTodo(store.todos[0].id)
-console.log('切换后已完成数量:', store.completedCount)
-
-store.setFilter('active')
-console.log('活跃 todos:', store.filteredTodos.length)
-
-// autorun 示例
-import { autorun } from 'mobx'
-
-autorun(() => {
-  console.log('当前已完成:', store.completedCount, '/', store.todos.length)
-})
-
-store.addTodo('autorun 测试')
-store.toggleTodo(store.todos[2].id)
-`), language: 'javascript',
+    demo: R34Mobx, code: R34Code, language: 'javascript',
     principle: 'MobX 用 Observable 把普通对象（如 class 实例）包装成可观察图谱：action 在组件之外统一修改状态，computed（getter）派生只读值并缓存，observer 包裹的组件会记录渲染时用到的 observable 字段并随其变化自动重渲染。这种"透明反应"心智模型贴近面向对象领域建模，适合复杂业务状态。',
     flow: ['用 makeAutoObservable 让类字段自动可观察，并把修改方法标为 action。', '在 action 内统一变更状态，触发依赖收集与通知。', 'observer 组件渲染时用到哪些字段，就只订阅这些字段，变化时自动更新。', '在 DevTools 中核对哪些 observable 被实际追踪。'],
     notes: ['MobX 的响应式是隐式收集的，代码更简洁，但需要理解"谁被追踪、何时重跑"。', 'configure({ enforceActions: "always" }) 保证状态只能在 action 中被修改。', '复杂领域模型优先用 class 搭配 makeAutoObservable 表达。', '跨组件的异步流程用 runInAction 包裹批量修改，减少中间态通知。'],
@@ -1167,138 +831,7 @@ store.toggleTodo(store.todos[2].id)
 {
     id: 'R_35', title: 'Overmind 分形状态管理', navTitle: 'Overmind', category: '结构化状态',
     path: '/react/r-35/overmind', summary: '了解 Overmind 的分形架构，掌握命名空间组织状态与 effects 隔离副作用。',
-    demo: R35Overmind, code: () => Promise.resolve(`// Overmind 状态管理 - 分形架构
-
-import { createOvermind } from 'overmind'
-import { createHook } from 'overmind-react'
-
-// 定义状态、动作和 effects
-const config = {
-  state: {
-    user: {
-      isLoggedIn: false,
-      name: '',
-      token: '',
-    },
-    todos: [],
-    filter: 'all',
-  },
-  actions: {
-    setUser: ({ state }, user) => {
-      state.user = { ...user, isLoggedIn: true }
-    },
-    logout: ({ state }) => {
-      state.user = {
-        isLoggedIn: false,
-        name: '',
-        token: '',
-      }
-    },
-    addTodo: ({ state }, text) => {
-      state.todos.push({
-        id: Date.now(),
-        text,
-        completed: false,
-      })
-    },
-    toggleTodo: ({ state }, id) => {
-      const todo = state.todos.find((t) => t.id === id)
-      if (todo) {
-        todo.completed = !todo.completed
-      }
-    },
-    setFilter: ({ state }, filter) => {
-      state.filter = filter
-    },
-    async loadTodos({ state, effects }) {
-      const todos = await effects.api.getTodos()
-      state.todos = todos
-    },
-  },
-  effects: {
-    api: {
-      async getTodos() {
-        const response = await fetch('/api/todos')
-        return response.json()
-      },
-      async addTodo(text) {
-        const response = await fetch('/api/todos', {
-          method: 'POST',
-          body: JSON.stringify({ text }),
-        })
-        return response.json()
-      },
-    },
-    storage: {
-      saveToken(token) {
-        localStorage.setItem('token', token)
-      },
-      getToken() {
-        return localStorage.getItem('token')
-      },
-    },
-  },
-  // 派生值 (getters)
-  derived: {
-    completedTodos: ({ state }) =>
-      state.todos.filter((todo) => todo.completed),
-    activeTodos: ({ state }) =>
-      state.todos.filter((todo) => !todo.completed),
-    filteredTodos: ({ state }) => {
-      switch (state.filter) {
-        case 'active':
-          return state.activeTodos
-        case 'completed':
-          return state.completedTodos
-        default:
-          return state.todos
-      }
-    },
-  },
-}
-
-// 创建 Overmind 实例
-export const overmind = createOvermind(config)
-
-// React Hook
-export const useOvermind = createHook()
-
-// 使用示例
-import React from 'react'
-import { createRoot } from 'react-dom/client'
-import { Provider } from 'overmind-react'
-
-function TodoList() {
-  const { state, actions } = useOvermind()
-
-  return (
-    <section className="panel">
-      <h3>Todo 列表</h3>
-      <ul>
-        {state.filteredTodos.map((todo) => (
-          <li key={todo.id} onClick={() => actions.toggleTodo(todo.id)}>
-            {todo.completed ? '✓ ' : '○ '}{todo.text}
-          </li>
-        ))}
-      </ul>
-      <button onClick={() => actions.addTodo('新任务')}>添加</button>
-    </section>
-  )
-}
-
-function App() {
-  return (
-    <Provider value={overmind}>
-      <main className="app">
-        <p className="kicker">Overmind 分形状态</p>
-        <TodoList />
-      </main>
-    </Provider>
-  )
-}
-
-createRoot(document.getElementById('root')).render(<App />)
-`), language: 'javascript',
+    demo: R35Overmind, code: R35Code, language: 'javascript',
     principle: 'Overmind 以"分形"方式组织全局状态：state、actions、derived 与 effects 按命名空间聚合，天然支持状态追踪、DevTools 与时间旅行调试。核心约定是 actions 只改 state，网络、存储等副作用一律放进 effects，让 UI 层保持纯净、便于替换与测试。',
     flow: ['用 createOvermind 依配置创建 store，按命名空间放好 state、actions 与 effects。', '组件经 useOvermind 解构出 state 与 actions 使用。', 'actions 直接修改 state，需要的外部能力（如 fetch）从 effects 注入。', '用测试替身注入 effects，验证 actions 逻辑独立可测。'],
     notes: ['Overmind 同时支持 Vue、React 等框架，同一份逻辑可跨端复用。', '状态变更都能回溯到具体 action 调用，极大地方便调试与审计。', 'effects 独立成层，测试时可用替身注入，避免真实网络与存储。', '状态划分先按业务域命名空间拆开，再按 actions/effects 归位。'],

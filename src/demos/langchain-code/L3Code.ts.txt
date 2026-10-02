@@ -1,0 +1,76 @@
+import { ChatOpenAI } from '@langchain/openai'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
+import { StringOutputParser } from '@langchain/core/output_parsers'
+import { StructuredOutputParser } from 'langchain/output_parsers'
+import { z } from 'zod'
+
+const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 })
+
+// 示例1: StringOutputParser - 提取纯文本
+const prompt1 = ChatPromptTemplate.fromTemplate(
+  '用一句话解释{concept}是什么'
+)
+const stringParser = new StringOutputParser()
+
+const chain1 = prompt1.pipe(model).pipe(stringParser)
+const textResult = await chain1.invoke({ concept: 'RAG' })
+console.log('纯文本结果:', textResult)
+
+// 示例2: Zod 结构化输出 - 课程推荐
+const courseSchema = z.object({
+  courseName: z.string().describe('课程名称'),
+  category: z.string().describe('课程分类'),
+  difficulty: z.enum(['入门', '中级', '高级']).describe('难度等级'),
+  duration: z.number().describe('课程时长（小时）'),
+  description: z.string().describe('课程简介'),
+  prerequisites: z.array(z.string()).describe('前置知识要求'),
+})
+
+const parser2 = StructuredOutputParser.fromZodSchema(courseSchema)
+
+const prompt2 = ChatPromptTemplate.fromTemplate(`
+请推荐一门适合学习{topic}的课程。
+
+{format_instructions}
+`)
+
+const chain2 = prompt2.pipe(model).pipe(parser2)
+const courseResult = await chain2.invoke({ topic: '机器学习' })
+console.log('结构化课程:', courseResult.courseName, courseResult.difficulty)
+
+// 示例3: 数组输出解析
+const listSchema = z.object({
+  recommendations: z.array(
+    z.object({
+      title: z.string(),
+      reason: z.string(),
+    })
+  ).describe('推荐列表'),
+})
+
+const parser3 = StructuredOutputParser.fromZodSchema(listSchema)
+
+const prompt3 = ChatPromptTemplate.fromTemplate(`
+请推荐3本关于{genre}的经典书籍。
+
+{format_instructions}
+`)
+
+const chain3 = prompt3.pipe(model).pipe(parser3)
+const booksResult = await chain3.invoke({ genre: '科幻小说' })
+booksResult.recommendations.forEach((book, i) => {
+  console.log(`${i + 1}. ${book.title}: ${book.reason}`)
+})
+
+// 示例4: 链式调用中的 parser 组合
+const prompt4 = ChatPromptTemplate.fromTemplate(
+  '列出{count}个{category}的名称，用逗号分隔'
+)
+
+const chain4 = prompt4
+  .pipe(model)
+  .pipe(new StringOutputParser())
+  .pipe((text) => text.split(',').map(s => s.trim()))
+
+const listResult = await chain4.invoke({ count: 5, category: '编程语言' })
+console.log('编程语言列表:', listResult)

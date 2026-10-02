@@ -1,0 +1,126 @@
+// Google Fonts - 自动自托管
+// app/layout.tsx
+import './globals.css'
+import { Inter, Noto_Sans_SC } from 'next/font/google'
+
+// 加载 Inter 字体
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+})
+
+// 加载思源黑体
+const notoSansSC = Noto_Sans_SC({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  display: 'swap',
+  variable: '--font-noto-sans-sc',
+})
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="zh-CN" className={`${inter.variable} ${notoSansSC.variable}`}>
+      <body>{children}</body>
+    </html>
+  )
+}
+
+// ============================================
+
+// 在 CSS 中使用
+/* app/globals.css */
+// :root {
+//   --font-inter: 'Inter', sans-serif;
+//   --font-noto-sans-sc: 'Noto Sans SC', sans-serif;
+// }
+//
+// body {
+//   font-family: var(--font-inter), var(--font-noto-sans-sc), sans-serif;
+// }
+
+// ============================================
+
+// 本地字体 - next/font/local
+// app/layout.tsx
+import './globals.css'
+import localFont from 'next/font/local'
+
+// 加载本地字体文件
+const myFont = localFont({
+  src: [
+    {
+      path: './fonts/MyFont-Regular.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: './fonts/MyFont-Bold.woff2',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
+  display: 'swap',
+  variable: '--font-my',
+})
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="zh-CN" className={myFont.variable}>
+      <body>{children}</body>
+    </html>
+  )
+}
+
+// ============================================
+
+// 在组件中使用字体类名
+import { Roboto } from 'next/font/google'
+
+const roboto = Roboto({
+  weight: ['400', '700'],
+  subsets: ['latin'],
+})
+
+export default function Page() {
+  return (
+    <div className={roboto.className}>
+      <h1>使用 Roboto 字体</h1>
+      <p>这段文字使用 Roboto 字体渲染</p>
+    </div>
+  )
+}
+
+// ============================================
+
+// display 选项说明：
+// - 'swap'（推荐）：先用 fallback 字体，加载完再切换
+// - 'auto'：浏览器默认行为
+// - 'block'：短暂隐藏文本（FOIT）
+// - 'fallback'：极短隐藏期，然后 swap
+// - 'optional'：极短隐藏期，加载失败用 fallback
+
+// ============================================
+
+// 预加载子集
+// subsets 可以减小字体文件体积
+import { Noto_Sans_SC } from 'next/font/google'
+
+const notoSans = Noto_Sans_SC({
+  subsets: ['latin'], // 只加载拉丁字符子集
+  weight: ['400', '700'],
+  display: 'swap',
+})
+
+// 完整的中文字体很大，可以考虑：
+// 1. 只加载需要的字重
+// 2. 使用 latin 子集 + 系统中文字体 fallback
+// 3. 用第三方字体服务（如阿里巴巴普惠体）配合 next/font/local

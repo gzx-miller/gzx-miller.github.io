@@ -1,0 +1,215 @@
+import { ChatOpenAI } from '@langchain/openai'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
+import { StringOutputParser } from '@langchain/core/output_parsers'
+import { RunnableSequence, RunnablePassthrough } from '@langchain/core/runnables'
+import { OpenAIEmbeddings } from '@langchain/openai'
+import { MemoryVectorStore } from 'langchain/vectorstores/memory'
+import { Document } from '@langchain/core/documents'
+
+const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 })
+const parser = new StringOutputParser()
+
+// 示例1: 简单内存缓存
+const cache = new Map<string, string>()
+
+async function getAnswerWithCache(question: string): Promise<string> {
+  if (cache.has(question)) {
+    console.log('缓存命中!')
+    return cache.get(question)!
+  }
+  
+  const prompt = ChatPromptTemplate.fromTemplate('回答问题: {question}')
+  const chain = prompt.pipe(model).pipe(parser)
+  const answer = await chain.invoke({ question })
+  
+  cache.set(question, answer)
+  return answer
+}
+
+// 使用示例
+console.log('第一次调用（无缓存）:')
+const answer1 = await getAnswerWithCache('什么是 LLM？')
+console.log(answer1.slice(0, 50) + '...')
+
+console.log('\n第二次调用（命中缓存）:')
+const answer2 = await getAnswerWithCache('什么是 LLM？')
+console.log(answer2.slice(0, 50) + '...')
+
+// 示例2: 语义缓存 - 基于向量相似度
+const embeddings = new OpenAIEmbeddings({ model: 'text-embedding-3-small' })
+const semanticCacheStore = await MemoryVectorStore.fromDocuments([], embeddings)
+const semanticCache = new Map<string, string>() // id -> answer
+
+async function getAnswerWithSemanticCache(
+  question: string,
+  threshold: number = 0.9
+): Promise<{ answer: string; fromCache: boolean }> {
+  // 先搜索是否有相似问题
+  const results = await semanticCacheStore.similaritySearchWithScore(question, 1)
+  
+  if (results.length > 0 && results[0][1] >= threshold) {
+    const cachedDoc = results[0][0]
+    const cacheKey = cachedDoc.metadata.cacheKey as string
+    console.log(`语义缓存命中! (相似度: ${results[0][1].toFixed(4)})`)
+    return { answer: semanticCache.get(cacheKey)!, fromCache: true }
+  }
+  
+  // 没有命中，生成答案
+  const prompt = ChatPromptTemplate.fromTemplate('回答问题: {question}')
+  const chain = prompt.pipe(model).pipe(parser)
+  const answer = await chain.invoke({ question })
+  
+  // 存入语义缓存
+  const cacheKey = `cache_${Date.now()}`
+  semanticCache.set(cacheKey, answer)
+  await semanticCacheStore.addDocuments([
+    new Document({
+      pageContent: question,
+      metadata: { cacheKey },
+    }),
+  ])
+  
+  return { answer, fromCache: false }
+}
+
+// 示例3: Token 预算控制
+class TokenBudgetManager {
+  private budget: number
+  private used: number = 0
+  private resetInterval: number
+  private lastReset: number
+
+  constructor(budget: number, resetIntervalMs: number = 3600000) {
+    this.budget = budget
+    this.resetInterval = resetIntervalMs
+    this.lastReset = Date.now()
+  }
+
+  private checkReset() {
+    if (Date.now() - this.lastReset > this.resetInterval) {
+      this.used = 0
+      this.lastReset = Date.now()
+    }
+  }
+
+  canAfford(tokens: number): boolean {
+    this.checkReset()
+    return this.used + tokens <= this.budget
+  }
+
+  consume(tokens: number): boolean {
+    this.checkReset()
+    if (this.used + tokens > this.budget) {
+      return false
+    }
+    this.used += tokens
+    return true
+  }
+
+  getUsage(): { used: number; budget: number; remaining: number } {
+    this.checkReset()
+    return {
+      used: this.used,
+      budget: this.budget,
+      remaining: this.budget - this.used,
+    }
+  }
+}
+
+// 使用 Token 预算
+const budgetManager = new TokenBudgetManager(100000) // 每小时 100k token
+console.log('Token 使用情况:', budgetManager.getUsage())
+
+// 示例4: 指数退避重试
+async function retryWithBackoff<T>(
+  fn: () => Promise<T>,
+  maxRetries: number = 3,
+  baseDelay: number = 1000
+): Promise<T> {
+  let lastError: Error
+  
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return await fn()
+    } catch (error: any) {
+      lastError = error
+      
+      // 只有限流错误才重试
+      if (error.status !== 429 && error.code !== 'rate_limit_exceeded') {
+        throw error
+      }
+      
+      const delay = baseDelay * Math.pow(2, i)
+      console.log(`限流，${delay}ms 后重试 (${i + 1}/${maxRetries})`)
+      await new Promise(resolve => setTimeout(resolve, delay))
+    }
+  }
+  
+  throw lastError!
+}
+
+// 使用重试
+// const result = await retryWithBackoff(() => 
+//   model.invoke('你好')
+// )
+
+// 示例5: 降级策略
+async function getAnswerWithFallback(question: string): Promise<string> {
+  const prompt = ChatPromptTemplate.fromTemplate('回答问题: {question}')
+  const advancedChain = prompt.pipe(new ChatOpenAI({ model: 'gpt-4o' })).pipe(parser)
+  const basicChain = prompt.pipe(new ChatOpenAI({ model: 'gpt-4o-mini' })).pipe(parser)
+  
+  try {
+    // 先尝试高级模型
+    return await advancedChain.invoke({ question })
+  } catch (error) {
+    console.log('高级模型失败，降级到基础模型')
+    // 降级到基础模型
+    return await basicChain.invoke({ question })
+  }
+}
+
+// 示例6: 请求超时控制
+async function withTimeout<T>(
+  promise: Promise<T>,
+  timeoutMs: number
+): Promise<T> {
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    setTimeout(() => reject(new Error('请求超时')), timeoutMs)
+  })
+  
+  return Promise.race([promise, timeoutPromise])
+}
+
+// 使用超时
+try {
+  const result = await withTimeout(
+    model.invoke('写一篇长文'),
+    10000 // 10秒超时
+  )
+} catch (error: any) {
+  console.log('超时处理:', error.message)
+}
+
+// 示例7: 成本估算
+function estimateCost(
+  promptTokens: number,
+  completionTokens: number,
+  model: string = 'gpt-4o-mini'
+): number {
+  const prices: Record<string, { input: number; output: number }> = {
+    'gpt-4o': { input: 0.005, output: 0.015 },
+    'gpt-4o-mini': { input: 0.00015, output: 0.0006 },
+    'gpt-3.5-turbo': { input: 0.0005, output: 0.0015 },
+  }
+  
+  const price = prices[model] || prices['gpt-4o-mini']
+  const inputCost = (promptTokens / 1000) * price.input
+  const outputCost = (completionTokens / 1000) * price.output
+  
+  return inputCost + outputCost
+}
+
+// 估算成本示例
+const cost = estimateCost(1000, 500, 'gpt-4o-mini')
+console.log(`估算成本: $ ${cost.toFixed(6)}`)

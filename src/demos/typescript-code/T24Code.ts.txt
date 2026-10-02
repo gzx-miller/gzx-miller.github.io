@@ -1,0 +1,184 @@
+// 异步返回类型与 Awaited：解包 Promise，获取异步函数返回值类型
+
+// ── Awaited 基础用法 ──
+// Awaited<T> 用于解包 Promise 类型
+
+type StringPromise = Promise<string>
+type UnwrappedString = Awaited<StringPromise>  // string
+
+type NumberPromise = Promise<number>
+type UnwrappedNumber = Awaited<NumberPromise>  // number
+
+// 普通类型不变
+type PlainType = Awaited<string>  // string
+
+// ── 递归解包嵌套 Promise ──
+// Awaited 会递归解包嵌套的 Promise
+
+type NestedPromise = Promise<Promise<Promise<boolean>>>
+type DeepUnwrapped = Awaited<NestedPromise>  // boolean
+
+type DoublePromise = Promise<Promise<number[]>>
+type UnwrappedArray = Awaited<DoublePromise>  // number[]
+
+// ── 获取异步函数的返回类型 ──
+// 组合 Awaited + ReturnType
+
+async function fetchUser(id: number) {
+  return {
+    id,
+    name: '用户' + id,
+    email: `user${id}@example.com`,
+  }
+}
+
+// ReturnType 得到的是 Promise<User>
+type FetchUserPromise = ReturnType<typeof fetchUser>
+// Promise<{ id: number; name: string; email: string }>
+
+// 用 Awaited 解包得到实际返回值类型
+type FetchUserResult = Awaited<ReturnType<typeof fetchUser>>
+// { id: number; name: string; email: string }
+
+// ── 实用类型：AsyncReturnType ──
+// 封装一个便捷的工具类型
+
+type AsyncReturnType<T extends (...args: any) => Promise<any>> =
+  Awaited<ReturnType<T>>
+
+type UserResult = AsyncReturnType<typeof fetchUser>
+// { id: number; name: string; email: string }
+
+// ── Promise.all 的返回类型 ──
+// 处理多个 Promise 并发
+
+async function getUser() {
+  return { id: 1, name: 'Tom' }
+}
+
+async function getOrders() {
+  return [{ id: 'O001', total: 99 }]
+}
+
+async function getDashboardData() {
+  const [user, orders] = await Promise.all([getUser(), getOrders()])
+  return { user, orders }
+}
+
+type DashboardData = AsyncReturnType<typeof getDashboardData>
+// {
+//   user: { id: number; name: string }
+//   orders: { id: string; total: number }[]
+// }
+
+// ── Promise.allSettled 的返回类型 ──
+
+async function mightFail(flag: boolean): Promise<string> {
+  if (flag) return 'success'
+  throw new Error('failed')
+}
+
+async function runAllSettled() {
+  const results = await Promise.allSettled([
+    mightFail(true),
+    mightFail(false),
+  ])
+  return results
+}
+
+type SettledResults = AsyncReturnType<typeof runAllSettled>
+// PromiseSettledResult<string>[]
+// 其中每个元素是：
+// - PromiseFulfilledResult<string>  { status: 'fulfilled'; value: string }
+// - PromiseRejectedResult           { status: 'rejected'; reason: any }
+
+// ── Promise.race 的返回类型 ──
+
+async function fastResponse() {
+  return 'fast'
+}
+
+async function slowResponse() {
+  return 'slow'
+}
+
+async function raceDemo() {
+  return await Promise.race([fastResponse(), slowResponse()])
+}
+
+type RaceResult = AsyncReturnType<typeof raceDemo>  // string
+
+// ── try/catch 中的错误类型 ──
+// catch 中的 error 默认是 unknown
+
+async function safeFetch(url: string): Promise<{ data: string } | null> {
+  try {
+    const response = await fetch(url)
+    const data = await response.json()
+    return { data }
+  } catch (error) {
+    // error 类型为 unknown，需要类型守卫
+    if (error instanceof Error) {
+      console.error('请求失败:', error.message)
+    }
+    return null
+  }
+}
+
+// ── 自定义 Awaited 实现 ──
+// 理解 Awaited 的工作原理
+
+type MyAwaited<T> = T extends Promise<infer U>
+  ? U extends Promise<any>
+    ? MyAwaited<U>
+    : U
+  : T
+
+// 测试
+type Test1 = MyAwaited<Promise<string>>           // string
+type Test2 = MyAwaited<Promise<Promise<number>>>  // number
+type Test3 = MyAwaited<boolean>                    // boolean
+
+// ── 带 then 的对象（thenable） ──
+// Awaited 也能处理有 then 方法的对象
+
+type Thenable<T> = { then: (onfulfilled: (value: T) => any) => any }
+
+type ThenableString = Thenable<string>
+type UnwrappedThenable = Awaited<ThenableString>  // string
+
+// ── 实用场景：API 响应封装 ──
+
+interface ApiResponse<T> {
+  code: number
+  message: string
+  data: T
+}
+
+async function request<T>(url: string): Promise<ApiResponse<T>> {
+  const res = await fetch(url)
+  return res.json()
+}
+
+async function getCourses() {
+  const res = await request<{ id: number; title: string }[]>('/api/courses')
+  return res.data
+}
+
+type CourseList = AsyncReturnType<typeof getCourses>
+// { id: number; title: string }[]
+
+// ── 延迟类型：模拟 sleep ──
+
+function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+async function delayedGreet(name: string) {
+  await sleep(1000)
+  return `Hello, ${name}!`
+}
+
+type DelayedResult = AsyncReturnType<typeof delayedGreet>  // string
+
+console.log('异步返回类型演示完成')

@@ -1,0 +1,139 @@
+// 基础 GET 请求
+// app/api/posts/route.ts
+import { NextResponse } from 'next/server'
+
+// 导出对应 HTTP 方法的函数
+export async function GET() {
+  const posts = [
+    { id: 1, title: '第一篇文章' },
+    { id: 2, title: '第二篇文章' },
+  ]
+
+  // 返回 JSON 响应
+  return NextResponse.json(posts)
+}
+
+// ============================================
+
+// POST 请求处理
+// app/api/posts/route.ts
+import { NextResponse, NextRequest } from 'next/server'
+
+export async function POST(request: NextRequest) {
+  // 解析请求体
+  const body = await request.json()
+
+  // 处理数据...
+  const newPost = {
+    id: Date.now(),
+    title: body.title,
+    content: body.content,
+  }
+
+  // 返回 201 状态码
+  return NextResponse.json(newPost, { status: 201 })
+}
+
+// ============================================
+
+// 动态路由参数
+// app/api/posts/[id]/route.ts
+import { NextResponse, NextRequest } from 'next/server'
+
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const id = params.id
+
+  // 根据 ID 查询数据...
+  const post = { id, title: `文章 ${id}` }
+
+  return NextResponse.json(post)
+}
+
+// PUT 更新
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const id = params.id
+  const body = await request.json()
+
+  return NextResponse.json({ id, ...body })
+}
+
+// DELETE 删除
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const id = params.id
+  // 删除逻辑...
+
+  return NextResponse.json({ message: `删除文章 ${id}` })
+}
+
+// ============================================
+
+// 处理查询参数
+// app/api/search/route.ts
+import { NextResponse, NextRequest } from 'next/server'
+
+export async function GET(request: NextRequest) {
+  // 从 URL 获取查询参数
+  const { searchParams } = new URL(request.url)
+  const query = searchParams.get('q')
+  const page = searchParams.get('page') || '1'
+
+  return NextResponse.json({
+    query,
+    page,
+    results: [],
+  })
+}
+
+// ============================================
+
+// 设置响应头和 Cookie
+// app/api/login/route.ts
+import { NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
+
+export async function POST(request: NextRequest) {
+  const body = await request.json()
+
+  // 验证用户...
+
+  // 方式1：通过 cookies() 设置
+  const cookieStore = cookies()
+  cookieStore.set('session', 'token-123', {
+    httpOnly: true,
+    secure: process.env['NODE_ENV'] === 'production',
+    sameSite: 'strict',
+    maxAge: 60 * 60 * 24 * 7, // 7 天
+  })
+
+  // 方式2：通过 NextResponse 设置
+  const response = NextResponse.json({ success: true })
+  response.cookies.set('session', 'token-123')
+
+  return response
+}
+
+// ============================================
+
+// 自定义响应头
+// app/api/data/route.ts
+import { NextResponse } from 'next/server'
+
+export async function GET() {
+  const data = { message: 'Hello' }
+
+  return NextResponse.json(data, {
+    headers: {
+      'Cache-Control': 's-maxage=60, stale-while-revalidate=30',
+      'X-Custom-Header': 'my-value',
+    },
+  })
+}

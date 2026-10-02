@@ -1,6 +1,7 @@
 import type { Component } from 'vue'
 import { defineAsyncComponent } from 'vue'
 import type { Lesson } from '../lessons'
+import { restoreCodeSource } from '../code-restore'
 
 const demoModules = import.meta.glob<Component>('../../demos/*.vue', { import: 'default' })
 const vueCodeModules = import.meta.glob<string>('../../demos/*.vue', { query: '?raw', import: 'default' })
@@ -9,6 +10,7 @@ const stateCodeModules = import.meta.glob<string>('../../demos/state-react/*.js'
 const jsCodeModules = import.meta.glob<string>('../../demos/js-code/*.js', { query: '?raw', import: 'default' })
 const tsCodeModules = import.meta.glob<string>('../../demos/ts-code/*.ts', { query: '?raw', import: 'default' })
 const styleCodeModules = import.meta.glob<string>('../../demos/style-code/*', { query: '?raw', import: 'default' })
+const tailwindCssCodeModules = import.meta.glob<string>('../../demos/tailwind-css-code/*', { query: '?raw', import: 'default' })
 
 function createDemo(name: string) {
   const loader = demoModules[`../../demos/${name}.vue`]
@@ -30,10 +32,12 @@ function createCodeLoader(path: string) {
           ? tsCodeModules
           : path.startsWith('style-code/')
             ? styleCodeModules
+            : path.startsWith('tailwind-css-code/')
+              ? tailwindCssCodeModules
             : vueCodeModules
   const loader = modules[`../../demos/${path}`]
   if (!loader) throw new Error(`未找到内容源码：${path}`)
-  return loader
+  return () => loader().then(restoreCodeSource)
 }
 
 const TW01UtilityFirst = createDemo('TW01UtilityFirstArticle')
@@ -77,6 +81,15 @@ const TW22SvgIcons = createDemo('TW22SVGIconsArticle')
 const TW23Plugins = createDemo('TW23PluginsArticle')
 const TW24Preset = createDemo('TW24PresetArticle')
 
+
+const TW17Code = createCodeLoader('tailwind-css-code/TW17Code.html')
+const TW18Code = createCodeLoader('tailwind-css-code/TW18Code.html')
+const TW19Code = createCodeLoader('tailwind-css-code/TW19Code.html')
+const TW20Code = createCodeLoader('tailwind-css-code/TW20Code.html')
+const TW21Code = createCodeLoader('tailwind-css-code/TW21Code.html')
+const TW22Code = createCodeLoader('tailwind-css-code/TW22Code.html')
+const TW23Code = createCodeLoader('tailwind-css-code/TW23Code.js.txt')
+const TW24Code = createCodeLoader('tailwind-css-code/TW24Code.js.txt')
 
 export const lessons: Lesson[] = [
 {
@@ -226,48 +239,7 @@ export const lessons: Lesson[] = [
 {
     id: 'TW_17', title: 'Grid 网格布局与 Grid Template', navTitle: 'Grid 布局', category: '布局与栅格',
     path: '/tailwind-css/tw-17/grid-layout', summary: '通过 grid-cols、grid-rows、gap 等工具类快速构建二维网格布局，配合 col-span、row-span 实现跨列跨行。',
-    demo: TW17GridLayout, code: () => Promise.resolve(`<!-- 基础 3 列网格 -->
-<div class="grid grid-cols-3 gap-4">
-  <div class="rounded-lg bg-amber-100 p-4">1</div>
-  <div class="rounded-lg bg-amber-100 p-4">2</div>
-  <div class="rounded-lg bg-amber-100 p-4">3</div>
-  <div class="rounded-lg bg-amber-100 p-4">4</div>
-  <div class="rounded-lg bg-amber-100 p-4">5</div>
-  <div class="rounded-lg bg-amber-100 p-4">6</div>
-</div>
-
-<!-- 跨列布局 -->
-<div class="grid grid-cols-4 gap-3">
-  <div class="col-span-2 rounded-lg bg-orange-200 p-4">跨 2 列</div>
-  <div class="rounded-lg bg-orange-100 p-4">3</div>
-  <div class="rounded-lg bg-orange-100 p-4">4</div>
-  <div class="rounded-lg bg-orange-100 p-4">5</div>
-  <div class="col-span-3 rounded-lg bg-orange-200 p-4">跨 3 列</div>
-</div>
-
-<!-- 响应式网格：移动端 1 列，平板 2 列，桌面 3 列 -->
-<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-  <article class="rounded-xl bg-amber-50 p-4">卡片 A</article>
-  <article class="rounded-xl bg-amber-50 p-4">卡片 B</article>
-  <article class="rounded-xl bg-amber-50 p-4">卡片 C</article>
-</div>
-
-<!-- 12 栅格系统 -->
-<div class="grid grid-cols-12 gap-2">
-  <div class="col-span-12 rounded bg-orange-300 p-2 text-center">col-span-12</div>
-  <div class="col-span-6 rounded bg-orange-200 p-2 text-center">col-span-6</div>
-  <div class="col-span-6 rounded bg-orange-200 p-2 text-center">col-span-6</div>
-  <div class="col-span-4 rounded bg-orange-100 p-2 text-center">4</div>
-  <div class="col-span-4 rounded bg-orange-100 p-2 text-center">4</div>
-  <div class="col-span-4 rounded bg-orange-100 p-2 text-center">4</div>
-</div>
-
-<!-- place-items 对齐 -->
-<div class="grid h-40 grid-cols-3 gap-2 rounded-lg bg-stone-100 place-items-center">
-  <div class="rounded bg-amber-200 px-3 py-2">居中</div>
-  <div class="rounded bg-amber-200 px-3 py-2">对齐</div>
-  <div class="rounded bg-amber-200 px-3 py-2">示例</div>
-</div>`), language: 'xml',
+    demo: TW17GridLayout, code: TW17Code, language: 'xml',
     principle: 'Grid 用 grid-cols/grid-rows 声明行与列轨道，col-span/row-span 控制子项跨列跨行，grid-template-areas + grid-area 用命名区域描述整体骨架；再用 gap 设轨道间距、place-items 控制对齐，配合响应式前缀在不同尺寸下切换列数。',
     flow: ['先用 grid-cols-* 定列数、gap 定轨道间距搭建二维网格。', '用 col-span-*/row-span-* 控制跨列跨行，或 grid-cols-[...] 表达自定义比例。', '整页骨架用 grid-template-areas 加 grid-area 命名区域，改一处模板即可全局重排。', '收窄窗口验证网格列数与跨列行为按断点平滑切换。'],
     notes: ['grid-cols-[repeat(auto-fill,minmax(200px,1fr))] 可通过自动填充生成等宽卡片墙。', 'place-items-center 可快速让网格子项水平垂直居中。', '跨行跨列类（col-span-*、col-start-*）只对 Grid 容器直系子项生效。', 'auto-fill 与 auto-fit 的差异在空轨道的处理，需要卡片保持最小宽度时用 auto-fill。'],
@@ -276,43 +248,7 @@ export const lessons: Lesson[] = [
 {
     id: 'TW_18', title: 'Flexbox 与 Grid 布局对比选择', navTitle: 'Flex vs Grid', category: '布局与栅格',
     path: '/tailwind-css/tw-18/flex-grid', summary: '理解 Flexbox 与 Grid 的适用场景，一维布局用 Flex，二维布局用 Grid，两者可组合使用。',
-    demo: TW18FlexGrid, code: () => Promise.resolve(`<!-- Flex：一维导航栏 -->
-<nav class="flex items-center justify-between gap-4 rounded-lg bg-amber-100 px-4 py-3">
-  <span class="font-bold text-amber-900">Logo</span>
-  <div class="flex gap-3">
-    <a href="#" class="text-amber-800 hover:text-amber-950">首页</a>
-    <a href="#" class="text-amber-800 hover:text-amber-950">课程</a>
-    <a href="#" class="text-amber-800 hover:text-amber-950">关于</a>
-  </div>
-</nav>
-
-<!-- Grid：二维卡片网格 -->
-<div class="grid grid-cols-2 gap-4 md:grid-cols-3">
-  <article class="rounded-xl bg-orange-100 p-4">卡片 1</article>
-  <article class="rounded-xl bg-orange-100 p-4">卡片 2</article>
-  <article class="rounded-xl bg-orange-100 p-4">卡片 3</article>
-  <article class="rounded-xl bg-orange-100 p-4">卡片 4</article>
-  <article class="rounded-xl bg-orange-100 p-4">卡片 5</article>
-  <article class="rounded-xl bg-orange-100 p-4">卡片 6</article>
-</div>
-
-<!-- Flex + Grid 组合：Grid 骨架，Flex 内容对齐 -->
-<div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-  <article class="flex flex-col justify-between rounded-xl bg-amber-50 p-5">
-    <div>
-      <h3 class="font-bold text-stone-900">Vue 入门</h3>
-      <p class="mt-2 text-sm text-stone-600">基础语法与响应式原理</p>
-    </div>
-    <button class="mt-4 rounded-lg bg-orange-600 px-4 py-2 text-sm text-white">开始学习</button>
-  </article>
-</div>
-
-<!-- Flex：居中对齐 -->
-<div class="flex h-24 items-center justify-center rounded-lg bg-stone-100">
-  <span class="text-stone-700">Flex 水平垂直居中</span>
-</div>
-
-<!-- 选择参考：一维内容流用 Flex，二维轨道布局用 Grid -->`), language: 'xml',
+    demo: TW18FlexGrid, code: TW18Code, language: 'xml',
     principle: 'Flexbox 是一维布局：沿主轴排列子项，尺寸与换行由内容驱动，适合导航、标签组与简单对齐；Grid 是二维布局：先定义行列轨道，再把子项放进网格，位置由布局驱动，适合卡片墙、表单栅格与页面骨架。两者不互斥——宏观骨架用 Grid 划区域、区域内部用 Flex 做流式对齐，是常见且高效的组合。',
     flow: ['一维流（导航、标签、居中）用 Flex，用 justify-*/items-* 控制主轴与交叉轴。', '二维网格（卡片墙、表单、页面骨架）用 Grid，用 grid-cols-* 与 col-span-* 控制轨道。', '大框架用 Grid、内部对齐用 Flex 组合，避免用一种布局硬撑所有场景。', '给容器临时描边，直观核对两种布局的实际轨道与对齐。'],
     notes: ['Flex 内容驱动：子项按内容换行伸缩；Grid 布局驱动：轨道决定子项排列。', '两者可嵌套，Grid 容器内子项仍可用 Flex 做细微对齐。', '单元素水平垂直居中用 flex + items-center + justify-center 即可，不必动用 Grid。', '调试布局时用 outline 类给容器加临时边界，比改背景色更直观且不影响布局。'],
@@ -321,44 +257,7 @@ export const lessons: Lesson[] = [
 {
     id: 'TW_19', title: '交互状态与组(Group)状态', navTitle: '交互状态', category: '响应与状态',
     path: '/tailwind-css/tw-19/interactivity', summary: '使用 hover、focus、active 等状态变体，配合 group 类实现父元素状态触发子元素样式变化。',
-    demo: TW19Interactivity, code: () => Promise.resolve(`<!-- 基础按钮交互状态 -->
-<button class="rounded-lg bg-orange-600 px-5 py-2.5 text-white transition
-  hover:bg-orange-700
-  active:bg-orange-800
-  focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-500 focus-visible:outline-offset-2
-  disabled:opacity-50 disabled:cursor-not-allowed">
-  提交
-</button>
-
-<!-- Group：父元素悬停触发子元素变化 -->
-<article class="group cursor-pointer rounded-xl bg-amber-50 p-5 transition hover:bg-amber-100">
-  <h3 class="font-bold text-stone-900 transition group-hover:text-orange-700">
-    Vue 性能优化实战
-  </h3>
-  <p class="mt-2 text-sm text-stone-600">深入理解响应式原理与渲染优化</p>
-  <span class="mt-3 inline-block text-orange-600 transition group-hover:translate-x-1">
-    查看详情 →
-  </span>
-</article>
-
-<!-- Peer：兄弟元素状态联动 -->
-<label class="flex items-center gap-2">
-  <input type="checkbox" class="peer rounded border-stone-300">
-  <span class="text-stone-700 peer-checked:text-orange-700 peer-checked:font-medium">
-    同意服务条款
-  </span>
-</label>
-
-<!-- Focus 与表单验证 -->
-<input type="email" placeholder="输入邮箱"
-  class="w-full rounded-lg border border-stone-300 px-4 py-2 transition
-  focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-200
-  invalid:border-red-500 invalid:focus:ring-red-200">
-
-<!-- 光标与用户选择 -->
-<p class="select-all cursor-pointer rounded bg-stone-100 p-3 text-stone-700">
-  点击可选中整段文字
-</p>`), language: 'xml',
+    demo: TW19Interactivity, code: TW19Code, language: 'xml',
     principle: '状态变体把 hover/focus/active/focus-visible/disabled/checked 等伪类展开为选择器规则；group 把容器状态向下传达给后代，peer 让前置兄弟的状态影响后续兄弟；此外还有 first/last/odd/even/empty/placeholder/selection 等结构性与元素伪类变体。',
     flow: ['用 hover:/active: 做直接反馈，用 focus-visible: 保住键盘焦点可见。', '父容器加 group，子元素用 group-hover: 联动，必要时用 group/name 命名以支持嵌套。', '列表间隔样式用 first:/last:/odd/even:，输入态用 placeholder:/selection:。', '用元素面板核对各变体生成的选择器与命中元素一致。'],
     notes: ['group-hover 命中的是标记链上的祖先 group，要求目标元素在 DOM 上是其后代。', 'peer 只影响其后方的兄弟元素，这是后续兄弟选择器的固有约束。', '聚焦描边优先用 focus-visible: 而非 focus:，避免鼠标点击也出现焦点圈。', '结构伪类变体依赖 DOM 顺序，增删节点后要重新核对首尾与奇偶样式。'],
@@ -367,43 +266,7 @@ export const lessons: Lesson[] = [
 {
     id: 'TW_20', title: '变换、过渡与动画', navTitle: '变换动画', category: '动效与过渡',
     path: '/tailwind-css/tw-20/transform', summary: '使用 transform、transition 和 animate 工具类，配合状态变体实现丰富的交互动效。',
-    demo: TW20Transform, code: () => Promise.resolve(`<!-- 悬停放大效果 -->
-<button class="rounded-lg bg-orange-600 px-6 py-3 text-white transition duration-200 ease-out
-  hover:scale-105 hover:shadow-lg
-  active:scale-95">
-  点击放大
-</button>
-
-<!-- 旋转与位移 -->
-<div class="flex gap-8">
-  <div class="transition duration-300 hover:rotate-12 hover:scale-110">
-    <div class="h-16 w-16 rounded-lg bg-amber-300"></div>
-    <p class="mt-2 text-xs text-stone-600">rotate + scale</p>
-  </div>
-  <div class="transition duration-300 hover:-translate-y-2 hover:shadow-xl">
-    <div class="h-16 w-16 rounded-lg bg-orange-400"></div>
-    <p class="mt-2 text-xs text-stone-600">translate-y</p>
-  </div>
-  <div class="transition duration-300 hover:skew-x-6">
-    <div class="h-16 w-16 rounded-lg bg-amber-500"></div>
-    <p class="mt-2 text-xs text-stone-600">skew-x</p>
-  </div>
-</div>
-
-<!-- 过渡曲线控制 -->
-<button class="rounded-lg bg-stone-700 px-5 py-2.5 text-white transition duration-500 ease-in-out hover:bg-orange-600">
-  ease-in-out 过渡
-</button>
-
-<!-- 内置关键帧动画 -->
-<div class="flex items-center gap-6">
-  <span class="inline-flex h-8 w-8 animate-spin rounded-full border-4 border-amber-200 border-t-orange-600"></span>
-  <span class="inline-flex h-3 w-3 animate-ping rounded-full bg-orange-500"></span>
-  <span class="inline-flex animate-pulse text-orange-600 font-medium">加载中...</span>
-  <span class="inline-flex animate-bounce text-2xl">👋</span>
-</div>
-
-<!-- 优先动画 transform 与 opacity，性能更好 -->`), language: 'xml',
+    demo: TW20Transform, code: TW20Code, language: 'xml',
     principle: 'scale/rotate/translate/skew 组合成单一 transform 且不改变布局占位；transition 声明参与过渡的属性、时长与缓动函数，animate 应用关键帧动画；配合 hover 等变体即可触发平滑的交互反馈。',
     flow: ['用 scale/rotate/translate/skew 与 origin-* 定义要呈现的变换。', '加 transition 与 duration-*/ease-* 让状态变化平滑过渡，用 hover:/active: 触发。', '循环或阶段性动效用 animate-*（内置 spin/ping/pulse/bounce）或自定义 keyframes。', '打开动画面板确认动画只涉及 transform 与 opacity，未触发重排。'],
     notes: ['优先动画 transform 与 opacity，性能最好；避免让布局属性参与昂贵动画。', '优先用 transition-transform 等明确属性，不要一律 transition-all。', 'v4 自定义动画在 CSS 里用 @theme 的 --animate-* 与 @keyframes 声明（旧式 tailwind.config 需经 @config 加载）。', '旋转与缩放组合时注意 transform 的书写顺序，顺序不同结果可能明显不同。'],
@@ -412,53 +275,7 @@ export const lessons: Lesson[] = [
 {
     id: 'TW_21', title: '滤镜与混合模式', navTitle: '滤镜混合', category: '视觉效果',
     path: '/tailwind-css/tw-21/filters', summary: '使用 CSS filter 和 backdrop-filter 工具类，实现模糊、亮度、对比度等滤镜效果与毛玻璃背景。',
-    demo: TW21Filters, code: () => Promise.resolve(`<!-- 图片滤镜效果 -->
-<div class="flex flex-wrap gap-4">
-  <div class="text-center">
-    <div class="h-20 w-20 rounded-lg bg-gradient-to-br from-orange-400 to-amber-500 blur-sm"></div>
-    <p class="mt-1 text-xs text-stone-600">blur-sm</p>
-  </div>
-  <div class="text-center">
-    <div class="h-20 w-20 rounded-lg bg-gradient-to-br from-orange-400 to-amber-500 brightness-125"></div>
-    <p class="mt-1 text-xs text-stone-600">brightness-125</p>
-  </div>
-  <div class="text-center">
-    <div class="h-20 w-20 rounded-lg bg-gradient-to-br from-orange-400 to-amber-500 contrast-75"></div>
-    <p class="mt-1 text-xs text-stone-600">contrast-75</p>
-  </div>
-  <div class="text-center">
-    <div class="h-20 w-20 rounded-lg bg-gradient-to-br from-orange-400 to-amber-500 saturate-200"></div>
-    <p class="mt-1 text-xs text-stone-600">saturate-200</p>
-  </div>
-  <div class="text-center">
-    <div class="h-20 w-20 rounded-lg bg-gradient-to-br from-orange-400 to-amber-500 grayscale"></div>
-    <p class="mt-1 text-xs text-stone-600">grayscale</p>
-  </div>
-  <div class="text-center">
-    <div class="h-20 w-20 rounded-lg bg-gradient-to-br from-orange-400 to-amber-500 sepia"></div>
-    <p class="mt-1 text-xs text-stone-600">sepia</p>
-  </div>
-</div>
-
-<!-- 毛玻璃效果 backdrop-blur -->
-<div class="relative h-32 w-full overflow-hidden rounded-xl bg-gradient-to-r from-orange-400 via-amber-400 to-yellow-400">
-  <div class="absolute bottom-0 left-0 right-0 backdrop-blur-md bg-white/30 px-4 py-3">
-    <p class="text-sm font-medium text-stone-800">backdrop-blur 毛玻璃效果</p>
-  </div>
-</div>
-
-<!-- 组合滤镜 -->
-<img class="rounded-lg transition duration-300 hover:brightness-110 hover:saturate-125 hover:shadow-xl"
-  src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=abstract%20orange%20gradient&image_size=square"
-  alt="示例图片" style="width: 160px; height: 160px; object-fit: cover;">
-
-<!-- 混合模式 -->
-<div class="relative h-24 w-48">
-  <div class="absolute inset-0 bg-orange-500 rounded-lg"></div>
-  <div class="absolute inset-2 bg-amber-200 rounded-lg mix-blend-multiply flex items-center justify-center">
-    <span class="text-xs text-stone-800">mix-blend-multiply</span>
-  </div>
-</div>`), language: 'xml',
+    demo: TW21Filters, code: TW21Code, language: 'xml',
     principle: 'filter 工具类（blur/brightness/contrast/saturate/grayscale/sepia/invert 等）作用于元素本身，backdrop-* 对其背后覆盖的内容应用滤镜，mix-blend-* 用混合模式让元素与下层背景叠加。',
     flow: ['对元素本体用 blur-*/brightness-* 等 filter 工具类，可按需求并发叠加多个效果。', '对元素背后内容用 backdrop-blur-*，配半透明背景色实现毛玻璃质感。', '文字或图层叠放用 mix-blend-* 控制与背景的混合关系。', '在元素面板核对 filter 与 backdrop-filter 的合成结果。'],
     notes: ['多个滤镜可写进同一元素的多个类里（如 blur-sm brightness-110），会合并成一条 filter 声明。', 'backdrop-filter 需配合半透明背景色或边框，才能肉眼看到毛玻璃效果。', '像素或任意档位用 blur-[8px]、brightness-[1.2] 表达，超出默认档位即可用任意值。', 'backdrop 类依赖浏览器支持 backdrop-filter，降级时记得提供纯色兜底。'],
@@ -467,53 +284,7 @@ export const lessons: Lesson[] = [
 {
     id: 'TW_22', title: 'SVG 图标与当前颜色', navTitle: 'SVG 图标', category: '视觉效果',
     path: '/tailwind-css/tw-22/svg-icons', summary: '通过 currentColor 让 SVG 继承父元素文字颜色，配合 text-* 工具类统一控制颜色和大小。',
-    demo: TW22SvgIcons, code: () => Promise.resolve(`<!-- fill 图标用 currentColor -->
-<button class="flex items-center gap-2 rounded-lg bg-orange-600 px-4 py-2 text-white hover:bg-orange-700">
-  <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
-    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
-  </svg>
-  <span>查看详情</span>
-</button>
-
-<!-- stroke 线性图标用 currentColor -->
-<button class="flex items-center gap-2 rounded-lg border border-stone-300 px-4 py-2 text-stone-700 hover:border-orange-500 hover:text-orange-600">
-  <svg class="h-5 w-5" stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-  </svg>
-  <span>添加课程</span>
-</button>
-
-<!-- 图标颜色跟随文字 -->
-<div class="flex items-center gap-6">
-  <div class="text-orange-600">
-    <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 20 20">
-      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-    </svg>
-    <p class="mt-1 text-sm font-medium">收藏</p>
-  </div>
-  <div class="text-stone-400">
-    <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 20 20">
-      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-    </svg>
-    <p class="mt-1 text-sm font-medium">未收藏</p>
-  </div>
-</div>
-
-<!-- 图标尺寸控制 -->
-<div class="flex items-end gap-4">
-  <svg class="h-4 w-4 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
-    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-  </svg>
-  <svg class="h-6 w-6 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
-    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-  </svg>
-  <svg class="h-8 w-8 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
-    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-  </svg>
-</div>
-
-<!-- currentColor 让图标颜色随父级文字变化，主题切换零成本 -->`), language: 'xml',
+    demo: TW22SvgIcons, code: TW22Code, language: 'xml',
     principle: 'Tailwind 配合 SVG 时，把 fill 或 stroke 设为 currentColor 可让图标自动继承父元素文字色，再结合 text-* 工具类就能同时控制文字与图标颜色；使用 stroke 而不是 fill 的线性图标配色更灵活、文件更小，是图标库的最佳实践。',
     flow: ['在 SVG 内部把 fill/stroke 改为 currentColor。', '用 text-* 工具类同时控制文字与图标颜色。', '用 w-*、h-* 或父级 text-* 大小控制图标尺寸。', '切换主题色后确认图标与文字颜色同步变化。'],
     notes: ['currentColor 让图标颜色跟随上下文，主题切换零成本。', '推荐使用线性 stroke 图标，更容易变色和保持一致性。', '可以直接用 Heroicons、Lucide 等库的 currentColor 变体。', '内联 SVG 时保持 stroke-width 一致，混用不同线宽会让图标观感不齐。'],
@@ -522,82 +293,7 @@ export const lessons: Lesson[] = [
 {
     id: 'TW_23', title: '插件系统与自定义插件开发', navTitle: '插件系统', category: '工程与定制',
     path: '/tailwind-css/tw-23/plugins', summary: '使用官方插件扩展能力，以及通过 plugin() API 开发自定义工具类和组件。',
-    demo: TW23Plugins, code: () => Promise.resolve(`// tailwind.config.js
-import plugin from 'tailwindcss/plugin'
-
-export default {
-  // 引入官方插件
-  plugins: [
-    require('@tailwindcss/typography'),
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/aspect-ratio'),
-
-    // 自定义插件：添加基础样式
-    plugin(function({ addBase, theme }) {
-      addBase({
-        'h1': { fontSize: theme('fontSize.3xl'), fontWeight: theme('fontWeight.bold') },
-        'h2': { fontSize: theme('fontSize.2xl'), fontWeight: theme('fontWeight.bold') },
-      })
-    }),
-
-    // 自定义插件：添加工具类
-    plugin(function({ addUtilities }) {
-      addUtilities({
-        '.content-auto': {
-          'content-visibility': 'auto',
-        },
-        '.text-shadow': {
-          'text-shadow': '0 2px 4px rgba(0,0,0,0.1)',
-        },
-      })
-    }),
-
-    // 自定义插件：添加组件类
-    plugin(function({ addComponents, theme }) {
-      addComponents({
-        '.btn': {
-          padding: theme('spacing.2') + ' ' + theme('spacing.4'),
-          borderRadius: theme('borderRadius.lg'),
-          fontWeight: theme('fontWeight.medium'),
-          backgroundColor: theme('colors.orange.600'),
-          color: 'white',
-          '&:hover': {
-            backgroundColor: theme('colors.orange.700'),
-          },
-        },
-        '.card': {
-          padding: theme('spacing.5'),
-          borderRadius: theme('borderRadius.xl'),
-          backgroundColor: 'white',
-          boxShadow: theme('boxShadow.md'),
-        },
-      })
-    }),
-
-    // 自定义插件：动态值工具类（matchUtilities）
-    plugin(function({ matchUtilities, theme }) {
-      matchUtilities(
-        {
-          'text-shadow': (value) => ({
-            textShadow: value,
-          }),
-        },
-        { values: theme('textShadow') }
-      )
-    }),
-  ],
-
-  // 为动态工具类扩展主题
-  theme: {
-    extend: {
-      textShadow: {
-        sm: '0 1px 2px rgba(0,0,0,0.05)',
-        DEFAULT: '0 2px 4px rgba(0,0,0,0.1)',
-        lg: '0 4px 8px rgba(0,0,0,0.15)',
-      },
-    },
-  },
-}`), language: 'javascript',
+    demo: TW23Plugins, code: TW23Code, language: 'javascript',
     principle: '插件通过 JS API（addBase/addComponents/addUtilities/addVariant/matchUtilities）扩展基础样式、组件类、工具类与变体；官方插件如 typography、forms、aspect-ratio 覆盖常见能力，除此以外更推荐先用 CSS-first 的 @utility 声明简单工具，只有动态或复杂能力才落到 plugin()。',
     flow: ['先确认是否能用内置工具、任意值或 @utility 解决，避免为简单需求引入插件。', '注册官方插件或自写 plugin() 时，按 addUtilities/addComponents/addBase/addVariant 分门别类扩展。', '需要按参数生成工具类时用 matchUtilities，配合入参和阈值生成动态值。', '在产物中核对插件注册的类名与变体能否被正常生成。'],
     notes: ['line-clamp、aspect-ratio、container-queries 等已在 v4 内置，无需再安装同名插件。', 'v4 里插件属 JS 配置能力，须在 CSS 里用 @config 显式加载 tailwind.config；简单工具优先用 @utility。', '插件可发布为 npm 包跨项目复用，但应只暴露必要 API，控制启动开销。', '升级 v4 前先盘点在用插件清单，确认哪些已内置、哪些必须保留。'],
@@ -606,108 +302,7 @@ export default {
 {
     id: 'TW_24', title: '主题预设与设计系统配置', navTitle: '主题预设', category: '工程与定制',
     path: '/tailwind-css/tw-24/preset', summary: '通过 presets 机制将设计系统配置抽成可复用的预设包，多项目共享统一的视觉规范。',
-    demo: TW24Preset, code: () => Promise.resolve(`// tailwind.design-system-preset.js （预设包，可发布为 npm 包）
-export default {
-  // 设计令牌：颜色
-  theme: {
-    extend: {
-      colors: {
-        brand: {
-          50: '#fff7ed',
-          100: '#ffedd5',
-          200: '#fed7aa',
-          300: '#fdba74',
-          400: '#fb923c',
-          500: '#f97316',
-          600: '#ea580c',
-          700: '#c2410c',
-          800: '#9a3412',
-          900: '#7c2d12',
-        },
-        neutral: {
-          50: '#fafaf9',
-          100: '#f5f5f4',
-          200: '#e7e5e4',
-          300: '#d6d3d1',
-          400: '#a8a29e',
-          500: '#78716c',
-          600: '#57534e',
-          700: '#44403c',
-          800: '#292524',
-          900: '#1c1917',
-        },
-      },
-
-      // 字体
-      fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        mono: ['JetBrains Mono', 'monospace'],
-      },
-
-      // 间距
-      spacing: {
-        '18': '4.5rem',
-        '88': '22rem',
-      },
-
-      // 圆角
-      borderRadius: {
-        '4xl': '2rem',
-      },
-
-      // 动画
-      animation: {
-        'fade-in': 'fadeIn 0.3s ease-out',
-        'slide-up': 'slideUp 0.3s ease-out',
-      },
-      keyframes: {
-        fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
-        },
-        slideUp: {
-          '0%': { transform: 'translateY(10px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
-        },
-      },
-    },
-  },
-
-  // 预设可以嵌套其他预设
-  presets: [
-    // require('@company/tailwind-tokens-preset'),
-  ],
-
-  // 预设也可以包含插件
-  plugins: [
-    // require('@tailwindcss/typography'),
-  ],
-}
-
-// ========== 项目中使用 ==========
-// tailwind.config.js
-import designSystemPreset from './tailwind.design-system-preset'
-
-export default {
-  // 引入设计系统预设
-  presets: [designSystemPreset],
-
-  // 项目层可以覆盖或扩展预设
-  theme: {
-    extend: {
-      // 项目特有颜色
-      colors: {
-        'project-accent': '#8b5cf6',
-      },
-    },
-  },
-
-  // 项目特有插件
-  plugins: [],
-
-  // 内容源路径（项目级，不会被预设覆盖）
-  content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
-}`), language: 'javascript',
+    demo: TW24Preset, code: TW24Code, language: 'javascript',
     principle: '把颜色、字体、间距、圆角、动画等设计令牌抽成可复用配置，多项目共享统一视觉规范，并允许项目层覆盖或扩展：v4 推荐用 @theme 的 CSS-first 文件配合 @import 共享，旧式 JavaScript 配置则把 theme 抽成 preset，经 presets 数组在 @config 加载的配置内引用。',
     flow: ['把设计令牌从项目样式提炼为独立共享文件（CSS 的 @theme 文件，或 JS 的 preset 对象）。', '在项目里 import 该主题 CSS，或经 presets 数组引入；需要时发布成 npm 包做版本化迭代。', '项目层只覆盖或扩展差异项，保持全局一致与局部个性并存。', '在项目中覆盖一个令牌值，验证派生工具类随之变化。'],
     notes: ['v4 默认不再自动读取 tailwind.config.js，遗留 JS 配置须在 CSS 里用 @config 显式加载。', 'CSS-first 下更推荐把设计系统写成一个带 @theme 的共用 CSS，再用 @import 引入，不拆成多份独立 JS 配置。', '预设可嵌套与组合，设计令牌应由设计与开发共同定义，并用语义化版本发布。', '共享主题文件在构建时被静态内联，改造后要复核产物里的变量值。'],

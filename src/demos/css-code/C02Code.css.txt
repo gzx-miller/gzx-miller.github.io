@@ -1,0 +1,46 @@
+/* content-box：width 只包含内容区 */
+.box-content {
+  box-sizing: content-box;
+  width: 200px;
+  padding: 20px;
+  border: 2px solid #e8590c;
+  /* 实际总宽度 = 200 + 40 + 4 = 244px */
+}
+
+/* border-box：width 包含内容 + padding + border */
+.box-border {
+  box-sizing: border-box;
+  width: 200px;
+  padding: 20px;
+  border: 2px solid #e8590c;
+  /* 实际总宽度 = 200px */
+}
+
+/* 全局设置 border-box（推荐做法） */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* 外边距折叠：垂直相邻块级元素的 margin 会合并 */
+.card-top {
+  margin-bottom: 20px;
+}
+.card-bottom {
+  margin-top: 20px;
+  /* 实际间距是 20px，不是 40px */
+}
+
+/* padding 内边距示例 */
+.card-padding {
+  padding: 16px 24px;
+  /* 上下 16px，左右 24px */
+}
+
+/* border 边框示例 */
+.card-border {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  border-left: 4px solid #e8590c;
+}
