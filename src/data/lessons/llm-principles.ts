@@ -88,7 +88,7 @@ const LLM32Code = createCodeLoader('llm-principles-code/LLM32Code.py.txt')
 export const lessons: Lesson[] = [
   {
     id: 'LLM_1',
-    title: '什么是向量：给事物拍一张「数字照片」',
+    title: '向量与数字照片',
     navTitle: '向量的起点',
     category: '基础数学',
     path: '/llm-principles/llm-1/what-is-vector',
@@ -99,7 +99,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_2',
-    title: '向量的常见运算：加法、点积与余弦相似度',
+    title: '向量运算与余弦相似度',
     navTitle: '向量的运算',
     category: '基础数学',
     path: '/llm-principles/llm-2/vector-ops',
@@ -110,7 +110,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_3',
-    title: '什么是矩阵：把多组变换装进一张数字表',
+    title: '矩阵与多组变换',
     navTitle: '矩阵',
     category: '基础数学',
     path: '/llm-principles/llm-3/matrix',
@@ -121,7 +121,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_4',
-    title: '什么是线性变换：矩阵乘法在做什么',
+    title: '线性变换与矩阵乘法',
     navTitle: '线性变换',
     category: '基础数学',
     path: '/llm-principles/llm-4/linear-transform',
@@ -132,7 +132,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_5',
-    title: '什么是梯度：蒙着眼找到下山路',
+    title: '梯度与蒙眼下山',
     navTitle: '梯度',
     category: '基础数学',
     path: '/llm-principles/llm-5/gradient',
@@ -143,7 +143,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_6',
-    title: '概率与信息：输出为什么叫「概率」',
+    title: '概率信息与交叉熵',
     navTitle: '概率与信息',
     category: '基础数学',
     path: '/llm-principles/llm-6/probability',
@@ -154,7 +154,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_7',
-    title: '神经元结构：加权投票的小开关',
+    title: '神经元与加权开关',
     navTitle: '神经元',
     category: '神经网络',
     path: '/llm-principles/llm-7/neuron',
@@ -165,7 +165,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_8',
-    title: '激活函数：给直线网络引入弯折',
+    title: '激活函数与网络弯折',
     navTitle: '激活函数',
     category: '神经网络',
     path: '/llm-principles/llm-8/activation',
@@ -176,7 +176,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_9',
-    title: '神经网络与训练：让电脑自己「学」',
+    title: '神经网络与训练循环',
     navTitle: '网络与训练',
     category: '神经网络',
     path: '/llm-principles/llm-9/network-training',
@@ -187,7 +187,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_10',
-    title: '损失函数：把「错得多离谱」变成可比的数',
+    title: '损失函数与误差尺度',
     navTitle: '损失函数',
     category: '神经网络',
     path: '/llm-principles/llm-10/loss-function',
@@ -198,7 +198,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_11',
-    title: 'Softmax：把分数变成概率',
+    title: 'Softmax与概率转换',
     navTitle: 'Softmax',
     category: '神经网络',
     path: '/llm-principles/llm-11/softmax',
@@ -209,7 +209,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_12',
-    title: '梯度下降与优化器：这一步该迈多大',
+    title: '梯度下降与优化器',
     navTitle: '梯度下降',
     category: '神经网络',
     path: '/llm-principles/llm-12/sgd-optimizer',
@@ -220,7 +220,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_13',
-    title: '反向传播：把错误逐层送回去',
+    title: '反向传播与梯度回传',
     navTitle: '反向传播',
     category: '神经网络',
     path: '/llm-principles/llm-13/backpropagation',
@@ -231,7 +231,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_14',
-    title: '语言的概率游戏：N-gram',
+    title: '语言概率游戏与N-gram',
     navTitle: 'N-gram',
     category: '自然语言处理',
     path: '/llm-principles/llm-14/ngram',
@@ -242,7 +242,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_15',
-    title: '词向量：词的含义变成坐标',
+    title: '词向量与语义坐标',
     navTitle: '词向量',
     category: '自然语言处理',
     path: '/llm-principles/llm-15/word2vec',
@@ -253,7 +253,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_16',
-    title: '前馈神经网络语言模型：绕开稀疏灾难',
+    title: '前馈模型与稀疏灾难',
     navTitle: '前馈语言模型',
     category: '自然语言处理',
     path: '/llm-principles/llm-16/ffnn-lm',
@@ -264,7 +264,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_17',
-    title: 'RNN 循环神经网络：给网络装上记忆',
+    title: 'RNN循环网络与记忆',
     navTitle: 'RNN',
     category: '自然语言处理',
     path: '/llm-principles/llm-17/rnn',
@@ -275,7 +275,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_18',
-    title: 'LSTM 长短期记忆网络：给记忆装上阀门',
+    title: 'LSTM与记忆阀门',
     navTitle: 'LSTM',
     category: '自然语言处理',
     path: '/llm-principles/llm-18/lstm',
@@ -286,7 +286,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_19',
-    title: '注意力机制：每个词自己决定看向哪里',
+    title: '注意力机制与看向何处',
     navTitle: '注意力机制',
     category: '大语言模型',
     path: '/llm-principles/llm-19/attention',
@@ -297,7 +297,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_20',
-    title: '多头注意力：一个头忙不过来',
+    title: '多头注意力与并行分工',
     navTitle: '多头注意力',
     category: '大语言模型',
     path: '/llm-principles/llm-20/multihead',
@@ -308,7 +308,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_21',
-    title: 'Transformer 架构：大模型的地基',
+    title: 'Transformer架构与地基',
     navTitle: 'Transformer',
     category: '大语言模型',
     path: '/llm-principles/llm-21/transformer',
@@ -319,7 +319,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_22',
-    title: 'Tokenizer 分词器：模型眼里的「字」',
+    title: 'Tokenizer与子词分词',
     navTitle: 'Token 分词',
     category: '大语言模型',
     path: '/llm-principles/llm-22/tokenizer',
@@ -330,7 +330,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_23',
-    title: '编码器、解码器与大语言模型',
+    title: '编码解码器与语言模型',
     navTitle: '编码器与解码器',
     category: '大语言模型',
     path: '/llm-principles/llm-23/encoder-decoder',
@@ -341,7 +341,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_24',
-    title: '残差连接与层归一化：让 96 层不再难训',
+    title: '残差连接与层归一化',
     navTitle: '残差与归一化',
     category: '大语言模型',
     path: '/llm-principles/llm-24/residual-layernorm',
@@ -352,7 +352,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_25',
-    title: '预训练 · 监督微调 · 强化学习：ChatGPT 三阶段',
+    title: '预训练微调强化三阶段',
     navTitle: '三阶段训练',
     category: '大语言模型',
     path: '/llm-principles/llm-25/training-stages',
@@ -363,7 +363,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_26',
-    title: 'KV 缓存、稀疏注意力与 FlashAttention：驯服 O(n²)',
+    title: 'KV缓存与稀疏注意力',
     navTitle: '注意力加速',
     category: '大语言模型',
     path: '/llm-principles/llm-26/attention-speedup',
@@ -374,7 +374,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_27',
-    title: 'MoE 混合专家架构：万亿参数却没全用上',
+    title: 'MoE混合专家架构',
     navTitle: 'MoE 专家',
     category: '大语言模型',
     path: '/llm-principles/llm-27/moe',
@@ -385,7 +385,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_28',
-    title: '模型蒸馏：大模型把本领传授给小模型',
+    title: '模型蒸馏与知识传授',
     navTitle: '模型蒸馏',
     category: '大语言模型',
     path: '/llm-principles/llm-28/distillation',
@@ -396,7 +396,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_29',
-    title: '串讲：从 N-gram 到 Transformer 的一条线',
+    title: '原理串讲到Transformer',
     navTitle: '原理串讲',
     category: '大语言模型',
     path: '/llm-principles/llm-29/recap',
@@ -407,7 +407,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_30',
-    title: '前沿与未来：ChatGPT 之后的下一程',
+    title: '前沿未来与下一程',
     navTitle: '前沿与未来',
     category: '大语言模型',
     path: '/llm-principles/llm-30/frontier',
@@ -418,7 +418,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_31',
-    title: '附录 1：Transformer 3D 全景图',
+    title: 'Transformer3D架构全景图',
     navTitle: 'Transformer 全景图',
     category: '附录',
     path: '/llm-principles/llm-31/transformer-3d',
@@ -429,7 +429,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'LLM_32',
-    title: '附录 2：《Attention Is All You Need》原文译文',
+    title: 'Attention论文原文译文',
     navTitle: 'Attention 论文译文',
     category: '附录',
     path: '/llm-principles/llm-32/attention-paper',
