@@ -1,0 +1,1 @@
+import{F as t,o as c,b as s,X as n}from"./CfJSWYGO.js";const o={},r={class:"llm-article"};function _(e,a){return c(),s("article",r,[n(e.$slots,"default")])}const i=Object.assign(t(o,[["render",_]]),{__name:"LlmArticle"});export{i as _};

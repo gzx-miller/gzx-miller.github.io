@@ -1,0 +1,1 @@
+import{F as o,o as a,b as r,e as s,p as c,V as _,X as l,K as d}from"./CfJSWYGO.js";const m={},p={class:"app-frame"};function f(t,e){const n=_;return a(),r(d,null,[e[0]||(e[0]=s("a",{class:"skip-link",href:"#main-content"},"跳到正文",-1)),s("div",p,[c(n),l(t.$slots,"default")])],64)}const u=o(m,[["render",f]]);export{u as default};

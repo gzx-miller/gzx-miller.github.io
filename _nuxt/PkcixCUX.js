@@ -1,0 +1,134 @@
+const n=`// 声明文件与全局类型增强：理解 .d.ts 的作用
+
+// ── 环境声明：declare 关键字 ──
+// 告诉 TypeScript "这个东西存在，但实现不在这"
+
+// 声明全局变量
+declare const __APP_VERSION__: string
+declare const __BUILD_TIME__: number
+
+// 使用环境变量
+const version = __APP_VERSION__
+const buildTime = new Date(__BUILD_TIME__)
+
+// 声明全局函数
+declare function ga(event: string, data?: object): void
+
+// ga('page_view', { page: '/home' })
+
+// ── 声明模块：为无类型 JS 库补充类型 ──
+// 当第三方库没有 .d.ts 文件时，可以自己写声明
+
+// 声明一个模块
+// declare module 'some-js-lib' {
+//   export function init(options: { debug?: boolean }): void
+//   export const version: string
+// }
+
+// 使用时就能获得类型提示
+// import { init, version } from 'some-js-lib'
+// init({ debug: true })
+
+// 声明通配符模块（如资源文件）
+// declare module '*.svg' {
+//   const content: string
+//   export default content
+// }
+//
+// declare module '*.png' {
+//   const src: string
+//   export default src
+// }
+//
+// declare module '*.module.css' {
+//   const classes: { [key: string]: string }
+//   export default classes
+// }
+
+// ── 全局类型增强：扩展已有类型 ──
+// 注意：必须在模块文件（有 import/export）中使用 declare global
+
+// 扩展 String 接口
+// declare global {
+//   interface String {
+//     capitalize(): string
+//     padLeft(length: number, char?: string): string
+//   }
+// }
+
+// 扩展后就可以在字符串上调用这些方法
+// const str = 'hello'
+// str.capitalize()  // 'Hello'
+// str.padLeft(10)   // '     hello'
+
+// 扩展 Array 接口
+// declare global {
+//   interface Array<T> {
+//     first(): T | undefined
+//     last(): T | undefined
+//     unique(): T[]
+//   }
+// }
+
+// const arr = [1, 2, 2, 3]
+// arr.first()   // 1
+// arr.last()    // 3
+// arr.unique()  // [1, 2, 3]
+
+// ── 扩展 Window 对象 ──
+// 为 window 添加自定义属性
+
+// declare global {
+//   interface Window {
+//     __INITIAL_STATE__: {
+//       user: { id: number; name: string } | null
+//       theme: 'light' | 'dark'
+//     }
+//     myGlobalFunc: (msg: string) => void
+//   }
+// }
+
+// 访问 window 上的自定义属性
+// const theme = window.__INITIAL_STATE__.theme
+// window.myGlobalFunc('hello')
+
+// ── 命名空间声明 ──
+// 为库的命名空间补充类型
+
+// declare namespace MyLib {
+//   interface Config {
+//     debug: boolean
+//     version: string
+//   }
+//
+//   function configure(cfg: Partial<Config>): void
+//   const config: Config
+// }
+
+// MyLib.configure({ debug: true })
+// console.log(MyLib.config.version)
+
+// ── 声明合并：接口自动合并 ──
+// 同名的 interface 会自动合并
+
+interface UserConfig {
+  debug: boolean
+}
+
+interface UserConfig {
+  version: string
+}
+
+// 合并后相当于：
+// interface UserConfig {
+//   debug: boolean
+//   version: string
+// }
+
+const config: UserConfig = {
+  debug: true,
+  version: '1.0.0',
+}
+
+console.log('声明文件演示完成')
+`;export{n as default};

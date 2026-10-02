@@ -1,0 +1,14 @@
+const n=`#include <iostream>
+
+int main() {
+    int a = 10, b = 3;
+    std::cout << a + b << std::endl;
+    std::cout << a / b << std::endl;
+    std::cout << a % b << std::endl;
+
+    int x = 0;
+    if (a > b && ++x) { }
+    std::cout << x << std::endl;
+
+    return 0;
+}`;export{n as default};

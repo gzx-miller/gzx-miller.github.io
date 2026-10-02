@@ -1,0 +1,152 @@
+const n=`// 品牌类型（Branded Types）：模拟名义类型，区分语义不同的结构相同类型
+
+// ── 基础品牌类型 ──
+// 使用交叉类型 & 加上唯一的 "品牌" 属性
+// 运行时没有额外开销，只是类型层面的标记
+
+type Brand<T, B extends string> = T & { readonly __brand: B }
+
+// 定义不同语义的 ID 类型
+type UserId = Brand<number, 'UserId'>
+type OrderId = Brand<number, 'OrderId'>
+type ProductId = Brand<string, 'ProductId'>
+
+// 类型断言创建品牌类型的值
+const userId = 1001 as UserId
+const orderId = 2001 as OrderId
+const productId = 'PROD-001' as ProductId
+
+// 错误：不能将 OrderId 赋值给 UserId（虽然底层都是 number）
+// const wrongId: UserId = orderId  // 类型不兼容
+
+// 正确：同类型可以赋值
+const anotherUserId: UserId = userId
+
+// ── 品牌类型构造函数 ──
+// 用函数封装类型断言，更安全
+
+function createUserId(id: number): UserId {
+  return id as UserId
+}
+
+function createOrderId(id: number): OrderId {
+  return id as OrderId
+}
+
+const uid = createUserId(100)
+const oid = createOrderId(200)
+
+// 函数参数使用品牌类型，传参时自动校验身份
+function fetchUser(id: UserId) {
+  return { id, name: '用户' + id }
+}
+
+function fetchOrder(id: OrderId) {
+  return { id, status: 'pending' }
+}
+
+fetchUser(uid)   // 正确
+// fetchUser(oid) // 错误：类型不匹配
+
+// ── 更多品牌类型示例 ──
+
+// 邮箱类型
+type Email = Brand<string, 'Email'>
+
+function createEmail(email: string): Email | null {
+  const emailRegex = /^[^s@]+@[^s@]+.[^s@]+$/
+  return emailRegex.test(email) ? email as Email : null
+}
+
+function sendEmail(to: Email, subject: string) {
+  console.log(\`发送邮件到 \${to}，主题：\${subject}\`)
+}
+
+const adminEmail = createEmail('a****@********')
+if (adminEmail) {
+  sendEmail(adminEmail, '系统通知')
+}
+
+// 金额类型（避免不同货币混用）
+type USD = Brand<number, 'USD'>
+type CNY = Brand<number, 'CNY'>
+
+function usd(amount: number): USD {
+  return amount as USD
+}
+
+function cny(amount: number): CNY {
+  return amount as CNY
+}
+
+const priceUSD = usd(99.9)
+const priceCNY = cny(699)
+
+function payUSD(amount: USD) {
+  console.log(\`支付 \${amount} 美元\`)
+}
+
+payUSD(priceUSD)  // 正确
+// payUSD(priceCNY) // 错误：不能用人民币支付美元账户
+
+// ── 使用 symbol 作为品牌（避免属性名冲突） ──
+// 用 unique symbol 代替字符串，更安全
+
+declare const __brand: unique symbol
+type Branded<T, B> = T & { [__brand]: B }
+
+type SafeUserId = Branded<number, 'UserId'>
+type SafeOrderId = Branded<number, 'OrderId'>
+
+// ── 带校验的品牌类型 ──
+// 结合类型守卫，运行时也能验证
+
+type PositiveNumber = Brand<number, 'PositiveNumber'>
+
+function isPositiveNumber(n: number): n is PositiveNumber {
+  return n > 0
+}
+
+function createPositive(n: number): PositiveNumber | null {
+  return isPositiveNumber(n) ? n : null
+}
+
+function setAge(age: PositiveNumber) {
+  console.log(\`年龄设置为：\${age}\`)
+}
+
+const age = createPositive(25)
+if (age) {
+  setAge(age)
+}
+
+// ── 去除品牌类型 ──
+// 有时需要转回原始类型
+
+type Unbrand<T> = T extends Brand<infer U, any> ? U : T
+
+const rawUserId: number = userId as Unbrand<UserId>
+console.log(rawUserId)  // 1001
+
+// 或者直接用类型断言
+const rawOrderId = orderId as number
+
+// ── 实用场景：URL 路径 ──
+type AbsoluteURL = Brand<string, 'AbsoluteURL'>
+type RelativeURL = Brand<string, 'RelativeURL'>
+
+function isAbsoluteURL(url: string): url is AbsoluteURL {
+  return /^https?:\\/\\//.test(url)
+}
+
+function resolveURL(base: AbsoluteURL, path: RelativeURL): AbsoluteURL {
+  return (base.replace(/\\/$/, '') + '/' + path.replace(/^\\//, '')) as AbsoluteURL
+}
+
+const base = 'https://example.com' as AbsoluteURL
+const path = '/api/users' as RelativeURL
+const fullUrl = resolveURL(base, path)
+console.log(fullUrl)  // https://example.com/api/users
+
+console.log('品牌类型演示完成')
+`;export{n as default};

@@ -1,0 +1,65 @@
+const n=`/* 移动优先：先写小屏样式 */
+.card-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+/* 平板：>= 768px */
+@media (min-width: 768px) {
+  .card-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 桌面：>= 1024px */
+@media (min-width: 1024px) {
+  .card-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* 大屏：>= 1280px */
+@media (min-width: 1280px) {
+  .card-list {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* 最大宽度（桌面优先） */
+@media (max-width: 767px) {
+  .sidebar {
+    display: none;
+  }
+}
+
+/* 媒体特性：深色模式 */
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #1a1a1a;
+    color: #fff;
+  }
+}
+
+/* 媒体特性：减少动画 */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* 组合条件 */
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* 仅平板尺寸 */
+  .container {
+    padding: 0 24px;
+  }
+}
+
+/* 横屏 */
+@media (orientation: landscape) {
+  .hero {
+    height: 80vh;
+  }
+}`;export{n as default};

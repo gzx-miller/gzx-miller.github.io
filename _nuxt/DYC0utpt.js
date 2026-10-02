@@ -1,0 +1,36 @@
+const n=`#include <iostream>
+#include <string>
+
+class Student {
+private:
+    std::string* name;
+
+public:
+    Student(const std::string& n) {
+        name = new std::string(n);
+    }
+
+    // 拷贝构造函数（深拷贝）
+    Student(const Student& other) {
+        name = new std::string(*other.name);
+    }
+
+    // 拷贝赋值运算符
+    Student& operator=(const Student& other) {
+        if (this != &other) {
+            delete name;
+            name = new std::string(*other.name);
+        }
+        return *this;
+    }
+
+    ~Student() {
+        delete name;
+    }
+};
+
+int main() {
+    Student s1("小明");
+    Student s2 = s1;
+    return 0;
+}`;export{n as default};

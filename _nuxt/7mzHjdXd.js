@@ -1,0 +1,52 @@
+const n=`/* 优先级从低到高 */
+
+/* 类型选择器：优先级 0,0,1 */
+p {
+  color: #333;
+}
+
+/* 类选择器：优先级 0,1,0 */
+.text-primary {
+  color: #e8590c;
+}
+
+/* ID 选择器：优先级 1,0,0 */
+#title {
+  color: #1971c2;
+}
+
+/* 内联样式：优先级 1,0,0,0（最高，除了 !important） */
+/* <p style="color: green">内联样式</p> */
+
+/* !important：覆盖所有优先级（慎用） */
+.important-text {
+  color: #000 !important;
+}
+
+/* 组合选择器优先级叠加 */
+/* .card .title 优先级：0,2,0 */
+.card .title {
+  font-size: 18px;
+}
+
+/* 可继承属性示例 */
+.parent {
+  font-family: system-ui, sans-serif;
+  color: #333;
+  line-height: 1.6;
+  /* 这些属性会被子元素继承 */
+}
+
+/* 显式控制继承 */
+.inherit-value {
+  color: inherit;
+  /* 继承父元素的值 */
+}
+.initial-value {
+  all: initial;
+  /* 重置为初始值 */
+}
+.unset-value {
+  color: unset;
+  /* 可继承则继承，否则初始值 */
+}`;export{n as default};

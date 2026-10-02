@@ -1,0 +1,215 @@
+const n=`import { ChatOpenAI } from '@langchain/openai'
+import { tool } from '@langchain/core/tools'
+import { z } from 'zod'
+import { HumanMessage, AIMessage, ToolMessage } from '@langchain/core/messages'
+
+const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 })
+
+// 示例1: 定义工具函数
+const getWeatherTool = tool(
+  async ({ city, unit }) => {
+    const mockData: Record<string, { temp: number; condition: string }> = {
+      '北京': { temp: 25, condition: '晴' },
+      '上海': { temp: 28, condition: '多云' },
+      '广州': { temp: 32, condition: '雷阵雨' },
+      '深圳': { temp: 30, condition: '晴' },
+    }
+    
+    const data = mockData[city] || { temp: 20, condition: '未知' }
+    const temp = unit === 'fahrenheit' ? (data.temp * 9 / 5) + 32 : data.temp
+    
+    return JSON.stringify({
+      city,
+      temperature: temp,
+      unit: unit || 'celsius',
+      condition: data.condition,
+      humidity: 65,
+      windSpeed: 10,
+    })
+  },
+  {
+    name: 'get_current_weather',
+    description: '获取指定城市的当前天气信息。查询天气时使用此工具。',
+    schema: z.object({
+      city: z.string().describe('城市名称，例如：北京、上海、深圳'),
+      unit: z.enum(['celsius', 'fahrenheit']).optional().describe('温度单位，默认摄氏度'),
+    }),
+  }
+)
+
+// 示例2: 定义多个工具
+const searchTool = tool(
+  async ({ query, numResults }) => {
+    const mockResults = [
+      { title: \`\${query} - 百度百科\`, snippet: \`这是关于\${query}的百科介绍...\` },
+      { title: \`\${query}最新动态\`, snippet: \`\${query}的最新消息和动态...\` },
+      { title: \`\${query}使用教程\`, snippet: \`详细的\${query}使用指南...\` },
+    ]
+    return JSON.stringify(mockResults.slice(0, numResults || 3))
+  },
+  {
+    name: 'web_search',
+    description: '搜索网络获取最新信息。当你需要实时信息、最新动态或不了解的知识时使用。',
+    schema: z.object({
+      query: z.string().describe('搜索关键词'),
+      numResults: z.number().optional().describe('返回结果数量，默认3'),
+    }),
+  }
+)
+
+const calculatorTool = tool(
+  async ({ expression }) => {
+    try {
+      const result = eval(expression)
+      return JSON.stringify({ expression, result })
+    } catch (e) {
+      return JSON.stringify({ error: '计算错误，请检查表达式' })
+    }
+  },
+  {
+    name: 'calculator',
+    description: '执行数学计算。当需要进行数学运算时使用此工具。',
+    schema: z.object({
+      expression: z.string().describe('数学表达式，例如 "2 + 3 * 4"'),
+    }),
+  }
+)
+
+const tools = [getWeatherTool, searchTool, calculatorTool]
+
+// 示例3: 单次工具调用流程
+async function singleToolCallExample() {
+  console.log('=== 单次工具调用 ===')
+  
+  // 第一步：用户提问
+  const messages = [
+    new HumanMessage('北京今天天气怎么样？'),
+  ]
+  
+  // 第二步：模型决定是否调用工具
+  const modelWithTools = model.bindTools(tools)
+  const response = await modelWithTools.invoke(messages)
+  
+  console.log('模型响应:', response.content)
+  console.log('工具调用:', response.tool_calls)
+  
+  // 第三步：执行工具
+  if (response.tool_calls && response.tool_calls.length > 0) {
+    messages.push(response) // 添加 AI 消息
+    
+    for (const toolCall of response.tool_calls) {
+      const toolInstance = tools.find(t => t.name === toolCall.name)
+      if (toolInstance) {
+        const toolResult = await toolInstance.invoke(toolCall.args)
+        messages.push(new ToolMessage({
+          tool_call_id: toolCall.id,
+          content: toolResult,
+        }))
+        console.log('工具结果:', toolResult)
+      }
+    }
+    
+    // 第四步：模型根据工具结果生成最终回答
+    const finalResponse = await modelWithTools.invoke(messages)
+    console.log('最终回答:', finalResponse.content)
+  }
+}
+
+// 示例4: 多轮工具调用
+async function multiToolCallExample() {
+  console.log('\\n=== 多轮工具调用 ===')
+  
+  const modelWithTools = model.bindTools(tools)
+  const messages: any[] = [
+    new HumanMessage('北京的天气怎么样？那里的气温换算成华氏度是多少？'),
+  ]
+  
+  let iteration = 0
+  const maxIterations = 5
+  
+  while (iteration < maxIterations) {
+    iteration++
+    console.log(\`\\n--- 第 \${iteration} 轮 ---\`)
+    
+    const response = await modelWithTools.invoke(messages)
+    messages.push(response)
+    
+    // 如果没有工具调用，说明任务完成
+    if (!response.tool_calls || response.tool_calls.length === 0) {
+      console.log('最终回答:', response.content)
+      break
+    }
+    
+    console.log('工具调用:', response.tool_calls.map((tc: any) => tc.name))
+    
+    // 执行所有工具调用
+    for (const toolCall of response.tool_calls) {
+      const toolInstance = tools.find(t => t.name === toolCall.name)
+      if (toolInstance) {
+        const result = await toolInstance.invoke(toolCall.args)
+        messages.push(new ToolMessage({
+          tool_call_id: toolCall.id,
+          content: result,
+        }))
+      }
+    }
+  }
+}
+
+// 示例5: 使用 withStructuredOutput 实现函数调用
+const userInfoSchema = z.object({
+  name: z.string().describe('用户姓名'),
+  age: z.number().describe('年龄'),
+  city: z.string().describe('所在城市'),
+  hobbies: z.array(z.string()).describe('兴趣爱好'),
+})
+
+const modelWithUserExtraction = model.withStructuredOutput(userInfoSchema, {
+  name: 'extract_user_info',
+})
+
+async function extractUserInfo(text: string) {
+  const result = await modelWithUserExtraction.invoke([
+    ['human', \`从以下文本中提取用户信息: \${text}\`],
+  ])
+  return result
+}
+
+// 示例6: 工具调用 + RAG 结合
+async function ragWithTools(question: string) {
+  const modelWithTools = model.bindTools(tools)
+  
+  const messages = [
+    new SystemMessage('你是一个 helpful 的助手。可以使用工具来获取最新信息。'),
+    new HumanMessage(question),
+  ]
+  
+  const response = await modelWithTools.invoke(messages)
+  
+  if (response.tool_calls && response.tool_calls.length > 0) {
+    // 有工具调用，执行工具
+    messages.push(response)
+    
+    for (const toolCall of response.tool_calls) {
+      const toolInstance = tools.find(t => t.name === toolCall.name)
+      if (toolInstance) {
+        const result = await toolInstance.invoke(toolCall.args)
+        messages.push(new ToolMessage({
+          tool_call_id: toolCall.id,
+          content: result,
+        }))
+      }
+    }
+    
+    const finalResponse = await modelWithTools.invoke(messages)
+    return finalResponse.content
+  }
+  
+  return response.content
+}
+
+// 运行示例
+// await singleToolCallExample()
+// await multiToolCallExample()
+// const userInfo = await extractUserInfo('我叫张三，今年25岁，住在北京，喜欢编程和篮球')
+// console.log('提取的用户信息:', userInfo)`;export{n as default};

@@ -1,0 +1,115 @@
+const n=`// vite.config.ts - TypeScript 配置
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+
+export default defineConfig({
+  plugins: [vue()],
+  
+  // esbuild 配置（用于 TS/JSX 转译）
+  esbuild: {
+    // 目标语法
+    target: 'es2020',
+    
+    // 移除 console（仅构建时）
+    // drop: ['console', 'debugger'],
+    
+    // JSX 配置
+    jsxFactory: 'h',
+    jsxFragment: 'Fragment'
+  }
+})
+
+// ====================
+// tsconfig.json 配置
+// ====================
+
+// {
+//   "compilerOptions": {
+//     "target": "ES2020",
+//     "module": "ESNext",
+//     "moduleResolution": "Bundler",
+//     "strict": true,
+//     "jsx": "preserve",
+//     "sourceMap": true,
+//     "resolveJsonModule": true,
+//     "esModuleInterop": true,
+//     "lib": ["ES2020", "DOM", "DOM.Iterable"],
+//     "skipLibCheck": true,
+//     
+//     // 路径别名
+//     "baseUrl": ".",
+//     "paths": {
+//       "@/*": ["src/*"]
+//     },
+//     
+//     // 类型声明文件
+//     "types": ["vite/client"]
+//   },
+//   "include": [
+//     "src/**/*.ts",
+//     "src/**/*.tsx",
+//     "src/**/*.vue",
+//     "src/**/*.d.ts"
+//   ]
+// }
+
+// ====================
+// Vite 客户端类型声明 (src/vite-env.d.ts)
+// ====================
+
+/// <reference types="vite/client" />
+
+declare module '*.vue' {
+  import type { DefineComponent } from 'vue'
+  const component: DefineComponent<{}, {}, any>
+  export default component
+}
+
+// 环境变量类型
+interface ImportMetaEnv {
+  readonly VITE_APP_TITLE: string
+  readonly VITE_API_BASE_URL: string
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv
+}
+
+// ====================
+// package.json - 类型检查脚本
+// ====================
+
+// {
+//   "scripts": {
+//     "dev": "vite",
+//     "build": "vue-tsc --noEmit && vite build",
+//     "type-check": "vue-tsc --noEmit",
+//     "type-check:watch": "vue-tsc --noEmit --watch"
+//   }
+// }
+
+// 运行类型检查:
+// npm run type-check
+
+// ====================
+// Vue SFC 中使用 TypeScript
+// ====================
+
+// <script setup lang="ts">
+// import { ref, computed } from 'vue'
+// 
+// interface User {
+//   id: number
+//   name: string
+//   email: string
+// }
+// 
+// const user = ref<User | null>(null)
+// const userName = computed(() => user.value?.name ?? '未登录')
+// 
+// function updateUser(data: Partial<User>) {
+//   if (user.value) {
+//     Object.assign(user.value, data)
+//   }
+// }
+// <\/script>`;export{n as default};

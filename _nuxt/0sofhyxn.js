@@ -1,0 +1,92 @@
+const n=`// vite.config.ts - 多页面应用配置
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import { resolve } from 'node:path'
+
+export default defineConfig({
+  plugins: [vue()],
+  build: {
+    rollupOptions: {
+      input: {
+        // 主入口
+        main: resolve(__dirname, 'index.html'),
+        // 管理后台入口
+        admin: resolve(__dirname, 'admin/index.html'),
+        // 登录页入口
+        login: resolve(__dirname, 'login/index.html')
+      }
+    }
+  }
+})
+
+// ====================
+// 项目结构示例
+// ====================
+
+// project/
+//   ├── index.html          # 主页面入口
+//   ├── admin/
+//   │   └── index.html      # 管理后台入口
+//   ├── login/
+//   │   └── index.html      # 登录页入口
+//   ├── src/
+//   │   ├── main/
+//   │   │   └── main.ts     # 主页面入口脚本
+//   │   ├── admin/
+//   │   │   └── main.ts     # 管理后台入口脚本
+//   │   ├── login/
+//   │   │   └── main.ts     # 登录页入口脚本
+//   │   └── shared/         # 共享代码
+//   └── vite.config.ts
+
+// ====================
+// HTML 入口文件示例
+// ====================
+
+// index.html
+// <!DOCTYPE html>
+// <html lang="zh-CN">
+//   <head>
+//     <title>首页</title>
+//   </head>
+//   <body>
+//     <div id="app"></div>
+//     <script type="module" src="/src/main/main.ts"><\/script>
+//   </body>
+// </html>
+
+// admin/index.html
+// <!DOCTYPE html>
+// <html lang="zh-CN">
+//   <head>
+//     <title>管理后台</title>
+//   </head>
+//   <body>
+//     <div id="app"></div>
+//     <script type="module" src="/src/admin/main.ts"><\/script>
+//   </body>
+// </html>
+
+// ====================
+// 开发服务器访问路径
+// ====================
+
+// http://localhost:5173/           →  index.html
+// http://localhost:5173/admin/     →  admin/index.html
+// http://localhost:5173/login/     →  login/index.html
+
+// ====================
+// 构建产物
+// ====================
+
+// dist/
+//   ├── index.html
+//   ├── admin/
+//   │   └── index.html
+//   ├── login/
+//   │   └── index.html
+//   └── assets/
+//       ├── main-xxx.js
+//       ├── admin-xxx.js
+//       ├── login-xxx.js
+//       └── shared-xxx.js  # 共享依赖自动提取`;export{n as default};

@@ -1,0 +1,29 @@
+const t=`// all-exceptions.filter.ts —— 捕获全部异常并统一格式
+@Catch()
+export class AllExceptionsFilter implements ExceptionFilter {
+  catch(exception: unknown, host: ArgumentsHost) {
+    const ctx = host.switchToHttp()
+    const response = ctx.getResponse<Response>()
+
+    const status =
+      exception instanceof HttpException ? exception.getStatus() : 500
+
+    const message =
+      exception instanceof HttpException
+        ? (exception.getResponse() as any)?.message ?? exception.message
+        : 'Internal server error'
+
+    response.status(status).json({
+      code: status,
+      message,
+      path: ctx.getRequest<Request>().url,
+      timestamp: new Date().toISOString(),
+    })
+  }
+}
+
+// main.ts —— 全局注册
+app.useGlobalFilters(new AllExceptionsFilter())
+
+// 业务代码只需抛出语义化异常
+throw new NotFoundException(\`课程 \${id} 不存在\`)`;export{t as default};

@@ -1,0 +1,13 @@
+const n=`import numpy as np
+def sig(x): return 1/(1+np.exp(-x))
+def act(x): return np.tanh(x)
+
+# LSTM：长期记忆 C + 短期记忆 h 两条线，和三扇门做加权的加法
+def lstm_step(C, h, x, W, b):
+    i, f, o, g = (sig(W @ np.concatenate([h, x]) + b).reshape(4,-1) for _ in range(1))
+    # 忘记门f、写入门i、读出门o 控制打多开多大
+    C = f * C + i * g          # 记忆近乎“无损”地按需取舍
+    h = o * act(C)
+    return C, h
+
+# 关键信息可以几乎不衰减地传几十上百步 —— 克服 RNN 的记性短`;export{n as default};

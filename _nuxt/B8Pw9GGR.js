@@ -1,0 +1,64 @@
+const n=`/* 声明容器：允许查询内联尺寸（宽度） */
+.card-container {
+  container-type: inline-size;
+  container-name: card;
+  /* 可选：命名容器 */
+}
+
+/* 基于容器宽度的响应式 */
+@container card (min-width: 400px) {
+  .card {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 16px;
+  }
+}
+
+/* 容器查询断点：小容器 */
+@container (max-width: 299px) {
+  .card-title {
+    font-size: 14px;
+  }
+  .card-desc {
+    display: none;
+  }
+}
+
+/* 容器查询断点：中容器 */
+@container (min-width: 300px) and (max-width: 499px) {
+  .card-title {
+    font-size: 16px;
+  }
+}
+
+/* 容器查询断点：大容器 */
+@container (min-width: 500px) {
+  .card-title {
+    font-size: 18px;
+  }
+  .card-desc {
+    display: block;
+  }
+}
+
+/* 容器查询单位：cqw 容器宽度百分比 */
+@container (min-width: 400px) {
+  .card-title {
+    font-size: 4cqw;
+    /* 容器宽度的 4% */
+  }
+}
+
+/* 容器查询单位：cqh 容器高度百分比 */
+.card-icon {
+  font-size: 10cqh;
+  /* 容器高度的 10% */
+}
+
+/* 其他容器单位 */
+/* cqi / cqb：容器 inline / block 尺寸百分比 */
+/* cqmin / cqmax：较小/较大边的百分比 */
+
+/* 容器查询与 @media 的区别：
+   @media 基于视口，适合页面级布局
+   @container 基于祖先容器，适合组件级响应式 */`;export{n as default};

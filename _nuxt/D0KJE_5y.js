@@ -1,0 +1,13 @@
+const t=`.dashboard .panel {
+  // 输出到文档根层级，而不是保留两个父选择器
+  @at-root .theme-dark .widget {
+    color: white;
+  }
+}
+
+@media print {
+  .article {
+    @at-root (without: media) { .print-helper { display: block; } }
+  }
+}
+`;export{t as default};

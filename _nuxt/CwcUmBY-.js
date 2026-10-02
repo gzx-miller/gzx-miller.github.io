@@ -1,0 +1,14 @@
+const s=`@use "sass:math";
+@use "sass:color";
+
+@function space($step) {
+  @if not math.is-unitless($step) { @error "$step 必须无单位"; }
+  @return $step * 0.25rem;
+}
+
+.card {
+  gap: space(4);
+  background: color.adjust(#c45125, $lightness: 35%);
+}
+// / 的除法语义已迁移到 math.div()；不要依赖旧式全局内置函数。
+`;export{s as default};

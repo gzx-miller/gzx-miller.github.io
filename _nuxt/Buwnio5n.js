@@ -1,0 +1,15 @@
+const n=`from collections import defaultdict, Counter
+
+# BPE：从字符开始，反复合并出现最高频的相邻字符对，直到达到词表上限
+def bpe(corpus, num_merges=20):
+    raw = " ".join(list(w)) + " </w>"          # 先拆成字符
+    for _ in range(num_merges):
+        pairs = Counter(zip(raw.split(), raw.split()[1:]))
+        if not pairs: break
+        best = max(pairs, key=pairs.get)        # 挑最高频的字符对
+        # 把这对合并成一个新 token —— 迭代则得词表
+    return raw
+
+# 文本 -> token 序列 -> 整数 ID -> 查表得向量
+tokens = "strawberry"
+# 细节：模型只看到 token，看不到内部字符，所以数不对 r 的个数`;export{n as default};

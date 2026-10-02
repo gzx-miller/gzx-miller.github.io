@@ -1,0 +1,16 @@
+const n=`#include <iostream>
+#include <string>
+
+void byValue(int x) { x = 100; }
+void byReference(int& x) { x = 100; }
+
+int main() {
+    int x = 5;
+    byValue(x);
+    std::cout << x << std::endl;
+
+    byReference(x);
+    std::cout << x << std::endl;
+
+    return 0;
+}`;export{n as default};

@@ -1,0 +1,11 @@
+const e=`@use "sass:meta";
+
+@mixin theme($name) {
+  @if $name == "legacy" { @warn "legacy 主题即将移除"; }
+  @if not meta.type-of($name) == string { @error "$name 必须是字符串"; }
+  @debug "正在生成 #{$name} 主题";
+}
+
+// 迁移命令示例：sass-migrator module --migrate-deps styles/app.scss
+// CI 应保留弃用警告，并把压缩与 Source Map 作为构建配置。
+`;export{e as default};

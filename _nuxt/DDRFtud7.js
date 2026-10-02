@@ -1,0 +1,16 @@
+const n=`import numpy as np
+
+a, b = np.array([1, 3]), np.array([4, 9])
+
+# 点积：逐位相乘再加总，刻画“同向程度”
+dot = float(a @ b)
+
+# 余弦相似度：除以各自长度，去掉模的影响，只看方向
+def cosine(x, y):
+    return float(x @ y) / (np.linalg.norm(x) * np.linalg.norm(y))
+
+print(dot)           # 31
+print(cosine(a, b))  # 0.98 —— 值越接近 1 越相似
+
+# 语义算术：国王 − 男人 + 女人 ≈ 女王
+# vec(king) - vec(man) + vec(woman) ≈ vec(queen)`;export{n as default};

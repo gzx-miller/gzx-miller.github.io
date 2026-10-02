@@ -1,0 +1,18 @@
+const n=`#include <iostream>
+
+int main() {
+    int x = 42;
+    int* p = &x;
+    std::cout << *p << std::endl;
+    *p = 100;
+    std::cout << x << std::endl;
+
+    int& r = x;
+    r = 10;
+    std::cout << x << std::endl;
+
+    int* np = nullptr;
+    if (np != nullptr) { }
+
+    return 0;
+}`;export{n as default};

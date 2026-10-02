@@ -1,0 +1,109 @@
+const n=`// vite.config.ts - 构建优化配置
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+
+export default defineConfig({
+  plugins: [vue()],
+  build: {
+    // 输出目录
+    outDir: 'dist',
+    
+    // 源码映射
+    sourcemap: false,
+    
+    // 压缩方式: 'esbuild' | 'terser' | false
+    minify: 'esbuild',
+    
+    // 目标环境
+    target: 'es2015',
+    
+    // 代码分割配置
+    rollupOptions: {
+      output: {
+        // 手动分包策略
+        manualChunks: {
+          // Vue 生态单独打包
+          'vue-vendor': ['vue', 'vue-router', 'pinia'],
+          // UI 库单独打包
+          'element-plus': ['element-plus'],
+          // 工具库单独打包
+          'utils': ['lodash-es', 'dayjs']
+        }
+      }
+    },
+    
+    // chunk 大小警告阈值（默认 500kb）
+    chunkSizeWarningLimit: 500
+  }
+})
+
+// ====================
+// 路由级懒加载（代码分割）
+// ====================
+
+// router/index.ts
+import { createRouter, createWebHistory } from 'vue-router'
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [
+    {
+      path: '/',
+      name: 'Home',
+      component: () => import('../views/Home.vue')
+    },
+    {
+      path: '/about',
+      name: 'About',
+      component: () => import('../views/About.vue')
+    },
+    {
+      path: '/dashboard',
+      name: 'Dashboard',
+      component: () => import('../views/Dashboard.vue')
+    }
+  ]
+})
+
+// ====================
+// 组件级懒加载
+// ====================
+
+import { defineAsyncComponent } from 'vue'
+
+const HeavyComponent = defineAsyncComponent(() =>
+  import('../components/HeavyComponent.vue')
+)
+
+// 带加载状态和错误状态
+const HeavyComponentWithLoading = defineAsyncComponent({
+  loader: () => import('../components/HeavyComponent.vue'),
+  loadingComponent: LoadingSpinner,
+  errorComponent: ErrorDisplay,
+  delay: 200,
+  timeout: 3000
+})
+
+// ====================
+// Terser 高级压缩配置
+// ====================
+
+export default defineConfig({
+  build: {
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        // 移除 console
+        drop_console: true,
+        // 移除 debugger
+        drop_debugger: true,
+        // 移除未使用的代码
+        unused: true
+      },
+      mangle: {
+        // 混淆变量名
+        safari10: true
+      }
+    }
+  }
+})`;export{n as default};

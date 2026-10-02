@@ -1,0 +1,19 @@
+const n=`#include <iostream>
+#include <vector>
+#include <deque>
+#include <list>
+
+int main() {
+    std::vector<int> vec = {1, 2, 3};
+    vec.push_back(4);
+
+    std::deque<int> dq;
+    dq.push_front(0);
+    dq.push_back(2);
+
+    std::list<int> lst = {1, 2, 3};
+    lst.push_front(0);
+    lst.push_back(4);
+
+    return 0;
+}`;export{n as default};

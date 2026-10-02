@@ -1,0 +1,1 @@
+import{R as e}from"./Dcngb3kX.js";import o from"./DHsH6o_4.js";import{d as t,B as r,y as s,o as c}from"./CfJSWYGO.js";const l=t({__name:"S04ZustandSelectors",setup(a){return(n,m)=>(c(),r(e,{title:"Zustand selector 演示",code:s(o)},null,8,["code"]))}});export{l as _};

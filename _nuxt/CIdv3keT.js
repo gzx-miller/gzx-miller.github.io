@@ -1,0 +1,4 @@
+const e=`<script setup lang="ts">import { computed, ref } from 'vue'; const columns = ref(3); const gap = ref(16); const width = computed(() => (1000 - gap.value * (columns.value - 1)) / columns.value)<\/script>
+<template><div class="demo-card math-demo"><label>列数 {{ columns }} <input v-model.number="columns" type="range" min="2" max="6"></label><label>间距 {{ gap }}px <input v-model.number="gap" type="range" min="0" max="40"></label><p>1000px 容器中的单列：{{ width.toFixed(2) }}px</p><code>math.div(1000px - $gap * ($columns - 1), $columns)</code><small>加减要求兼容单位，乘除会组合或消去单位；结果要交给浏览器动态计算时保留 calc()，不要强行在 Sass 中求值。</small></div></template>
+<style scoped>.math-demo{display:grid;gap:.6rem}.math-demo label{display:flex;gap:.5rem}.math-demo p{padding:.7rem;background:#fff0d9;border-radius:.5rem}.math-demo>code{font-size:.73rem}</style>
+`;export{e as default};
