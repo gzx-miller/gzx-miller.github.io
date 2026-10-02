@@ -69,6 +69,14 @@ export default defineNuxtConfig({
     'build:before': () => {
       writeFileSync(new URL('./public/sitemap.xml', import.meta.url), buildSitemapXml(), 'utf8')
     },
+    // 关闭动态 chunk 的 prefetch：否则每页都会预取全部 22 个分类课程数据
+    // （实测约 6.4MB），而首屏真正需要的只有当前分类。动态 import 改为
+    // 进入对应路由时按需加载；同步依赖仍由 modulepreload 保底。
+    'build:manifest': (manifest) => {
+      for (const key of Object.keys(manifest)) {
+        manifest[key].prefetch = false
+      }
+    },
   },
   vite: {
     plugins: [
