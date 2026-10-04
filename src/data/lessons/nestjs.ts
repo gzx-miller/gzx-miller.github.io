@@ -1,18 +1,18 @@
 import type { Component } from 'vue'
-import { defineAsyncComponent } from 'vue'
 import type { Lesson } from '../lessons'
 import { restoreCodeSource } from '../code-restore'
-
-const demoModules = import.meta.glob<Component>('../../demos/*.vue', { import: 'default' })
-
-function createDemo(name: string) {
-  const loader = demoModules[`../../demos/${name}.vue`]
-  if (!loader) throw new Error(`未找到内容组件：${name}`)
-  return defineAsyncComponent(async () => {
-    if (name.startsWith('E')) await import('../../element-plus/styles')
-    return loader()
-  })
-}
+import N01ModulesDi from '../../demos/N01ModulesDiArticle.vue'
+import N02ControllersRoutes from '../../demos/N02ControllersRoutesArticle.vue'
+import N03PipesValidation from '../../demos/N03PipesValidationArticle.vue'
+import N04GuardsJwt from '../../demos/N04GuardsJwtArticle.vue'
+import N05Interceptors from '../../demos/N05InterceptorsArticle.vue'
+import N06Middleware from '../../demos/N06MiddlewareArticle.vue'
+import N07ExceptionFilter from '../../demos/N07ExceptionFilterArticle.vue'
+import N08TypeOrmDb from '../../demos/N08TypeOrmDbArticle.vue'
+import N09WebSocketGateway from '../../demos/N09WebSocketGatewayArticle.vue'
+import N10ScheduleTask from '../../demos/N10ScheduleTaskArticle.vue'
+import N11ConfigEnv from '../../demos/N11ConfigEnvArticle.vue'
+import N12Microservices from '../../demos/N12MicroservicesArticle.vue'
 
 const nestjsCodeModules = import.meta.glob<string>('../../demos/nestjs-code/*', { query: '?raw', import: 'default' })
 
@@ -21,19 +21,6 @@ function createCodeLoader(path: string) {
   if (!loader) throw new Error(`未找到内容源码：${path}`)
   return () => loader().then(restoreCodeSource)
 }
-
-const N01ModulesDi = createDemo('N01ModulesDiArticle')
-const N02ControllersRoutes = createDemo('N02ControllersRoutesArticle')
-const N03PipesValidation = createDemo('N03PipesValidationArticle')
-const N04GuardsJwt = createDemo('N04GuardsJwtArticle')
-const N05Interceptors = createDemo('N05InterceptorsArticle')
-const N06Middleware = createDemo('N06MiddlewareArticle')
-const N07ExceptionFilter = createDemo('N07ExceptionFilterArticle')
-const N08TypeOrmDb = createDemo('N08TypeOrmDbArticle')
-const N09WebSocketGateway = createDemo('N09WebSocketGatewayArticle')
-const N10ScheduleTask = createDemo('N10ScheduleTaskArticle')
-const N11ConfigEnv = createDemo('N11ConfigEnvArticle')
-const N12Microservices = createDemo('N12MicroservicesArticle')
 
 const NE01Code = createCodeLoader('nestjs-code/NE01Code.txt')
 const NE02Code = createCodeLoader('nestjs-code/NE02Code.txt')
@@ -56,7 +43,8 @@ export const lessons: Lesson[] = [
     category: '模块化架构',
     path: '/nestjs/n-1/modules-di',
     summary: '用课程管理模块展示 @Module 声明式组装：Controllers、Providers、Imports、Exports 与构造器注入。',
-    demo: N01ModulesDi,
+    demo: null,
+    demoComponent: N01ModulesDi,
     code: NE01Code,
     principle: 'NestJS 用模块（Module）把相关的控制器、服务、管道聚合为内聚单元。@Module 的四个数组各司其职：controllers 注册路由处理器、providers 登记可注入依赖、imports 引入其它模块、exports 决定哪些 Provider 对模块外部可见。依赖注入（DI）容器在启动时解析构造器参数并完成实例化与作用域管理；注意 @Injectable() 只是把类标记为候选，还必须出现在某个模块的 providers 里，容器才会真正托管它。',
     flow: [
@@ -81,7 +69,8 @@ export const lessons: Lesson[] = [
     category: '模块化架构',
     path: '/nestjs/n-2/controllers-routing',
     summary: '用课程 API 展示 @Controller、HTTP 方法装饰器、路径参数、查询参数与请求体 DTO 的绑定规则。',
-    demo: N02ControllersRoutes,
+    demo: null,
+    demoComponent: N02ControllersRoutes,
     code: NE02Code,
     principle: '控制器是请求的入口：@Controller 定义路由前缀，方法装饰器（@Get/@Post/@Patch/@Delete）绑定 HTTP 方法与子路径，二者拼接成最终路由（如 @Controller(\'courses\') 配合 @Get(\':id\') → GET /courses/:id）。参数装饰器把请求数据映射到方法参数：@Param 取路径参数、@Query 取查询字符串、@Body 取请求体、@Req/@Res 直接访问原始请求对象。配合 ParseIntPipe 等管道可就地转换参数类型。',
     flow: [
@@ -106,7 +95,8 @@ export const lessons: Lesson[] = [
     category: '请求处理',
     path: '/nestjs/n-3/pipes-validation',
     summary: '用课程报名表单展示 DTO + class-validator 装饰器 + ValidationPipe 的声明式校验，以及错误响应结构。',
-    demo: N03PipesValidation,
+    demo: null,
+    demoComponent: N03PipesValidation,
     code: NE03Code,
     principle: '管道（Pipe）在数据进入处理器之前执行，负责转换与校验。ValidationPipe 基于 class-transformer + class-validator：先把请求体实例化为 DTO 类，再按装饰器规则逐字段校验，任一规则失败就抛出 400 错误，响应中包含 message 数组列出每个字段的失败原因。whitelist 模式自动剥离 DTO 未声明的多余字段，防止参数污染。',
     flow: [
@@ -131,7 +121,8 @@ export const lessons: Lesson[] = [
     category: '请求处理',
     path: '/nestjs/n-4/guards-jwt-auth',
     summary: '用学员登录场景展示 AuthGuard 校验 JWT 的完整链路：登录发 token、守卫解析验证、无凭证返回 401。',
-    demo: N04GuardsJwt,
+    demo: null,
+    demoComponent: N04GuardsJwt,
     code: NE04Code,
     principle: '守卫（Guard）实现 CanActivate 接口，在请求进入路由处理器之前决定是否放行，是鉴权与授权的首选位置。JWT 流程：登录成功用 JwtService.sign 签发签名 token；之后每个受保护请求携带 Authorization: Bearer <token>，JwtAuthGuard 验签并解析 payload，无效或过期抛 401，有效则把用户信息挂到 request 上。守卫返回 false 时框架自动返回 403，抛 UnauthorizedException 则返回 401。',
     flow: [
@@ -156,7 +147,8 @@ export const lessons: Lesson[] = [
     category: '请求处理',
     path: '/nestjs/n-5/interceptors',
     summary: '用请求耗时面板展示拦截器的执行顺序：在处理器前后织入逻辑，统一包装响应结构。',
-    demo: N05Interceptors,
+    demo: null,
+    demoComponent: N05Interceptors,
     code: NE05Code,
     principle: '拦截器（Interceptor）基于 RxJS 的 Observable 模型，在处理器执行前调用，并通过 next.handle() 拿到处理器返回的流：前置于 handle() 的代码在处理器之前运行，pipe 中的 map/tap 在处理器之后运行。由此可以在不修改业务代码的前提下完成响应包装、耗时统计、缓存、日志等横切关注点。',
     flow: [
@@ -181,7 +173,8 @@ export const lessons: Lesson[] = [
     category: '请求处理',
     path: '/nestjs/n-6/middleware',
     summary: '用请求日志链路展示中间件与守卫、管道、拦截器的执行顺序：洋葱模型的层层包裹。',
-    demo: N06Middleware,
+    demo: null,
+    demoComponent: N06Middleware,
     code: NE06Code,
     principle: '中间件在守卫之前执行，是请求生命周期的最外层。典型的执行顺序是：中间件 → 守卫 → 拦截器前置 → 管道 → 处理器 → 拦截器后置。MiddlewareConsumer 用 apply().forRoutes() 声明中间件的作用路径与方法，可用排除法 exclude() 跳过指定路由。中间件适合日志、CORS、请求体解析、Cookie 解析等与路由无关的横切逻辑。',
     flow: [
@@ -206,7 +199,8 @@ export const lessons: Lesson[] = [
     category: '请求处理',
     path: '/nestjs/n-7/exception-filters',
     summary: '用三类典型异常展示 @Catch 过滤器如何把错误转换成统一的 JSON 响应结构。',
-    demo: N07ExceptionFilter,
+    demo: null,
+    demoComponent: N07ExceptionFilter,
     code: NE07Code,
     principle: '异常过滤器（Exception Filter）实现 ExceptionFilter 接口，用 @Catch() 声明捕获范围：@Catch(HttpException) 只处理 HTTP 异常，@Catch() 捕获所有异常。过滤器从 ArgumentsHost 中拿到响应对象，统一输出 JSON 结构。业务代码只需抛出带语义的异常（NotFoundException、BadRequestException 等），无需关心响应格式。',
     flow: [
@@ -231,7 +225,8 @@ export const lessons: Lesson[] = [
     category: '数据与实时通信',
     path: '/nestjs/n-8/typeorm-database',
     summary: '用课程报名业务展示实体定义、Repository 模式与事务：名额不足时整笔回滚。',
-    demo: N08TypeOrmDb,
+    demo: null,
+    demoComponent: N08TypeOrmDb,
     code: NE08Code,
     principle: 'TypeORM 是 NestJS 官方推荐的 ORM：实体类用装饰器描述表结构，Repository 提供类型安全的 CRUD。事务用于多步写操作：manager.transaction 回调内的所有语句在同一个数据库事务中执行，任一步抛错则整体回滚。报名场景的"检查名额 + 扣减人数"必须原子化，否则并发报名会超额。',
     flow: [
@@ -256,7 +251,8 @@ export const lessons: Lesson[] = [
     category: '数据与实时通信',
     path: '/nestjs/n-9/websocket-gateway',
     summary: '用课堂公告场景展示 @WebSocketGateway 的事件处理、房间（Room）隔离与广播推送。',
-    demo: N09WebSocketGateway,
+    demo: null,
+    demoComponent: N09WebSocketGateway,
     code: NE09Code,
     principle: '网关（Gateway）复用 DI 容器，把 WebSocket 消息映射为类方法。@SubscribeMessage 声明处理的事件名，@MessageBody 取消息数据，@ConnectedSocket 取客户端连接。socket.join(roomId) 让连接进入房间，client.to(roomId).emit() 只向该房间广播，实现课堂、群聊等场景的按组隔离推送。',
     flow: [
@@ -281,7 +277,8 @@ export const lessons: Lesson[] = [
     category: '工程实践',
     path: '/nestjs/n-10/scheduled-tasks',
     summary: '用日报表场景展示 @Cron、@Interval、@Timeout 三种调度方式与 cron 表达式规则。',
-    demo: N10ScheduleTask,
+    demo: null,
+    demoComponent: N10ScheduleTask,
     code: NE10Code,
     principle: '@nestjs/schedule 模块基于 cron 表达式管理定时任务：@Cron 按表达式周期执行，@Interval 按固定毫秒间隔执行，@Timeout 延迟一次执行。cron 表达式的六段格式为"秒 分 时 日 月 周"，支持 *、?、/、-、, 等通配符。任务方法挂在 Injectable 服务上，可注入其它依赖，天然复用 DI 体系。',
     flow: [
@@ -306,7 +303,8 @@ export const lessons: Lesson[] = [
     category: '工程实践',
     path: '/nestjs/n-11/config-env',
     summary: '用多环境部署场景展示 ConfigModule 读取 .env、自定义配置与启动校验。',
-    demo: N11ConfigEnv,
+    demo: null,
+    demoComponent: N11ConfigEnv,
     code: NE11Code,
     principle: '@nestjs/config 封装 dotenv：ConfigModule.forRoot 读取 .env 文件并合并到配置对象，ConfigService 提供类型安全的 get 访问。自定义配置工厂（load 数组）可以集中做默认值与类型转换，避免散落 process.env 读取。生产环境配合环境变量注入（docker/CI），本地用 .env 文件，实现"配置与代码分离"。',
     flow: [
@@ -331,7 +329,8 @@ export const lessons: Lesson[] = [
     category: '工程实践',
     path: '/nestjs/n-12/microservices',
     summary: '用下单场景展示微服务间 TCP 传输：ClientProxy 代理调用与 @MessagePattern 扣库存的请求-响应式 RPC。',
-    demo: N12Microservices,
+    demo: null,
+    demoComponent: N12Microservices,
     code: NE12Code,
     principle: 'NestJS 微服务把传输层抽象为 Transport 策略（TCP、Redis、MQTT、gRPC、Kafka、RabbitMQ）。服务方用 @MessagePattern 声明消息处理函数，客户端用 ClientProxy.send(pattern, data) 发起请求-响应式调用（基于 RPC），也可以用 emit() 发送无需回执的事件。TCP 默认端口 3000，多服务需分配不同端口或用服务发现。',
     flow: [

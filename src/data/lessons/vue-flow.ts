@@ -1,20 +1,20 @@
 import type { Component } from 'vue'
-import { defineAsyncComponent } from 'vue'
 import type { Lesson } from '../lessons'
 import { restoreCodeSource } from '../code-restore'
+import VF01Demo from '../../demos/VF01FirstFlowArticle.vue'
+import VF02Demo from '../../demos/VF02NodeTypesArticle.vue'
+import VF03Demo from '../../demos/VF03CanvasPartsArticle.vue'
+import VF04Demo from '../../demos/VF04HandlesArticle.vue'
+import VF05Demo from '../../demos/VF05EdgeStylesArticle.vue'
+import VF06Demo from '../../demos/VF06CustomNodesArticle.vue'
+import VF07Demo from '../../demos/VF07CustomEdgesArticle.vue'
+import VF08Demo from '../../demos/VF08InteractionsArticle.vue'
+import VF09Demo from '../../demos/VF09StateManageArticle.vue'
+import VF10Demo from '../../demos/VF10DragDropArticle.vue'
+import VF11Demo from '../../demos/VF11AutoLayoutArticle.vue'
+import VF12Demo from '../../demos/VF12ReadonlyThemeArticle.vue'
 
-const demoModules = import.meta.glob<Component>('../../demos/*.vue', { import: 'default' })
 const vueCodeModules = import.meta.glob<string>('../../demos/*.vue', { query: '?raw', import: 'default' })
-
-function createDemo(name: string) {
-  const loader = demoModules[`../../demos/${name}.vue`]
-  if (!loader) throw new Error(`未找到内容组件：${name}`)
-  return defineAsyncComponent(async () => {
-    // VF 系列内容统一加载 Vue Flow 官方样式与站点双主题适配
-    if (name.startsWith('VF')) await import('../../vue-flow/styles')
-    return loader()
-  })
-}
 
 function createCodeLoader(path: string) {
   const loader = vueCodeModules[`../../demos/${path}`]
@@ -22,29 +22,28 @@ function createCodeLoader(path: string) {
   return () => loader().then(restoreCodeSource)
 }
 
-const VF01Demo = createDemo('VF01FirstFlowArticle')
 const VF01Code = createCodeLoader('VF01FirstFlow.vue')
-const VF02Demo = createDemo('VF02NodeTypesArticle')
+
 const VF02Code = createCodeLoader('VF02NodeTypes.vue')
-const VF03Demo = createDemo('VF03CanvasPartsArticle')
+
 const VF03Code = createCodeLoader('VF03CanvasParts.vue')
-const VF04Demo = createDemo('VF04HandlesArticle')
+
 const VF04Code = createCodeLoader('VF04Handles.vue')
-const VF05Demo = createDemo('VF05EdgeStylesArticle')
+
 const VF05Code = createCodeLoader('VF05EdgeStyles.vue')
-const VF06Demo = createDemo('VF06CustomNodesArticle')
+
 const VF06Code = createCodeLoader('VF06CustomNodes.vue')
-const VF07Demo = createDemo('VF07CustomEdgesArticle')
+
 const VF07Code = createCodeLoader('VF07CustomEdges.vue')
-const VF08Demo = createDemo('VF08InteractionsArticle')
+
 const VF08Code = createCodeLoader('VF08Interactions.vue')
-const VF09Demo = createDemo('VF09StateManageArticle')
+
 const VF09Code = createCodeLoader('VF09StateManage.vue')
-const VF10Demo = createDemo('VF10DragDropArticle')
+
 const VF10Code = createCodeLoader('VF10DragDrop.vue')
-const VF11Demo = createDemo('VF11AutoLayoutArticle')
+
 const VF11Code = createCodeLoader('VF11AutoLayout.vue')
-const VF12Demo = createDemo('VF12ReadonlyThemeArticle')
+
 const VF12Code = createCodeLoader('VF12ReadonlyTheme.vue')
 
 export const lessons: Lesson[] = [
@@ -55,7 +54,8 @@ export const lessons: Lesson[] = [
     category: '基础入门',
     path: '/vue-flow/vf-1/first-flow',
     summary: '用课程学习路径图跑通 Vue Flow 最小闭环：安装独立包、引入官方样式、用 nodes/edges 数据模型渲染出可拖拽缩放的画布。',
-    demo: VF01Demo,
+    demo: null,
+    demoComponent: VF01Demo,
     code: VF01Code,
     language: 'vue',
     principle:
@@ -82,7 +82,8 @@ export const lessons: Lesson[] = [
     category: '基础入门',
     path: '/vue-flow/vf-2/node-types',
     summary: '用报销审批流演示三种内置节点类型在连接桩方向上的差异，以及 type 缺省即 default 的规则。',
-    demo: VF02Demo,
+    demo: null,
+    demoComponent: VF02Demo,
     code: VF02Code,
     language: 'vue',
     principle:
@@ -109,7 +110,8 @@ export const lessons: Lesson[] = [
     category: '基础入门',
     path: '/vue-flow/vf-3/canvas-parts',
     summary: '给流程图装配背景网格、缩放控制条与小地图三个附加包，并让网格配色跟随站点深浅主题。',
-    demo: VF03Demo,
+    demo: null,
+    demoComponent: VF03Demo,
     code: VF03Code,
     language: 'vue',
     principle:
@@ -136,7 +138,8 @@ export const lessons: Lesson[] = [
     category: '节点与连线',
     path: '/vue-flow/vf-4/handles',
     summary: '用报销单按金额分流演示自定义节点内多 Handle 的 id 匹配，与 isValidConnection 的实时业务校验。',
-    demo: VF04Demo,
+    demo: null,
+    demoComponent: VF04Demo,
     code: VF04Code,
     language: 'vue',
     principle:
@@ -163,7 +166,8 @@ export const lessons: Lesson[] = [
     category: '节点与连线',
     path: '/vue-flow/vf-5/edge-styles',
     summary: '对比五种内置连线路径的差异，掌握 type、label、animated、markerEnd、style 与 default-edge-options 的用法。',
-    demo: VF05Demo,
+    demo: null,
+    demoComponent: VF05Demo,
     code: VF05Code,
     language: 'vue',
     principle:
@@ -190,7 +194,8 @@ export const lessons: Lesson[] = [
     category: '节点与连线',
     path: '/vue-flow/vf-6/custom-nodes',
     summary: '用 #node-course 插槽把默认节点升级为带阶段徽标、讲师与课时的课程卡片，并用插槽参数处理选中态。',
-    demo: VF06Demo,
+    demo: null,
+    demoComponent: VF06Demo,
     code: VF06Code,
     language: 'vue',
     principle:
@@ -217,7 +222,8 @@ export const lessons: Lesson[] = [
     category: '节点与连线',
     path: '/vue-flow/vf-7/custom-edges',
     summary: '用 #edge-approval 插槽配合 getBezierPath 生成路径、EdgeLabelRenderer 挂载 HTML 标签，画出带通过/驳回状态的审批线。',
-    demo: VF07Demo,
+    demo: null,
+    demoComponent: VF07Demo,
     code: VF07Code,
     language: 'vue',
     principle:
@@ -244,7 +250,8 @@ export const lessons: Lesson[] = [
     category: '交互与状态',
     path: '/vue-flow/vf-8/interactions',
     summary: '用任务编排板演示 onConnect 查重后重建连线、Shift 空白框选多元素与键盘删除并清理悬空连线。',
-    demo: VF08Demo,
+    demo: null,
+    demoComponent: VF08Demo,
     code: VF08Code,
     language: 'vue',
     principle:
@@ -271,7 +278,8 @@ export const lessons: Lesson[] = [
     category: '交互与状态',
     path: '/vue-flow/vf-9/state-manage',
     summary: '在业务代码里用 useVueFlow 拿到画布实例，用 addNodes、updateNodeData、findNode、removeNodes、fitView 直接增删改查。',
-    demo: VF09Demo,
+    demo: null,
+    demoComponent: VF09Demo,
     code: VF09Code,
     language: 'vue',
     principle:
@@ -298,7 +306,8 @@ export const lessons: Lesson[] = [
     category: '交互与状态',
     path: '/vue-flow/vf-10/drag-drop',
     summary: '把物料从左侧面板拖进画布，用 screenToFlowCoordinate 把屏幕坐标换算成画布坐标后再 addNodes 落点。',
-    demo: VF10Demo,
+    demo: null,
+    demoComponent: VF10Demo,
     code: VF10Code,
     language: 'vue',
     principle:
@@ -325,7 +334,8 @@ export const lessons: Lesson[] = [
     category: '进阶能力',
     path: '/vue-flow/vf-11/auto-layout',
     summary: '自实现分层布局：用 Kahn 算法按依赖分派层号、层内堆叠计算坐标，updateNode 写回后 fitView 收拢。',
-    demo: VF11Demo,
+    demo: null,
+    demoComponent: VF11Demo,
     code: VF11Code,
     language: 'vue',
     principle:
@@ -352,7 +362,8 @@ export const lessons: Lesson[] = [
     category: '进阶能力',
     path: '/vue-flow/vf-12/readonly-theme',
     summary: '用组织架构图演示只读/编辑开关组合，并通过变量映射与 data-theme 选择器让画布跟随站点深浅主题。',
-    demo: VF12Demo,
+    demo: null,
+    demoComponent: VF12Demo,
     code: VF12Code,
     language: 'vue',
     principle:

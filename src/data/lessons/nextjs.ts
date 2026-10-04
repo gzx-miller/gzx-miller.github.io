@@ -1,15 +1,30 @@
 import type { Component } from 'vue'
-import { defineAsyncComponent } from 'vue'
 import type { Lesson } from '../lessons'
 import { restoreCodeSource } from '../code-restore'
-
-const demoModules = import.meta.glob<Component>('../../demos/*.vue', { import: 'default' })
-
-function createDemo(name: string) {
-  const loader = demoModules[`../../demos/${name}.vue`]
-  if (!loader) throw new Error(`未找到内容组件：${name}`)
-  return defineAsyncComponent(() => loader())
-}
+import X01ProjectStructure from '../../demos/X01ProjectStructureArticle.vue'
+import X02FileRouting from '../../demos/X02FileRoutingArticle.vue'
+import X03Layouts from '../../demos/X03LayoutsArticle.vue'
+import X04DynamicRoutes from '../../demos/X04DynamicRoutesArticle.vue'
+import X05ServerComponents from '../../demos/X05ServerComponentsArticle.vue'
+import X06ClientComponents from '../../demos/X06ClientComponentsArticle.vue'
+import X07StaticDynamic from '../../demos/X07StaticDynamicArticle.vue'
+import X08StreamingSuspense from '../../demos/X08StreamingSuspenseArticle.vue'
+import X09DataFetching from '../../demos/X09DataFetchingArticle.vue'
+import X10ServerActions from '../../demos/X10ServerActionsArticle.vue'
+import X11RouteHandlers from '../../demos/X11RouteHandlersArticle.vue'
+import X12Caching from '../../demos/X12CachingArticle.vue'
+import X13ParallelRoutes from '../../demos/X13ParallelRoutesArticle.vue'
+import X14InterceptingRoutes from '../../demos/X14InterceptingRoutesArticle.vue'
+import X15RouteGroups from '../../demos/X15RouteGroupsArticle.vue'
+import X16LoadingError from '../../demos/X16LoadingErrorArticle.vue'
+import X17NextImage from '../../demos/X17NextImageArticle.vue'
+import X18NextFont from '../../demos/X18NextFontArticle.vue'
+import X19NextLink from '../../demos/X19NextLinkArticle.vue'
+import X20Metadata from '../../demos/X20MetadataArticle.vue'
+import X21Middleware from '../../demos/X21MiddlewareArticle.vue'
+import X22EnvConfig from '../../demos/X22EnvConfigArticle.vue'
+import X23I18n from '../../demos/X23I18nArticle.vue'
+import X24Deployment from '../../demos/X24DeploymentArticle.vue'
 
 const nextjsCodeModules = import.meta.glob<string>('../../demos/nextjs-code/*', { query: '?raw', import: 'default' })
 
@@ -18,31 +33,6 @@ function createCodeLoader(path: string) {
   if (!loader) throw new Error(`未找到内容源码：${path}`)
   return () => loader().then(restoreCodeSource)
 }
-
-const X01ProjectStructure = createDemo('X01ProjectStructureArticle')
-const X02FileRouting = createDemo('X02FileRoutingArticle')
-const X03Layouts = createDemo('X03LayoutsArticle')
-const X04DynamicRoutes = createDemo('X04DynamicRoutesArticle')
-const X05ServerComponents = createDemo('X05ServerComponentsArticle')
-const X06ClientComponents = createDemo('X06ClientComponentsArticle')
-const X07StaticDynamic = createDemo('X07StaticDynamicArticle')
-const X08StreamingSuspense = createDemo('X08StreamingSuspenseArticle')
-const X09DataFetching = createDemo('X09DataFetchingArticle')
-const X10ServerActions = createDemo('X10ServerActionsArticle')
-const X11RouteHandlers = createDemo('X11RouteHandlersArticle')
-const X12Caching = createDemo('X12CachingArticle')
-const X13ParallelRoutes = createDemo('X13ParallelRoutesArticle')
-const X14InterceptingRoutes = createDemo('X14InterceptingRoutesArticle')
-const X15RouteGroups = createDemo('X15RouteGroupsArticle')
-const X16LoadingError = createDemo('X16LoadingErrorArticle')
-const X17NextImage = createDemo('X17NextImageArticle')
-const X18NextFont = createDemo('X18NextFontArticle')
-const X19NextLink = createDemo('X19NextLinkArticle')
-const X20Metadata = createDemo('X20MetadataArticle')
-const X21Middleware = createDemo('X21MiddlewareArticle')
-const X22EnvConfig = createDemo('X22EnvConfigArticle')
-const X23I18n = createDemo('X23I18nArticle')
-const X24Deployment = createDemo('X24DeploymentArticle')
 
 const X1Code = createCodeLoader('nextjs-code/X1Code.jsx.txt')
 const X2Code = createCodeLoader('nextjs-code/X2Code.jsx.txt')
@@ -73,7 +63,8 @@ export const lessons: Lesson[] = [
   {
     id: 'X_1', title: '项目结构与 App Router 目录约定', navTitle: '项目结构', category: '起步',
     path: '/nextjs/x-1/project-structure', summary: '了解 App Router 的目录约定、app/ 核心文件的职责，以及 public/ 与 next.config.js 在项目中的作用。',
-    demo: X01ProjectStructure,
+    demo: null,
+    demoComponent: X01ProjectStructure,
     code: X1Code,
     language: 'jsx',
     principle: 'Next.js App Router 以 app/ 目录组织路由：page.tsx 是唯一的路由入口，layout.tsx 定义共享布局，loading/error/not-found 分别约定加载、错误与 404 状态文件，目录层级即为 URL 层级。',
@@ -84,7 +75,8 @@ export const lessons: Lesson[] = [
   {
     id: 'X_2', title: '文件路由：目录即路由表', navTitle: '文件路由', category: '起步',
     path: '/nextjs/x-2/file-routing', summary: '掌握 App Router 文件路由映射规则，理解静态、动态、Catch-all、路由组和并行路由的命名约定。',
-    demo: X02FileRouting,
+    demo: null,
+    demoComponent: X02FileRouting,
     code: X2Code,
     language: 'jsx',
     principle: 'App Router 基于文件系统生成路由：page.tsx 定义页面 UI，目录层级即 URL 层级。方括号 [param] 表示动态参数，[...slug] 捕获多段，[[...slug]] 可选捕获；圆括号 (group) 是路由组（不影响路径），@ 前缀是并行路由插槽，_ 前缀是私有文件夹（不参与路由）。',
@@ -95,7 +87,8 @@ export const lessons: Lesson[] = [
   {
     id: 'X_3', title: '布局与模板：共享 UI 的层级', navTitle: '布局模板', category: '起步',
     path: '/nextjs/x-3/layouts', summary: '理解根布局、嵌套布局、路由组布局和 template 的区别与嵌套机制。',
-    demo: X03Layouts,
+    demo: null,
+    demoComponent: X03Layouts,
     code: X3Code,
     language: 'jsx',
     principle: 'layout.tsx 在导航时保持挂载、状态不重置，适合放 Header/Footer 等持久 UI；template.tsx 每次导航都重新创建实例、状态会重置。布局按目录层层嵌套，子布局包裹在父布局内。需要进入动画或每次重置的副作用时选 template，其余场景默认用 layout。',
@@ -106,7 +99,8 @@ export const lessons: Lesson[] = [
   {
     id: 'X_4', title: '动态路由与参数', navTitle: '动态路由', category: '起步',
     path: '/nextjs/x-4/dynamic-routes', summary: '掌握动态路由参数、Catch-all、可选 Catch-all，以及 params 与 searchParams 的使用。',
-    demo: X04DynamicRoutes,
+    demo: null,
+    demoComponent: X04DynamicRoutes,
     code: X4Code,
     language: 'jsx',
     principle: '动态路由用方括号 [id] 捕获单段，[...slug] 捕获多段（得到数组），[[...slug]] 可选捕获。page 组件通过 params 读取路径参数、通过 searchParams 读取查询串；Next.js 15+ 二者都是 Promise，需 await 解包。generateStaticParams 可在构建期预生成动态路由的静态页。',
@@ -117,7 +111,8 @@ export const lessons: Lesson[] = [
   {
     id: 'X_5', title: 'Server Components 服务端组件', navTitle: 'Server组件', category: '渲染',
     path: '/nextjs/x-5/server-components', summary: '理解 Server Component 的运行环境、能力边界与默认行为。',
-    demo: X05ServerComponents,
+    demo: null,
+    demoComponent: X05ServerComponents,
     code: X5Code,
     language: 'jsx',
     principle: 'App Router 中组件默认是 Server Component，在服务端运行、不进入前端 bundle，可直接访问数据库、文件系统与密钥，并能直接 await 获取数据；但不能使用 useState/useEffect 等客户端 Hook、事件处理器或浏览器 API。',
@@ -128,7 +123,8 @@ export const lessons: Lesson[] = [
   {
     id: 'X_6', title: 'Client Components 客户端组件', navTitle: 'Client组件', category: '渲染',
     path: '/nextjs/x-6/client-components', summary: '掌握 "use client" 声明时机、客户端 Hooks 限制与 Server/Client 组件组合模式。',
-    demo: X06ClientComponents,
+    demo: null,
+    demoComponent: X06ClientComponents,
     code: X6Code,
     language: 'jsx',
     principle: '需要交互的组件（事件、状态、生命周期、浏览器 API）必须在文件顶部加 "use client" 声明为 Client Component；该声明会向下传递，导入的子组件也变成 Client。Server 组件可获取数据后通过 props 传给 Client 组件接管交互。',
@@ -139,7 +135,8 @@ export const lessons: Lesson[] = [
   {
     id: 'X_7', title: '静态与动态渲染', navTitle: '静态动态', category: '渲染',
     path: '/nextjs/x-7/static-dynamic', summary: '理解 Next.js 的静态渲染（构建时）与动态渲染（请求时）触发条件和缓存行为。',
-    demo: X07StaticDynamic,
+    demo: null,
+    demoComponent: X07StaticDynamic,
     code: X7Code,
     language: 'jsx',
     principle: 'Next.js 默认对不含动态 API 的页面做静态渲染（构建时生成 HTML）；一旦组件树使用 cookies()/headers()/searchParams 等动态函数或显式禁用缓存，整条路由转为动态渲染（每次请求执行）。静态路由可被 CDN 缓存，动态路由按需执行。',
@@ -150,7 +147,8 @@ export const lessons: Lesson[] = [
   {
     id: 'X_8', title: 'Streaming 与 Suspense 流式渲染', navTitle: '流式渲染', category: '渲染',
     path: '/nextjs/x-8/streaming', summary: '用 Suspense 边界实现流式渲染，让慢组件不阻塞首屏，渐进式展示内容。',
-    demo: X08StreamingSuspense,
+    demo: null,
+    demoComponent: X08StreamingSuspense,
     code: X8Code,
     language: 'jsx',
     principle: 'Streaming 把服务端渲染的 HTML 分块发送：遇到 <Suspense> 边界先返回 fallback，慢组件数据就绪后流式替换。用户无需等待最慢的组件即可看到骨架内容；loading.tsx 是路由级 Suspense 的语法糖。',
@@ -161,7 +159,8 @@ export const lessons: Lesson[] = [
   {
     id: 'X_9', title: '数据获取与 fetch 缓存', navTitle: '数据获取', category: '数据',
     path: '/nextjs/x-9/data-fetching', summary: '掌握 Server Component 中直接 await fetch 的模式，以及 Next.js 扩展的缓存选项。',
-    demo: X09DataFetching,
+    demo: null,
+    demoComponent: X09DataFetching,
     code: X9Code,
     language: 'jsx',
     principle: 'Next.js 扩展了原生 fetch 用于服务端数据获取：可配置 no-store（不缓存，新版默认）、force-cache（持久缓存）、next.revalidate（ISR 定时刷新）或 next.tags（按标签缓存，用 revalidateTag/revalidatePath 主动失效）。同一次渲染中相同 URL 的请求自动去重，Server Component 中直接 await 即可。',
@@ -172,7 +171,8 @@ export const lessons: Lesson[] = [
   {
     id: 'X_10', title: 'Server Actions 服务端操作', navTitle: 'Server Actions', category: '数据',
     path: '/nextjs/x-10/server-actions', summary: '用 "use server" 定义服务端函数，表单直接提交到服务端，无需手写 API。',
-    demo: X10ServerActions,
+    demo: null,
+    demoComponent: X10ServerActions,
     code: X10Code,
     language: 'jsx',
     principle: 'Server Action 用 "use server" 声明，函数在服务端运行，前端通过 POST 调用。可配合 form action 属性实现无 JavaScript 的表单提交，并自动处理 CSRF 防护；执行后用 revalidatePath/revalidateTag 刷新缓存，页面自动更新，无需手动 refetch。',
@@ -183,7 +183,8 @@ export const lessons: Lesson[] = [
   {
     id: 'X_11', title: 'Route Handlers API 路由', navTitle: 'API路由', category: '数据',
     path: '/nextjs/x-11/route-handlers', summary: '用 route.ts 定义 REST API，导出 GET/POST 等方法处理 HTTP 请求。',
-    demo: X11RouteHandlers,
+    demo: null,
+    demoComponent: X11RouteHandlers,
     code: X11Code,
     language: 'jsx',
     principle: 'Route Handler 在 app/api/ 目录下用 route.ts 定义，每个导出的 HTTP 方法（GET/POST/PUT/DELETE/PATCH）对应一个处理函数，返回 NextResponse。适合构建 REST API、Webhook、第三方 API 代理，可运行在 Node 或 Edge Runtime。',
@@ -194,7 +195,8 @@ export const lessons: Lesson[] = [
   {
     id: 'X_12', title: '缓存与重新验证', navTitle: '缓存策略', category: '数据',
     path: '/nextjs/x-12/caching', summary: '理解 Data Cache、Full Route Cache、Router Cache、Request Memoization 四层缓存与失效机制。',
-    demo: X12Caching,
+    demo: null,
+    demoComponent: X12Caching,
     code: X12Code,
     language: 'jsx',
     principle: 'Next.js 有多个缓存层：Request Memoization（单次渲染内请求去重）、Data Cache（fetch 结果的持久缓存）、Full Route Cache（静态渲染的 HTML 与 RSC payload）、Router Cache（客户端会话内已访问的路由缓存）。按需失效 Data Cache 会级联刷新上层缓存。',
@@ -205,7 +207,8 @@ export const lessons: Lesson[] = [
   {
     id: 'X_13', title: 'Parallel Routes 并行路由', navTitle: '并行路由', category: '路由进阶',
     path: '/nextjs/x-13/parallel-routes', summary: '用 @ 插槽在布局中并行渲染多个独立子路由，实现仪表盘等复杂布局。',
-    demo: X13ParallelRoutes,
+    demo: null,
+    demoComponent: X13ParallelRoutes,
     code: X13Code,
     language: 'jsx',
     principle: 'Parallel Routes 用 @ 前缀目录定义插槽，插槽作为 props 传入 layout，可在同一布局中并行渲染多个独立子路由。每个插槽有自己的加载、错误与 default 状态，default.tsx 提供插槽未匹配时的默认内容，适合仪表盘等多面板布局。',
@@ -216,7 +219,8 @@ export const lessons: Lesson[] = [
   {
     id: 'X_14', title: 'Intercepting Routes 拦截路由', navTitle: '拦截路由', category: '路由进阶',
     path: '/nextjs/x-14/intercepting-routes', summary: '用 (.) (..) (...) 拦截路由，实现客户端导航弹窗、直接访问全屏的体验。',
-    demo: X14InterceptingRoutes,
+    demo: null,
+    demoComponent: X14InterceptingRoutes,
     code: X14Code,
     language: 'jsx',
     principle: 'Intercepting Routes 用 (.) (..) (..)(..) (...) 前缀拦截其他路由：客户端导航时命中拦截版（如模态框弹窗），直接访问或刷新 URL 时命中真实版（如全屏页）。同一 URL 提供两种体验，既流畅又可分享，常配合 Parallel Routes 的 Modal 插槽。',
@@ -227,7 +231,8 @@ export const lessons: Lesson[] = [
   {
     id: 'X_15', title: 'Route Groups 与私有文件夹', navTitle: '路由组', category: '路由进阶',
     path: '/nextjs/x-15/route-groups', summary: '用 (group) 路由组组织代码、切换布局，用 _folder 私有文件夹存放不参与路由的内容。',
-    demo: X15RouteGroups,
+    demo: null,
+    demoComponent: X15RouteGroups,
     code: X15Code,
     language: 'jsx',
     principle: 'Route Groups 用 (folder) 圆括号目录组织代码而不影响 URL，可为一组路由指定独立 layout；私有文件夹用 _folder 下划线前缀，完全不参与路由生成，适合存放内部组件和工具函数；路由组与私有目录都不影响 URL，是整理工程结构的两种正交手段。',
@@ -238,7 +243,8 @@ export const lessons: Lesson[] = [
   {
     id: 'X_16', title: 'Loading 与 Error UI', navTitle: '加载错误', category: '路由进阶',
     path: '/nextjs/x-16/loading-error', summary: '用 loading.tsx / error.tsx / not-found.tsx / global-error.tsx 约定加载、错误和 404 状态。',
-    demo: X16LoadingError,
+    demo: null,
+    demoComponent: X16LoadingError,
     code: X16Code,
     language: 'jsx',
     principle: 'loading.tsx 自动为页面创建 Suspense 边界；error.tsx 捕获子组件错误（必须是 Client Component，提供 reset 重试）；not-found.tsx 处理 404；global-error.tsx 是根 layout 出错时的兜底，需自带 html/body。错误就近匹配、逐层向上冒泡。',
@@ -249,7 +255,8 @@ export const lessons: Lesson[] = [
   {
     id: 'X_17', title: 'next/image 图片优化', navTitle: '图片优化', category: '优化',
     path: '/nextjs/x-17/next-image', summary: '用 next/image 自动优化图片格式、尺寸、懒加载，消除布局抖动（CLS）。',
-    demo: X17NextImage,
+    demo: null,
+    demoComponent: X17NextImage,
     code: X17Code,
     language: 'jsx',
     principle: 'next/image 的 <Image> 组件自动按设备生成合适尺寸的 AVIF/WebP，默认懒加载，通过指定 width/height 或 fill 防止 CLS。本地图片需 import（自带尺寸），远程图片需在 next.config.js 配置域名白名单；priority 用于首屏 LCP 图片预加载。',
@@ -260,7 +267,8 @@ export const lessons: Lesson[] = [
   {
     id: 'X_18', title: 'next/font 字体优化', navTitle: '字体优化', category: '优化',
     path: '/nextjs/x-18/next-font', summary: '用 next/font 自托管字体，消除布局抖动，避免第三方 CDN 请求。',
-    demo: X18NextFont,
+    demo: null,
+    demoComponent: X18NextFont,
     code: X18Code,
     language: 'jsx',
     principle: 'next/font 在构建时下载字体并自托管，避免第三方 CDN 请求，用 size-adjust 消除换字体时的布局抖动。支持 next/font/google 和 next/font/local，通过 variable 生成 CSS 变量方便引用；display: swap 先用 fallback 显示再平滑切换。',
@@ -271,7 +279,8 @@ export const lessons: Lesson[] = [
   {
     id: 'X_19', title: 'next/link 与导航', navTitle: '链接导航', category: '优化',
     path: '/nextjs/x-19/next-link', summary: '掌握 Link 客户端导航、useRouter 编程式跳转、redirect 服务端重定向等导航 API。',
-    demo: X19NextLink,
+    demo: null,
+    demoComponent: X19NextLink,
     code: X19Code,
     language: 'jsx',
     principle: 'next/link 的 <Link> 实现客户端导航并自动预取目标路由的 RSC payload；useRouter 提供 push/replace/back/refresh 等程序式导航；redirect/permanentRedirect 在服务端重定向。App Router 的导航 API 一律从 next/navigation 导入（而非 next/router）。',
@@ -282,7 +291,8 @@ export const lessons: Lesson[] = [
   {
     id: 'X_20', title: 'Metadata 与 SEO', navTitle: 'Metadata', category: '优化',
     path: '/nextjs/x-20/metadata', summary: '用 Metadata API（静态 metadata + 动态 generateMetadata）管理 title、description、OG 等 SEO 元信息。',
-    demo: X20Metadata,
+    demo: null,
+    demoComponent: X20Metadata,
     code: X20Code,
     language: 'jsx',
     principle: 'App Router 用 Metadata API 取代 Pages Router 的 next/head：可导出静态 metadata 对象或动态 generateMetadata 函数生成 title/description/openGraph 等元信息。还支持文件约定（favicon/icon/opengraph-image）和 sitemap.ts/robots.ts 动态生成，子页面 metadata 覆盖父级。',
@@ -293,7 +303,8 @@ export const lessons: Lesson[] = [
   {
     id: 'X_21', title: 'Middleware 中间件', navTitle: '中间件', category: '工程',
     path: '/nextjs/x-21/middleware', summary: '用 middleware.ts 在请求到达路由前执行认证、重定向、A/B 测试等逻辑。',
-    demo: X21Middleware,
+    demo: null,
+    demoComponent: X21Middleware,
     code: X21Code,
     language: 'jsx',
     principle: 'Middleware 在每个请求、路由渲染前运行，可重写、重定向、修改请求/响应头，适合认证鉴权、i18n 语言检测、A/B 测试、灰度发布。文件放在项目根或 src/ 下，用 config.matcher 限定匹配路径以提升性能；由于它在路由渲染前运行，逻辑要尽量轻量，避免拖慢每个请求。',
@@ -304,7 +315,8 @@ export const lessons: Lesson[] = [
   {
     id: 'X_22', title: '环境变量与 next.config', navTitle: '环境配置', category: '工程',
     path: '/nextjs/x-22/env-config', summary: '掌握 NEXT_PUBLIC_ 前缀规则、env 文件优先级和 next.config.js 核心配置项。',
-    demo: X22EnvConfig,
+    demo: null,
+    demoComponent: X22EnvConfig,
     code: X22Code,
     language: 'jsx',
     principle: '环境变量加 NEXT_PUBLIC_ 前缀会被内联进前端 bundle（客户端可见），无前缀则仅在服务端可读。env 文件优先级：.env.local > .env.[环境] > .env。next.config.js 集中配置 reactStrictMode、images、rewrites、redirects、output 等。',
@@ -315,7 +327,8 @@ export const lessons: Lesson[] = [
   {
     id: 'X_23', title: '国际化 i18n', navTitle: '国际化', category: '工程',
     path: '/nextjs/x-23/i18n', summary: '用 App Router 的 [lang] 动态路由 + middleware 语言检测实现多语言站点。',
-    demo: X23I18n,
+    demo: null,
+    demoComponent: X23I18n,
     code: X23Code,
     language: 'jsx',
     principle: 'App Router 推荐用 [lang] 动态路由实现 i18n：每种语言拥有独立 URL，利于 SEO；middleware 根据 Accept-Language 或 Cookie 自动检测并重定向到对应语言前缀；字典按语言拆分并按需 import。可配合 hreflang 标签与 Intl API 处理复数、日期等本地化。',
@@ -326,7 +339,8 @@ export const lessons: Lesson[] = [
   {
     id: 'X_24', title: '部署与 Vercel', navTitle: '部署', category: '工程',
     path: '/nextjs/x-24/deployment', summary: '掌握 Vercel、Node 自托管、Docker、静态导出四种部署目标的特点与配置。',
-    demo: X24Deployment,
+    demo: null,
+    demoComponent: X24Deployment,
     code: X24Code,
     language: 'jsx',
     principle: 'Next.js 支持多种部署目标：Vercel（官方全托管、零配置，支持全部特性）、Node Server（output: standalone 自托管）、Docker（基于 standalone 产物构建镜像）、Static Export（output: export 纯静态）。静态导出有限制：不支持 Server Actions、Middleware、Image 优化等动态能力。',

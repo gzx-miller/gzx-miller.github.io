@@ -1,24 +1,51 @@
 import type { Component } from 'vue'
-import { defineAsyncComponent } from 'vue'
 import type { Lesson } from '../lessons'
 import { restoreCodeSource } from '../code-restore'
+import K01AppEntry from '../../demos/K01AppEntryArticle.vue'
+import K02TemplateSyntax from '../../demos/K02TemplateSyntaxArticle.vue'
+import K03Reactivity from '../../demos/K03ReactivityArticle.vue'
+import K04ComputedWatch from '../../demos/K04ComputedWatchArticle.vue'
+import K05ConditionList from '../../demos/K05ConditionListArticle.vue'
+import K06FormModel from '../../demos/K06FormModelArticle.vue'
+import K07ComponentBasics from '../../demos/K07ComponentBasicsArticle.vue'
+import K08Slots from '../../demos/K08SlotsArticle.vue'
+import K09Communication from '../../demos/K09CommunicationArticle.vue'
+import K10LifecycleRef from '../../demos/K10LifecycleRefArticle.vue'
+import K11Composable from '../../demos/K11ComposableArticle.vue'
+import K12Routing from '../../demos/K12RoutingArticle.vue'
+import K13Pinia from '../../demos/K13PiniaArticle.vue'
+import K14AsyncState from '../../demos/K14AsyncStateArticle.vue'
+import K15DynamicKeepAlive from '../../demos/K15DynamicKeepAliveArticle.vue'
+import K16Transition from '../../demos/K16TransitionArticle.vue'
+import K17Directive from '../../demos/K17DirectiveArticle.vue'
+import K18Teleport from '../../demos/K18TeleportArticle.vue'
+import K19Suspense from '../../demos/K19SuspenseArticle.vue'
+import K20Performance from '../../demos/K20PerformanceArticle.vue'
+import K21TestingMaintainability from '../../demos/K21TestingMaintainabilityArticle.vue'
+import K22CustomVModel from '../../demos/K22CustomVModelArticle.vue'
+import K23ErrorHandling from '../../demos/K23ErrorHandlingArticle.vue'
+import K24PluginDev from '../../demos/K24PluginDevArticle.vue'
+import K25ShallowReactivity from '../../demos/K25ShallowReactivityArticle.vue'
+import K26EffectScope from '../../demos/K26EffectScopeArticle.vue'
+import K27AttributeForwarding from '../../demos/K27AttributeForwardingArticle.vue'
+import K28ComponentExpose from '../../demos/K28ComponentExposeArticle.vue'
+import K29StateBoundaries from '../../demos/S01StateBoundariesArticle.vue'
+import K30PiniaSetupStore from '../../demos/S02PiniaSetupStoreArticle.vue'
+import K31PiniaSubscriptions from '../../demos/S03PiniaSubscriptionsArticle.vue'
+import K32VuexMigration from '../../demos/S11VuexMigrationArticle.vue'
+import K33PiniaPlugin from '../../demos/S17PiniaPluginArticle.vue'
+import K34PiniaGetters from '../../demos/S18PiniaGettersArticle.vue'
+import K35PiniaActions from '../../demos/S19PiniaActionsArticle.vue'
+import K36PiniaDevtools from '../../demos/S20PiniaDevtoolsArticle.vue'
+import K37PiniaTesting from '../../demos/S21PiniaTestingArticle.vue'
+import K38DefineModel from '../../demos/K38DefineModelArticle.vue'
 
-const demoModules = import.meta.glob<Component>('../../demos/*.vue', { import: 'default' })
 const vueCodeModules = import.meta.glob<string>('../../demos/*.vue', { query: '?raw', import: 'default' })
 const jsxCodeModules = import.meta.glob<string>('../../demos/react-jsx/*.jsx', { query: '?raw', import: 'default' })
 const stateCodeModules = import.meta.glob<string>('../../demos/state-react/*.js', { query: '?raw', import: 'default' })
 const jsCodeModules = import.meta.glob<string>('../../demos/js-code/*.js', { query: '?raw', import: 'default' })
 const tsCodeModules = import.meta.glob<string>('../../demos/ts-code/*.ts', { query: '?raw', import: 'default' })
 const styleCodeModules = import.meta.glob<string>('../../demos/style-code/*', { query: '?raw', import: 'default' })
-
-function createDemo(name: string) {
-  const loader = demoModules[`../../demos/${name}.vue`]
-  if (!loader) throw new Error(`未找到内容组件：${name}`)
-  return defineAsyncComponent(async () => {
-    if (name.startsWith('E')) await import('../../element-plus/styles')
-    return loader()
-  })
-}
 
 function createCodeLoader(path: string) {
   const modules = path.startsWith('react-jsx/')
@@ -37,81 +64,80 @@ function createCodeLoader(path: string) {
   return () => loader().then(restoreCodeSource)
 }
 
-const K01AppEntry = createDemo('K01AppEntryArticle')
 const K01Code = createCodeLoader('K01AppEntry.vue')
-const K02TemplateSyntax = createDemo('K02TemplateSyntaxArticle')
+
 const K02Code = createCodeLoader('K02TemplateSyntax.vue')
-const K03Reactivity = createDemo('K03ReactivityArticle')
+
 const K03Code = createCodeLoader('K03Reactivity.vue')
-const K04ComputedWatch = createDemo('K04ComputedWatchArticle')
+
 const K04Code = createCodeLoader('K04ComputedWatch.vue')
-const K05ConditionList = createDemo('K05ConditionListArticle')
+
 const K05Code = createCodeLoader('K05ConditionList.vue')
-const K06FormModel = createDemo('K06FormModelArticle')
+
 const K06Code = createCodeLoader('K06FormModel.vue')
-const K07ComponentBasics = createDemo('K07ComponentBasicsArticle')
+
 const K07Code = createCodeLoader('K07ComponentBasics.vue')
-const K08Slots = createDemo('K08SlotsArticle')
+
 const K08Code = createCodeLoader('K08Slots.vue')
-const K09Communication = createDemo('K09CommunicationArticle')
+
 const K09Code = createCodeLoader('K09Communication.vue')
-const K10LifecycleRef = createDemo('K10LifecycleRefArticle')
+
 const K10Code = createCodeLoader('K10LifecycleRef.vue')
-const K11Composable = createDemo('K11ComposableArticle')
+
 const K11Code = createCodeLoader('K11Composable.vue')
-const K12Routing = createDemo('K12RoutingArticle')
+
 const K12Code = createCodeLoader('K12Routing.vue')
-const K13Pinia = createDemo('K13PiniaArticle')
+
 const K13Code = createCodeLoader('K13Pinia.vue')
-const K14AsyncState = createDemo('K14AsyncStateArticle')
+
 const K14Code = createCodeLoader('K14AsyncState.vue')
-const K15DynamicKeepAlive = createDemo('K15DynamicKeepAliveArticle')
+
 const K15Code = createCodeLoader('K15DynamicKeepAlive.vue')
-const K16Transition = createDemo('K16TransitionArticle')
+
 const K16Code = createCodeLoader('K16Transition.vue')
-const K17Directive = createDemo('K17DirectiveArticle')
+
 const K17Code = createCodeLoader('K17Directive.vue')
-const K18Teleport = createDemo('K18TeleportArticle')
+
 const K18Code = createCodeLoader('K18Teleport.vue')
-const K19Suspense = createDemo('K19SuspenseArticle')
+
 const K19Code = createCodeLoader('K19Suspense.vue')
-const K20Performance = createDemo('K20PerformanceArticle')
+
 const K20Code = createCodeLoader('K20Performance.vue')
-const K21TestingMaintainability = createDemo('K21TestingMaintainabilityArticle')
+
 const K21Code = createCodeLoader('K21TestingMaintainability.vue')
-const K22CustomVModel = createDemo('K22CustomVModelArticle')
+
 const K22Code = createCodeLoader('K22CustomVModel.vue')
-const K23ErrorHandling = createDemo('K23ErrorHandlingArticle')
+
 const K23Code = createCodeLoader('K23ErrorHandling.vue')
-const K24PluginDev = createDemo('K24PluginDevArticle')
+
 const K24Code = createCodeLoader('K24PluginDev.vue')
-const K25ShallowReactivity = createDemo('K25ShallowReactivityArticle')
+
 const K25Code = createCodeLoader('K25ShallowReactivity.vue')
-const K26EffectScope = createDemo('K26EffectScopeArticle')
+
 const K26Code = createCodeLoader('K26EffectScope.vue')
-const K27AttributeForwarding = createDemo('K27AttributeForwardingArticle')
+
 const K27Code = createCodeLoader('K27AttributeForwarding.vue')
-const K28ComponentExpose = createDemo('K28ComponentExposeArticle')
+
 const K28Code = createCodeLoader('K28ComponentExpose.vue')
-const K29StateBoundaries = createDemo('S01StateBoundariesArticle')
+
 const K29Code = createCodeLoader('S01StateBoundaries.vue')
-const K30PiniaSetupStore = createDemo('S02PiniaSetupStoreArticle')
+
 const K30Code = createCodeLoader('S02PiniaSetupStore.vue')
-const K31PiniaSubscriptions = createDemo('S03PiniaSubscriptionsArticle')
+
 const K31Code = createCodeLoader('S03PiniaSubscriptions.vue')
-const K32VuexMigration = createDemo('S11VuexMigrationArticle')
+
 const K32Code = createCodeLoader('S11VuexMigration.vue')
-const K33PiniaPlugin = createDemo('S17PiniaPluginArticle')
+
 const K33Code = createCodeLoader('S17PiniaPlugin.vue')
-const K34PiniaGetters = createDemo('S18PiniaGettersArticle')
+
 const K34Code = createCodeLoader('S18PiniaGetters.vue')
-const K35PiniaActions = createDemo('S19PiniaActionsArticle')
+
 const K35Code = createCodeLoader('S19PiniaActions.vue')
-const K36PiniaDevtools = createDemo('S20PiniaDevtoolsArticle')
+
 const K36Code = createCodeLoader('S20PiniaDevtools.vue')
-const K37PiniaTesting = createDemo('S21PiniaTestingArticle')
+
 const K37Code = createCodeLoader('S21PiniaTesting.vue')
-const K38DefineModel = createDemo('K38DefineModelArticle')
+
 const K38Code = createCodeLoader('K38DefineModel.vue')
 
 export const lessons: Lesson[] = [
@@ -122,7 +148,8 @@ export const lessons: Lesson[] = [
     category: '工程起点',
     path: '/vue/k-1/app-entry',
     summary: '从入口文件理解 Vue 应用实例、插件注册、根组件挂载和单文件组件的基本组成。',
-    demo: K01AppEntry,
+    demo: null,
+    demoComponent: K01AppEntry,
     code: K01Code,
     language: 'vue',
     principle:
@@ -148,7 +175,8 @@ export const lessons: Lesson[] = [
     category: '模板基础',
     path: '/vue/k-2/template-syntax',
     summary: '用订单搜索展示插值、v-model、v-if、v-for、属性绑定和事件绑定如何协作。',
-    demo: K02TemplateSyntax,
+    demo: null,
+    demoComponent: K02TemplateSyntax,
     code: K02Code,
     language: 'vue',
     principle:
@@ -174,7 +202,8 @@ export const lessons: Lesson[] = [
     category: '响应式',
     path: '/vue/k-3/reactivity',
     summary: '用学习进度展示 ref 与 reactive 的适用边界，以及模板自动解包的阅读方式。',
-    demo: K03Reactivity,
+    demo: null,
+    demoComponent: K03Reactivity,
     code: K03Code,
     language: 'vue',
     principle:
@@ -200,7 +229,8 @@ export const lessons: Lesson[] = [
     category: '响应式',
     path: '/vue/k-4/computed-watch',
     summary: '用购物车金额展示派生数据、精确监听和自动依赖收集的区别。',
-    demo: K04ComputedWatch,
+    demo: null,
+    demoComponent: K04ComputedWatch,
     code: K04Code,
     language: 'vue',
     principle:
@@ -226,7 +256,8 @@ export const lessons: Lesson[] = [
     category: '模板基础',
     path: '/vue/k-5/condition-list',
     summary: '用任务看板展示条件渲染、显示切换和列表身份维护。',
-    demo: K05ConditionList,
+    demo: null,
+    demoComponent: K05ConditionList,
     code: K05Code,
     language: 'vue',
     principle:
@@ -252,7 +283,8 @@ export const lessons: Lesson[] = [
     category: '用户输入',
     path: '/vue/k-6/form-model',
     summary: '用活动报名表展示双向绑定、输入清洗和提交条件控制。',
-    demo: K06FormModel,
+    demo: null,
+    demoComponent: K06FormModel,
     code: K06Code,
     language: 'vue',
     principle:
@@ -278,7 +310,8 @@ export const lessons: Lesson[] = [
     category: '组件',
     path: '/vue/k-7/component-basics',
     summary: '用可编辑卡片展示组件输入、内部草稿和事件输出的边界。',
-    demo: K07ComponentBasics,
+    demo: null,
+    demoComponent: K07ComponentBasics,
     code: K07Code,
     language: 'vue',
     principle:
@@ -304,7 +337,8 @@ export const lessons: Lesson[] = [
     category: '组件',
     path: '/vue/k-8/slots',
     summary: '用课程卡片展示组件提供结构，使用者定制内容的模式。',
-    demo: K08Slots,
+    demo: null,
+    demoComponent: K08Slots,
     code: K08Code,
     language: 'vue',
     principle:
@@ -330,7 +364,8 @@ export const lessons: Lesson[] = [
     category: '组件',
     path: '/vue/k-9/communication',
     summary: '用课程主题同步展示跨层级依赖注入的基本方式。',
-    demo: K09Communication,
+    demo: null,
+    demoComponent: K09Communication,
     code: K09Code,
     language: 'vue',
     principle:
@@ -356,7 +391,8 @@ export const lessons: Lesson[] = [
     category: '组件',
     path: '/vue/k-10/lifecycle-ref',
     summary: '用自动聚焦计时器展示挂载、卸载和 template ref。',
-    demo: K10LifecycleRef,
+    demo: null,
+    demoComponent: K10LifecycleRef,
     code: K10Code,
     language: 'vue',
     principle:
@@ -382,7 +418,8 @@ export const lessons: Lesson[] = [
     category: '复用',
     path: '/vue/k-11/composable',
     summary: '用验证码倒计时展示如何把有状态逻辑抽成可复用函数。',
-    demo: K11Composable,
+    demo: null,
+    demoComponent: K11Composable,
     code: K11Code,
     language: 'vue',
     principle:
@@ -408,7 +445,8 @@ export const lessons: Lesson[] = [
     category: '路由',
     path: '/vue/k-12/routing/lee',
     summary: '用成员详情展示 NuxtLink、动态参数和全局路由中间件。',
-    demo: K12Routing,
+    demo: null,
+    demoComponent: K12Routing,
     code: K12Code,
     language: 'vue',
     principle:
@@ -434,7 +472,8 @@ export const lessons: Lesson[] = [
     category: '状态管理',
     path: '/vue/k-13/pinia-store',
     summary: '用课程购物车展示全局 store 的状态、派生值和业务动作。',
-    demo: K13Pinia,
+    demo: null,
+    demoComponent: K13Pinia,
     code: K13Code,
     language: 'vue',
     principle:
@@ -460,7 +499,8 @@ export const lessons: Lesson[] = [
     category: '异步',
     path: '/vue/k-14/async-state',
     summary: '用异步课程列表展示 loading、error、success 三态。',
-    demo: K14AsyncState,
+    demo: null,
+    demoComponent: K14AsyncState,
     code: K14Code,
     language: 'vue',
     principle:
@@ -486,7 +526,8 @@ export const lessons: Lesson[] = [
     category: '组件',
     path: '/vue/k-15/dynamic-keep-alive',
     summary: '用学习工作台展示按状态切换组件并缓存实例。',
-    demo: K15DynamicKeepAlive,
+    demo: null,
+    demoComponent: K15DynamicKeepAlive,
     code: K15Code,
     language: 'vue',
     principle:
@@ -512,7 +553,8 @@ export const lessons: Lesson[] = [
     category: '体验',
     path: '/vue/k-16/transition',
     summary: '用学习提醒展示单元素和列表元素的进入离开动画。',
-    demo: K16Transition,
+    demo: null,
+    demoComponent: K16Transition,
     code: K16Code,
     language: 'vue',
     principle:
@@ -538,7 +580,8 @@ export const lessons: Lesson[] = [
     category: '复用',
     path: '/vue/k-17/directive',
     summary: '用自动聚焦搜索框展示指令如何封装底层 DOM 行为。',
-    demo: K17Directive,
+    demo: null,
+    demoComponent: K17Directive,
     code: K17Code,
     language: 'vue',
     principle:
@@ -564,7 +607,8 @@ export const lessons: Lesson[] = [
     category: '体验',
     path: '/vue/k-18/teleport',
     summary: '用确认弹窗展示组件内容如何渲染到 body。',
-    demo: K18Teleport,
+    demo: null,
+    demoComponent: K18Teleport,
     code: K18Code,
     language: 'vue',
     principle:
@@ -590,7 +634,8 @@ export const lessons: Lesson[] = [
     category: '异步',
     path: '/vue/k-19/suspense',
     summary: '用异步学习报告展示 fallback 和延迟加载组件。',
-    demo: K19Suspense,
+    demo: null,
+    demoComponent: K19Suspense,
     code: K19Code,
     language: 'vue',
     principle:
@@ -616,7 +661,8 @@ export const lessons: Lesson[] = [
     category: '工程实践',
     path: '/vue/k-20/performance',
     summary: '用课程列表展示过滤、v-memo 和列表渲染的基础优化思路。',
-    demo: K20Performance,
+    demo: null,
+    demoComponent: K20Performance,
     code: K20Code,
     language: 'vue',
     principle:
@@ -642,7 +688,8 @@ export const lessons: Lesson[] = [
     category: '工程实践',
     path: '/vue/k-21/testing-maintainability',
     summary: '用检查清单说明哪些 Vue3 代码适合被单测覆盖。',
-    demo: K21TestingMaintainability,
+    demo: null,
+    demoComponent: K21TestingMaintainability,
     code: K21Code,
     language: 'vue',
     principle:
@@ -668,7 +715,8 @@ export const lessons: Lesson[] = [
     category: '组件',
     path: '/vue/k-22/custom-v-model',
     summary: '用评分选择器展示组件级 v-model 的实现：modelValue、命名 model 和修饰符。',
-    demo: K22CustomVModel,
+    demo: null,
+    demoComponent: K22CustomVModel,
     code: K22Code,
     language: 'vue',
     principle:
@@ -694,7 +742,8 @@ export const lessons: Lesson[] = [
     category: '工程实践',
     path: '/vue/k-23/error-handling',
     summary: '用错误边界展示 onErrorCaptured 捕获后代错误和 app.config.errorHandler 全局兜底。',
-    demo: K23ErrorHandling,
+    demo: null,
+    demoComponent: K23ErrorHandling,
     code: K23Code,
     language: 'vue',
     principle:
@@ -720,7 +769,8 @@ export const lessons: Lesson[] = [
     category: '工程实践',
     path: '/vue/k-24/plugin-dev',
     summary: '用通知插件展示 Vue 插件的 install 方法、全局组件注册和 provide/inject 注入。',
-    demo: K24PluginDev,
+    demo: null,
+    demoComponent: K24PluginDev,
     code: K24Code,
     language: 'vue',
     principle:
@@ -746,7 +796,8 @@ export const lessons: Lesson[] = [
     category: '响应式进阶',
     path: '/vue/k-25/shallow-reactivity',
     summary: '用门店库存工作台演示大型数据只追踪顶层变化，以及批量修改后主动刷新视图。',
-    demo: K25ShallowReactivity,
+    demo: null,
+    demoComponent: K25ShallowReactivity,
     code: K25Code,
     language: 'vue',
     principle:
@@ -772,7 +823,8 @@ export const lessons: Lesson[] = [
     category: '响应式进阶',
     path: '/vue/k-26/effect-scope',
     summary: '用工作台订阅演示将监听器和定时器放进同一作用域，并在退出业务模块时统一清理。',
-    demo: K26EffectScope,
+    demo: null,
+    demoComponent: K26EffectScope,
     code: K26Code,
     language: 'vue',
     principle:
@@ -798,7 +850,8 @@ export const lessons: Lesson[] = [
     category: '组件进阶',
     path: '/vue/k-27/attribute-forwarding',
     summary: '用发布按钮包装组件演示 class、事件、无障碍属性和 data-* 如何透传到真实元素。',
-    demo: K27AttributeForwarding,
+    demo: null,
+    demoComponent: K27AttributeForwarding,
     code: K27Code,
     language: 'vue',
     principle:
@@ -824,7 +877,8 @@ export const lessons: Lesson[] = [
     category: '组件进阶',
     path: '/vue/k-28/component-expose',
     summary: '用课程搜索面板演示父组件通过模板引用调用子组件明确公开的聚焦与清空能力。',
-    demo: K28ComponentExpose,
+    demo: null,
+    demoComponent: K28ComponentExpose,
     code: K28Code,
     language: 'vue',
     principle:
@@ -846,7 +900,8 @@ export const lessons: Lesson[] = [
 {
     id: 'K_29', title: '先判断状态归属，再选择 Store', navTitle: '状态边界', category: '状态设计',
     path: '/vue/k-29/state-boundaries', summary: '区分组件状态、URL 状态、客户端共享状态和服务端缓存状态。',
-    demo: K29StateBoundaries, code: K29Code, language: 'vue',
+    demo: null,
+    demoComponent: K29StateBoundaries, code: K29Code, language: 'vue',
     principle: 'Store 只应承载需要跨组件共享、具有业务生命周期的客户端状态；表单瞬时输入、URL 参数、组件私有 UI 状态和远程缓存各有更合适的归属。把它们一股脑塞进 Pinia 会让状态臃肿、来源混乱且难以调试。正确做法是先用"状态归属"判断：问清每段状态的唯一事实来源、共享范围与生命周期，再选最小且匹配语义的工具。',
     flow: ['先回答"这段状态只在一个组件内用吗"：是则留在组件的 ref/reactive，不做全局管理。', '再判断"刷新或分享后是否仍需保持"：可分享的筛选视图放 URL query，跨会话偏好放 localStorage。', '来自服务端 API 的数据交给 TanStack Query / useFetch 等缓存层，自动处理请求去重、失效与加载态。', '只有多个页面或组件都要读写同一份业务状态（如购物车）时才交给 Pinia，让组件保持独立。'],
     notes: ['全局可访问不等于应该全局存储，单组件可用的 UI 状态用 ref 即可。', '远程数据自带缓存失效、请求去重与重试问题，交给 TanStack Query 比塞进 Store 更合适。', '同一份数据应只有一个事实来源：组件、URL、Store、远程各司其职，避免多处来源造成不一致。', '状态归属的决策应自外向内递进，先排除组件级与远程缓存，最后才考虑是否动用 Store。'],
@@ -859,7 +914,8 @@ export const lessons: Lesson[] = [
     category: 'Pinia 进阶',
     path: '/vue/k-30/pinia-setup-store',
     summary: '用学习计划实现组合式 Store：state、getter、action 与 storeToRefs 的安全解构。',
-    demo: K30PiniaSetupStore,
+    demo: null,
+    demoComponent: K30PiniaSetupStore,
     code: K30Code,
     language: 'vue',
     principle:
@@ -885,7 +941,8 @@ export const lessons: Lesson[] = [
     category: 'Pinia 进阶',
     path: '/vue/k-31/pinia-subscriptions',
     summary: '通过 $patch 合并多个修改，用 $subscribe 观察状态变更并驱动持久化等基础设施副作用。',
-    demo: K31PiniaSubscriptions,
+    demo: null,
+    demoComponent: K31PiniaSubscriptions,
     code: K31Code,
     language: 'vue',
     principle:
@@ -911,7 +968,8 @@ export const lessons: Lesson[] = [
     category: 'Pinia 进阶',
     path: '/vue/k-32/vuex-migration',
     summary: '对比 Vuex 模块与 Pinia Store 的模式差异，制定可回滚的渐进迁移策略。',
-    demo: K32VuexMigration,
+    demo: null,
+    demoComponent: K32VuexMigration,
     code: K32Code,
     language: 'vue',
     principle:
@@ -934,7 +992,8 @@ export const lessons: Lesson[] = [
     id: 'K_33', title: 'Pinia 插件：统一扩展所有 Store', navTitle: 'Pinia 插件', category: 'Pinia 进阶',
     path: '/vue/k-33/pinia-plugin',
     summary: '用登录日志和错误追踪场景展示如何编写 Pinia 插件，统一拦截 actions 和状态变化。',
-    demo: K33PiniaPlugin, code: K33Code, language: 'vue',
+    demo: null,
+    demoComponent: K33PiniaPlugin, code: K33Code, language: 'vue',
     principle:
       'Pinia 插件通过 pinia.use() 注册，它是一个接收 context 的函数，context 中包含 pinia、app、store 与 options。插件会在每一个 store 创建时执行一次，因此可以在其中针对该 store 调用 $subscribe 观察状态变化、调用 $onAction 拦截 action 的调用，从而为所有 store 统一注入持久化、日志、错误上报等横切关注点。',
     flow: [
@@ -954,7 +1013,8 @@ export const lessons: Lesson[] = [
 {
     id: 'K_34', title: 'Pinia Getters 与派生状态', navTitle: 'Pinia Getters', category: 'Pinia 进阶',
     path: '/vue/k-34/pinia-getters', summary: '理解 Pinia Getter 的计算属性本质，掌握派生状态的定义和缓存机制。',
-    demo: K34PiniaGetters, code: K34Code, language: 'vue',
+    demo: null,
+    demoComponent: K34PiniaGetters, code: K34Code, language: 'vue',
     principle: 'Pinia Getter 本质是计算属性：Setup Store 中用 computed 定义，自动缓存结果，只有依赖的状态变化时才重新计算，适合表达由状态派生出的统计、筛选、分组和金额等结果。Getter 还可以引用其他 Getter 组成派生链，但要保持为无副作用的纯计算。',
     flow: ['在 Setup Store 中用 computed 定义派生结果，例如商品总数、均价、低库存和购物车合计。', '组件通过 storeToRefs 解构或直接 store.getterName 读取，Vue 自动追踪依赖并按需缓存。', 'Getter 之间可互相引用形成派生链，例如购物车合计依赖购物车明细的再计算。', '需要按参数取值时让 Getter 返回一个函数（如按分类取列表），但这样会失去缓存。'],
     notes: ['Getter 有缓存，依赖未变化时多次读取不会重复计算，适合高频访问的派生数据。', 'Getter 应是纯函数，不要在内部发起请求或修改状态，否则破坏可预测性与缓存语义。', '返回函数的 Getter 可以接收参数，但每次访问都会重新执行，应按调用频率权衡是否使用。', 'Getter 依赖的状态变化时会自动失效重算，无需手动清除缓存。'],
@@ -963,7 +1023,8 @@ export const lessons: Lesson[] = [
 {
     id: 'K_35', title: 'Pinia Actions 与异步操作', navTitle: 'Pinia Actions', category: 'Pinia 进阶',
     path: '/vue/k-35/pinia-actions', summary: '掌握 Pinia 中修改状态的主要方式，理解同步异步 action 与 $onAction 拦截。',
-    demo: K35PiniaActions, code: K35Code, language: 'vue',
+    demo: null,
+    demoComponent: K35PiniaActions, code: K35Code, language: 'vue',
     principle: 'Action 是 Pinia 中修改状态的入口（相比 Vuex 移除了 mutations，直接改 state）。它支持同步与异步，可以用 async/await 完成请求与状态流转，加载态、失败处理也收进 action，把数据的读取与变更集中到一处。$onAction 可在 action 调用前后与出错时挂接钩子，用于日志、埋点与监控。',
     flow: ['在 store 中定义普通函数作为 action，通过赋值直接修改 state。', '异步 action 使用 async/await，在内部维护 loading 并用 finally 关闭，返回 Promise 供调用方 await。', 'action 之间可以相互调用和组合，把下单、备餐、配送、完成等步骤串成完整流程。', '组件只表达用户意图（如提交订单），由 action 负责实际的数据操作与状态更新。'],
     notes: ['相比 Vuex，Pinia 没有 mutations，同步与异步的状态修改都统一写入 action。', '$onAction 提供 before、after 与 onError 钩子，可拦截调用、读取返回值并上报异常。', '复杂业务流程拆成多个小 action 组合复用，避免单个 action 逻辑臃肿、难以测试。', '异步 action 要处理好 loading 与竞态，避免旧请求返回覆盖新状态。'],
@@ -972,7 +1033,8 @@ export const lessons: Lesson[] = [
 {
     id: 'K_36', title: 'Pinia DevTools 与时间旅行调试', navTitle: 'Pinia DevTools', category: 'Pinia 进阶',
     path: '/vue/k-36/pinia-devtools', summary: '使用 Vue DevTools 查看 Pinia 状态、提交历史和时间旅行调试。',
-    demo: K36PiniaDevtools, code: K36Code, language: 'vue',
+    demo: null,
+    demoComponent: K36PiniaDevtools, code: K36Code, language: 'vue',
     principle: 'Pinia 与 Vue DevTools 深度集成，可以查看每个 store 的当前状态、action 调用记录，并基于快照做时间旅行回溯，从而定位状态在哪个 action 被改坏。其底层的"快照 + 回放"原理可以用 $subscribe 捕获变更生成快照、用 $patch 回放快照来模拟，本课 demo 正是用这两个 API 手工实现了 DevTools 的时间旅行与状态检查。',
     flow: ['通过 $subscribe 监听状态变更并保存快照，得到一份可按时间索引的历史记录。', '组件触发 addNote、setMood 等 action 时，变更被采样进时间线。', '在时间线上选择某个历史位置，用 store.$patch(快照) 回放状态，实现撤销与恢复。', '开发时结合 import.meta.hot 与 acceptHMRUpdate，修改 Store 代码不丢失现场状态。'],
     notes: ['真实调试依赖浏览器里的 Vue DevTools，可在 Pinia 面板直接查看各 store 状态与提交历史。', '时间旅行本质是"快照 + 回放"，可在业务里用 $subscribe 与 $patch 实现撤销/重做。', 'action 命名要表达业务意图，命名清晰的 action 在 DevTools 里更容易定位问题来源。', 'DevTools 主要服务开发调试阶段，生产环境的异常排查靠日志与监控接入。'],
@@ -981,7 +1043,8 @@ export const lessons: Lesson[] = [
 {
     id: 'K_37', title: 'Pinia Store 单元测试', navTitle: 'Pinia 测试', category: 'Pinia 进阶',
     path: '/vue/k-37/pinia-testing', summary: '学习如何为 Pinia Store 编写单元测试，使用独立 Pinia 实例避免状态污染。',
-    demo: K37PiniaTesting, code: K37Code, language: 'vue',
+    demo: null,
+    demoComponent: K37PiniaTesting, code: K37Code, language: 'vue',
     principle: 'Pinia Store 很容易单元测试：先用 setActivePinia(createPinia()) 创建并激活一个独立的 Pinia 实例，再调用 useXxxStore 得到普通 store 对象，之后直接调用 action、读取 state 与 getter 并断言。由于每个用例重建实例，测试间状态互不污染，也没有框架层 mock 的负担。',
     flow: ['每个测试里用 setActivePinia(createPinia()) 创建全新的 Pinia 实例。', '调用 useTaskStore() 获取 store，先还原到初始状态保证用例独立。', '直接调用 addTask、toggleTask 等 action，随后断言 tasks、completedCount 等状态与 getter。', '对异步 action 先 await 完成再断言，确保状态已到位再校验结果。'],
     notes: ['action 与 getter 承载纯业务规则，应优先补单测；低价值快照测试要控制数量。', 'Setup Store 没有内建的 $reset 还原初始状态，需自行实现重置或在每个用例重建实例。', '异步 action 用 vi.mock 模拟 API，并 await 返回值避免竞态导致断言不稳定。', '断言应写业务结果而非内部实现，Store 重构后用例仍能复用。'],
@@ -994,7 +1057,8 @@ export const lessons: Lesson[] = [
     category: '组件进阶',
     path: '/vue/k-38/define-model',
     summary: '用课程提醒设置对比 defineModel 宏与手写 props/emits，展示 Vue 3.4 起组件级 v-model 的简化写法。',
-    demo: K38DefineModel,
+    demo: null,
+    demoComponent: K38DefineModel,
     code: K38Code,
     language: 'vue',
     principle:

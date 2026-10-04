@@ -1,15 +1,30 @@
 import type { Component } from 'vue'
-import { defineAsyncComponent } from 'vue'
 import type { Lesson } from '../lessons'
 import { restoreCodeSource } from '../code-restore'
-
-const demoModules = import.meta.glob<Component>('../../demos/*.vue', { import: 'default' })
-
-function createDemo(name: string) {
-  const loader = demoModules[`../../demos/${name}.vue`]
-  if (!loader) throw new Error(`未找到内容组件：${name}`)
-  return defineAsyncComponent(() => loader())
-}
+import F01Basics from '../../demos/F01BasicsArticle.vue'
+import F02FormatConversion from '../../demos/F02FormatConversionArticle.vue'
+import F03VideoInfo from '../../demos/F03VideoInfoArticle.vue'
+import F04Resolution from '../../demos/F04ResolutionArticle.vue'
+import F05Bitrate from '../../demos/F05BitrateArticle.vue'
+import F06Framerate from '../../demos/F06FramerateArticle.vue'
+import F07Crop from '../../demos/F07CropArticle.vue'
+import F08Scale from '../../demos/F08ScaleArticle.vue'
+import F09Pad from '../../demos/F09PadArticle.vue'
+import F10Overlay from '../../demos/F10OverlayArticle.vue'
+import F11Audio from '../../demos/F11AudioArticle.vue'
+import F12Volume from '../../demos/F12VolumeArticle.vue'
+import F13Subtitle from '../../demos/F13SubtitleArticle.vue'
+import F14Screenshot from '../../demos/F14ScreenshotArticle.vue'
+import F15Thumbnail from '../../demos/F15ThumbnailArticle.vue'
+import F16Concat from '../../demos/F16ConcatArticle.vue'
+import F17Streaming from '../../demos/F17StreamingArticle.vue'
+import F18HardwareAccel from '../../demos/F18HardwareAccelArticle.vue'
+import F19Drawtext from '../../demos/F19DrawtextArticle.vue'
+import F20Fade from '../../demos/F20FadeArticle.vue'
+import F21ColorSpace from '../../demos/F21ColorSpaceArticle.vue'
+import F22Batch from '../../demos/F22BatchArticle.vue'
+import F23Gif from '../../demos/F23GifArticle.vue'
+import F24Metadata from '../../demos/F24MetadataArticle.vue'
 
 const ffmpegCodeModules = import.meta.glob<string>('../../demos/ffmpeg-code/*', { query: '?raw', import: 'default' })
 
@@ -18,31 +33,6 @@ function createCodeLoader(path: string) {
   if (!loader) throw new Error(`未找到内容源码：${path}`)
   return () => loader().then(restoreCodeSource)
 }
-
-const F01Basics = createDemo('F01BasicsArticle')
-const F02FormatConversion = createDemo('F02FormatConversionArticle')
-const F03VideoInfo = createDemo('F03VideoInfoArticle')
-const F04Resolution = createDemo('F04ResolutionArticle')
-const F05Bitrate = createDemo('F05BitrateArticle')
-const F06Framerate = createDemo('F06FramerateArticle')
-const F07Crop = createDemo('F07CropArticle')
-const F08Scale = createDemo('F08ScaleArticle')
-const F09Pad = createDemo('F09PadArticle')
-const F10Overlay = createDemo('F10OverlayArticle')
-const F11Audio = createDemo('F11AudioArticle')
-const F12Volume = createDemo('F12VolumeArticle')
-const F13Subtitle = createDemo('F13SubtitleArticle')
-const F14Screenshot = createDemo('F14ScreenshotArticle')
-const F15Thumbnail = createDemo('F15ThumbnailArticle')
-const F16Concat = createDemo('F16ConcatArticle')
-const F17Streaming = createDemo('F17StreamingArticle')
-const F18HardwareAccel = createDemo('F18HardwareAccelArticle')
-const F19Drawtext = createDemo('F19DrawtextArticle')
-const F20Fade = createDemo('F20FadeArticle')
-const F21ColorSpace = createDemo('F21ColorSpaceArticle')
-const F22Batch = createDemo('F22BatchArticle')
-const F23Gif = createDemo('F23GifArticle')
-const F24Metadata = createDemo('F24MetadataArticle')
 
 const F01Code = createCodeLoader('ffmpeg-code/F01Code.sh.txt')
 const F02Code = createCodeLoader('ffmpeg-code/F02Code.sh.txt')
@@ -74,7 +64,8 @@ export const lessons: Lesson[] = [
     id: 'F_01', title: 'FFmpeg 基础概念与安装', navTitle: '基础概念',
     category: 'ffmpeg',
     path: '/ffmpeg/f-1/basics', summary: '理解容器、编解码器、流、帧、码率等核心概念，掌握 FFmpeg 的安装与基本命令结构。',
-    demo: F01Basics, code: F01Code, language: 'bash',
+    demo: null,
+    demoComponent: F01Basics, code: F01Code, language: 'bash',
     principle: 'FFmpeg 由三个核心概念组成：容器（Container，如 MP4、MKV）负责封装，编解码器（Codec，如 H.264、H.265）负责压缩与解压，流（Stream）是容器内的音视频轨道。此外，帧（Frame）是单张画面，码率（Bitrate）是每秒平均数据量，它们与容器/编解码器构成理解 FFmpeg 的几大核心概念；本课先建立直觉，具体的帧率与码率调节见后续课程。FFmpeg 命令行的基本结构是 ffmpeg [全局选项] [输入选项] -i 输入 [输出选项] 输出。',
     flow: ['用 ffprobe -show_streams 查看一个 MP4 里封装了哪些流、各用什么编码。', '按 ffmpeg [全局选项] -i 输入 [输出选项] 输出 的结构拆解一条命令。', '在自己的系统上安装 FFmpeg 并运行 ffmpeg -version 验证。', '对照 ffprobe 输出，指出同一文件里容器格式与编码格式的区别。'],
     notes: ['容器格式不等于编码格式，MP4 容器可以装 H.264 也可以装 H.265。', 'ffprobe 是 FFmpeg 套件中的媒体信息分析工具。', '使用 -hide_banner 可以隐藏编译信息，让输出更整洁。', 'Windows 安装后需把 bin 目录加入 PATH，否则命令行找不到 ffmpeg。'],
@@ -85,7 +76,8 @@ export const lessons: Lesson[] = [
     id: 'F_02', title: '格式转换与转封装', navTitle: '格式转换',
     category: 'ffmpeg',
     path: '/ffmpeg/f-2/format-conversion', summary: '掌握不同容器格式之间的转换，理解转封装（不重新编码）与转码（重新编码）的区别。',
-    demo: F02FormatConversion, code: F02Code, language: 'bash',
+    demo: null,
+    demoComponent: F02FormatConversion, code: F02Code, language: 'bash',
     principle: '格式转换有两种本质不同的方式：转封装（-c copy）只是按新的容器（如 MKV、MP4）重新封装原始数据包，不重新编码，速度极快，但要求目标容器兼容源流的编码格式；转码（Transcoding）会通过解码再编码更换编解码器，耗时较长但可以适配任意容器。',
     flow: ['使用 -c copy 做快速无损转封装（不改编码）。', '使用 -c:v / -c:a 指定编码器做转码。', '根据目标容器的编码兼容性决定采用转封装还是转码。', '用 -v error 观察实际日志，验证是否如预期未重新编码。'],
     notes: ['MP4 对音频编码兼容性有限，例如 FLAC 无损音频在 MP4 中不被广泛支持，应换用 MKV 容器或转码为 AAC。', '-c copy 只搬运数据包而非重编码，速度几乎不随编码复杂度变化，但容器不支持源编码时会直接报错。', '-c copy 搭配 -ss 裁剪依赖关键帧定位、并不精确，需要精确裁剪时应重新编码或将 -ss 放在 -i 之后。', '判断能否转封装看容器支持矩阵：不确定时先试 -c copy，报错再改为转码。'],
@@ -95,7 +87,8 @@ export const lessons: Lesson[] = [
     id: 'F_03', title: '媒体信息分析与 ffprobe', navTitle: '媒体信息',
     category: 'ffmpeg',
     path: '/ffmpeg/f-3/video-info', summary: '使用 ffprobe 和 FFmpeg 内置分析选项，获取视频/音频的详细信息，包括编码格式、分辨率、码率、时长等。',
-    demo: F03VideoInfo, code: F03Code, language: 'bash',
+    demo: null,
+    demoComponent: F03VideoInfo, code: F03Code, language: 'bash',
     principle: 'ffprobe 是 FFmpeg 套件中专用于媒体分析的命令行工具，支持多种输出格式（JSON、XML、Flat 等），可以精确获取容器中每个流的编码参数、时长、码率、帧率等信息，是自动化媒体处理流程的第一步。自动化脚本先探测参数、再据此生成处理命令，能避免因源文件规格差异导致批量任务失败。',
     flow: ['使用 ffprobe -show_format 获取容器信息。', '使用 ffprobe -show_streams 获取每个流的详细信息。', '使用 -print_format json 输出结构化数据供程序解析。', '用 jq/python 解析 JSON 输出，把探测结果接进自动化脚本。'],
     notes: ['ffprobe -v error 可以只输出媒体信息不输出日志。', '使用 -show_frames 可以获取每一帧的详细信息（输出量巨大）。', 'JSON 输出格式非常适合与 Python/Node.js 等脚本语言集成。', '-select_streams v 只看视频流，-show_entries 只取所需字段，可大幅精简输出。'],
@@ -105,7 +98,8 @@ export const lessons: Lesson[] = [
     id: 'F_04', title: '分辨率调整与缩放滤镜', navTitle: '分辨率调整',
     category: 'ffmpeg',
     path: '/ffmpeg/f-4/resolution', summary: '使用 scale 滤镜调整视频分辨率，掌握等比缩放、指定缩放、填充与裁剪等常见场景。',
-    demo: F04Resolution, code: F04Code, language: 'bash',
+    demo: null,
+    demoComponent: F04Resolution, code: F04Code, language: 'bash',
     principle: 'scale 滤镜通过指定输出宽高调整视频分辨率，语法为 scale=width:height。其中一维写负值时表示按原宽高比自动反推另一维：-2 会额外把结果取整为偶数，避免因色度二次采样（如 yuv420）规格导致编码器拒绝非偶数尺寸，因此等比缩放推荐使用 -2。源与目标宽高比不一致时，可用 force_original_aspect_ratio=decrease/increase 让画面在指定矩形内保持比例，并配合 pad 或 crop 得到加黑边或裁切的画面。',
     flow: ['使用 scale=width:height 指定目标分辨率。', '使用 scale=-1:720 保持宽高比只指定高度。', '使用 force_original_aspect_ratio 在目标矩形内适配。', '结合 pad 把比例不符的画面补边输出，核对最终尺寸与预期一致。'],
     notes: ['缩放时建议使用 -2 而不是 -1，确保尺寸是偶数（兼容编码器要求）。', '上采样（小分辨率放大）会导致画质损失，应尽量避免。', '使用 lanczos 缩放算法可以获得比默认 bilinear 更好的画质。', 'scale 里写奇数尺寸会被编码器拒绝，宽高都应保持偶数或用 -2 自动取偶。'],
@@ -115,7 +109,8 @@ export const lessons: Lesson[] = [
     id: 'F_05', title: '码率控制与视频质量', navTitle: '码率控制',
     category: 'ffmpeg',
     path: '/ffmpeg/f-5/bitrate', summary: '理解码率（Bitrate）对视频质量和文件大小的影响，掌握 CBR、CRF、VBR 等码率控制模式。',
-    demo: F05Bitrate, code: F05Code, language: 'bash',
+    demo: null,
+    demoComponent: F05Bitrate, code: F05Code, language: 'bash',
     principle: '码率控制决定视频每秒使用多少比特存储数据。CBR（恒定码率）适合流媒体，CRF（恒定速率因子）适合归档和高质量存储，VBR（可变码率）在质量和文件大小间取得平衡。x264/x265 的 CRF 取值范围是 0-51，默认 23，值越小质量越高文件越大。',
     flow: ['用同一源文件分别以 -crf 18/23/28 编码，对比文件大小与画质。', '用 -maxrate 与 -bufsize 限制 CRF 模式的峰值码率。', '用 -b:v/-minrate/-maxrate 配置 CBR 或 VBR 以适配流媒体场景。', '归档前先用 10 秒样片对比不同 CRF 的画质与体积，再确定参数。'],
     notes: ['CRF 18-28 是常用范围，18 接近视觉无损。', '使用 -maxrate 和 -bufsize 可以限制 VBR 的码率峰值。', '动画内容通常比实拍视频需要更低的码率。', 'CRF 与两遍编码适合点播归档，直播场景优先 CBR 保证传输稳定。'],
@@ -125,7 +120,8 @@ export const lessons: Lesson[] = [
     id: 'F_06', title: '帧率修改与抽帧补帧', navTitle: '帧率修改',
     category: 'ffmpeg',
     path: '/ffmpeg/f-6/framerate', summary: '理解帧率（FPS）的概念，掌握修改帧率、抽帧、补帧（插值）的操作方法。',
-    demo: F06Framerate, code: F06Code, language: 'bash',
+    demo: null,
+    demoComponent: F06Framerate, code: F06Code, language: 'bash',
     principle: '帧率（FPS）决定视频每秒显示的画面数量。调整帧率主要是在重新编码时用 -vf fps=30 指定目标帧率：fps 滤镜基于时间戳选择并复制帧，既可抽帧（如 60→30）也可单纯补帧（如 24→30，此时只是复制已有帧，画面流畅度并不提升）。要真正生成中间过渡帧，需要 minterpolate 运动插值。输出端 -r 也能设定目标帧率，但通过丢帧/复制帧粗略对齐，控制不如 fps 滤镜精细。降低帧率会永久丢弃帧，无法恢复。',
     flow: ['用 -vf fps=30 把不同来源的视频统一到目标帧率。', '对比 fps 滤镜与输出端 -r 在丢帧/复制帧行为上的差异。', '用 select+vsync vfr 抽取关键帧，或用 minterpolate 插值补帧到 60fps。', '检查输出时间戳是否连续，避免抽帧或补帧后出现抖动。'],
     notes: ['将高帧率视频转为低帧率会丢弃帧，无法恢复。', '使用 minterpolate 补帧效果有限，可能产生伪影。', 'NTSC 标准是 23.976/29.97 FPS，PAL 是 25/50 FPS。', '混合帧率素材先统一时间基再处理，否则时间戳错乱会导致音画不同步。'],
@@ -135,7 +131,8 @@ export const lessons: Lesson[] = [
     id: 'F_07', title: '视频裁剪（Crop）', navTitle: '视频裁剪',
     category: 'ffmpeg',
     path: '/ffmpeg/f-7/crop', summary: '使用 crop 滤镜裁剪视频画面，去除黑边、聚焦特定区域或调整为不同宽高比。',
-    demo: F07Crop, code: F07Code, language: 'bash',
+    demo: null,
+    demoComponent: F07Crop, code: F07Code, language: 'bash',
     principle: 'crop 滤镜通过指定输出宽度、高度和起始坐标（相对于原始画面）来裁剪视频。语法为 crop=w:h:x:y，其中 x 和 y 可以使用 in_w 和 in_h 变量表达式自动计算居中位置，如 crop=ih*9/16:ih:(in_w-ih*9/16)/2:0 可以裁剪出居中的 9:16 竖屏画面。',
     flow: ['使用 crop=width:height:x:y 指定裁剪区域。', '使用表达式自动计算居中裁剪。', '结合 ffprobe 获取原始分辨率以确定裁剪参数。', '裁完后用 ffprobe 复核输出分辨率，确认没有偏移或尺寸错误。'],
     notes: ['cropdetect 滤镜可以自动检测黑边并返回建议的裁剪参数。', '裁剪后的分辨率建议为偶数以避免编码器兼容性问题。', '使用 -vf crop 而不是 -af crop（后者用于音频）。', 'x/y 表达式在逐帧变化时会逐帧计算，固定值可减少不必要的性能开销。'],
@@ -145,7 +142,8 @@ export const lessons: Lesson[] = [
     id: 'F_08', title: '高级缩放与宽高比处理', navTitle: '高级缩放',
     category: 'ffmpeg',
     path: '/ffmpeg/f-8/scale', summary: '掌握缩放算法选择、色彩空间感知缩放、HDR 内容缩放等高级缩放技术。',
-    demo: F08Scale, code: F08Code, language: 'bash',
+    demo: null,
+    demoComponent: F08Scale, code: F08Code, language: 'bash',
     principle: 'FFmpeg 的 scale 滤镜支持多种缩放算法（bilinear、bicubic、lanczos、spline、neighbor 等），在速度与画质间各有取舍，放大时 lanczos 与 bicubic 通常优于默认的 bilinear。缩放本身并不做色彩空间转换，因此处理 10-bit/HDR 内容时需用 -pix_fmt 保持位深，并通过 scale 的 out_color_matrix/out_range 或 zscale 滤镜设置正确的色彩元数据，避免输出端解析出错。',
     flow: ['分别用 bilinear、bicubic、lanczos 缩放同一素材，对比画质与耗时。', '缩放 10-bit/HDR 素材时用 -pix_fmt yuv420p10le 保持位深与色彩元数据。', '用 zscale 滤镜在缩放同时完成色彩空间（bt2020 等）的精确处理。', '输出后用 ffprobe 核对 color_space 与位深标记是否与预期一致。'],
     notes: ['lanczos 与 bicubic 在放大画质上优于默认 bilinear，缩小场景差异不明显。', '保持 10-bit 位深靠输出端的 -pix_fmt yuv420p10le；scale 的 out_color_matrix/out_range 只改写色彩矩阵与范围标记，真正的色彩转换需用 colorspace 或 zscale 滤镜。', 'zscale 滤镜基于 zimg 库，参数写法与 scale 不同（f=/p=/m=/r=），适合在缩放同时做精确的色彩空间处理。', 'HDR 素材缩放后要复查色彩元数据，缺失会让播放器按 SDR 解析导致画面发灰。'],
@@ -155,7 +153,8 @@ export const lessons: Lesson[] = [
     id: 'F_09', title: '画面填充（Pad）与宽高比转换', navTitle: '画面填充',
     category: 'ffmpeg',
     path: '/ffmpeg/f-9/pad', summary: '使用 pad 滤镜为视频添加黑边或自定义颜色边距，将视频适配到不同宽高比的播放区域。',
-    demo: F09Pad, code: F09Code, language: 'bash',
+    demo: null,
+    demoComponent: F09Pad, code: F09Code, language: 'bash',
     principle: 'pad 滤镜通过在视频画面周围添加填充区域来实现宽高比转换，而不裁剪或拉伸原始内容。语法为 pad=w:h:x:y:color，其中 w 和 h 是输出尺寸，x 和 y 是原始画面在新画布上的位置。常用 (ow-iw)/2:(oh-ih)/2 让原始画面居中。',
     flow: ['用 pad=1920:1440:(ow-iw)/2:(oh-ih)/2 为 16:9 视频添加左右黑边适配 4:3。', '用 pad 的 x/y 表达式把原始画面居中到目标画布。', '把竖屏视频 scale 后用 pad 加黑边，适配横屏播放器。', '用 ffprobe 核对补边后的分辨率与比例是否符合播放器要求。'],
     notes: ['pad 滤镜的 color 参数支持颜色名称、十六进制值和表达式。', '使用 pad=ceil(iw/2)*2:ceil(ih/2)*2 可以确保输出尺寸为偶数。', 'pad 常与 scale 组合实现「适配并加黑边」的转换（类似 CSS object-fit: contain）；与 crop 组合则得到「填满且裁切」的 cover 效果。', '补边颜色默认黑色；浅色背景下改用 white 或品牌色，避免缝隙突兀。'],
@@ -165,7 +164,8 @@ export const lessons: Lesson[] = [
     id: 'F_10', title: '画面叠加与画中画（Overlay）', navTitle: '画面叠加',
     category: 'ffmpeg',
     path: '/ffmpeg/f-10/overlay', summary: '使用 overlay 滤镜实现画中画、水印添加、多画面拼接等叠加效果。',
-    demo: F10Overlay, code: F10Code, language: 'bash',
+    demo: null,
+    demoComponent: F10Overlay, code: F10Code, language: 'bash',
     principle: 'overlay 滤镜需要配合复杂的滤镜图（Filter Complex，-filter_complex）使用，通过将两个视频流叠加来实现画中画效果。基本语法为 [背景][前景]overlay=x:y。可以使用 enable 选项控制叠加的时间区间，实现动态显示/隐藏。',
     flow: ['把滤镜图写成 [0:v][1:v]overlay=x:y 的形式并理解流标签的含义。', '用 scale + overlay 把第二路视频叠成右上角画中画。', '用 PNG Logo 与 overlay 表达式实现定位水印或滚动水印。', '用 enable 控制显隐区间，实现水印只在指定时间段出现。'],
     notes: ['overlay 的坐标原点 (0,0) 位于画面左上角。', '使用 shortest=1 可以让输出在较短的输入结束时停止。', '叠加透明 PNG 水印时，需先用 format=rgba（或 format=yuva420p）把前景转为带 alpha 的像素格式，overlay 才能正确完成半透明合成。', 'overlay 的 x/y 支持表达式（如 W-w-10 贴右上角），负值可让画面部分出界。'],
@@ -175,7 +175,8 @@ export const lessons: Lesson[] = [
     id: 'F_11', title: '音频处理基础', navTitle: '音频处理',
     category: 'ffmpeg',
     path: '/ffmpeg/f-11/audio', summary: '掌握音频采样率、声道数、编码格式、码率等核心参数的调整方法。',
-    demo: F11Audio, code: F11Code, language: 'bash',
+    demo: null,
+    demoComponent: F11Audio, code: F11Code, language: 'bash',
     principle: '音频处理的核心参数包括：采样率（Sample Rate，常用 44100Hz 或 48000Hz）、声道数（单声道/立体声/5.1 环绕声）、编码格式（AAC、MP3、Opus 等）与码率（决定音质和文件大小）。FFmpeg 用 -ar 设置采样率、-ac 设置声道数、-b:a 设置音频码率；改变 -ar/-ac 会触发音频重采样并重新编码，示例中配合 -c:v copy 仅保持视频流不动。',
     flow: ['用 -ar/-ac 调整采样率与声道数，并用 -c:v copy 保持视频不动。', '用 -b:a 与 -c:a 控制音频码率与编码格式。', '用 -vn 提取纯音频，按场景选择 AAC、MP3 或 Opus。', '用 ffprobe 复核输出的采样率与声道数，确认参数已生效。'],
     notes: ['AAC 是目前最广泛支持的音频编码格式，推荐用于大多数场景。', 'Opus 编码在低码率下音质优于 AAC，适合 WebRTC 和语音通话。', '将多声道音频降级为立体声时使用 -ac 2，注意可能需要使用 pan 或 aresample 滤镜获得更好的混音效果。', '改为单声道（-ac 1）常用于语音类内容，能显著减小文件体积。'],
@@ -185,7 +186,8 @@ export const lessons: Lesson[] = [
     id: 'F_12', title: '音量调整与音频滤镜', navTitle: '音量调整',
     category: 'ffmpeg',
     path: '/ffmpeg/f-12/volume', summary: '使用 volume 滤镜调整音量，掌握标准化、动态范围压缩、静音检测等音频处理技术。',
-    demo: F12Volume, code: F12Code, language: 'bash',
+    demo: null,
+    demoComponent: F12Volume, code: F12Code, language: 'bash',
     principle: 'volume 滤镜通过调整音频采样值来改变音量，可以使用分贝（dB）或倍数作为参数。loudnorm 滤镜可以实现 EBU R128 标准的响度标准化，使不同视频的音量保持一致。silencedetect 滤镜可以检测音频中的静音片段，常用于自动剪辑和章节分割。',
     flow: ['使用 volume 滤镜调整绝对音量。', '使用 loudnorm 实现响度标准化。', '使用 silencedetect 检测并处理静音片段。', '用 loudnorm 两遍处理（先测量再应用）获得更稳定的响度结果。'],
     notes: ['volume=0.5 是将音量减半，volume=-3dB 是将音量降低 3 分贝。', '响度标准化目标值通常为 -16LUFS（网络视频）或 -24LUFS（广播）。', '过大的音量增益会导致削波失真（Clipping），应配合 limiter 滤镜使用。', 'silencedetect 的时间戳输出在 stderr，可接进脚本自动完成静音剪辑。'],
@@ -195,7 +197,8 @@ export const lessons: Lesson[] = [
     id: 'F_13', title: '字幕处理与烧录', navTitle: '字幕处理',
     category: 'ffmpeg',
     path: '/ffmpeg/f-13/subtitle', summary: '掌握外挂字幕、内嵌字幕和烧录字幕（Hardsub）三种字幕处理方式。',
-    demo: F13Subtitle, code: F13Code, language: 'bash',
+    demo: null,
+    demoComponent: F13Subtitle, code: F13Code, language: 'bash',
     principle: '字幕处理有三种方式：外挂字幕（独立的 SRT/ASS 文件，播放时加载）、内嵌字幕（将字幕流封装进容器，可开关）和烧录字幕（将字幕渲染到视频画面上，无法关闭）。烧录字幕使用 subtitles 滤镜，需要编译时启用了 libass 支持；内嵌字幕可随时开关，是发布多语言版本更灵活的选择。',
     flow: ['用 -c:s mov_text/-c:s srt 把外挂字幕封装为内嵌字幕流。', '用 subtitles 滤镜把 SRT/ASS 烧录进画面，中文注意 charenc=UTF-8。', '用 ffprobe -select_streams s 检查字幕流并选择要保留的轨道。', '用 -map 明确指定要输出的字幕轨，避免多轨时默认行为不符预期。'],
     notes: ['烧录字幕会增加编码工作量，且字幕一旦烧录无法移除。', 'ASS 格式支持丰富的样式和定位，SRT 格式简单但样式有限。', '使用中文字幕时需注意编码问题，建议使用 UTF-8 编码的 SRT 文件。', 'Windows 路径在 subtitles 滤镜中要转义冒号与反斜杠，或用单引号包裹路径。'],
@@ -205,7 +208,8 @@ export const lessons: Lesson[] = [
     id: 'F_14', title: '视频截图与单帧导出', navTitle: '视频截图',
     category: 'ffmpeg',
     path: '/ffmpeg/f-14/screenshot', summary: '从视频中提取指定时间点的画面，掌握精确截图、批量截图和高质量静态图像导出。',
-    demo: F14Screenshot, code: F14Code, language: 'bash',
+    demo: null,
+    demoComponent: F14Screenshot, code: F14Code, language: 'bash',
     principle: '使用 -ss 参数指定截图时间位置，配合 -vframes 1 只输出一帧画面。-ss 放在 -i 之前是输入选项（定位速度快但可能不精确），放在 -i 之后是输出选项（精确定位但需解码到指定位置）。输出图像格式由文件扩展名决定（.jpg、.png、.webp 等）。',
     flow: ['使用 -ss 和 -vframes 1 截取指定时间点的画面。', '理解输入选项和输出选项的 -ss 在精度上的差异。', '掌握批量截图（使用 select 滤镜或 fps 滤镜）。', '用 ffprobe 核对截图的宽高与预期比例一致。'],
     notes: ['PNG 格式无损但文件大，JPEG 有损压缩但文件小，WebP 在质量和大小间取得良好平衡。', '使用 -q:v 2 可以设置 JPEG 输出质量（1-31，值越小质量越高）。', '批量截图时建议使用 printf 风格的输出文件名（如 thumbnail_%04d.jpg）。', '截图时间超出视频时长会得到空输出，脚本中先用 ffprobe 取时长做边界校验。'],
@@ -215,7 +219,8 @@ export const lessons: Lesson[] = [
     id: 'F_15', title: '缩略图与预览图生成', navTitle: '缩略图',
     category: 'ffmpeg',
     path: '/ffmpeg/f-15/thumbnail', summary: '生成视频缩略图网格（Contact Sheet）和 HLS 风格预览图，提升视频管理和用户体验。',
-    demo: F15Thumbnail, code: F15Code, language: 'bash',
+    demo: null,
+    demoComponent: F15Thumbnail, code: F15Code, language: 'bash',
     principle: '缩略图网格（Contact Sheet）是将多个时间点的截图排列在一张图片上，方便快速浏览视频内容。可以使用 select 滤镜定期提取帧，然后使用 tile 滤镜将多帧排列为网格。HLS 协议的预览图（VTT + 缩略图雪碧图）则需要将缩略图合并为一张大图并生成 WebVTT 索引文件。',
     flow: ['用 fps + scale + tile=5x4 生成一张缩略图网格总览图。', '用 drawtext 给每个缩略图标注时间戳。', '按 HLS 预览图思路把缩略图拼成雪碧图并生成索引。', '核对网格行列数与截图数量匹配，避免 tile 末行出现空块。'],
     notes: ['tile=5x4 表示生成 5 列 4 行的缩略图网格，共 20 张。', '使用 drawtext 滤镜可以在每个缩略图下方添加时间戳。', '缩略图网格适合快速预览，但不适合精确定位（不如逐帧浏览）。', '先取视频时长再计算抽帧间隔，让网格时间点均匀覆盖全片。'],
@@ -225,7 +230,8 @@ export const lessons: Lesson[] = [
     id: 'F_16', title: '视频合并与拼接', navTitle: '视频拼接',
     category: 'ffmpeg',
     path: '/ffmpeg/f-16/concat', summary: '掌握三种视频拼接方法：concat 协议（无损）、concat 滤镜（需重编码）和 concat 分离器（需编码格式一致）。',
-    demo: F16Concat, code: F16Code, language: 'bash',
+    demo: null,
+    demoComponent: F16Concat, code: F16Code, language: 'bash',
     principle: '视频拼接有三种方法：1) concat 协议（file1.ts|file2.ts，要求编码参数完全一致，无损但局限性大）；2) concat 分离器（-f concat -i list.txt，要求编码参数一致但可以不同的文件容器）；3) concat 滤镜（filter_complex concat，可以拼接不同编码的视频但需重新编码）。选择哪种方法取决于源视频的编码参数是否一致以及是否允许重新编码。',
     flow: ['先统一各片段的编码参数，再用 concat 分离器无损拼接。', '用 concat 协议（concat:file1.ts|file2.ts）拼接 TS 片段。', '编码参数不一致时用 concat 滤镜重新编码拼接。', '拼接后用 ffprobe 检查总时长是否等于各片段之和。'],
     notes: ['使用 concat 协议或分离器时，所有输入文件必须有相同的编码参数（分辨率、帧率、编码格式等）。', '拼接不同帧率的视频时需要先使用 fps 滤镜统一帧率。', '在拼接列表中可以使用 inpoint 和 outpoint 参数指定每个文件的入点和出点。', '列表文件路径含空格或特殊字符时容易失败，建议用相对路径并逐行检查。'],
@@ -235,7 +241,8 @@ export const lessons: Lesson[] = [
     id: 'F_17', title: '流媒体与 RTMP 推流', navTitle: '流媒体',
     category: 'ffmpeg',
     path: '/ffmpeg/f-17/streaming', summary: '使用 FFmpeg 进行 RTMP 推流、HLS 切片和 DASH 流式传输，掌握直播和点播的流媒体技术。',
-    demo: F17Streaming, code: F17Code, language: 'bash',
+    demo: null,
+    demoComponent: F17Streaming, code: F17Code, language: 'bash',
     principle: 'FFmpeg 可以作为流媒体生产工具，将本地视频或实时采集的画面推送到 RTMP 服务器（如 Nginx-RTMP、SRS）。HLS（HTTP Live Streaming）通过将视频切片为小 TS 片段并生成 M3U8 播放列表，实现自适应码率流式传输。DASH 是类似的开放标准，使用 MP4 片段和 MPD 描述文件。',
     flow: ['用 -re -f flv 把文件按原始帧率推流到 rtmp:// 地址。', '用 -hls_time/-hls_list_size 生成 HLS 点播或直播切片。', '用 -f dash 生成 MPD 切片，按需选择 DASH 分发。', '用本地播放器或 hls.js 验证切片与播放列表可正常播放。'],
     notes: ['推流时使用 -re 参数可以按原始帧率读取输入，避免推送速度过快。', 'HLS 的 #EXT-X-ENDLIST 标签表示点播（直播结束），没有此标签表示直播流。', '多码率 HLS 需用 -map 将源视频拆成多路不同 -b:v 的变体分别切片，再生成引用各变体 m3u8 的 master playlist，播放器才能按带宽自动切换。', '推流地址不要暴露流密钥，生产环境用环境变量注入并限制访问来源。'],
@@ -245,7 +252,8 @@ export const lessons: Lesson[] = [
     id: 'F_18', title: '硬件加速编码与解码', navTitle: '硬件加速',
     category: 'ffmpeg',
     path: '/ffmpeg/f-18/hardware-accel', summary: '掌握使用 GPU 进行视频编码和解码的硬件加速技术，包括 NVIDIA NVENC、Intel QSV、AMD VCE 和 Apple VideoToolbox。',
-    demo: F18HardwareAccel, code: F18Code, language: 'bash',
+    demo: null,
+    demoComponent: F18HardwareAccel, code: F18Code, language: 'bash',
     principle: '硬件加速通过 GPU 专用的编码/解码电路来处理视频，速度远超 CPU 软编码，但画质通常略逊于同等码率下的 CPU 编码。NVIDIA GPU 使用 h264_nvenc/hevc_nvenc 编码器，Intel 集成显卡使用 h264_qsv/hevc_qsv，Apple 设备使用 h264_videotoolbox/hevc_videotoolbox，AMD GPU 使用 h264_amf/hevc_amf。',
     flow: ['用 ffmpeg -hwaccels 与 ffmpeg -encoders 检测本机可用的硬件编解码器。', '按平台选用硬件编码器（nvenc / qsv / amf / videotoolbox）加速编码。', '配合 -hwaccel 使用硬件解码，实现边解码边编码的完整硬件链路。', '对比软编与硬编在同一素材上的耗时与体积，确认加速收益后再切换。'],
     notes: ['-gpu N 仅 NVIDIA NVENC 支持，用于在多 GPU 系统上指定设备，Intel/AMD/Apple 无此参数。', '硬件编码器的质量/码率参数各不相同，如 NVENC 用 -rc + -b:v / -cq，QSV 用 -global_quality，使用前以 ffmpeg -h encoder=h264_nvenc 确认。', '硬件加速依赖驱动与 FFmpeg 编译配置，可通过 ffmpeg -hwaccels 和 ffmpeg -encoders 实际确认可用性。', '硬编画质偏软时提高目标码率或改用慢速预设（如 -preset p6），画质改善明显。'],
@@ -255,7 +263,8 @@ export const lessons: Lesson[] = [
     id: 'F_19', title: '文字叠加与动态字幕（Drawtext）', navTitle: '文字叠加',
     category: 'ffmpeg',
     path: '/ffmpeg/f-19/drawtext', summary: '使用 drawtext 滤镜在视频上添加动态文字，实现标题、台标、跑马灯、时间码显示等效果。',
-    demo: F19Drawtext, code: F19Code, language: 'bash',
+    demo: null,
+    demoComponent: F19Drawtext, code: F19Code, language: 'bash',
     principle: 'drawtext 滤镜可以在视频画面的指定位置渲染文字，支持自定义字体、大小、颜色、边框、阴影等样式。通过使用表达式和 ffmpeg 内置的时间变量（如 t 表示当前时间秒数），可以实现动态更新的文字效果，如实时时间码、滚动新闻条等。文本支持转义与格式化占位符（如 %{pts}），配合 enable 还能控制出现时段。',
     flow: ['用 drawtext 的 fontfile/fontsize/fontcolor 参数添加带样式的标题文字。', '用 x/y 定位与 bordercolor 边框把文字固定到角落或居中。', '用 %{pts\:hms} 与 x=w-t*20 等表达式实现时间码与跑马灯。', '用 enable 或 alpha 表达式控制文字只在指定时段显示。'],
     notes: ['使用 drawtext 需要 FFmpeg 编译时启用了 libfreetype 支持。', 'fontfile 参数指定字体文件路径，Windows 可以使用 C:/Windows/Fonts/ 下的字体。', '使用 x 和 y 参数的表达式可以实现文字动画（如从右向左滚动的跑马灯效果）。', '文字中的冒号与百分号需转义，drawtext 调试失败时先简化文本定位问题。'],
@@ -265,7 +274,8 @@ export const lessons: Lesson[] = [
     id: 'F_20', title: '淡入淡出与转场效果', navTitle: '淡入淡出',
     category: 'ffmpeg',
     path: '/ffmpeg/f-20/fade', summary: '使用 fade 滤镜实现视频和音频的淡入淡出效果，掌握基础转场和多轨道淡入淡出协调。',
-    demo: F20Fade, code: F20Code, language: 'bash',
+    demo: null,
+    demoComponent: F20Fade, code: F20Code, language: 'bash',
     principle: 'fade 滤镜可以对视频画面应用淡入（从黑场渐显）和淡出（渐隐到黑场）效果，也可以对音频应用淡入淡出。视频淡入淡出是对画面亮度/透明度在时间轴上的渐变，音频淡入淡出则是调整音量包络。多输入场景下，画面跨段过渡用 xfade 滤镜，音频衔接用 acrossfade 滤镜（两者都需要较新版本）。',
     flow: ['使用 fade=t=in:st=0:d=2 实现前 2 秒淡入。', '使用 fade=t=out:st=58:d=2 实现结束前 2 秒淡出。', '同时处理视频和音频的淡入淡出效果。', '跨片段转场用 xfade + acrossfade，注意两段时长与 offset 的对齐。'],
     notes: ['fade 滤镜的 st 参数是起始时间（秒），d 参数是持续时间（秒）。', 'xfade 滤镜支持多种视频转场效果（fade、wipeleft、circleopen 等），要求两路输入时间轴对齐并由 offset 控制切换点。', '音频淡入淡出标准做法是用 afade 滤镜（afade=t=in/out），也可用 volume 的 enable 表达式做更精细的分段控制。', '淡入淡出时长要与内容节奏匹配，2 秒以内通常最自然，避免拖沓。'],
@@ -275,7 +285,8 @@ export const lessons: Lesson[] = [
     id: 'F_21', title: '色彩空间与 HDR 处理', navTitle: '色彩空间',
     category: 'ffmpeg',
     path: '/ffmpeg/f-21/color-space', summary: '理解色彩空间（BT.601、BT.709、BT.2020）和色深（8-bit、10-bit）的概念，掌握 SDR 与 HDR 内容的处理和转换。',
-    demo: F21ColorSpace, code: F21Code, language: 'bash',
+    demo: null,
+    demoComponent: F21ColorSpace, code: F21Code, language: 'bash',
     principle: '色彩空间定义了视频中颜色的表示方式。BT.601 用于标清（SD），BT.709 用于高清（HD），BT.2020 用于超高清（UHD）和 HDR。色深决定每个颜色通道的精度，10-bit 比 8-bit 能表现更细腻的色彩渐变，减少色带（Banding）。HDR 内容还需要处理传输函数（PQ/HLG）和亮度元数据（MaxCLL、MaxFALL）。',
     flow: ['用 ffprobe 查看 color_space/color_transfer/color_primaries 三个标记。', '用 -pix_fmt yuv420p10le 与 -color_primaries 参数编码 10-bit HDR 视频。', 'HDR 转 SDR 时用 zscale 做色调映射，避免直接转换造成色偏。', '用 ffprobe 核对输出色彩标记，播放器按标记解析才能显示正确颜色。'],
     notes: ['将 HDR 内容转为 SDR 时需要进行色调映射（Tone Mapping），直接使用 zscale 或 colorspace 滤镜可能导致色偏。', '使用 -pix_fmt yuv420p10le 可以编码 10-bit 视频（需要编码器支持）。', 'HDR10 使用静态元数据，HDR10+ 和 Dolby Vision 使用动态元数据（需要额外处理）。', 'SDR 转 HDR 要谨慎：伪 HDR 效果不如原生，观看环境不匹配时反而更差。'],
@@ -285,7 +296,8 @@ export const lessons: Lesson[] = [
     id: 'F_22', title: '批量处理与 Shell 脚本', navTitle: '批量处理',
     category: 'ffmpeg',
     path: '/ffmpeg/f-22/batch', summary: '编写 Shell/PowerShell 脚本批量处理视频文件，掌握遍历、并行处理、错误处理和进度监控。',
-    demo: F22Batch, code: F22Code, language: 'bash',
+    demo: null,
+    demoComponent: F22Batch, code: F22Code, language: 'bash',
     principle: '批量视频处理通常涉及遍历文件、构造 FFmpeg 命令、处理输出路径和错误捕获。Bash 脚本可以使用 for 循环和 glob 模式遍历文件，PowerShell 可以使用 Get-ChildItem 和 ForEach-Object。并行处理可以通过 GNU parallel、xargs -P 或直接在脚本中后台运行多个 FFmpeg 进程实现。',
     flow: ['用 for f in *.mp4 与 ${f%.mp4} 前缀替换批量生成输出文件名。', '在批量命令中加 -nostdin 防止脚本卡住，并先小批量试跑。', '用 parallel -j 或后台进程 & + wait 并行处理多条转码。', '为每个任务记录日志与耗时，失败的文件单独标记便于重跑。'],
     notes: ['批量处理时注意磁盘 I/O 瓶颈，并行数不宜过高。', '使用 -nostdin 参数可以防止 FFmpeg 从标准输入读取导致脚本卡住。', '建议先对小批量文件测试命令正确性，再执行全量处理。', '文件名含空格或中文时脚本要正确加引号，避免参数被拆断。'],
@@ -295,7 +307,8 @@ export const lessons: Lesson[] = [
     id: 'F_23', title: 'GIF 动图生成与优化', navTitle: 'GIF 生成',
     category: 'ffmpeg',
     path: '/ffmpeg/f-23/gif', summary: '从视频生成高质量 GIF 动图，掌握调色板生成、尺寸优化和播放控制。',
-    demo: F23Gif, code: F23Code, language: 'bash',
+    demo: null,
+    demoComponent: F23Gif, code: F23Code, language: 'bash',
     principle: 'GIF 格式只支持 256 色，直接从视频生成 GIF 会导致严重色偏。正确方法是先生成调色板（palettegen 滤镜），然后使用调色板进行二次编码（paletteuse 滤镜）。通过指定较小的尺寸和减少颜色数可以大幅减小 GIF 文件大小。',
     flow: ['先执行 palettegen 生成调色板 PNG。', '再执行 paletteuse 配合调色板输出高质量 GIF。', '通过 fps/scale/颜色数控制 GIF 体积，必要时改用 WebP 动图。', '用浏览器实测循环与体积，确认满足渠道限制（如微信 10MB）后再发布。'],
     notes: ['GIF 的帧率通常设为 10-15 FPS 即可，过高的帧率会大幅增加文件大小。', 'FFmpeg 输出的 GIF 默认循环播放；循环次数在 GIF 内部的 Netscape 扩展里记录，若需精确控制次数需借助专门工具处理。', '考虑使用 WebP 动画或 MP4 短视频替代 GIF，在同等质量下文件更小。', '调色板只对当前片段有效：换了片段要重新生成，否则颜色会明显偏差。'],
@@ -305,7 +318,8 @@ export const lessons: Lesson[] = [
     id: 'F_24', title: '元数据编辑与章节标记', navTitle: '元数据',
     category: 'ffmpeg',
     path: '/ffmpeg/f-24/metadata', summary: '查看和编辑媒体文件的元数据（标题、作者、版权等），以及添加章节标记实现快速导航。',
-    demo: F24Metadata, code: F24Code, language: 'bash',
+    demo: null,
+    demoComponent: F24Metadata, code: F24Code, language: 'bash',
     principle: '媒体文件的元数据存储在容器层的元数据包中，可以使用 -metadata 参数在转码时添加或修改。MP4 容器使用 moov atom 存储元数据，MKV 使用 Tags 元素。章节标记（Chapters）可以嵌入到 MKV 和 MP4 文件中，播放器可以显示章节列表并支持跳转。',
     flow: ['用 -metadata title/artist 添加元数据，用 -map_metadata -1 清除全部元数据。', '用 -metadata:s:a:0 language=chi 修改指定流的语言标签。', '用 ffmetadata 文件 + -map_chapters 1 为视频添加章节标记。', '用 ffprobe 或播放器复核元数据与章节是否写入成功。'],
     notes: ['使用 -map_metadata -1 可以去除所有元数据（用于匿名化）。', '章节标记可先写成 ffmetadata 文件再用 -map_chapters 1 导入，或用 mkvmerge 的 --chapters 选项添加。', '某些播放器可能不显示嵌入的章节信息，需要测试目标播放器的兼容性。', '重新编码默认继承部分元数据：是保留、覆盖还是清空，操作前要明确。'],

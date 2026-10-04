@@ -1,24 +1,33 @@
 import type { Component } from 'vue'
-import { defineAsyncComponent } from 'vue'
 import type { Lesson } from '../lessons'
 import { restoreCodeSource } from '../code-restore'
+import E01Button from '../../demos/E01ButtonArticle.vue'
+import E02Form from '../../demos/E02FormArticle.vue'
+import E03Table from '../../demos/E03TableArticle.vue'
+import E04Dialog from '../../demos/E04DialogArticle.vue'
+import E05Message from '../../demos/E05MessageArticle.vue'
+import E06Popover from '../../demos/E06PopoverArticle.vue'
+import E07Dropdown from '../../demos/E07DropdownArticle.vue'
+import E08Tabs from '../../demos/E08TabsArticle.vue'
+import E09Pagination from '../../demos/E09PaginationArticle.vue'
+import E10Upload from '../../demos/E10UploadArticle.vue'
+import E11Cascader from '../../demos/E11CascaderArticle.vue'
+import E12Tooltip from '../../demos/E12TooltipArticle.vue'
+import E13DatePicker from '../../demos/E13DatePickerArticle.vue'
+import E14Tree from '../../demos/E14TreeArticle.vue'
+import E15Drawer from '../../demos/E15DrawerArticle.vue'
+import E16Steps from '../../demos/E16StepsArticle.vue'
+import E17Transfer from '../../demos/E17TransferArticle.vue'
+import E18Result from '../../demos/E18ResultArticle.vue'
+import E19Progress from '../../demos/E19ProgressArticle.vue'
+import E20Skeleton from '../../demos/E20SkeletonArticle.vue'
 
-const demoModules = import.meta.glob<Component>('../../demos/*.vue', { import: 'default' })
 const vueCodeModules = import.meta.glob<string>('../../demos/*.vue', { query: '?raw', import: 'default' })
 const jsxCodeModules = import.meta.glob<string>('../../demos/react-jsx/*.jsx', { query: '?raw', import: 'default' })
 const stateCodeModules = import.meta.glob<string>('../../demos/state-react/*.js', { query: '?raw', import: 'default' })
 const jsCodeModules = import.meta.glob<string>('../../demos/js-code/*.js', { query: '?raw', import: 'default' })
 const tsCodeModules = import.meta.glob<string>('../../demos/ts-code/*.ts', { query: '?raw', import: 'default' })
 const styleCodeModules = import.meta.glob<string>('../../demos/style-code/*', { query: '?raw', import: 'default' })
-
-function createDemo(name: string) {
-  const loader = demoModules[`../../demos/${name}.vue`]
-  if (!loader) throw new Error(`未找到内容组件：${name}`)
-  return defineAsyncComponent(async () => {
-    if (name.startsWith('E')) await import('../../element-plus/styles')
-    return loader()
-  })
-}
 
 function createCodeLoader(path: string) {
   const modules = path.startsWith('react-jsx/')
@@ -37,47 +46,45 @@ function createCodeLoader(path: string) {
   return () => loader().then(restoreCodeSource)
 }
 
-const E01Button = createDemo('E01ButtonArticle')
 const E01Code = createCodeLoader('E01Button.vue')
-const E02Form = createDemo('E02FormArticle')
-const E02Code = createCodeLoader('E02Form.vue')
-const E03Table = createDemo('E03TableArticle')
-const E03Code = createCodeLoader('E03Table.vue')
-const E04Dialog = createDemo('E04DialogArticle')
-const E04Code = createCodeLoader('E04Dialog.vue')
-const E05Message = createDemo('E05MessageArticle')
-const E05Code = createCodeLoader('E05Message.vue')
-const E06Popover = createDemo('E06PopoverArticle')
-const E06Code = createCodeLoader('E06Popover.vue')
-const E07Dropdown = createDemo('E07DropdownArticle')
-const E07Code = createCodeLoader('E07Dropdown.vue')
-const E08Tabs = createDemo('E08TabsArticle')
-const E08Code = createCodeLoader('E08Tabs.vue')
-const E09Pagination = createDemo('E09PaginationArticle')
-const E09Code = createCodeLoader('E09Pagination.vue')
-const E10Upload = createDemo('E10UploadArticle')
-const E10Code = createCodeLoader('E10Upload.vue')
-const E11Cascader = createDemo('E11CascaderArticle')
-const E11Code = createCodeLoader('E11Cascader.vue')
-const E12Tooltip = createDemo('E12TooltipArticle')
-const E12Code = createCodeLoader('E12Tooltip.vue')
-const E13DatePicker = createDemo('E13DatePickerArticle')
-const E13Code = createCodeLoader('E13DatePicker.vue')
-const E14Tree = createDemo('E14TreeArticle')
-const E14Code = createCodeLoader('E14Tree.vue')
-const E15Drawer = createDemo('E15DrawerArticle')
-const E15Code = createCodeLoader('E15Drawer.vue')
-const E16Steps = createDemo('E16StepsArticle')
-const E16Code = createCodeLoader('E16Steps.vue')
-const E17Transfer = createDemo('E17TransferArticle')
-const E17Code = createCodeLoader('E17Transfer.vue')
-const E18Result = createDemo('E18ResultArticle')
-const E18Code = createCodeLoader('E18Result.vue')
-const E19Progress = createDemo('E19ProgressArticle')
-const E19Code = createCodeLoader('E19Progress.vue')
-const E20Skeleton = createDemo('E20SkeletonArticle')
-const E20Code = createCodeLoader('E20Skeleton.vue')
 
+const E02Code = createCodeLoader('E02Form.vue')
+
+const E03Code = createCodeLoader('E03Table.vue')
+
+const E04Code = createCodeLoader('E04Dialog.vue')
+
+const E05Code = createCodeLoader('E05Message.vue')
+
+const E06Code = createCodeLoader('E06Popover.vue')
+
+const E07Code = createCodeLoader('E07Dropdown.vue')
+
+const E08Code = createCodeLoader('E08Tabs.vue')
+
+const E09Code = createCodeLoader('E09Pagination.vue')
+
+const E10Code = createCodeLoader('E10Upload.vue')
+
+const E11Code = createCodeLoader('E11Cascader.vue')
+
+const E12Code = createCodeLoader('E12Tooltip.vue')
+
+const E13Code = createCodeLoader('E13DatePicker.vue')
+
+const E14Code = createCodeLoader('E14Tree.vue')
+
+const E15Code = createCodeLoader('E15Drawer.vue')
+
+const E16Code = createCodeLoader('E16Steps.vue')
+
+const E17Code = createCodeLoader('E17Transfer.vue')
+
+const E18Code = createCodeLoader('E18Result.vue')
+
+const E19Code = createCodeLoader('E19Progress.vue')
+
+const E20Code = createCodeLoader('E20Skeleton.vue')
 
 export const lessons: Lesson[] = [
 {
@@ -87,7 +94,8 @@ export const lessons: Lesson[] = [
     category: '基础组件',
     path: '/element-plus/e-1/button',
     summary: '用课程操作按钮展示 ElButton 的类型、尺寸、状态和图标组合用法。',
-    demo: E01Button,
+    demo: null,
+    demoComponent: E01Button,
     code: E01Code,
     language: 'vue',
     principle:
@@ -113,7 +121,8 @@ export const lessons: Lesson[] = [
     category: '表单组件',
     path: '/element-plus/e-2/form',
     summary: '用用户注册表单展示 ElForm 的双向绑定、规则校验和提交处理。',
-    demo: E02Form,
+    demo: null,
+    demoComponent: E02Form,
     code: E02Code,
     language: 'vue',
     principle:
@@ -139,7 +148,8 @@ export const lessons: Lesson[] = [
     category: '数据展示',
     path: '/element-plus/e-3/table',
     summary: '用课程列表展示 ElTable 的列定义、数据绑定、筛选和自定义渲染。',
-    demo: E03Table,
+    demo: null,
+    demoComponent: E03Table,
     code: E03Code,
     language: 'vue',
     principle:
@@ -165,7 +175,8 @@ export const lessons: Lesson[] = [
     category: '反馈组件',
     path: '/element-plus/e-4/dialog',
     summary: '用课程创建弹窗展示 ElDialog 的显示控制、标题定制和表单集成。',
-    demo: E04Dialog,
+    demo: null,
+    demoComponent: E04Dialog,
     code: E04Code,
     language: 'vue',
     principle:
@@ -191,7 +202,8 @@ export const lessons: Lesson[] = [
     category: '反馈组件',
     path: '/element-plus/e-5/message',
     summary: '用操作反馈展示 ElMessage 的四种类型和 ElMessageBox 的确认与输入对话框。',
-    demo: E05Message,
+    demo: null,
+    demoComponent: E05Message,
     code: E05Code,
     language: 'vue',
     principle:
@@ -217,7 +229,8 @@ export const lessons: Lesson[] = [
     category: '展示组件',
     path: '/element-plus/e-6/popover',
     summary: '用快捷操作和课程列表展示 ElPopover 的触发方式和嵌套内容。',
-    demo: E06Popover,
+    demo: null,
+    demoComponent: E06Popover,
     code: E06Code,
     language: 'vue',
     principle:
@@ -243,7 +256,8 @@ export const lessons: Lesson[] = [
     category: '导航组件',
     path: '/element-plus/e-7/dropdown',
     summary: '用操作菜单和课程切换展示 ElDropdown 的菜单项和命令处理。',
-    demo: E07Dropdown,
+    demo: null,
+    demoComponent: E07Dropdown,
     code: E07Code,
     language: 'vue',
     principle:
@@ -269,7 +283,8 @@ export const lessons: Lesson[] = [
     category: '导航组件',
     path: '/element-plus/e-8/tabs',
     summary: '用学习面板展示 ElTabs 的标签切换和内容隔离。',
-    demo: E08Tabs,
+    demo: null,
+    demoComponent: E08Tabs,
     code: E08Code,
     language: 'vue',
     principle:
@@ -295,7 +310,8 @@ export const lessons: Lesson[] = [
     category: '数据展示',
     path: '/element-plus/e-9/pagination',
     summary: '用课程列表展示 ElPagination 的页码切换、每页条数和总数显示。',
-    demo: E09Pagination,
+    demo: null,
+    demoComponent: E09Pagination,
     code: E09Code,
     language: 'vue',
     principle:
@@ -321,7 +337,8 @@ export const lessons: Lesson[] = [
     category: '表单组件',
     path: '/element-plus/e-10/upload',
     summary: '用课程资料上传展示 ElUpload 的拖拽上传、文件校验和数量限制。',
-    demo: E10Upload,
+    demo: null,
+    demoComponent: E10Upload,
     code: E10Code,
     language: 'vue',
     principle:
@@ -347,7 +364,8 @@ export const lessons: Lesson[] = [
     category: '表单组件',
     path: '/element-plus/e-11/cascader',
     summary: '用课程分类选择展示 ElCascader 的多级联动和路径显示。',
-    demo: E11Cascader,
+    demo: null,
+    demoComponent: E11Cascader,
     code: E11Code,
     language: 'vue',
     principle:
@@ -373,7 +391,8 @@ export const lessons: Lesson[] = [
     category: '展示组件',
     path: '/element-plus/e-12/tooltip',
     summary: '用课程信息提示展示 ElTooltip 的方向、触发方式和富内容插槽。',
-    demo: E12Tooltip,
+    demo: null,
+    demoComponent: E12Tooltip,
     code: E12Code,
     language: 'vue',
     principle:
@@ -399,7 +418,8 @@ export const lessons: Lesson[] = [
     category: '表单组件',
     path: '/element-plus/e-13/date-picker',
     summary: '用运营报表筛选演示 ElDatePicker 的日期范围、快捷周期、格式化和禁用日期。',
-    demo: E13DatePicker,
+    demo: null,
+    demoComponent: E13DatePicker,
     code: E13Code,
     language: 'vue',
     principle:
@@ -425,7 +445,8 @@ export const lessons: Lesson[] = [
     category: '数据展示',
     path: '/element-plus/e-14/tree',
     summary: '用角色权限配置演示 ElTree 的复选框、节点过滤、默认展开和实例方法。',
-    demo: E14Tree,
+    demo: null,
+    demoComponent: E14Tree,
     code: E14Code,
     language: 'vue',
     principle:
@@ -451,7 +472,8 @@ export const lessons: Lesson[] = [
     category: '反馈组件',
     path: '/element-plus/e-15/drawer',
     summary: '用课程详情编辑演示 ElDrawer 的显示控制、尺寸、销毁策略和表单操作。',
-    demo: E15Drawer,
+    demo: null,
+    demoComponent: E15Drawer,
     code: E15Code,
     language: 'vue',
     principle:
@@ -477,7 +499,8 @@ export const lessons: Lesson[] = [
     category: '导航组件',
     path: '/element-plus/e-16/steps',
     summary: '用训练营报名流程演示 ElSteps 的当前步骤、完成状态和流程重置。',
-    demo: E16Steps,
+    demo: null,
+    demoComponent: E16Steps,
     code: E16Code,
     language: 'vue',
     principle:
@@ -499,7 +522,8 @@ export const lessons: Lesson[] = [
 {
     id: 'E_17', title: '穿梭框：Transfer 数据分配', navTitle: '穿梭框', category: '数据组件',
     path: '/element-plus/e-17/transfer', summary: '用课程分类分配展示 ElTransfer 的筛选、移动和自定义渲染。',
-    demo: E17Transfer, code: E17Code, language: 'vue',
+    demo: null,
+    demoComponent: E17Transfer, code: E17Code, language: 'vue',
     principle: 'ElTransfer 提供左/右两栏穿梭选择，v-model 绑定已转移到右栏的数据 key 数组，data 提供全部条目（含 key、label、disabled）。filterable 开启搜索并结合 filter-method 自定义过滤逻辑，titles 设置两栏标题。底层用 key-value 模型跟踪选中状态。',
     flow: ['准备带唯一 key 与可读 label 的数据源，并用 v-model 绑定右栏目标集合。', '开启 filterable 并用 filter-method 按 label 过滤左侧候选项。', '配置 titles 说明两栏语义（可选课程 / 已选课程）。', '提交前从 v-model 的右栏 key 集合反查完整数据项，作为落库结果。'],
     notes: ['数据项的 key 必须唯一且稳定，否则穿梭与回显会出现错位。', 'data 里的 disabled 可锁定不可移动的条目。', '穿梭相关事件（change 等）可用于联动外部状态；大数据量注意过滤性能。', '为左右栏配置空状态文案：候选为空时提示"暂无可选项"而非空白面板，减少困惑。'],
@@ -508,7 +532,8 @@ export const lessons: Lesson[] = [
 {
     id: 'E_18', title: '结果页：Result 操作反馈', navTitle: '结果页', category: '反馈组件',
     path: '/element-plus/e-18/result', summary: '用课程提交结果展示 ElResult 的成功、警告、错误和信息状态。',
-    demo: E18Result, code: E18Code, language: 'vue',
+    demo: null,
+    demoComponent: E18Result, code: E18Code, language: 'vue',
     principle: 'ElResult 提供标准化的操作结果反馈页面：icon 指定 success/warning/error/info 四种状态图形，title 与 sub-title 分层展示"发生了什么、接下来怎么办"，extra 插槽放后续操作按钮。它把"状态图形 + 说明文案 + 下一步入口"固化成统一结构，让提交、支付、发布等不同业务的结果页保持一致的视觉语言。',
     flow: ['根据操作结果选择对应 icon 状态。', '用 title、sub-title 说明发生了什么。', '在 extra 插槽中放置"继续操作 / 查看详情"等按钮。', '补充结果编号、金额等关键业务信息，失败页同时提供重试入口。'],
     notes: ['结果页适合表单提交或流程结束后的整页反馈。', '更轻量的成功/失败反馈优先用 ElMessage 或 ElMessageBox。', 'sub-title 文案宜给出下一步建议，而不仅是状态名称。', '同一业务流程沿用同一结果页结构，用 icon 与文案参数区分状态，降低用户学习成本。'],
@@ -517,7 +542,8 @@ export const lessons: Lesson[] = [
 {
     id: 'E_19', title: '进度条：Progress 学习进度', navTitle: '进度条', category: '数据组件',
     path: '/element-plus/e-19/progress', summary: '用课程学习进度展示 ElProgress 的线形、环形和仪表盘模式。',
-    demo: E19Progress, code: E19Code, language: 'vue',
+    demo: null,
+    demoComponent: E19Progress, code: E19Code, language: 'vue',
     principle: 'ElProgress 用 percentage 控制进度数值，type 切换线形/环形/仪表盘，width 控制圆形与仪表盘的整体尺寸，stroke-width 控制进度条粗细，color 支持固定颜色、按百分比分段的对象数组或返回颜色的函数。',
     flow: ['根据业务数据把进度折算为 0-100 的百分比。', '选择展示类型与尺寸，需要分段时用 color 对象数组或函数按值取色。', '监听数据变化动态更新 percentage，并处理完成/异常态。', '多任务场景把各任务进度汇总为一个总进度展示，避免用户逐个查看。'],
     notes: ['type=dashboard（仪表盘）时 width 控制整体画布尺寸，不要与 stroke-width 混淆。', 'color 可传分段数组 [{color, percentage}] 或函数按值返回颜色。', '进度到达 100% 时给用户下一步引导，而不是静默结束。', 'percentage 传入前裁剪到 0-100：异常数据会导致进度条绘制溢出或反向。'],
@@ -526,7 +552,8 @@ export const lessons: Lesson[] = [
 {
     id: 'E_20', title: '骨架屏：Skeleton 加载占位', navTitle: '骨架屏', category: '反馈组件',
     path: '/element-plus/e-20/skeleton', summary: '用课程卡片加载态展示 ElSkeleton 的基础占位和自定义模板。',
-    demo: E20Skeleton, code: E20Code, language: 'vue',
+    demo: null,
+    demoComponent: E20Skeleton, code: E20Code, language: 'vue',
     principle: 'ElSkeleton 在 loading 为 true 时渲染骨架占位，为 false 时渲染默认插槽的真实内容；animated 开启骨架闪烁动画，#template 插槽用 ElSkeletonItem 拼出贴近真实布局的占位元素（circle、h3、text 等 variant），count 控制骨架数量。',
     flow: ['数据加载前把 loading 置为 true，展示骨架屏。', '用 #template 布置 ElSkeletonItem 占位结构，形状对齐真实内容。', '数据就绪后置 loading=false，切到 #default 的真实内容。', '为骨架容器限定最小高度，占位与真实内容切换时布局不塌陷。'],
     notes: ['骨架形状应尽量贴近最终内容，减少加载完成后的跳动感。', '简短的按钮/列表加载可直接用 v-loading，避免全局滥用骨架屏。', '切换 loading 时可配合过渡动画，让内容出现更平滑。', '骨架块的数量与结构贴近真实列表（用 count 平铺卡片骨架），比通用三行占位跳动更少。'],

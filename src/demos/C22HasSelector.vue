@@ -27,7 +27,9 @@ const active = ref('demo')
       ✅ <strong>:has() 生效</strong>：含有 .error 徽章的卡片被高亮了！
     </div>
 
-    <style v-if="active === 'has'">
+    <!-- 用 <component is="style"> 动态标签承载内嵌样式：
+         既保留实时演示 :has() 的效果，也避开模板编译对 <style> 节点的处理。 -->
+    <component is="style" v-if="active === 'has'">
       .cards:has(.error) .card {
         opacity: 0.4;
       }
@@ -36,7 +38,7 @@ const active = ref('demo')
         border-color: #e03131;
         background: #fff5f5;
       }
-    </style>
+    </component>
 
     <div class="controls" style="margin-top: 16px;">
       <button :class="['btn', { active: active === 'has' }]" @click="active = 'has'">启用 :has() 高亮</button>

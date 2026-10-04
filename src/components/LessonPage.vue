@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { computed, h, nextTick, onMounted, ref, shallowRef, watch } from 'vue'
 import CodeBlock from './CodeBlock.vue'
 import { useLessonNavigation } from '../composables/useLessonNavigation'
 import { useLearningProgress } from '../composables/useLearningProgress'
@@ -27,6 +27,33 @@ const {
   () => `lesson-code-${currentLesson.value.id}`,
   () => currentLesson.value.code ? currentLesson.value.code() : Promise.resolve(null),
   { watch: [() => currentLesson.value.id] },
+)
+
+// 正文渲染策略：
+// - 课程带 demoComponent（静态导入的同步组件）时，直接同步渲染，SSG 阶段即可
+//   连同嵌套的交互 demo 一起写入 HTML，首屏立刻有完整正文；
+// - 旧数据只有 demo（defineAsyncComponent）时，退化为原来的 ClientOnly 方案。
+const hasStaticDemo = computed(() => Boolean(currentLesson.value.demoComponent))
+const demoVNode = shallowRef<any>(null)
+
+/** 把 lesson.demoComponent + lesson.demoProps 渲染成 vnode（同步） */
+function makeDemoVNode() {
+  const lesson = currentLesson.value
+  if (!lesson.demoComponent) {
+    demoVNode.value = null
+    return
+  }
+  demoVNode.value = h(lesson.demoComponent, lesson.demoProps ?? {})
+}
+
+// 用 watch(..., { immediate: true, flush: 'sync' }) 代替 computed：
+// computed 在 SSR 渲染期间被读取后会保留缓存，而 vnode 被服务端渲染器
+// 消费后会打上 vnode.el 标记，跨路由复用同一份缓存会触发水合异常。
+// 每次渲染前同步重建 vnode，既保证正文首屏可用，也避免复用已渲染的 vnode。
+watch(
+  () => currentLesson.value.id,
+  makeDemoVNode,
+  { immediate: true, flush: 'sync' },
 )
 
 const currentLessonIndex = computed(() => {
@@ -171,8 +198,9 @@ useSeoMeta({
       </div>
     </header>
 
-    <section v-if="currentLesson.demo" class="lesson-section lesson-demo">
-      <ClientOnly>
+    <section v-if="currentLesson.demo || hasStaticDemo" class="lesson-section lesson-demo">
+      <component :is="demoVNode" v-if="hasStaticDemo" />
+      <ClientOnly v-else>
         <component :is="currentLesson.demo" />
         <template #fallback>
           <div class="demo-card">内容交互加载中...</div>
@@ -182,14 +210,23 @@ useSeoMeta({
 
     <section v-if="currentLesson.code" class="lesson-section">
       <h2>关键代码</h2>
+      <!-- 源码与正文同时到达，这里始终保留与代码块同高的骨架，
+           避免「正文已铺开、代码块后弹出」造成的高度跳变。 -->
+      <div v-if="lessonCodeStatus === 'pending'" class="code-skeleton" role="status" aria-live="polite">
+        <span class="sr-only">正在加载关键代码…</span>
+        <div class="code-skeleton-toolbar" aria-hidden="true">
+          <span class="code-skeleton-pill" style="width: 52px"></span>
+          <span class="code-skeleton-pill" style="width: 64px"></span>
+        </div>
+        <div class="code-skeleton-body" aria-hidden="true">
+          <span v-for="line in 10" :key="line" class="code-skeleton-line" :style="{ width: `${88 - (line * 7) % 46}%` }"></span>
+        </div>
+      </div>
       <CodeBlock
-        v-if="lessonCode"
+        v-else-if="lessonCode"
         :code="lessonCode"
         :language="currentLesson.language || 'typescript'"
       />
-      <div v-else-if="lessonCodeStatus === 'pending'" class="code-loading" role="status">
-        正在加载当前内容源码…
-      </div>
       <div v-else class="code-loading code-loading-error" role="alert">
         源码加载失败，请刷新后重试。{{ lessonCodeError?.message }}
       </div>

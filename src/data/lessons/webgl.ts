@@ -1,17 +1,29 @@
 import type { Component } from 'vue'
-import { defineAsyncComponent } from 'vue'
 import type { Lesson } from '../lessons'
 import { restoreCodeSource } from '../code-restore'
+import W01WebGLContext from '../../demos/W01WebGLContextArticle.vue'
+import W02Shaders from '../../demos/W02ShadersArticle.vue'
+import W03Buffers from '../../demos/W03BuffersArticle.vue'
+import W04Attributes from '../../demos/W04AttributesArticle.vue'
+import W05Matrices from '../../demos/W05MatricesArticle.vue'
+import W06MVP from '../../demos/W06MVPArticle.vue'
+import W07Camera from '../../demos/W07CameraArticle.vue'
+import W08Textures from '../../demos/W08TexturesArticle.vue'
+import W09TextureFilter from '../../demos/W09TextureFilterArticle.vue'
+import W10MultiTexture from '../../demos/W10MultiTextureArticle.vue'
+import W11Lighting from '../../demos/W11LightingArticle.vue'
+import W12Phong from '../../demos/W12PhongArticle.vue'
+import W13Normals from '../../demos/W13NormalsArticle.vue'
+import W14FBO from '../../demos/W14FBOArticle.vue'
+import W15Shadows from '../../demos/W15ShadowsArticle.vue'
+import W16PostProcess from '../../demos/W16PostProcessArticle.vue'
+import W17WebGL2 from '../../demos/W17WebGL2Article.vue'
+import W18Instancing from '../../demos/W18InstancingArticle.vue'
+import W19Particles from '../../demos/W19ParticlesArticle.vue'
+import W20Performance from '../../demos/W20PerformanceArticle.vue'
 
-const demoModules = import.meta.glob<Component>('../../demos/*.vue', { import: 'default' })
 const vueCodeModules = import.meta.glob<string>('../../demos/*.vue', { query: '?raw', import: 'default' })
 const glslCodeModules = import.meta.glob<string>('../../demos/glsl-code/*.glsl', { query: '?raw', import: 'default' })
-
-function createDemo(name: string) {
-  const loader = demoModules[`../../demos/${name}.vue`]
-  if (!loader) throw new Error(`未找到内容组件：${name}`)
-  return defineAsyncComponent(async () => loader())
-}
 
 function createCodeLoader(path: string) {
   const modules = path.startsWith('glsl-code/')
@@ -22,45 +34,44 @@ function createCodeLoader(path: string) {
   return () => loader().then(restoreCodeSource)
 }
 
-const W01WebGLContext = createDemo('W01WebGLContextArticle')
 const W01Code = createCodeLoader('glsl-code/W01WebGLContext.glsl')
-const W02Shaders = createDemo('W02ShadersArticle')
+
 const W02Code = createCodeLoader('glsl-code/W02Shaders.glsl')
-const W03Buffers = createDemo('W03BuffersArticle')
+
 const W03Code = createCodeLoader('glsl-code/W03Buffers.glsl')
-const W04Attributes = createDemo('W04AttributesArticle')
+
 const W04Code = createCodeLoader('glsl-code/W04Attributes.glsl')
-const W05Matrices = createDemo('W05MatricesArticle')
+
 const W05Code = createCodeLoader('glsl-code/W05Matrices.glsl')
-const W06MVP = createDemo('W06MVPArticle')
+
 const W06Code = createCodeLoader('glsl-code/W06MVP.glsl')
-const W07Camera = createDemo('W07CameraArticle')
+
 const W07Code = createCodeLoader('glsl-code/W07Camera.glsl')
-const W08Textures = createDemo('W08TexturesArticle')
+
 const W08Code = createCodeLoader('glsl-code/W08Textures.glsl')
-const W09TextureFilter = createDemo('W09TextureFilterArticle')
+
 const W09Code = createCodeLoader('glsl-code/W09TextureFilter.glsl')
-const W10MultiTexture = createDemo('W10MultiTextureArticle')
+
 const W10Code = createCodeLoader('glsl-code/W10MultiTexture.glsl')
-const W11Lighting = createDemo('W11LightingArticle')
+
 const W11Code = createCodeLoader('glsl-code/W11Lighting.glsl')
-const W12Phong = createDemo('W12PhongArticle')
+
 const W12Code = createCodeLoader('glsl-code/W12Phong.glsl')
-const W13Normals = createDemo('W13NormalsArticle')
+
 const W13Code = createCodeLoader('glsl-code/W13Normals.glsl')
-const W14FBO = createDemo('W14FBOArticle')
+
 const W14Code = createCodeLoader('glsl-code/W14FBO.glsl')
-const W15Shadows = createDemo('W15ShadowsArticle')
+
 const W15Code = createCodeLoader('glsl-code/W15Shadows.glsl')
-const W16PostProcess = createDemo('W16PostProcessArticle')
+
 const W16Code = createCodeLoader('glsl-code/W16PostProcess.glsl')
-const W17WebGL2 = createDemo('W17WebGL2Article')
+
 const W17Code = createCodeLoader('glsl-code/W17WebGL2.glsl')
-const W18Instancing = createDemo('W18InstancingArticle')
+
 const W18Code = createCodeLoader('glsl-code/W18Instancing.glsl')
-const W19Particles = createDemo('W19ParticlesArticle')
+
 const W19Code = createCodeLoader('glsl-code/W19Particles.glsl')
-const W20Performance = createDemo('W20PerformanceArticle')
+
 const W20Code = createCodeLoader('glsl-code/W20Performance.glsl')
 
 export const lessons: Lesson[] = [
@@ -71,7 +82,8 @@ export const lessons: Lesson[] = [
     category: '基础入门',
     path: '/webgl/w-1/context-pipeline',
     summary: '从 Canvas 获取 WebGL 上下文，用最简单的单色三角形看清顶点处理与片段处理两段可编程管线。',
-    demo: W01WebGLContext,
+    demo: null,
+    demoComponent: W01WebGLContext,
     code: W01Code,
     language: 'glsl',
     principle:
@@ -97,7 +109,8 @@ export const lessons: Lesson[] = [
     category: '基础入门',
     path: '/webgl/w-2/shaders',
     summary: '用一个旋转三角形展示顶点着色器与片段着色器的协作与数据传递。',
-    demo: W02Shaders,
+    demo: null,
+    demoComponent: W02Shaders,
     code: W02Code,
     language: 'glsl',
     principle:
@@ -123,7 +136,8 @@ export const lessons: Lesson[] = [
     category: '基础入门',
     path: '/webgl/w-3/buffers-draw',
     summary: '用 VBO、VAO 和 drawArrays/drawElements 展示不同绘制模式。',
-    demo: W03Buffers,
+    demo: null,
+    demoComponent: W03Buffers,
     code: W03Code,
     language: 'glsl',
     principle:
@@ -149,7 +163,8 @@ export const lessons: Lesson[] = [
     category: '基础入门',
     path: '/webgl/w-4/attribute-uniform',
     summary: '用动态彩色方块展示三种着色器变量类型的不同使用场景。',
-    demo: W04Attributes,
+    demo: null,
+    demoComponent: W04Attributes,
     code: W04Code,
     language: 'glsl',
     principle:
@@ -175,7 +190,8 @@ export const lessons: Lesson[] = [
     category: '空间变换',
     path: '/webgl/w-5/2d-transform',
     summary: '用矩阵库实现平移、旋转、缩放的组合变换。',
-    demo: W05Matrices,
+    demo: null,
+    demoComponent: W05Matrices,
     code: W05Code,
     language: 'glsl',
     principle:
@@ -201,7 +217,8 @@ export const lessons: Lesson[] = [
     category: '空间变换',
     path: '/webgl/w-6/mvp-matrix',
     summary: '用 3D 立方体展示模型、视图、投影三种矩阵的协作。',
-    demo: W06MVP,
+    demo: null,
+    demoComponent: W06MVP,
     code: W06Code,
     language: 'glsl',
     principle:
@@ -227,7 +244,8 @@ export const lessons: Lesson[] = [
     category: '空间变换',
     path: '/webgl/w-7/camera-control',
     summary: '用轨道相机展示视角移动、缩放和旋转的交互控制。',
-    demo: W07Camera,
+    demo: null,
+    demoComponent: W07Camera,
     code: W07Code,
     language: 'glsl',
     principle:
@@ -253,7 +271,8 @@ export const lessons: Lesson[] = [
     category: '纹理贴图',
     path: '/webgl/w-8/textures',
     summary: '用纹理图片展示 UV 坐标到网格的映射过程。',
-    demo: W08Textures,
+    demo: null,
+    demoComponent: W08Textures,
     code: W08Code,
     language: 'glsl',
     principle:
@@ -279,7 +298,8 @@ export const lessons: Lesson[] = [
     category: '纹理贴图',
     path: '/webgl/w-9/texture-filter',
     summary: '对比不同过滤模式和 Mipmap 层级的渲染效果。',
-    demo: W09TextureFilter,
+    demo: null,
+    demoComponent: W09TextureFilter,
     code: W09Code,
     language: 'glsl',
     principle:
@@ -305,7 +325,8 @@ export const lessons: Lesson[] = [
     category: '纹理贴图',
     path: '/webgl/w-10/multi-texture',
     summary: '展示如何同时使用多张纹理并在着色器中混合。',
-    demo: W10MultiTexture,
+    demo: null,
+    demoComponent: W10MultiTexture,
     code: W10Code,
     language: 'glsl',
     principle:
@@ -331,7 +352,8 @@ export const lessons: Lesson[] = [
     category: '光照模型',
     path: '/webgl/w-11/basic-lighting',
     summary: '展示环境光和 Lambert 漫反射光照模型的实现。',
-    demo: W11Lighting,
+    demo: null,
+    demoComponent: W11Lighting,
     code: W11Code,
     language: 'glsl',
     principle:
@@ -357,7 +379,8 @@ export const lessons: Lesson[] = [
     category: '光照模型',
     path: '/webgl/w-12/phong-lighting',
     summary: '展示环境光+漫反射+镜面高光的完整 Phong 光照模型。',
-    demo: W12Phong,
+    demo: null,
+    demoComponent: W12Phong,
     code: W12Code,
     language: 'glsl',
     principle:
@@ -383,7 +406,8 @@ export const lessons: Lesson[] = [
     category: '光照模型',
     path: '/webgl/w-13/normals-lighting',
     summary: '展示顶点法线、法线矩阵与光照方向的正确变换。',
-    demo: W13Normals,
+    demo: null,
+    demoComponent: W13Normals,
     code: W13Code,
     language: 'glsl',
     principle:
@@ -409,7 +433,8 @@ export const lessons: Lesson[] = [
     category: '高级渲染',
     path: '/webgl/w-14/fbo-offscreen',
     summary: '用离屏渲染展示 FBO 的创建、绑定与纹理附件。',
-    demo: W14FBO,
+    demo: null,
+    demoComponent: W14FBO,
     code: W14Code,
     language: 'glsl',
     principle:
@@ -435,7 +460,8 @@ export const lessons: Lesson[] = [
     category: '高级渲染',
     path: '/webgl/w-15/shadow-mapping',
     summary: '展示 shadow map 的生成与 PCF 软阴影采样。',
-    demo: W15Shadows,
+    demo: null,
+    demoComponent: W15Shadows,
     code: W15Code,
     language: 'glsl',
     principle:
@@ -461,7 +487,8 @@ export const lessons: Lesson[] = [
     category: '高级渲染',
     path: '/webgl/w-16/post-processing',
     summary: '用全屏四边形展示 Bloom、模糊、灰度等后处理效果。',
-    demo: W16PostProcess,
+    demo: null,
+    demoComponent: W16PostProcess,
     code: W16Code,
     language: 'glsl',
     principle:
@@ -487,7 +514,8 @@ export const lessons: Lesson[] = [
     category: 'WebGL2',
     path: '/webgl/w-17/webgl2-features',
     summary: '展示 WebGL2 的 Uniform Buffer、Texture 3D、浮点纹理等新能力。',
-    demo: W17WebGL2,
+    demo: null,
+    demoComponent: W17WebGL2,
     code: W17Code,
     language: 'glsl',
     principle:
@@ -513,7 +541,8 @@ export const lessons: Lesson[] = [
     category: 'WebGL2',
     path: '/webgl/w-18/instancing',
     summary: '用实例化渲染展示大量几何体的高效绘制。',
-    demo: W18Instancing,
+    demo: null,
+    demoComponent: W18Instancing,
     code: W18Code,
     language: 'glsl',
     principle:
@@ -539,7 +568,8 @@ export const lessons: Lesson[] = [
     category: '工程实践',
     path: '/webgl/w-19/particle-system',
     summary: '展示基于 GPU 的粒子系统，包括位置更新和渲染。',
-    demo: W19Particles,
+    demo: null,
+    demoComponent: W19Particles,
     code: W19Code,
     language: 'glsl',
     principle:
@@ -565,7 +595,8 @@ export const lessons: Lesson[] = [
     category: '工程实践',
     path: '/webgl/w-20/performance',
     summary: '展示 WebGL 性能分析、常见瓶颈与优化手段。',
-    demo: W20Performance,
+    demo: null,
+    demoComponent: W20Performance,
     code: W20Code,
     language: 'glsl',
     principle:

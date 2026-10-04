@@ -1,9 +1,37 @@
 import type { Component } from 'vue'
-import { defineAsyncComponent } from 'vue'
 import type { Lesson } from '../lessons'
 import { restoreCodeSource } from '../code-restore'
+import CPP01Demo from '../../demos/CPP01ProgramStructureArticle.vue'
+import CPP02Demo from '../../demos/CPP02VariablesTypesArticle.vue'
+import CPP03Demo from '../../demos/CPP03OperatorsExpressionsArticle.vue'
+import CPP04Demo from '../../demos/CPP04ControlFlowArticle.vue'
+import CPP05Demo from '../../demos/CPP05FunctionsArticle.vue'
+import CPP06Demo from '../../demos/CPP06ArraysStringsArticle.vue'
+import CPP07Demo from '../../demos/CPP07PointersReferencesArticle.vue'
+import CPP08Demo from '../../demos/CPP08DynamicMemoryArticle.vue'
+import CPP09Demo from '../../demos/CPP09ClassesObjectsArticle.vue'
+import CPP10Demo from '../../demos/CPP10CtorDtorArticle.vue'
+import CPP11Demo from '../../demos/CPP11CopyControlArticle.vue'
+import CPP12Demo from '../../demos/CPP12InheritanceArticle.vue'
+import CPP13Demo from '../../demos/CPP13PolymorphismArticle.vue'
+import CPP14Demo from '../../demos/CPP14OperatorOverloadingArticle.vue'
+import CPP15Demo from '../../demos/CPP15TemplatesBasicsArticle.vue'
+import CPP16Demo from '../../demos/CPP16StlSequenceContainersArticle.vue'
+import CPP17Demo from '../../demos/CPP17StlAssociativeContainersArticle.vue'
+import CPP18Demo from '../../demos/CPP18IteratorsAlgorithmsArticle.vue'
+import CPP19Demo from '../../demos/CPP19LambdaExpressionsArticle.vue'
+import CPP20Demo from '../../demos/CPP20SmartPointersArticle.vue'
+import CPP21Demo from '../../demos/CPP21MoveSemanticsArticle.vue'
+import CPP22Demo from '../../demos/CPP22RAIIArticle.vue'
+import CPP23Demo from '../../demos/CPP23ExceptionHandlingArticle.vue'
+import CPP24Demo from '../../demos/CPP24FileIOArticle.vue'
+import CPP25Demo from '../../demos/CPP25ConcurrencyArticle.vue'
+import CPP26Demo from '../../demos/CPP26ModernCppCoreArticle.vue'
+import CPP27Demo from '../../demos/CPP27CompileTimeComputationArticle.vue'
+import CPP28Demo from '../../demos/CPP28ModulesArticle.vue'
+import CPP29Demo from '../../demos/CPP29DesignPatternsArticle.vue'
+import CPP30Demo from '../../demos/CPP30CodingStandardsArticle.vue'
 
-const demoModules = import.meta.glob<Component>('../../demos/*.vue', { import: 'default' })
 const vueCodeModules = import.meta.glob<string>('../../demos/*.vue', { query: '?raw', import: 'default' })
 const jsxCodeModules = import.meta.glob<string>('../../demos/react-jsx/*.jsx', { query: '?raw', import: 'default' })
 const stateCodeModules = import.meta.glob<string>('../../demos/state-react/*.js', { query: '?raw', import: 'default' })
@@ -11,15 +39,6 @@ const jsCodeModules = import.meta.glob<string>('../../demos/js-code/*.js', { que
 const tsCodeModules = import.meta.glob<string>('../../demos/ts-code/*.ts', { query: '?raw', import: 'default' })
 const styleCodeModules = import.meta.glob<string>('../../demos/style-code/*', { query: '?raw', import: 'default' })
 const cppCodeModules = import.meta.glob<string>('../../demos/cpp-code/*', { query: '?raw', import: 'default' })
-
-function createDemo(name: string) {
-  const loader = demoModules[`../../demos/${name}.vue`]
-  if (!loader) throw new Error(`未找到内容组件：${name}`)
-  return defineAsyncComponent(async () => {
-    if (name.startsWith('E')) await import('../../element-plus/styles')
-    return loader()
-  })
-}
 
 function createCodeLoader(path: string) {
   const modules = path.startsWith('react-jsx/')
@@ -39,38 +58,6 @@ function createCodeLoader(path: string) {
   if (!loader) throw new Error(`未找到内容源码：${path}`)
   return () => loader().then(restoreCodeSource)
 }
-
-const CPP01Demo = createDemo('CPP01ProgramStructureArticle')
-const CPP02Demo = createDemo('CPP02VariablesTypesArticle')
-const CPP03Demo = createDemo('CPP03OperatorsExpressionsArticle')
-const CPP04Demo = createDemo('CPP04ControlFlowArticle')
-const CPP05Demo = createDemo('CPP05FunctionsArticle')
-const CPP06Demo = createDemo('CPP06ArraysStringsArticle')
-const CPP07Demo = createDemo('CPP07PointersReferencesArticle')
-const CPP08Demo = createDemo('CPP08DynamicMemoryArticle')
-const CPP09Demo = createDemo('CPP09ClassesObjectsArticle')
-const CPP10Demo = createDemo('CPP10CtorDtorArticle')
-const CPP11Demo = createDemo('CPP11CopyControlArticle')
-const CPP12Demo = createDemo('CPP12InheritanceArticle')
-const CPP13Demo = createDemo('CPP13PolymorphismArticle')
-const CPP14Demo = createDemo('CPP14OperatorOverloadingArticle')
-const CPP15Demo = createDemo('CPP15TemplatesBasicsArticle')
-const CPP16Demo = createDemo('CPP16StlSequenceContainersArticle')
-const CPP17Demo = createDemo('CPP17StlAssociativeContainersArticle')
-const CPP18Demo = createDemo('CPP18IteratorsAlgorithmsArticle')
-const CPP19Demo = createDemo('CPP19LambdaExpressionsArticle')
-const CPP20Demo = createDemo('CPP20SmartPointersArticle')
-const CPP21Demo = createDemo('CPP21MoveSemanticsArticle')
-const CPP22Demo = createDemo('CPP22RAIIArticle')
-const CPP23Demo = createDemo('CPP23ExceptionHandlingArticle')
-const CPP24Demo = createDemo('CPP24FileIOArticle')
-const CPP25Demo = createDemo('CPP25ConcurrencyArticle')
-const CPP26Demo = createDemo('CPP26ModernCppCoreArticle')
-const CPP27Demo = createDemo('CPP27CompileTimeComputationArticle')
-const CPP28Demo = createDemo('CPP28ModulesArticle')
-const CPP29Demo = createDemo('CPP29DesignPatternsArticle')
-const CPP30Demo = createDemo('CPP30CodingStandardsArticle')
-
 
 const CPP1Code = createCodeLoader('cpp-code/CPP1Code.cpp.txt')
 const CPP2Code = createCodeLoader('cpp-code/CPP2Code.cpp.txt')
@@ -127,7 +114,8 @@ export const lessons: Lesson[] = [
       '头文件（.h/.hpp）通常包含声明，源文件（.cpp）包含实现，防止代码重复。',
     ],
     problem: '解决"C++ 程序是如何从源代码变成可执行文件的，以及如何理解编译和链接错误"的问题。',
-    demo: CPP01Demo,
+    demo: null,
+    demoComponent: CPP01Demo,
     code: CPP1Code,
     language: 'cpp',
   },
@@ -154,7 +142,8 @@ export const lessons: Lesson[] = [
       'C++17 起，变量可以在 if 或 switch 语句内声明（if (int x = foo(); x > 0) {...}），限制变量作用域。',
     ],
     problem: '解决"如何选择合适的数据类型、理解变量作用域，以及安全地进行类型转换"的问题。',
-    demo: CPP02Demo,
+    demo: null,
+    demoComponent: CPP02Demo,
     code: CPP2Code,
     language: 'cpp',
   },
@@ -181,7 +170,8 @@ export const lessons: Lesson[] = [
       '逗号运算符顺序求值，整个表达式为最右侧表达式的值和类型，常用于 for 循环的多个初始化或更新。',
     ],
     problem: '解决"如何理解复杂表达式的求值过程、避免运算符优先级陷阱和未定义行为"的问题。',
-    demo: CPP03Demo,
+    demo: null,
+    demoComponent: CPP03Demo,
     code: CPP3Code,
     language: 'cpp',
   },
@@ -208,7 +198,8 @@ export const lessons: Lesson[] = [
       '初始化列表作为条件（while (auto x = getOptional())）可以在条件中声明变量并判断，限制作用域。',
     ],
     problem: '解决"如何选择合适的控制流语句、避免常见陷阱（如 switch 穿透、迭代器失效）"的问题。',
-    demo: CPP04Demo,
+    demo: null,
+    demoComponent: CPP04Demo,
     code: CPP4Code,
     language: 'cpp',
   },
@@ -235,7 +226,8 @@ export const lessons: Lesson[] = [
       'C++17 引入 constexpr if，可以在编译期根据条件丢弃分支，常用于模板代码。',
     ],
     problem: '解决"如何选择参数传递方式、设计清晰的函数接口，以及理解重载决议和递归实现"的问题。',
-    demo: CPP05Demo,
+    demo: null,
+    demoComponent: CPP05Demo,
     code: CPP5Code,
     language: 'cpp',
   },
@@ -262,7 +254,8 @@ export const lessons: Lesson[] = [
       '字符串字面量是 const char[N] 类型，可以隐式转换为 const char*，但不能转换为 char*（C++11 起，需要 const_cast 或弃用转换）。',
     ],
     problem: '解决"如何安全地处理字符串和数组、避免缓冲区溢出和数组退化问题"的问题。',
-    demo: CPP06Demo,
+    demo: null,
+    demoComponent: CPP06Demo,
     code: CPP6Code,
     language: 'cpp',
   },
@@ -289,7 +282,8 @@ export const lessons: Lesson[] = [
       'C++11 引入 nullptr 替代 NULL（0 或 (void*)0），nullptr 可以隐式转换为任何指针类型，但不能转换为 int，解决了 NULL 的二义性问题。',
     ],
     problem: '解决"指针和引用有什么区别、如何选择、以及理解指针算术和 const 正确用法"的问题。',
-    demo: CPP07Demo,
+    demo: null,
+    demoComponent: CPP07Demo,
     code: CPP7Code,
     language: 'cpp',
   },
@@ -316,7 +310,8 @@ export const lessons: Lesson[] = [
       'placement new（new(addr) T(...)）在已分配的内存地址上构造对象（适用于内存池等场景），销毁时必须直接调用析构函数 obj->~T()，绝不能对其调用 delete（operator delete 不会释放这块内存）；内存本身需按分配来源自行归还。',
     ],
     problem: '解决"如何安全地管理动态内存、避免内存泄漏和悬垂指针，以及何时应该使用智能指针"的问题。',
-    demo: CPP08Demo,
+    demo: null,
+    demoComponent: CPP08Demo,
     code: CPP8Code,
     language: 'cpp',
   },
@@ -343,7 +338,8 @@ export const lessons: Lesson[] = [
       'C++11 引入 in-class 初始化器，可以在类定义内为非静态数据成员提供默认初始值。',
     ],
     problem: '解决"如何用类实现封装、理解访问控制的作用，以及正确使用 this 指针和 const 成员函数"的问题。',
-    demo: CPP09Demo,
+    demo: null,
+    demoComponent: CPP09Demo,
     code: CPP9Code,
     language: 'cpp',
   },
@@ -370,7 +366,8 @@ export const lessons: Lesson[] = [
       'constexpr 构造函数可以创建编译期常量对象；C++14 之前 constexpr 函数体必须为空（只能靠初始化列表），C++14 起允许包含非空函数体，但初始化列表中的表达式仍须是常量表达式。',
     ],
     problem: '解决"如何控制对象的初始化和清理、理解对象生命周期，以及正确实现特殊成员函数"的问题。',
-    demo: CPP10Demo,
+    demo: null,
+    demoComponent: CPP10Demo,
     code: CPP10Code,
     language: 'cpp',
   },
@@ -397,7 +394,8 @@ export const lessons: Lesson[] = [
       'C++11 引入 = default 和 = delete，可以显式控制特殊成员函数的生成。= default 要求编译器生成默认版本；= delete 阻止生成或调用。',
     ],
     problem: '解决"如何正确处理含有资源的类的拷贝行为、避免浅拷贝陷阱，以及遵循 Rule of Three/Five"的问题。',
-    demo: CPP11Demo,
+    demo: null,
+    demoComponent: CPP11Demo,
     code: CPP11Code,
     language: 'cpp',
   },
@@ -424,7 +422,8 @@ export const lessons: Lesson[] = [
       '多重继承（一个类继承多个基类）在 C++ 中是允许的，但可能导致菱形继承问题（虚继承可以解决，但应谨慎使用）。',
     ],
     problem: '解决"如何正确使用继承实现代码复用和多态、理解切片问题，以及避免构造析构中的常见错误"的问题。',
-    demo: CPP12Demo,
+    demo: null,
+    demoComponent: CPP12Demo,
     code: CPP12Code,
     language: 'cpp',
   },
@@ -451,7 +450,8 @@ export const lessons: Lesson[] = [
       'C++11 引入 final 关键字可以阻止派生类重写特定虚函数（如 virtual void f() final;），这有助于优化（去虚化）和文档说明。',
     ],
     problem: '解决"如何实现运行时多态、理解虚函数表的机制，以及正确使用纯虚函数定义接口"的问题。',
-    demo: CPP13Demo,
+    demo: null,
+    demoComponent: CPP13Demo,
     code: CPP13Code,
     language: 'cpp',
   },
@@ -478,7 +478,8 @@ export const lessons: Lesson[] = [
       '赋值运算符 operator= 必须定义为成员函数（不能定义为全局函数），如果不定义，编译器生成逐成员赋值的版本。',
     ],
     problem: '解决"如何为自定义类型提供直观的运算符接口、遵循运算符重载的惯用法和语义规则"的问题。',
-    demo: CPP14Demo,
+    demo: null,
+    demoComponent: CPP14Demo,
     code: CPP14Code,
     language: 'cpp',
   },
@@ -505,7 +506,8 @@ export const lessons: Lesson[] = [
       '变长模板（variadic templates，C++11）允许模板接受任意数量和类型的参数，是元组（tuple）、函数包装器（bind、thread）和完美转发的基础。',
     ],
     problem: '解决"如何编写类型无关的通用代码、理解模板实例化机制，以及正确使用模板特化"的问题。',
-    demo: CPP15Demo,
+    demo: null,
+    demoComponent: CPP15Demo,
     code: CPP15Code,
     language: 'cpp',
   },
@@ -532,7 +534,8 @@ export const lessons: Lesson[] = [
       'array（C++11）是固定大小的数组容器，比内置数组更安全（提供 at() 边界检查、size()、迭代器等），适用于编译期已知大小的数组。',
     ],
     problem: '解决"如何根据需求选择合适的 STL 顺序容器、理解各容器的性能特性和迭代器失效规则"的问题。',
-    demo: CPP16Demo,
+    demo: null,
+    demoComponent: CPP16Demo,
     code: CPP16Code,
     language: 'cpp',
   },
@@ -559,7 +562,8 @@ export const lessons: Lesson[] = [
       'multimap 和 multiset 允许重复键，count(key) 返回键出现的次数，lower_bound/upper_bound 或 equal_range 用于获取所有相同键的元素。',
     ],
     problem: '解决"如何选择合适的关联容器、理解有序与无序容器的性能差异，以及正确自定义键类型"的问题。',
-    demo: CPP17Demo,
+    demo: null,
+    demoComponent: CPP17Demo,
     code: CPP17Code,
     language: 'cpp',
   },
@@ -586,7 +590,8 @@ export const lessons: Lesson[] = [
       'C++17 起，许多算法有并行版本（在 <execution> 中），可以指定执行策略（seq、par、par_unseq）利用多核性能（如 sort(execution::par, v.begin(), v.end())）。',
     ],
     problem: '解决"如何使用 STL 算法高效处理容器元素、理解迭代器类别要求，以及掌握 remove-erase 惯用法"的问题。',
-    demo: CPP18Demo,
+    demo: null,
+    demoComponent: CPP18Demo,
     code: CPP18Code,
     language: 'cpp',
   },
@@ -613,7 +618,8 @@ export const lessons: Lesson[] = [
       '模板 lambda 自 C++20 起支持显式模板参数列表（[]<typename T>(T x) { ... }），相比 C++14 用 auto 写的泛型 lambda，更适合对参数做类型约束与更精细的推导；而 C++23 进一步增加了静态/线程局部变量的便捷使用。',
     ],
     problem: '解决"如何在 C++ 中定义内联匿名函数、理解捕获列表的各种方式，以及避免 lambda 中的生命周期陷阱"的问题。',
-    demo: CPP19Demo,
+    demo: null,
+    demoComponent: CPP19Demo,
     code: CPP19Code,
     language: 'cpp',
   },
@@ -640,7 +646,8 @@ export const lessons: Lesson[] = [
       '现代 C++ 推荐的内存策略（可参考 C++ Core Guidelines）：优先使用栈对象；确需堆对象时用 unique_ptr；确需共享所有权时用 shared_ptr；原始指针只应作为非拥有性质的可观察引用，几乎不要用它管理资源。',
     ],
     problem: '解决"如何安全地管理动态内存、理解智能指针的所有权语义，以及避免内存泄漏和双重释放"的问题。',
-    demo: CPP20Demo,
+    demo: null,
+    demoComponent: CPP20Demo,
     code: CPP20Code,
     language: 'cpp',
   },
@@ -667,7 +674,8 @@ export const lessons: Lesson[] = [
       'C++17 保证返回值优化（RVO）在某些情况下是强制的（当返回表达式是纯右值时），确保不会发生不必要的拷贝或移动。',
     ],
     problem: '解决"如何利用移动语义避免不必要的拷贝、理解右值引用和通用引用的区别，以及正确实现移动操作"的问题。',
-    demo: CPP21Demo,
+    demo: null,
+    demoComponent: CPP21Demo,
     code: CPP21Code,
     language: 'cpp',
   },
@@ -694,7 +702,8 @@ export const lessons: Lesson[] = [
       '实现 RAII 类时，遵循 Rule of Five（或 Rule of Zero），确保拷贝/移动操作正确管理资源（通常 RAII 类应是不可拷贝的，使用 unique_ptr 类似的移动语义）。',
     ],
     problem: '解决"如何用对象生命周期自动管理资源、实现异常安全的代码，以及理解 RAII 在各种资源类型中的应用"的问题。',
-    demo: CPP22Demo,
+    demo: null,
+    demoComponent: CPP22Demo,
     code: CPP22Code,
     language: 'cpp',
   },
@@ -721,7 +730,8 @@ export const lessons: Lesson[] = [
       '标准库异常层次：std::exception 是基类，派生类包括 std::bad_alloc（new 失败）、std::bad_cast（dynamic_cast 失败）、std::runtime_error（运行时错误）、std::logic_error（逻辑错误，如无效参数）等。',
     ],
     problem: '解决"如何正确使用异常处理错误、理解异常安全保证级别，以及确保代码在异常存在时仍然正确"的问题。',
-    demo: CPP23Demo,
+    demo: null,
+    demoComponent: CPP23Demo,
     code: CPP23Code,
     language: 'cpp',
   },
@@ -748,7 +758,8 @@ export const lessons: Lesson[] = [
       'C++17 起，文件流支持 open 接受 std::filesystem::path（在 <filesystem> 中），更好地支持 Unicode 文件名。',
     ],
     problem: '解决"如何在 C++ 中进行文件读写、使用字符串流进行文本解析和类型转换，以及理解流的状态和错误处理"的问题。',
-    demo: CPP24Demo,
+    demo: null,
+    demoComponent: CPP24Demo,
     code: CPP24Code,
     language: 'cpp',
   },
@@ -775,7 +786,8 @@ export const lessons: Lesson[] = [
       'C++20 引入信号量（std::counting_semaphore、std::binary_semaphore）、闩（std::latch）、屏障（std::barrier），丰富了并发原语。',
     ],
     problem: '解决"如何在 C++ 中创建和管理线程、保护共享数据避免数据竞争，以及使用条件变量进行线程间通信"的问题。',
-    demo: CPP25Demo,
+    demo: null,
+    demoComponent: CPP25Demo,
     code: CPP25Code,
     language: 'cpp',
   },
@@ -805,7 +817,8 @@ export const lessons: Lesson[] = [
       'C++17 引入结构化绑定（auto [a, b] = pair; 或 auto& [key, value] = *map_it;），可以简洁地解构元组、pair、结构体。',
     ],
     problem: '解决"如何编写简洁、安全、现代化的 C++ 代码，充分利用 C++11/14/17 的语言特性提升开发效率"的问题。',
-    demo: CPP26Demo,
+    demo: null,
+    demoComponent: CPP26Demo,
     code: CPP26Code,
     language: 'cpp',
   },
@@ -832,7 +845,8 @@ export const lessons: Lesson[] = [
       'C++20 起，std::vector 和 std::string 的部分操作是 constexpr 的（在编译期可以构造 vector、string 等，但有限制），这使得编译期计算能力大大增强。',
     ],
 
-    demo: CPP27Demo,
+    demo: null,
+    demoComponent: CPP27Demo,
     code: CPP27Code,
     language: 'cpp',
     problem: '解决"如何将计算从运行期移到编译期、理解 constexpr/consteval/constinit 的适用场景与限制，以及利用编译期计算提升性能"的问题。',
@@ -859,7 +873,8 @@ export const lessons: Lesson[] = [
       '头文件仍然会存在很长时间（与 C 的互操作、与不支持模块的编译器兼容），但新项目可以优先考虑模块。',
       '模块和 ABI：模块可能改变名称修饰（name mangling），导致不同编译器或不同版本之间的模块不兼容，标准库模块（import std;）有助于缓解此问题。',
     ],
-    demo: CPP28Demo,
+    demo: null,
+    demoComponent: CPP28Demo,
     code: CPP28Code,
     language: 'cpp',
     problem: '解决"如何理解 C++20 模块系统、它与传统头文件相比的优势，以及如何在项目中使用模块"的问题。',
@@ -886,7 +901,8 @@ export const lessons: Lesson[] = [
       '原型模式（Prototype）：通过克隆创建对象；C++ 可以用虚克隆函数（virtual unique_ptr<Base> clone() const = 0;）实现，派生类返回 unique_ptr<Derived>。',
       '现代 C++ 中，许多模式可以用 lambda 和 std::function 简化（如策略、命令、观察者），不再需要严格的接口继承，代码更灵活。',
     ],
-    demo: CPP29Demo,
+    demo: null,
+    demoComponent: CPP29Demo,
     code: CPP29Code,
     language: 'cpp',
     problem: '解决"如何在 C++ 中实现常用设计模式、利用现代 C++ 特性简化模式实现，以及选择适合问题的设计模式"的问题。',
@@ -913,7 +929,8 @@ export const lessons: Lesson[] = [
       'C++ 演进迅速：C++11（重大更新）、C++14（小更新）、C++17（重大更新：结构化绑定、if constexpr、折叠表达式、文件系统库）、C++20（重大更新：模块、概念、协程、范围库）、C++23（小更新）。保持学习新标准。',
       '跨平台 C++ 开发注意事项：字节序（用 <bit> 中的 endian）、字符编码（用 u8"" 字符串字面量、std::u8string、std::filesystem::path 的 unicode 支持）、编译器特定扩展（尽量使用标准特性，用预定义宏处理差异）。',
     ],
-    demo: CPP30Demo,
+    demo: null,
+    demoComponent: CPP30Demo,
     code: CPP30Code,
     language: 'cpp',
     problem: '解决"如何编写高质量、可维护的 C++ 代码、避免常见陷阱，以及建立现代 C++ 工程的构建、测试和持续集成流程"的问题。',

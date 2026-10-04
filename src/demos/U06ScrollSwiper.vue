@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeUnmount, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 
 const banners = [
   { title: 'Vue3 组合式 API', tone: '#d94b26' },
@@ -28,7 +28,10 @@ function toggleAuto() {
   autoplay.value = !autoplay.value
   autoplay.value ? start() : stop()
 }
-start()
+// 自动播放只在浏览器端启动：SSR 预渲染时不能调用 setInterval
+onMounted(() => {
+  if (autoplay.value) start()
+})
 onBeforeUnmount(stop)
 
 const courses = ref(['数组去重', '深拷贝', '防抖节流', 'Promise 时序'])

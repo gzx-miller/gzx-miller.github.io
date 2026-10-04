@@ -1,18 +1,29 @@
 import type { Component } from 'vue'
-import { defineAsyncComponent } from 'vue'
 import type { Lesson } from '../lessons'
 import { restoreCodeSource } from '../code-restore'
-
-const demoModules = import.meta.glob<Component>('../../demos/*.vue', { import: 'default' })
-
-function createDemo(name: string) {
-  const loader = demoModules[`../../demos/${name}.vue`]
-  if (!loader) throw new Error(`未找到内容组件：${name}`)
-  return defineAsyncComponent(async () => {
-    if (name.startsWith('E')) await import('../../element-plus/styles')
-    return loader()
-  })
-}
+import L01LLMCall from '../../demos/L01LLMCallArticle.vue'
+import L02PromptTemplate from '../../demos/L02PromptTemplateArticle.vue'
+import L03OutputParser from '../../demos/L03OutputParserArticle.vue'
+import L04LCEL from '../../demos/L04LCELArticle.vue'
+import L05Chains from '../../demos/L05ChainsArticle.vue'
+import L06DocSplitter from '../../demos/L06DocSplitterArticle.vue'
+import L07VectorRetrieval from '../../demos/L07VectorRetrievalArticle.vue'
+import L08Agent from '../../demos/L08AgentArticle.vue'
+import L09Tools from '../../demos/L09ToolsArticle.vue'
+import L10Memory from '../../demos/L10MemoryArticle.vue'
+import L11Callbacks from '../../demos/L11CallbacksArticle.vue'
+import L12QABot from '../../demos/L12QABotArticle.vue'
+import L13Streaming from '../../demos/L13StreamingArticle.vue'
+import L14Evaluation from '../../demos/L14EvaluationArticle.vue'
+import L15StructuredOutput from '../../demos/L15StructuredOutputArticle.vue'
+import L16LangGraph from '../../demos/L16LangGraphArticle.vue'
+import L17VectorStore from '../../demos/L17VectorStoreArticle.vue'
+import L18Deploy from '../../demos/L18DeployArticle.vue'
+import L19RagPipeline from '../../demos/L19RagPipelineArticle.vue'
+import L20MultiModal from '../../demos/L20MultiModalArticle.vue'
+import L21FunctionCalling from '../../demos/L21FunctionCallingArticle.vue'
+import L22PromptEngineering from '../../demos/L22PromptEngineeringArticle.vue'
+import L23Guardrails from '../../demos/L23GuardrailsArticle.vue'
 
 const langchainCodeModules = import.meta.glob<string>('../../demos/langchain-code/*', { query: '?raw', import: 'default' })
 
@@ -21,30 +32,6 @@ function createCodeLoader(path: string) {
   if (!loader) throw new Error(`未找到内容源码：${path}`)
   return () => loader().then(restoreCodeSource)
 }
-
-const L01LLMCall = createDemo('L01LLMCallArticle')
-const L02PromptTemplate = createDemo('L02PromptTemplateArticle')
-const L03OutputParser = createDemo('L03OutputParserArticle')
-const L04LCEL = createDemo('L04LCELArticle')
-const L05Chains = createDemo('L05ChainsArticle')
-const L06DocSplitter = createDemo('L06DocSplitterArticle')
-const L07VectorRetrieval = createDemo('L07VectorRetrievalArticle')
-const L08Agent = createDemo('L08AgentArticle')
-const L09Tools = createDemo('L09ToolsArticle')
-const L10Memory = createDemo('L10MemoryArticle')
-const L11Callbacks = createDemo('L11CallbacksArticle')
-const L12QABot = createDemo('L12QABotArticle')
-const L13Streaming = createDemo('L13StreamingArticle')
-const L14Evaluation = createDemo('L14EvaluationArticle')
-const L15StructuredOutput = createDemo('L15StructuredOutputArticle')
-const L16LangGraph = createDemo('L16LangGraphArticle')
-const L17VectorStore = createDemo('L17VectorStoreArticle')
-const L18Deploy = createDemo('L18DeployArticle')
-const L19RagPipeline = createDemo('L19RagPipelineArticle')
-const L20MultiModal = createDemo('L20MultiModalArticle')
-const L21FunctionCalling = createDemo('L21FunctionCallingArticle')
-const L22PromptEngineering = createDemo('L22PromptEngineeringArticle')
-const L23Guardrails = createDemo('L23GuardrailsArticle')
 
 const L1Code = createCodeLoader('langchain-code/L1Code.ts.txt')
 const L2Code = createCodeLoader('langchain-code/L2Code.ts.txt')
@@ -78,7 +65,8 @@ export const lessons: Lesson[] = [
     category: '基础入门',
     path: '/langchain/l-1/llm-call',
     summary: '用智能问答模拟器展示 ChatOpenAI 的基本调用、模型配置和流式输出。',
-    demo: L01LLMCall,
+    demo: null,
+    demoComponent: L01LLMCall,
     code: L1Code,
     language: 'typescript',
     principle:
@@ -104,7 +92,8 @@ export const lessons: Lesson[] = [
     category: '提示工程',
     path: '/langchain/l-2/prompt-template',
     summary: '用产品文案生成器展示 PromptTemplate 的变量注入、ChatPromptTemplate 的消息序列和 Partial Variables。',
-    demo: L02PromptTemplate,
+    demo: null,
+    demoComponent: L02PromptTemplate,
     code: L2Code,
     language: 'typescript',
     principle:
@@ -130,7 +119,8 @@ export const lessons: Lesson[] = [
     category: '输出处理',
     path: '/langchain/l-3/output-parser',
     summary: '用课程推荐展示 StringOutputParser 和基于 Zod 的结构化输出解析。',
-    demo: L03OutputParser,
+    demo: null,
+    demoComponent: L03OutputParser,
     code: L3Code,
     language: 'typescript',
     principle:
@@ -156,7 +146,8 @@ export const lessons: Lesson[] = [
     category: '核心概念',
     path: '/langchain/l-4/lcel',
     summary: '用管道执行器展示 LCEL 的 prompt.pipe(model).pipe(parser) 链式组合和数据流转。',
-    demo: L04LCEL,
+    demo: null,
+    demoComponent: L04LCEL,
     code: L4Code,
     language: 'typescript',
     principle:
@@ -182,7 +173,8 @@ export const lessons: Lesson[] = [
     category: '核心概念',
     path: '/langchain/l-5/chains',
     summary: '用课程大纲生成展示 LCEL 多步骤链式处理：大纲生成 → 内容展开 → 摘要提炼。',
-    demo: L05Chains,
+    demo: null,
+    demoComponent: L05Chains,
     code: L5Code,
     language: 'typescript',
     principle:
@@ -208,7 +200,8 @@ export const lessons: Lesson[] = [
     category: 'RAG',
     path: '/langchain/l-6/doc-splitter',
     summary: '用文档切分器展示 RecursiveCharacterTextSplitter 的块大小和重叠量配置。',
-    demo: L06DocSplitter,
+    demo: null,
+    demoComponent: L06DocSplitter,
     code: L6Code,
     language: 'typescript',
     principle:
@@ -234,7 +227,8 @@ export const lessons: Lesson[] = [
     category: 'RAG',
     path: '/langchain/l-7/vector-retrieval',
     summary: '用知识库搜索展示文档嵌入、余弦相似度计算和 Top-K 检索结果排序。',
-    demo: L07VectorRetrieval,
+    demo: null,
+    demoComponent: L07VectorRetrieval,
     code: L7Code,
     language: 'typescript',
     principle:
@@ -261,7 +255,8 @@ export const lessons: Lesson[] = [
     category: 'Agent',
     path: '/langchain/l-8/agent',
     summary: '用推理过程展示 Agent 的 ReAct 循环：思考 → 行动 → 观察 → 回答。',
-    demo: L08Agent,
+    demo: null,
+    demoComponent: L08Agent,
     code: L8Code,
     language: 'typescript',
     principle:
@@ -287,7 +282,8 @@ export const lessons: Lesson[] = [
     category: 'Agent',
     path: '/langchain/l-9/tools',
     summary: '用工具注册表展示 tool 函数的定义、Zod 参数 Schema 和调用过程。',
-    demo: L09Tools,
+    demo: null,
+    demoComponent: L09Tools,
     code: L9Code,
     language: 'typescript',
     principle:
@@ -313,7 +309,8 @@ export const lessons: Lesson[] = [
     category: '对话管理',
     path: '/langchain/l-10/memory',
     summary: '用对话面板展示完整历史、最近 k 轮窗口、历史摘要三种记忆策略及 RunnableWithMessageHistory。',
-    demo: L10Memory,
+    demo: null,
+    demoComponent: L10Memory,
     code: L10Code,
     language: 'typescript',
     principle:
@@ -339,7 +336,8 @@ export const lessons: Lesson[] = [
     category: '工程实践',
     path: '/langchain/l-11/callbacks',
     summary: '用事件时间线展示 handleChainStart、handleLLMStart、handleLLMNewToken、handleLLMEnd 等回调的触发时机。',
-    demo: L11Callbacks,
+    demo: null,
+    demoComponent: L11Callbacks,
     code: L11Code,
     language: 'typescript',
     principle:
@@ -365,7 +363,8 @@ export const lessons: Lesson[] = [
     category: '综合实战',
     path: '/langchain/l-12/qa-bot',
     summary: '用智能问答助手展示 Retriever 检索、Agent 推理和对话记忆的综合应用。',
-    demo: L12QABot,
+    demo: null,
+    demoComponent: L12QABot,
     code: L12Code,
     language: 'typescript',
     principle:
@@ -391,7 +390,8 @@ export const lessons: Lesson[] = [
     category: '核心概念',
     path: '/langchain/l-13/streaming',
     summary: '用三种流式策略对比展示 invoke、stream 和 astream_events 的差异和适用场景。',
-    demo: L13Streaming,
+    demo: null,
+    demoComponent: L13Streaming,
     code: L13Code,
     language: 'typescript',
     principle:
@@ -417,7 +417,8 @@ export const lessons: Lesson[] = [
     category: '工程实践',
     path: '/langchain/l-14/evaluation',
     summary: '用问答质量评估展示 LLM-as-Judge 评估模式和人工评分对比。',
-    demo: L14Evaluation,
+    demo: null,
+    demoComponent: L14Evaluation,
     code: L14Code,
     language: 'typescript',
     principle:
@@ -439,7 +440,8 @@ export const lessons: Lesson[] = [
 {
     id: 'L_15', title: '结构化输出与 Zod Schema', navTitle: '结构化输出', category: '输出控制',
     path: '/langchain/l-15/structured-output', summary: '用 Zod Schema 约束 LLM 输出为结构化数据，对比 JSON Mode 和函数调用。',
-    demo: L15StructuredOutput,
+    demo: null,
+    demoComponent: L15StructuredOutput,
     code: L15Code,
     language: 'typescript',
     principle: '结构化输出让 LLM 直接返回可编程消费的数据：withStructuredOutput 底层走函数调用，模型按 Zod Schema 生成参数对象并由 Schema 校验；JSON Mode 只保证输出是合法 JSON，字段结构仍靠提示词约束。字段越多、层级越深，函数调用的可靠性优势越明显；Zod 同时提供运行时校验与 TypeScript 类型推导。',
@@ -450,7 +452,8 @@ export const lessons: Lesson[] = [
 {
     id: 'L_16', title: 'LangGraph 多智能体编排', navTitle: 'LangGraph', category: '智能体',
     path: '/langchain/l-16/langgraph', summary: '用状态图编排课程推荐智能体，掌握节点、边和条件路由。',
-    demo: L16LangGraph,
+    demo: null,
+    demoComponent: L16LangGraph,
     code: L16Code,
     language: 'typescript',
     principle: 'LangGraph 把智能体工作流建模为有向状态图：节点是执行函数，接收当前状态并返回状态更新；普通边定义固定转移，条件边根据状态动态选择下一个节点，从而表达循环与分支。状态通过 channel 在节点间共享并按 reducer 合并更新；编译后的图支持流式观察每个节点执行过程，并可挂载检查点实现暂停与恢复。',
@@ -461,7 +464,8 @@ export const lessons: Lesson[] = [
 {
     id: 'L_17', title: '向量存储与检索策略', navTitle: '向量存储', category: 'RAG',
     path: '/langchain/l-17/vector-store', summary: '比较 Chroma、FAISS、Pinecone 和 pgvector 的适用场景与检索策略。',
-    demo: L17VectorStore,
+    demo: null,
+    demoComponent: L17VectorStore,
     code: L17Code,
     language: 'typescript',
     principle: '向量存储把文本嵌入为高维向量，用余弦相似度等度量做近邻检索，是 RAG 的检索底座。后端选择取决于规模与运维条件：MemoryVectorStore 仅供开发验证，Chroma/FAISS 适合本地与中小规模，Pinecone 等托管服务面向生产，pgvector 适合已有 PostgreSQL 的团队。检索侧还要选择策略：纯相似度、MMR（兼顾多样性）以及元数据过滤与混合检索（向量+关键词）。',
@@ -472,7 +476,8 @@ export const lessons: Lesson[] = [
 {
     id: 'L_18', title: '部署优化与语义缓存', navTitle: '部署优化', category: '工程实践',
     path: '/langchain/l-18/deploy', summary: '掌握 LLM 应用的缓存、流式输出、Token 预算和成本控制策略。',
-    demo: L18Deploy,
+    demo: null,
+    demoComponent: L18Deploy,
     code: L18Code,
     language: 'typescript',
     principle: 'LLM 应用部署需要同时平衡三件事：延迟（用语义缓存复用近似问题的答案，降低重复调用）、成本（管理 Token 预算、按任务选择模型并估算调用费用）和可靠性（对限流做指数退避重试、为长请求设置超时上限、在模型不可用时降级到备用模型），任何一项失守都会直接反映到用户体验与运营账单上。',
@@ -483,7 +488,8 @@ export const lessons: Lesson[] = [
 {
     id: 'L_19', title: 'RAG 完整流水线实现', navTitle: 'RAG 流水线', category: 'RAG',
     path: '/langchain/l-19/rag-pipeline', summary: '端到端实现文档加载、切分、向量化、存储、检索、重排、生成的完整 RAG 流水线。',
-    demo: L19RagPipeline,
+    demo: null,
+    demoComponent: L19RagPipeline,
     code: L19Code,
     language: 'typescript',
     principle: 'RAG（检索增强生成）把外部知识接进 LLM：离线阶段把文档加载、切分、向量化后存入向量库，在线阶段把用户提问向量化并检索相关块、重排精选后连同问题一起放进提示词，让模型基于真实资料作答。加载、切分、向量化、存储、检索、重排、生成七个环节逐级传递，任何一环质量不足都会让最终回答失真，因此需要端到端测量与调优。',
@@ -494,7 +500,8 @@ export const lessons: Lesson[] = [
 {
     id: 'L_20', title: '多模态模型与视觉理解', navTitle: '多模态', category: '模型能力',
     path: '/langchain/l-20/multi-modal', summary: '使用多模态模型同时理解文本和图像，实现图像描述、图表分析、OCR 等视觉任务。',
-    demo: L20MultiModal,
+    demo: null,
+    demoComponent: L20MultiModal,
     code: L20Code,
     language: 'typescript',
     principle: '多模态模型（如 GPT-4o 系列）可以同时理解文本与图像：LangChain 在 HumanMessage 的 content 数组中混排 text 与 image_url 内容块，图片既可传 URL 也可传 base64 data URL。模型据此完成图像描述、视觉问答、图表解读与 OCR 等任务，还可与 Zod Schema 结合输出结构化的图像分析结果。',
@@ -505,7 +512,8 @@ export const lessons: Lesson[] = [
 {
     id: 'L_21', title: '函数调用与工具扩展', navTitle: '函数调用', category: '工具与代理',
     path: '/langchain/l-21/function-calling', summary: '通过 Function Calling 让 LLM 调用外部工具，扩展实时数据获取和操作执行能力。',
-    demo: L21FunctionCalling,
+    demo: null,
+    demoComponent: L21FunctionCalling,
     code: L21Code,
     language: 'typescript',
     principle: '函数调用让 LLM 突破知识截止与封闭环境：应用先用 Zod Schema 描述工具参数，模型在对话中返回结构化的 tool_calls（工具名+参数），宿主代码执行对应函数后把 ToolMessage 结果回传，模型再基于结果生成最终回答。LangChain 的 tool 抽象把定义、校验与执行统一起来，Agent 在此之上自动编排多轮调用。',
@@ -516,7 +524,8 @@ export const lessons: Lesson[] = [
 {
     id: 'L_22', title: '提示词工程最佳实践', navTitle: '提示词工程', category: '提示工程',
     path: '/langchain/l-22/prompt-engineering', summary: '掌握角色设定、清晰指令、示例引导、思维链、结构化输出等提示词工程核心技巧。',
-    demo: L22PromptEngineering,
+    demo: null,
+    demoComponent: L22PromptEngineering,
     code: L22Code,
     language: 'typescript',
     principle: '提示词工程通过设计输入来引导模型行为，核心手段包括：角色设定（system 提示框定专家身份）、清晰指令与输出格式约束、Few-shot 示例（用样例对齐判别标准）、思维链（引导分步推理提升复杂任务准确率）、以及结构化输出要求。它本质上是在补偿模型缺失的上下文与约束，需要针对真实样例迭代验证。',
@@ -527,7 +536,8 @@ export const lessons: Lesson[] = [
 {
     id: 'L_23', title: '输出护栏与安全验证', navTitle: '输出护栏', category: '安全与治理',
     path: '/langchain/l-23/guardrails', summary: '在 LLM 输出前后进行验证和修正，确保输出符合业务规则、格式要求和安全政策。',
-    demo: L23Guardrails,
+    demo: null,
+    demoComponent: L23Guardrails,
     code: L23Code,
     language: 'typescript',
     principle: '输出护栏在 LLM 调用前后插入校验层：输入侧检查提示注入与有害内容，输出侧用 Zod 校验格式、用审核提示词检查合规与业务范围，不通过则重试、改写或返回降级话术。护栏把不可控的生成约束成符合业务规则的输出，所有拦截都应有日志以便审计与迭代。',

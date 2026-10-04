@@ -1,9 +1,27 @@
 import type { Component } from 'vue'
-import { defineAsyncComponent } from 'vue'
 import type { Lesson } from '../lessons'
 import { restoreCodeSource } from '../code-restore'
+import N01ProjectStructure from '../../demos/N01ProjectStructureArticle.vue'
+import N02FileRouting from '../../demos/N02FileRoutingArticle.vue'
+import N03DynamicRoute from '../../demos/N03DynamicRouteArticle.vue'
+import N04Layouts from '../../demos/N04LayoutsArticle.vue'
+import N05AutoImport from '../../demos/N05AutoImportArticle.vue'
+import N06Composables from '../../demos/N06ComposablesArticle.vue'
+import N07UseFetch from '../../demos/N07UseFetchArticle.vue'
+import N08UseAsyncData from '../../demos/N08UseAsyncDataArticle.vue'
+import N09SSR from '../../demos/N09SSRArticle.vue'
+import N10ClientOnly from '../../demos/N10ClientOnlyArticle.vue'
+import N11Middleware from '../../demos/N11MiddlewareArticle.vue'
+import N12Plugins from '../../demos/N12PluginsArticle.vue'
+import N13UseState from '../../demos/N13UseStateArticle.vue'
+import N14SEO from '../../demos/N14SEOArticle.vue'
+import N15Nitro from '../../demos/N15NitroArticle.vue'
+import N16ApiRoutes from '../../demos/N16ApiRoutesArticle.vue'
+import N17SSG from '../../demos/N17SSGArticle.vue'
+import N18RuntimeConfig from '../../demos/N18RuntimeConfigArticle.vue'
+import N19ErrorHandling from '../../demos/N19ErrorHandlingArticle.vue'
+import N20Modules from '../../demos/N20ModulesArticle.vue'
 
-const demoModules = import.meta.glob<Component>('../../demos/*.vue', { import: 'default' })
 const vueCodeModules = import.meta.glob<string>('../../demos/*.vue', { query: '?raw', import: 'default' })
 const jsxCodeModules = import.meta.glob<string>('../../demos/react-jsx/*.jsx', { query: '?raw', import: 'default' })
 const stateCodeModules = import.meta.glob<string>('../../demos/state-react/*.js', { query: '?raw', import: 'default' })
@@ -12,15 +30,6 @@ const tsCodeModules = import.meta.glob<string>('../../demos/ts-code/*.ts', { que
 // 文案需要原样显示 import.meta 的 client 标记时用该常量拼接：直接写字面量会被压缩器折叠后命中 Nitro 的替换规则
 const metaClient = ['import', 'meta', 'client'].join('.')
 const styleCodeModules = import.meta.glob<string>('../../demos/style-code/*', { query: '?raw', import: 'default' })
-
-function createDemo(name: string) {
-  const loader = demoModules[`../../demos/${name}.vue`]
-  if (!loader) throw new Error(`未找到内容组件：${name}`)
-  return defineAsyncComponent(async () => {
-    if (name.startsWith('E')) await import('../../element-plus/styles')
-    return loader()
-  })
-}
 
 function createCodeLoader(path: string) {
   const modules = path.startsWith('react-jsx/')
@@ -39,47 +48,45 @@ function createCodeLoader(path: string) {
   return () => loader().then(restoreCodeSource)
 }
 
-const N01ProjectStructure = createDemo('N01ProjectStructureArticle')
 const N01Code = createCodeLoader('N01ProjectStructure.vue')
-const N02FileRouting = createDemo('N02FileRoutingArticle')
-const N02Code = createCodeLoader('N02FileRouting.vue')
-const N03DynamicRoute = createDemo('N03DynamicRouteArticle')
-const N03Code = createCodeLoader('N03DynamicRoute.vue')
-const N04Layouts = createDemo('N04LayoutsArticle')
-const N04Code = createCodeLoader('N04Layouts.vue')
-const N05AutoImport = createDemo('N05AutoImportArticle')
-const N05Code = createCodeLoader('N05AutoImport.vue')
-const N06Composables = createDemo('N06ComposablesArticle')
-const N06Code = createCodeLoader('N06Composables.vue')
-const N07UseFetch = createDemo('N07UseFetchArticle')
-const N07Code = createCodeLoader('N07UseFetch.vue')
-const N08UseAsyncData = createDemo('N08UseAsyncDataArticle')
-const N08Code = createCodeLoader('N08UseAsyncData.vue')
-const N09SSR = createDemo('N09SSRArticle')
-const N09Code = createCodeLoader('N09SSR.vue')
-const N10ClientOnly = createDemo('N10ClientOnlyArticle')
-const N10Code = createCodeLoader('N10ClientOnly.vue')
-const N11Middleware = createDemo('N11MiddlewareArticle')
-const N11Code = createCodeLoader('N11Middleware.vue')
-const N12Plugins = createDemo('N12PluginsArticle')
-const N12Code = createCodeLoader('N12Plugins.vue')
-const N13UseState = createDemo('N13UseStateArticle')
-const N13Code = createCodeLoader('N13UseState.vue')
-const N14SEO = createDemo('N14SEOArticle')
-const N14Code = createCodeLoader('N14SEO.vue')
-const N15Nitro = createDemo('N15NitroArticle')
-const N15Code = createCodeLoader('N15Nitro.vue')
-const N16ApiRoutes = createDemo('N16ApiRoutesArticle')
-const N16Code = createCodeLoader('N16ApiRoutes.vue')
-const N17SSG = createDemo('N17SSGArticle')
-const N17Code = createCodeLoader('N17SSG.vue')
-const N18RuntimeConfig = createDemo('N18RuntimeConfigArticle')
-const N18Code = createCodeLoader('N18RuntimeConfig.vue')
-const N19ErrorHandling = createDemo('N19ErrorHandlingArticle')
-const N19Code = createCodeLoader('N19ErrorHandling.vue')
-const N20Modules = createDemo('N20ModulesArticle')
-const N20Code = createCodeLoader('N20Modules.vue')
 
+const N02Code = createCodeLoader('N02FileRouting.vue')
+
+const N03Code = createCodeLoader('N03DynamicRoute.vue')
+
+const N04Code = createCodeLoader('N04Layouts.vue')
+
+const N05Code = createCodeLoader('N05AutoImport.vue')
+
+const N06Code = createCodeLoader('N06Composables.vue')
+
+const N07Code = createCodeLoader('N07UseFetch.vue')
+
+const N08Code = createCodeLoader('N08UseAsyncData.vue')
+
+const N09Code = createCodeLoader('N09SSR.vue')
+
+const N10Code = createCodeLoader('N10ClientOnly.vue')
+
+const N11Code = createCodeLoader('N11Middleware.vue')
+
+const N12Code = createCodeLoader('N12Plugins.vue')
+
+const N13Code = createCodeLoader('N13UseState.vue')
+
+const N14Code = createCodeLoader('N14SEO.vue')
+
+const N15Code = createCodeLoader('N15Nitro.vue')
+
+const N16Code = createCodeLoader('N16ApiRoutes.vue')
+
+const N17Code = createCodeLoader('N17SSG.vue')
+
+const N18Code = createCodeLoader('N18RuntimeConfig.vue')
+
+const N19Code = createCodeLoader('N19ErrorHandling.vue')
+
+const N20Code = createCodeLoader('N20Modules.vue')
 
 export const lessons: Lesson[] = [
 {
@@ -89,7 +96,8 @@ export const lessons: Lesson[] = [
     category: '起步',
     path: '/nuxt/n-1/project-structure',
     summary: '了解 Nuxt 的目录约定、自动导入机制和 nuxt.config.ts 中的核心配置项。',
-    demo: N01ProjectStructure,
+    demo: null,
+    demoComponent: N01ProjectStructure,
     code: N01Code,
     language: 'vue',
     principle:
@@ -115,7 +123,8 @@ export const lessons: Lesson[] = [
     category: '起步',
     path: '/nuxt/n-2/file-routing',
     summary: '掌握 Nuxt 文件路由的映射规则，理解静态路由、动态路由和嵌套路由的文件命名约定。',
-    demo: N02FileRouting,
+    demo: null,
+    demoComponent: N02FileRouting,
     code: N02Code,
     language: 'vue',
     principle:
@@ -141,7 +150,8 @@ export const lessons: Lesson[] = [
     category: '路由',
     path: '/nuxt/n-3/dynamic-route',
     summary: '深入理解动态路由参数 [id] 和 catch-all [...slug] 的匹配规则与参数获取方式。',
-    demo: N03DynamicRoute,
+    demo: null,
+    demoComponent: N03DynamicRoute,
     code: N03Code,
     language: 'vue',
     principle:
@@ -167,7 +177,8 @@ export const lessons: Lesson[] = [
     category: '路由',
     path: '/nuxt/n-4/layouts',
     summary: '掌握 layouts/ 目录创建布局模板，页面通过 definePageMeta 指定布局。',
-    demo: N04Layouts,
+    demo: null,
+    demoComponent: N04Layouts,
     code: N04Code,
     language: 'vue',
     principle:
@@ -193,7 +204,8 @@ export const lessons: Lesson[] = [
     category: '约定',
     path: '/nuxt/n-5/auto-import',
     summary: '理解 components/、composables/、utils/ 的自动导入机制与组件命名规则。',
-    demo: N05AutoImport,
+    demo: null,
+    demoComponent: N05AutoImport,
     code: N05Code,
     language: 'vue',
     principle:
@@ -219,7 +231,8 @@ export const lessons: Lesson[] = [
     category: '约定',
     path: '/nuxt/n-6/composables',
     summary: '掌握 composables/ 目录的使用模式，封装与复用可复用的响应式逻辑。',
-    demo: N06Composables,
+    demo: null,
+    demoComponent: N06Composables,
     code: N06Code,
     language: 'vue',
     principle:
@@ -245,7 +258,8 @@ export const lessons: Lesson[] = [
     category: '数据获取',
     path: '/nuxt/n-7/use-fetch',
     summary: '掌握 useFetch 的声明式数据获取、参数传递、错误处理与仅客户端请求模式。',
-    demo: N07UseFetch,
+    demo: null,
+    demoComponent: N07UseFetch,
     code: N07Code,
     language: 'vue',
     principle:
@@ -271,7 +285,8 @@ export const lessons: Lesson[] = [
     category: '数据获取',
     path: '/nuxt/n-8/use-async-data',
     summary: '深入 useAsyncData 的 key 管理、去重策略、数据转换与 lazy 模式。',
-    demo: N08UseAsyncData,
+    demo: null,
+    demoComponent: N08UseAsyncData,
     code: N08Code,
     language: 'vue',
     principle:
@@ -297,7 +312,8 @@ export const lessons: Lesson[] = [
     category: '渲染',
     path: '/nuxt/n-9/ssr',
     summary: '理解 SSR 的请求生命周期、Hydration 过程与常见 SSR 兼容性问题。',
-    demo: N09SSR,
+    demo: null,
+    demoComponent: N09SSR,
     code: N09Code,
     language: 'vue',
     principle:
@@ -323,7 +339,8 @@ export const lessons: Lesson[] = [
     category: '渲染',
     path: '/nuxt/n-10/client-only',
     summary: `掌握 ClientOnly 组件、${metaClient} 判断与 .client.ts 后缀等客户端专属渲染方式。`,
-    demo: N10ClientOnly,
+    demo: null,
+    demoComponent: N10ClientOnly,
     code: N10Code,
     language: 'vue',
     principle:
@@ -349,7 +366,8 @@ export const lessons: Lesson[] = [
     category: '路由控制',
     path: '/nuxt/n-11/middleware',
     summary: '掌握命名中间件、全局中间件与内联中间件的定义方式和执行顺序。',
-    demo: N11Middleware,
+    demo: null,
+    demoComponent: N11Middleware,
     code: N11Code,
     language: 'vue',
     principle:
@@ -375,7 +393,8 @@ export const lessons: Lesson[] = [
     category: '路由控制',
     path: '/nuxt/n-12/plugins',
     summary: '掌握 plugins/ 目录的自动注册、.client.ts 端侧限制与 provide 注入模式。',
-    demo: N12Plugins,
+    demo: null,
+    demoComponent: N12Plugins,
     code: N12Code,
     language: 'vue',
     principle:
@@ -401,7 +420,8 @@ export const lessons: Lesson[] = [
     category: '状态管理',
     path: '/nuxt/n-13/use-state',
     summary: '掌握 useState 的轻量状态共享用法，理解其与 Pinia 的适用场景区别。',
-    demo: N13UseState,
+    demo: null,
+    demoComponent: N13UseState,
     code: N13Code,
     language: 'vue',
     principle:
@@ -427,7 +447,8 @@ export const lessons: Lesson[] = [
     category: '状态管理',
     path: '/nuxt/n-14/seo',
     summary: '掌握 useHead、useSeoMeta 管理 SEO 标签，理解响应式 SEO 与全局 head 配置。',
-    demo: N14SEO,
+    demo: null,
+    demoComponent: N14SEO,
     code: N14Code,
     language: 'vue',
     principle:
@@ -453,7 +474,8 @@ export const lessons: Lesson[] = [
     category: '服务端',
     path: '/nuxt/n-15/nitro',
     summary: '理解 Nitro 引擎的核心特性、部署预设与基于 routeRules 的混合渲染。',
-    demo: N15Nitro,
+    demo: null,
+    demoComponent: N15Nitro,
     code: N15Code,
     language: 'vue',
     principle:
@@ -479,7 +501,8 @@ export const lessons: Lesson[] = [
     category: '服务端',
     path: '/nuxt/n-16/api-routes',
     summary: '掌握 server/api/ 目录创建 API 路由，理解方法后缀与请求参数的获取。',
-    demo: N16ApiRoutes,
+    demo: null,
+    demoComponent: N16ApiRoutes,
     code: N16Code,
     language: 'vue',
     principle:
@@ -505,7 +528,8 @@ export const lessons: Lesson[] = [
     category: '部署',
     path: '/nuxt/n-17/ssg',
     summary: '掌握 SSG 构建流程、ISR 增量静态再生与基于 routeRules 的混合渲染。',
-    demo: N17SSG,
+    demo: null,
+    demoComponent: N17SSG,
     code: N17Code,
     language: 'vue',
     principle:
@@ -531,7 +555,8 @@ export const lessons: Lesson[] = [
     category: '部署',
     path: '/nuxt/n-18/runtime-config',
     summary: '掌握 runtimeConfig 的公有/私有配置、环境变量映射及与 app.config.ts 的区别。',
-    demo: N18RuntimeConfig,
+    demo: null,
+    demoComponent: N18RuntimeConfig,
     code: N18Code,
     language: 'vue',
     principle:
@@ -557,7 +582,8 @@ export const lessons: Lesson[] = [
     category: '工程实践',
     path: '/nuxt/n-19/error-handling',
     summary: '掌握 error.vue 自定义错误页面、错误钩子、API 错误处理及 createError/clearError。',
-    demo: N19ErrorHandling,
+    demo: null,
+    demoComponent: N19ErrorHandling,
     code: N19Code,
     language: 'vue',
     principle:
@@ -583,7 +609,8 @@ export const lessons: Lesson[] = [
     category: '工程实践',
     path: '/nuxt/n-20/modules',
     summary: '掌握常用 Nuxt 模块的安装配置、模块开发结构与生态使用要点。',
-    demo: N20Modules,
+    demo: null,
+    demoComponent: N20Modules,
     code: N20Code,
     language: 'vue',
     principle:

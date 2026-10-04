@@ -13,7 +13,9 @@ const active = ref('default')
     </div>
 
     <div class="demo-preview" :class="'mode-' + active">
-      <style v-if="active === 'layers'">
+      <!-- 用 <component is="style"> 动态标签承载内嵌样式：
+           既保留实时演示 @layer 的效果，也避开模板编译对 <style> 节点的处理。 -->
+      <component is="style" v-if="active === 'layers'">
         @layer reset, components, utilities;
         @layer reset {
           .layer-box { background: #e9ecef; border: 2px solid #adb5bd; }
@@ -24,12 +26,12 @@ const active = ref('default')
         @layer utilities {
           .layer-box { background: #ffc9c9; border-color: #e03131; }
         }
-      </style>
-      <style v-else>
+      </component>
+      <component is="style" v-else>
         .layer-box-default.reset { background: #e9ecef; border: 2px solid #adb5bd; }
         .layer-box-default.components { background: #d0bfff; border-color: #7048e8; }
         .layer-box-default.utilities { background: #ffc9c9; border-color: #e03131; }
-      </style>
+      </component>
       <div :class="active === 'layers' ? 'layer-box' : 'layer-box-default components'" style="padding: 16px; border-radius: 8px; transition: all 0.3s;">
         同一个元素的背景色：reset → components → utilities<br/>
         <small>@layer 让 utilities 层始终优先，无论 CSS 文件顺序</small>

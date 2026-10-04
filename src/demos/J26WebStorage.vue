@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 const key = ref('course_progress')
 const value = ref('')
 const stored = ref('')
@@ -40,9 +40,15 @@ function clearAll() {
   read()
 }
 
-// 监听 storage 事件（仅其他标签页触发）
-window.addEventListener('storage', (e) => {
+// 监听 storage 事件（仅其他标签页触发）；仅在浏览器端注册，并在卸载时移除
+function onStorageChange(e) {
   if (e.key === key.value) read()
+}
+onMounted(() => {
+  window.addEventListener('storage', onStorageChange)
+})
+onBeforeUnmount(() => {
+  window.removeEventListener('storage', onStorageChange)
 })
 </script>
 

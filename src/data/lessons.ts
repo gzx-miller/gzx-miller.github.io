@@ -6,6 +6,15 @@ export interface Lesson {
   path: string
   summary: string
   demo?: any // Vue 组件，使用 any 避免导入 vue
+  /**
+   * 正文内容组件（异步、仅供 pages 原有逻辑兜底使用）。
+   * 新代码请改用 demoComponent + demoProps：前者是静态导入的同步组件，
+   * 能在 SSG 预渲染阶段连同嵌套的交互 demo 一起输出为 HTML，
+   * 避免「正文等 JS 才出现」的首屏空窗。
+   */
+  demoComponent?: any
+  /** 传给 demoComponent 的 props / attrs（如嵌套组件的名字） */
+  demoProps?: Record<string, unknown>
   code?: () => Promise<string> // 返回源码的函数
   language?: string
   principle?: string

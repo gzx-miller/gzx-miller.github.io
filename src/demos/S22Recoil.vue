@@ -11,13 +11,28 @@ interface SelectorOptions<T> {
   get: () => T
 }
 
-const atomRegistry = ref<Record<string, any>>({})
+// 注意：registry 必须放在组件实例内（而非模块顶层）。
+// 模块级变量在 SSR 期间会被所有请求共享，既造成跨请求状态污染，
+// 也会让「按 key 惰性注册」的读取顺序在服务端出错。
+//
+// 这里用普通对象（而非 ref）保存各 atom 的状态 ref：
+// 若外层用 ref/reactive 包裹，Vue 会对嵌套的 ref 做自动解包，
+// 存进去的 ref 会退化成普通值，导致读取时拿到 undefined。
+const atomRegistry: Record<string, { value: unknown }> = {}
+
+/**
+ * 取出（必要时创建）某个 atom 对应的状态容器。
+ * 派生 selector 会通过它读取上游 atom，因此「读」与「注册」必须走同一路径。
+ */
+function resolveAtomRef<T>(atom: Atom<T>): { value: T } {
+  if (!(atom.key in atomRegistry)) {
+    atomRegistry[atom.key] = ref<T>(atom.default)
+  }
+  return atomRegistry[atom.key] as { value: T }
+}
 
 function useRecoilState<T>(atom: Atom<T>): [T, (val: T | ((prev: T) => T)) => void] {
-  if (!(atom.key in atomRegistry.value)) {
-    atomRegistry.value[atom.key] = ref(atom.default)
-  }
-  const stateRef = atomRegistry.value[atom.key]
+  const stateRef = resolveAtomRef(atom)
   const setter = (val: T | ((prev: T) => T)) => {
     if (typeof val === 'function') {
       stateRef.value = (val as (prev: T) => T)(stateRef.value)
@@ -32,10 +47,7 @@ function useRecoilValue<T>(atomOrSelector: Atom<T> | SelectorOptions<T>): T {
   if ('get' in atomOrSelector) {
     return atomOrSelector.get()
   }
-  if (!(atomOrSelector.key in atomRegistry.value)) {
-    atomRegistry.value[atomOrSelector.key] = ref(atomOrSelector.default)
-  }
-  return atomRegistry.value[atomOrSelector.key].value
+  return resolveAtomRef(atomOrSelector).value
 }
 
 const userNameAtom: Atom<string> = { key: 'userName', default: '秋日旅人' }

@@ -1,17 +1,29 @@
 import type { Component } from 'vue'
-import { defineAsyncComponent } from 'vue'
 import type { Lesson } from '../lessons'
 import { restoreCodeSource } from '../code-restore'
+import WB01WhatIsWasm from '../../demos/WB01WhatIsWasmArticle.vue'
+import WB02WatBinary from '../../demos/WB02WatBinaryArticle.vue'
+import WB03ValueTypes from '../../demos/WB03ValueTypesArticle.vue'
+import WB04Operators from '../../demos/WB04OperatorsArticle.vue'
+import WB05LinearMemory from '../../demos/WB05LinearMemoryArticle.vue'
+import WB06StringsInterop from '../../demos/WB06StringsInteropArticle.vue'
+import WB07FunctionsLocals from '../../demos/WB07FunctionsLocalsArticle.vue'
+import WB08ImportExportGlobals from '../../demos/WB08ImportExportGlobalsArticle.vue'
+import WB09JsInteropNumbers from '../../demos/WB09JsInteropNumbersArticle.vue'
+import WB10FunctionTable from '../../demos/WB10FunctionTableArticle.vue'
+import WB11ControlFlow from '../../demos/WB11ControlFlowArticle.vue'
+import WB12MemoryArrays from '../../demos/WB12MemoryArraysArticle.vue'
+import WB13ImportCallbacks from '../../demos/WB13ImportCallbacksArticle.vue'
+import WB14ReferenceTypes from '../../demos/WB14ReferenceTypesArticle.vue'
+import WB15SharedMemoryAtomics from '../../demos/WB15SharedMemoryAtomicsArticle.vue'
+import WB16MultiThreading from '../../demos/WB16MultiThreadingArticle.vue'
+import WB17Simd from '../../demos/WB17SimdArticle.vue'
+import WB18ExceptionHandling from '../../demos/WB18ExceptionHandlingArticle.vue'
+import WB19Performance from '../../demos/WB19PerformanceArticle.vue'
+import WB20ToolchainDeploy from '../../demos/WB20ToolchainDeployArticle.vue'
 
-const demoModules = import.meta.glob<Component>('../../demos/*.vue', { import: 'default' })
 const vueCodeModules = import.meta.glob<string>('../../demos/*.vue', { query: '?raw', import: 'default' })
 const wasmCodeModules = import.meta.glob<string>('../../demos/wasm-code/*', { query: '?raw', import: 'default' })
-
-function createDemo(name: string) {
-  const loader = demoModules[`../../demos/${name}.vue`]
-  if (!loader) throw new Error(`未找到内容组件：${name}`)
-  return defineAsyncComponent(async () => loader())
-}
 
 function createCodeLoader(path: string) {
   const modules = path.startsWith('wasm-code/')
@@ -22,45 +34,44 @@ function createCodeLoader(path: string) {
   return () => loader().then(restoreCodeSource)
 }
 
-const WB01WhatIsWasm = createDemo('WB01WhatIsWasmArticle')
 const WB01Code = createCodeLoader('wasm-code/WB01WhatIsWasm.wat')
-const WB02WatBinary = createDemo('WB02WatBinaryArticle')
+
 const WB02Code = createCodeLoader('wasm-code/WB02WatBinary.wat')
-const WB03ValueTypes = createDemo('WB03ValueTypesArticle')
+
 const WB03Code = createCodeLoader('wasm-code/WB03ValueTypes.wat')
-const WB04Operators = createDemo('WB04OperatorsArticle')
+
 const WB04Code = createCodeLoader('wasm-code/WB04Operators.wat')
-const WB05LinearMemory = createDemo('WB05LinearMemoryArticle')
+
 const WB05Code = createCodeLoader('wasm-code/WB05LinearMemory.wat')
-const WB06StringsInterop = createDemo('WB06StringsInteropArticle')
+
 const WB06Code = createCodeLoader('wasm-code/WB06StringsInterop.wat')
-const WB07FunctionsLocals = createDemo('WB07FunctionsLocalsArticle')
+
 const WB07Code = createCodeLoader('wasm-code/WB07FunctionsLocals.wat')
-const WB08ImportExportGlobals = createDemo('WB08ImportExportGlobalsArticle')
+
 const WB08Code = createCodeLoader('wasm-code/WB08ImportExportGlobals.wat')
-const WB09JsInteropNumbers = createDemo('WB09JsInteropNumbersArticle')
+
 const WB09Code = createCodeLoader('wasm-code/WB09JsInteropNumbers.js')
-const WB10FunctionTable = createDemo('WB10FunctionTableArticle')
+
 const WB10Code = createCodeLoader('wasm-code/WB10FunctionTable.wat')
-const WB11ControlFlow = createDemo('WB11ControlFlowArticle')
+
 const WB11Code = createCodeLoader('wasm-code/WB11ControlFlow.wat')
-const WB12MemoryArrays = createDemo('WB12MemoryArraysArticle')
+
 const WB12Code = createCodeLoader('wasm-code/WB12MemoryArrays.wat')
-const WB13ImportCallbacks = createDemo('WB13ImportCallbacksArticle')
+
 const WB13Code = createCodeLoader('wasm-code/WB13ImportCallbacks.js')
-const WB14ReferenceTypes = createDemo('WB14ReferenceTypesArticle')
+
 const WB14Code = createCodeLoader('wasm-code/WB14ReferenceTypes.wat')
-const WB15SharedMemoryAtomics = createDemo('WB15SharedMemoryAtomicsArticle')
+
 const WB15Code = createCodeLoader('wasm-code/WB15SharedMemoryAtomics.wat')
-const WB16MultiThreading = createDemo('WB16MultiThreadingArticle')
+
 const WB16Code = createCodeLoader('wasm-code/WB16MultiThreading.js')
-const WB17Simd = createDemo('WB17SimdArticle')
+
 const WB17Code = createCodeLoader('wasm-code/WB17Simd.wat')
-const WB18ExceptionHandling = createDemo('WB18ExceptionHandlingArticle')
+
 const WB18Code = createCodeLoader('wasm-code/WB18ExceptionHandling.wat')
-const WB19Performance = createDemo('WB19PerformanceArticle')
+
 const WB19Code = createCodeLoader('wasm-code/WB19Performance.js')
-const WB20ToolchainDeploy = createDemo('WB20ToolchainDeployArticle')
+
 const WB20Code = createCodeLoader('wasm-code/WB20ToolchainDeploy.js')
 
 export const lessons: Lesson[] = [
@@ -71,7 +82,8 @@ export const lessons: Lesson[] = [
     category: '基础入门',
     path: '/webassembly/wb-1/what-is-wasm',
     summary: '从十六进制读懂 .wasm 文件的魔数、版本与各段结构，并完成首次实例化调用。',
-    demo: WB01WhatIsWasm,
+    demo: null,
+    demoComponent: WB01WhatIsWasm,
     code: WB01Code,
     language: 'wat',
     principle:
@@ -97,7 +109,8 @@ export const lessons: Lesson[] = [
     category: '基础入门',
     path: '/webassembly/wb-2/wat-vs-binary',
     summary: '用可读的 WAT 文本对照每条指令的二进制操作码，建立"文本即图纸"的映射。',
-    demo: WB02WatBinary,
+    demo: null,
+    demoComponent: WB02WatBinary,
     code: WB02Code,
     language: 'wat',
     principle:
@@ -123,7 +136,8 @@ export const lessons: Lesson[] = [
     category: '基础入门',
     path: '/webassembly/wb-3/value-types',
     summary: '认识 i32、i64、f32、f64 四种数值类型，以及类型在签名与内存中的强制约束。',
-    demo: WB03ValueTypes,
+    demo: null,
+    demoComponent: WB03ValueTypes,
     code: WB03Code,
     language: 'wat',
     principle:
@@ -149,7 +163,8 @@ export const lessons: Lesson[] = [
     category: '基础入门',
     path: '/webassembly/wb-4/operators',
     summary: '以折扣计算场景体验整数、位运算与浮点指令，理解栈式运算。',
-    demo: WB04Operators,
+    demo: null,
+    demoComponent: WB04Operators,
     code: WB04Code,
     language: 'wat',
     principle:
@@ -175,7 +190,8 @@ export const lessons: Lesson[] = [
     category: '内存管理',
     path: '/webassembly/wb-5/linear-memory',
     summary: '用货架可视化展示内存字节视图，体验 store8/load8 读写。',
-    demo: WB05LinearMemory,
+    demo: null,
+    demoComponent: WB05LinearMemory,
     code: WB05Code,
     language: 'wat',
     principle:
@@ -201,7 +217,8 @@ export const lessons: Lesson[] = [
     category: '内存管理',
     path: '/webassembly/wb-6/strings-interop',
     summary: '把收货地址写入内存，交给 Wasm 求长度并原地转大写。',
-    demo: WB06StringsInterop,
+    demo: null,
+    demoComponent: WB06StringsInterop,
     code: WB06Code,
     language: 'wat',
     principle:
@@ -227,7 +244,8 @@ export const lessons: Lesson[] = [
     category: '函数与模块',
     path: '/webassembly/wb-7/functions-locals',
     summary: '用购物车结算函数 sum 剖析参数、局部变量与循环累加。',
-    demo: WB07FunctionsLocals,
+    demo: null,
+    demoComponent: WB07FunctionsLocals,
     code: WB07Code,
     language: 'wat',
     principle:
@@ -253,7 +271,8 @@ export const lessons: Lesson[] = [
     category: '互操作',
     path: '/webassembly/wb-8/import-export-globals',
     summary: '用库存计数器展示模块如何导入宿主函数、导出全局变量与函数。',
-    demo: WB08ImportExportGlobals,
+    demo: null,
+    demoComponent: WB08ImportExportGlobals,
     code: WB08Code,
     language: 'wat',
     principle:
@@ -279,7 +298,8 @@ export const lessons: Lesson[] = [
     category: '互操作',
     path: '/webassembly/wb-9/js-interop-numbers',
     summary: '模拟下单数量取整，观察 JS 数值跨 i32 边界时的截断行为。',
-    demo: WB09JsInteropNumbers,
+    demo: null,
+    demoComponent: WB09JsInteropNumbers,
     code: WB09Code,
     language: 'javascript',
     principle:
@@ -305,7 +325,8 @@ export const lessons: Lesson[] = [
     category: '函数与模块',
     path: '/webassembly/wb-10/function-table',
     summary: '用促销计价切换演示函数表与动态分发，JS 还能改写表项。',
-    demo: WB10FunctionTable,
+    demo: null,
+    demoComponent: WB10FunctionTable,
     code: WB10Code,
     language: 'wat',
     principle:
@@ -331,7 +352,8 @@ export const lessons: Lesson[] = [
     category: '函数与模块',
     path: '/webassembly/wb-11/control-flow',
     summary: '用递归斐波那契认识 if/else 分支，并梳理 block、loop、br 跳转。',
-    demo: WB11ControlFlow,
+    demo: null,
+    demoComponent: WB11ControlFlow,
     code: WB11Code,
     language: 'wat',
     principle:
@@ -357,7 +379,8 @@ export const lessons: Lesson[] = [
     category: '内存管理',
     path: '/webassembly/wb-12/memory-arrays',
     summary: '把购物车价格按 4 字节对齐写入内存，可视化数组并求和。',
-    demo: WB12MemoryArrays,
+    demo: null,
+    demoComponent: WB12MemoryArrays,
     code: WB12Code,
     language: 'wat',
     principle:
@@ -383,7 +406,8 @@ export const lessons: Lesson[] = [
     category: '互操作',
     path: '/webassembly/wb-13/import-callbacks',
     summary: '用同一份 counter 二进制注入两种回调，演示导入驱动的可复用设计。',
-    demo: WB13ImportCallbacks,
+    demo: null,
+    demoComponent: WB13ImportCallbacks,
     code: WB13Code,
     language: 'javascript',
     principle:
@@ -409,7 +433,8 @@ export const lessons: Lesson[] = [
     category: '高级特性',
     path: '/webassembly/wb-14/reference-types',
     summary: '把会员对象作为 externref 传入 Wasm 再原样返回，理解引用不复制。',
-    demo: WB14ReferenceTypes,
+    demo: null,
+    demoComponent: WB14ReferenceTypes,
     code: WB14Code,
     language: 'wat',
     principle:
@@ -435,7 +460,8 @@ export const lessons: Lesson[] = [
     category: '并发多线程',
     path: '/webassembly/wb-15/shared-memory-atomics',
     summary: '用点赞计数器体验 SharedArrayBuffer 与 atomicAdd 的并发安全。',
-    demo: WB15SharedMemoryAtomics,
+    demo: null,
+    demoComponent: WB15SharedMemoryAtomics,
     code: WB15Code,
     language: 'wat',
     principle:
@@ -461,7 +487,8 @@ export const lessons: Lesson[] = [
     category: '并发多线程',
     path: '/webassembly/wb-16/multi-threading',
     summary: '启动多个 Worker 并发补货，验证共享内存 + 原子操作的正确性。',
-    demo: WB16MultiThreading,
+    demo: null,
+    demoComponent: WB16MultiThreading,
     code: WB16Code,
     language: 'javascript',
     principle:
@@ -487,7 +514,8 @@ export const lessons: Lesson[] = [
     category: '高性能',
     path: '/webassembly/wb-17/simd',
     summary: '用一次 i32x4.add 同时给四个元素调价，理解单指令多数据。',
-    demo: WB17Simd,
+    demo: null,
+    demoComponent: WB17Simd,
     code: WB17Code,
     language: 'wat',
     principle:
@@ -513,7 +541,8 @@ export const lessons: Lesson[] = [
     category: '高级特性',
     path: '/webassembly/wb-18/exception-handling',
     summary: '用除零保护演示 Wasm 抛出携带负载的异常并由 JS 捕获。',
-    demo: WB18ExceptionHandling,
+    demo: null,
+    demoComponent: WB18ExceptionHandling,
     code: WB18Code,
     language: 'wat',
     principle:
@@ -539,7 +568,8 @@ export const lessons: Lesson[] = [
     category: '高性能',
     path: '/webassembly/wb-19/performance',
     summary: '对同一递归算法实测 Wasm 与 JS 耗时，理解各自的性能特性。',
-    demo: WB19Performance,
+    demo: null,
+    demoComponent: WB19Performance,
     code: WB19Code,
     language: 'javascript',
     principle:
@@ -565,7 +595,8 @@ export const lessons: Lesson[] = [
     category: '工程实践',
     path: '/webassembly/wb-20/toolchain-deploy',
     summary: '走通从源码到线上的完整流程，用 instantiateStreaming 演示流式加载。',
-    demo: WB20ToolchainDeploy,
+    demo: null,
+    demoComponent: WB20ToolchainDeploy,
     code: WB20Code,
     language: 'javascript',
     principle:

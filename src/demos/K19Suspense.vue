@@ -4,7 +4,8 @@ import { defineAsyncComponent, defineComponent, h, type Component } from 'vue'
 const AsyncReport = defineAsyncComponent(
   () =>
     new Promise<Component>((resolve) => {
-      window.setTimeout(() => {
+      // 用全局 setTimeout（而非 window.setTimeout）：SSR 预渲染阶段同样可用
+      setTimeout(() => {
         resolve(
           defineComponent({
             setup: () => () => h('p', '异步学习报告加载完成：本周完成 6 个知识点。'),

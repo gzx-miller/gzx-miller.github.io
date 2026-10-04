@@ -1,9 +1,42 @@
 import type { Component } from 'vue'
-import { defineAsyncComponent } from 'vue'
 import type { Lesson } from '../lessons'
 import { restoreCodeSource } from '../code-restore'
+import R01ComponentProps from '../../demos/R01ComponentPropsArticle.vue'
+import R02StateUpdates from '../../demos/R02StateUpdatesArticle.vue'
+import R03ListsKeys from '../../demos/R03ListsKeysArticle.vue'
+import R04ControlledForm from '../../demos/R04ControlledFormArticle.vue'
+import R05EffectSync from '../../demos/R05EffectSyncArticle.vue'
+import R06Reducer from '../../demos/R06ReducerArticle.vue'
+import R07Context from '../../demos/R07ContextArticle.vue'
+import R08CustomHook from '../../demos/R08CustomHookArticle.vue'
+import R09RefDom from '../../demos/R09RefDomArticle.vue'
+import R10Memoization from '../../demos/R10MemoizationArticle.vue'
+import R11DeferredValue from '../../demos/R11DeferredValueArticle.vue'
+import R12ExternalStore from '../../demos/R12ExternalStoreArticle.vue'
+import R13Portal from '../../demos/R13PortalArticle.vue'
+import R14LazySuspense from '../../demos/R14LazySuspenseArticle.vue'
+import R15ErrorBoundary from '../../demos/R15ErrorBoundaryArticle.vue'
+import R16AccessibleId from '../../demos/R16AccessibleIdArticle.vue'
+import R17EventHandler from '../../demos/R17EventHandlerArticle.vue'
+import R18ConditionalRender from '../../demos/R18ConditionalRenderArticle.vue'
+import R19Composition from '../../demos/R19CompositionArticle.vue'
+import R20Transition from '../../demos/R20TransitionArticle.vue'
+import R21ImperativeHandle from '../../demos/R21ImperativeHandleArticle.vue'
+import R22ForwardRef from '../../demos/R22ForwardRefArticle.vue'
+import R23StrictMode from '../../demos/R23StrictModeArticle.vue'
+import R24EffectLifecycle from '../../demos/R24EffectLifecycleArticle.vue'
+import R25ZustandSelectors from '../../demos/S04ZustandSelectorsArticle.vue'
+import R26ZustandMiddleware from '../../demos/S05ZustandMiddlewareArticle.vue'
+import R27JotaiAtoms from '../../demos/S06JotaiAtomsArticle.vue'
+import R28JotaiAsyncAtoms from '../../demos/S07JotaiAsyncAtomsArticle.vue'
+import R29ReduxToolkit from '../../demos/S08ReduxToolkitArticle.vue'
+import R30XStateMachine from '../../demos/S09XStateMachineArticle.vue'
+import R31Valtio from '../../demos/S12ValtioArticle.vue'
+import R32TanStackQuery from '../../demos/S13TanStackQueryArticle.vue'
+import R33Recoil from '../../demos/S22RecoilArticle.vue'
+import R34Mobx from '../../demos/S23MobxArticle.vue'
+import R35Overmind from '../../demos/S24OvermindArticle.vue'
 
-const demoModules = import.meta.glob<Component>('../../demos/*.vue', { import: 'default' })
 const vueCodeModules = import.meta.glob<string>('../../demos/*.vue', { query: '?raw', import: 'default' })
 const jsxCodeModules = import.meta.glob<string>('../../demos/react-jsx/*.jsx', { query: '?raw', import: 'default' })
 const stateCodeModules = import.meta.glob<string>('../../demos/state-react/*.js', { query: '?raw', import: 'default' })
@@ -11,15 +44,6 @@ const jsCodeModules = import.meta.glob<string>('../../demos/js-code/*.js', { que
 const tsCodeModules = import.meta.glob<string>('../../demos/ts-code/*.ts', { query: '?raw', import: 'default' })
 const styleCodeModules = import.meta.glob<string>('../../demos/style-code/*', { query: '?raw', import: 'default' })
 const reactCodeModules = import.meta.glob<string>('../../demos/react-code/*', { query: '?raw', import: 'default' })
-
-function createDemo(name: string) {
-  const loader = demoModules[`../../demos/${name}.vue`]
-  if (!loader) throw new Error(`未找到内容组件：${name}`)
-  return defineAsyncComponent(async () => {
-    if (name.startsWith('E')) await import('../../element-plus/styles')
-    return loader()
-  })
-}
 
 function createCodeLoader(path: string) {
   const modules = path.startsWith('react-jsx/')
@@ -40,72 +64,65 @@ function createCodeLoader(path: string) {
   return () => loader().then(restoreCodeSource)
 }
 
-const R01ComponentProps = createDemo('R01ComponentPropsArticle')
 const R01Code = createCodeLoader('react-jsx/R01ComponentProps.jsx')
-const R02StateUpdates = createDemo('R02StateUpdatesArticle')
-const R02Code = createCodeLoader('react-jsx/R02StateUpdates.jsx')
-const R03ListsKeys = createDemo('R03ListsKeysArticle')
-const R03Code = createCodeLoader('react-jsx/R03ListsKeys.jsx')
-const R04ControlledForm = createDemo('R04ControlledFormArticle')
-const R04Code = createCodeLoader('react-jsx/R04ControlledForm.jsx')
-const R05EffectSync = createDemo('R05EffectSyncArticle')
-const R05Code = createCodeLoader('react-jsx/R05EffectSync.jsx')
-const R06Reducer = createDemo('R06ReducerArticle')
-const R06Code = createCodeLoader('react-jsx/R06Reducer.jsx')
-const R07Context = createDemo('R07ContextArticle')
-const R07Code = createCodeLoader('react-jsx/R07Context.jsx')
-const R08CustomHook = createDemo('R08CustomHookArticle')
-const R08Code = createCodeLoader('react-jsx/R08CustomHook.jsx')
-const R09RefDom = createDemo('R09RefDomArticle')
-const R09Code = createCodeLoader('react-jsx/R09RefDom.jsx')
-const R10Memoization = createDemo('R10MemoizationArticle')
-const R10Code = createCodeLoader('react-jsx/R10Memoization.jsx')
-const R11DeferredValue = createDemo('R11DeferredValueArticle')
-const R11Code = createCodeLoader('react-jsx/R11DeferredValue.jsx')
-const R12ExternalStore = createDemo('R12ExternalStoreArticle')
-const R12Code = createCodeLoader('react-jsx/R12ExternalStore.jsx')
-const R13Portal = createDemo('R13PortalArticle')
-const R13Code = createCodeLoader('react-jsx/R13Portal.jsx')
-const R14LazySuspense = createDemo('R14LazySuspenseArticle')
-const R14Code = createCodeLoader('react-jsx/R14LazySuspense.jsx')
-const R15ErrorBoundary = createDemo('R15ErrorBoundaryArticle')
-const R15Code = createCodeLoader('react-jsx/R15ErrorBoundary.jsx')
-const R16AccessibleId = createDemo('R16AccessibleIdArticle')
-const R16Code = createCodeLoader('react-jsx/R16AccessibleId.jsx')
-const R17EventHandler = createDemo('R17EventHandlerArticle')
-const R17Code = createCodeLoader('react-jsx/R17EventHandler.jsx')
-const R18ConditionalRender = createDemo('R18ConditionalRenderArticle')
-const R18Code = createCodeLoader('react-jsx/R18ConditionalRender.jsx')
-const R19Composition = createDemo('R19CompositionArticle')
-const R19Code = createCodeLoader('react-jsx/R19Composition.jsx')
-const R20Transition = createDemo('R20TransitionArticle')
-const R20Code = createCodeLoader('react-jsx/R20Transition.jsx')
-const R21ImperativeHandle = createDemo('R21ImperativeHandleArticle')
-const R21Code = createCodeLoader('react-jsx/R21ImperativeHandle.jsx')
-const R22ForwardRef = createDemo('R22ForwardRefArticle')
-const R22Code = createCodeLoader('react-jsx/R22ForwardRef.jsx')
-const R23StrictMode = createDemo('R23StrictModeArticle')
-const R23Code = createCodeLoader('react-jsx/R23StrictMode.jsx')
-const R24EffectLifecycle = createDemo('R24EffectLifecycleArticle')
-const R24Code = createCodeLoader('react-jsx/R24EffectLifecycle.jsx')
-const R25ZustandSelectors = createDemo('S04ZustandSelectorsArticle')
-const R25Code = createCodeLoader('state-react/S04ZustandSelectors.js')
-const R26ZustandMiddleware = createDemo('S05ZustandMiddlewareArticle')
-const R26Code = createCodeLoader('state-react/S05ZustandMiddleware.js')
-const R27JotaiAtoms = createDemo('S06JotaiAtomsArticle')
-const R27Code = createCodeLoader('state-react/S06JotaiAtoms.js')
-const R28JotaiAsyncAtoms = createDemo('S07JotaiAsyncAtomsArticle')
-const R28Code = createCodeLoader('state-react/S07JotaiAsyncAtoms.js')
-const R29ReduxToolkit = createDemo('S08ReduxToolkitArticle')
-const R29Code = createCodeLoader('state-react/S08ReduxToolkit.js')
-const R30XStateMachine = createDemo('S09XStateMachineArticle')
-const R30Code = createCodeLoader('state-react/S09XStateMachine.js')
-const R31Valtio = createDemo('S12ValtioArticle')
-const R32TanStackQuery = createDemo('S13TanStackQueryArticle')
-const R33Recoil = createDemo('S22RecoilArticle')
-const R34Mobx = createDemo('S23MobxArticle')
-const R35Overmind = createDemo('S24OvermindArticle')
 
+const R02Code = createCodeLoader('react-jsx/R02StateUpdates.jsx')
+
+const R03Code = createCodeLoader('react-jsx/R03ListsKeys.jsx')
+
+const R04Code = createCodeLoader('react-jsx/R04ControlledForm.jsx')
+
+const R05Code = createCodeLoader('react-jsx/R05EffectSync.jsx')
+
+const R06Code = createCodeLoader('react-jsx/R06Reducer.jsx')
+
+const R07Code = createCodeLoader('react-jsx/R07Context.jsx')
+
+const R08Code = createCodeLoader('react-jsx/R08CustomHook.jsx')
+
+const R09Code = createCodeLoader('react-jsx/R09RefDom.jsx')
+
+const R10Code = createCodeLoader('react-jsx/R10Memoization.jsx')
+
+const R11Code = createCodeLoader('react-jsx/R11DeferredValue.jsx')
+
+const R12Code = createCodeLoader('react-jsx/R12ExternalStore.jsx')
+
+const R13Code = createCodeLoader('react-jsx/R13Portal.jsx')
+
+const R14Code = createCodeLoader('react-jsx/R14LazySuspense.jsx')
+
+const R15Code = createCodeLoader('react-jsx/R15ErrorBoundary.jsx')
+
+const R16Code = createCodeLoader('react-jsx/R16AccessibleId.jsx')
+
+const R17Code = createCodeLoader('react-jsx/R17EventHandler.jsx')
+
+const R18Code = createCodeLoader('react-jsx/R18ConditionalRender.jsx')
+
+const R19Code = createCodeLoader('react-jsx/R19Composition.jsx')
+
+const R20Code = createCodeLoader('react-jsx/R20Transition.jsx')
+
+const R21Code = createCodeLoader('react-jsx/R21ImperativeHandle.jsx')
+
+const R22Code = createCodeLoader('react-jsx/R22ForwardRef.jsx')
+
+const R23Code = createCodeLoader('react-jsx/R23StrictMode.jsx')
+
+const R24Code = createCodeLoader('react-jsx/R24EffectLifecycle.jsx')
+
+const R25Code = createCodeLoader('state-react/S04ZustandSelectors.js')
+
+const R26Code = createCodeLoader('state-react/S05ZustandMiddleware.js')
+
+const R27Code = createCodeLoader('state-react/S06JotaiAtoms.js')
+
+const R28Code = createCodeLoader('state-react/S07JotaiAsyncAtoms.js')
+
+const R29Code = createCodeLoader('state-react/S08ReduxToolkit.js')
+
+const R30Code = createCodeLoader('state-react/S09XStateMachine.js')
 
 const R31Code = createCodeLoader('react-code/R31Code.jsx.txt')
 const R32Code = createCodeLoader('react-code/R32Code.jsx.txt')
@@ -121,7 +138,8 @@ export const lessons: Lesson[] = [
     category: '组件基础',
     path: '/react/r-1/component-props',
     summary: '用训练营课程卡片理解 createRoot 挂载、函数组件组合、单向数据流与只读 Props。',
-    demo: R01ComponentProps,
+    demo: null,
+    demoComponent: R01ComponentProps,
     code: R01Code,
     language: 'jsx',
     principle:
@@ -147,7 +165,8 @@ export const lessons: Lesson[] = [
     category: '状态管理',
     path: '/react/r-2/state-updates',
     summary: '用购物车数量调整演示 useState、函数式更新以及数组、对象的不可变替换。',
-    demo: R02StateUpdates,
+    demo: null,
+    demoComponent: R02StateUpdates,
     code: R02Code,
     language: 'jsx',
     principle:
@@ -173,7 +192,8 @@ export const lessons: Lesson[] = [
     category: '渲染模式',
     path: '/react/r-3/lists-keys',
     summary: '用课程检索展示列表映射、稳定 key，以及在渲染阶段直接计算筛选结果。',
-    demo: R03ListsKeys,
+    demo: null,
+    demoComponent: R03ListsKeys,
     code: R03Code,
     language: 'jsx',
     principle:
@@ -199,7 +219,8 @@ export const lessons: Lesson[] = [
     category: '用户输入',
     path: '/react/r-4/controlled-form',
     summary: '用训练营报名表展示受控表单的 value、onChange、统一字段更新与提交校验。',
-    demo: R04ControlledForm,
+    demo: null,
+    demoComponent: R04ControlledForm,
     code: R04Code,
     language: 'jsx',
     principle:
@@ -225,7 +246,8 @@ export const lessons: Lesson[] = [
     category: '副作用',
     path: '/react/r-5/effect-sync',
     summary: '用跨时区时钟说明 useEffect 的适用边界、依赖数组与清理函数。',
-    demo: R05EffectSync,
+    demo: null,
+    demoComponent: R05EffectSync,
     code: R05Code,
     language: 'jsx',
     principle:
@@ -251,7 +273,8 @@ export const lessons: Lesson[] = [
     category: '状态管理',
     path: '/react/r-6/reducer',
     summary: '用项目入组流程展示 reducer、action 与可预测的有限状态转换。',
-    demo: R06Reducer,
+    demo: null,
+    demoComponent: R06Reducer,
     code: R06Code,
     language: 'jsx',
     principle:
@@ -277,7 +300,8 @@ export const lessons: Lesson[] = [
     category: '组件通信',
     path: '/react/r-7/context',
     summary: '用工作台主题演示 createContext、Provider 与深层组件订阅。',
-    demo: R07Context,
+    demo: null,
+    demoComponent: R07Context,
     code: R07Code,
     language: 'jsx',
     principle:
@@ -303,7 +327,8 @@ export const lessons: Lesson[] = [
     category: '逻辑复用',
     path: '/react/r-8/custom-hook',
     summary: '用浏览器在线状态订阅展示自定义 Hook 的命名、组合与每次调用的独立状态。',
-    demo: R08CustomHook,
+    demo: null,
+    demoComponent: R08CustomHook,
     code: R08Code,
     language: 'jsx',
     principle:
@@ -329,7 +354,8 @@ export const lessons: Lesson[] = [
     category: '命令式协作',
     path: '/react/r-9/ref-dom',
     summary: '用课程检索演示 useRef 聚焦输入框，以及保存不触发渲染的会话计数。',
-    demo: R09RefDom,
+    demo: null,
+    demoComponent: R09RefDom,
     code: R09Code,
     language: 'jsx',
     principle:
@@ -355,7 +381,8 @@ export const lessons: Lesson[] = [
     category: '性能',
     path: '/react/r-10/memoization',
     summary: '用课程筛选与无关外观更新演示组件、计算结果与回调引用的记忆化边界。',
-    demo: R10Memoization,
+    demo: null,
+    demoComponent: R10Memoization,
     code: R10Code,
     language: 'jsx',
     principle:
@@ -381,7 +408,8 @@ export const lessons: Lesson[] = [
     category: '并发渲染',
     path: '/react/r-11/deferred-value',
     summary: '用大列表搜索演示输入立即更新，而结果区域以较低优先级追赶最新关键词。',
-    demo: R11DeferredValue,
+    demo: null,
+    demoComponent: R11DeferredValue,
     code: R11Code,
     language: 'jsx',
     principle:
@@ -407,7 +435,8 @@ export const lessons: Lesson[] = [
     category: '状态集成',
     path: '/react/r-12/external-store',
     summary: '用独立计数 Store 演示 subscribe、getSnapshot 与多个消费者的一致更新。',
-    demo: R12ExternalStore,
+    demo: null,
+    demoComponent: R12ExternalStore,
     code: R12Code,
     language: 'jsx',
     principle:
@@ -433,7 +462,8 @@ export const lessons: Lesson[] = [
     category: 'DOM 协作',
     path: '/react/r-13/portal',
     summary: '用发布确认弹窗演示内容脱离受裁切容器渲染，同时仍属于原 React 组件树。',
-    demo: R13Portal,
+    demo: null,
+    demoComponent: R13Portal,
     code: R13Code,
     language: 'jsx',
     principle:
@@ -459,7 +489,8 @@ export const lessons: Lesson[] = [
     category: '加载体验',
     path: '/react/r-14/lazy-suspense',
     summary: '用延迟出现的学习报告演示 lazy 组件首次渲染时挂起，以及 Suspense 后备界面。',
-    demo: R14LazySuspense,
+    demo: null,
+    demoComponent: R14LazySuspense,
     code: R14Code,
     language: 'jsx',
     principle:
@@ -485,7 +516,8 @@ export const lessons: Lesson[] = [
     category: '容错',
     path: '/react/r-15/error-boundary',
     summary: '用故障课程卡片演示错误边界如何保护页面其他区域并提供可恢复的后备内容。',
-    demo: R15ErrorBoundary,
+    demo: null,
+    demoComponent: R15ErrorBoundary,
     code: R15Code,
     language: 'jsx',
     principle:
@@ -511,7 +543,8 @@ export const lessons: Lesson[] = [
     category: '可访问性',
     path: '/react/r-16/accessible-id',
     summary: '用动态课程字段演示 useId 为 label、input 与辅助说明生成稳定且唯一的关联标识。',
-    demo: R16AccessibleId,
+    demo: null,
+    demoComponent: R16AccessibleId,
     code: R16Code,
     language: 'jsx',
     principle:
@@ -537,7 +570,8 @@ export const lessons: Lesson[] = [
     category: '用户交互',
     path: '/react/r-17/event-handler',
     summary: '用课程搜索和表单提交演示合成事件对象、preventDefault 与事件处理器设计。',
-    demo: R17EventHandler,
+    demo: null,
+    demoComponent: R17EventHandler,
     code: R17Code,
     language: 'jsx',
     principle:
@@ -563,7 +597,8 @@ export const lessons: Lesson[] = [
     category: '渲染模式',
     path: '/react/r-18/conditional-render',
     summary: '用课程列表与详情切换演示 &&、三元运算符和提前返回三种条件渲染方式。',
-    demo: R18ConditionalRender,
+    demo: null,
+    demoComponent: R18ConditionalRender,
     code: R18Code,
     language: 'jsx',
     principle:
@@ -589,7 +624,8 @@ export const lessons: Lesson[] = [
     category: '组件设计',
     path: '/react/r-19/composition',
     summary: '用课程卡片与统计面板演示 children 插槽和 render props 两种组合方式。',
-    demo: R19Composition,
+    demo: null,
+    demoComponent: R19Composition,
     code: R19Code,
     language: 'jsx',
     principle:
@@ -615,7 +651,8 @@ export const lessons: Lesson[] = [
     category: '并发渲染',
     path: '/react/r-20/transition',
     summary: '用大列表搜索演示 useTransition 的 isPending 与将筛选标记为可中断过渡更新的思路。',
-    demo: R20Transition,
+    demo: null,
+    demoComponent: R20Transition,
     code: R20Code,
     language: 'jsx',
     principle:
@@ -641,7 +678,8 @@ export const lessons: Lesson[] = [
     category: '命令式协作',
     path: '/react/r-21/imperative-handle',
     summary: '用搜索框演示 useImperativeHandle 限定父组件通过 ref 能调用的方法。',
-    demo: R21ImperativeHandle,
+    demo: null,
+    demoComponent: R21ImperativeHandle,
     code: R21Code,
     language: 'jsx',
     principle:
@@ -667,7 +705,8 @@ export const lessons: Lesson[] = [
     category: '命令式协作',
     path: '/react/r-22/forward-ref',
     summary: '用报名表单演示 forwardRef 让自定义输入组件把 ref 转发给内部 DOM 节点。',
-    demo: R22ForwardRef,
+    demo: null,
+    demoComponent: R22ForwardRef,
     code: R22Code,
     language: 'jsx',
     principle:
@@ -693,7 +732,8 @@ export const lessons: Lesson[] = [
     category: '开发体验',
     path: '/react/r-23/strict-mode',
     summary: '用 Effect 执行日志演示 StrictMode 的双重调用机制如何暴露清理缺失。',
-    demo: R23StrictMode,
+    demo: null,
+    demoComponent: R23StrictMode,
     code: R23Code,
     language: 'jsx',
     principle:
@@ -719,7 +759,8 @@ export const lessons: Lesson[] = [
     category: '副作用',
     path: '/react/r-24/effect-lifecycle',
     summary: '用窗口尺寸、计时器与在线状态演示 Effect 的挂载、依赖更新与清理卸载模式。',
-    demo: R24EffectLifecycle,
+    demo: null,
+    demoComponent: R24EffectLifecycle,
     code: R24Code,
     language: 'jsx',
     principle:
@@ -741,7 +782,8 @@ export const lessons: Lesson[] = [
 {
     id: 'R_25', title: 'Zustand Store 与细粒度 Selector', navTitle: 'Zustand Selector', category: '轻量 Store',
     path: '/react/r-25/zustand-selectors', summary: '用购物车 Store 展示超越 useState 的 Hook API、Action 与细粒度 selector 订阅。',
-    demo: R25ZustandSelectors, code: R25Code, language: 'jsx',
+    demo: null,
+    demoComponent: R25ZustandSelectors, code: R25Code, language: 'jsx',
     principle: 'Zustand 用 create 在 React 树之外构建独立 Store，通过 useStore 的 Hook API 暴露给组件。每个 selector 把状态投影成最小切片；切片引用不变时组件就不会重渲染，从而把无关更新的影响隔离在真正读取它的组件内。',
     flow: ['create((set) => (…)) 定义状态与修改函数。', '组件用多个 selector 分别取 items、coupon 等最小切片。', 'action 用 set 合并新状态，只有读取相关切片的组件响应更新。', '在 DevTools 中观察 action 触发后哪些组件重渲染。'],
     notes: ['selector 若返回新对象（如每次新建数组），需要关注相等比较是否导致无限重渲染。', 'Store 不依赖 React 树，可在组件外直接调用 getState().action 操作。', '不读取的状态切片变化不会让该组件重渲染。', '选择器要返回稳定切片；需要派生数组或对象时用浅比较选择器（如 useShallow）。'],
@@ -750,7 +792,8 @@ export const lessons: Lesson[] = [
 {
     id: 'R_26', title: 'Zustand Middleware 与选择性订阅', navTitle: 'Zustand Middleware', category: '轻量 Store',
     path: '/react/r-26/zustand-middleware', summary: '用课程进度演示 subscribeWithSelector 中间件的选择性订阅。',
-    demo: R26ZustandMiddleware, code: R26Code, language: 'jsx',
+    demo: null,
+    demoComponent: R26ZustandMiddleware, code: R26Code, language: 'jsx',
     principle: 'Zustand 中间件包裹 create 的创建器，为其追加持久化、DevTools、Immer 或 subscribeWithSelector 等横切能力，而组件的消费方式保持不变。subscribeWithSelector 让 store.subscribe 能按 selector 订阅并同时拿到变化前后的值。',
     flow: ['用 subscribeWithSelector 创建启用选择性订阅的 Store。', '经 subscribe 指定 selector 订阅 progress，读取变化前后两个值。', '订阅返回取消函数，在 effect 清理阶段取消以求不留订阅泄漏。', '触发一次状态变化，验证订阅回调收到前后两个快照值。'],
     notes: ['不同中间件的组合顺序会影响类型推导与行为。', '持久化等中间件需要用常量的存储 Key，且要规划好版本迁移。', '订阅了 selector 后只有该切片变化时回调才被触发。', '持久化中间件升级状态结构时要写好 migrate，避免旧数据直接崩溃。'],
@@ -759,7 +802,8 @@ export const lessons: Lesson[] = [
 {
     id: 'R_27', title: 'Jotai 原子状态与派生图', navTitle: 'Jotai Atom', category: '原子化状态',
     path: '/react/r-27/jotai-atoms', summary: '用数量、价格与总价 Atom 理解原子组合和依赖追踪。',
-    demo: R27JotaiAtoms, code: R27Code, language: 'jsx',
+    demo: null,
+    demoComponent: R27JotaiAtoms, code: R27Code, language: 'jsx',
     principle: 'Jotai 以 atom 为最小状态单元：基础 atom 直接持有值，派生(derived) atom 通过读取其他 atom 自动建立依赖图。某个原子变化时，只有依赖链路上真正受影响的消费者会被触发更新，从而实现细粒度的按需重渲染。把它放进组件树后，更新范围自然收敛到依赖链。',
     flow: ['创建 countAtom、priceAtom 两个可写基础原子。', '用 totalAtom = atom((get) => …) 读取二者构造派生原子。', '组件用 useAtom 读写基础原子、useAtomValue 只读派生值，驱动界面显示总价。', '单独更新一个基础原子，确认只有依赖它的组件重渲染。'],
     notes: ['atom 应在组件外部定义以保持引用稳定，避免每次渲染重建。', '需要动态创建大量原子时可引入 atomFamily 管理。', '派生原子本身不可直写，其值始终来自依赖原子的当前状态。', '原子按功能领域拆分并集中导出，避免业务文件中散落定义。'],
@@ -768,7 +812,8 @@ export const lessons: Lesson[] = [
 {
     id: 'R_28', title: 'Jotai 异步 Atom 与 Suspense', navTitle: 'Jotai 异步 Atom', category: '原子化状态',
     path: '/react/r-28/jotai-async-atoms', summary: '用异步课程 Atom 演示依赖驱动的刷新与 Suspense 等待边界。',
-    demo: R28JotaiAsyncAtoms, code: R28Code, language: 'jsx',
+    demo: null,
+    demoComponent: R28JotaiAsyncAtoms, code: R28Code, language: 'jsx',
     principle: 'Jotai 的读取函数可以返回 Promise，从而定义"异步原子"；它一旦被读取就会执行，执行中的 Promise 会触发 useAtomValue 所在的组件进入挂起(suspend)状态，由外层 Suspense 展示后备界面。当异步 atom 读取了某个刷新原子时，只要刷新原子变化，异步 atom 就会失效并重新计算。',
     flow: ['refreshAtom 作为刷新依赖，异步 coursesAtom 读取它以建立重算关系。', '组件读取异步 atom 时会挂起，外层 Suspense 显示"加载中"后备。', '点击"重新读取"更新 refreshAtom，使异步 atom 失效并重新拉取课程。', '验证多个组件同时读取同一异步原子时只发起一次请求。'],
     notes: ['异步 atom 适合以原子为依赖、天然可组合的加载场景。', '并发取消、去重等更复杂的服务端缓存语义，仍需交给专门请求库。', '同一异步 atom 被多个组件读取时，结果会被共享缓存，避免重复执行。', '异步原子需要失败兜底：出错时可转交错误边界或展示重试入口。'],
@@ -777,7 +822,8 @@ export const lessons: Lesson[] = [
 {
     id: 'R_29', title: 'Redux Toolkit 的 Slice 与单向数据流', navTitle: 'Redux Toolkit', category: '结构化状态',
     path: '/react/r-29/redux-toolkit', summary: '用报名 Slice 展示 Redux Toolkit 的 reducer、action、selector 与 Provider。',
-    demo: R29ReduxToolkit, code: R29Code, language: 'jsx',
+    demo: null,
+    demoComponent: R29ReduxToolkit, code: R29Code, language: 'jsx',
     principle: 'Redux Toolkit 用 createSlice 把初始状态与 reducer 放在一起，同时自动生成对应的 action；configureStore 再组合成单一 store。所有改动都必须经过 dispatch 走一遍可追踪的单向数据流，配合 DevTools 可回溯每一次变更，适合状态规则严格、需要统一调试工具的团队。',
     flow: ['createSlice 定义初始状态与 enroll/reset 等 reducer，并自动生成 actions.enroll 等对象。', 'configureStore 组合业务 Slice，用 Provider 把 store 提供给组件树。', '组件用 useSelector 读取名额与报名数，用 useDispatch 发起 action。', '在 DevTools 时间线中回放每次 dispatch，核对状态变化轨迹。'],
     notes: ['reducer 里"看似直接修改"的写法由 Immer 自动转成不可变更新，无需手写 spread。', '不要把光标位置、临时输入等短暂 UI 状态塞进全局 Store。', 'selector 应返回最稳定的最小切片，避免不必要的全局重渲染。', '按功能域拆分 slice，避免单个 store 文件随业务增长无限膨胀。'],
@@ -786,7 +832,8 @@ export const lessons: Lesson[] = [
 {
     id: 'R_30', title: 'XState 有限状态机与合法转换', navTitle: 'XState 状态机', category: '结构化状态',
     path: '/react/r-30/xstate-machine', summary: '用结算流程限制 editing、submitting、failure 与 success 的合法转换。',
-    demo: R30XStateMachine, code: R30Code, language: 'jsx',
+    demo: null,
+    demoComponent: R30XStateMachine, code: R30Code, language: 'jsx',
     principle: '有限状态机把互斥的状态与可接受的事件显式列举出来，使非法转换在建模阶段就被排除。XState 用 createMachine 描述状态图：每个状态声明它响应的事件与目标，并支持守卫(guard)、副作用(invoke/actor)、并行状态等，适合结算、审批等多步骤关键流程。',
     flow: ['枚举业务互斥的状态：editing、submitting、failure、success(event 驱动的 final 态)。', '为每个状态声明允许转换的事件，如 editing 只接受 SUBMIT。', '组件用 useMachine 订阅状态快照 snapshot，并通过 send 触发事件推动流程。', '发送非法事件，验证状态机忽略或拒绝并使流程保持稳定。'],
     notes: ['简单布尔或极少状态用 useState 即可，不必引入状态机。', '副作用应用 invoke/actor 建模，组件经 useActor/useMachine 订阅快照。', '状态图可直接对齐产品与测试认知，减少"非法组合"类缺陷。', '状态机的测试从状态图出发：为每条转移写一个用例，覆盖面一目了然。'],
@@ -795,7 +842,8 @@ export const lessons: Lesson[] = [
 {
     id: 'R_31', title: 'Valtio 与 Proxy 响应式状态', navTitle: 'Valtio', category: '轻量 Store',
     path: '/react/r-31/valtio', summary: '用 Valtio 的 proxy/snapshot 模式管理 React 状态，理解 Proxy 响应式原理。',
-    demo: R31Valtio, code: R31Code, language: 'jsx',
+    demo: null,
+    demoComponent: R31Valtio, code: R31Code, language: 'jsx',
     principle: 'Valtio 用 Proxy 包裹状态对象，直接赋值属性即触发更新，无需 Provider 与 reducer 样板代码；组件再用 useSnapshot 取到不可变快照用于渲染，快照层会自动追踪组件实际读到的路径，从而把重渲染收敛到真正依赖它的组件。',
     flow: ['用 proxy 创建响应式状态对象，跨组件共享引用。', '在组件或动作里直接修改 proxy 的属性（如 state.count++）。', '组件用 useSnapshot 读取并渲染，系统按所读路径自动收集依赖。', '去掉未使用的快照字段，确认依赖收集范围随之缩小。'],
     notes: ['Valtio 提供 subscribe 订阅任意路径的变化，便于接入调试或持久化。', '不要把 proxy 对象整体放进 React Context，快照隔离更适合组件消费。', 'useSnapshot 的可变性对象不宜作 props 长期保存，尽量保持组件使用模式一致。', 'valtio 状态在组件外可直接读写，适合接入调试工具或非 React 逻辑。'],
@@ -804,7 +852,8 @@ export const lessons: Lesson[] = [
 {
     id: 'R_32', title: 'TanStack Query 服务端状态', navTitle: 'TanStack Query', category: '服务端状态',
     path: '/react/r-32/tanstack-query', summary: '用缓存策略、乐观更新和后台同步管理服务端数据状态。',
-    demo: R32TanStackQuery, code: R32Code, language: 'jsx',
+    demo: null,
+    demoComponent: R32TanStackQuery, code: R32Code, language: 'jsx',
     principle: 'TanStack Query 把"服务端数据"看作缓存而非组件本地状态：staleTime 决定数据在多久内视为新鲜、期间不重复请求，gcTime 控制不再使用后的回收时机。useQuery 负责读取与缓存，useMutation 负责写入，配合乐观更新可在请求完成前先更新界面、失败时回滚。',
     flow: ['用 QueryClient 统一配置 staleTime、gcTime 与窗口聚焦时是否重取。', 'useQuery 以 courses 作为 queryKey 获取并缓存课程列表。', 'useMutation 上传新课程：onMutate 先写入乐观值，onError 回滚，onSettled 使缓存失效以对齐服务端。', '断网后提交，验证乐观更新被回滚且提示可重试。'],
     notes: ['服务端状态与本地 UI 状态分开管理，避免重复当"事实来源"。', 'queryKey 的结构直接决定缓存命中与失效粒度，需稳定且能标识查询语义。', 'staleTime 控制请求频率，gcTime 控制缓存保留时长；均需针对数据特性取值。', '失效策略按数据变化频率设计，频繁失效会让缓存形同虚设。'],
@@ -813,7 +862,8 @@ export const lessons: Lesson[] = [
 {
     id: 'R_33', title: 'Recoil 原子状态与 Selector', navTitle: 'Recoil', category: '原子化状态',
     path: '/react/r-33/recoil', summary: '了解 Recoil 的 Atom 与 Selector 模型，理解原子化状态管理的细粒度更新。',
-    demo: R33Recoil, code: R33Code, language: 'jsx',
+    demo: null,
+    demoComponent: R33Recoil, code: R33Code, language: 'jsx',
     principle: 'Recoil 以 Atom 为最小状态单元，Selector 是从一个或多个 atom 推导出的派生状态。组件用 useRecoilState/useRecoilValue 读写，每个 atom 独立追踪订阅；只有读取了变化原子或其派生链的组件才会更新，从而实现细粒度的组件级重渲染。',
     flow: ['用 atom 定义原始状态并指定全局唯一的 key。', '用 selector 的 get 读取依赖的 atom 构造派生值，如字符数、完成率。', '组件经 useRecoilState 读写 atom、useRecoilValue 订阅派生 selector 展示统计。', '只更新一个 atom，验证未依赖它的组件不重渲染。'],
     notes: ['Recoil 的状态图也支持异步 selector，并能配合 Suspense 使用。', '每个 atom/selector 独立维护订阅，更新粒度较其他全局 store 更细。', 'Recoil 与 React 生态深度绑定，主要面向 React 项目。', '选型时关注维护活跃度：同作者已有替代工具，评估后再采用 Recoil。'],
@@ -822,7 +872,8 @@ export const lessons: Lesson[] = [
 {
     id: 'R_34', title: 'MobX 响应式状态与 Observable', navTitle: 'MobX', category: '结构化状态',
     path: '/react/r-34/mobx', summary: '理解 MobX 的 Observable 响应式模型，掌握 action、computed 和 observer 的协作方式。',
-    demo: R34Mobx, code: R34Code, language: 'javascript',
+    demo: null,
+    demoComponent: R34Mobx, code: R34Code, language: 'javascript',
     principle: 'MobX 用 Observable 把普通对象（如 class 实例）包装成可观察图谱：action 在组件之外统一修改状态，computed（getter）派生只读值并缓存，observer 包裹的组件会记录渲染时用到的 observable 字段并随其变化自动重渲染。这种"透明反应"心智模型贴近面向对象领域建模，适合复杂业务状态。',
     flow: ['用 makeAutoObservable 让类字段自动可观察，并把修改方法标为 action。', '在 action 内统一变更状态，触发依赖收集与通知。', 'observer 组件渲染时用到哪些字段，就只订阅这些字段，变化时自动更新。', '在 DevTools 中核对哪些 observable 被实际追踪。'],
     notes: ['MobX 的响应式是隐式收集的，代码更简洁，但需要理解"谁被追踪、何时重跑"。', 'configure({ enforceActions: "always" }) 保证状态只能在 action 中被修改。', '复杂领域模型优先用 class 搭配 makeAutoObservable 表达。', '跨组件的异步流程用 runInAction 包裹批量修改，减少中间态通知。'],
@@ -831,7 +882,8 @@ export const lessons: Lesson[] = [
 {
     id: 'R_35', title: 'Overmind 分形状态管理', navTitle: 'Overmind', category: '结构化状态',
     path: '/react/r-35/overmind', summary: '了解 Overmind 的分形架构，掌握命名空间组织状态与 effects 隔离副作用。',
-    demo: R35Overmind, code: R35Code, language: 'javascript',
+    demo: null,
+    demoComponent: R35Overmind, code: R35Code, language: 'javascript',
     principle: 'Overmind 以"分形"方式组织全局状态：state、actions、derived 与 effects 按命名空间聚合，天然支持状态追踪、DevTools 与时间旅行调试。核心约定是 actions 只改 state，网络、存储等副作用一律放进 effects，让 UI 层保持纯净、便于替换与测试。',
     flow: ['用 createOvermind 依配置创建 store，按命名空间放好 state、actions 与 effects。', '组件经 useOvermind 解构出 state 与 actions 使用。', 'actions 直接修改 state，需要的外部能力（如 fetch）从 effects 注入。', '用测试替身注入 effects，验证 actions 逻辑独立可测。'],
     notes: ['Overmind 同时支持 Vue、React 等框架，同一份逻辑可跨端复用。', '状态变更都能回溯到具体 action 调用，极大地方便调试与审计。', 'effects 独立成层，测试时可用替身注入，避免真实网络与存储。', '状态划分先按业务域命名空间拆开，再按 actions/effects 归位。'],
