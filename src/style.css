@@ -1386,19 +1386,30 @@ li + li {
   overflow: auto;
 }
 
-/* 课程正文的代码块：浅色暖底，配合 highlight.js 语法配色。
-   限定在 .lesson-article 内 —— 演示区域的 .code-block 是深色小片段，
-   由 styles/demo.css 单独定义，两者作用域不重叠。 */
-.lesson-article .code-block {
+/* 代码块的呈现（内边距 / 字号 / 行高 / 溢出）。
+
+   ⚠️ 两个作用域必须并列，别只写 `.lesson-article .code-block`：
+     - 正文区的代码块在 <article class="lesson-article"> 内；
+     - 「关键代码」区块却位于该 article 的【兄弟节点】里（.code-block-wrapper）。
+   只写前者会让「关键代码」整块漏掉内边距 —— 代码紧贴左边框，
+   而代码的顶层行恰好多以 < > 开头，看上去就像"缺左边距"。
+
+   外框与底色两处不同：正文区自带浅色暖底，关键代码区由 .code-block-wrapper
+   提供外框（见下方），所以那部分只限正文区。 */
+.lesson-article .code-block,
+.code-block-wrapper .code-block {
   overflow: auto;
   max-width: 100%;
   margin: 0;
-  border: 1px solid rgba(123, 53, 29, 0.12);
-  border-radius: 10px;
-  background: linear-gradient(180deg, #fff8e8 0%, #fff4df 100%);
   padding: 20px;
   font-size: 14px;
   line-height: 1.7;
+}
+
+.lesson-article .code-block {
+  border: 1px solid rgba(123, 53, 29, 0.12);
+  border-radius: 10px;
+  background: linear-gradient(180deg, #fff8e8 0%, #fff4df 100%);
   box-shadow: inset 0 1px 3px rgba(123, 53, 29, 0.04);
   transition: box-shadow 0.3s ease;
 }
@@ -1407,7 +1418,8 @@ li + li {
   box-shadow: inset 0 1px 3px rgba(123, 53, 29, 0.04), 0 4px 12px rgba(123, 53, 29, 0.06);
 }
 
-.lesson-article .code-block code {
+.lesson-article .code-block code,
+.code-block-wrapper .code-block code {
   font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace;
   font-size: 13px;
 }
@@ -2390,6 +2402,8 @@ pre.code-block code {
   box-shadow: inset 0 1px 3px rgba(123, 53, 29, 0.04);
 }
 
+/* 包装内的代码块只负责"褪去自身外框"——外框/底色由 .code-block-wrapper 提供。
+   内边距与字号来自上方那条 `.code-block-wrapper .code-block` 的共用规则。 */
 .code-block-wrapper .code-block {
   margin: 0;
   border: none;
