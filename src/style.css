@@ -1843,15 +1843,18 @@ pre.code-block code {
 }
 
 /* demo 通用元素深色主题适配 */
-[data-theme='dark'] .demo-card table th,
-[data-theme='dark'] table th {
+/* :not(.el-table__cell) —— 只认演示里手写的表格单元格。
+   Element Plus 的 th/td 全都带 .el-table__cell，组件库表格自带白色底，
+   若被这里的浅色字与深棕底盖住会直接看不清（见下方 el-table 还原块）。 */
+[data-theme='dark'] .demo-card table th:not(.el-table__cell),
+[data-theme='dark'] table th:not(.el-table__cell) {
   background: rgba(74, 52, 40, 0.5);
   border-color: rgba(74, 52, 40, 0.6);
   color: var(--text);
 }
 
-[data-theme='dark'] .demo-card table td,
-[data-theme='dark'] table td {
+[data-theme='dark'] .demo-card table td:not(.el-table__cell),
+[data-theme='dark'] table td:not(.el-table__cell) {
   border-color: rgba(74, 52, 40, 0.5);
   color: var(--text);
 }
@@ -3561,6 +3564,55 @@ pre.code-block code {
 .lesson-article tbody tr:nth-child(even) td {
   background: rgba(255, 248, 240, 0.6);
 }
+
+/* ── 内嵌演示里的组件库表格：正文排版不得介入 ─────────────────────────────
+   ⚠️ 长文版式把演示放在 <article class="lesson-article"> 的
+   <figure class="lesson-figure"> 里，所以上面那批正文表格规则会**穿透**进
+   组件库自己的表格。实测 Element Plus 的 el-table 被这样打乱：
+
+     · table { margin: 14px 0 }            → 表头容器被 margin 撑高 28px，
+                                              表格上方凭空多出一条空白行
+     · table { border-collapse: collapse } → 盖掉 EP 的 separate，边框错位
+     · th/td { border: 1px solid }         → 单元格多出上/左/右三条边线
+     · th { color: var(--chestnut) }       → 表头文字被染成栗棕
+     · 深色主题的 [data-theme='dark'] table th/td { color: var(--text) }
+                                           → 表头/单元格变成浅色文字，落回
+                                             EP 自己的白底表格上完全看不清
+
+   下面把这几条在组件库表格范围内显式还原。刻意只声明「正文多出来的那些属性」
+   （margin / border-collapse / 单元格上左右边框 / 文字色），
+   不去碰 EP 自己声明的 border-bottom 与 padding —— 一旦两边都声明同一个属性，
+   谁生效就要看加载顺序（分类 chunk 晚于入口 CSS），那正是本次故障的成因。 */
+.lesson-article .el-table table {
+  margin: 0;
+  border-collapse: separate;
+}
+
+.lesson-article .el-table th,
+.lesson-article .el-table td {
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+
+/* 文字色取 EP 自己的令牌：浅色主题下也顺带纠正表头的栗棕。
+   两个变量都带兜底值，万一 EP 版本改名也不会退回成正文色。 */
+.lesson-article .el-table th {
+  color: var(--el-table-header-text-color, #909399);
+}
+
+.lesson-article .el-table td {
+  color: var(--el-table-text-color, #606266);
+}
+
+/* 兜底：深色主题下若再有别的规则把 table th 的底色刷成深色，
+   EP 的表头仍保持自己的底色（上面那条靠 :not(.el-table__cell) 排除，
+   这里再明确声明一次，避免日后新增深色表格规则时重新踩坑）。 */
+[data-theme='dark'] .lesson-article .el-table th {
+  background-color: var(--el-table-header-bg-color, #ffffff);
+}
+
+/* 数值 / 关键字高亮 */
 
 /* 数值 / 关键字高亮 */
 .lesson-kv {

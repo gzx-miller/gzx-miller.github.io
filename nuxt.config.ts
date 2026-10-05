@@ -112,6 +112,16 @@ export default defineNuxtConfig({
     },
   },
   vite: {
+    ssr: {
+      // Element Plus / Vue Flow 的官方样式表由「组件入口的 .mjs」间接引入
+      // （如 element-plus/es/components/button/style/css.mjs →
+      //   import 'element-plus/theme-chalk/el-button.css'）。
+      // 若这些包在 SSR 里被当成外部依赖交给 Node 直接加载，Node 会因为
+      // 不认识 .css 而抛 "Unknown file extension .css"，连带使分类数据模块
+      // 加载失败（课程路由会 302 兜底到默认内容）。
+      // 交给 Vite 处理这些包，CSS 才能被正确抽取进分类 chunk。
+      noExternal: ['element-plus', '@vue-flow/core', '@vue-flow/controls', '@vue-flow/minimap', '@vue-flow/background'],
+    },
     plugins: [
       Components({ dts: false, resolvers: [ElementPlusResolver()] }),
       // 注：nitro 渲染器会对产物做 process.env.NODE_ENV 文本替换，会破坏 ?raw

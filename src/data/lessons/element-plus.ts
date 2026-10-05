@@ -21,6 +21,11 @@ import E17Transfer from '../../demos/E17TransferArticle.vue'
 import E18Result from '../../demos/E18ResultArticle.vue'
 import E19Progress from '../../demos/E19ProgressArticle.vue'
 import E20Skeleton from '../../demos/E20SkeletonArticle.vue'
+// ⚠️ Element Plus 官方组件样式必须在这里引入。
+// 该分类的演示组件（E01…E20）自身没有 <style scoped>，完全依赖官方样式表；
+// 本文件按分类动态加载，这条 import 会把官方 CSS 并入 element-plus 分类 chunk，
+// 只有真正进入该分类时才下载。删掉它，整个分类的组件会退化成浏览器默认样式。
+import '../../element-plus/styles'
 
 const vueCodeModules = import.meta.glob<string>('../../demos/*.vue', { query: '?raw', import: 'default' })
 const jsxCodeModules = import.meta.glob<string>('../../demos/react-jsx/*.jsx', { query: '?raw', import: 'default' })

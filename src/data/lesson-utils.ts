@@ -18,7 +18,12 @@ export function createDemo(name: string) {
   }
 
   return defineAsyncComponent(async () => {
-    if (name.startsWith('E')) await import('../element-plus/styles')
+    // 注意：这里**不再**注入 Element Plus / Vue Flow 的官方样式。
+    // 分类样式统一由「分类数据模块」自己引入（见 lessons/element-plus.ts、
+    // lessons/vue-flow.ts 顶部的样式 import），与 category-*.css 同一套机制。
+    // 早先的 `if (name.startsWith('E')) await import('../element-plus/styles')`
+    // 分支是历史遗留：除 C++ 外的分类都已改用静态 demoComponent，这个分支
+    // 从未命中，反而掩盖了"官方样式其实没被加载"的事实。
     return loader()
   })
 }
