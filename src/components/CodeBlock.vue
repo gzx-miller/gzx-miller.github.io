@@ -30,14 +30,38 @@ const props = defineProps<{
   language?: string
 }>()
 
+// 「关键代码」区展示的是演示组件的**源码原文**（`?raw`）。标记类源码里，作者
+// 为了让页面显示字面量的尖括号，必须把源码写成实体，例如：
+//
+//     <p>给 <code>&lt;Handle&gt;</code> 设置 id 后…</p>
+//
+// 这是 Vue 模板里唯一正确的写法（直接写 <Handle> 会被解析成组件标签）。
+// 但源码被原样搬进代码块后，读者看到的是 `&lt;Handle&gt;`，很像渲染出错。
+//
+// 这里做一次「一级实体还原」：把 hljs 转义出来的 &amp;lt; 还原成 &lt;，
+// 屏幕上就显示成 <Handle> —— 即源码的本意。两点保证它不会歪曲源码：
+//   1. 只还原「成对的实体写法」，且 **不产生裸的 < > " &**（还原目标仍是实体），
+//      因此不可能被浏览器当成标签解析，也不存在注入风险；
+//   2. 还原后字符仍包在 hljs 原生的 <span> 里 —— 实体 token 是 .hljs-symbol
+//      （紫），真标签是 .hljs-tag（红），读者依旧能分清「字面文本」与「真标签」。
+// 「复制」按钮始终给 props.code 原文，不受影响。
+const MARKUP_LANGUAGES = new Set(['vue', 'xml', 'html'])
+
+/** 把一层双重转义收回来：`&amp;lt;` → `&lt;`（显示为 `<`）。单次扫描，不递归。 */
+function restoreEntitiesOnce(html: string): string {
+  return html.replace(/&amp;(lt|gt|quot|nbsp|amp|#39|#x27);/g, '&$1;')
+}
+
 const highlightedCode = computed(() => {
   const language = props.language ?? 'vue'
 
-  if (hljs.getLanguage(language)) {
-    return hljs.highlight(props.code.trim(), { language }).value
-  }
+  const raw = hljs.getLanguage(language)
+    ? hljs.highlight(props.code.trim(), { language }).value
+    : hljs.highlightAuto(props.code.trim()).value
 
-  return hljs.highlightAuto(props.code.trim()).value
+  // JS/TS 等非标记语言不做还原：那里出现 `'&lt;'` 往往本身就是教学内容
+  // （如「HTML 转义」一课），还原反而会把课程示例改错。
+  return MARKUP_LANGUAGES.has(language) ? restoreEntitiesOnce(raw) : raw
 })
 
 const languageLabel = computed(() => {

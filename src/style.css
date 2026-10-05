@@ -1947,7 +1947,8 @@ pre.code-block code {
 [data-theme='dark'] .code-block .hljs-attr { color: #7ab556; }
 [data-theme='dark'] .code-block .hljs-number,
 [data-theme='dark'] .code-block .hljs-literal { color: #f6c15a; }
-[data-theme='dark'] .code-block .hljs-built_in { color: #7ab556; }
+[data-theme='dark'] .code-block .hljs-built_in,
+[data-theme='dark'] .code-block .hljs-builtin-name { color: #7ab556; }
 [data-theme='dark'] .code-block .hljs-function .hljs-title { color: #f09060; }
 [data-theme='dark'] .code-block .hljs-title.function_ { color: #f09060; }
 [data-theme='dark'] .code-block .hljs-class .hljs-title { color: #7ab556; }
@@ -1961,6 +1962,12 @@ pre.code-block code {
 [data-theme='dark'] .code-block .hljs-bullet { color: #f09060; }
 [data-theme='dark'] .code-block .hljs-selector-id { color: #e8623a; }
 [data-theme='dark'] .code-block .hljs-selector-class { color: #f5a040; }
+/* .hljs-name / .hljs-tag 是 .vue 源码里出现最多的 token（标签名 + 尖括号）。
+   深色下曾有整整一类没有覆写，只能落回浅色值 #b7431f —— 那是暗红压在
+   #2a1e18 的深底上，对比度只有 2.97，读起来发闷。这里补齐，
+   并与 .hljs-keyword 同色，保持「标签 = 关键字」的既有语义。 */
+[data-theme='dark'] .code-block .hljs-name,
+[data-theme='dark'] .code-block .hljs-tag { color: #e8623a; }
 [data-theme='dark'] .code-block .hljs-params { color: #f0e6dc; }
 [data-theme='dark'] .code-block .hljs-punctuation,
 [data-theme='dark'] .code-block .hljs-operator { color: #c0a080; }
