@@ -1,0 +1,28 @@
+const n=`#include <iostream>
+#include <fstream>
+#include <sstream>
+
+int main() {
+    // 写入文件
+    std::ofstream outFile("example.txt");
+    outFile << "Hello, C++!" << std::endl;
+    outFile.close();
+
+    // 读取文件
+    std::ifstream inFile("example.txt");
+    std::string line;
+    while (std::getline(inFile, line)) {
+        std::cout << "读取: " << line << std::endl;
+    }
+
+    // 字符串流
+    std::string data = "42 3.14 Hello";
+    std::istringstream iss(data);
+    int num;
+    double pi;
+    std::string word;
+    iss >> num >> pi >> word;
+    std::cout << num << ", " << pi << ", " << word << std::endl;
+
+    return 0;
+}`;export{n as default};

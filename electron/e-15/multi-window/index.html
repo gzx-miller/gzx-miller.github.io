@@ -1,0 +1,343 @@
+<!DOCTYPE html><html  lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>多窗口管理 - 小松鼠举栗子</title><script>(function(){try{var t=localStorage.getItem('theme-preference');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script><style>.squirrel-pet[data-v-235d5ef5]{position:fixed;right:20px;top:50%;transform:translateY(-50%);z-index:1000;width:76px;height:76px;padding:0;border:none;background:transparent;cursor:grab;touch-action:none;-webkit-user-select:none;-moz-user-select:none;user-select:none;filter:drop-shadow(0 8px 16px rgba(98,42,18,.28));transition:left 2.4s cubic-bezier(.45,.05,.55,.95),top 2.4s cubic-bezier(.45,.05,.55,.95),filter .2s ease}.squirrel-pet[data-v-235d5ef5]:hover{filter:drop-shadow(0 10px 20px rgba(98,42,18,.4))}.squirrel-pet.dragging[data-v-235d5ef5]{cursor:grabbing;filter:drop-shadow(0 14px 24px rgba(98,42,18,.45));transition:filter .2s ease}.pet-inner[data-v-235d5ef5]{position:relative;display:block;animation:pet-bob-235d5ef5 3.2s ease-in-out infinite}.pet-ai-badge[data-v-235d5ef5]{position:absolute;top:-14px;left:50%;z-index:2;transform:translate(-50%);transform-origin:50% 100%;font-size:19px;font-weight:900;font-style:italic;letter-spacing:1px;line-height:1;background:linear-gradient(180deg,#ffe9a8,#f6c15a 35%,#d99a2b 55%,#fff3c4);background-clip:text;-webkit-background-clip:text;-webkit-text-stroke:.9px #8f2f18;paint-order:stroke fill;color:transparent;filter:drop-shadow(0 2px 3px rgba(98,42,18,.45));pointer-events:none;transition:filter .25s ease}.squirrel-pet:hover .pet-ai-badge[data-v-235d5ef5]{background:linear-gradient(110deg,#f6c15a,#ffe9a8 20%,#fff 38%,#ffe9a8 55%,#d99a2b 75%,#f6c15a);background-size:250% 100%;background-clip:text;-webkit-background-clip:text;filter:drop-shadow(0 0 6px rgba(246,193,90,.9)) drop-shadow(0 2px 3px rgba(98,42,18,.45));animation:ai-swing-235d5ef5 .62s ease-in-out infinite,ai-shine-235d5ef5 1.4s linear infinite}@keyframes ai-swing-235d5ef5{0%,to{transform:translate(-50%) rotate(-9deg) scale(1.06)}50%{transform:translate(-50%) rotate(9deg) scale(1.06)}}@keyframes ai-shine-235d5ef5{0%{background-position:120% 0}to{background-position:-120% 0}}.squirrel-pet.pricked .pet-inner[data-v-235d5ef5]{animation:prick-jump-235d5ef5 .68s cubic-bezier(.3,.9,.4,1)}@keyframes prick-jump-235d5ef5{0%{transform:translateY(0) scale(1)}28%{transform:translateY(-30px) scale(1.07)}52%{transform:translateY(-20px) scale(1.02) rotate(-5deg)}76%{transform:translateY(2px) scale(.96,.88)}to{transform:translateY(0) scale(1)}}.squirrel-pet.dragging .pet-ai-badge[data-v-235d5ef5],.squirrel-pet.dragging .pet-arm[data-v-235d5ef5],.squirrel-pet.dragging .pet-eyes[data-v-235d5ef5],.squirrel-pet.dragging .pet-face-happy[data-v-235d5ef5],.squirrel-pet.dragging .pet-foot-l[data-v-235d5ef5],.squirrel-pet.dragging .pet-foot-r[data-v-235d5ef5],.squirrel-pet.dragging .pet-hint-text[data-v-235d5ef5],.squirrel-pet.dragging .pet-inner[data-v-235d5ef5],.squirrel-pet.dragging .pet-tail[data-v-235d5ef5]{animation-play-state:paused}.pet-foot[data-v-235d5ef5]{transform-box:fill-box}.squirrel-pet.crawling .pet-foot-l[data-v-235d5ef5]{animation:foot-step-235d5ef5 .42s ease-in-out infinite alternate}.squirrel-pet.crawling .pet-foot-r[data-v-235d5ef5]{animation:foot-step-235d5ef5 .42s ease-in-out infinite alternate-reverse}@keyframes foot-step-235d5ef5{0%{transform:translate(2.5px,-1.2px) rotate(3deg)}to{transform:translate(-2.5px,1.2px) rotate(-3deg)}}.pet-wobble[data-v-235d5ef5]{display:block}.squirrel-pet.crawling .pet-wobble[data-v-235d5ef5]{transform-origin:50% 100%;animation:crawl-wobble-235d5ef5 .42s ease-in-out infinite alternate}@keyframes crawl-wobble-235d5ef5{0%{transform:rotate(-4deg) translate(1.5px)}to{transform:rotate(4deg) translate(-1.5px)}}.pet-arm[data-v-235d5ef5]{transform-box:fill-box;transform-origin:50% 90%}.squirrel-pet.waving .pet-arm[data-v-235d5ef5]{animation:arm-wave-235d5ef5 1.1s ease-in-out infinite}@keyframes arm-wave-235d5ef5{0%,to{transform:rotate(0)}30%{transform:rotate(-46deg)}55%{transform:rotate(10deg)}80%{transform:rotate(-36deg)}}.pet-eyes[data-v-235d5ef5],.pet-face-happy[data-v-235d5ef5]{transition:opacity .2s ease}.pet-face-happy[data-v-235d5ef5]{opacity:0}.squirrel-pet.waving .pet-face-happy[data-v-235d5ef5]{opacity:1}.squirrel-pet.waving .pet-eyes[data-v-235d5ef5]{opacity:0}.pet-face-sleep[data-v-235d5ef5]{opacity:0;transition:opacity .2s ease}.squirrel-pet.sleeping .pet-eyes[data-v-235d5ef5],.squirrel-pet.sleeping .pet-face-happy[data-v-235d5ef5]{opacity:0}.squirrel-pet.sleeping .pet-face-sleep[data-v-235d5ef5]{opacity:1}.squirrel-pet.sleeping .pet-eyes[data-v-235d5ef5],.squirrel-pet.sleeping .pet-inner[data-v-235d5ef5],.squirrel-pet.sleeping .pet-tail[data-v-235d5ef5]{animation:none}.pet-zzz[data-v-235d5ef5]{position:absolute;top:-16px;right:-14px;z-index:3;display:inline-flex;gap:3px;font-size:12px;font-weight:700;color:var(--muted);line-height:1;pointer-events:none;opacity:0;transition:opacity .3s ease}.squirrel-pet.sleeping .pet-zzz[data-v-235d5ef5]{opacity:1}.pet-zzz span[data-v-235d5ef5]{display:inline-block;animation:pet-zzz-float-235d5ef5 2.4s ease-in-out infinite}.pet-zzz span[data-v-235d5ef5]:nth-child(2){animation-delay:.4s}.pet-zzz span[data-v-235d5ef5]:nth-child(3){animation-delay:.8s}@keyframes pet-zzz-float-235d5ef5{0%{transform:translateY(0) scale(.6);opacity:0}30%{opacity:1}to{transform:translateY(-14px) scale(1.15);opacity:0}}@media(prefers-reduced-motion:reduce){.squirrel-pet.sleeping .pet-zzz span[data-v-235d5ef5]{animation:none;opacity:1}}.pet-tail[data-v-235d5ef5]{transform-origin:bottom left;animation:tail-wag-235d5ef5 2.6s ease-in-out infinite}.pet-eyes[data-v-235d5ef5],.pet-tail[data-v-235d5ef5]{transform-box:fill-box}.pet-eyes[data-v-235d5ef5]{transform-origin:center;animation:pet-blink-235d5ef5 4.4s ease-in-out infinite}.pet-hint[data-v-235d5ef5]{position:absolute;top:6px;right:calc(100% + 10px);width:-moz-max-content;width:max-content;max-width:170px;padding:3px 10px;border-radius:12px;font-size:11px;line-height:1.6;color:#fffaf2;background:linear-gradient(135deg,var(--leaf-red),var(--leaf-orange));box-shadow:0 4px 10px #8f2f1859;opacity:0;transform:translate(8px) scale(.9);transform-origin:100% 70%;pointer-events:none;transition:opacity .28s ease,transform .28s cubic-bezier(.34,1.56,.64,1)}.pet-hint[data-v-235d5ef5]:after{content:"";position:absolute;top:10px;left:100%;border:5px solid transparent;border-left:7px solid #e0652f}.pet-hint.show[data-v-235d5ef5]{opacity:1;transform:translate(0) scale(1)}.pet-hint-text[data-v-235d5ef5]{display:inline-block}.squirrel-pet.hint-on-right .pet-hint[data-v-235d5ef5]{right:auto;left:calc(100% + 10px);transform-origin:0 70%;transform:translate(-8px) scale(.9)}.squirrel-pet.hint-on-right .pet-hint.show[data-v-235d5ef5]{transform:translate(0) scale(1)}.squirrel-pet.hint-on-right .pet-hint[data-v-235d5ef5]:after{left:auto;right:100%;border:5px solid transparent;border-right:7px solid #e0652f;border-left:none}.pet-hint.show .pet-hint-text[data-v-235d5ef5]{animation:tip-talk-235d5ef5 .8s ease-in-out infinite}@keyframes tip-talk-235d5ef5{0%,to{transform:translateY(0) scale(1)}50%{transform:translateY(-1px) scale(1.04)}}@media(prefers-reduced-motion:reduce){.pet-hint.show .pet-hint-text[data-v-235d5ef5],.squirrel-pet.crawling .pet-foot-l[data-v-235d5ef5],.squirrel-pet.crawling .pet-foot-r[data-v-235d5ef5],.squirrel-pet.crawling .pet-wobble[data-v-235d5ef5],.squirrel-pet.waving .pet-arm[data-v-235d5ef5],.squirrel-pet:hover .pet-ai-badge[data-v-235d5ef5]{animation:none}}@keyframes pet-bob-235d5ef5{0%,to{transform:translateY(0)}50%{transform:translateY(-5px)}}@keyframes tail-wag-235d5ef5{0%,to{transform:rotate(0)}50%{transform:rotate(5deg)}}@keyframes pet-blink-235d5ef5{0%,93%,to{transform:scaleY(1)}96%{transform:scaleY(.12)}}</style><style>.windows-grid[data-v-60ca9521]{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;margin-bottom:20px}.window-card[data-v-60ca9521]{background:#f9f9f9;padding:20px;border-radius:12px;border:2px solid #e0e0e0}.window-card.open[data-v-60ca9521]{border-color:#4caf50;background:#4caf5010}.window-card h3[data-v-60ca9521]{margin:0 0 8px}.window-card p[data-v-60ca9521]{margin:0 0 8px;color:#666;font-size:14px}.controls[data-v-60ca9521]{display:flex;gap:8px}.btn[data-v-60ca9521]{background:#ff6b35;color:#fff;border:none;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px}.btn.danger[data-v-60ca9521]{background:#f44336}.broadcast[data-v-60ca9521]{background:#2196f3;margin-bottom:20px}.code-block[data-v-60ca9521]{background:#f9f9f9;padding:20px;border-radius:12px;margin-bottom:20px}.code-block pre[data-v-60ca9521]{background:#1e1e1e;color:#d4d4d4;padding:16px;border-radius:8px;overflow-x:auto;font-size:13px}.tips[data-v-60ca9521]{background:#fff3e0;padding:20px;border-radius:12px}</style><link rel="stylesheet" href="/_nuxt/entry.CGN0g2Ra.css" crossorigin><link rel="preload" as="fetch" crossorigin="anonymous" href="/electron/e-15/multi-window/_payload.json?e714b28c-1387-4a7d-a2e1-4256272ad9f2"><script type="module" src="/_nuxt/ClZcEZ7f.js" crossorigin></script><meta name="author" content="gzx-miller"><meta name="robots" content="index, follow"><meta property="og:site_name" content="小松鼠举栗子"><meta property="og:locale" content="zh_CN"><meta property="og:url" content="https://gzx-miller.github.io/"><meta property="og:image:width" content="2560"><meta property="og:image:height" content="1440"><meta name="twitter:title" content="小松鼠举栗子 - 通过独立真实内容学习软件技术"><meta name="twitter:description" content="中文技术知识内容库：22 大分类 500+ 真实内容，每个栗子只讲一个知识点。"><meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8b369"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1210"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"小松鼠举栗子","url":"https://gzx-miller.github.io/","description":"中文技术知识内容库：通过独立真实小内容学习 Vue3、TypeScript、React、Node.js、CSS、WebGL、C++、uni-app 等。","inLanguage":"zh-CN"}</script><link rel="canonical" href="https://gzx-miller.github.io/electron/e-15/multi-window"><meta name="og:image:alt" content="用集中式 Map 管理多个窗口，通过主进程中转与 webContents.send 实现窗口间通信并预防内存泄漏。"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://gzx-miller.github.io/"},{"@type":"ListItem","position":2,"name":"Electron","item":"https://gzx-miller.github.io/electron"},{"@type":"ListItem","position":3,"name":"多窗口管理","item":"https://gzx-miller.github.io/electron/e-15/multi-window"}]}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"LearningResource","name":"多窗口管理与通信","description":"用集中式 Map 管理多个窗口，通过主进程中转与 webContents.send 实现窗口间通信并预防内存泄漏。","url":"https://gzx-miller.github.io/electron/e-15/multi-window","inLanguage":"zh-CN","learningResourceType":"CourseContent","about":{"@type":"WebSite","name":"Electron","url":"https://gzx-miller.github.io/electron"},"isPartOf":{"@type":"WebSite","name":"小松鼠举栗子","url":"https://gzx-miller.github.io/"}}</script><meta name="description" content="用集中式 Map 管理多个窗口，通过主进程中转与 webContents.send 实现窗口间通信并预防内存泄漏。"><meta property="og:title" content="多窗口管理与通信 - 小松鼠举栗子"><meta property="og:description" content="用集中式 Map 管理多个窗口，通过主进程中转与 webContents.send 实现窗口间通信并预防内存泄漏。"><meta property="og:type" content="article"><meta property="og:image" content="https://gzx-miller.github.io/og-image.jpg"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://gzx-miller.github.io/og-image.jpg"></head><body><div id="__nuxt"><!--[--><!--[--><a class="skip-link" href="#main-content">跳到正文</a><div class="app-frame"><header class="top-nav"><div class="top-bar"><a href="/" class="top-brand" aria-label="回到首页"><img class="brand-avatar" src="/_nuxt/squirrel-chestnut-avatar.BUhAFRCm.webp" alt="小松鼠举着栗子" width="48" height="48" fetchpriority="high"><div class="brand-text"><strong>小松鼠举栗子 </strong><span class="brand-tagline">中文技术知识内容库</span></div></a><div class="site-intro-group"><p class="site-intro">记录与分享可复用的软件技术内容</p><p class="site-stats"><span class="stat-pill">免费开源</span><span class="stat-pill">持续更新</span></p></div><div class="top-actions"><a class="contact-mail" href="mailto:gzx_miller@foxmail.com" title="给我发邮件">gzx_miller@foxmail.com</a><a class="github-link" href="https://github.com/gzx-miller/gzx-miller.github.io" target="_blank" rel="noopener" aria-label="查看开源代码" title="查看开源代码"><svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"></path></svg></a><button class="theme-toggle" aria-label="切换深色主题" title="切换深色主题"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></button></div></div><div class="tabs-row"><nav class="knowledge-tabs" aria-label="知识类别导航"><!--[--><div class="knowledge-tab-wrapper"><a href="/javascript" class="knowledge-tab" aria-disabled="false"><span>JavaScript</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/typescript" class="knowledge-tab" aria-disabled="false"><span>TypeScript</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/vue" class="knowledge-tab" aria-disabled="false"><span>Vue3</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/element-plus" class="knowledge-tab" aria-disabled="false"><span>Element Plus</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/vue-flow" class="knowledge-tab" aria-disabled="false"><span>Vue Flow</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/nestjs" class="knowledge-tab" aria-disabled="false"><span>Nest.js</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/nuxt" class="knowledge-tab" aria-disabled="false"><span>Nuxt</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/nodejs" class="knowledge-tab" aria-disabled="false"><span>Node.js</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/css" class="knowledge-tab" aria-disabled="false"><span>CSS</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/tailwind-css" class="knowledge-tab" aria-disabled="false"><span>Tailwind CSS</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/sass" class="knowledge-tab" aria-disabled="false"><span>Sass</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/vite" class="knowledge-tab" aria-disabled="false"><span>Vite</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/react" class="knowledge-tab" aria-disabled="false"><span>React</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/nextjs" class="knowledge-tab" aria-disabled="false"><span>Next.js</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/langchain" class="knowledge-tab" aria-disabled="false"><span>LangChain</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/llm-principles" class="knowledge-tab" aria-disabled="false"><span>LLM 原理</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/cpp" class="knowledge-tab" aria-disabled="false"><span>C++</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a aria-current="page" href="/electron" class="knowledge-tab active" aria-disabled="false"><span>Electron</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/ffmpeg" class="knowledge-tab" aria-disabled="false"><span>FFmpeg</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/webgl" class="knowledge-tab" aria-disabled="false"><span>WebGL</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/webassembly" class="knowledge-tab" aria-disabled="false"><span>WebAssembly</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/uni-app" class="knowledge-tab" aria-disabled="false"><span>uni-app</span><!----></a><!----></div><!--]--></nav><!----></div><div class="nprogress-rail" aria-hidden="true"></div></header><div class="sidebar-expanded app-shell"><aside class="sidebar-temporarily-expanded sidebar" aria-label="Electron 知识点导航"><div class="sidebar-heading"><button class="expanded sidebar-toggle" aria-label="收起侧边栏"><span class="toggle-icon" aria-hidden="true"></span><strong class="sidebar-toggle-label">Electron</strong></button><label class="lesson-search"><span class="sr-only">搜索当前分类课程</span><input value="" type="search" placeholder="搜索课程…" autocomplete="off"></label></div><nav class="lesson-nav"><!--[--><section class="lesson-group"><h2 class="lesson-group-title">基础架构</h2><!--[--><a href="/electron/e-1/architecture" class="lesson-link" aria-label="🌰1 架构模型" title="架构模型"><span>🌰1</span><strong>架构模型</strong></a><a href="/electron/e-2/main-window" class="lesson-link" aria-label="🌰2 窗口管理" title="窗口管理"><span>🌰2</span><strong>窗口管理</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">进程通信</h2><!--[--><a href="/electron/e-3/ipc" class="lesson-link" aria-label="🌰3 IPC 通信" title="IPC 通信"><span>🌰3</span><strong>IPC 通信</strong></a><a href="/electron/e-4/preload" class="lesson-link" aria-label="🌰4 预加载脚本" title="预加载脚本"><span>🌰4</span><strong>预加载脚本</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">应用管理</h2><!--[--><a href="/electron/e-5/app-lifecycle" class="lesson-link" aria-label="🌰5 应用生命周期" title="应用生命周期"><span>🌰5</span><strong>应用生命周期</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">原生能力</h2><!--[--><a href="/electron/e-6/native-menu" class="lesson-link" aria-label="🌰6 原生菜单" title="原生菜单"><span>🌰6</span><strong>原生菜单</strong></a><a href="/electron/e-7/tray-notification" class="lesson-link" aria-label="🌰7 系统托盘" title="系统托盘"><span>🌰7</span><strong>系统托盘</strong></a><a href="/electron/e-8/dialog" class="lesson-link" aria-label="🌰8 文件对话框" title="文件对话框"><span>🌰8</span><strong>文件对话框</strong></a><a href="/electron/e-9/shortcuts" class="lesson-link" aria-label="🌰9 快捷键" title="快捷键"><span>🌰9</span><strong>快捷键</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">分发部署</h2><!--[--><a href="/electron/e-10/auto-update" class="lesson-link" aria-label="🌰10 自动更新" title="自动更新"><span>🌰10</span><strong>自动更新</strong></a><a href="/electron/e-11/packaging" class="lesson-link" aria-label="🌰11 打包分发" title="打包分发"><span>🌰11</span><strong>打包分发</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">安全与性能</h2><!--[--><a href="/electron/e-12/security" class="lesson-link" aria-label="🌰12 安全实践" title="安全实践"><span>🌰12</span><strong>安全实践</strong></a><a href="/electron/e-13/performance" class="lesson-link" aria-label="🌰13 性能优化" title="性能优化"><span>🌰13</span><strong>性能优化</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">数据管理</h2><!--[--><a href="/electron/e-14/storage" class="lesson-link" aria-label="🌰14 数据存储" title="数据存储"><span>🌰14</span><strong>数据存储</strong></a><a aria-current="page" href="/electron/e-15/multi-window" class="router-link-active router-link-exact-active lesson-link active" aria-label="🌰15 多窗口管理" title="多窗口管理"><span>🌰15</span><strong>多窗口管理</strong></a><!--]--></section><!--]--><!----></nav></aside><!--[--><main id="main-content" class="lesson-page" data-category="electron" tabindex="-1"><nav class="breadcrumb" aria-label="面包屑"><a href="/electron" class="">Electron</a><span aria-hidden="true">/</span><span aria-current="page">多窗口管理</span><small>15 / 15</small></nav><div class="lesson-progress" role="progressbar" aria-label="Electron 学习进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span style="width:100%;"></span></div><header class="lesson-header"><div class="lesson-copy"><p class="eyebrow">🌰15 · 数据管理 <span class="reading-time">约 1 分钟读完</span></p><h1>多窗口管理与通信</h1><p>用集中式 Map 管理多个窗口，通过主进程中转与 webContents.send 实现窗口间通信并预防内存泄漏。</p></div></header><section class="lesson-section lesson-demo"><article class="lesson-article"><!--[--><div class="lesson-question"><strong>开场问题：</strong>用户连点了三下「关于」，你屏幕上就叠了三个一模一样的关于窗口——因为你每点一次就 <code>new BrowserWindow</code> 一次。更别扭的是，主窗口把主题切成深色后，设置窗口还亮着白底，两个窗口各说各话，像活在两个应用里。 </div><h2>多窗口三类难题</h2><p> 多窗口应用比单窗口多出三件必须回答的事。<strong>谁是谁</strong>：同时存在好几个窗口实例，你怎么找到指定的那个、怎么保证同类窗口不重复弹。<strong>窗口之间怎么说话</strong>：主窗口改了主题，别的窗口怎么知道。<strong>窗口长什么样、在哪</strong>：用户拖过位置、调过大小，下次打开还还原不还原。 </p><p> 旧办法每一步都有代价：窗口引用散落在全局变量或函数局部变量里，用时找不到、关时清不掉；窗口之间直接互相引用对方的 <code>webContents</code>，一旦其中一个被关掉，另一个再发消息就是发给一个已经销毁的对象，直接报错；每个窗口各存一份全局状态，改一处不同步；窗口位置大小不持久化，用户精心摆好的布局重启就没了。 </p><p> 所以要问的是：怎样把「多个窗口」当成一个可管理的整体，让它们找得到、说得上话、状态还不丢？ </p><h2>窗口映射与集中管理</h2><p> 主进程里用一个 <code>Map</code> 集中持有所有窗口：创建后 <code>windows.set(win.id, { win, type })</code>，需要哪个窗口就按 <code>id</code> 取。 </p><p> 这个方案做对了一件事：<strong>它把「窗口实例」变成了一个可查询、可清理的集合</strong>，而不是一堆散落在角落里的变量。有了这张表，「找到某个窗口」和「关掉后把它忘掉」都成了明确的操作。 </p><h2>单例缺失与引用残留</h2><ul><li>没有单例控制：同一个按钮点几下就 <code>new</code> 出几个同类窗口，用户想要的其实只是把已有的那个拉到前面。</li><li><code>closed</code> 事件里不 <code>windows.delete(win.id)</code>：引用一直挂在 Map 上，GC 收不回，还会在你稍后对它 <code>send</code> 时抛错。</li><li>窗口之间直接互相引用 <code>webContents</code>：一个关了，另一个还攥着旧引用，通信时打到死对象上。</li><li>每个窗口各存一份共享状态：主窗口改了，设置窗口不知道，界面就对不上。</li><li>平台差异：macOS 上关掉所有窗口应用仍在运行，「什么时候退出」不能只按 Windows 的直觉写。</li><li>窗口位置大小不保存：用户摆放的布局，重启就回去了。</li></ul><h2>主进程转发与单例控制</h2><p> 先把「实例管理」补成可靠的。在 <code>Map</code> 之外加一层<strong>单例判断</strong>：开窗口前先查有没有同类窗口，有就 <code>win.focus()</code>（必要时先 <code>restore()</code>），没有才 <code>new BrowserWindow</code> 并存进 Map。这一步直接解决连点叠窗。 </p><p> 接着定「父子关系」。用 <code>new BrowserWindow({ parent: mainWindow })</code> 建立从属：子窗口永远在父窗口之上，父窗口最小化或关闭时子窗口随之隐藏或关闭；需要它挡住父窗口操作时再加 <code>modal: true</code>。同时给窗口类型定下清晰契约——<strong>谁是主窗口、谁负责退出</strong>，避免出现孤儿窗口或互相等待的僵局。 </p><p> 再解决通信。这里的关键是<strong>窗口之间不互相直接碰，统一由主进程当中间人</strong>。想给某个窗口发消息，就用 <code>target.webContents.send(channel, data)</code> 定向推送；想通知所有窗口，就遍历 <code>BrowserWindow.getAllWindows()</code> 广播——比如主窗口切了主题，主进程收到后广播给每个窗口，大家步调一致。这样做的好处是：任何一方被关掉都不会连累别人，因为发消息的始终是还活着的主进程。 </p><p> 然后是共享状态。<strong>以主进程或存储为单一事实来源</strong>，各个窗口只持有自己的快照：数据改动先到主进程，主进程再决定推给谁。这样关掉任意一个窗口都不会丢全局状态。 </p><p> 最后补窗口状态持久化。在窗口 <code>resize</code> / <code>move</code>（或关闭）时把位置和大小记进 <code>electron-store</code> 这类 userData 存储里，下次创建时读取恢复；恢复前<strong>先校验保存的 bounds 是否还落在当前显示器范围内</strong>——用户可能拔掉了那块外接屏，直接 <code>setBounds</code> 会把窗口放到看不见的地方。 </p><p> 收尾是清理：每个窗口的 <code>closed</code> 事件里 <code>windows.delete(win.id)</code>，让引用和对象一起被回收；再配合 <code>window-all-closed</code> 处理「所有窗口都关了要不要退出应用」这个平台差异。 </p><h2>开关切换与消息广播</h2><figure class="lesson-figure"><figcaption>点每个窗口卡片上的「打开 / 关闭」管理它的生命周期，再点「广播消息到所有窗口」模拟主进程的定向推送与广播，观察窗口状态如何随开关同步变化。</figcaption><div class="demo-container" data-v-60ca9521><h2 data-v-60ca9521>🌰 多窗口管理</h2><p class="desc" data-v-60ca9521>管理多个应用窗口，实现窗口间通信、数据共享和状态同步。</p><div class="windows-grid" data-v-60ca9521><!--[--><div class="open window-card" data-v-60ca9521><h3 data-v-60ca9521>主窗口</h3><p data-v-60ca9521>类型: main</p><p data-v-60ca9521>状态: ✅ 打开</p><div class="controls" data-v-60ca9521><!----><button class="btn danger" data-v-60ca9521>关闭</button></div></div><div class="window-card" data-v-60ca9521><h3 data-v-60ca9521>设置窗口</h3><p data-v-60ca9521>类型: settings</p><p data-v-60ca9521>状态: ❌ 关闭</p><div class="controls" data-v-60ca9521><button class="btn" data-v-60ca9521>打开</button><!----></div></div><div class="window-card" data-v-60ca9521><h3 data-v-60ca9521>关于窗口</h3><p data-v-60ca9521>类型: about</p><p data-v-60ca9521>状态: ❌ 关闭</p><div class="controls" data-v-60ca9521><button class="btn" data-v-60ca9521>打开</button><!----></div></div><!--]--></div><button class="btn broadcast" data-v-60ca9521>广播消息到所有窗口</button><div class="code-block" data-v-60ca9521><h3 data-v-60ca9521>多窗口管理代码示例</h3><pre data-v-60ca9521>// 主进程 - 窗口管理
+const windows = new Map()
+
+function createWindow(type: string) {
+  const win = new BrowserWindow({...})
+  windows.set(win.id, { window: win, type })
+  
+  win.on(&#39;closed&#39;, () =&gt; {
+    windows.delete(win.id) // 释放引用
+  })
+  
+  return win
+}
+
+// 窗口间通信
+function broadcastToAll(channel: string, data: any) {
+  windows.forEach(({ window }) =&gt; {
+    window.webContents.send(channel, data)
+  })
+}
+
+// 渲染进程 - 接收广播
+ipcRenderer.on(&#39;refresh-data&#39;, (event, data) =&gt; {
+  console.log(&#39;收到广播:&#39;, data)
+})</pre></div><div class="tips" data-v-60ca9521><h3 data-v-60ca9521>多窗口管理要点</h3><ul data-v-60ca9521><li data-v-60ca9521><strong data-v-60ca9521>窗口引用管理</strong>: 使用 Map 或对象存储窗口引用</li><li data-v-60ca9521><strong data-v-60ca9521>内存泄漏预防</strong>: 窗口 closed 事件中释放引用</li><li data-v-60ca9521><strong data-v-60ca9521>窗口间通信</strong>: 通过主进程中转或共享存储</li><li data-v-60ca9521><strong data-v-60ca9521>macOS 特殊处理</strong>: 所有窗口关闭后应用仍运行</li></ul></div></div></figure><h2>三项职责归属</h2><p> 多窗口管理的三件事各有归属：实例用主进程里的一个 <code>Map</code> 集中管理并加单例判断，通信一律走主进程中转（定向用 <code>webContents.send</code>、批量用 <code>getAllWindows()</code> 广播），共享状态以主进程为单一事实来源，窗口位置用 userData 存储持久化。别忘了在 <code>closed</code> 里删引用——这是不掉进内存泄漏的关键。 </p><div class="lesson-term"><span class="term-name">「父子窗口」</span>通过在 <code>BrowserWindow</code> 选项里传 <code>parent</code> 建立：子窗口永远浮在父窗口之上，父窗口最小化或关闭时子窗口跟随隐藏或关闭；再加 <code>modal: true</code> 会让子窗口阻塞父窗口的交互。边界：父子关系必须<strong>显式传 <code>parent</code></strong>，不能靠窗口创建顺序去推断；而且平台表现不完全一致（macOS 的 modal sheet 行为与 Windows 有差异），macOS 上「关掉所有窗口」也不等于退出应用，退出策略要单独处理。 </div><!--]--></article></section><section class="lesson-section"><h2>关键代码</h2><div class="code-block-wrapper"><div class="code-block-toolbar"><span class="code-block-lang">JavaScript</span><button class="code-copy-btn" type="button" aria-label="复制代码"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>复制</span></button></div><pre class="code-block"><code><span class="hljs-comment">// ========== 1. 多窗口管理器 main.js ==========</span>
+<span class="hljs-keyword">const</span> { app, <span class="hljs-title class_">BrowserWindow</span>, ipcMain } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;electron&#x27;</span>)
+<span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;path&#x27;</span>)
+
+<span class="hljs-comment">// 窗口引用管理（使用 Map，不要用全局变量）</span>
+<span class="hljs-keyword">const</span> windowManager = {
+  <span class="hljs-attr">windows</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>(), <span class="hljs-comment">// id -&gt; window</span>
+  <span class="hljs-attr">nextId</span>: <span class="hljs-number">1</span>,
+
+  <span class="hljs-comment">// 创建窗口</span>
+  <span class="hljs-title function_">create</span>(<span class="hljs-params">type, options = {}</span>) {
+    <span class="hljs-keyword">const</span> id = <span class="hljs-string">`<span class="hljs-subst">${type}</span>-<span class="hljs-subst">${<span class="hljs-variable language_">this</span>.nextId++}</span>`</span>
+
+    <span class="hljs-keyword">const</span> win = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BrowserWindow</span>({
+      <span class="hljs-attr">width</span>: options.<span class="hljs-property">width</span> || <span class="hljs-number">800</span>,
+      <span class="hljs-attr">height</span>: options.<span class="hljs-property">height</span> || <span class="hljs-number">600</span>,
+      <span class="hljs-attr">title</span>: options.<span class="hljs-property">title</span> || <span class="hljs-string">&#x27;新窗口&#x27;</span>,
+      <span class="hljs-attr">x</span>: options.<span class="hljs-property">x</span>,
+      <span class="hljs-attr">y</span>: options.<span class="hljs-property">y</span>,
+      <span class="hljs-attr">webPreferences</span>: {
+        <span class="hljs-attr">preload</span>: path.<span class="hljs-title function_">join</span>(__dirname, <span class="hljs-string">&#x27;preload.js&#x27;</span>),
+        <span class="hljs-attr">contextIsolation</span>: <span class="hljs-literal">true</span>
+      },
+      ...options.<span class="hljs-property">windowOptions</span>
+    })
+
+    <span class="hljs-comment">// 存储窗口元数据</span>
+    win.<span class="hljs-property">data</span> = {
+      id,
+      type,
+      <span class="hljs-attr">createdAt</span>: <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>()
+    }
+
+    <span class="hljs-comment">// 加载对应页面</span>
+    <span class="hljs-keyword">const</span> pageMap = {
+      <span class="hljs-attr">main</span>: <span class="hljs-string">&#x27;index.html&#x27;</span>,
+      <span class="hljs-attr">editor</span>: <span class="hljs-string">&#x27;editor.html&#x27;</span>,
+      <span class="hljs-attr">preview</span>: <span class="hljs-string">&#x27;preview.html&#x27;</span>,
+      <span class="hljs-attr">settings</span>: <span class="hljs-string">&#x27;settings.html&#x27;</span>
+    }
+    win.<span class="hljs-title function_">loadFile</span>(pageMap[type] || <span class="hljs-string">&#x27;index.html&#x27;</span>)
+
+    <span class="hljs-comment">// 窗口关闭时移除引用</span>
+    win.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;closed&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">windows</span>.<span class="hljs-title function_">delete</span>(id)
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`窗口 <span class="hljs-subst">${id}</span> 已关闭，剩余 <span class="hljs-subst">${<span class="hljs-variable language_">this</span>.windows.size}</span> 个窗口`</span>)
+    })
+
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">windows</span>.<span class="hljs-title function_">set</span>(id, win)
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`创建窗口 <span class="hljs-subst">${id}</span>，共 <span class="hljs-subst">${<span class="hljs-variable language_">this</span>.windows.size}</span> 个窗口`</span>)
+
+    <span class="hljs-keyword">return</span> { id, win }
+  },
+
+  <span class="hljs-comment">// 获取窗口</span>
+  <span class="hljs-title function_">get</span>(<span class="hljs-params">id</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">windows</span>.<span class="hljs-title function_">get</span>(id)
+  },
+
+  <span class="hljs-comment">// 获取所有窗口</span>
+  <span class="hljs-title function_">getAll</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-title class_">Array</span>.<span class="hljs-title function_">from</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">windows</span>.<span class="hljs-title function_">values</span>())
+  },
+
+  <span class="hljs-comment">// 按类型获取窗口</span>
+  <span class="hljs-title function_">getByType</span>(<span class="hljs-params">type</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-title class_">Array</span>.<span class="hljs-title function_">from</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">windows</span>.<span class="hljs-title function_">values</span>()).<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">w</span> =&gt;</span> w.<span class="hljs-property">data</span>.<span class="hljs-property">type</span> === type)
+  },
+
+  <span class="hljs-comment">// 关闭所有窗口</span>
+  <span class="hljs-title function_">closeAll</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">getAll</span>().<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">win</span> =&gt;</span> win.<span class="hljs-title function_">close</span>())
+  },
+
+  <span class="hljs-comment">// 广播消息给所有窗口</span>
+  <span class="hljs-title function_">broadcast</span>(<span class="hljs-params">channel, data, excludeId = <span class="hljs-literal">null</span></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">windows</span>.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">win, id</span>) =&gt;</span> {
+      <span class="hljs-keyword">if</span> (id !== excludeId) {
+        win.<span class="hljs-property">webContents</span>.<span class="hljs-title function_">send</span>(channel, data)
+      }
+    })
+  }
+}
+
+<span class="hljs-comment">// ========== 2. 窗口间通信（通过主进程中转） ==========</span>
+<span class="hljs-comment">// 模式一: 广播消息</span>
+ipcMain.<span class="hljs-title function_">handle</span>(<span class="hljs-string">&#x27;window:broadcast&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event, { channel, data }</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> senderWin = <span class="hljs-title class_">BrowserWindow</span>.<span class="hljs-title function_">fromWebContents</span>(event.<span class="hljs-property">sender</span>)
+  <span class="hljs-keyword">const</span> senderId = senderWin?.<span class="hljs-property">data</span>?.<span class="hljs-property">id</span>
+  windowManager.<span class="hljs-title function_">broadcast</span>(channel, data, senderId)
+  <span class="hljs-keyword">return</span> { <span class="hljs-attr">success</span>: <span class="hljs-literal">true</span> }
+})
+
+<span class="hljs-comment">// 模式二: 发送给指定窗口</span>
+ipcMain.<span class="hljs-title function_">handle</span>(<span class="hljs-string">&#x27;window:sendTo&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event, { targetId, channel, data }</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> targetWin = windowManager.<span class="hljs-title function_">get</span>(targetId)
+  <span class="hljs-keyword">if</span> (targetWin) {
+    targetWin.<span class="hljs-property">webContents</span>.<span class="hljs-title function_">send</span>(channel, {
+      <span class="hljs-attr">from</span>: event.<span class="hljs-property">sender</span>.<span class="hljs-property">data</span>?.<span class="hljs-property">id</span>,
+      data
+    })
+    <span class="hljs-keyword">return</span> { <span class="hljs-attr">success</span>: <span class="hljs-literal">true</span> }
+  }
+  <span class="hljs-keyword">return</span> { <span class="hljs-attr">success</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">error</span>: <span class="hljs-string">&#x27;目标窗口不存在&#x27;</span> }
+})
+
+<span class="hljs-comment">// 模式三: 获取窗口列表</span>
+ipcMain.<span class="hljs-title function_">handle</span>(<span class="hljs-string">&#x27;window:list&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">return</span> windowManager.<span class="hljs-title function_">getAll</span>().<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">win</span> =&gt;</span> ({
+    <span class="hljs-attr">id</span>: win.<span class="hljs-property">data</span>.<span class="hljs-property">id</span>,
+    <span class="hljs-attr">type</span>: win.<span class="hljs-property">data</span>.<span class="hljs-property">type</span>,
+    <span class="hljs-attr">title</span>: win.<span class="hljs-title function_">getTitle</span>(),
+    <span class="hljs-attr">isFocused</span>: win.<span class="hljs-title function_">isFocused</span>()
+  }))
+})
+
+<span class="hljs-comment">// ========== 3. 创建子窗口示例 ==========</span>
+<span class="hljs-comment">// 方式一: 从主进程创建</span>
+ipcMain.<span class="hljs-title function_">handle</span>(<span class="hljs-string">&#x27;window:create&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event, { type, options }</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> { id, win } = windowManager.<span class="hljs-title function_">create</span>(type, options)
+  <span class="hljs-keyword">return</span> { id }
+})
+
+<span class="hljs-comment">// 方式二: window.open (渲染进程)</span>
+<span class="hljs-comment">// 注意: 需要 nativeWindowOpen: true</span>
+<span class="hljs-comment">// renderer.js:</span>
+<span class="hljs-comment">// const newWindow = window.open(&#x27;editor.html&#x27;, &#x27;_blank&#x27;, &#x27;width=600,height=400&#x27;)</span>
+
+<span class="hljs-comment">// ========== 4. 预加载脚本暴露窗口管理 API ==========</span>
+<span class="hljs-comment">// preload.js</span>
+<span class="hljs-comment">// const { contextBridge, ipcRenderer } = require(&#x27;electron&#x27;)</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// contextBridge.exposeInMainWorld(&#x27;windowAPI&#x27;, {</span>
+<span class="hljs-comment">//   // 创建新窗口</span>
+<span class="hljs-comment">//   createWindow: (type, options) =&gt;</span>
+<span class="hljs-comment">//     ipcRenderer.invoke(&#x27;window:create&#x27;, { type, options }),</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//   // 获取窗口列表</span>
+<span class="hljs-comment">//   listWindows: () =&gt; ipcRenderer.invoke(&#x27;window:list&#x27;),</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//   // 广播消息</span>
+<span class="hljs-comment">//   broadcast: (channel, data) =&gt;</span>
+<span class="hljs-comment">//     ipcRenderer.invoke(&#x27;window:broadcast&#x27;, { channel, data }),</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//   // 发送给指定窗口</span>
+<span class="hljs-comment">//   sendTo: (targetId, channel, data) =&gt;</span>
+<span class="hljs-comment">//     ipcRenderer.invoke(&#x27;window:sendTo&#x27;, { targetId, channel, data }),</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//   // 接收消息</span>
+<span class="hljs-comment">//   onWindowMessage: (channel, callback) =&gt; {</span>
+<span class="hljs-comment">//     ipcRenderer.on(channel, (_event, data) =&gt; callback(data))</span>
+<span class="hljs-comment">//   },</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//   // 关闭当前窗口</span>
+<span class="hljs-comment">//   close: () =&gt; window.close(),</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//   // 最小化</span>
+<span class="hljs-comment">//   minimize: () =&gt; ipcRenderer.invoke(&#x27;window:minimize&#x27;),</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//   // 最大化/还原</span>
+<span class="hljs-comment">//   toggleMaximize: () =&gt; ipcRenderer.invoke(&#x27;window:toggle-maximize&#x27;)</span>
+<span class="hljs-comment">// })</span>
+
+<span class="hljs-comment">// main.js 对应实现</span>
+<span class="hljs-comment">// ipcMain.handle(&#x27;window:minimize&#x27;, (event) =&gt; {</span>
+<span class="hljs-comment">//   const win = BrowserWindow.fromWebContents(event.sender)</span>
+<span class="hljs-comment">//   win?.minimize()</span>
+<span class="hljs-comment">// })</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// ipcMain.handle(&#x27;window:toggle-maximize&#x27;, (event) =&gt; {</span>
+<span class="hljs-comment">//   const win = BrowserWindow.fromWebContents(event.sender)</span>
+<span class="hljs-comment">//   if (!win) return</span>
+<span class="hljs-comment">//   if (win.isMaximized()) {</span>
+<span class="hljs-comment">//     win.unmaximize()</span>
+<span class="hljs-comment">//   } else {</span>
+<span class="hljs-comment">//     win.maximize()</span>
+<span class="hljs-comment">//   }</span>
+<span class="hljs-comment">// })</span>
+
+<span class="hljs-comment">// ========== 5. 渲染进程使用示例 ==========</span>
+<span class="hljs-comment">// async function openEditor() {</span>
+<span class="hljs-comment">//   const result = await window.windowAPI.createWindow(&#x27;editor&#x27;, {</span>
+<span class="hljs-comment">//     title: &#x27;编辑器&#x27;,</span>
+<span class="hljs-comment">//     width: 1000,</span>
+<span class="hljs-comment">//     height: 700</span>
+<span class="hljs-comment">//   })</span>
+<span class="hljs-comment">//   console.log(&#x27;新窗口 ID:&#x27;, result.id)</span>
+<span class="hljs-comment">// }</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// async function sendMessageToAll() {</span>
+<span class="hljs-comment">//   await window.windowAPI.broadcast(&#x27;chat-message&#x27;, {</span>
+<span class="hljs-comment">//     from: &#x27;user1&#x27;,</span>
+<span class="hljs-comment">//     text: &#x27;大家好！&#x27;</span>
+<span class="hljs-comment">//   })</span>
+<span class="hljs-comment">// }</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// // 监听消息</span>
+<span class="hljs-comment">// window.windowAPI.onWindowMessage(&#x27;chat-message&#x27;, (msg) =&gt; {</span>
+<span class="hljs-comment">//   console.log(`收到 ${msg.from} 的消息: ${msg.text}`)</span>
+<span class="hljs-comment">// })</span>
+
+<span class="hljs-comment">// ========== 6. 父子窗口 (BrowserWindow parent) ==========</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">createChildWindow</span>(<span class="hljs-params">parentWin</span>) {
+  <span class="hljs-keyword">const</span> childWin = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BrowserWindow</span>({
+    <span class="hljs-attr">width</span>: <span class="hljs-number">400</span>,
+    <span class="hljs-attr">height</span>: <span class="hljs-number">300</span>,
+    <span class="hljs-attr">parent</span>: parentWin, <span class="hljs-comment">// 父窗口</span>
+    <span class="hljs-attr">modal</span>: <span class="hljs-literal">true</span>,        <span class="hljs-comment">// 模态窗口（阻塞父窗口）</span>
+    <span class="hljs-attr">webPreferences</span>: {
+      <span class="hljs-attr">contextIsolation</span>: <span class="hljs-literal">true</span>
+    }
+  })
+  childWin.<span class="hljs-title function_">loadFile</span>(<span class="hljs-string">&#x27;dialog.html&#x27;</span>)
+  <span class="hljs-keyword">return</span> childWin
+}
+
+<span class="hljs-comment">// ========== 7. 窗口位置记忆 ==========</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Store</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;electron-store&#x27;</span>)
+<span class="hljs-keyword">const</span> store = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Store</span>({ <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;window-state&#x27;</span> })
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">createWindowWithState</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> savedState = store.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;mainWindow&#x27;</span>) || {}
+
+  <span class="hljs-keyword">const</span> win = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BrowserWindow</span>({
+    <span class="hljs-attr">width</span>: savedState.<span class="hljs-property">width</span> || <span class="hljs-number">1200</span>,
+    <span class="hljs-attr">height</span>: savedState.<span class="hljs-property">height</span> || <span class="hljs-number">800</span>,
+    <span class="hljs-attr">x</span>: savedState.<span class="hljs-property">x</span>,
+    <span class="hljs-attr">y</span>: savedState.<span class="hljs-property">y</span>,
+    <span class="hljs-attr">webPreferences</span>: {
+      <span class="hljs-attr">preload</span>: path.<span class="hljs-title function_">join</span>(__dirname, <span class="hljs-string">&#x27;preload.js&#x27;</span>),
+      <span class="hljs-attr">contextIsolation</span>: <span class="hljs-literal">true</span>
+    }
+  })
+
+  <span class="hljs-comment">// 如果之前是最大化，恢复最大化</span>
+  <span class="hljs-keyword">if</span> (savedState.<span class="hljs-property">isMaximized</span>) {
+    win.<span class="hljs-title function_">maximize</span>()
+  }
+
+  win.<span class="hljs-title function_">loadFile</span>(<span class="hljs-string">&#x27;index.html&#x27;</span>)
+
+  <span class="hljs-comment">// 关闭时保存状态</span>
+  win.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;close&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">if</span> (!win.<span class="hljs-title function_">isMaximized</span>()) {
+      <span class="hljs-keyword">const</span> [x, y] = win.<span class="hljs-title function_">getPosition</span>()
+      <span class="hljs-keyword">const</span> [width, height] = win.<span class="hljs-title function_">getSize</span>()
+      store.<span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;mainWindow&#x27;</span>, { x, y, width, height, <span class="hljs-attr">isMaximized</span>: <span class="hljs-literal">false</span> })
+    } <span class="hljs-keyword">else</span> {
+      store.<span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;mainWindow.isMaximized&#x27;</span>, <span class="hljs-literal">true</span>)
+    }
+  })
+
+  <span class="hljs-keyword">return</span> win
+}
+
+<span class="hljs-comment">// ========== 8. 内存泄漏预防 ==========</span>
+<span class="hljs-comment">// 1. 窗口关闭后一定要从 Map 中删除引用</span>
+<span class="hljs-comment">// 2. 移除所有事件监听器</span>
+<span class="hljs-comment">// 3. 清除定时器</span>
+<span class="hljs-comment">// 4. 断开 IPC 连接</span>
+
+<span class="hljs-comment">// 错误示例 ❌</span>
+<span class="hljs-comment">// const windows = [] // 全局数组</span>
+<span class="hljs-comment">// function createWin() {</span>
+<span class="hljs-comment">//   const win = new BrowserWindow()</span>
+<span class="hljs-comment">//   windows.push(win) // 只加不删 -&gt; 内存泄漏</span>
+<span class="hljs-comment">// }</span>
+
+<span class="hljs-comment">// 正确示例 ✅</span>
+<span class="hljs-comment">// const windows = new Map()</span>
+<span class="hljs-comment">// function createWin(id) {</span>
+<span class="hljs-comment">//   const win = new BrowserWindow()</span>
+<span class="hljs-comment">//   windows.set(id, win)</span>
+<span class="hljs-comment">//   win.on(&#x27;closed&#x27;, () =&gt; {</span>
+<span class="hljs-comment">//     windows.delete(id) // 关闭时删除</span>
+<span class="hljs-comment">//   })</span>
+<span class="hljs-comment">// }</span>
+
+<span class="hljs-comment">// ========== 9. 多窗口应用的启动逻辑 ==========</span>
+app.<span class="hljs-title function_">whenReady</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-comment">// 创建主窗口</span>
+  windowManager.<span class="hljs-title function_">create</span>(<span class="hljs-string">&#x27;main&#x27;</span>, {
+    <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;主窗口&#x27;</span>,
+    <span class="hljs-attr">width</span>: <span class="hljs-number">1200</span>,
+    <span class="hljs-attr">height</span>: <span class="hljs-number">800</span>
+  })
+
+  <span class="hljs-comment">// macOS 激活时</span>
+  app.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;activate&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">if</span> (windowManager.<span class="hljs-property">windows</span>.<span class="hljs-property">size</span> === <span class="hljs-number">0</span>) {
+      windowManager.<span class="hljs-title function_">create</span>(<span class="hljs-string">&#x27;main&#x27;</span>)
+    }
+  })
+})
+
+<span class="hljs-comment">// 所有窗口关闭时</span>
+app.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;window-all-closed&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">if</span> (process.<span class="hljs-property">platform</span> !== <span class="hljs-string">&#x27;darwin&#x27;</span>) {
+    app.<span class="hljs-title function_">quit</span>()
+  }
+})
+
+<span class="hljs-comment">// ========== 10. 多窗口数据共享方案 ==========</span>
+<span class="hljs-comment">// 方案 1: 主进程作为数据源 (推荐)</span>
+<span class="hljs-comment">// - 所有数据存储在主进程</span>
+<span class="hljs-comment">// - 渲染进程通过 IPC 读写</span>
+<span class="hljs-comment">// - 数据变更时主进程广播通知</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// 方案 2: 共享存储 (electron-store / SQLite)</span>
+<span class="hljs-comment">// - 多个窗口读写同一个存储</span>
+<span class="hljs-comment">// - 需要处理数据同步和冲突</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// 方案 3: MessageChannel (直接通信)</span>
+<span class="hljs-comment">// - 性能好，但建立连接麻烦</span>
+<span class="hljs-comment">// - 适合高频大量数据传输</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// 方案 4: BroadcastChannel (同源渲染进程)</span>
+<span class="hljs-comment">// - 浏览器标准 API</span>
+<span class="hljs-comment">// - 简单易用，但只能在同源页面间使用</span></code></pre></div></section><nav class="lesson-next" aria-label="下一章节"><div class="bottom-nav-row"><a href="https://www.electronjs.org/" target="_blank" rel="noopener" class="official-link">Electron 官网 → </a><div class="lesson-pager"><a href="/electron/e-14/storage" class="previous-lesson-link"><span>上一颗</span><strong>🌰14 数据存储</strong></a><span class="category-complete">✓ 本分类已学完</span></div></div></nav></main><!--]--></div><footer class="site-footer"><p class="site-footer-line"> © 2026 小松鼠举栗子 · 用 🌰 记录技术知识 · <a href="mailto:gzx_miller@foxmail.com">gzx_miller@foxmail.com</a></p></footer></div><!--]--><button type="button" class="squirrel-pet" style="" aria-label="松鼠小助手：点击提问，拖拽移动" title="点我提问，拖拽移动" data-v-235d5ef5><span class="pet-inner" aria-hidden="true" data-v-235d5ef5><span class="pet-ai-badge" data-v-235d5ef5>AI</span><span class="pet-zzz" aria-hidden="true" data-v-235d5ef5>z<span data-v-235d5ef5>z</span><span data-v-235d5ef5>z</span></span><span class="pet-flip" data-v-235d5ef5><span class="pet-wobble" data-v-235d5ef5><svg viewBox="0 0 136 120" width="68" height="60" data-v-235d5ef5><defs data-v-235d5ef5><linearGradient id="sq-body" x1="0" y1="0" x2="0" y2="1" data-v-235d5ef5><stop offset="0" stop-color="#f0904a" data-v-235d5ef5></stop><stop offset="1" stop-color="#d95a24" data-v-235d5ef5></stop></linearGradient><linearGradient id="sq-tail" x1="0" y1="1" x2="1" y2="0" data-v-235d5ef5><stop offset="0" stop-color="#c1441e" data-v-235d5ef5></stop><stop offset="1" stop-color="#f5a040" data-v-235d5ef5></stop></linearGradient></defs><g class="pet-tail" data-v-235d5ef5><path d="M58 96 C96 106 122 86 122 50 C121.5 30 112 13 97 8 C83 3.5 72.5 9 71.5 17.5 C70.8 24 74.5 28.5 76.5 33.5 C63 44 58 66 56.5 86 C56 92 57 95 58 96 Z" fill="url(#sq-tail)" data-v-235d5ef5></path><path d="M76 88 C96 80 106 58 99 40 C105 58 98 80 82 90 Z" fill="#f6c15a" opacity="0.5" data-v-235d5ef5></path></g><ellipse class="pet-foot pet-foot-l" cx="41.4" cy="107" rx="9.6" ry="5.4" fill="#b7431f" data-v-235d5ef5></ellipse><ellipse class="pet-foot pet-foot-r" cx="64.6" cy="107" rx="9.6" ry="5.4" fill="#b7431f" data-v-235d5ef5></ellipse><ellipse cx="52" cy="84" rx="27" ry="27" fill="url(#sq-body)" data-v-235d5ef5></ellipse><ellipse cx="51" cy="90" rx="16" ry="17" fill="#ffe3c2" opacity="0.95" data-v-235d5ef5></ellipse><path d="M33.5 38 L38.5 12 L48 27 Z" fill="#d95a24" stroke="#d95a24" stroke-width="3" stroke-linejoin="round" data-v-235d5ef5></path><path d="M36.8 30.5 L39 17 L44 25.5 Z" fill="#f2a582" data-v-235d5ef5></path><path d="M70.5 38 L65.5 12 L56 27 Z" fill="#d95a24" stroke="#d95a24" stroke-width="3" stroke-linejoin="round" data-v-235d5ef5></path><path d="M67.2 30.5 L65 17 L60 25.5 Z" fill="#f2a582" data-v-235d5ef5></path><circle cx="52" cy="47" r="22" fill="url(#sq-body)" data-v-235d5ef5></circle><circle cx="33" cy="54" r="9.5" fill="#e8793c" data-v-235d5ef5></circle><circle cx="71" cy="54" r="9.5" fill="#e8793c" data-v-235d5ef5></circle><circle cx="41" cy="53" r="4" fill="#f6c15a" opacity="0.6" data-v-235d5ef5></circle><circle cx="63" cy="53" r="4" fill="#f6c15a" opacity="0.6" data-v-235d5ef5></circle><g stroke="#b7431f" stroke-width="0.9" stroke-linecap="round" opacity="0.7" data-v-235d5ef5><path d="M32 50 L25 49" data-v-235d5ef5></path><path d="M32 54 L25 55" data-v-235d5ef5></path><path d="M32.5 58 L26 60" data-v-235d5ef5></path><path d="M72 50 L79 49" data-v-235d5ef5></path><path d="M72 54 L79 55" data-v-235d5ef5></path><path d="M71.5 58 L78 60" data-v-235d5ef5></path></g><g class="pet-eyes" data-v-235d5ef5><circle cx="44" cy="44" r="3.4" fill="#32190f" data-v-235d5ef5></circle><circle cx="45" cy="43" r="1.1" fill="#fffaf2" data-v-235d5ef5></circle><circle cx="60" cy="44" r="3.4" fill="#32190f" data-v-235d5ef5></circle><circle cx="61" cy="43" r="1.1" fill="#fffaf2" data-v-235d5ef5></circle></g><g class="pet-face-happy" data-v-235d5ef5><path d="M40.5 44.5 Q44 40.5 47.5 44.5" fill="none" stroke="#32190f" stroke-width="2" stroke-linecap="round" data-v-235d5ef5></path><path d="M56.5 44.5 Q60 40.5 63.5 44.5" fill="none" stroke="#32190f" stroke-width="2" stroke-linecap="round" data-v-235d5ef5></path><circle cx="36" cy="50.5" r="2.8" fill="#f0806e" opacity="0.6" data-v-235d5ef5></circle><circle cx="68" cy="50.5" r="2.8" fill="#f0806e" opacity="0.6" data-v-235d5ef5></circle></g><g class="pet-face-sleep" data-v-235d5ef5><path d="M40.5 45 Q44 47.5 47.5 45" fill="none" stroke="#32190f" stroke-width="2" stroke-linecap="round" data-v-235d5ef5></path><path d="M56.5 45 Q60 47.5 63.5 45" fill="none" stroke="#32190f" stroke-width="2" stroke-linecap="round" data-v-235d5ef5></path></g><ellipse cx="52" cy="55" rx="9" ry="7" fill="#ffe3c2" data-v-235d5ef5></ellipse><ellipse cx="52" cy="50.5" rx="2.4" ry="1.8" fill="#7b351d" data-v-235d5ef5></ellipse><path d="M48.5 54.5 Q52 57.5 55.5 54.5" fill="none" stroke="#7b351d" stroke-width="1.4" stroke-linecap="round" data-v-235d5ef5></path><rect x="50.2" y="56.4" width="1.6" height="2.6" rx="0.5" fill="#fffdf6" data-v-235d5ef5></rect><rect x="52.2" y="56.4" width="1.6" height="2.6" rx="0.5" fill="#fffdf6" data-v-235d5ef5></rect><ellipse cx="39.6" cy="74.6" rx="5.5" ry="7.2" fill="#c1441e" transform="rotate(18 39.6 74.6)" data-v-235d5ef5></ellipse><ellipse cx="40" cy="80.4" rx="3.6" ry="2.4" fill="#f0a06a" data-v-235d5ef5></ellipse><g class="pet-arm" data-v-235d5ef5><ellipse cx="66.4" cy="71.6" rx="5.4" ry="7" fill="#c1441e" transform="rotate(-24 66.4 71.6)" data-v-235d5ef5></ellipse><circle cx="69.2" cy="66.4" r="2.8" fill="#d95a24" data-v-235d5ef5></circle><circle cx="71.4" cy="63.8" r="1.7" fill="#d95a24" data-v-235d5ef5></circle></g></svg></span></span></span><span class="pet-hint" aria-hidden="true" data-v-235d5ef5><span class="pet-hint-text" data-v-235d5ef5></span></span></button><!----><!--]--></div><div id="teleports"></div><script>window.__NUXT__={};window.__NUXT__.config={public:{zhipuApiKey:"4a144c581416035e180b03574714070553061642165f46465c5f1958545145181c047f743904140e2b350009195b2a3503"},app:{baseURL:"/",buildId:"e714b28c-1387-4a7d-a2e1-4256272ad9f2",buildAssetsDir:"/_nuxt/",cdnURL:""}}</script><script type="application/json" data-nuxt-data="nuxt-app" data-ssr="true" id="__NUXT_DATA__" data-src="/electron/e-15/multi-window/_payload.json?e714b28c-1387-4a7d-a2e1-4256272ad9f2">[{"state":1,"once":5,"_errors":6,"serverRendered":3,"path":8,"pinia":9,"prerenderedAt":11},["Reactive",2],{"$ssidebarExpanded":3,"$stheme":4},true,"light",["Set"],["ShallowReactive",7],{"lesson-code-EL_15":-1},"\u002Felectron\u002Fe-15\u002Fmulti-window",["Reactive",10],{},1791203785676]</script></body></html>

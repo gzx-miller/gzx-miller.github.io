@@ -1,0 +1,106 @@
+const n=`// app/components/Counter.tsx - 客户端组件
+// 文件顶部必须声明 "use client"
+'use client'
+
+import { useState } from 'react'
+
+export function Counter() {
+  const [count, setCount] = useState(0)
+
+  return (
+    <div>
+      <p>计数: {count}</p>
+      <button onClick={() => setCount(c => c + 1)}>
+        +1
+      </button>
+    </div>
+  )
+}
+
+// ============================================
+
+// app/components/SearchBox.tsx - 带输入交互的客户端组件
+'use client'
+
+import { useState, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+
+export function SearchBox() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const [query, setQuery] = useState(searchParams.get('q') || '')
+
+  useEffect(() => {
+    // 可以使用浏览器 API
+    console.log('搜索词更新:', query)
+  }, [query])
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    router.push(\`/search?q=\${encodeURIComponent(query)}\`)
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        value={query}
+        onChange={e => setQuery(e.target.value)}
+        placeholder="搜索..."
+      />
+      <button type="submit">搜索</button>
+    </form>
+  )
+}
+
+// ============================================
+
+// Server + Client 组合模式
+// app/page.tsx - Server Component（获取数据）
+import { ProductCard } from './components/ProductCard'
+
+async function getProducts() {
+  const res = await fetch('https://api.example.com/products')
+  return res.json()
+}
+
+export default async function ProductsPage() {
+  const products = await getProducts()
+
+  return (
+    <div>
+      <h1>商品列表</h1>
+      <div className="grid">
+        {products.map((product: any) => (
+          // 把数据通过 props 传给客户端组件
+          <ProductCard key={product.id} product={product} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// app/components/ProductCard.tsx - Client Component（交互）
+'use client'
+
+import { useState } from 'react'
+
+export function ProductCard({ product }: { product: any }) {
+  const [liked, setLiked] = useState(false)
+
+  return (
+    <div className="card">
+      <h3>{product.name}</h3>
+      <p>¥{product.price}</p>
+      <button onClick={() => setLiked(!liked)}>
+        {liked ? '♥' : '♡'} 收藏
+      </button>
+    </div>
+  )
+}
+
+// ============================================
+
+// "use client" 边界向下传递
+// 只要在文件顶部声明，该文件导入的所有子组件也都是客户端组件
+// 但子文件不需要再写 "use client"（除非单独使用）`;export{n as default};

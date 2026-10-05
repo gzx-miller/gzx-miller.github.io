@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <clipPath id="sq"><rect width="64" height="64" rx="15" /></clipPath>
+    <linearGradient id="bg" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff3dc" />
+      <stop offset="1" stop-color="#f7c487" />
+    </linearGradient>
+    <linearGradient id="fur" x1="0" y1="6" x2="0" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#de6e32" />
+      <stop offset="1" stop-color="#a63a1d" />
+    </linearGradient>
+    <radialGradient id="nut" cx="38%" cy="28%" r="95%">
+      <stop offset="0" stop-color="#9c4f26" />
+      <stop offset="1" stop-color="#45180a" />
+    </radialGradient>
+    <linearGradient id="tail" x1="0" y1="6" x2="0" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f2b383" />
+      <stop offset="1" stop-color="#d17141" />
+    </linearGradient>
+  </defs>
+
+  <!-- 奶油金圆角底 + 顶部柔光 + 底部暖影 -->
+  <g clip-path="url(#sq)">
+    <rect width="64" height="64" fill="url(#bg)" />
+    <ellipse cx="32" cy="-8" rx="46" ry="32" fill="#ffffff" opacity="0.4" />
+    <ellipse cx="14" cy="60" rx="36" ry="16" fill="#a63a1d" opacity="0.1" />
+  </g>
+
+  <!-- 高耸蓬松的大尾巴（颜色更浅，藏于身体与头部后方；底部圆润，左上移并逆时针旋转 28°） -->
+  <g transform="translate(5 -4.5) rotate(-23 23 45)">
+    <path fill="url(#tail)" d="M19 55 C9 55 4.8 45 9 30.5 C13 17.5 23.5 10 32.5 11 C27.5 14 23.5 20 24 27 C24.5 33 29 35.5 29.5 41 C30 47 26 54.5 19 55 Z" />
+    <path fill="#c15f33" opacity="0.28" d="M17 49 C12.5 45.5 11.3 36 14 28 C15.8 23.8 18.3 20.8 21.3 19.3 C19.2 24 18.5 30 19.5 36 C20.5 42 19.8 46 17 49 Z" />
+  </g>
+
+  <!-- 圆短的坐姿身体 -->
+  <path fill="url(#fur)" d="M36.5 31.5 C44 31.5 48.5 37.5 48.5 44 C48.5 50.5 44 54.5 36.5 54.5 C29 54.5 25 50.5 25 44 C25 37.5 29 31.5 36.5 31.5 Z" />
+
+  <!-- 小脚丫 -->
+  <ellipse cx="30.5" cy="53.5" rx="3" ry="2" fill="#d9864a" />
+  <ellipse cx="43" cy="53.5" rx="3" ry="2" fill="#d9864a" />
+
+  <!-- 头部（偏大，松鼠比例） -->
+  <circle cx="37" cy="22" r="11.5" fill="url(#fur)" />
+
+  <!-- 小而圆的耳朵，微微外撇 -->
+  <path fill="url(#fur)" d="M34 13 C32.5 8.5 30 5.5 26.8 5.5 C25.3 5.5 25.3 8 26.3 10.8 C27.2 13.2 28.5 15.2 29.8 16 Z" />
+  <path fill="url(#fur)" d="M40 13 C41.5 8.5 44 5.5 47.2 5.5 C48.7 5.5 48.7 8 47.7 10.8 C46.8 13.2 45.5 15.2 44.2 16 Z" />
+
+  <!-- 腮红 -->
+  <circle cx="29.3" cy="26.3" r="2.1" fill="#ff9a4d" opacity="0.6" />
+  <circle cx="44.7" cy="26.3" r="2.1" fill="#ff9a4d" opacity="0.6" />
+
+  <!-- 眼睛 -->
+  <circle cx="32.5" cy="21.5" r="2" fill="#32190f" />
+  <circle cx="41.5" cy="21.5" r="2" fill="#32190f" />
+  <circle cx="33.2" cy="20.8" r="0.65" fill="#ffffff" opacity="0.9" />
+  <circle cx="42.2" cy="20.8" r="0.65" fill="#ffffff" opacity="0.9" />
+
+  <!-- 小鼻子 -->
+  <ellipse cx="37" cy="26" rx="1.4" ry="1.1" fill="#4a1c0a" />
+
+  <!-- 怀中的栗子 -->
+  <path fill="url(#nut)" d="M37 36.5 C40.8 39.8 45 43.2 45 48 C45 52.8 41.4 55.8 37 55.8 C32.6 55.8 29 52.8 29 48 C29 43.2 33.2 39.8 37 36.5 Z" />
+  <path fill="#f0cd98" d="M29.8 48.8 C30.6 53 33.6 55.5 37 55.5 C40.4 55.5 43.4 53 44.2 48.8 C41.5 51.6 32.5 51.6 29.8 48.8 Z" />
+  <ellipse cx="33.8" cy="43" rx="2.4" ry="1.5" fill="#ffffff" opacity="0.35" transform="rotate(-24 33.8 43)" />
+
+  <!-- 捧栗子的小爪 -->
+  <circle cx="31" cy="47.5" r="2.1" fill="#d9864a" />
+  <circle cx="43" cy="47.5" r="2.1" fill="#d9864a" />
+</svg>

@@ -1,0 +1,1 @@
+import{_ as a,c as o,h as r,j as s,f as c,W as _,Y as l,F as d}from"./ClZcEZ7f.js";const f={},m={class:"app-frame"};function i(t,e){const n=_;return o(),r(d,null,[e[0]||(e[0]=s("a",{class:"skip-link",href:"#main-content"},"跳到正文",-1)),s("div",m,[c(n),l(t.$slots,"default")])],64)}const u=a(f,[["render",i]]);export{u as default};

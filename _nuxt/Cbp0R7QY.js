@@ -1,0 +1,14 @@
+const r=`import math
+
+# 回归：均方误差 MSE —— 平方差越大越受罚
+def mse(y_true, y_pred):
+    return sum((a - b) ** 2 for a, b in zip(y_true, y_pred)) / len(y_true)
+
+print(mse([1.0, 2.0], [1.1, 1.85]))   # 0.01375
+
+# 分类：交叉熵 —— 只看正确类的概率，错得越离谱惩罚越大
+def cross_entropy(p_correct):
+    return -math.log(p_correct)
+
+print(cross_entropy(0.9))   # 0.1053
+print(cross_entropy(0.3))   # 1.204  错得多，梯度推力更猛`;export{r as default};

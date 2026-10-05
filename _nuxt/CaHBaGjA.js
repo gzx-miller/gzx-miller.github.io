@@ -1,0 +1,6 @@
+const n=`# 注意力代价是 O(n²)，三套工程手段分别解决“算/存/搬”：
+# 1) 稀疏注意力：只让一部分 token 配对（滑动窗口/全局 token）-> 少算
+# 2) KV 缓存   ：已算出的 Key/Value 缓存复用，新 token 不重算 -> 少算
+# 3) FlashAttention：分块在高速 SRAM 里在线算 softmax，不把整段矩阵写回
+#                    慢速 HBM，用“少搬运”换速度
+# 三者可叠加，是长上下文(如 128K/1M) 的关键基础设施`;export{n as default};

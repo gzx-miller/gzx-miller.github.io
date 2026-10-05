@@ -1,0 +1,76 @@
+const n=`/* BFC：块级格式化上下文 */
+
+/* 创建 BFC 的方式 */
+
+/* 方式 1：overflow 非 visible */
+.bfc-overflow {
+  overflow: hidden;
+  /* 创建 BFC */
+}
+
+/* 方式 2：display: flow-root（推荐，无副作用） */
+.bfc-flow-root {
+  display: flow-root;
+  /* 专门创建 BFC */
+}
+
+/* 方式 3：浮动 */
+.bfc-float {
+  float: left;
+  /* 创建 BFC */
+}
+
+/* 方式 4：绝对定位 */
+.bfc-absolute {
+  position: absolute;
+  /* 创建 BFC */
+}
+
+/* BFC 作用 1：包含浮动（清除浮动） */
+.clearfix {
+  display: flow-root;
+  /* 子元素浮动不会溢出容器 */
+}
+
+/* BFC 作用 2：防止外边距折叠 */
+.no-collapse {
+  display: flow-root;
+  /* 子元素 margin 不会与外部 margin 折叠 */
+}
+.no-collapse p {
+  margin: 16px 0;
+  /* 不会与外部 margin 折叠 */
+}
+
+/* BFC 作用 3：阻止文字环绕浮动 */
+.two-column {
+  overflow: hidden;
+  /* 创建 BFC，不与浮动重叠 */
+}
+.sidebar {
+  float: left;
+  width: 200px;
+}
+.content {
+  display: flow-root;
+  /* 自适应剩余宽度 */
+}
+
+/* IFC：行内格式化上下文 */
+.ifc-text {
+  line-height: 1.6;
+  vertical-align: middle;
+  /* 行内元素基线对齐 */
+}
+
+/* FFC：Flex 格式化上下文 */
+.ffc-flex {
+  display: flex;
+  /* 创建 FFC */
+}
+
+/* GFC：Grid 格式化上下文 */
+.gfc-grid {
+  display: grid;
+  /* 创建 GFC */
+}`;export{n as default};

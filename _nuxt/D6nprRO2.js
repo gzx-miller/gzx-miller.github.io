@@ -1,0 +1,10 @@
+const i=`/* input.css：Tailwind v4 的最小入口 */
+@import "tailwindcss";
+
+/* Vite：npm i tailwindcss @tailwindcss/vite */
+// vite.config.ts
+// import tailwindcss from '@tailwindcss/vite'
+// export default defineConfig({ plugins: [tailwindcss()] })
+
+/* PostCSS 使用 @tailwindcss/postcss；CLI 使用 @tailwindcss/cli。 */
+`;export{i as default};

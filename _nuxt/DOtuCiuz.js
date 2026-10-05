@@ -1,0 +1,9 @@
+const n=`# 一个 Transformer block = 注意力(横向通信) + FFN(纵向加工) + 残差 + LayerNorm
+def transformer_block(x, attn, ffn, norm):
+    x = norm(x + attn(x))   # 残差 + 自注意力 + 归一化
+    x = norm(x + ffn(x))    # 残差 + 前馈 + 归一化
+    return x
+
+# 位置编码注入顺序信息；多层堆叠；最上层 softmax 输出下一个词
+# 与 RNN 不同：所有词的位置可并行计算(不需逐词等待)，规模易扩展
+# 2017《Attention Is All You Need》把这一整套拼起来 --> 大模型地基`;export{n as default};

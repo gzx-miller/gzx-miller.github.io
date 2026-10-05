@@ -1,0 +1,292 @@
+<!DOCTYPE html><html  lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>定时器 - 小松鼠举栗子</title><script>(function(){try{var t=localStorage.getItem('theme-preference');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script><style>.squirrel-pet[data-v-235d5ef5]{position:fixed;right:20px;top:50%;transform:translateY(-50%);z-index:1000;width:76px;height:76px;padding:0;border:none;background:transparent;cursor:grab;touch-action:none;-webkit-user-select:none;-moz-user-select:none;user-select:none;filter:drop-shadow(0 8px 16px rgba(98,42,18,.28));transition:left 2.4s cubic-bezier(.45,.05,.55,.95),top 2.4s cubic-bezier(.45,.05,.55,.95),filter .2s ease}.squirrel-pet[data-v-235d5ef5]:hover{filter:drop-shadow(0 10px 20px rgba(98,42,18,.4))}.squirrel-pet.dragging[data-v-235d5ef5]{cursor:grabbing;filter:drop-shadow(0 14px 24px rgba(98,42,18,.45));transition:filter .2s ease}.pet-inner[data-v-235d5ef5]{position:relative;display:block;animation:pet-bob-235d5ef5 3.2s ease-in-out infinite}.pet-ai-badge[data-v-235d5ef5]{position:absolute;top:-14px;left:50%;z-index:2;transform:translate(-50%);transform-origin:50% 100%;font-size:19px;font-weight:900;font-style:italic;letter-spacing:1px;line-height:1;background:linear-gradient(180deg,#ffe9a8,#f6c15a 35%,#d99a2b 55%,#fff3c4);background-clip:text;-webkit-background-clip:text;-webkit-text-stroke:.9px #8f2f18;paint-order:stroke fill;color:transparent;filter:drop-shadow(0 2px 3px rgba(98,42,18,.45));pointer-events:none;transition:filter .25s ease}.squirrel-pet:hover .pet-ai-badge[data-v-235d5ef5]{background:linear-gradient(110deg,#f6c15a,#ffe9a8 20%,#fff 38%,#ffe9a8 55%,#d99a2b 75%,#f6c15a);background-size:250% 100%;background-clip:text;-webkit-background-clip:text;filter:drop-shadow(0 0 6px rgba(246,193,90,.9)) drop-shadow(0 2px 3px rgba(98,42,18,.45));animation:ai-swing-235d5ef5 .62s ease-in-out infinite,ai-shine-235d5ef5 1.4s linear infinite}@keyframes ai-swing-235d5ef5{0%,to{transform:translate(-50%) rotate(-9deg) scale(1.06)}50%{transform:translate(-50%) rotate(9deg) scale(1.06)}}@keyframes ai-shine-235d5ef5{0%{background-position:120% 0}to{background-position:-120% 0}}.squirrel-pet.pricked .pet-inner[data-v-235d5ef5]{animation:prick-jump-235d5ef5 .68s cubic-bezier(.3,.9,.4,1)}@keyframes prick-jump-235d5ef5{0%{transform:translateY(0) scale(1)}28%{transform:translateY(-30px) scale(1.07)}52%{transform:translateY(-20px) scale(1.02) rotate(-5deg)}76%{transform:translateY(2px) scale(.96,.88)}to{transform:translateY(0) scale(1)}}.squirrel-pet.dragging .pet-ai-badge[data-v-235d5ef5],.squirrel-pet.dragging .pet-arm[data-v-235d5ef5],.squirrel-pet.dragging .pet-eyes[data-v-235d5ef5],.squirrel-pet.dragging .pet-face-happy[data-v-235d5ef5],.squirrel-pet.dragging .pet-foot-l[data-v-235d5ef5],.squirrel-pet.dragging .pet-foot-r[data-v-235d5ef5],.squirrel-pet.dragging .pet-hint-text[data-v-235d5ef5],.squirrel-pet.dragging .pet-inner[data-v-235d5ef5],.squirrel-pet.dragging .pet-tail[data-v-235d5ef5]{animation-play-state:paused}.pet-foot[data-v-235d5ef5]{transform-box:fill-box}.squirrel-pet.crawling .pet-foot-l[data-v-235d5ef5]{animation:foot-step-235d5ef5 .42s ease-in-out infinite alternate}.squirrel-pet.crawling .pet-foot-r[data-v-235d5ef5]{animation:foot-step-235d5ef5 .42s ease-in-out infinite alternate-reverse}@keyframes foot-step-235d5ef5{0%{transform:translate(2.5px,-1.2px) rotate(3deg)}to{transform:translate(-2.5px,1.2px) rotate(-3deg)}}.pet-wobble[data-v-235d5ef5]{display:block}.squirrel-pet.crawling .pet-wobble[data-v-235d5ef5]{transform-origin:50% 100%;animation:crawl-wobble-235d5ef5 .42s ease-in-out infinite alternate}@keyframes crawl-wobble-235d5ef5{0%{transform:rotate(-4deg) translate(1.5px)}to{transform:rotate(4deg) translate(-1.5px)}}.pet-arm[data-v-235d5ef5]{transform-box:fill-box;transform-origin:50% 90%}.squirrel-pet.waving .pet-arm[data-v-235d5ef5]{animation:arm-wave-235d5ef5 1.1s ease-in-out infinite}@keyframes arm-wave-235d5ef5{0%,to{transform:rotate(0)}30%{transform:rotate(-46deg)}55%{transform:rotate(10deg)}80%{transform:rotate(-36deg)}}.pet-eyes[data-v-235d5ef5],.pet-face-happy[data-v-235d5ef5]{transition:opacity .2s ease}.pet-face-happy[data-v-235d5ef5]{opacity:0}.squirrel-pet.waving .pet-face-happy[data-v-235d5ef5]{opacity:1}.squirrel-pet.waving .pet-eyes[data-v-235d5ef5]{opacity:0}.pet-face-sleep[data-v-235d5ef5]{opacity:0;transition:opacity .2s ease}.squirrel-pet.sleeping .pet-eyes[data-v-235d5ef5],.squirrel-pet.sleeping .pet-face-happy[data-v-235d5ef5]{opacity:0}.squirrel-pet.sleeping .pet-face-sleep[data-v-235d5ef5]{opacity:1}.squirrel-pet.sleeping .pet-eyes[data-v-235d5ef5],.squirrel-pet.sleeping .pet-inner[data-v-235d5ef5],.squirrel-pet.sleeping .pet-tail[data-v-235d5ef5]{animation:none}.pet-zzz[data-v-235d5ef5]{position:absolute;top:-16px;right:-14px;z-index:3;display:inline-flex;gap:3px;font-size:12px;font-weight:700;color:var(--muted);line-height:1;pointer-events:none;opacity:0;transition:opacity .3s ease}.squirrel-pet.sleeping .pet-zzz[data-v-235d5ef5]{opacity:1}.pet-zzz span[data-v-235d5ef5]{display:inline-block;animation:pet-zzz-float-235d5ef5 2.4s ease-in-out infinite}.pet-zzz span[data-v-235d5ef5]:nth-child(2){animation-delay:.4s}.pet-zzz span[data-v-235d5ef5]:nth-child(3){animation-delay:.8s}@keyframes pet-zzz-float-235d5ef5{0%{transform:translateY(0) scale(.6);opacity:0}30%{opacity:1}to{transform:translateY(-14px) scale(1.15);opacity:0}}@media(prefers-reduced-motion:reduce){.squirrel-pet.sleeping .pet-zzz span[data-v-235d5ef5]{animation:none;opacity:1}}.pet-tail[data-v-235d5ef5]{transform-origin:bottom left;animation:tail-wag-235d5ef5 2.6s ease-in-out infinite}.pet-eyes[data-v-235d5ef5],.pet-tail[data-v-235d5ef5]{transform-box:fill-box}.pet-eyes[data-v-235d5ef5]{transform-origin:center;animation:pet-blink-235d5ef5 4.4s ease-in-out infinite}.pet-hint[data-v-235d5ef5]{position:absolute;top:6px;right:calc(100% + 10px);width:-moz-max-content;width:max-content;max-width:170px;padding:3px 10px;border-radius:12px;font-size:11px;line-height:1.6;color:#fffaf2;background:linear-gradient(135deg,var(--leaf-red),var(--leaf-orange));box-shadow:0 4px 10px #8f2f1859;opacity:0;transform:translate(8px) scale(.9);transform-origin:100% 70%;pointer-events:none;transition:opacity .28s ease,transform .28s cubic-bezier(.34,1.56,.64,1)}.pet-hint[data-v-235d5ef5]:after{content:"";position:absolute;top:10px;left:100%;border:5px solid transparent;border-left:7px solid #e0652f}.pet-hint.show[data-v-235d5ef5]{opacity:1;transform:translate(0) scale(1)}.pet-hint-text[data-v-235d5ef5]{display:inline-block}.squirrel-pet.hint-on-right .pet-hint[data-v-235d5ef5]{right:auto;left:calc(100% + 10px);transform-origin:0 70%;transform:translate(-8px) scale(.9)}.squirrel-pet.hint-on-right .pet-hint.show[data-v-235d5ef5]{transform:translate(0) scale(1)}.squirrel-pet.hint-on-right .pet-hint[data-v-235d5ef5]:after{left:auto;right:100%;border:5px solid transparent;border-right:7px solid #e0652f;border-left:none}.pet-hint.show .pet-hint-text[data-v-235d5ef5]{animation:tip-talk-235d5ef5 .8s ease-in-out infinite}@keyframes tip-talk-235d5ef5{0%,to{transform:translateY(0) scale(1)}50%{transform:translateY(-1px) scale(1.04)}}@media(prefers-reduced-motion:reduce){.pet-hint.show .pet-hint-text[data-v-235d5ef5],.squirrel-pet.crawling .pet-foot-l[data-v-235d5ef5],.squirrel-pet.crawling .pet-foot-r[data-v-235d5ef5],.squirrel-pet.crawling .pet-wobble[data-v-235d5ef5],.squirrel-pet.waving .pet-arm[data-v-235d5ef5],.squirrel-pet:hover .pet-ai-badge[data-v-235d5ef5]{animation:none}}@keyframes pet-bob-235d5ef5{0%,to{transform:translateY(0)}50%{transform:translateY(-5px)}}@keyframes tail-wag-235d5ef5{0%,to{transform:rotate(0)}50%{transform:rotate(5deg)}}@keyframes pet-blink-235d5ef5{0%,93%,to{transform:scaleY(1)}96%{transform:scaleY(.12)}}</style><style>.timer-log[data-v-2e1ff068]{margin:.8rem 0;font-size:12px;line-height:1.8}.log-phase[data-v-2e1ff068]{display:inline-block;width:100px;font-weight:600;color:#e8590c}.log-Promise[data-v-2e1ff068],.log-nextTick[data-v-2e1ff068]{background:#fff7ed;border-left:3px solid #e8590c;padding-left:4px}.log-setImmediate[data-v-2e1ff068],.log-setInterval[data-v-2e1ff068],.log-setTimeout[data-v-2e1ff068]{background:#f8fafc;border-left:3px solid #6366f1;padding-left:4px}.timer-compare[data-v-2e1ff068]{display:grid;gap:8px;margin:.8rem 0}.timer-item[data-v-2e1ff068]{background:#fff9f0;padding:8px 12px;border-radius:6px;font-size:12px}.timer-item strong[data-v-2e1ff068]{color:#e8590c;display:block;margin-bottom:4px}.timer-item p[data-v-2e1ff068]{color:#64748b;margin:4px 0}</style><link rel="stylesheet" href="/_nuxt/entry.CGN0g2Ra.css" crossorigin><link rel="preload" as="fetch" crossorigin="anonymous" href="/nodejs/d-25/timers/_payload.json?e714b28c-1387-4a7d-a2e1-4256272ad9f2"><script type="module" src="/_nuxt/ClZcEZ7f.js" crossorigin></script><meta name="author" content="gzx-miller"><meta name="robots" content="index, follow"><meta property="og:site_name" content="小松鼠举栗子"><meta property="og:locale" content="zh_CN"><meta property="og:url" content="https://gzx-miller.github.io/"><meta property="og:image:width" content="2560"><meta property="og:image:height" content="1440"><meta name="twitter:title" content="小松鼠举栗子 - 通过独立真实内容学习软件技术"><meta name="twitter:description" content="中文技术知识内容库：22 大分类 500+ 真实内容，每个栗子只讲一个知识点。"><meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8b369"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1210"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"小松鼠举栗子","url":"https://gzx-miller.github.io/","description":"中文技术知识内容库：通过独立真实小内容学习 Vue3、TypeScript、React、Node.js、CSS、WebGL、C++、uni-app 等。","inLanguage":"zh-CN"}</script><link rel="canonical" href="https://gzx-miller.github.io/nodejs/d-25/timers"><meta name="og:image:alt" content="深入理解 setTimeout、setInterval、setImmediate、process.nextTick 的语义差异和执行时机。"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://gzx-miller.github.io/"},{"@type":"ListItem","position":2,"name":"Node.js","item":"https://gzx-miller.github.io/nodejs"},{"@type":"ListItem","position":3,"name":"定时器","item":"https://gzx-miller.github.io/nodejs/d-25/timers"}]}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"LearningResource","name":"timers 定时器详解","description":"深入理解 setTimeout、setInterval、setImmediate、process.nextTick 的语义差异和执行时机。","url":"https://gzx-miller.github.io/nodejs/d-25/timers","inLanguage":"zh-CN","learningResourceType":"CourseContent","about":{"@type":"WebSite","name":"Node.js","url":"https://gzx-miller.github.io/nodejs"},"isPartOf":{"@type":"WebSite","name":"小松鼠举栗子","url":"https://gzx-miller.github.io/"}}</script><meta name="description" content="深入理解 setTimeout、setInterval、setImmediate、process.nextTick 的语义差异和执行时机。"><meta property="og:title" content="timers 定时器详解 - 小松鼠举栗子"><meta property="og:description" content="深入理解 setTimeout、setInterval、setImmediate、process.nextTick 的语义差异和执行时机。"><meta property="og:type" content="article"><meta property="og:image" content="https://gzx-miller.github.io/og-image.jpg"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://gzx-miller.github.io/og-image.jpg"></head><body><div id="__nuxt"><!--[--><!--[--><a class="skip-link" href="#main-content">跳到正文</a><div class="app-frame"><header class="top-nav"><div class="top-bar"><a href="/" class="top-brand" aria-label="回到首页"><img class="brand-avatar" src="/_nuxt/squirrel-chestnut-avatar.BUhAFRCm.webp" alt="小松鼠举着栗子" width="48" height="48" fetchpriority="high"><div class="brand-text"><strong>小松鼠举栗子 </strong><span class="brand-tagline">中文技术知识内容库</span></div></a><div class="site-intro-group"><p class="site-intro">记录与分享可复用的软件技术内容</p><p class="site-stats"><span class="stat-pill">免费开源</span><span class="stat-pill">持续更新</span></p></div><div class="top-actions"><a class="contact-mail" href="mailto:gzx_miller@foxmail.com" title="给我发邮件">gzx_miller@foxmail.com</a><a class="github-link" href="https://github.com/gzx-miller/gzx-miller.github.io" target="_blank" rel="noopener" aria-label="查看开源代码" title="查看开源代码"><svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"></path></svg></a><button class="theme-toggle" aria-label="切换深色主题" title="切换深色主题"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></button></div></div><div class="tabs-row"><nav class="knowledge-tabs" aria-label="知识类别导航"><!--[--><div class="knowledge-tab-wrapper"><a href="/javascript" class="knowledge-tab" aria-disabled="false"><span>JavaScript</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/typescript" class="knowledge-tab" aria-disabled="false"><span>TypeScript</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/vue" class="knowledge-tab" aria-disabled="false"><span>Vue3</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/element-plus" class="knowledge-tab" aria-disabled="false"><span>Element Plus</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/vue-flow" class="knowledge-tab" aria-disabled="false"><span>Vue Flow</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/nestjs" class="knowledge-tab" aria-disabled="false"><span>Nest.js</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/nuxt" class="knowledge-tab" aria-disabled="false"><span>Nuxt</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a aria-current="page" href="/nodejs" class="knowledge-tab active" aria-disabled="false"><span>Node.js</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/css" class="knowledge-tab" aria-disabled="false"><span>CSS</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/tailwind-css" class="knowledge-tab" aria-disabled="false"><span>Tailwind CSS</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/sass" class="knowledge-tab" aria-disabled="false"><span>Sass</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/vite" class="knowledge-tab" aria-disabled="false"><span>Vite</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/react" class="knowledge-tab" aria-disabled="false"><span>React</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/nextjs" class="knowledge-tab" aria-disabled="false"><span>Next.js</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/langchain" class="knowledge-tab" aria-disabled="false"><span>LangChain</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/llm-principles" class="knowledge-tab" aria-disabled="false"><span>LLM 原理</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/cpp" class="knowledge-tab" aria-disabled="false"><span>C++</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/electron" class="knowledge-tab" aria-disabled="false"><span>Electron</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/ffmpeg" class="knowledge-tab" aria-disabled="false"><span>FFmpeg</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/webgl" class="knowledge-tab" aria-disabled="false"><span>WebGL</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/webassembly" class="knowledge-tab" aria-disabled="false"><span>WebAssembly</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/uni-app" class="knowledge-tab" aria-disabled="false"><span>uni-app</span><!----></a><!----></div><!--]--></nav><!----></div><div class="nprogress-rail" aria-hidden="true"></div></header><div class="sidebar-expanded app-shell"><aside class="sidebar-temporarily-expanded sidebar" aria-label="Node.js 知识点导航"><div class="sidebar-heading"><button class="expanded sidebar-toggle" aria-label="收起侧边栏"><span class="toggle-icon" aria-hidden="true"></span><strong class="sidebar-toggle-label">Node.js</strong></button><label class="lesson-search"><span class="sr-only">搜索当前分类课程</span><input value="" type="search" placeholder="搜索课程…" autocomplete="off"></label></div><nav class="lesson-nav"><!--[--><section class="lesson-group"><h2 class="lesson-group-title">运行时与模块</h2><!--[--><a href="/nodejs/d-1/module-system" class="lesson-link" aria-label="🌰1 模块系统" title="模块系统"><span>🌰1</span><strong>模块系统</strong></a><a href="/nodejs/d-2/path-url" class="lesson-link" aria-label="🌰2 路径与 URL" title="路径与 URL"><span>🌰2</span><strong>路径与 URL</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">文件与事件</h2><!--[--><a href="/nodejs/d-3/file-system" class="lesson-link" aria-label="🌰3 文件系统" title="文件系统"><span>🌰3</span><strong>文件系统</strong></a><a href="/nodejs/d-4/event-emitter" class="lesson-link" aria-label="🌰4 事件发布订阅" title="事件发布订阅"><span>🌰4</span><strong>事件发布订阅</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">流与网络</h2><!--[--><a href="/nodejs/d-5/streams" class="lesson-link" aria-label="🌰5 流与背压" title="流与背压"><span>🌰5</span><strong>流与背压</strong></a><a href="/nodejs/d-6/http-server" class="lesson-link" aria-label="🌰6 HTTP 服务" title="HTTP 服务"><span>🌰6</span><strong>HTTP 服务</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">进程与并发</h2><!--[--><a href="/nodejs/d-7/process-env" class="lesson-link" aria-label="🌰7 进程与配置" title="进程与配置"><span>🌰7</span><strong>进程与配置</strong></a><a href="/nodejs/d-8/concurrency" class="lesson-link" aria-label="🌰8 并发控制" title="并发控制"><span>🌰8</span><strong>并发控制</strong></a><a href="/nodejs/d-16/worker-threads" class="lesson-link" aria-label="🌰9 Worker 线程" title="Worker 线程"><span>🌰9</span><strong>Worker 线程</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">可靠性</h2><!--[--><a href="/nodejs/d-9/error-logging" class="lesson-link" aria-label="🌰10 错误与日志" title="错误与日志"><span>🌰10</span><strong>错误与日志</strong></a><a href="/nodejs/d-10/node-test" class="lesson-link" aria-label="🌰11 Node 测试" title="Node 测试"><span>🌰11</span><strong>Node 测试</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">安全与依赖</h2><!--[--><a href="/nodejs/d-11/security" class="lesson-link" aria-label="🌰12 输入安全" title="输入安全"><span>🌰12</span><strong>输入安全</strong></a><a href="/nodejs/d-12/package-management" class="lesson-link" aria-label="🌰13 依赖管理" title="依赖管理"><span>🌰13</span><strong>依赖管理</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">Web 框架</h2><!--[--><a href="/nodejs/d-13/express-fastify" class="lesson-link" aria-label="🌰14 Express/Fastify" title="Express/Fastify"><span>🌰14</span><strong>Express/Fastify</strong></a><a href="/nodejs/d-14/websocket" class="lesson-link" aria-label="🌰15 WebSocket" title="WebSocket"><span>🌰15</span><strong>WebSocket</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">数据与存储</h2><!--[--><a href="/nodejs/d-15/database" class="lesson-link" aria-label="🌰16 数据库" title="数据库"><span>🌰16</span><strong>数据库</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">事件循环</h2><!--[--><a href="/nodejs/d-17/event-loop" class="lesson-link" aria-label="🌰17 事件循环" title="事件循环"><span>🌰17</span><strong>事件循环</strong></a><a aria-current="page" href="/nodejs/d-25/timers" class="router-link-active router-link-exact-active lesson-link active" aria-label="🌰18 定时器" title="定时器"><span>🌰18</span><strong>定时器</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">二进制</h2><!--[--><a href="/nodejs/d-18/buffer" class="lesson-link" aria-label="🌰19 Buffer" title="Buffer"><span>🌰19</span><strong>Buffer</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">多进程</h2><!--[--><a href="/nodejs/d-19/child-process" class="lesson-link" aria-label="🌰20 子进程" title="子进程"><span>🌰20</span><strong>子进程</strong></a><a href="/nodejs/d-20/cluster" class="lesson-link" aria-label="🌰21 cluster" title="cluster"><span>🌰21</span><strong>cluster</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">安全</h2><!--[--><a href="/nodejs/d-21/crypto" class="lesson-link" aria-label="🌰22 加密" title="加密"><span>🌰22</span><strong>加密</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">性能</h2><!--[--><a href="/nodejs/d-22/perf-hooks" class="lesson-link" aria-label="🌰23 性能分析" title="性能分析"><span>🌰23</span><strong>性能分析</strong></a><a href="/nodejs/d-27/zlib" class="lesson-link" aria-label="🌰24 压缩" title="压缩"><span>🌰24</span><strong>压缩</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">网络</h2><!--[--><a href="/nodejs/d-23/https" class="lesson-link" aria-label="🌰25 HTTPS" title="HTTPS"><span>🌰25</span><strong>HTTPS</strong></a><a href="/nodejs/d-26/net-tcp" class="lesson-link" aria-label="🌰26 TCP" title="TCP"><span>🌰26</span><strong>TCP</strong></a><a href="/nodejs/d-29/dns" class="lesson-link" aria-label="🌰27 DNS" title="DNS"><span>🌰27</span><strong>DNS</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">CLI</h2><!--[--><a href="/nodejs/d-24/cli" class="lesson-link" aria-label="🌰28 CLI" title="CLI"><span>🌰28</span><strong>CLI</strong></a><a href="/nodejs/d-30/readline" class="lesson-link" aria-label="🌰29 readline" title="readline"><span>🌰29</span><strong>readline</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">系统</h2><!--[--><a href="/nodejs/d-28/os" class="lesson-link" aria-label="🌰30 系统信息" title="系统信息"><span>🌰30</span><strong>系统信息</strong></a><!--]--></section><!--]--><!----></nav></aside><!--[--><main id="main-content" class="lesson-page" data-category="nodejs" tabindex="-1"><nav class="breadcrumb" aria-label="面包屑"><a href="/nodejs" class="">Node.js</a><span aria-hidden="true">/</span><span aria-current="page">定时器</span><small>18 / 30</small></nav><div class="lesson-progress" role="progressbar" aria-label="Node.js 学习进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="60"><span style="width:60%;"></span></div><header class="lesson-header"><div class="lesson-copy"><p class="eyebrow">🌰18 · 事件循环 <span class="reading-time">约 1 分钟读完</span></p><h1>timers 定时器详解</h1><p>深入理解 setTimeout、setInterval、setImmediate、process.nextTick 的语义差异和执行时机。</p></div></header><section class="lesson-section lesson-demo"><article class="lesson-article"><!--[--><div class="lesson-question"><strong>开场问题：</strong>你在接口末尾写了 <code>setTimeout(() =&gt; metrics.flush(), 0)</code>，想让「本次请求一处理完就尽快把指标刷出去」。结果这个回调排在了 <code>process.nextTick</code> 和 <code>Promise.then</code> 后面，还跟你另一处的 <code>setImmediate</code> 顺序对不上。同样是「尽快执行」，为什么时机完全不同？ </div><h2>延时写法等价性</h2><p> 「等一会儿再执行」在 Node 里有一堆写法，可它们并不等价，各自落在事件循环的不同阶段。最省事的理解——「延时设成 0 就是最快」——把三笔成本留给了你： </p><ul><li>把 <code>setTimeout(fn, 0)</code> 当成「立即执行」，忽略了它至少要等一个 timers 阶段的轮次，而且精度根本不保证。</li><li>分不清两种「稍后」：一种是<strong>插当前操作的队</strong>（<code>process.nextTick</code>、<code>Promise.then</code>），另一种是<strong>等本轮回合走完</strong>（<code>setTimeout</code>、<code>setImmediate</code>）。混着用，顺序就只能靠猜。</li><li>在 I/O 回调里，<code>setImmediate</code> 与 <code>setTimeout(fn, 0)</code> 的顺序和顶层脚本里还不一样，凭直觉写必然出错。</li></ul><p><strong>面对不同的「需要什么时机执行」，到底该挑哪一个定时器？</strong></p><h2>统一使用定时器</h2><p> 最偷懒的做法：不区分场景，凡是「稍后」都用 <code>setTimeout</code>，需要立即就用 <code>setTimeout(fn, 0)</code>。 </p><p> 它做对了一件事：<code>setTimeout</code> 是唯一能直白表达「延迟一段真实时间后执行」的 API，语义清楚，而且只要不 <code>clearTimeout</code>，回调总会被安排执行。作为「延时」的基本工具，它没有错。 </p><h2>零延时实际滞后</h2><ul><li><code>setTimeout(fn, 0)</code> 的实际延迟至少是 1ms 量级，还会被前面的任务拖后，它并不「立即」。</li><li>它排在 <code>process.nextTick</code> 和 <code>Promise.then</code> 之后——因为后两者是微任务，会在当前操作一结束就被整体清空。</li><li>在 I/O 回调里，<code>setImmediate</code> 会先于 <code>setTimeout(fn, 0)</code> 执行，靠「延迟 0」根本排不出确定顺序。</li><li><code>setInterval</code> 的回调若执行时间超过间隔，任务会堆积、触发时刻越走越偏。</li><li>传入一个巨大的毫秒数（超过 32 位整数上限）会溢出，反倒变成「立即执行」——本想延后很久，结果马上跑了。</li></ul><h2>按执行时机选工具</h2><p> 不推翻 <code>setTimeout</code>，而是先把「时机」分成几档，再按需选工具。选择前的第一句话不是「用哪个 API」，而是<strong>「我需要它在什么时机执行」</strong>： </p><ol class="lesson-steps"><li>要插到「当前操作刚结束、别的 I/O 回调还没跑」的位置 → <code>process.nextTick</code>（微任务，优先级最高，甚至高于 <code>Promise.then</code>）。</li><li>要在微任务序列里排队、和 Promise 一致 → <code>Promise.then</code> / <code>queueMicrotask</code>。</li><li>要延迟一段真实时间 → <code>setTimeout</code> / <code>setInterval</code>，回调在 timers 阶段执行。</li><li>在 I/O 回调里要「本轮回合尽量早」 → <code>setImmediate</code>，它在 check 阶段执行，比 <code>setTimeout(fn, 0)</code> 更确定。</li></ol><p> 先补 <code>setImmediate</code>，因为 I/O 回调里「立即」是最常见的需求，而 <code>setTimeout(fn, 0)</code> 在这里顺序不确定；<code>setImmediate</code> 正是专治这个场景，语义也直白。 </p><p> 再补 <code>process.nextTick</code> 的边界：它优先级最高，但<strong>只能用于极短的内部逻辑</strong>。nextTick 队列清空之前，事件循环不会继续往下走，你若拿它包一个耗时任务，会把整个循环卡住，甚至饿死 I/O 回调——这比慢一点危险得多。 </p><p> 接着补 <code>setInterval</code> 的替代方案：如果回调耗时可能超过间隔，长周期任务改用<strong>递归 <code>setTimeout</code></strong>（这次回调执行完，再排下一次），而不是固定间隔的 <code>setInterval</code>，这样就不会堆积、也不会漂移。 </p><p> 最后补大延时这一条：需要延后很久时，别用单个巨大的毫秒值（会溢出），改成记录一个目标时间点、用小步长去检查，或配合其它调度手段。 </p><div class="lesson-box warn"><strong>记住这句：<code>setTimeout(fn, 0)</code> 不等于「立即执行」</strong>，它只是「尽快排进 timers 阶段」；真正执行的时刻还要等前面的微任务和当前阶段走完。<code>setImmediate</code> 的名字里有「immediate」，但在顶层脚本里它和 <code>setTimeout(fn, 0)</code> 的先后其实不确定，只有在 I/O 回调内部才稳定地更早。 </div><h2>真实执行顺序观察</h2><figure class="lesson-figure"><figcaption>点「运行定时器演示」，看日志区按真实执行顺序逐条落下：同步代码最先，接着是 nextTick 与 Promise 回调，然后是 setTimeout / setInterval，最后才是 setImmediate——亲手验证「尽快执行」其实分好几个档次。</figcaption><div class="demo-card" data-v-2e1ff068><p data-v-2e1ff068>Node.js 定时器有不同优先级和执行时机，理解它们对排查异步问题至关重要。</p><button data-v-2e1ff068>运行定时器演示</button><!----><div class="timer-compare" data-v-2e1ff068><div class="timer-item" data-v-2e1ff068><strong data-v-2e1ff068>setTimeout(fn, delay)</strong><p data-v-2e1ff068>延迟至少 delay 毫秒后执行一次，精度受事件循环影响。</p><pre class="mini-code" data-v-2e1ff068><code data-v-2e1ff068>setTimeout(() =&gt; {
+  console.log(&#39;1秒后执行&#39;)
+}, 1000)</code></pre></div><div class="timer-item" data-v-2e1ff068><strong data-v-2e1ff068>setInterval(fn, delay)</strong><p data-v-2e1ff068>每隔 delay 毫秒重复执行，需注意回调执行时间可能超过间隔。</p><pre class="mini-code" data-v-2e1ff068><code data-v-2e1ff068>const id = setInterval(() =&gt; {
+  console.log(&#39;每秒执行&#39;)
+}, 1000)
+clearInterval(id)  // 停止</code></pre></div><div class="timer-item" data-v-2e1ff068><strong data-v-2e1ff068>setImmediate(fn)</strong><p data-v-2e1ff068>在当前事件循环迭代的 Check 阶段执行，Node.js 特有。</p><pre class="mini-code" data-v-2e1ff068><code data-v-2e1ff068>setImmediate(() =&gt; {
+  console.log(&#39;Check 阶段执行&#39;)
+})</code></pre></div><div class="timer-item" data-v-2e1ff068><strong data-v-2e1ff068>process.nextTick(fn)</strong><p data-v-2e1ff068>优先级最高，在当前操作完成后立即执行，优于 Promise.then。</p><pre class="mini-code" data-v-2e1ff068><code data-v-2e1ff068>process.nextTick(() =&gt; {
+  console.log(&#39;优先执行&#39;)
+})</code></pre></div></div><small data-v-2e1ff068>执行顺序：同步代码 → nextTick 回调 → Promise.then 回调 → setTimeout/setInterval 回调 → setImmediate 回调</small></div></figure><h2>回调阶段与微宏任务</h2><p> Node 的定时器差异，本质上不是「谁更快」，而是「回调落在事件循环的哪个阶段、属于微任务还是宏任务」。写之前先问一句「我需要什么时机执行」，再对号入座：插队的归微任务，延时的归 timers 阶段，I/O 回调里的「立即」归 check 阶段的 <code>setImmediate</code>。 </p><div class="lesson-term"><span class="term-name">「定时器漂移」</span>指 <code>setInterval</code> 这类周期任务，因为回调执行时间与调度延迟不断累积，实际触发时刻逐渐偏离理论间隔（越走越晚，甚至出现堆积）的现象。边界：漂移只影响「由同一个定时器反复触发」的周期任务，单次 <code>setTimeout</code> 不受其影响；要消除漂移，应改用「回调执行完后重新排一次 <code>setTimeout</code>」的递归写法；无论哪种方式，实际触发时刻都取决于事件循环的拥挤程度，高精度的长周期调度不能只依赖 <code>setInterval</code>。 </div><!--]--></article></section><section class="lesson-section"><h2>关键代码</h2><div class="code-block-wrapper"><div class="code-block-toolbar"><span class="code-block-lang">JavaScript</span><button class="code-copy-btn" type="button" aria-label="复制代码"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>复制</span></button></div><pre class="code-block"><code><span class="hljs-comment">// ═══════════════════════════════════════════</span>
+<span class="hljs-comment">// D25 - timers 定时器详解</span>
+<span class="hljs-comment">// ═══════════════════════════════════════════</span>
+
+<span class="hljs-keyword">import</span> { <span class="hljs-built_in">setTimeout</span>, <span class="hljs-built_in">setInterval</span>, setImmediate, <span class="hljs-built_in">clearTimeout</span>, <span class="hljs-built_in">clearInterval</span>, clearImmediate } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:timers&#x27;</span>
+<span class="hljs-keyword">import</span> { <span class="hljs-built_in">setTimeout</span> <span class="hljs-keyword">as</span> setTimeoutPromise } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:timers/promises&#x27;</span>
+
+<span class="hljs-comment">// ───────── setTimeout ─────────</span>
+<span class="hljs-comment">// 在指定毫秒后执行一次回调</span>
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;1. 开始&#x27;</span>)
+
+<span class="hljs-keyword">const</span> timer1 = <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;3. 1秒后执行&#x27;</span>)
+}, <span class="hljs-number">1000</span>)
+
+<span class="hljs-comment">// 可以提前取消</span>
+<span class="hljs-comment">// clearTimeout(timer1)</span>
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;2. setTimeout 已设置&#x27;</span>)
+
+<span class="hljs-comment">// 注意：实际延迟可能比指定的长</span>
+<span class="hljs-comment">// 原因：事件循环调度、系统负载、其他任务阻塞</span>
+
+<span class="hljs-comment">// setTimeout(fn, 0) 也不是立即执行</span>
+<span class="hljs-comment">// 会进入 timers 阶段，至少等一轮事件循环</span>
+
+<span class="hljs-comment">// setTimeout(fn, 1) 和 setTimeout(fn, 0) 实际一样</span>
+<span class="hljs-comment">// Node.js 会把 0 转为 1ms</span>
+
+<span class="hljs-comment">// ───────── setInterval ─────────</span>
+<span class="hljs-comment">// 每隔指定毫秒重复执行回调</span>
+
+<span class="hljs-keyword">let</span> count = <span class="hljs-number">0</span>
+<span class="hljs-keyword">const</span> intervalId = <span class="hljs-built_in">setInterval</span>(<span class="hljs-function">() =&gt;</span> {
+  count++
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`间隔执行: 第 <span class="hljs-subst">${count}</span> 次`</span>)
+
+  <span class="hljs-keyword">if</span> (count &gt;= <span class="hljs-number">3</span>) {
+    <span class="hljs-built_in">clearInterval</span>(intervalId)
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;停止间隔执行&#x27;</span>)
+  }
+}, <span class="hljs-number">200</span>)
+
+<span class="hljs-comment">// 注意：setInterval 的问题</span>
+<span class="hljs-comment">// 如果回调执行时间 &gt; 间隔时间，会出现累积</span>
+<span class="hljs-comment">// 比如间隔 100ms，回调执行 200ms</span>
+<span class="hljs-comment">// 结果：回调会一个接一个，没有间隔</span>
+
+<span class="hljs-comment">// 更安全的方式：递归 setTimeout</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">repeat</span>(<span class="hljs-params">fn, interval</span>) {
+  <span class="hljs-keyword">const</span> timer = { <span class="hljs-attr">id</span>: <span class="hljs-literal">null</span> }
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">run</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-title function_">fn</span>()
+    timer.<span class="hljs-property">id</span> = <span class="hljs-built_in">setTimeout</span>(run, interval)
+  }
+
+  timer.<span class="hljs-property">id</span> = <span class="hljs-built_in">setTimeout</span>(run, interval)
+  <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">clearTimeout</span>(timer.<span class="hljs-property">id</span>)
+}
+
+<span class="hljs-comment">// 使用：</span>
+<span class="hljs-comment">// const stop = repeat(() =&gt; {</span>
+<span class="hljs-comment">//   console.log(&#x27;递归 setTimeout 执行&#x27;)</span>
+<span class="hljs-comment">// }, 500)</span>
+<span class="hljs-comment">// 之后 stop() 停止</span>
+
+<span class="hljs-comment">// 好处：确保两次执行之间至少间隔指定时间</span>
+<span class="hljs-comment">// 不会因为回调慢而累积</span>
+
+<span class="hljs-comment">// ───────── setImmediate ─────────</span>
+<span class="hljs-comment">// 在当前事件循环的 check 阶段执行</span>
+
+<span class="hljs-title function_">setImmediate</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;setImmediate 回调&#x27;</span>)
+})
+
+<span class="hljs-comment">// setImmediate vs setTimeout(0)</span>
+<span class="hljs-comment">// 在主模块中，顺序不确定</span>
+<span class="hljs-comment">// 在 I/O 回调中，setImmediate 总是先执行</span>
+
+<span class="hljs-keyword">import</span> fs <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:fs&#x27;</span>
+<span class="hljs-keyword">import</span> path <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:path&#x27;</span>
+
+fs.<span class="hljs-title function_">readFile</span>(path.<span class="hljs-title function_">resolve</span>(<span class="hljs-string">&#x27;.&#x27;</span>), <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-comment">// console.log(&#x27;I/O 内的 setTimeout&#x27;)</span>
+  }, <span class="hljs-number">0</span>)
+
+  <span class="hljs-title function_">setImmediate</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-comment">// console.log(&#x27;I/O 内的 setImmediate&#x27;)</span>
+  })
+  <span class="hljs-comment">// 总是 setImmediate 先执行</span>
+  <span class="hljs-comment">// 因为 I/O 回调在 poll 阶段，下一个是 check 阶段</span>
+})
+
+<span class="hljs-comment">// ───────── Promise 版本 (timers/promises) ─────────</span>
+
+<span class="hljs-comment">// async/await 风格的定时器</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">delayExample</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;等待 1 秒...&#x27;</span>)
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">setTimeoutPromise</span>(<span class="hljs-number">1000</span>)
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;1 秒到了！&#x27;</span>)
+
+  <span class="hljs-comment">// 带值传递</span>
+  <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> <span class="hljs-title function_">setTimeoutPromise</span>(<span class="hljs-number">500</span>, <span class="hljs-string">&#x27;完成&#x27;</span>)
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;结果:&#x27;</span>, result)
+}
+
+<span class="hljs-comment">// delayExample()</span>
+
+<span class="hljs-comment">// 也可以用 AbortController 取消</span>
+<span class="hljs-comment">// const ac = new AbortController()</span>
+<span class="hljs-comment">// setTimeoutPromise(1000, &#x27;结果&#x27;, { signal: ac.signal })</span>
+<span class="hljs-comment">//   .then(console.log)</span>
+<span class="hljs-comment">//   .catch(err =&gt; console.log(&#x27;已取消:&#x27;, err.name))</span>
+<span class="hljs-comment">// ac.abort() // 取消</span>
+
+<span class="hljs-comment">// ───────── 不精确的原因 ─────────</span>
+
+<span class="hljs-comment">// 1. 事件循环阶段</span>
+<span class="hljs-comment">//    定时器回调在 timers 阶段执行</span>
+<span class="hljs-comment">//    如果当前正在执行其他阶段的回调，需要等</span>
+
+<span class="hljs-comment">// 2. 最小延迟</span>
+<span class="hljs-comment">//    setTimeout(fn, 0) 实际是 setTimeout(fn, 1)</span>
+<span class="hljs-comment">//    setInterval 最小间隔约 1ms</span>
+
+<span class="hljs-comment">// 3. 任务队列</span>
+<span class="hljs-comment">//    同一时间点有多个定时器，依次执行</span>
+<span class="hljs-comment">//    前一个慢了，后面的都会延迟</span>
+
+<span class="hljs-comment">// 4. 系统负载</span>
+<span class="hljs-comment">//    CPU 繁忙时，调度可能延迟</span>
+
+<span class="hljs-comment">// 5. 嵌套定时器最小间隔</span>
+<span class="hljs-comment">//    嵌套超过 5 层后，最小间隔变为 4ms</span>
+<span class="hljs-comment">//    （浏览器规范，Node.js 也遵循类似规则）</span>
+
+<span class="hljs-comment">// 示例：嵌套延迟</span>
+<span class="hljs-keyword">let</span> level = <span class="hljs-number">0</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">nested</span>(<span class="hljs-params"></span>) {
+  level++
+  <span class="hljs-keyword">if</span> (level &gt; <span class="hljs-number">10</span>) <span class="hljs-keyword">return</span>
+  <span class="hljs-keyword">const</span> start = <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>()
+  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> delay = <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>() - start
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`第 <span class="hljs-subst">${level}</span> 层嵌套: 实际延迟 <span class="hljs-subst">${delay}</span>ms`</span>)
+    <span class="hljs-title function_">nested</span>()
+  }, <span class="hljs-number">0</span>)
+}
+<span class="hljs-comment">// nested()</span>
+
+<span class="hljs-comment">// ───────── 定时器的 this 问题 ─────────</span>
+
+<span class="hljs-keyword">const</span> obj = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;test&#x27;</span>,
+  <span class="hljs-title function_">delayed</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-comment">// 错误：setTimeout 回调中 this 不是 obj</span>
+    <span class="hljs-comment">// setTimeout(function() {</span>
+    <span class="hljs-comment">//   console.log(this.name) // undefined (非严格模式下是 global)</span>
+    <span class="hljs-comment">// }, 100)</span>
+
+    <span class="hljs-comment">// 正确1：箭头函数</span>
+    <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span>) <span class="hljs-comment">// &#x27;test&#x27;</span>
+    }, <span class="hljs-number">100</span>)
+
+    <span class="hljs-comment">// 正确2：bind</span>
+    <span class="hljs-comment">// setTimeout(function() {</span>
+    <span class="hljs-comment">//   console.log(this.name)</span>
+    <span class="hljs-comment">// }.bind(this), 100)</span>
+
+    <span class="hljs-comment">// 正确3：保存 this</span>
+    <span class="hljs-comment">// const self = this</span>
+    <span class="hljs-comment">// setTimeout(function() {</span>
+    <span class="hljs-comment">//   console.log(self.name)</span>
+    <span class="hljs-comment">// }, 100)</span>
+  }
+}
+
+<span class="hljs-comment">// ───────── 常见使用模式 ─────────</span>
+
+<span class="hljs-comment">// 1. 防抖 (Debounce)</span>
+<span class="hljs-comment">//    事件停止后等待一段时间才执行</span>
+<span class="hljs-comment">//    用于：输入框搜索、窗口 resize</span>
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">debounce</span>(<span class="hljs-params">fn, delay</span>) {
+  <span class="hljs-keyword">let</span> timer = <span class="hljs-literal">null</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> (<span class="hljs-params">...args</span>) {
+    <span class="hljs-built_in">clearTimeout</span>(timer)
+    timer = <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+      fn.<span class="hljs-title function_">apply</span>(<span class="hljs-variable language_">this</span>, args)
+    }, delay)
+  }
+}
+
+<span class="hljs-comment">// 2. 节流 (Throttle)</span>
+<span class="hljs-comment">//    保证在一段时间内最多执行一次</span>
+<span class="hljs-comment">//    用于：滚动事件、按钮防重复点击</span>
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">throttle</span>(<span class="hljs-params">fn, interval</span>) {
+  <span class="hljs-keyword">let</span> lastTime = <span class="hljs-number">0</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> (<span class="hljs-params">...args</span>) {
+    <span class="hljs-keyword">const</span> now = <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>()
+    <span class="hljs-keyword">if</span> (now - lastTime &gt;= interval) {
+      lastTime = now
+      fn.<span class="hljs-title function_">apply</span>(<span class="hljs-variable language_">this</span>, args)
+    }
+  }
+}
+
+<span class="hljs-comment">// 3. 超时取消</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">withTimeout</span>(<span class="hljs-params">promise, timeoutMs</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+    <span class="hljs-keyword">const</span> timer = <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-title function_">reject</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;超时&#x27;</span>))
+    }, timeoutMs)
+
+    promise
+      .<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">result</span>) =&gt;</span> {
+        <span class="hljs-built_in">clearTimeout</span>(timer)
+        <span class="hljs-title function_">resolve</span>(result)
+      })
+      .<span class="hljs-title function_">catch</span>(<span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> {
+        <span class="hljs-built_in">clearTimeout</span>(timer)
+        <span class="hljs-title function_">reject</span>(err)
+      })
+  })
+}
+
+<span class="hljs-comment">// 用 AbortController 更现代</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">fetchWithTimeout</span>(<span class="hljs-params">url, timeout = <span class="hljs-number">5000</span></span>) {
+  <span class="hljs-keyword">const</span> controller = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AbortController</span>()
+  <span class="hljs-keyword">const</span> id = <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> controller.<span class="hljs-title function_">abort</span>(), timeout)
+
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(url, {
+      <span class="hljs-attr">signal</span>: controller.<span class="hljs-property">signal</span>
+    })
+    <span class="hljs-keyword">return</span> response
+  } <span class="hljs-keyword">finally</span> {
+    <span class="hljs-built_in">clearTimeout</span>(id)
+  }
+}
+
+<span class="hljs-comment">// ───────── 常见问题 ─────────</span>
+
+<span class="hljs-comment">// 1. 内存泄漏</span>
+<span class="hljs-comment">//    忘记 clearInterval / clearTimeout</span>
+<span class="hljs-comment">//    特别是组件卸载时要清理</span>
+
+<span class="hljs-comment">// 2. this 指向错误</span>
+<span class="hljs-comment">//    用箭头函数或 bind 解决</span>
+
+<span class="hljs-comment">// 3. 递归 setInterval 导致的重复执行</span>
+<span class="hljs-comment">//    用递归 setTimeout 代替</span>
+
+<span class="hljs-comment">// 4. 依赖定时器精确性</span>
+<span class="hljs-comment">//    定时器不保证精确，不要用于高精度计时</span>
+<span class="hljs-comment">//    高精度用 performance.now() 计算</span>
+
+<span class="hljs-comment">// 5. setTimeout(fn, 0) 不立即执行</span>
+<span class="hljs-comment">//    要立即执行用 process.nextTick 或 Promise</span>
+
+<span class="hljs-comment">// ───────── 最佳实践 ─────────</span>
+<span class="hljs-comment">// 不要依赖定时器的精确性</span>
+<span class="hljs-comment">// 长时间间隔用 setTimeout 递归，不用 setInterval</span>
+<span class="hljs-comment">// 组件/模块销毁时清理定时器</span>
+<span class="hljs-comment">// 异步操作加超时机制</span>
+<span class="hljs-comment">// 用 AbortController 统一取消（fetch, timers 都支持）</span>
+<span class="hljs-comment">// 防抖和节流是常用模式，熟悉掌握</span>
+<span class="hljs-comment">// 注意 this 指向问题，优先用箭头函数</span>
+<span class="hljs-comment">// 不要在定时器回调中做 heavy computation</span>
+<span class="hljs-comment">// 用 unref() 让定时器不阻止进程退出</span>
+
+<span class="hljs-comment">// 什么是 unref()？</span>
+<span class="hljs-comment">// const t = setTimeout(() =&gt; {}, 10000)</span>
+<span class="hljs-comment">// t.unref() // 这个定时器不会阻止 Node.js 退出</span>
+<span class="hljs-comment">// // 如果事件循环中只有这个定时器，进程会直接退出</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// t.ref()  // 恢复，会阻止退出</span></code></pre></div></section><nav class="lesson-next" aria-label="下一章节"><div class="bottom-nav-row"><a href="https://nodejs.org/docs/latest/api/" target="_blank" rel="noopener" class="official-link">Node.js 官网 → </a><div class="lesson-pager"><a href="/nodejs/d-17/event-loop" class="previous-lesson-link"><span>上一颗</span><strong>🌰17 事件循环</strong></a><a href="/nodejs/d-18/buffer" class="next-lesson-link"><span>下一颗</span><strong>🌰19 Buffer</strong></a></div></div></nav></main><!--]--></div><footer class="site-footer"><p class="site-footer-line"> © 2026 小松鼠举栗子 · 用 🌰 记录技术知识 · <a href="mailto:gzx_miller@foxmail.com">gzx_miller@foxmail.com</a></p></footer></div><!--]--><button type="button" class="squirrel-pet" style="" aria-label="松鼠小助手：点击提问，拖拽移动" title="点我提问，拖拽移动" data-v-235d5ef5><span class="pet-inner" aria-hidden="true" data-v-235d5ef5><span class="pet-ai-badge" data-v-235d5ef5>AI</span><span class="pet-zzz" aria-hidden="true" data-v-235d5ef5>z<span data-v-235d5ef5>z</span><span data-v-235d5ef5>z</span></span><span class="pet-flip" data-v-235d5ef5><span class="pet-wobble" data-v-235d5ef5><svg viewBox="0 0 136 120" width="68" height="60" data-v-235d5ef5><defs data-v-235d5ef5><linearGradient id="sq-body" x1="0" y1="0" x2="0" y2="1" data-v-235d5ef5><stop offset="0" stop-color="#f0904a" data-v-235d5ef5></stop><stop offset="1" stop-color="#d95a24" data-v-235d5ef5></stop></linearGradient><linearGradient id="sq-tail" x1="0" y1="1" x2="1" y2="0" data-v-235d5ef5><stop offset="0" stop-color="#c1441e" data-v-235d5ef5></stop><stop offset="1" stop-color="#f5a040" data-v-235d5ef5></stop></linearGradient></defs><g class="pet-tail" data-v-235d5ef5><path d="M58 96 C96 106 122 86 122 50 C121.5 30 112 13 97 8 C83 3.5 72.5 9 71.5 17.5 C70.8 24 74.5 28.5 76.5 33.5 C63 44 58 66 56.5 86 C56 92 57 95 58 96 Z" fill="url(#sq-tail)" data-v-235d5ef5></path><path d="M76 88 C96 80 106 58 99 40 C105 58 98 80 82 90 Z" fill="#f6c15a" opacity="0.5" data-v-235d5ef5></path></g><ellipse class="pet-foot pet-foot-l" cx="41.4" cy="107" rx="9.6" ry="5.4" fill="#b7431f" data-v-235d5ef5></ellipse><ellipse class="pet-foot pet-foot-r" cx="64.6" cy="107" rx="9.6" ry="5.4" fill="#b7431f" data-v-235d5ef5></ellipse><ellipse cx="52" cy="84" rx="27" ry="27" fill="url(#sq-body)" data-v-235d5ef5></ellipse><ellipse cx="51" cy="90" rx="16" ry="17" fill="#ffe3c2" opacity="0.95" data-v-235d5ef5></ellipse><path d="M33.5 38 L38.5 12 L48 27 Z" fill="#d95a24" stroke="#d95a24" stroke-width="3" stroke-linejoin="round" data-v-235d5ef5></path><path d="M36.8 30.5 L39 17 L44 25.5 Z" fill="#f2a582" data-v-235d5ef5></path><path d="M70.5 38 L65.5 12 L56 27 Z" fill="#d95a24" stroke="#d95a24" stroke-width="3" stroke-linejoin="round" data-v-235d5ef5></path><path d="M67.2 30.5 L65 17 L60 25.5 Z" fill="#f2a582" data-v-235d5ef5></path><circle cx="52" cy="47" r="22" fill="url(#sq-body)" data-v-235d5ef5></circle><circle cx="33" cy="54" r="9.5" fill="#e8793c" data-v-235d5ef5></circle><circle cx="71" cy="54" r="9.5" fill="#e8793c" data-v-235d5ef5></circle><circle cx="41" cy="53" r="4" fill="#f6c15a" opacity="0.6" data-v-235d5ef5></circle><circle cx="63" cy="53" r="4" fill="#f6c15a" opacity="0.6" data-v-235d5ef5></circle><g stroke="#b7431f" stroke-width="0.9" stroke-linecap="round" opacity="0.7" data-v-235d5ef5><path d="M32 50 L25 49" data-v-235d5ef5></path><path d="M32 54 L25 55" data-v-235d5ef5></path><path d="M32.5 58 L26 60" data-v-235d5ef5></path><path d="M72 50 L79 49" data-v-235d5ef5></path><path d="M72 54 L79 55" data-v-235d5ef5></path><path d="M71.5 58 L78 60" data-v-235d5ef5></path></g><g class="pet-eyes" data-v-235d5ef5><circle cx="44" cy="44" r="3.4" fill="#32190f" data-v-235d5ef5></circle><circle cx="45" cy="43" r="1.1" fill="#fffaf2" data-v-235d5ef5></circle><circle cx="60" cy="44" r="3.4" fill="#32190f" data-v-235d5ef5></circle><circle cx="61" cy="43" r="1.1" fill="#fffaf2" data-v-235d5ef5></circle></g><g class="pet-face-happy" data-v-235d5ef5><path d="M40.5 44.5 Q44 40.5 47.5 44.5" fill="none" stroke="#32190f" stroke-width="2" stroke-linecap="round" data-v-235d5ef5></path><path d="M56.5 44.5 Q60 40.5 63.5 44.5" fill="none" stroke="#32190f" stroke-width="2" stroke-linecap="round" data-v-235d5ef5></path><circle cx="36" cy="50.5" r="2.8" fill="#f0806e" opacity="0.6" data-v-235d5ef5></circle><circle cx="68" cy="50.5" r="2.8" fill="#f0806e" opacity="0.6" data-v-235d5ef5></circle></g><g class="pet-face-sleep" data-v-235d5ef5><path d="M40.5 45 Q44 47.5 47.5 45" fill="none" stroke="#32190f" stroke-width="2" stroke-linecap="round" data-v-235d5ef5></path><path d="M56.5 45 Q60 47.5 63.5 45" fill="none" stroke="#32190f" stroke-width="2" stroke-linecap="round" data-v-235d5ef5></path></g><ellipse cx="52" cy="55" rx="9" ry="7" fill="#ffe3c2" data-v-235d5ef5></ellipse><ellipse cx="52" cy="50.5" rx="2.4" ry="1.8" fill="#7b351d" data-v-235d5ef5></ellipse><path d="M48.5 54.5 Q52 57.5 55.5 54.5" fill="none" stroke="#7b351d" stroke-width="1.4" stroke-linecap="round" data-v-235d5ef5></path><rect x="50.2" y="56.4" width="1.6" height="2.6" rx="0.5" fill="#fffdf6" data-v-235d5ef5></rect><rect x="52.2" y="56.4" width="1.6" height="2.6" rx="0.5" fill="#fffdf6" data-v-235d5ef5></rect><ellipse cx="39.6" cy="74.6" rx="5.5" ry="7.2" fill="#c1441e" transform="rotate(18 39.6 74.6)" data-v-235d5ef5></ellipse><ellipse cx="40" cy="80.4" rx="3.6" ry="2.4" fill="#f0a06a" data-v-235d5ef5></ellipse><g class="pet-arm" data-v-235d5ef5><ellipse cx="66.4" cy="71.6" rx="5.4" ry="7" fill="#c1441e" transform="rotate(-24 66.4 71.6)" data-v-235d5ef5></ellipse><circle cx="69.2" cy="66.4" r="2.8" fill="#d95a24" data-v-235d5ef5></circle><circle cx="71.4" cy="63.8" r="1.7" fill="#d95a24" data-v-235d5ef5></circle></g></svg></span></span></span><span class="pet-hint" aria-hidden="true" data-v-235d5ef5><span class="pet-hint-text" data-v-235d5ef5></span></span></button><!----><!--]--></div><div id="teleports"></div><script>window.__NUXT__={};window.__NUXT__.config={public:{zhipuApiKey:"4a144c581416035e180b03574714070553061642165f46465c5f1958545145181c047f743904140e2b350009195b2a3503"},app:{baseURL:"/",buildId:"e714b28c-1387-4a7d-a2e1-4256272ad9f2",buildAssetsDir:"/_nuxt/",cdnURL:""}}</script><script type="application/json" data-nuxt-data="nuxt-app" data-ssr="true" id="__NUXT_DATA__" data-src="/nodejs/d-25/timers/_payload.json?e714b28c-1387-4a7d-a2e1-4256272ad9f2">[{"state":1,"once":5,"_errors":6,"serverRendered":3,"path":8,"pinia":9,"prerenderedAt":11},["Reactive",2],{"$ssidebarExpanded":3,"$stheme":4},true,"light",["Set"],["ShallowReactive",7],{"lesson-code-D_25":-1},"\u002Fnodejs\u002Fd-25\u002Ftimers",["Reactive",10],{},1791203790837]</script></body></html>

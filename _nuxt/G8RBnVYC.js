@@ -1,0 +1,56 @@
+const n=`/* 线性渐变：沿直线方向过渡 */
+.gradient-linear {
+  background: linear-gradient(135deg, #e8590c, #d9480f);
+  /* 角度 + 起始色 + 结束色 */
+}
+
+/* 线性渐变：多个色标 */
+.gradient-multi {
+  background: linear-gradient(
+    to right,
+    #e8590c 0%,
+    #ff922b 50%,
+    #ffd43b 100%
+  );
+}
+
+/* 线性渐变：硬边（色标位置相同） */
+.gradient-stripes {
+  background: linear-gradient(
+    to bottom,
+    #e8590c 0%,
+    #e8590c 50%,
+    #fff4e6 50%,
+    #fff4e6 100%
+  );
+}
+
+/* 径向渐变：从中心向外辐射 */
+.gradient-radial {
+  background: radial-gradient(circle at center, #fff4e6, #e8590c);
+  /* 形状 + 位置 + 色标 */
+}
+
+/* 锥形渐变：围绕中心旋转 */
+.gradient-conic {
+  background: conic-gradient(from 0deg, #e8590c, #ffd43b, #e8590c);
+}
+
+/* 多重渐变叠加 */
+.gradient-multi-layer {
+  background:
+    linear-gradient(135deg, rgba(232,89,12,0.8), transparent),
+    radial-gradient(circle at top right, #ffd43b, transparent);
+}
+
+/* 渐变 + background-size 实现图案 */
+.gradient-pattern {
+  background: linear-gradient(45deg, #e8590c 25%, transparent 25%) 0 0 / 20px 20px,
+              linear-gradient(-45deg, #e8590c 25%, transparent 25%) 0 0 / 20px 20px;
+}
+
+/* background 属性简写 */
+.bg-full {
+  background: #fff url('bg.png') no-repeat center / cover;
+  /* 颜色 图片 重复 位置 / 尺寸 */
+}`;export{n as default};

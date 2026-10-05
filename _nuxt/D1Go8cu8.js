@@ -1,0 +1,33 @@
+const n=`// config/configuration.ts —— 自定义配置工厂（类型安全）
+export default () => ({
+  port: parseInt(process.env.PORT ?? '3000', 10),
+  database: {
+    host: process.env.DB_HOST ?? 'localhost',
+    port: parseInt(process.env.DB_PORT ?? '5432', 10),
+    name: process.env.DB_NAME ?? 'classroom',
+  },
+  redis: {
+    ttl: parseInt(process.env.REDIS_TTL ?? '3600', 10),
+  },
+})
+
+// app.module.ts —— 全局配置模块
+@Module({
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,               // 所有模块都可注入 ConfigService
+      load: [configuration],        // 加载自定义配置工厂
+      envFilePath: ['.env.local', '.env'],
+    }),
+  ],
+})
+
+// 任意服务中注入使用
+@Injectable()
+export class AppService {
+  constructor(private readonly config: ConfigService) {}
+
+  getDbName() {
+    return this.config.get<string>('database.name')
+  }
+}`;export{n as default};

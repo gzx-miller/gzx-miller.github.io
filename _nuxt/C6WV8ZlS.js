@@ -1,0 +1,76 @@
+const n=`// tailwind.config.js
+import plugin from 'tailwindcss/plugin'
+
+export default {
+  // 引入官方插件
+  plugins: [
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/aspect-ratio'),
+
+    // 自定义插件：添加基础样式
+    plugin(function({ addBase, theme }) {
+      addBase({
+        'h1': { fontSize: theme('fontSize.3xl'), fontWeight: theme('fontWeight.bold') },
+        'h2': { fontSize: theme('fontSize.2xl'), fontWeight: theme('fontWeight.bold') },
+      })
+    }),
+
+    // 自定义插件：添加工具类
+    plugin(function({ addUtilities }) {
+      addUtilities({
+        '.content-auto': {
+          'content-visibility': 'auto',
+        },
+        '.text-shadow': {
+          'text-shadow': '0 2px 4px rgba(0,0,0,0.1)',
+        },
+      })
+    }),
+
+    // 自定义插件：添加组件类
+    plugin(function({ addComponents, theme }) {
+      addComponents({
+        '.btn': {
+          padding: theme('spacing.2') + ' ' + theme('spacing.4'),
+          borderRadius: theme('borderRadius.lg'),
+          fontWeight: theme('fontWeight.medium'),
+          backgroundColor: theme('colors.orange.600'),
+          color: 'white',
+          '&:hover': {
+            backgroundColor: theme('colors.orange.700'),
+          },
+        },
+        '.card': {
+          padding: theme('spacing.5'),
+          borderRadius: theme('borderRadius.xl'),
+          backgroundColor: 'white',
+          boxShadow: theme('boxShadow.md'),
+        },
+      })
+    }),
+
+    // 自定义插件：动态值工具类（matchUtilities）
+    plugin(function({ matchUtilities, theme }) {
+      matchUtilities(
+        {
+          'text-shadow': (value) => ({
+            textShadow: value,
+          }),
+        },
+        { values: theme('textShadow') }
+      )
+    }),
+  ],
+
+  // 为动态工具类扩展主题
+  theme: {
+    extend: {
+      textShadow: {
+        sm: '0 1px 2px rgba(0,0,0,0.05)',
+        DEFAULT: '0 2px 4px rgba(0,0,0,0.1)',
+        lg: '0 4px 8px rgba(0,0,0,0.15)',
+      },
+    },
+  },
+}`;export{n as default};

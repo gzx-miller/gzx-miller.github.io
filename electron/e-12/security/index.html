@@ -1,0 +1,276 @@
+<!DOCTYPE html><html  lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>安全实践 - 小松鼠举栗子</title><script>(function(){try{var t=localStorage.getItem('theme-preference');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script><style>.squirrel-pet[data-v-235d5ef5]{position:fixed;right:20px;top:50%;transform:translateY(-50%);z-index:1000;width:76px;height:76px;padding:0;border:none;background:transparent;cursor:grab;touch-action:none;-webkit-user-select:none;-moz-user-select:none;user-select:none;filter:drop-shadow(0 8px 16px rgba(98,42,18,.28));transition:left 2.4s cubic-bezier(.45,.05,.55,.95),top 2.4s cubic-bezier(.45,.05,.55,.95),filter .2s ease}.squirrel-pet[data-v-235d5ef5]:hover{filter:drop-shadow(0 10px 20px rgba(98,42,18,.4))}.squirrel-pet.dragging[data-v-235d5ef5]{cursor:grabbing;filter:drop-shadow(0 14px 24px rgba(98,42,18,.45));transition:filter .2s ease}.pet-inner[data-v-235d5ef5]{position:relative;display:block;animation:pet-bob-235d5ef5 3.2s ease-in-out infinite}.pet-ai-badge[data-v-235d5ef5]{position:absolute;top:-14px;left:50%;z-index:2;transform:translate(-50%);transform-origin:50% 100%;font-size:19px;font-weight:900;font-style:italic;letter-spacing:1px;line-height:1;background:linear-gradient(180deg,#ffe9a8,#f6c15a 35%,#d99a2b 55%,#fff3c4);background-clip:text;-webkit-background-clip:text;-webkit-text-stroke:.9px #8f2f18;paint-order:stroke fill;color:transparent;filter:drop-shadow(0 2px 3px rgba(98,42,18,.45));pointer-events:none;transition:filter .25s ease}.squirrel-pet:hover .pet-ai-badge[data-v-235d5ef5]{background:linear-gradient(110deg,#f6c15a,#ffe9a8 20%,#fff 38%,#ffe9a8 55%,#d99a2b 75%,#f6c15a);background-size:250% 100%;background-clip:text;-webkit-background-clip:text;filter:drop-shadow(0 0 6px rgba(246,193,90,.9)) drop-shadow(0 2px 3px rgba(98,42,18,.45));animation:ai-swing-235d5ef5 .62s ease-in-out infinite,ai-shine-235d5ef5 1.4s linear infinite}@keyframes ai-swing-235d5ef5{0%,to{transform:translate(-50%) rotate(-9deg) scale(1.06)}50%{transform:translate(-50%) rotate(9deg) scale(1.06)}}@keyframes ai-shine-235d5ef5{0%{background-position:120% 0}to{background-position:-120% 0}}.squirrel-pet.pricked .pet-inner[data-v-235d5ef5]{animation:prick-jump-235d5ef5 .68s cubic-bezier(.3,.9,.4,1)}@keyframes prick-jump-235d5ef5{0%{transform:translateY(0) scale(1)}28%{transform:translateY(-30px) scale(1.07)}52%{transform:translateY(-20px) scale(1.02) rotate(-5deg)}76%{transform:translateY(2px) scale(.96,.88)}to{transform:translateY(0) scale(1)}}.squirrel-pet.dragging .pet-ai-badge[data-v-235d5ef5],.squirrel-pet.dragging .pet-arm[data-v-235d5ef5],.squirrel-pet.dragging .pet-eyes[data-v-235d5ef5],.squirrel-pet.dragging .pet-face-happy[data-v-235d5ef5],.squirrel-pet.dragging .pet-foot-l[data-v-235d5ef5],.squirrel-pet.dragging .pet-foot-r[data-v-235d5ef5],.squirrel-pet.dragging .pet-hint-text[data-v-235d5ef5],.squirrel-pet.dragging .pet-inner[data-v-235d5ef5],.squirrel-pet.dragging .pet-tail[data-v-235d5ef5]{animation-play-state:paused}.pet-foot[data-v-235d5ef5]{transform-box:fill-box}.squirrel-pet.crawling .pet-foot-l[data-v-235d5ef5]{animation:foot-step-235d5ef5 .42s ease-in-out infinite alternate}.squirrel-pet.crawling .pet-foot-r[data-v-235d5ef5]{animation:foot-step-235d5ef5 .42s ease-in-out infinite alternate-reverse}@keyframes foot-step-235d5ef5{0%{transform:translate(2.5px,-1.2px) rotate(3deg)}to{transform:translate(-2.5px,1.2px) rotate(-3deg)}}.pet-wobble[data-v-235d5ef5]{display:block}.squirrel-pet.crawling .pet-wobble[data-v-235d5ef5]{transform-origin:50% 100%;animation:crawl-wobble-235d5ef5 .42s ease-in-out infinite alternate}@keyframes crawl-wobble-235d5ef5{0%{transform:rotate(-4deg) translate(1.5px)}to{transform:rotate(4deg) translate(-1.5px)}}.pet-arm[data-v-235d5ef5]{transform-box:fill-box;transform-origin:50% 90%}.squirrel-pet.waving .pet-arm[data-v-235d5ef5]{animation:arm-wave-235d5ef5 1.1s ease-in-out infinite}@keyframes arm-wave-235d5ef5{0%,to{transform:rotate(0)}30%{transform:rotate(-46deg)}55%{transform:rotate(10deg)}80%{transform:rotate(-36deg)}}.pet-eyes[data-v-235d5ef5],.pet-face-happy[data-v-235d5ef5]{transition:opacity .2s ease}.pet-face-happy[data-v-235d5ef5]{opacity:0}.squirrel-pet.waving .pet-face-happy[data-v-235d5ef5]{opacity:1}.squirrel-pet.waving .pet-eyes[data-v-235d5ef5]{opacity:0}.pet-face-sleep[data-v-235d5ef5]{opacity:0;transition:opacity .2s ease}.squirrel-pet.sleeping .pet-eyes[data-v-235d5ef5],.squirrel-pet.sleeping .pet-face-happy[data-v-235d5ef5]{opacity:0}.squirrel-pet.sleeping .pet-face-sleep[data-v-235d5ef5]{opacity:1}.squirrel-pet.sleeping .pet-eyes[data-v-235d5ef5],.squirrel-pet.sleeping .pet-inner[data-v-235d5ef5],.squirrel-pet.sleeping .pet-tail[data-v-235d5ef5]{animation:none}.pet-zzz[data-v-235d5ef5]{position:absolute;top:-16px;right:-14px;z-index:3;display:inline-flex;gap:3px;font-size:12px;font-weight:700;color:var(--muted);line-height:1;pointer-events:none;opacity:0;transition:opacity .3s ease}.squirrel-pet.sleeping .pet-zzz[data-v-235d5ef5]{opacity:1}.pet-zzz span[data-v-235d5ef5]{display:inline-block;animation:pet-zzz-float-235d5ef5 2.4s ease-in-out infinite}.pet-zzz span[data-v-235d5ef5]:nth-child(2){animation-delay:.4s}.pet-zzz span[data-v-235d5ef5]:nth-child(3){animation-delay:.8s}@keyframes pet-zzz-float-235d5ef5{0%{transform:translateY(0) scale(.6);opacity:0}30%{opacity:1}to{transform:translateY(-14px) scale(1.15);opacity:0}}@media(prefers-reduced-motion:reduce){.squirrel-pet.sleeping .pet-zzz span[data-v-235d5ef5]{animation:none;opacity:1}}.pet-tail[data-v-235d5ef5]{transform-origin:bottom left;animation:tail-wag-235d5ef5 2.6s ease-in-out infinite}.pet-eyes[data-v-235d5ef5],.pet-tail[data-v-235d5ef5]{transform-box:fill-box}.pet-eyes[data-v-235d5ef5]{transform-origin:center;animation:pet-blink-235d5ef5 4.4s ease-in-out infinite}.pet-hint[data-v-235d5ef5]{position:absolute;top:6px;right:calc(100% + 10px);width:-moz-max-content;width:max-content;max-width:170px;padding:3px 10px;border-radius:12px;font-size:11px;line-height:1.6;color:#fffaf2;background:linear-gradient(135deg,var(--leaf-red),var(--leaf-orange));box-shadow:0 4px 10px #8f2f1859;opacity:0;transform:translate(8px) scale(.9);transform-origin:100% 70%;pointer-events:none;transition:opacity .28s ease,transform .28s cubic-bezier(.34,1.56,.64,1)}.pet-hint[data-v-235d5ef5]:after{content:"";position:absolute;top:10px;left:100%;border:5px solid transparent;border-left:7px solid #e0652f}.pet-hint.show[data-v-235d5ef5]{opacity:1;transform:translate(0) scale(1)}.pet-hint-text[data-v-235d5ef5]{display:inline-block}.squirrel-pet.hint-on-right .pet-hint[data-v-235d5ef5]{right:auto;left:calc(100% + 10px);transform-origin:0 70%;transform:translate(-8px) scale(.9)}.squirrel-pet.hint-on-right .pet-hint.show[data-v-235d5ef5]{transform:translate(0) scale(1)}.squirrel-pet.hint-on-right .pet-hint[data-v-235d5ef5]:after{left:auto;right:100%;border:5px solid transparent;border-right:7px solid #e0652f;border-left:none}.pet-hint.show .pet-hint-text[data-v-235d5ef5]{animation:tip-talk-235d5ef5 .8s ease-in-out infinite}@keyframes tip-talk-235d5ef5{0%,to{transform:translateY(0) scale(1)}50%{transform:translateY(-1px) scale(1.04)}}@media(prefers-reduced-motion:reduce){.pet-hint.show .pet-hint-text[data-v-235d5ef5],.squirrel-pet.crawling .pet-foot-l[data-v-235d5ef5],.squirrel-pet.crawling .pet-foot-r[data-v-235d5ef5],.squirrel-pet.crawling .pet-wobble[data-v-235d5ef5],.squirrel-pet.waving .pet-arm[data-v-235d5ef5],.squirrel-pet:hover .pet-ai-badge[data-v-235d5ef5]{animation:none}}@keyframes pet-bob-235d5ef5{0%,to{transform:translateY(0)}50%{transform:translateY(-5px)}}@keyframes tail-wag-235d5ef5{0%,to{transform:rotate(0)}50%{transform:rotate(5deg)}}@keyframes pet-blink-235d5ef5{0%,93%,to{transform:scaleY(1)}96%{transform:scaleY(.12)}}</style><style>.security-check[data-v-2bef83c6]{margin-bottom:20px}.security-check h3[data-v-2bef83c6]{margin:0 0 12px}.check-item[data-v-2bef83c6]{display:flex;align-items:flex-start;gap:12px;padding:16px;border-radius:8px;margin-bottom:8px}.check-item.passed[data-v-2bef83c6]{background:#e8f5e9}.check-item.failed[data-v-2bef83c6]{background:#ffebee}.icon[data-v-2bef83c6]{font-size:24px}.check-info strong[data-v-2bef83c6]{display:block;margin-bottom:4px}.check-info p[data-v-2bef83c6]{margin:0;color:#666;font-size:13px}.code-block[data-v-2bef83c6]{background:#f9f9f9;padding:20px;border-radius:12px;margin-bottom:20px}.code-block pre[data-v-2bef83c6]{background:#1e1e1e;color:#d4d4d4;padding:16px;border-radius:8px;overflow-x:auto;font-size:13px}.tips[data-v-2bef83c6]{background:#fff3e0;padding:20px;border-radius:12px}</style><link rel="stylesheet" href="/_nuxt/entry.CGN0g2Ra.css" crossorigin><link rel="preload" as="fetch" crossorigin="anonymous" href="/electron/e-12/security/_payload.json?e714b28c-1387-4a7d-a2e1-4256272ad9f2"><script type="module" src="/_nuxt/ClZcEZ7f.js" crossorigin></script><meta name="author" content="gzx-miller"><meta name="robots" content="index, follow"><meta property="og:site_name" content="小松鼠举栗子"><meta property="og:locale" content="zh_CN"><meta property="og:url" content="https://gzx-miller.github.io/"><meta property="og:image:width" content="2560"><meta property="og:image:height" content="1440"><meta name="twitter:title" content="小松鼠举栗子 - 通过独立真实内容学习软件技术"><meta name="twitter:description" content="中文技术知识内容库：22 大分类 500+ 真实内容，每个栗子只讲一个知识点。"><meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8b369"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1210"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"小松鼠举栗子","url":"https://gzx-miller.github.io/","description":"中文技术知识内容库：通过独立真实小内容学习 Vue3、TypeScript、React、Node.js、CSS、WebGL、C++、uni-app 等。","inLanguage":"zh-CN"}</script><link rel="canonical" href="https://gzx-miller.github.io/electron/e-12/security"><meta name="og:image:alt" content="建立 Electron 应用的安全基线：关闭 nodeIntegration、开启 contextIsolation、配置 CSP 并审计依赖，收紧渲染进程能力。"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://gzx-miller.github.io/"},{"@type":"ListItem","position":2,"name":"Electron","item":"https://gzx-miller.github.io/electron"},{"@type":"ListItem","position":3,"name":"安全实践","item":"https://gzx-miller.github.io/electron/e-12/security"}]}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"LearningResource","name":"安全最佳实践","description":"建立 Electron 应用的安全基线：关闭 nodeIntegration、开启 contextIsolation、配置 CSP 并审计依赖，收紧渲染进程能力。","url":"https://gzx-miller.github.io/electron/e-12/security","inLanguage":"zh-CN","learningResourceType":"CourseContent","about":{"@type":"WebSite","name":"Electron","url":"https://gzx-miller.github.io/electron"},"isPartOf":{"@type":"WebSite","name":"小松鼠举栗子","url":"https://gzx-miller.github.io/"}}</script><meta name="description" content="建立 Electron 应用的安全基线：关闭 nodeIntegration、开启 contextIsolation、配置 CSP 并审计依赖，收紧渲染进程能力。"><meta property="og:title" content="安全最佳实践 - 小松鼠举栗子"><meta property="og:description" content="建立 Electron 应用的安全基线：关闭 nodeIntegration、开启 contextIsolation、配置 CSP 并审计依赖，收紧渲染进程能力。"><meta property="og:type" content="article"><meta property="og:image" content="https://gzx-miller.github.io/og-image.jpg"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://gzx-miller.github.io/og-image.jpg"></head><body><div id="__nuxt"><!--[--><!--[--><a class="skip-link" href="#main-content">跳到正文</a><div class="app-frame"><header class="top-nav"><div class="top-bar"><a href="/" class="top-brand" aria-label="回到首页"><img class="brand-avatar" src="/_nuxt/squirrel-chestnut-avatar.BUhAFRCm.webp" alt="小松鼠举着栗子" width="48" height="48" fetchpriority="high"><div class="brand-text"><strong>小松鼠举栗子 </strong><span class="brand-tagline">中文技术知识内容库</span></div></a><div class="site-intro-group"><p class="site-intro">记录与分享可复用的软件技术内容</p><p class="site-stats"><span class="stat-pill">免费开源</span><span class="stat-pill">持续更新</span></p></div><div class="top-actions"><a class="contact-mail" href="mailto:gzx_miller@foxmail.com" title="给我发邮件">gzx_miller@foxmail.com</a><a class="github-link" href="https://github.com/gzx-miller/gzx-miller.github.io" target="_blank" rel="noopener" aria-label="查看开源代码" title="查看开源代码"><svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"></path></svg></a><button class="theme-toggle" aria-label="切换深色主题" title="切换深色主题"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></button></div></div><div class="tabs-row"><nav class="knowledge-tabs" aria-label="知识类别导航"><!--[--><div class="knowledge-tab-wrapper"><a href="/javascript" class="knowledge-tab" aria-disabled="false"><span>JavaScript</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/typescript" class="knowledge-tab" aria-disabled="false"><span>TypeScript</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/vue" class="knowledge-tab" aria-disabled="false"><span>Vue3</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/element-plus" class="knowledge-tab" aria-disabled="false"><span>Element Plus</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/vue-flow" class="knowledge-tab" aria-disabled="false"><span>Vue Flow</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/nestjs" class="knowledge-tab" aria-disabled="false"><span>Nest.js</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/nuxt" class="knowledge-tab" aria-disabled="false"><span>Nuxt</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/nodejs" class="knowledge-tab" aria-disabled="false"><span>Node.js</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/css" class="knowledge-tab" aria-disabled="false"><span>CSS</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/tailwind-css" class="knowledge-tab" aria-disabled="false"><span>Tailwind CSS</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/sass" class="knowledge-tab" aria-disabled="false"><span>Sass</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/vite" class="knowledge-tab" aria-disabled="false"><span>Vite</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/react" class="knowledge-tab" aria-disabled="false"><span>React</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/nextjs" class="knowledge-tab" aria-disabled="false"><span>Next.js</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/langchain" class="knowledge-tab" aria-disabled="false"><span>LangChain</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/llm-principles" class="knowledge-tab" aria-disabled="false"><span>LLM 原理</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/cpp" class="knowledge-tab" aria-disabled="false"><span>C++</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a aria-current="page" href="/electron" class="knowledge-tab active" aria-disabled="false"><span>Electron</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/ffmpeg" class="knowledge-tab" aria-disabled="false"><span>FFmpeg</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/webgl" class="knowledge-tab" aria-disabled="false"><span>WebGL</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/webassembly" class="knowledge-tab" aria-disabled="false"><span>WebAssembly</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/uni-app" class="knowledge-tab" aria-disabled="false"><span>uni-app</span><!----></a><!----></div><!--]--></nav><!----></div><div class="nprogress-rail" aria-hidden="true"></div></header><div class="sidebar-expanded app-shell"><aside class="sidebar-temporarily-expanded sidebar" aria-label="Electron 知识点导航"><div class="sidebar-heading"><button class="expanded sidebar-toggle" aria-label="收起侧边栏"><span class="toggle-icon" aria-hidden="true"></span><strong class="sidebar-toggle-label">Electron</strong></button><label class="lesson-search"><span class="sr-only">搜索当前分类课程</span><input value="" type="search" placeholder="搜索课程…" autocomplete="off"></label></div><nav class="lesson-nav"><!--[--><section class="lesson-group"><h2 class="lesson-group-title">基础架构</h2><!--[--><a href="/electron/e-1/architecture" class="lesson-link" aria-label="🌰1 架构模型" title="架构模型"><span>🌰1</span><strong>架构模型</strong></a><a href="/electron/e-2/main-window" class="lesson-link" aria-label="🌰2 窗口管理" title="窗口管理"><span>🌰2</span><strong>窗口管理</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">进程通信</h2><!--[--><a href="/electron/e-3/ipc" class="lesson-link" aria-label="🌰3 IPC 通信" title="IPC 通信"><span>🌰3</span><strong>IPC 通信</strong></a><a href="/electron/e-4/preload" class="lesson-link" aria-label="🌰4 预加载脚本" title="预加载脚本"><span>🌰4</span><strong>预加载脚本</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">应用管理</h2><!--[--><a href="/electron/e-5/app-lifecycle" class="lesson-link" aria-label="🌰5 应用生命周期" title="应用生命周期"><span>🌰5</span><strong>应用生命周期</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">原生能力</h2><!--[--><a href="/electron/e-6/native-menu" class="lesson-link" aria-label="🌰6 原生菜单" title="原生菜单"><span>🌰6</span><strong>原生菜单</strong></a><a href="/electron/e-7/tray-notification" class="lesson-link" aria-label="🌰7 系统托盘" title="系统托盘"><span>🌰7</span><strong>系统托盘</strong></a><a href="/electron/e-8/dialog" class="lesson-link" aria-label="🌰8 文件对话框" title="文件对话框"><span>🌰8</span><strong>文件对话框</strong></a><a href="/electron/e-9/shortcuts" class="lesson-link" aria-label="🌰9 快捷键" title="快捷键"><span>🌰9</span><strong>快捷键</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">分发部署</h2><!--[--><a href="/electron/e-10/auto-update" class="lesson-link" aria-label="🌰10 自动更新" title="自动更新"><span>🌰10</span><strong>自动更新</strong></a><a href="/electron/e-11/packaging" class="lesson-link" aria-label="🌰11 打包分发" title="打包分发"><span>🌰11</span><strong>打包分发</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">安全与性能</h2><!--[--><a aria-current="page" href="/electron/e-12/security" class="router-link-active router-link-exact-active lesson-link active" aria-label="🌰12 安全实践" title="安全实践"><span>🌰12</span><strong>安全实践</strong></a><a href="/electron/e-13/performance" class="lesson-link" aria-label="🌰13 性能优化" title="性能优化"><span>🌰13</span><strong>性能优化</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">数据管理</h2><!--[--><a href="/electron/e-14/storage" class="lesson-link" aria-label="🌰14 数据存储" title="数据存储"><span>🌰14</span><strong>数据存储</strong></a><a href="/electron/e-15/multi-window" class="lesson-link" aria-label="🌰15 多窗口管理" title="多窗口管理"><span>🌰15</span><strong>多窗口管理</strong></a><!--]--></section><!--]--><!----></nav></aside><!--[--><main id="main-content" class="lesson-page" data-category="electron" tabindex="-1"><nav class="breadcrumb" aria-label="面包屑"><a href="/electron" class="">Electron</a><span aria-hidden="true">/</span><span aria-current="page">安全实践</span><small>12 / 15</small></nav><div class="lesson-progress" role="progressbar" aria-label="Electron 学习进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="80"><span style="width:80%;"></span></div><header class="lesson-header"><div class="lesson-copy"><p class="eyebrow">🌰12 · 安全与性能 <span class="reading-time">约 2 分钟读完</span></p><h1>安全最佳实践</h1><p>建立 Electron 应用的安全基线：关闭 nodeIntegration、开启 contextIsolation、配置 CSP 并审计依赖，收紧渲染进程能力。</p></div></header><section class="lesson-section lesson-demo"><article class="lesson-article"><!--[--><div class="lesson-question"><strong>开场问题：</strong>你做了个笔记应用，正文是富文本编辑器。测试时同事粘进来一段从网页复制的 HTML，里面藏了一个看不见的 <code>&lt;img src=x onerror=&quot;require(&#39;child_process&#39;).exec(&#39;calc&#39;)&quot;&gt;</code>。保存、刷新——你本机的计算器弹了出来。一个网页里的 XSS，凭什么能在你的应用里执行系统命令？ </div><h2>脚本注入风险升级</h2><p> Electron 的渲染进程本质就是一个 Chromium 窗口，里面跑着你的页面和用户的输入。只要这里有 XSS，就等于有人在你的应用里执行任意脚本。真正决定后果的是另一件事：<strong>这段脚本手里有多少权限</strong>。如果渲染进程还带着 Node 能力，那它就能直接 <code>require(&#39;child_process&#39;)</code> 执行系统命令——XSS 升级成了 RCE（远程代码执行），而主进程是唯一还能信任的边界。 </p><p> 旧办法的毛病都出在「默认太宽松」：渲染进程默认能碰 Node，<code>require</code> 随手可用，一个注入点就直通系统；<code>preload</code> 脚本和页面共享同一个全局上下文，页面能篡改 preload 暴露出来的对象；没有 CSP，内联脚本、远程脚本想加载就加载；页面里的新窗口和跳转没人管，一点就可能把窗口带到任意站点上。 </p><p> 所以问题变成：怎样把渲染进程的能力收得只剩「渲染」，同时把注入与导航都挡在边界之外？ </p><h2>渲染进程能力关闭</h2><p> 最直接的一步：创建窗口时改 <code>webPreferences</code>——<code>nodeIntegration: false</code>、<code>contextIsolation: true</code>、<code>webSecurity: true</code>，需要的能力只通过 <code>preload</code> 加 <code>contextBridge</code> 显式暴露。 </p><p> 这个方案做对了一件事：<strong>它把「渲染进程能不能碰 Node」从默认开放改成了默认关闭</strong>，你要什么再明确开口。渲染进程从此只是一个网页，页面里跑再怪的脚本也拿不到 <code>require</code>。 </p><h2>隔离失效与防护漏洞</h2><ul><li>只关 <code>nodeIntegration</code> 不够：<code>contextIsolation</code> 若为 <code>false</code>，页面和 preload 在同一上下文里，页面可以污染 <code>Object.prototype</code> 之类的原型，让你写在校验里的判断悄悄失效。</li><li>没有 CSP：隔离做得再好，页面里照样能内联执行 <code>&lt;script&gt;</code>、从远程拉脚本，XSS 本身还在。</li><li>不拦新窗口与导航：页面里一个 <code>&lt;a target=&quot;_blank&quot;&gt;</code> 或一次 <code>location</code> 跳转，就能把窗口带到任意站点，钓鱼页可以做得和你的应用一模一样。</li><li>为本地调试把 <code>webSecurity</code> 关掉：跨域与 <code>file://</code> 读取全部放开，等于把刚锁上的门又开了。</li><li><code>shell.openExternal</code> 直接吃用户给的 URL：一旦有人传 <code>file://</code> 或自定义协议进来，就可能触发本机命令执行。</li><li>依赖不体检：某个包爆出已知漏洞你不会知道，攻击面在悄悄扩大。</li></ul><h2>最小权限与内容安全</h2><p> 第一步先把「最小权限」落进 <code>webPreferences</code>：<code>nodeIntegration: false</code>、<code>contextIsolation: true</code>、<code>webSecurity: true</code>，<code>sandbox</code> 保持默认开启。这是地基，后面所有措施都建立在「渲染进程没有额外权限」之上。 </p><p> 第二步把能力搬进 preload 里显式暴露。有了上下文隔离，preload 与页面跑在不同的 V8 世界里，<code>contextBridge.exposeInMainWorld(&#39;api&#39;, { ... })</code> 是唯一的桥；桥这边只暴露一个个具体方法，<strong>不要把 ipcRenderer 整个对象挂上去</strong>——那等于把钥匙串整串交出去。 </p><p> 第三步补 CSP，它是「就算脚本被注入也让它施展不开」的兜底。在 <code>&lt;head&gt;</code> 最顶部写一条 meta，把 <code>default-src &#39;self&#39;</code>、<code>script-src &#39;self&#39;</code> 收紧，<strong>禁止 <code>unsafe-inline</code> 与 <code>unsafe-eval</code></strong>（样式上留一个可控的 <code>&#39;unsafe-inline&#39;</code> 一般可以接受）。这样内联脚本和 <code>eval</code> 直接失效，注入的执行链被掐断。 </p><p> 第四步把「导航」也拦起来。用 <code>webContents.setWindowOpenHandler(() =&gt; ({ action: &#39;deny&#39; }))</code> 拒绝页面自作主张开新窗口；确实要开外链，就显式改走 <code>shell.openExternal</code>，<strong>并且对协议和域名做白名单校验</strong>，只放行 <code>https:</code>。再用 <code>will-navigate</code> 拦下窗口自身的跳转，凡是跳去非本应用源的地址一律阻止——这一步防的是「把用户带到伪造页面上」。 </p><p> 第五步补运维习惯：只加载可信内容、不加载远程脚本，定期跑 <code>npm audit</code> / <code>npm outdated</code> 做依赖体检。 </p><p> 最后一条最容易被漏掉：<strong>渲染进程要当成「随时可能被攻破」来对待</strong>，所以主进程是信任边界——所有经 IPC 传进主进程的参数都要校验，不能因为「这是我自己页面发的」就照单全收。 </p><h2>安全清单逐项核对</h2><figure class="lesson-figure"><figcaption>逐条对照安全检查清单（绿勾=已达标、红叉=待修），再读下方代码示例中 BrowserWindow 与 CSP 的正确写法，确认 <code>nodeIntegration</code> / <code>contextIsolation</code> / <code>webSecurity</code> 与 CSP 各自该设成什么。</figcaption><div class="demo-container" data-v-2bef83c6><h2 data-v-2bef83c6>🌰 安全最佳实践</h2><p class="desc" data-v-2bef83c6>Electron 安全核心原则：最小权限、上下文隔离、内容安全策略。</p><div class="security-check" data-v-2bef83c6><h3 data-v-2bef83c6>安全检查清单</h3><!--[--><div class="passed check-item" data-v-2bef83c6><span class="icon" data-v-2bef83c6>✅</span><div class="check-info" data-v-2bef83c6><strong data-v-2bef83c6>nodeIntegration: false</strong><p data-v-2bef83c6>渲染进程不能直接使用 Node.js API</p></div></div><div class="passed check-item" data-v-2bef83c6><span class="icon" data-v-2bef83c6>✅</span><div class="check-info" data-v-2bef83c6><strong data-v-2bef83c6>contextIsolation: true</strong><p data-v-2bef83c6>预加载脚本与渲染进程上下文隔离</p></div></div><div class="passed check-item" data-v-2bef83c6><span class="icon" data-v-2bef83c6>✅</span><div class="check-info" data-v-2bef83c6><strong data-v-2bef83c6>webSecurity: true</strong><p data-v-2bef83c6>不允许跨域请求和禁用安全特性</p></div></div><div class="failed check-item" data-v-2bef83c6><span class="icon" data-v-2bef83c6>❌</span><div class="check-info" data-v-2bef83c6><strong data-v-2bef83c6>CSP 已配置</strong><p data-v-2bef83c6>Content-Security-Policy 限制资源加载</p></div></div><div class="failed check-item" data-v-2bef83c6><span class="icon" data-v-2bef83c6>❌</span><div class="check-info" data-v-2bef83c6><strong data-v-2bef83c6>依赖无已知漏洞</strong><p data-v-2bef83c6>定期运行 npm audit</p></div></div><div class="passed check-item" data-v-2bef83c6><span class="icon" data-v-2bef83c6>✅</span><div class="check-info" data-v-2bef83c6><strong data-v-2bef83c6>不允许加载远程代码</strong><p data-v-2bef83c6>避免从远程 URL 加载脚本</p></div></div><!--]--></div><div class="code-block" data-v-2bef83c6><h3 data-v-2bef83c6>安全配置示例</h3><pre data-v-2bef83c6>// 主进程 - 正确的 BrowserWindow 配置
+new BrowserWindow({
+  webPreferences: {
+    nodeIntegration: false,      // ✅ 必须关闭
+    contextIsolation: true,       // ✅ 必须开启
+    webSecurity: true,            // ✅ 必须开启
+    preload: path.join(__dirname, &#39;preload.js&#39;)
+  }
+})
+
+// HTML - CSP 配置（必须放在 &lt;head&gt; 最顶部）
+&lt;meta http-equiv=&quot;Content-Security-Policy&quot;
+      content=&quot;default-src &#39;self&#39;;
+               script-src &#39;self&#39;;
+               style-src &#39;self&#39; &#39;unsafe-inline&#39;;
+               img-src &#39;self&#39; data:;&quot;&gt;</pre></div><div class="tips" data-v-2bef83c6><h3 data-v-2bef83c6>安全原则</h3><ul data-v-2bef83c6><li data-v-2bef83c6><strong data-v-2bef83c6>最小权限</strong>: 只给渲染进程需要的 API</li><li data-v-2bef83c6><strong data-v-2bef83c6>上下文隔离</strong>: 防止渲染进程访问 Node.js</li><li data-v-2bef83c6><strong data-v-2bef83c6>CSP</strong>: 防止 XSS 攻击升级为 RCE</li><li data-v-2bef83c6><strong data-v-2bef83c6>依赖审计</strong>: 定期检查依赖漏洞</li><li data-v-2bef83c6><strong data-v-2bef83c6>代码签名</strong>: 确保应用完整性</li></ul></div></div></figure><h2>信任边界与权限收敛</h2><p> 安全加固的核心，是把渲染进程的权限压到最小：默认关掉 Node、开启上下文隔离、用 preload 白名单暴露能力，再用 CSP、导航拦截与依赖审计把注入的后果封死在渲染进程里。记住主进程是信任边界，渲染进程送来的一切都要当成不可信。 </p><div class="lesson-term"><span class="term-name">「上下文隔离（contextIsolation）」</span>把 preload 脚本与页面 JS 跑在<strong>两个独立的 V8 上下文</strong>里，两者不能直接改对方的全局对象，唯一的通道是 <code>contextBridge</code>。它自 Electron 12 起默认开启；一旦关成 <code>false</code>，页面就和 preload 共享上下文，可以污染原型链绕过你的校验。开启后 preload 里不能再直接往 <code>window</code> 挂属性，必须走 <code>contextBridge.exposeInMainWorld</code>。 </div><!--]--></article></section><section class="lesson-section"><h2>关键代码</h2><div class="code-block-wrapper"><div class="code-block-toolbar"><span class="code-block-lang">JavaScript</span><button class="code-copy-btn" type="button" aria-label="复制代码"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>复制</span></button></div><pre class="code-block"><code><span class="hljs-comment">// ========== 1. 安全配置基线 main.js ==========</span>
+<span class="hljs-keyword">const</span> { app, <span class="hljs-title class_">BrowserWindow</span>, session } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;electron&#x27;</span>)
+<span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;path&#x27;</span>)
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">createSecureWindow</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> win = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BrowserWindow</span>({
+    <span class="hljs-attr">width</span>: <span class="hljs-number">800</span>,
+    <span class="hljs-attr">height</span>: <span class="hljs-number">600</span>,
+    <span class="hljs-attr">webPreferences</span>: {
+      <span class="hljs-comment">// 开启上下文隔离（默认 true，显式声明更安全）</span>
+      <span class="hljs-attr">contextIsolation</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-comment">// 关闭 Node.js 集成（默认 false，必须关闭）</span>
+      <span class="hljs-attr">nodeIntegration</span>: <span class="hljs-literal">false</span>,
+      <span class="hljs-comment">// 启用沙箱（进一步限制渲染进程）</span>
+      <span class="hljs-attr">sandbox</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-comment">// 指定预加载脚本</span>
+      <span class="hljs-attr">preload</span>: path.<span class="hljs-title function_">join</span>(__dirname, <span class="hljs-string">&#x27;preload.js&#x27;</span>),
+      <span class="hljs-comment">// 开启 Web 安全（默认 true）</span>
+      <span class="hljs-attr">webSecurity</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-comment">// 禁止使用 remote 模块</span>
+      <span class="hljs-attr">enableRemoteModule</span>: <span class="hljs-literal">false</span>,
+      <span class="hljs-comment">// 禁用 &lt;webview&gt; 标签（如不需要）</span>
+      <span class="hljs-attr">webviewTag</span>: <span class="hljs-literal">false</span>,
+      <span class="hljs-comment">// 限制新窗口</span>
+      <span class="hljs-attr">nativeWindowOpen</span>: <span class="hljs-literal">true</span>
+    }
+  })
+
+  <span class="hljs-comment">// 加载本地文件</span>
+  win.<span class="hljs-title function_">loadFile</span>(<span class="hljs-string">&#x27;index.html&#x27;</span>)
+
+  <span class="hljs-keyword">return</span> win
+}
+
+<span class="hljs-comment">// ========== 2. 内容安全策略 (CSP) ==========</span>
+<span class="hljs-comment">// 方式一: 在 HTML 的 &lt;meta&gt; 标签中设置</span>
+<span class="hljs-comment">// index.html:</span>
+<span class="hljs-comment">// &lt;head&gt;</span>
+<span class="hljs-comment">//   &lt;meta</span>
+<span class="hljs-comment">//     http-equiv=&quot;Content-Security-Policy&quot;</span>
+<span class="hljs-comment">//     content=&quot;</span>
+<span class="hljs-comment">//       default-src &#x27;self&#x27;;</span>
+<span class="hljs-comment">//       script-src &#x27;self&#x27;;</span>
+<span class="hljs-comment">//       style-src &#x27;self&#x27; &#x27;unsafe-inline&#x27;;</span>
+<span class="hljs-comment">//       img-src &#x27;self&#x27; data:;</span>
+<span class="hljs-comment">//       connect-src &#x27;self&#x27; https://api.example.com;</span>
+<span class="hljs-comment">//       font-src &#x27;self&#x27;;</span>
+<span class="hljs-comment">//       object-src &#x27;none&#x27;;</span>
+<span class="hljs-comment">//       base-uri &#x27;self&#x27;;</span>
+<span class="hljs-comment">//       form-action &#x27;self&#x27;;</span>
+<span class="hljs-comment">//       frame-ancestors &#x27;none&#x27;;</span>
+<span class="hljs-comment">//     &quot;</span>
+<span class="hljs-comment">//   &gt;</span>
+<span class="hljs-comment">// &lt;/head&gt;</span>
+
+<span class="hljs-comment">// 方式二: 在主进程中通过 session 设置</span>
+app.<span class="hljs-title function_">whenReady</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> {
+  session.<span class="hljs-property">defaultSession</span>.<span class="hljs-property">webRequest</span>.<span class="hljs-title function_">onHeadersReceived</span>(<span class="hljs-function">(<span class="hljs-params">details, callback</span>) =&gt;</span> {
+    <span class="hljs-title function_">callback</span>({
+      <span class="hljs-attr">responseHeaders</span>: {
+        ...details.<span class="hljs-property">responseHeaders</span>,
+        <span class="hljs-string">&#x27;Content-Security-Policy&#x27;</span>: [
+          <span class="hljs-string">&quot;default-src &#x27;self&#x27;; script-src &#x27;self&#x27;; style-src &#x27;self&#x27; &#x27;unsafe-inline&#x27;; img-src &#x27;self&#x27; data:&quot;</span>
+        ]
+      }
+    })
+  })
+})
+
+<span class="hljs-comment">// 常用 CSP 指令:</span>
+<span class="hljs-comment">// default-src    - 默认策略</span>
+<span class="hljs-comment">// script-src     - 脚本来源</span>
+<span class="hljs-comment">// style-src      - 样式来源</span>
+<span class="hljs-comment">// img-src        - 图片来源</span>
+<span class="hljs-comment">// connect-src    - 网络请求 (XHR, WebSocket, fetch)</span>
+<span class="hljs-comment">// font-src       - 字体来源</span>
+<span class="hljs-comment">// object-src     - 插件来源 (通常设为 &#x27;none&#x27;)</span>
+<span class="hljs-comment">// media-src      - 音视频来源</span>
+<span class="hljs-comment">// frame-src      - iframe 来源</span>
+<span class="hljs-comment">// frame-ancestors - 可嵌入的父页面 (通常设为 &#x27;none&#x27;)</span>
+
+<span class="hljs-comment">// ========== 3. 预加载脚本安全实践 ==========</span>
+<span class="hljs-comment">// preload.js - 正确示例</span>
+<span class="hljs-keyword">const</span> { contextBridge, ipcRenderer } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;electron&#x27;</span>)
+
+<span class="hljs-comment">// 只暴露必要的 API，不要暴露整个 ipcRenderer</span>
+contextBridge.<span class="hljs-title function_">exposeInMainWorld</span>(<span class="hljs-string">&#x27;electronAPI&#x27;</span>, {
+  <span class="hljs-comment">// 白名单通道，每个通道单独暴露</span>
+  <span class="hljs-attr">getUserSettings</span>: <span class="hljs-function">() =&gt;</span> ipcRenderer.<span class="hljs-title function_">invoke</span>(<span class="hljs-string">&#x27;settings:get&#x27;</span>),
+  <span class="hljs-attr">saveUserSettings</span>: <span class="hljs-function">(<span class="hljs-params">settings</span>) =&gt;</span> ipcRenderer.<span class="hljs-title function_">invoke</span>(<span class="hljs-string">&#x27;settings:save&#x27;</span>, settings),
+
+  <span class="hljs-comment">// 事件监听也要有对应的移除方法</span>
+  <span class="hljs-attr">onNotification</span>: <span class="hljs-function">(<span class="hljs-params">callback</span>) =&gt;</span> {
+    ipcRenderer.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;notification&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">_event, data</span>) =&gt;</span> <span class="hljs-title function_">callback</span>(data))
+  },
+  <span class="hljs-attr">removeNotificationListener</span>: <span class="hljs-function">() =&gt;</span> {
+    ipcRenderer.<span class="hljs-title function_">removeAllListeners</span>(<span class="hljs-string">&#x27;notification&#x27;</span>)
+  }
+})
+
+<span class="hljs-comment">// ❌ 错误做法: 直接暴露 ipcRenderer</span>
+<span class="hljs-comment">// contextBridge.exposeInMainWorld(&#x27;ipcRenderer&#x27;, ipcRenderer)</span>
+
+<span class="hljs-comment">// ❌ 错误做法: 暴露任意通道的发送方法</span>
+<span class="hljs-comment">// send: (channel, data) =&gt; ipcRenderer.send(channel, data)</span>
+
+<span class="hljs-comment">// ========== 4. IPC 安全验证 ==========</span>
+<span class="hljs-comment">// main.js - IPC 处理时进行参数验证和权限检查</span>
+
+<span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs/promises&#x27;</span>)
+
+<span class="hljs-comment">// 白名单通道</span>
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">ALLOWED_CHANNELS</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>([
+  <span class="hljs-string">&#x27;settings:get&#x27;</span>,
+  <span class="hljs-string">&#x27;settings:save&#x27;</span>,
+  <span class="hljs-string">&#x27;file:read&#x27;</span>,
+  <span class="hljs-string">&#x27;file:write&#x27;</span>
+])
+
+<span class="hljs-comment">// 参数验证</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">validateSettings</span>(<span class="hljs-params">settings</span>) {
+  <span class="hljs-keyword">if</span> (!settings || <span class="hljs-keyword">typeof</span> settings !== <span class="hljs-string">&#x27;object&#x27;</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> settings.<span class="hljs-property">theme</span> !== <span class="hljs-string">&#x27;string&#x27;</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> settings.<span class="hljs-property">autoSave</span> !== <span class="hljs-string">&#x27;boolean&#x27;</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>
+}
+
+<span class="hljs-comment">// 路径安全检查（防止路径穿越）</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">safeUserDataPath</span>(<span class="hljs-params">fileName</span>) {
+  <span class="hljs-keyword">const</span> userData = app.<span class="hljs-title function_">getPath</span>(<span class="hljs-string">&#x27;userData&#x27;</span>)
+  <span class="hljs-keyword">const</span> resolved = path.<span class="hljs-title function_">resolve</span>(userData, fileName)
+  <span class="hljs-keyword">if</span> (!resolved.<span class="hljs-title function_">startsWith</span>(userData)) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;路径越界: 不允许访问用户数据目录外的文件&#x27;</span>)
+  }
+  <span class="hljs-keyword">return</span> resolved
+}
+
+<span class="hljs-comment">// IPC 处理</span>
+ipcMain.<span class="hljs-title function_">handle</span>(<span class="hljs-string">&#x27;settings:save&#x27;</span>, <span class="hljs-title function_">async</span> (event, settings) =&gt; {
+  <span class="hljs-comment">// 验证输入</span>
+  <span class="hljs-keyword">if</span> (!<span class="hljs-title function_">validateSettings</span>(settings)) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;无效的设置数据&#x27;</span>)
+  }
+
+  <span class="hljs-comment">// 安全写入</span>
+  <span class="hljs-keyword">const</span> filePath = <span class="hljs-title function_">safeUserDataPath</span>(<span class="hljs-string">&#x27;settings.json&#x27;</span>)
+  <span class="hljs-keyword">await</span> fs.<span class="hljs-title function_">writeFile</span>(filePath, <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(settings, <span class="hljs-literal">null</span>, <span class="hljs-number">2</span>), <span class="hljs-string">&#x27;utf-8&#x27;</span>)
+  <span class="hljs-keyword">return</span> { <span class="hljs-attr">success</span>: <span class="hljs-literal">true</span> }
+})
+
+<span class="hljs-comment">// ========== 5. 权限请求处理 ==========</span>
+<span class="hljs-comment">// 控制渲染进程的权限请求</span>
+app.<span class="hljs-title function_">whenReady</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> {
+  session.<span class="hljs-property">defaultSession</span>.<span class="hljs-title function_">setPermissionRequestHandler</span>(
+    <span class="hljs-function">(<span class="hljs-params">webContents, permission, callback</span>) =&gt;</span> {
+      <span class="hljs-comment">// permission 可能值:</span>
+      <span class="hljs-comment">// &#x27;media&#x27; (摄像头/麦克风), &#x27;geolocation&#x27;, &#x27;notifications&#x27;,</span>
+      <span class="hljs-comment">// &#x27;midiSysex&#x27;, &#x27;pointerLock&#x27;, &#x27;fullscreen&#x27;, &#x27;openExternal&#x27;</span>
+
+      <span class="hljs-keyword">const</span> url = webContents.<span class="hljs-title function_">getURL</span>()
+
+      <span class="hljs-comment">// 只允许本地页面请求通知权限</span>
+      <span class="hljs-keyword">if</span> (permission === <span class="hljs-string">&#x27;notifications&#x27;</span> &amp;&amp; url.<span class="hljs-title function_">startsWith</span>(<span class="hljs-string">&#x27;file://&#x27;</span>)) {
+        <span class="hljs-title function_">callback</span>(<span class="hljs-literal">true</span>) <span class="hljs-comment">// 允许</span>
+        <span class="hljs-keyword">return</span>
+      }
+
+      <span class="hljs-comment">// 默认拒绝</span>
+      <span class="hljs-title function_">callback</span>(<span class="hljs-literal">false</span>)
+    }
+  )
+})
+
+<span class="hljs-comment">// ========== 6. 新窗口创建拦截 ==========</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">createWindow</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> win = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BrowserWindow</span>({...})
+
+  <span class="hljs-comment">// 拦截新窗口创建</span>
+  win.<span class="hljs-property">webContents</span>.<span class="hljs-title function_">setWindowOpenHandler</span>(<span class="hljs-function">(<span class="hljs-params">{ url }</span>) =&gt;</span> {
+    <span class="hljs-comment">// 只允许打开特定域名</span>
+    <span class="hljs-keyword">try</span> {
+      <span class="hljs-keyword">const</span> parsedUrl = <span class="hljs-keyword">new</span> <span class="hljs-title function_">URL</span>(url)
+      <span class="hljs-keyword">if</span> (parsedUrl.<span class="hljs-property">origin</span> === <span class="hljs-string">&#x27;https://trusted.com&#x27;</span>) {
+        <span class="hljs-keyword">return</span> { <span class="hljs-attr">action</span>: <span class="hljs-string">&#x27;allow&#x27;</span> }
+      }
+    } <span class="hljs-keyword">catch</span> {}
+
+    <span class="hljs-comment">// 在默认浏览器中打开外部链接</span>
+    shell.<span class="hljs-title function_">openExternal</span>(url)
+    <span class="hljs-keyword">return</span> { <span class="hljs-attr">action</span>: <span class="hljs-string">&#x27;deny&#x27;</span> }
+  })
+
+  <span class="hljs-comment">// 拦截导航</span>
+  win.<span class="hljs-property">webContents</span>.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;will-navigate&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event, url</span>) =&gt;</span> {
+    <span class="hljs-comment">// 阻止跳转到不可信的域名</span>
+    <span class="hljs-keyword">if</span> (!url.<span class="hljs-title function_">startsWith</span>(<span class="hljs-string">&#x27;file://&#x27;</span>) &amp;&amp; !url.<span class="hljs-title function_">startsWith</span>(<span class="hljs-string">&#x27;https://trusted.com&#x27;</span>)) {
+      event.<span class="hljs-title function_">preventDefault</span>()
+    }
+  })
+}
+
+<span class="hljs-comment">// ========== 7. 加载远程内容的安全 ==========</span>
+<span class="hljs-comment">// 如果必须加载远程网页，使用 &lt;webview&gt; 或 BrowserView</span>
+<span class="hljs-comment">// 但要严格限制权限</span>
+
+<span class="hljs-comment">// webview 示例 (不推荐，尽量避免):</span>
+<span class="hljs-comment">// &lt;webview</span>
+<span class="hljs-comment">//   src=&quot;https://example.com&quot;</span>
+<span class="hljs-comment">//   nodeintegration=&quot;false&quot;</span>
+<span class="hljs-comment">//   contextisolation=&quot;true&quot;</span>
+<span class="hljs-comment">//   sandbox=&quot;true&quot;</span>
+<span class="hljs-comment">//   preload=&quot;webview-preload.js&quot;</span>
+<span class="hljs-comment">// &gt;&lt;/webview&gt;</span>
+
+<span class="hljs-comment">// ========== 8. 依赖安全审计 ==========</span>
+<span class="hljs-comment">// 定期运行:</span>
+<span class="hljs-comment">//   npm audit</span>
+<span class="hljs-comment">//   npm audit fix</span>
+<span class="hljs-comment">//   npm outdated</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// 锁定依赖版本:</span>
+<span class="hljs-comment">//   package-lock.json 或 pnpm-lock.yaml</span>
+<span class="hljs-comment">//   CI 中使用 npm ci 或 pnpm install --frozen-lockfile</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// 工具:</span>
+<span class="hljs-comment">//   snyk, dependabot, renovate</span>
+
+<span class="hljs-comment">// ========== 9. 代码混淆与反调试（可选） ==========</span>
+<span class="hljs-comment">// 注意: 这些不是真正的安全，只是增加逆向难度</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// 代码混淆:</span>
+<span class="hljs-comment">//   javascript-obfuscator, bytenode</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// 反调试:</span>
+<span class="hljs-comment">//   检测 DevTools 打开（但可以被绕过）</span>
+
+<span class="hljs-comment">// ========== 10. 安全检查清单 ==========</span>
+<span class="hljs-comment">// [ ] contextIsolation: true</span>
+<span class="hljs-comment">// [ ] nodeIntegration: false</span>
+<span class="hljs-comment">// [ ] 使用 contextBridge 暴露有限 API</span>
+<span class="hljs-comment">// [ ] 设置合理的 CSP</span>
+<span class="hljs-comment">// [ ] webSecurity: true (生产环境)</span>
+<span class="hljs-comment">// [ ] IPC 参数验证</span>
+<span class="hljs-comment">// [ ] 路径穿越防护</span>
+<span class="hljs-comment">// [ ] 权限请求处理</span>
+<span class="hljs-comment">// [ ] 依赖定期审计</span>
+<span class="hljs-comment">// [ ] 代码签名 (macOS/Windows)</span>
+<span class="hljs-comment">// [ ] 自动更新签名验证</span>
+<span class="hljs-comment">// [ ] 禁用不必要的功能 (webview, remote 等)</span>
+
+<span class="hljs-comment">// ========== 11. Electron 安全官方建议 ==========</span>
+<span class="hljs-comment">// 1. 只加载可信内容</span>
+<span class="hljs-comment">// 2. 禁用 Node.js 集成</span>
+<span class="hljs-comment">// 3. 启用上下文隔离</span>
+<span class="hljs-comment">// 4. 启用进程沙箱</span>
+<span class="hljs-comment">// 5. 设置内容安全策略</span>
+<span class="hljs-comment">// 6. 不要禁用 webSecurity</span>
+<span class="hljs-comment">// 7. 验证所有 IPC 消息</span>
+<span class="hljs-comment">// 8. 使用 secure 变量处理 cookie</span>
+<span class="hljs-comment">// 9. 限制新窗口和导航</span>
+<span class="hljs-comment">// 10. 使用最新版 Electron</span></code></pre></div></section><nav class="lesson-next" aria-label="下一章节"><div class="bottom-nav-row"><a href="https://www.electronjs.org/" target="_blank" rel="noopener" class="official-link">Electron 官网 → </a><div class="lesson-pager"><a href="/electron/e-11/packaging" class="previous-lesson-link"><span>上一颗</span><strong>🌰11 打包分发</strong></a><a href="/electron/e-13/performance" class="next-lesson-link"><span>下一颗</span><strong>🌰13 性能优化</strong></a></div></div></nav></main><!--]--></div><footer class="site-footer"><p class="site-footer-line"> © 2026 小松鼠举栗子 · 用 🌰 记录技术知识 · <a href="mailto:gzx_miller@foxmail.com">gzx_miller@foxmail.com</a></p></footer></div><!--]--><button type="button" class="squirrel-pet" style="" aria-label="松鼠小助手：点击提问，拖拽移动" title="点我提问，拖拽移动" data-v-235d5ef5><span class="pet-inner" aria-hidden="true" data-v-235d5ef5><span class="pet-ai-badge" data-v-235d5ef5>AI</span><span class="pet-zzz" aria-hidden="true" data-v-235d5ef5>z<span data-v-235d5ef5>z</span><span data-v-235d5ef5>z</span></span><span class="pet-flip" data-v-235d5ef5><span class="pet-wobble" data-v-235d5ef5><svg viewBox="0 0 136 120" width="68" height="60" data-v-235d5ef5><defs data-v-235d5ef5><linearGradient id="sq-body" x1="0" y1="0" x2="0" y2="1" data-v-235d5ef5><stop offset="0" stop-color="#f0904a" data-v-235d5ef5></stop><stop offset="1" stop-color="#d95a24" data-v-235d5ef5></stop></linearGradient><linearGradient id="sq-tail" x1="0" y1="1" x2="1" y2="0" data-v-235d5ef5><stop offset="0" stop-color="#c1441e" data-v-235d5ef5></stop><stop offset="1" stop-color="#f5a040" data-v-235d5ef5></stop></linearGradient></defs><g class="pet-tail" data-v-235d5ef5><path d="M58 96 C96 106 122 86 122 50 C121.5 30 112 13 97 8 C83 3.5 72.5 9 71.5 17.5 C70.8 24 74.5 28.5 76.5 33.5 C63 44 58 66 56.5 86 C56 92 57 95 58 96 Z" fill="url(#sq-tail)" data-v-235d5ef5></path><path d="M76 88 C96 80 106 58 99 40 C105 58 98 80 82 90 Z" fill="#f6c15a" opacity="0.5" data-v-235d5ef5></path></g><ellipse class="pet-foot pet-foot-l" cx="41.4" cy="107" rx="9.6" ry="5.4" fill="#b7431f" data-v-235d5ef5></ellipse><ellipse class="pet-foot pet-foot-r" cx="64.6" cy="107" rx="9.6" ry="5.4" fill="#b7431f" data-v-235d5ef5></ellipse><ellipse cx="52" cy="84" rx="27" ry="27" fill="url(#sq-body)" data-v-235d5ef5></ellipse><ellipse cx="51" cy="90" rx="16" ry="17" fill="#ffe3c2" opacity="0.95" data-v-235d5ef5></ellipse><path d="M33.5 38 L38.5 12 L48 27 Z" fill="#d95a24" stroke="#d95a24" stroke-width="3" stroke-linejoin="round" data-v-235d5ef5></path><path d="M36.8 30.5 L39 17 L44 25.5 Z" fill="#f2a582" data-v-235d5ef5></path><path d="M70.5 38 L65.5 12 L56 27 Z" fill="#d95a24" stroke="#d95a24" stroke-width="3" stroke-linejoin="round" data-v-235d5ef5></path><path d="M67.2 30.5 L65 17 L60 25.5 Z" fill="#f2a582" data-v-235d5ef5></path><circle cx="52" cy="47" r="22" fill="url(#sq-body)" data-v-235d5ef5></circle><circle cx="33" cy="54" r="9.5" fill="#e8793c" data-v-235d5ef5></circle><circle cx="71" cy="54" r="9.5" fill="#e8793c" data-v-235d5ef5></circle><circle cx="41" cy="53" r="4" fill="#f6c15a" opacity="0.6" data-v-235d5ef5></circle><circle cx="63" cy="53" r="4" fill="#f6c15a" opacity="0.6" data-v-235d5ef5></circle><g stroke="#b7431f" stroke-width="0.9" stroke-linecap="round" opacity="0.7" data-v-235d5ef5><path d="M32 50 L25 49" data-v-235d5ef5></path><path d="M32 54 L25 55" data-v-235d5ef5></path><path d="M32.5 58 L26 60" data-v-235d5ef5></path><path d="M72 50 L79 49" data-v-235d5ef5></path><path d="M72 54 L79 55" data-v-235d5ef5></path><path d="M71.5 58 L78 60" data-v-235d5ef5></path></g><g class="pet-eyes" data-v-235d5ef5><circle cx="44" cy="44" r="3.4" fill="#32190f" data-v-235d5ef5></circle><circle cx="45" cy="43" r="1.1" fill="#fffaf2" data-v-235d5ef5></circle><circle cx="60" cy="44" r="3.4" fill="#32190f" data-v-235d5ef5></circle><circle cx="61" cy="43" r="1.1" fill="#fffaf2" data-v-235d5ef5></circle></g><g class="pet-face-happy" data-v-235d5ef5><path d="M40.5 44.5 Q44 40.5 47.5 44.5" fill="none" stroke="#32190f" stroke-width="2" stroke-linecap="round" data-v-235d5ef5></path><path d="M56.5 44.5 Q60 40.5 63.5 44.5" fill="none" stroke="#32190f" stroke-width="2" stroke-linecap="round" data-v-235d5ef5></path><circle cx="36" cy="50.5" r="2.8" fill="#f0806e" opacity="0.6" data-v-235d5ef5></circle><circle cx="68" cy="50.5" r="2.8" fill="#f0806e" opacity="0.6" data-v-235d5ef5></circle></g><g class="pet-face-sleep" data-v-235d5ef5><path d="M40.5 45 Q44 47.5 47.5 45" fill="none" stroke="#32190f" stroke-width="2" stroke-linecap="round" data-v-235d5ef5></path><path d="M56.5 45 Q60 47.5 63.5 45" fill="none" stroke="#32190f" stroke-width="2" stroke-linecap="round" data-v-235d5ef5></path></g><ellipse cx="52" cy="55" rx="9" ry="7" fill="#ffe3c2" data-v-235d5ef5></ellipse><ellipse cx="52" cy="50.5" rx="2.4" ry="1.8" fill="#7b351d" data-v-235d5ef5></ellipse><path d="M48.5 54.5 Q52 57.5 55.5 54.5" fill="none" stroke="#7b351d" stroke-width="1.4" stroke-linecap="round" data-v-235d5ef5></path><rect x="50.2" y="56.4" width="1.6" height="2.6" rx="0.5" fill="#fffdf6" data-v-235d5ef5></rect><rect x="52.2" y="56.4" width="1.6" height="2.6" rx="0.5" fill="#fffdf6" data-v-235d5ef5></rect><ellipse cx="39.6" cy="74.6" rx="5.5" ry="7.2" fill="#c1441e" transform="rotate(18 39.6 74.6)" data-v-235d5ef5></ellipse><ellipse cx="40" cy="80.4" rx="3.6" ry="2.4" fill="#f0a06a" data-v-235d5ef5></ellipse><g class="pet-arm" data-v-235d5ef5><ellipse cx="66.4" cy="71.6" rx="5.4" ry="7" fill="#c1441e" transform="rotate(-24 66.4 71.6)" data-v-235d5ef5></ellipse><circle cx="69.2" cy="66.4" r="2.8" fill="#d95a24" data-v-235d5ef5></circle><circle cx="71.4" cy="63.8" r="1.7" fill="#d95a24" data-v-235d5ef5></circle></g></svg></span></span></span><span class="pet-hint" aria-hidden="true" data-v-235d5ef5><span class="pet-hint-text" data-v-235d5ef5></span></span></button><!----><!--]--></div><div id="teleports"></div><script>window.__NUXT__={};window.__NUXT__.config={public:{zhipuApiKey:"4a144c581416035e180b03574714070553061642165f46465c5f1958545145181c047f743904140e2b350009195b2a3503"},app:{baseURL:"/",buildId:"e714b28c-1387-4a7d-a2e1-4256272ad9f2",buildAssetsDir:"/_nuxt/",cdnURL:""}}</script><script type="application/json" data-nuxt-data="nuxt-app" data-ssr="true" id="__NUXT_DATA__" data-src="/electron/e-12/security/_payload.json?e714b28c-1387-4a7d-a2e1-4256272ad9f2">[{"state":1,"once":5,"_errors":6,"serverRendered":3,"path":8,"pinia":9,"prerenderedAt":11},["Reactive",2],{"$ssidebarExpanded":3,"$stheme":4},true,"light",["Set"],["ShallowReactive",7],{"lesson-code-EL_12":-1},"\u002Felectron\u002Fe-12\u002Fsecurity",["Reactive",10],{},1791203785617]</script></body></html>

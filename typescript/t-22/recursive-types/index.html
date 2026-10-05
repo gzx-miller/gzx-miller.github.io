@@ -1,0 +1,296 @@
+<!DOCTYPE html><html  lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>递归类型 - 小松鼠举栗子</title><script>(function(){try{var t=localStorage.getItem('theme-preference');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script><style>.squirrel-pet[data-v-235d5ef5]{position:fixed;right:20px;top:50%;transform:translateY(-50%);z-index:1000;width:76px;height:76px;padding:0;border:none;background:transparent;cursor:grab;touch-action:none;-webkit-user-select:none;-moz-user-select:none;user-select:none;filter:drop-shadow(0 8px 16px rgba(98,42,18,.28));transition:left 2.4s cubic-bezier(.45,.05,.55,.95),top 2.4s cubic-bezier(.45,.05,.55,.95),filter .2s ease}.squirrel-pet[data-v-235d5ef5]:hover{filter:drop-shadow(0 10px 20px rgba(98,42,18,.4))}.squirrel-pet.dragging[data-v-235d5ef5]{cursor:grabbing;filter:drop-shadow(0 14px 24px rgba(98,42,18,.45));transition:filter .2s ease}.pet-inner[data-v-235d5ef5]{position:relative;display:block;animation:pet-bob-235d5ef5 3.2s ease-in-out infinite}.pet-ai-badge[data-v-235d5ef5]{position:absolute;top:-14px;left:50%;z-index:2;transform:translate(-50%);transform-origin:50% 100%;font-size:19px;font-weight:900;font-style:italic;letter-spacing:1px;line-height:1;background:linear-gradient(180deg,#ffe9a8,#f6c15a 35%,#d99a2b 55%,#fff3c4);background-clip:text;-webkit-background-clip:text;-webkit-text-stroke:.9px #8f2f18;paint-order:stroke fill;color:transparent;filter:drop-shadow(0 2px 3px rgba(98,42,18,.45));pointer-events:none;transition:filter .25s ease}.squirrel-pet:hover .pet-ai-badge[data-v-235d5ef5]{background:linear-gradient(110deg,#f6c15a,#ffe9a8 20%,#fff 38%,#ffe9a8 55%,#d99a2b 75%,#f6c15a);background-size:250% 100%;background-clip:text;-webkit-background-clip:text;filter:drop-shadow(0 0 6px rgba(246,193,90,.9)) drop-shadow(0 2px 3px rgba(98,42,18,.45));animation:ai-swing-235d5ef5 .62s ease-in-out infinite,ai-shine-235d5ef5 1.4s linear infinite}@keyframes ai-swing-235d5ef5{0%,to{transform:translate(-50%) rotate(-9deg) scale(1.06)}50%{transform:translate(-50%) rotate(9deg) scale(1.06)}}@keyframes ai-shine-235d5ef5{0%{background-position:120% 0}to{background-position:-120% 0}}.squirrel-pet.pricked .pet-inner[data-v-235d5ef5]{animation:prick-jump-235d5ef5 .68s cubic-bezier(.3,.9,.4,1)}@keyframes prick-jump-235d5ef5{0%{transform:translateY(0) scale(1)}28%{transform:translateY(-30px) scale(1.07)}52%{transform:translateY(-20px) scale(1.02) rotate(-5deg)}76%{transform:translateY(2px) scale(.96,.88)}to{transform:translateY(0) scale(1)}}.squirrel-pet.dragging .pet-ai-badge[data-v-235d5ef5],.squirrel-pet.dragging .pet-arm[data-v-235d5ef5],.squirrel-pet.dragging .pet-eyes[data-v-235d5ef5],.squirrel-pet.dragging .pet-face-happy[data-v-235d5ef5],.squirrel-pet.dragging .pet-foot-l[data-v-235d5ef5],.squirrel-pet.dragging .pet-foot-r[data-v-235d5ef5],.squirrel-pet.dragging .pet-hint-text[data-v-235d5ef5],.squirrel-pet.dragging .pet-inner[data-v-235d5ef5],.squirrel-pet.dragging .pet-tail[data-v-235d5ef5]{animation-play-state:paused}.pet-foot[data-v-235d5ef5]{transform-box:fill-box}.squirrel-pet.crawling .pet-foot-l[data-v-235d5ef5]{animation:foot-step-235d5ef5 .42s ease-in-out infinite alternate}.squirrel-pet.crawling .pet-foot-r[data-v-235d5ef5]{animation:foot-step-235d5ef5 .42s ease-in-out infinite alternate-reverse}@keyframes foot-step-235d5ef5{0%{transform:translate(2.5px,-1.2px) rotate(3deg)}to{transform:translate(-2.5px,1.2px) rotate(-3deg)}}.pet-wobble[data-v-235d5ef5]{display:block}.squirrel-pet.crawling .pet-wobble[data-v-235d5ef5]{transform-origin:50% 100%;animation:crawl-wobble-235d5ef5 .42s ease-in-out infinite alternate}@keyframes crawl-wobble-235d5ef5{0%{transform:rotate(-4deg) translate(1.5px)}to{transform:rotate(4deg) translate(-1.5px)}}.pet-arm[data-v-235d5ef5]{transform-box:fill-box;transform-origin:50% 90%}.squirrel-pet.waving .pet-arm[data-v-235d5ef5]{animation:arm-wave-235d5ef5 1.1s ease-in-out infinite}@keyframes arm-wave-235d5ef5{0%,to{transform:rotate(0)}30%{transform:rotate(-46deg)}55%{transform:rotate(10deg)}80%{transform:rotate(-36deg)}}.pet-eyes[data-v-235d5ef5],.pet-face-happy[data-v-235d5ef5]{transition:opacity .2s ease}.pet-face-happy[data-v-235d5ef5]{opacity:0}.squirrel-pet.waving .pet-face-happy[data-v-235d5ef5]{opacity:1}.squirrel-pet.waving .pet-eyes[data-v-235d5ef5]{opacity:0}.pet-face-sleep[data-v-235d5ef5]{opacity:0;transition:opacity .2s ease}.squirrel-pet.sleeping .pet-eyes[data-v-235d5ef5],.squirrel-pet.sleeping .pet-face-happy[data-v-235d5ef5]{opacity:0}.squirrel-pet.sleeping .pet-face-sleep[data-v-235d5ef5]{opacity:1}.squirrel-pet.sleeping .pet-eyes[data-v-235d5ef5],.squirrel-pet.sleeping .pet-inner[data-v-235d5ef5],.squirrel-pet.sleeping .pet-tail[data-v-235d5ef5]{animation:none}.pet-zzz[data-v-235d5ef5]{position:absolute;top:-16px;right:-14px;z-index:3;display:inline-flex;gap:3px;font-size:12px;font-weight:700;color:var(--muted);line-height:1;pointer-events:none;opacity:0;transition:opacity .3s ease}.squirrel-pet.sleeping .pet-zzz[data-v-235d5ef5]{opacity:1}.pet-zzz span[data-v-235d5ef5]{display:inline-block;animation:pet-zzz-float-235d5ef5 2.4s ease-in-out infinite}.pet-zzz span[data-v-235d5ef5]:nth-child(2){animation-delay:.4s}.pet-zzz span[data-v-235d5ef5]:nth-child(3){animation-delay:.8s}@keyframes pet-zzz-float-235d5ef5{0%{transform:translateY(0) scale(.6);opacity:0}30%{opacity:1}to{transform:translateY(-14px) scale(1.15);opacity:0}}@media(prefers-reduced-motion:reduce){.squirrel-pet.sleeping .pet-zzz span[data-v-235d5ef5]{animation:none;opacity:1}}.pet-tail[data-v-235d5ef5]{transform-origin:bottom left;animation:tail-wag-235d5ef5 2.6s ease-in-out infinite}.pet-eyes[data-v-235d5ef5],.pet-tail[data-v-235d5ef5]{transform-box:fill-box}.pet-eyes[data-v-235d5ef5]{transform-origin:center;animation:pet-blink-235d5ef5 4.4s ease-in-out infinite}.pet-hint[data-v-235d5ef5]{position:absolute;top:6px;right:calc(100% + 10px);width:-moz-max-content;width:max-content;max-width:170px;padding:3px 10px;border-radius:12px;font-size:11px;line-height:1.6;color:#fffaf2;background:linear-gradient(135deg,var(--leaf-red),var(--leaf-orange));box-shadow:0 4px 10px #8f2f1859;opacity:0;transform:translate(8px) scale(.9);transform-origin:100% 70%;pointer-events:none;transition:opacity .28s ease,transform .28s cubic-bezier(.34,1.56,.64,1)}.pet-hint[data-v-235d5ef5]:after{content:"";position:absolute;top:10px;left:100%;border:5px solid transparent;border-left:7px solid #e0652f}.pet-hint.show[data-v-235d5ef5]{opacity:1;transform:translate(0) scale(1)}.pet-hint-text[data-v-235d5ef5]{display:inline-block}.squirrel-pet.hint-on-right .pet-hint[data-v-235d5ef5]{right:auto;left:calc(100% + 10px);transform-origin:0 70%;transform:translate(-8px) scale(.9)}.squirrel-pet.hint-on-right .pet-hint.show[data-v-235d5ef5]{transform:translate(0) scale(1)}.squirrel-pet.hint-on-right .pet-hint[data-v-235d5ef5]:after{left:auto;right:100%;border:5px solid transparent;border-right:7px solid #e0652f;border-left:none}.pet-hint.show .pet-hint-text[data-v-235d5ef5]{animation:tip-talk-235d5ef5 .8s ease-in-out infinite}@keyframes tip-talk-235d5ef5{0%,to{transform:translateY(0) scale(1)}50%{transform:translateY(-1px) scale(1.04)}}@media(prefers-reduced-motion:reduce){.pet-hint.show .pet-hint-text[data-v-235d5ef5],.squirrel-pet.crawling .pet-foot-l[data-v-235d5ef5],.squirrel-pet.crawling .pet-foot-r[data-v-235d5ef5],.squirrel-pet.crawling .pet-wobble[data-v-235d5ef5],.squirrel-pet.waving .pet-arm[data-v-235d5ef5],.squirrel-pet:hover .pet-ai-badge[data-v-235d5ef5]{animation:none}}@keyframes pet-bob-235d5ef5{0%,to{transform:translateY(0)}50%{transform:translateY(-5px)}}@keyframes tail-wag-235d5ef5{0%,to{transform:rotate(0)}50%{transform:rotate(5deg)}}@keyframes pet-blink-235d5ef5{0%,93%,to{transform:scaleY(1)}96%{transform:scaleY(.12)}}</style><style>table[data-v-80bcd963]{width:100%;border-collapse:collapse;font-size:12px}td[data-v-80bcd963],th[data-v-80bcd963]{padding:6px 8px;border:1px solid #ddd;text-align:left;vertical-align:top}th[data-v-80bcd963]{background:#fff3e0}code[data-v-80bcd963]{background:#f5f0eb;padding:1px 4px;border-radius:3px;font-size:11px}code.type[data-v-80bcd963]{color:#0891b2;font-weight:700}.tree-stats[data-v-80bcd963],small[data-v-80bcd963]{color:#8a6d42}.tree-stats[data-v-80bcd963]{display:flex;gap:16px;margin-bottom:10px;font-size:13px}.tree-container[data-v-80bcd963]{background:#fffaf5;border:1px solid #f0c8a0;border-radius:6px;padding:8px}.tree-node[data-v-80bcd963]{display:flex;align-items:center;gap:4px;padding:3px 6px;border-radius:4px;cursor:pointer;font-size:13px}.tree-node[data-v-80bcd963]:hover{background:#fff3e0}.toggle[data-v-80bcd963]{color:#e85d04;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;user-select:none}.toggle[data-v-80bcd963],.toggle-placeholder[data-v-80bcd963]{width:16px}.icon[data-v-80bcd963]{font-size:14px}.name[data-v-80bcd963]{flex:1}.size[data-v-80bcd963]{color:#8a6d42;font-size:11px}.scenario-grid[data-v-80bcd963]{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:10px}.scenario-card[data-v-80bcd963]{background:#fff8f0;padding:10px;border-radius:6px;border:1px solid #f0c8a0}.scenario-card h5[data-v-80bcd963]{margin:0 0 4px;color:#e85d04}.scenario-card p[data-v-80bcd963]{margin:4px 0}ol[data-v-80bcd963]{font-size:13px;color:#5a4a32;padding-left:20px}ol li[data-v-80bcd963]{margin-bottom:4px}</style><link rel="stylesheet" href="/_nuxt/entry.CGN0g2Ra.css" crossorigin><link rel="preload" as="fetch" crossorigin="anonymous" href="/typescript/t-22/recursive-types/_payload.json?e714b28c-1387-4a7d-a2e1-4256272ad9f2"><script type="module" src="/_nuxt/ClZcEZ7f.js" crossorigin></script><meta name="author" content="gzx-miller"><meta name="robots" content="index, follow"><meta property="og:site_name" content="小松鼠举栗子"><meta property="og:locale" content="zh_CN"><meta property="og:url" content="https://gzx-miller.github.io/"><meta property="og:image:width" content="2560"><meta property="og:image:height" content="1440"><meta name="twitter:title" content="小松鼠举栗子 - 通过独立真实内容学习软件技术"><meta name="twitter:description" content="中文技术知识内容库：22 大分类 500+ 真实内容，每个栗子只讲一个知识点。"><meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8b369"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1210"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"小松鼠举栗子","url":"https://gzx-miller.github.io/","description":"中文技术知识内容库：通过独立真实小内容学习 Vue3、TypeScript、React、Node.js、CSS、WebGL、C++、uni-app 等。","inLanguage":"zh-CN"}</script><link rel="canonical" href="https://gzx-miller.github.io/typescript/t-22/recursive-types"><meta name="og:image:alt" content="利用递归类型描述树形结构和深嵌套对象，实现 DeepReadonly、DeepPartial 等深度转换。"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://gzx-miller.github.io/"},{"@type":"ListItem","position":2,"name":"TypeScript","item":"https://gzx-miller.github.io/typescript"},{"@type":"ListItem","position":3,"name":"递归类型","item":"https://gzx-miller.github.io/typescript/t-22/recursive-types"}]}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"LearningResource","name":"递归类型与深嵌套对象","description":"利用递归类型描述树形结构和深嵌套对象，实现 DeepReadonly、DeepPartial 等深度转换。","url":"https://gzx-miller.github.io/typescript/t-22/recursive-types","inLanguage":"zh-CN","learningResourceType":"CourseContent","about":{"@type":"WebSite","name":"TypeScript","url":"https://gzx-miller.github.io/typescript"},"isPartOf":{"@type":"WebSite","name":"小松鼠举栗子","url":"https://gzx-miller.github.io/"}}</script><meta name="description" content="利用递归类型描述树形结构和深嵌套对象，实现 DeepReadonly、DeepPartial 等深度转换。"><meta property="og:title" content="递归类型与深嵌套对象 - 小松鼠举栗子"><meta property="og:description" content="利用递归类型描述树形结构和深嵌套对象，实现 DeepReadonly、DeepPartial 等深度转换。"><meta property="og:type" content="article"><meta property="og:image" content="https://gzx-miller.github.io/og-image.jpg"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://gzx-miller.github.io/og-image.jpg"></head><body><div id="__nuxt"><!--[--><!--[--><a class="skip-link" href="#main-content">跳到正文</a><div class="app-frame"><header class="top-nav"><div class="top-bar"><a href="/" class="top-brand" aria-label="回到首页"><img class="brand-avatar" src="/_nuxt/squirrel-chestnut-avatar.BUhAFRCm.webp" alt="小松鼠举着栗子" width="48" height="48" fetchpriority="high"><div class="brand-text"><strong>小松鼠举栗子 </strong><span class="brand-tagline">中文技术知识内容库</span></div></a><div class="site-intro-group"><p class="site-intro">记录与分享可复用的软件技术内容</p><p class="site-stats"><span class="stat-pill">免费开源</span><span class="stat-pill">持续更新</span></p></div><div class="top-actions"><a class="contact-mail" href="mailto:gzx_miller@foxmail.com" title="给我发邮件">gzx_miller@foxmail.com</a><a class="github-link" href="https://github.com/gzx-miller/gzx-miller.github.io" target="_blank" rel="noopener" aria-label="查看开源代码" title="查看开源代码"><svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"></path></svg></a><button class="theme-toggle" aria-label="切换深色主题" title="切换深色主题"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></button></div></div><div class="tabs-row"><nav class="knowledge-tabs" aria-label="知识类别导航"><!--[--><div class="knowledge-tab-wrapper"><a href="/javascript" class="knowledge-tab" aria-disabled="false"><span>JavaScript</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a aria-current="page" href="/typescript" class="knowledge-tab active" aria-disabled="false"><span>TypeScript</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/vue" class="knowledge-tab" aria-disabled="false"><span>Vue3</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/element-plus" class="knowledge-tab" aria-disabled="false"><span>Element Plus</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/vue-flow" class="knowledge-tab" aria-disabled="false"><span>Vue Flow</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/nestjs" class="knowledge-tab" aria-disabled="false"><span>Nest.js</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/nuxt" class="knowledge-tab" aria-disabled="false"><span>Nuxt</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/nodejs" class="knowledge-tab" aria-disabled="false"><span>Node.js</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/css" class="knowledge-tab" aria-disabled="false"><span>CSS</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/tailwind-css" class="knowledge-tab" aria-disabled="false"><span>Tailwind CSS</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/sass" class="knowledge-tab" aria-disabled="false"><span>Sass</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/vite" class="knowledge-tab" aria-disabled="false"><span>Vite</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/react" class="knowledge-tab" aria-disabled="false"><span>React</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/nextjs" class="knowledge-tab" aria-disabled="false"><span>Next.js</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/langchain" class="knowledge-tab" aria-disabled="false"><span>LangChain</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/llm-principles" class="knowledge-tab" aria-disabled="false"><span>LLM 原理</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/cpp" class="knowledge-tab" aria-disabled="false"><span>C++</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/electron" class="knowledge-tab" aria-disabled="false"><span>Electron</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/ffmpeg" class="knowledge-tab" aria-disabled="false"><span>FFmpeg</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/webgl" class="knowledge-tab" aria-disabled="false"><span>WebGL</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/webassembly" class="knowledge-tab" aria-disabled="false"><span>WebAssembly</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/uni-app" class="knowledge-tab" aria-disabled="false"><span>uni-app</span><!----></a><!----></div><!--]--></nav><!----></div><div class="nprogress-rail" aria-hidden="true"></div></header><div class="sidebar-expanded app-shell"><aside class="sidebar-temporarily-expanded sidebar" aria-label="TypeScript 知识点导航"><div class="sidebar-heading"><button class="expanded sidebar-toggle" aria-label="收起侧边栏"><span class="toggle-icon" aria-hidden="true"></span><strong class="sidebar-toggle-label">TypeScript</strong></button><label class="lesson-search"><span class="sr-only">搜索当前分类课程</span><input value="" type="search" placeholder="搜索课程…" autocomplete="off"></label></div><nav class="lesson-nav"><!--[--><section class="lesson-group"><h2 class="lesson-group-title">类型基础</h2><!--[--><a href="/typescript/t-1/type-inference" class="lesson-link" aria-label="🌰1 类型推导" title="类型推导"><span>🌰1</span><strong>类型推导</strong></a><a href="/typescript/t-2/union-narrowing" class="lesson-link" aria-label="🌰2 联合与收窄" title="联合与收窄"><span>🌰2</span><strong>联合与收窄</strong></a><a href="/typescript/t-3/object-modeling" class="lesson-link" aria-label="🌰3 对象建模" title="对象建模"><span>🌰3</span><strong>对象建模</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">类型进阶</h2><!--[--><a href="/typescript/t-4/generics" class="lesson-link" aria-label="🌰4 泛型" title="泛型"><span>🌰4</span><strong>泛型</strong></a><a href="/typescript/t-5/keyof" class="lesson-link" aria-label="🌰5 keyof" title="keyof"><span>🌰5</span><strong>keyof</strong></a><a href="/typescript/t-6/utility-types" class="lesson-link" aria-label="🌰6 工具类型" title="工具类型"><span>🌰6</span><strong>工具类型</strong></a><a href="/typescript/t-9/intersection-mixin" class="lesson-link" aria-label="🌰7 交叉与 Mixin" title="交叉与 Mixin"><span>🌰7</span><strong>交叉与 Mixin</strong></a><a href="/typescript/t-10/conditional" class="lesson-link" aria-label="🌰8 条件类型" title="条件类型"><span>🌰8</span><strong>条件类型</strong></a><a href="/typescript/t-11/mapped" class="lesson-link" aria-label="🌰9 映射类型" title="映射类型"><span>🌰9</span><strong>映射类型</strong></a><a href="/typescript/t-12/template-literal" class="lesson-link" aria-label="🌰10 模板字面量" title="模板字面量"><span>🌰10</span><strong>模板字面量</strong></a><a href="/typescript/t-13/function-types" class="lesson-link" aria-label="🌰11 函数类型" title="函数类型"><span>🌰11</span><strong>函数类型</strong></a><a href="/typescript/t-14/enums" class="lesson-link" aria-label="🌰12 枚举与映射" title="枚举与映射"><span>🌰12</span><strong>枚举与映射</strong></a><a href="/typescript/t-15/declaration-merging" class="lesson-link" aria-label="🌰13 声明合并" title="声明合并"><span>🌰13</span><strong>声明合并</strong></a><a href="/typescript/t-16/compiler-options" class="lesson-link" aria-label="🌰14 tsconfig" title="tsconfig"><span>🌰14</span><strong>tsconfig</strong></a><a href="/typescript/t-17/declaration-files" class="lesson-link" aria-label="🌰15 声明文件" title="声明文件"><span>🌰15</span><strong>声明文件</strong></a><a href="/typescript/t-18/namespace" class="lesson-link" aria-label="🌰16 命名空间" title="命名空间"><span>🌰16</span><strong>命名空间</strong></a><a href="/typescript/t-19/branded-types" class="lesson-link" aria-label="🌰17 品牌类型" title="品牌类型"><span>🌰17</span><strong>品牌类型</strong></a><a href="/typescript/t-20/discriminated-union" class="lesson-link" aria-label="🌰18 可辨识联合" title="可辨识联合"><span>🌰18</span><strong>可辨识联合</strong></a><a href="/typescript/t-21/infer-keyword" class="lesson-link" aria-label="🌰19 infer 关键字" title="infer 关键字"><span>🌰19</span><strong>infer 关键字</strong></a><a aria-current="page" href="/typescript/t-22/recursive-types" class="router-link-active router-link-exact-active lesson-link active" aria-label="🌰20 递归类型" title="递归类型"><span>🌰20</span><strong>递归类型</strong></a><a href="/typescript/t-23/type-level-programming" class="lesson-link" aria-label="🌰21 类型级编程" title="类型级编程"><span>🌰21</span><strong>类型级编程</strong></a><a href="/typescript/t-24/async-return-type" class="lesson-link" aria-label="🌰22 异步返回类型" title="异步返回类型"><span>🌰22</span><strong>异步返回类型</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">安全边界</h2><!--[--><a href="/typescript/t-7/unknown-guard" class="lesson-link" aria-label="🌰23 安全边界" title="安全边界"><span>🌰23</span><strong>安全边界</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">框架实践</h2><!--[--><a href="/typescript/t-8/vue-typing" class="lesson-link" aria-label="🌰24 Vue 类型" title="Vue 类型"><span>🌰24</span><strong>Vue 类型</strong></a><!--]--></section><!--]--><!----></nav></aside><!--[--><main id="main-content" class="lesson-page" data-category="typescript" tabindex="-1"><nav class="breadcrumb" aria-label="面包屑"><a href="/typescript" class="">TypeScript</a><span aria-hidden="true">/</span><span aria-current="page">递归类型</span><small>20 / 24</small></nav><div class="lesson-progress" role="progressbar" aria-label="TypeScript 学习进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="83"><span style="width:83%;"></span></div><header class="lesson-header"><div class="lesson-copy"><p class="eyebrow">🌰20 · 类型进阶 <span class="reading-time">约 1 分钟读完</span></p><h1>递归类型与深嵌套对象</h1><p>利用递归类型描述树形结构和深嵌套对象，实现 DeepReadonly、DeepPartial 等深度转换。</p></div></header><section class="lesson-section lesson-demo"><article class="lesson-article"><!--[--><div class="lesson-question"><strong>开场问题：</strong>配置对象一层套一层，我想在只读的那一侧定义一个「所有层级都只读」的版本，可 <code>Readonly&lt;Config&gt;</code> 只锁住了最外面那层——难道每加深一层，就得手工把每一层都写一遍吗？ </div><h2>读写语义分离</h2><p> 你在做一个后台配置系统：一份配置对象里嵌着应用信息、主题设置、功能开关，再往里还嵌着一层。同一份结构你要在两种场景用它——<strong>编辑侧允许改，下游消费侧必须只读</strong>；此外「深度可选」用来表达局部补丁，「深度必填」用来表达带默认值的完整数据。 </p><p> 问题就出在「深度」两个字上。内置的 <code>Readonly</code>、<code>Partial</code>、<code>Required</code> 都<strong>只作用于一层</strong>：套上 <code>Readonly</code> 之后，顶层属性不可写了，可第二、第三层依旧可写，改起来照样不报错。而像文件目录树、任意深度的 JSON 这种结构，层级根本没法预先枚举——你连手写都写不完，更别说维护。 </p><h2>内置工具单层局限</h2><p> 最直接的做法：用内置工具做一层转换，剩下的层级手工展开。需要只读就写 <code>Readonly&lt;Config&gt;</code>，发现第二层还能改，就再给第二层套一个 <code>Readonly</code>，逐层补齐；深度可选、深度必填同理，各手抄一份。 </p><p> 这个方案做对了一件重要的事：<strong>它承认了「同一份结构需要多套读写语义」</strong>。对结构很浅的对象来说，套一层 <code>Readonly</code> 确实就把它挡住了，简单直接，也够用。 </p><h2>深层只读失效</h2><ul><li><code>Readonly</code> 只作用一层，<code>config.app.settings.debug</code> 依然可写，改了也不报错。</li><li>树形结构与 JSON 的层数无法预先枚举，手写版本根本写不完。</li><li>深度可选、深度必填都要另抄一份，结构一变，两份手写类型同时过期。</li><li>对象新增一层嵌套时，所有手写版本都得补，遗漏的层级编译器不会提醒你。</li></ul><h2>递归引用自身</h2><p> 不推翻「多套读写语义」，而是让类型<strong>引用自己</strong>。递归思想的第一次出场其实很朴素——描述一棵树时，子节点的类型就是节点自身： </p><p><code>interface TreeNode { value: string; children: TreeNode[] }</code></p><p> 把「引用自己」搬进映射类型与条件类型，就能一次性转完所有层级： </p><p><code>type DeepReadonly&lt;T&gt; = { readonly [K in keyof T]: T[K] extends object ? T[K] extends Function ? T[K] : DeepReadonly&lt;T[K]&gt; : T[K] }</code></p><ol class="lesson-steps"><li>用 <code>[K in keyof T]</code> 遍历对象的每一个键，逐个生成结果。</li><li>用条件类型判断 <code>T[K]</code> 是不是对象；不是的话（字符串、数字等基础类型）原样返回，作为递归的终止分支。</li><li>是对象就递归调用自身 <code>DeepReadonly&lt;T[K]&gt;</code>，进去把那一层也改成只读。</li><li>给外层属性加上 <code>readonly</code> 修饰符，于是每一层都被锁住。</li></ol><p> 换一个修饰符就换一种语义：把属性标成可选（<code>[K in keyof T]?</code>）得到 <code>DeepPartial</code>，用来表达任意层级的局部补丁；把可选去掉（<code>[K in keyof T]-?</code>）得到 <code>DeepRequired</code>，用来表达补齐默认值后的完整数据。三个工具共用同一套递归骨架，只是收尾的修饰符不同。 </p><p> 有一个细节必须单独处理：<strong>函数成员要原样返回</strong>。函数在类型上同样满足 <code>extends object</code>，如果只用「是对象就递归」这一条判断，函数签名会被一起递归进去、破坏掉。所以要额外放行 <code>T[K] extends Function ? T[K] : ...</code>，让方法保持原样。 </p><p> 除了深度转换，递归条件类型还能做别的：给一个多维数组类型一路剥到元素类型，<code>type FlatArray&lt;T&gt; = T extends (infer U)[] ? U extends any[] ? FlatArray&lt;U&gt; : U : T</code>，<code>number[][][]</code> 会被压成 <code>number</code>。判断条件本身，就是它的退出路径。 </p><div class="lesson-box warn"><strong>递归必须能终止。</strong>递归类型一定要有可退出的分支，否则会无限递归、把类型实例化压得越来越深；编译器对类型实例化深度是有限制的，嵌套极深或递归过重时会直接报错。对性能敏感的递归类型，控制在必要深度即可，超过三层嵌套的复杂转换，宁可交给现成的工具库。 </div><h2>文件树与映射类型</h2><figure class="lesson-figure"><figcaption>展开文件树感受结构自身的递归，再切到「深度映射类型」看 <code>DeepReadonly</code>、<code>DeepPartial</code>、<code>DeepRequired</code> 如何一层层生效。</figcaption><div class="demo-card" data-v-80bcd963><h3 data-v-80bcd963>递归类型与深嵌套对象</h3><div style="display:flex;gap:8px;margin-bottom:12px;" data-v-80bcd963><button class="active tab-btn" data-v-80bcd963>文件树演示</button><button class="tab-btn" data-v-80bcd963>深度映射类型</button><button class="tab-btn" data-v-80bcd963>应用场景</button></div><div data-v-80bcd963><h4 data-v-80bcd963>项目文件目录</h4><div class="tree-stats" data-v-80bcd963><span data-v-80bcd963>📁 5 个文件夹</span><span data-v-80bcd963>📄 12 个文件</span><span data-v-80bcd963>📦 30.8 KB</span></div><div class="tree-container" data-v-80bcd963><!--[--><!--[--><div class="tree-node" style="padding-left:0;" data-v-80bcd963><span class="toggle" data-v-80bcd963>▼</span><span class="icon" data-v-80bcd963>📁</span><span class="name" data-v-80bcd963>src</span><!----></div><!--[--><!--[--><div class="tree-node" style="padding-left:24px;" data-v-80bcd963><span class="toggle" data-v-80bcd963>▼</span><span class="icon" data-v-80bcd963>📁</span><span class="name" data-v-80bcd963>components</span><!----></div><!--[--><!--[--><div class="tree-node" style="padding-left:48px;" data-v-80bcd963><span class="toggle-placeholder" data-v-80bcd963></span><span class="icon" data-v-80bcd963>📄</span><span class="name" data-v-80bcd963>Button.vue</span><span class="size" data-v-80bcd963>2.0 KB</span></div><!----><!--]--><!--[--><div class="tree-node" style="padding-left:48px;" data-v-80bcd963><span class="toggle-placeholder" data-v-80bcd963></span><span class="icon" data-v-80bcd963>📄</span><span class="name" data-v-80bcd963>Input.vue</span><span class="size" data-v-80bcd963>3.0 KB</span></div><!----><!--]--><!--[--><div class="tree-node" style="padding-left:48px;" data-v-80bcd963><span class="toggle" data-v-80bcd963>▶</span><span class="icon" data-v-80bcd963>📁</span><span class="name" data-v-80bcd963>layout</span><!----></div><!----><!--]--><!--]--><!--]--><!--[--><div class="tree-node" style="padding-left:24px;" data-v-80bcd963><span class="toggle" data-v-80bcd963>▶</span><span class="icon" data-v-80bcd963>📁</span><span class="name" data-v-80bcd963>views</span><!----></div><!----><!--]--><!--[--><div class="tree-node" style="padding-left:24px;" data-v-80bcd963><span class="toggle-placeholder" data-v-80bcd963></span><span class="icon" data-v-80bcd963>📄</span><span class="name" data-v-80bcd963>App.vue</span><span class="size" data-v-80bcd963>1.0 KB</span></div><!----><!--]--><!--[--><div class="tree-node" style="padding-left:24px;" data-v-80bcd963><span class="toggle-placeholder" data-v-80bcd963></span><span class="icon" data-v-80bcd963>📘</span><span class="name" data-v-80bcd963>main.ts</span><span class="size" data-v-80bcd963>512 B</span></div><!----><!--]--><!--]--><!--]--><!--[--><div class="tree-node" style="padding-left:0;" data-v-80bcd963><span class="toggle" data-v-80bcd963>▼</span><span class="icon" data-v-80bcd963>📁</span><span class="name" data-v-80bcd963>public</span><!----></div><!--[--><!--[--><div class="tree-node" style="padding-left:24px;" data-v-80bcd963><span class="toggle-placeholder" data-v-80bcd963></span><span class="icon" data-v-80bcd963>🌐</span><span class="name" data-v-80bcd963>index.html</span><span class="size" data-v-80bcd963>1.0 KB</span></div><!----><!--]--><!--[--><div class="tree-node" style="padding-left:24px;" data-v-80bcd963><span class="toggle-placeholder" data-v-80bcd963></span><span class="icon" data-v-80bcd963>🖼️</span><span class="name" data-v-80bcd963>favicon.ico</span><span class="size" data-v-80bcd963>256 B</span></div><!----><!--]--><!--]--><!--]--><!--[--><div class="tree-node" style="padding-left:0;" data-v-80bcd963><span class="toggle-placeholder" data-v-80bcd963></span><span class="icon" data-v-80bcd963>📋</span><span class="name" data-v-80bcd963>package.json</span><span class="size" data-v-80bcd963>2.0 KB</span></div><!----><!--]--><!--[--><div class="tree-node" style="padding-left:0;" data-v-80bcd963><span class="toggle-placeholder" data-v-80bcd963></span><span class="icon" data-v-80bcd963>📝</span><span class="name" data-v-80bcd963>README.md</span><span class="size" data-v-80bcd963>4.0 KB</span></div><!----><!--]--><!--]--></div><div class="tips-box" data-v-80bcd963><p data-v-80bcd963><strong data-v-80bcd963>💡 类型定义：</strong><code data-v-80bcd963>TreeNode</code> 接口中 <code data-v-80bcd963>children?: TreeNode[]</code> 就是递归引用——子节点的类型和自身完全一样。这是树形结构最自然的建模方式。</p></div></div><!----><!----><h4 data-v-80bcd963>综合代码示例</h4><pre class="mini-code" data-v-80bcd963><span style="color:#7c7c99">// 1. 树形节点递归定义</span>
+interface TreeNode {
+  id: string
+  name: string
+  type: 'folder' | 'file'
+  children?: TreeNode[]  <span style="color:#8a8a3a">// 递归引用自身</span>
+}
+
+<span style="color:#7c7c99">// 2. 任意深度的 JSON 值</span>
+type JSONValue =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: JSONValue }
+  | JSONValue[]
+
+<span style="color:#7c7c99">// 3. 深度只读（递归映射类型）</span>
+type DeepReadonly&lt;T&gt; = {
+  readonly [K in keyof T]: T[K] extends object
+    ? DeepReadonly&lt;T[K]&gt;
+    : T[K]
+}
+
+<span style="color:#7c7c99">// 4. 深度可选</span>
+type DeepPartial&lt;T&gt; = {
+  [K in keyof T]?: T[K] extends object
+    ? DeepPartial&lt;T[K]&gt;
+    : T[K]
+}
+
+<span style="color:#7c7c99">// 使用示例</span>
+const data: DeepReadonly&lt;User&gt; = { ... }
+data.user.name = 'new'  <span style="color:#dc2626">// 错误：只读属性</span></pre></div></figure><h2>结构描述与转换</h2><p> 递归类型的价值，是让「结构描述」和「结构转换」都跟着层级自己走：在定义里引用自身，就能描述树与 JSON 这类无固定深度的结构；在映射类型里递归自己，就能把只读、可选、必填这类转换一口气铺满每一层。只要保证有可退出的分支，编译器就会按规则的终止路径收敛——而函数成员那类不该被递归的角色，要记得单独放行。 </p><div class="lesson-term"><span class="term-name">「递归类型」</span>是在自身定义中引用自己的类型，天然适合描述树、JSON 等嵌套结构。把递归搬进映射类型与条件类型，即可一键生成 <code>DeepReadonly</code>、<code>DeepPartial</code>、<code>DeepRequired</code> 这类深度转换。要点是<strong>必须有退出分支</strong>、函数与对象成员按需原样返回，并留意编译器对类型实例化深度的限制。 </div><!--]--></article></section><section class="lesson-section"><h2>关键代码</h2><div class="code-block-wrapper"><div class="code-block-toolbar"><span class="code-block-lang">TypeScript</span><button class="code-copy-btn" type="button" aria-label="复制代码"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>复制</span></button></div><pre class="code-block"><code><span class="hljs-comment">// 递归类型：描述树形结构和深嵌套对象</span>
+
+<span class="hljs-comment">// ── 树形结构 ──</span>
+<span class="hljs-comment">// 递归类型最常用于描述树、JSON 等嵌套结构</span>
+
+<span class="hljs-keyword">interface</span> <span class="hljs-title class_">TreeNode</span> {
+  <span class="hljs-attr">value</span>: <span class="hljs-built_in">string</span>
+  <span class="hljs-attr">children</span>: <span class="hljs-title class_">TreeNode</span>[]  <span class="hljs-comment">// 递归引用自身</span>
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-attr">tree</span>: <span class="hljs-title class_">TreeNode</span> = {
+  <span class="hljs-attr">value</span>: <span class="hljs-string">&#x27;root&#x27;</span>,
+  <span class="hljs-attr">children</span>: [
+    {
+      <span class="hljs-attr">value</span>: <span class="hljs-string">&#x27;child-1&#x27;</span>,
+      <span class="hljs-attr">children</span>: [
+        { <span class="hljs-attr">value</span>: <span class="hljs-string">&#x27;grandchild-1-1&#x27;</span>, <span class="hljs-attr">children</span>: [] },
+        { <span class="hljs-attr">value</span>: <span class="hljs-string">&#x27;grandchild-1-2&#x27;</span>, <span class="hljs-attr">children</span>: [] },
+      ],
+    },
+    {
+      <span class="hljs-attr">value</span>: <span class="hljs-string">&#x27;child-2&#x27;</span>,
+      <span class="hljs-attr">children</span>: [
+        { <span class="hljs-attr">value</span>: <span class="hljs-string">&#x27;grandchild-2-1&#x27;</span>, <span class="hljs-attr">children</span>: [] },
+      ],
+    },
+  ],
+}
+
+<span class="hljs-comment">// 遍历树</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">traverse</span>(<span class="hljs-params"><span class="hljs-attr">node</span>: <span class="hljs-title class_">TreeNode</span>, depth = <span class="hljs-number">0</span></span>): <span class="hljs-built_in">void</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27; &#x27;</span>.<span class="hljs-title function_">repeat</span>(depth * <span class="hljs-number">2</span>) + node.<span class="hljs-property">value</span>)
+  node.<span class="hljs-property">children</span>.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">child</span> =&gt;</span> <span class="hljs-title function_">traverse</span>(child, depth + <span class="hljs-number">1</span>))
+}
+
+<span class="hljs-comment">// ── DeepReadonly：深度只读 ──</span>
+<span class="hljs-comment">// 递归地将对象所有属性变为只读</span>
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">DeepReadonly</span>&lt;T&gt; = {
+  <span class="hljs-keyword">readonly</span> [K <span class="hljs-keyword">in</span> keyof T]: T[K] <span class="hljs-keyword">extends</span> <span class="hljs-built_in">object</span>
+    ? T[K] <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Function</span>
+      ? T[K]  <span class="hljs-comment">// 函数保持不变</span>
+      : <span class="hljs-title class_">DeepReadonly</span>&lt;T[K]&gt;
+    : T[K]
+}
+
+<span class="hljs-keyword">interface</span> <span class="hljs-title class_">NestedConfig</span> {
+  <span class="hljs-attr">app</span>: {
+    <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>
+    <span class="hljs-attr">version</span>: <span class="hljs-built_in">string</span>
+    <span class="hljs-attr">settings</span>: {
+      <span class="hljs-attr">debug</span>: <span class="hljs-built_in">boolean</span>
+      <span class="hljs-attr">theme</span>: <span class="hljs-string">&#x27;light&#x27;</span> | <span class="hljs-string">&#x27;dark&#x27;</span>
+      <span class="hljs-attr">features</span>: {
+        <span class="hljs-attr">auth</span>: <span class="hljs-built_in">boolean</span>
+        <span class="hljs-attr">analytics</span>: <span class="hljs-built_in">boolean</span>
+      }
+    }
+  }
+  <span class="hljs-attr">server</span>: {
+    <span class="hljs-attr">port</span>: <span class="hljs-built_in">number</span>
+    <span class="hljs-attr">host</span>: <span class="hljs-built_in">string</span>
+  }
+}
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">ReadonlyConfig</span> = <span class="hljs-title class_">DeepReadonly</span>&lt;<span class="hljs-title class_">NestedConfig</span>&gt;
+
+<span class="hljs-keyword">const</span> <span class="hljs-attr">config</span>: <span class="hljs-title class_">ReadonlyConfig</span> = {
+  <span class="hljs-attr">app</span>: {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;MyApp&#x27;</span>,
+    <span class="hljs-attr">version</span>: <span class="hljs-string">&#x27;1.0.0&#x27;</span>,
+    <span class="hljs-attr">settings</span>: {
+      <span class="hljs-attr">debug</span>: <span class="hljs-literal">false</span>,
+      <span class="hljs-attr">theme</span>: <span class="hljs-string">&#x27;light&#x27;</span>,
+      <span class="hljs-attr">features</span>: {
+        <span class="hljs-attr">auth</span>: <span class="hljs-literal">true</span>,
+        <span class="hljs-attr">analytics</span>: <span class="hljs-literal">true</span>,
+      },
+    },
+  },
+  <span class="hljs-attr">server</span>: {
+    <span class="hljs-attr">port</span>: <span class="hljs-number">3000</span>,
+    <span class="hljs-attr">host</span>: <span class="hljs-string">&#x27;localhost&#x27;</span>,
+  },
+}
+
+<span class="hljs-comment">// config.app.name = &#x27;NewApp&#x27;  // 错误：只读属性</span>
+<span class="hljs-comment">// config.app.settings.theme = &#x27;dark&#x27;  // 错误：只读属性</span>
+
+<span class="hljs-comment">// ── DeepPartial：深度可选 ──</span>
+<span class="hljs-comment">// 递归地将对象所有属性变为可选</span>
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">DeepPartial</span>&lt;T&gt; = {
+  [K <span class="hljs-keyword">in</span> keyof T]?: T[K] <span class="hljs-keyword">extends</span> <span class="hljs-built_in">object</span>
+    ? T[K] <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Function</span>
+      ? T[K]
+      : <span class="hljs-title class_">DeepPartial</span>&lt;T[K]&gt;
+    : T[K]
+}
+
+<span class="hljs-comment">// 深度更新配置</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">updateConfig</span>(<span class="hljs-params">
+  <span class="hljs-attr">target</span>: <span class="hljs-title class_">NestedConfig</span>,
+  <span class="hljs-attr">patch</span>: <span class="hljs-title class_">DeepPartial</span>&lt;<span class="hljs-title class_">NestedConfig</span>&gt;
+</span>): <span class="hljs-title class_">NestedConfig</span> {
+  <span class="hljs-keyword">return</span> {
+    ...target,
+    <span class="hljs-attr">app</span>: {
+      ...target.<span class="hljs-property">app</span>,
+      ...patch.<span class="hljs-property">app</span>,
+      <span class="hljs-attr">settings</span>: {
+        ...target.<span class="hljs-property">app</span>.<span class="hljs-property">settings</span>,
+        ...patch.<span class="hljs-property">app</span>?.<span class="hljs-property">settings</span>,
+        <span class="hljs-attr">features</span>: {
+          ...target.<span class="hljs-property">app</span>.<span class="hljs-property">settings</span>.<span class="hljs-property">features</span>,
+          ...patch.<span class="hljs-property">app</span>?.<span class="hljs-property">settings</span>?.<span class="hljs-property">features</span>,
+        },
+      },
+    },
+    <span class="hljs-attr">server</span>: {
+      ...target.<span class="hljs-property">server</span>,
+      ...patch.<span class="hljs-property">server</span>,
+    },
+  }
+}
+
+<span class="hljs-keyword">const</span> updated = <span class="hljs-title function_">updateConfig</span>(config <span class="hljs-keyword">as</span> <span class="hljs-title class_">NestedConfig</span>, {
+  <span class="hljs-attr">app</span>: {
+    <span class="hljs-attr">settings</span>: {
+      <span class="hljs-attr">theme</span>: <span class="hljs-string">&#x27;dark&#x27;</span>,
+      <span class="hljs-attr">features</span>: {
+        <span class="hljs-attr">analytics</span>: <span class="hljs-literal">false</span>,
+      },
+    },
+  },
+})
+
+<span class="hljs-comment">// ── DeepRequired：深度必填 ──</span>
+<span class="hljs-comment">// 递归地将所有可选属性变为必填</span>
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">DeepRequired</span>&lt;T&gt; = {
+  [K <span class="hljs-keyword">in</span> keyof T]-?: T[K] <span class="hljs-keyword">extends</span> <span class="hljs-built_in">object</span>
+    ? T[K] <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Function</span>
+      ? T[K]
+      : <span class="hljs-title class_">DeepRequired</span>&lt;T[K]&gt;
+    : T[K]
+}
+
+<span class="hljs-keyword">interface</span> <span class="hljs-title class_">PartialData</span> {
+  <span class="hljs-attr">id</span>?: <span class="hljs-built_in">number</span>
+  <span class="hljs-attr">info</span>?: {
+    <span class="hljs-attr">name</span>?: <span class="hljs-built_in">string</span>
+    <span class="hljs-attr">address</span>?: {
+      <span class="hljs-attr">city</span>?: <span class="hljs-built_in">string</span>
+      <span class="hljs-attr">street</span>?: <span class="hljs-built_in">string</span>
+    }
+  }
+}
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">FullData</span> = <span class="hljs-title class_">DeepRequired</span>&lt;<span class="hljs-title class_">PartialData</span>&gt;
+
+<span class="hljs-keyword">const</span> <span class="hljs-attr">fullData</span>: <span class="hljs-title class_">FullData</span> = {
+  <span class="hljs-attr">id</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">info</span>: {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;张三&#x27;</span>,
+    <span class="hljs-attr">address</span>: {
+      <span class="hljs-attr">city</span>: <span class="hljs-string">&#x27;北京&#x27;</span>,
+      <span class="hljs-attr">street</span>: <span class="hljs-string">&#x27;长安街&#x27;</span>,
+    },
+  },
+}
+
+<span class="hljs-comment">// ── 递归类型与 JSON ──</span>
+<span class="hljs-comment">// 描述任意 JSON 值的类型</span>
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">JSON</span>Value =
+  | <span class="hljs-built_in">string</span>
+  | <span class="hljs-built_in">number</span>
+  | <span class="hljs-built_in">boolean</span>
+  | <span class="hljs-literal">null</span>
+  | <span class="hljs-title class_">JSON</span>Value[]
+  | { [<span class="hljs-attr">key</span>: <span class="hljs-built_in">string</span>]: <span class="hljs-title class_">JSON</span>Value }
+
+<span class="hljs-keyword">const</span> <span class="hljs-attr">jsonData</span>: <span class="hljs-title class_">JSON</span>Value = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Test&#x27;</span>,
+  <span class="hljs-attr">values</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>],
+  <span class="hljs-attr">nested</span>: {
+    <span class="hljs-attr">a</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">b</span>: <span class="hljs-literal">null</span>,
+    <span class="hljs-attr">c</span>: [<span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>],
+  },
+}
+
+<span class="hljs-comment">// ── 递归类型与目录树 ──</span>
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">FileNode</span> = {
+  <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;file&#x27;</span>
+  <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>
+  <span class="hljs-attr">size</span>: <span class="hljs-built_in">number</span>
+}
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">DirectoryNode</span> = {
+  <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;directory&#x27;</span>
+  <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>
+  <span class="hljs-attr">children</span>: <span class="hljs-title class_">FileSystemNode</span>[]
+}
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">FileSystemNode</span> = <span class="hljs-title class_">FileNode</span> | <span class="hljs-title class_">DirectoryNode</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-attr">fileSystem</span>: <span class="hljs-title class_">DirectoryNode</span> = {
+  <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;directory&#x27;</span>,
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;src&#x27;</span>,
+  <span class="hljs-attr">children</span>: [
+    { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;file&#x27;</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;index.ts&#x27;</span>, <span class="hljs-attr">size</span>: <span class="hljs-number">1024</span> },
+    {
+      <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;directory&#x27;</span>,
+      <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;components&#x27;</span>,
+      <span class="hljs-attr">children</span>: [
+        { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;file&#x27;</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Button.tsx&#x27;</span>, <span class="hljs-attr">size</span>: <span class="hljs-number">2048</span> },
+        { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;file&#x27;</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Input.tsx&#x27;</span>, <span class="hljs-attr">size</span>: <span class="hljs-number">1536</span> },
+      ],
+    },
+    {
+      <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;directory&#x27;</span>,
+      <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;utils&#x27;</span>,
+      <span class="hljs-attr">children</span>: [
+        { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;file&#x27;</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;helpers.ts&#x27;</span>, <span class="hljs-attr">size</span>: <span class="hljs-number">512</span> },
+      ],
+    },
+  ],
+}
+
+<span class="hljs-comment">// 统计目录大小</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">getTotalSize</span>(<span class="hljs-params"><span class="hljs-attr">node</span>: <span class="hljs-title class_">FileSystemNode</span></span>): <span class="hljs-built_in">number</span> {
+  <span class="hljs-keyword">if</span> (node.<span class="hljs-property">type</span> === <span class="hljs-string">&#x27;file&#x27;</span>) {
+    <span class="hljs-keyword">return</span> node.<span class="hljs-property">size</span>
+  }
+  <span class="hljs-keyword">return</span> node.<span class="hljs-property">children</span>.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">sum, child</span>) =&gt;</span> sum + <span class="hljs-title function_">getTotalSize</span>(child), <span class="hljs-number">0</span>)
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">getTotalSize</span>(fileSystem))  <span class="hljs-comment">// 5120</span>
+
+<span class="hljs-comment">// ── 递归条件类型：扁平化数组 ──</span>
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">FlatArray</span>&lt;T&gt; = T <span class="hljs-title function_">extends</span> (infer U)[]
+  ? U <span class="hljs-keyword">extends</span> <span class="hljs-built_in">any</span>[]
+    ? <span class="hljs-title class_">FlatArray</span>&lt;U&gt;
+    : U
+  : T
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">NestedArray</span> = <span class="hljs-built_in">number</span>[][][]  <span class="hljs-comment">// [[[1]]]</span>
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">Flattened</span> = <span class="hljs-title class_">FlatArray</span>&lt;<span class="hljs-title class_">NestedArray</span>&gt;  <span class="hljs-comment">// number</span>
+
+<span class="hljs-comment">// ── 类型级别的字符串反转 ──</span>
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">ReverseString</span>&lt;S <span class="hljs-keyword">extends</span> <span class="hljs-built_in">string</span>&gt; = S <span class="hljs-keyword">extends</span> <span class="hljs-string">`<span class="hljs-subst">${infer First}</span><span class="hljs-subst">${infer Rest}</span>`</span>
+  ? <span class="hljs-string">`<span class="hljs-subst">${ReverseString&lt;Rest&gt;}</span><span class="hljs-subst">${First}</span>`</span>
+  : S
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">Hello</span> = <span class="hljs-string">&#x27;hello&#x27;</span>
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">Olleh</span> = <span class="hljs-title class_">ReverseString</span>&lt;<span class="hljs-title class_">Hello</span>&gt;  <span class="hljs-comment">// &#x27;olleh&#x27;</span>
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;递归类型演示完成&#x27;</span>)</code></pre></div></section><nav class="lesson-next" aria-label="下一章节"><div class="bottom-nav-row"><a href="https://www.typescriptlang.org/" target="_blank" rel="noopener" class="official-link">TypeScript 官网 → </a><div class="lesson-pager"><a href="/typescript/t-21/infer-keyword" class="previous-lesson-link"><span>上一颗</span><strong>🌰19 infer 关键字</strong></a><a href="/typescript/t-23/type-level-programming" class="next-lesson-link"><span>下一颗</span><strong>🌰21 类型级编程</strong></a></div></div></nav></main><!--]--></div><footer class="site-footer"><p class="site-footer-line"> © 2026 小松鼠举栗子 · 用 🌰 记录技术知识 · <a href="mailto:gzx_miller@foxmail.com">gzx_miller@foxmail.com</a></p></footer></div><!--]--><button type="button" class="squirrel-pet" style="" aria-label="松鼠小助手：点击提问，拖拽移动" title="点我提问，拖拽移动" data-v-235d5ef5><span class="pet-inner" aria-hidden="true" data-v-235d5ef5><span class="pet-ai-badge" data-v-235d5ef5>AI</span><span class="pet-zzz" aria-hidden="true" data-v-235d5ef5>z<span data-v-235d5ef5>z</span><span data-v-235d5ef5>z</span></span><span class="pet-flip" data-v-235d5ef5><span class="pet-wobble" data-v-235d5ef5><svg viewBox="0 0 136 120" width="68" height="60" data-v-235d5ef5><defs data-v-235d5ef5><linearGradient id="sq-body" x1="0" y1="0" x2="0" y2="1" data-v-235d5ef5><stop offset="0" stop-color="#f0904a" data-v-235d5ef5></stop><stop offset="1" stop-color="#d95a24" data-v-235d5ef5></stop></linearGradient><linearGradient id="sq-tail" x1="0" y1="1" x2="1" y2="0" data-v-235d5ef5><stop offset="0" stop-color="#c1441e" data-v-235d5ef5></stop><stop offset="1" stop-color="#f5a040" data-v-235d5ef5></stop></linearGradient></defs><g class="pet-tail" data-v-235d5ef5><path d="M58 96 C96 106 122 86 122 50 C121.5 30 112 13 97 8 C83 3.5 72.5 9 71.5 17.5 C70.8 24 74.5 28.5 76.5 33.5 C63 44 58 66 56.5 86 C56 92 57 95 58 96 Z" fill="url(#sq-tail)" data-v-235d5ef5></path><path d="M76 88 C96 80 106 58 99 40 C105 58 98 80 82 90 Z" fill="#f6c15a" opacity="0.5" data-v-235d5ef5></path></g><ellipse class="pet-foot pet-foot-l" cx="41.4" cy="107" rx="9.6" ry="5.4" fill="#b7431f" data-v-235d5ef5></ellipse><ellipse class="pet-foot pet-foot-r" cx="64.6" cy="107" rx="9.6" ry="5.4" fill="#b7431f" data-v-235d5ef5></ellipse><ellipse cx="52" cy="84" rx="27" ry="27" fill="url(#sq-body)" data-v-235d5ef5></ellipse><ellipse cx="51" cy="90" rx="16" ry="17" fill="#ffe3c2" opacity="0.95" data-v-235d5ef5></ellipse><path d="M33.5 38 L38.5 12 L48 27 Z" fill="#d95a24" stroke="#d95a24" stroke-width="3" stroke-linejoin="round" data-v-235d5ef5></path><path d="M36.8 30.5 L39 17 L44 25.5 Z" fill="#f2a582" data-v-235d5ef5></path><path d="M70.5 38 L65.5 12 L56 27 Z" fill="#d95a24" stroke="#d95a24" stroke-width="3" stroke-linejoin="round" data-v-235d5ef5></path><path d="M67.2 30.5 L65 17 L60 25.5 Z" fill="#f2a582" data-v-235d5ef5></path><circle cx="52" cy="47" r="22" fill="url(#sq-body)" data-v-235d5ef5></circle><circle cx="33" cy="54" r="9.5" fill="#e8793c" data-v-235d5ef5></circle><circle cx="71" cy="54" r="9.5" fill="#e8793c" data-v-235d5ef5></circle><circle cx="41" cy="53" r="4" fill="#f6c15a" opacity="0.6" data-v-235d5ef5></circle><circle cx="63" cy="53" r="4" fill="#f6c15a" opacity="0.6" data-v-235d5ef5></circle><g stroke="#b7431f" stroke-width="0.9" stroke-linecap="round" opacity="0.7" data-v-235d5ef5><path d="M32 50 L25 49" data-v-235d5ef5></path><path d="M32 54 L25 55" data-v-235d5ef5></path><path d="M32.5 58 L26 60" data-v-235d5ef5></path><path d="M72 50 L79 49" data-v-235d5ef5></path><path d="M72 54 L79 55" data-v-235d5ef5></path><path d="M71.5 58 L78 60" data-v-235d5ef5></path></g><g class="pet-eyes" data-v-235d5ef5><circle cx="44" cy="44" r="3.4" fill="#32190f" data-v-235d5ef5></circle><circle cx="45" cy="43" r="1.1" fill="#fffaf2" data-v-235d5ef5></circle><circle cx="60" cy="44" r="3.4" fill="#32190f" data-v-235d5ef5></circle><circle cx="61" cy="43" r="1.1" fill="#fffaf2" data-v-235d5ef5></circle></g><g class="pet-face-happy" data-v-235d5ef5><path d="M40.5 44.5 Q44 40.5 47.5 44.5" fill="none" stroke="#32190f" stroke-width="2" stroke-linecap="round" data-v-235d5ef5></path><path d="M56.5 44.5 Q60 40.5 63.5 44.5" fill="none" stroke="#32190f" stroke-width="2" stroke-linecap="round" data-v-235d5ef5></path><circle cx="36" cy="50.5" r="2.8" fill="#f0806e" opacity="0.6" data-v-235d5ef5></circle><circle cx="68" cy="50.5" r="2.8" fill="#f0806e" opacity="0.6" data-v-235d5ef5></circle></g><g class="pet-face-sleep" data-v-235d5ef5><path d="M40.5 45 Q44 47.5 47.5 45" fill="none" stroke="#32190f" stroke-width="2" stroke-linecap="round" data-v-235d5ef5></path><path d="M56.5 45 Q60 47.5 63.5 45" fill="none" stroke="#32190f" stroke-width="2" stroke-linecap="round" data-v-235d5ef5></path></g><ellipse cx="52" cy="55" rx="9" ry="7" fill="#ffe3c2" data-v-235d5ef5></ellipse><ellipse cx="52" cy="50.5" rx="2.4" ry="1.8" fill="#7b351d" data-v-235d5ef5></ellipse><path d="M48.5 54.5 Q52 57.5 55.5 54.5" fill="none" stroke="#7b351d" stroke-width="1.4" stroke-linecap="round" data-v-235d5ef5></path><rect x="50.2" y="56.4" width="1.6" height="2.6" rx="0.5" fill="#fffdf6" data-v-235d5ef5></rect><rect x="52.2" y="56.4" width="1.6" height="2.6" rx="0.5" fill="#fffdf6" data-v-235d5ef5></rect><ellipse cx="39.6" cy="74.6" rx="5.5" ry="7.2" fill="#c1441e" transform="rotate(18 39.6 74.6)" data-v-235d5ef5></ellipse><ellipse cx="40" cy="80.4" rx="3.6" ry="2.4" fill="#f0a06a" data-v-235d5ef5></ellipse><g class="pet-arm" data-v-235d5ef5><ellipse cx="66.4" cy="71.6" rx="5.4" ry="7" fill="#c1441e" transform="rotate(-24 66.4 71.6)" data-v-235d5ef5></ellipse><circle cx="69.2" cy="66.4" r="2.8" fill="#d95a24" data-v-235d5ef5></circle><circle cx="71.4" cy="63.8" r="1.7" fill="#d95a24" data-v-235d5ef5></circle></g></svg></span></span></span><span class="pet-hint" aria-hidden="true" data-v-235d5ef5><span class="pet-hint-text" data-v-235d5ef5></span></span></button><!----><!--]--></div><div id="teleports"></div><script>window.__NUXT__={};window.__NUXT__.config={public:{zhipuApiKey:"4a144c581416035e180b03574714070553061642165f46465c5f1958545145181c047f743904140e2b350009195b2a3503"},app:{baseURL:"/",buildId:"e714b28c-1387-4a7d-a2e1-4256272ad9f2",buildAssetsDir:"/_nuxt/",cdnURL:""}}</script><script type="application/json" data-nuxt-data="nuxt-app" data-ssr="true" id="__NUXT_DATA__" data-src="/typescript/t-22/recursive-types/_payload.json?e714b28c-1387-4a7d-a2e1-4256272ad9f2">[{"state":1,"once":5,"_errors":6,"serverRendered":3,"path":8,"pinia":9,"prerenderedAt":11},["Reactive",2],{"$ssidebarExpanded":3,"$stheme":4},true,"light",["Set"],["ShallowReactive",7],{"lesson-code-T_22":-1},"\u002Ftypescript\u002Ft-22\u002Frecursive-types",["Reactive",10],{},1791203793035]</script></body></html>

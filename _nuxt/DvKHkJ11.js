@@ -1,0 +1,80 @@
+const n=`/* Scroll Snap 容器设置 */
+
+/* 水平滚动 + 强制对齐 */
+.snap-x-mandatory {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  /* x: 水平方向，mandatory: 强制对齐 */
+  gap: 16px;
+  scrollbar-width: none;
+}
+.snap-x-mandatory::-webkit-scrollbar {
+  display: none;
+}
+
+/* 垂直滚动 + 接近时对齐 */
+.snap-y-proximity {
+  overflow-y: auto;
+  scroll-snap-type: y proximity;
+  /* y: 垂直方向，proximity: 接近时才对齐 */
+  height: 400px;
+}
+
+/* 子项：对齐到起始位置 */
+.snap-item-start {
+  scroll-snap-align: start;
+  /* 对齐到容器起始位置 */
+}
+
+/* 子项：居中对齐 */
+.snap-item-center {
+  scroll-snap-align: center;
+  /* 对齐到容器中心 */
+  flex: 0 0 100%;
+}
+
+/* 子项：对齐到结束位置 */
+.snap-item-end {
+  scroll-snap-align: end;
+  /* 对齐到容器结束位置 */
+}
+
+/* scroll-padding：处理固定导航栏遮挡 */
+.snap-container {
+  scroll-padding-top: 80px;
+  /* 顶部留出 80px 给固定导航 */
+  scroll-snap-type: y mandatory;
+}
+
+/* scroll-margin：子项的边距调整 */
+.snap-item {
+  scroll-margin: 16px;
+  /* 对齐时的边距 */
+}
+
+/* 全屏分页滚动 */
+.fullpage {
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+}
+.fullpage section {
+  height: 100vh;
+  scroll-snap-align: start;
+}
+
+/* 轮播图效果 */
+.carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+}
+.carousel-item {
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+}
+
+/* 注意：scroll-snap 不会创建滚动容器，需配合 overflow 使用 */
+/* 注意：mandatory 强制对齐可能导致内容无法停留，需谨慎使用 */`;export{n as default};

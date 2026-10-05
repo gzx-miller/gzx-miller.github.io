@@ -1,0 +1,286 @@
+<!DOCTYPE html><html  lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>DNS - 小松鼠举栗子</title><script>(function(){try{var t=localStorage.getItem('theme-preference');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script><style>.squirrel-pet[data-v-235d5ef5]{position:fixed;right:20px;top:50%;transform:translateY(-50%);z-index:1000;width:76px;height:76px;padding:0;border:none;background:transparent;cursor:grab;touch-action:none;-webkit-user-select:none;-moz-user-select:none;user-select:none;filter:drop-shadow(0 8px 16px rgba(98,42,18,.28));transition:left 2.4s cubic-bezier(.45,.05,.55,.95),top 2.4s cubic-bezier(.45,.05,.55,.95),filter .2s ease}.squirrel-pet[data-v-235d5ef5]:hover{filter:drop-shadow(0 10px 20px rgba(98,42,18,.4))}.squirrel-pet.dragging[data-v-235d5ef5]{cursor:grabbing;filter:drop-shadow(0 14px 24px rgba(98,42,18,.45));transition:filter .2s ease}.pet-inner[data-v-235d5ef5]{position:relative;display:block;animation:pet-bob-235d5ef5 3.2s ease-in-out infinite}.pet-ai-badge[data-v-235d5ef5]{position:absolute;top:-14px;left:50%;z-index:2;transform:translate(-50%);transform-origin:50% 100%;font-size:19px;font-weight:900;font-style:italic;letter-spacing:1px;line-height:1;background:linear-gradient(180deg,#ffe9a8,#f6c15a 35%,#d99a2b 55%,#fff3c4);background-clip:text;-webkit-background-clip:text;-webkit-text-stroke:.9px #8f2f18;paint-order:stroke fill;color:transparent;filter:drop-shadow(0 2px 3px rgba(98,42,18,.45));pointer-events:none;transition:filter .25s ease}.squirrel-pet:hover .pet-ai-badge[data-v-235d5ef5]{background:linear-gradient(110deg,#f6c15a,#ffe9a8 20%,#fff 38%,#ffe9a8 55%,#d99a2b 75%,#f6c15a);background-size:250% 100%;background-clip:text;-webkit-background-clip:text;filter:drop-shadow(0 0 6px rgba(246,193,90,.9)) drop-shadow(0 2px 3px rgba(98,42,18,.45));animation:ai-swing-235d5ef5 .62s ease-in-out infinite,ai-shine-235d5ef5 1.4s linear infinite}@keyframes ai-swing-235d5ef5{0%,to{transform:translate(-50%) rotate(-9deg) scale(1.06)}50%{transform:translate(-50%) rotate(9deg) scale(1.06)}}@keyframes ai-shine-235d5ef5{0%{background-position:120% 0}to{background-position:-120% 0}}.squirrel-pet.pricked .pet-inner[data-v-235d5ef5]{animation:prick-jump-235d5ef5 .68s cubic-bezier(.3,.9,.4,1)}@keyframes prick-jump-235d5ef5{0%{transform:translateY(0) scale(1)}28%{transform:translateY(-30px) scale(1.07)}52%{transform:translateY(-20px) scale(1.02) rotate(-5deg)}76%{transform:translateY(2px) scale(.96,.88)}to{transform:translateY(0) scale(1)}}.squirrel-pet.dragging .pet-ai-badge[data-v-235d5ef5],.squirrel-pet.dragging .pet-arm[data-v-235d5ef5],.squirrel-pet.dragging .pet-eyes[data-v-235d5ef5],.squirrel-pet.dragging .pet-face-happy[data-v-235d5ef5],.squirrel-pet.dragging .pet-foot-l[data-v-235d5ef5],.squirrel-pet.dragging .pet-foot-r[data-v-235d5ef5],.squirrel-pet.dragging .pet-hint-text[data-v-235d5ef5],.squirrel-pet.dragging .pet-inner[data-v-235d5ef5],.squirrel-pet.dragging .pet-tail[data-v-235d5ef5]{animation-play-state:paused}.pet-foot[data-v-235d5ef5]{transform-box:fill-box}.squirrel-pet.crawling .pet-foot-l[data-v-235d5ef5]{animation:foot-step-235d5ef5 .42s ease-in-out infinite alternate}.squirrel-pet.crawling .pet-foot-r[data-v-235d5ef5]{animation:foot-step-235d5ef5 .42s ease-in-out infinite alternate-reverse}@keyframes foot-step-235d5ef5{0%{transform:translate(2.5px,-1.2px) rotate(3deg)}to{transform:translate(-2.5px,1.2px) rotate(-3deg)}}.pet-wobble[data-v-235d5ef5]{display:block}.squirrel-pet.crawling .pet-wobble[data-v-235d5ef5]{transform-origin:50% 100%;animation:crawl-wobble-235d5ef5 .42s ease-in-out infinite alternate}@keyframes crawl-wobble-235d5ef5{0%{transform:rotate(-4deg) translate(1.5px)}to{transform:rotate(4deg) translate(-1.5px)}}.pet-arm[data-v-235d5ef5]{transform-box:fill-box;transform-origin:50% 90%}.squirrel-pet.waving .pet-arm[data-v-235d5ef5]{animation:arm-wave-235d5ef5 1.1s ease-in-out infinite}@keyframes arm-wave-235d5ef5{0%,to{transform:rotate(0)}30%{transform:rotate(-46deg)}55%{transform:rotate(10deg)}80%{transform:rotate(-36deg)}}.pet-eyes[data-v-235d5ef5],.pet-face-happy[data-v-235d5ef5]{transition:opacity .2s ease}.pet-face-happy[data-v-235d5ef5]{opacity:0}.squirrel-pet.waving .pet-face-happy[data-v-235d5ef5]{opacity:1}.squirrel-pet.waving .pet-eyes[data-v-235d5ef5]{opacity:0}.pet-face-sleep[data-v-235d5ef5]{opacity:0;transition:opacity .2s ease}.squirrel-pet.sleeping .pet-eyes[data-v-235d5ef5],.squirrel-pet.sleeping .pet-face-happy[data-v-235d5ef5]{opacity:0}.squirrel-pet.sleeping .pet-face-sleep[data-v-235d5ef5]{opacity:1}.squirrel-pet.sleeping .pet-eyes[data-v-235d5ef5],.squirrel-pet.sleeping .pet-inner[data-v-235d5ef5],.squirrel-pet.sleeping .pet-tail[data-v-235d5ef5]{animation:none}.pet-zzz[data-v-235d5ef5]{position:absolute;top:-16px;right:-14px;z-index:3;display:inline-flex;gap:3px;font-size:12px;font-weight:700;color:var(--muted);line-height:1;pointer-events:none;opacity:0;transition:opacity .3s ease}.squirrel-pet.sleeping .pet-zzz[data-v-235d5ef5]{opacity:1}.pet-zzz span[data-v-235d5ef5]{display:inline-block;animation:pet-zzz-float-235d5ef5 2.4s ease-in-out infinite}.pet-zzz span[data-v-235d5ef5]:nth-child(2){animation-delay:.4s}.pet-zzz span[data-v-235d5ef5]:nth-child(3){animation-delay:.8s}@keyframes pet-zzz-float-235d5ef5{0%{transform:translateY(0) scale(.6);opacity:0}30%{opacity:1}to{transform:translateY(-14px) scale(1.15);opacity:0}}@media(prefers-reduced-motion:reduce){.squirrel-pet.sleeping .pet-zzz span[data-v-235d5ef5]{animation:none;opacity:1}}.pet-tail[data-v-235d5ef5]{transform-origin:bottom left;animation:tail-wag-235d5ef5 2.6s ease-in-out infinite}.pet-eyes[data-v-235d5ef5],.pet-tail[data-v-235d5ef5]{transform-box:fill-box}.pet-eyes[data-v-235d5ef5]{transform-origin:center;animation:pet-blink-235d5ef5 4.4s ease-in-out infinite}.pet-hint[data-v-235d5ef5]{position:absolute;top:6px;right:calc(100% + 10px);width:-moz-max-content;width:max-content;max-width:170px;padding:3px 10px;border-radius:12px;font-size:11px;line-height:1.6;color:#fffaf2;background:linear-gradient(135deg,var(--leaf-red),var(--leaf-orange));box-shadow:0 4px 10px #8f2f1859;opacity:0;transform:translate(8px) scale(.9);transform-origin:100% 70%;pointer-events:none;transition:opacity .28s ease,transform .28s cubic-bezier(.34,1.56,.64,1)}.pet-hint[data-v-235d5ef5]:after{content:"";position:absolute;top:10px;left:100%;border:5px solid transparent;border-left:7px solid #e0652f}.pet-hint.show[data-v-235d5ef5]{opacity:1;transform:translate(0) scale(1)}.pet-hint-text[data-v-235d5ef5]{display:inline-block}.squirrel-pet.hint-on-right .pet-hint[data-v-235d5ef5]{right:auto;left:calc(100% + 10px);transform-origin:0 70%;transform:translate(-8px) scale(.9)}.squirrel-pet.hint-on-right .pet-hint.show[data-v-235d5ef5]{transform:translate(0) scale(1)}.squirrel-pet.hint-on-right .pet-hint[data-v-235d5ef5]:after{left:auto;right:100%;border:5px solid transparent;border-right:7px solid #e0652f;border-left:none}.pet-hint.show .pet-hint-text[data-v-235d5ef5]{animation:tip-talk-235d5ef5 .8s ease-in-out infinite}@keyframes tip-talk-235d5ef5{0%,to{transform:translateY(0) scale(1)}50%{transform:translateY(-1px) scale(1.04)}}@media(prefers-reduced-motion:reduce){.pet-hint.show .pet-hint-text[data-v-235d5ef5],.squirrel-pet.crawling .pet-foot-l[data-v-235d5ef5],.squirrel-pet.crawling .pet-foot-r[data-v-235d5ef5],.squirrel-pet.crawling .pet-wobble[data-v-235d5ef5],.squirrel-pet.waving .pet-arm[data-v-235d5ef5],.squirrel-pet:hover .pet-ai-badge[data-v-235d5ef5]{animation:none}}@keyframes pet-bob-235d5ef5{0%,to{transform:translateY(0)}50%{transform:translateY(-5px)}}@keyframes tail-wag-235d5ef5{0%,to{transform:rotate(0)}50%{transform:rotate(5deg)}}@keyframes pet-blink-235d5ef5{0%,93%,to{transform:scaleY(1)}96%{transform:scaleY(.12)}}</style><style>.dns-controls[data-v-e4e07306]{display:flex;gap:10px;align-items:center;margin:.6rem 0;flex-wrap:wrap}.dns-controls input[data-v-e4e07306]{width:180px}.dns-controls input[data-v-e4e07306],.dns-controls select[data-v-e4e07306]{padding:3px 8px;border:1px solid #ddd;border-radius:4px}.dns-result[data-v-e4e07306]{margin:.6rem 0}.result-header[data-v-e4e07306]{display:flex;justify-content:space-between;font-size:12px;color:#64748b;margin-bottom:4px}.domain[data-v-e4e07306]{color:#e8590c;font-weight:600}.dns-explain[data-v-e4e07306]{margin:.8rem 0}.dns-explain h4[data-v-e4e07306]{font-size:13px;color:#334155;margin-bottom:6px}.record-list[data-v-e4e07306]{display:grid;gap:4px}.record-item[data-v-e4e07306]{display:flex;gap:10px;padding:4px 8px;background:#fff9f0;border-radius:4px;font-size:12px}.record-item strong[data-v-e4e07306]{color:#e8590c;min-width:50px}.record-item span[data-v-e4e07306]{color:#64748b}</style><link rel="stylesheet" href="/_nuxt/entry.CGN0g2Ra.css" crossorigin><link rel="preload" as="fetch" crossorigin="anonymous" href="/nodejs/d-29/dns/_payload.json?e714b28c-1387-4a7d-a2e1-4256272ad9f2"><script type="module" src="/_nuxt/ClZcEZ7f.js" crossorigin></script><meta name="author" content="gzx-miller"><meta name="robots" content="index, follow"><meta property="og:site_name" content="小松鼠举栗子"><meta property="og:locale" content="zh_CN"><meta property="og:url" content="https://gzx-miller.github.io/"><meta property="og:image:width" content="2560"><meta property="og:image:height" content="1440"><meta name="twitter:title" content="小松鼠举栗子 - 通过独立真实内容学习软件技术"><meta name="twitter:description" content="中文技术知识内容库：22 大分类 500+ 真实内容，每个栗子只讲一个知识点。"><meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8b369"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1210"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"小松鼠举栗子","url":"https://gzx-miller.github.io/","description":"中文技术知识内容库：通过独立真实小内容学习 Vue3、TypeScript、React、Node.js、CSS、WebGL、C++、uni-app 等。","inLanguage":"zh-CN"}</script><link rel="canonical" href="https://gzx-miller.github.io/nodejs/d-29/dns"><meta name="og:image:alt" content="使用 dns 模块解析域名，查询各类 DNS 记录（A、AAAA、CNAME、MX、TXT、NS）。"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://gzx-miller.github.io/"},{"@type":"ListItem","position":2,"name":"Node.js","item":"https://gzx-miller.github.io/nodejs"},{"@type":"ListItem","position":3,"name":"DNS","item":"https://gzx-miller.github.io/nodejs/d-29/dns"}]}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"LearningResource","name":"dns 域名解析","description":"使用 dns 模块解析域名，查询各类 DNS 记录（A、AAAA、CNAME、MX、TXT、NS）。","url":"https://gzx-miller.github.io/nodejs/d-29/dns","inLanguage":"zh-CN","learningResourceType":"CourseContent","about":{"@type":"WebSite","name":"Node.js","url":"https://gzx-miller.github.io/nodejs"},"isPartOf":{"@type":"WebSite","name":"小松鼠举栗子","url":"https://gzx-miller.github.io/"}}</script><meta name="description" content="使用 dns 模块解析域名，查询各类 DNS 记录（A、AAAA、CNAME、MX、TXT、NS）。"><meta property="og:title" content="dns 域名解析 - 小松鼠举栗子"><meta property="og:description" content="使用 dns 模块解析域名，查询各类 DNS 记录（A、AAAA、CNAME、MX、TXT、NS）。"><meta property="og:type" content="article"><meta property="og:image" content="https://gzx-miller.github.io/og-image.jpg"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://gzx-miller.github.io/og-image.jpg"></head><body><div id="__nuxt"><!--[--><!--[--><a class="skip-link" href="#main-content">跳到正文</a><div class="app-frame"><header class="top-nav"><div class="top-bar"><a href="/" class="top-brand" aria-label="回到首页"><img class="brand-avatar" src="/_nuxt/squirrel-chestnut-avatar.BUhAFRCm.webp" alt="小松鼠举着栗子" width="48" height="48" fetchpriority="high"><div class="brand-text"><strong>小松鼠举栗子 </strong><span class="brand-tagline">中文技术知识内容库</span></div></a><div class="site-intro-group"><p class="site-intro">记录与分享可复用的软件技术内容</p><p class="site-stats"><span class="stat-pill">免费开源</span><span class="stat-pill">持续更新</span></p></div><div class="top-actions"><a class="contact-mail" href="mailto:gzx_miller@foxmail.com" title="给我发邮件">gzx_miller@foxmail.com</a><a class="github-link" href="https://github.com/gzx-miller/gzx-miller.github.io" target="_blank" rel="noopener" aria-label="查看开源代码" title="查看开源代码"><svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"></path></svg></a><button class="theme-toggle" aria-label="切换深色主题" title="切换深色主题"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></button></div></div><div class="tabs-row"><nav class="knowledge-tabs" aria-label="知识类别导航"><!--[--><div class="knowledge-tab-wrapper"><a href="/javascript" class="knowledge-tab" aria-disabled="false"><span>JavaScript</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/typescript" class="knowledge-tab" aria-disabled="false"><span>TypeScript</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/vue" class="knowledge-tab" aria-disabled="false"><span>Vue3</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/element-plus" class="knowledge-tab" aria-disabled="false"><span>Element Plus</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/vue-flow" class="knowledge-tab" aria-disabled="false"><span>Vue Flow</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/nestjs" class="knowledge-tab" aria-disabled="false"><span>Nest.js</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/nuxt" class="knowledge-tab" aria-disabled="false"><span>Nuxt</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a aria-current="page" href="/nodejs" class="knowledge-tab active" aria-disabled="false"><span>Node.js</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/css" class="knowledge-tab" aria-disabled="false"><span>CSS</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/tailwind-css" class="knowledge-tab" aria-disabled="false"><span>Tailwind CSS</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/sass" class="knowledge-tab" aria-disabled="false"><span>Sass</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/vite" class="knowledge-tab" aria-disabled="false"><span>Vite</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/react" class="knowledge-tab" aria-disabled="false"><span>React</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/nextjs" class="knowledge-tab" aria-disabled="false"><span>Next.js</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/langchain" class="knowledge-tab" aria-disabled="false"><span>LangChain</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/llm-principles" class="knowledge-tab" aria-disabled="false"><span>LLM 原理</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/cpp" class="knowledge-tab" aria-disabled="false"><span>C++</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/electron" class="knowledge-tab" aria-disabled="false"><span>Electron</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/ffmpeg" class="knowledge-tab" aria-disabled="false"><span>FFmpeg</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/webgl" class="knowledge-tab" aria-disabled="false"><span>WebGL</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/webassembly" class="knowledge-tab" aria-disabled="false"><span>WebAssembly</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/uni-app" class="knowledge-tab" aria-disabled="false"><span>uni-app</span><!----></a><!----></div><!--]--></nav><!----></div><div class="nprogress-rail" aria-hidden="true"></div></header><div class="sidebar-expanded app-shell"><aside class="sidebar-temporarily-expanded sidebar" aria-label="Node.js 知识点导航"><div class="sidebar-heading"><button class="expanded sidebar-toggle" aria-label="收起侧边栏"><span class="toggle-icon" aria-hidden="true"></span><strong class="sidebar-toggle-label">Node.js</strong></button><label class="lesson-search"><span class="sr-only">搜索当前分类课程</span><input value="" type="search" placeholder="搜索课程…" autocomplete="off"></label></div><nav class="lesson-nav"><!--[--><section class="lesson-group"><h2 class="lesson-group-title">运行时与模块</h2><!--[--><a href="/nodejs/d-1/module-system" class="lesson-link" aria-label="🌰1 模块系统" title="模块系统"><span>🌰1</span><strong>模块系统</strong></a><a href="/nodejs/d-2/path-url" class="lesson-link" aria-label="🌰2 路径与 URL" title="路径与 URL"><span>🌰2</span><strong>路径与 URL</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">文件与事件</h2><!--[--><a href="/nodejs/d-3/file-system" class="lesson-link" aria-label="🌰3 文件系统" title="文件系统"><span>🌰3</span><strong>文件系统</strong></a><a href="/nodejs/d-4/event-emitter" class="lesson-link" aria-label="🌰4 事件发布订阅" title="事件发布订阅"><span>🌰4</span><strong>事件发布订阅</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">流与网络</h2><!--[--><a href="/nodejs/d-5/streams" class="lesson-link" aria-label="🌰5 流与背压" title="流与背压"><span>🌰5</span><strong>流与背压</strong></a><a href="/nodejs/d-6/http-server" class="lesson-link" aria-label="🌰6 HTTP 服务" title="HTTP 服务"><span>🌰6</span><strong>HTTP 服务</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">进程与并发</h2><!--[--><a href="/nodejs/d-7/process-env" class="lesson-link" aria-label="🌰7 进程与配置" title="进程与配置"><span>🌰7</span><strong>进程与配置</strong></a><a href="/nodejs/d-8/concurrency" class="lesson-link" aria-label="🌰8 并发控制" title="并发控制"><span>🌰8</span><strong>并发控制</strong></a><a href="/nodejs/d-16/worker-threads" class="lesson-link" aria-label="🌰9 Worker 线程" title="Worker 线程"><span>🌰9</span><strong>Worker 线程</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">可靠性</h2><!--[--><a href="/nodejs/d-9/error-logging" class="lesson-link" aria-label="🌰10 错误与日志" title="错误与日志"><span>🌰10</span><strong>错误与日志</strong></a><a href="/nodejs/d-10/node-test" class="lesson-link" aria-label="🌰11 Node 测试" title="Node 测试"><span>🌰11</span><strong>Node 测试</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">安全与依赖</h2><!--[--><a href="/nodejs/d-11/security" class="lesson-link" aria-label="🌰12 输入安全" title="输入安全"><span>🌰12</span><strong>输入安全</strong></a><a href="/nodejs/d-12/package-management" class="lesson-link" aria-label="🌰13 依赖管理" title="依赖管理"><span>🌰13</span><strong>依赖管理</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">Web 框架</h2><!--[--><a href="/nodejs/d-13/express-fastify" class="lesson-link" aria-label="🌰14 Express/Fastify" title="Express/Fastify"><span>🌰14</span><strong>Express/Fastify</strong></a><a href="/nodejs/d-14/websocket" class="lesson-link" aria-label="🌰15 WebSocket" title="WebSocket"><span>🌰15</span><strong>WebSocket</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">数据与存储</h2><!--[--><a href="/nodejs/d-15/database" class="lesson-link" aria-label="🌰16 数据库" title="数据库"><span>🌰16</span><strong>数据库</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">事件循环</h2><!--[--><a href="/nodejs/d-17/event-loop" class="lesson-link" aria-label="🌰17 事件循环" title="事件循环"><span>🌰17</span><strong>事件循环</strong></a><a href="/nodejs/d-25/timers" class="lesson-link" aria-label="🌰18 定时器" title="定时器"><span>🌰18</span><strong>定时器</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">二进制</h2><!--[--><a href="/nodejs/d-18/buffer" class="lesson-link" aria-label="🌰19 Buffer" title="Buffer"><span>🌰19</span><strong>Buffer</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">多进程</h2><!--[--><a href="/nodejs/d-19/child-process" class="lesson-link" aria-label="🌰20 子进程" title="子进程"><span>🌰20</span><strong>子进程</strong></a><a href="/nodejs/d-20/cluster" class="lesson-link" aria-label="🌰21 cluster" title="cluster"><span>🌰21</span><strong>cluster</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">安全</h2><!--[--><a href="/nodejs/d-21/crypto" class="lesson-link" aria-label="🌰22 加密" title="加密"><span>🌰22</span><strong>加密</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">性能</h2><!--[--><a href="/nodejs/d-22/perf-hooks" class="lesson-link" aria-label="🌰23 性能分析" title="性能分析"><span>🌰23</span><strong>性能分析</strong></a><a href="/nodejs/d-27/zlib" class="lesson-link" aria-label="🌰24 压缩" title="压缩"><span>🌰24</span><strong>压缩</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">网络</h2><!--[--><a href="/nodejs/d-23/https" class="lesson-link" aria-label="🌰25 HTTPS" title="HTTPS"><span>🌰25</span><strong>HTTPS</strong></a><a href="/nodejs/d-26/net-tcp" class="lesson-link" aria-label="🌰26 TCP" title="TCP"><span>🌰26</span><strong>TCP</strong></a><a aria-current="page" href="/nodejs/d-29/dns" class="router-link-active router-link-exact-active lesson-link active" aria-label="🌰27 DNS" title="DNS"><span>🌰27</span><strong>DNS</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">CLI</h2><!--[--><a href="/nodejs/d-24/cli" class="lesson-link" aria-label="🌰28 CLI" title="CLI"><span>🌰28</span><strong>CLI</strong></a><a href="/nodejs/d-30/readline" class="lesson-link" aria-label="🌰29 readline" title="readline"><span>🌰29</span><strong>readline</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">系统</h2><!--[--><a href="/nodejs/d-28/os" class="lesson-link" aria-label="🌰30 系统信息" title="系统信息"><span>🌰30</span><strong>系统信息</strong></a><!--]--></section><!--]--><!----></nav></aside><!--[--><main id="main-content" class="lesson-page" data-category="nodejs" tabindex="-1"><nav class="breadcrumb" aria-label="面包屑"><a href="/nodejs" class="">Node.js</a><span aria-hidden="true">/</span><span aria-current="page">DNS</span><small>27 / 30</small></nav><div class="lesson-progress" role="progressbar" aria-label="Node.js 学习进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="90"><span style="width:90%;"></span></div><header class="lesson-header"><div class="lesson-copy"><p class="eyebrow">🌰27 · 网络 <span class="reading-time">约 1 分钟读完</span></p><h1>dns 域名解析</h1><p>使用 dns 模块解析域名，查询各类 DNS 记录（A、AAAA、CNAME、MX、TXT、NS）。</p></div></header><section class="lesson-section lesson-demo"><article class="lesson-article"><!--[--><div class="lesson-question"><strong>开场问题：</strong>本地联调时，你在 hosts 文件里把 <code>api.internal</code> 指到 <code>127.0.0.1</code>，浏览器和 <code>fetch</code> 都通；可脚本里调 <code>dns.resolve4(&#39;api.internal&#39;)</code> 却直接报 <code>ENOTFOUND</code>。同一个域名，为什么一个解析得到、一个查不到？ </div><h2>域名解析双路径</h2><p> 你要在建立连接前把域名换成 IP，或者校验收件域名有没有配对的邮件服务器。这件事看起来只有一个答案，实际却处处是分叉。 </p><p> 如果假设「域名解析只有一个结果」，就有几笔成本要人扛：<strong>把 IP 写死在代码里</strong>，服务换 IP 就要改代码重新发版；<strong>靠系统命令去查</strong>，临时、不可编程，不同平台输出还不一样；<strong>忽略 hosts 与缓存</strong>，本地联调和线上行为对不上，排查半天才发现「你查的地方和程序连的地方根本不是一回事」。 </p><p> 问题落到一句话：一个域名到 IP 的解析<strong>究竟发生在哪一层，为什么从不同入口去问，得到的答案会不一样？</strong></p><h2>系统解析器与连接</h2><p> 用 <code>node:dns</code> 的 <code>dns.lookup(&#39;example.com&#39;, callback)</code>：它走<strong>系统解析器</strong>，也就是先读 hosts 文件、再查系统缓存与系统配置的 DNS 服务器，最后交回一个地址。 </p><p> 这个方案做对了一件关键的事：<strong>它的行为和浏览器、和其它系统程序保持一致</strong>。你接下来真正要发起的连接用哪个 IP，<code>lookup</code> 就报哪个 IP——包括 hosts 里那条本地覆盖。所以「发起连接之前」这个时刻，它才是对的那个入口。 </p><h2>单一地址与记录缺口</h2><ul><li><code>lookup</code> 只给你<strong>一个地址</strong>，问不到 <code>MX</code>、<code>TXT</code>、<code>NS</code> 这些记录——想校验收件域名，它根本给不了这个能力。</li><li>正因为 <code>lookup</code> 读 hosts，而 <code>dns.resolve*()</code> <strong>不读 hosts、直接向 DNS 服务器查询</strong>，所以 hosts 里手动改过的域名在 <code>resolve4</code> 下会报 <code>ENOTFOUND</code>——这就是开场那个「一个通、一个不通」的由来。</li><li><code>dns.lookup()</code> 默认跑在 <strong>libuv 线程池</strong>里：解析请求一多，线程池被占满，解析会排队变慢，还可能拖累同一池子里的文件 I/O。</li><li>每次请求都解析、<strong>不做缓存</strong>，DNS 一抖动就会把等待放大到所有并发请求上，整站跟着变慢。</li><li>只处理 A 记录会漏掉现实：<code>AAAA</code>（IPv6）不少环境在用，一个域名也常有多个 A 记录，只取一个并不代表全貌。</li></ul><h2>两类查询入口分工</h2><p> 先把两个入口的分工划清楚，这是理解这道题的关键。<code>dns.lookup()</code> 走<strong>系统解析器</strong>，包含 hosts 文件与系统缓存，行为与实际建立连接一致；<code>dns.resolve*()</code> 系列则<strong>绕开系统</strong>，直接向 DNS 服务器查询指定类型的记录。所以「为了避免连错」用前者，「为了查记录本身」用后者。 </p><p> 接着把<strong>记录类型</strong>补齐，<code>resolve</code> 系列正是为此而生：<code>resolve4</code> 查 IPv4 的 A 记录、<code>resolve6</code> 查 IPv6 的 AAAA、<code>resolveMx</code> 查邮件交换、<code>resolveTxt</code> 查文本记录、<code>resolveNs</code> 查权威名称服务器、<code>resolveCname</code> 查别名。校验收件域能不能收信，看的就是 <code>MX</code>；这些是 <code>lookup</code> 永远给不了的信息。 </p><p> 再补<strong>反向解析</strong>：<code>dns.reverse(ip, callback)</code> 把 IP 换回主机名。排查网络问题时，日志里出现一个陌生 IP，反查一下常常能立刻定位到来源。 </p><p> 最后是<strong>缓存与降级</strong>，因为解析是最容易被忽略的单点。给解析结果加一层应用层缓存，按记录的 TTL 决定缓存多久——TTL 是这条记录在缓存里能活多少秒，也是「改了 DNS 却迟迟不生效」的原因。缓存之外还要有降级预案：查询失败时用上一次成功的结果兜底，或者切到备用解析服务，别让一次 DNS 抖动直接变成全站不可用。 </p><div class="lesson-box warn"><strong>别把两件事混在一起：</strong><code>dns.lookup()</code> 走系统解析器、会读 hosts，<code>resolve*()</code> 直接查 DNS 服务器、不读 hosts，两者结果不同是正常的，不是 bug；高频解析要加缓存并考虑线程池排队；DNS 要有失败降级方案，缓存上次成功结果或切换备用解析。 </div><h2>记录类型查询对照</h2><figure class="lesson-figure"><figcaption>输入域名、选择记录类型（A / AAAA / CNAME / MX / TXT / NS）后点「查询 DNS」，看同一个域名在不同记录类型下返回的内容完全不同——这正是 <code>resolve</code> 系列必须指定记录类型的原因。</figcaption><div class="demo-card" data-v-e4e07306><p data-v-e4e07306><code data-v-e4e07306>dns</code> 模块提供域名解析功能，可将域名转换为 IP 地址，或查询各类 DNS 记录。</p><div class="dns-controls" data-v-e4e07306><label data-v-e4e07306>域名 <input value="example.com" placeholder="example.com" data-v-e4e07306></label><label data-v-e4e07306>记录类型 <select data-v-e4e07306><!--[--><option value="A" data-v-e4e07306 selected>A</option><option value="AAAA" data-v-e4e07306>AAAA</option><option value="CNAME" data-v-e4e07306>CNAME</option><option value="MX" data-v-e4e07306>MX</option><option value="TXT" data-v-e4e07306>TXT</option><option value="NS" data-v-e4e07306>NS</option><!--]--></select></label><button data-v-e4e07306>查询 DNS</button></div><!----><div class="dns-explain" data-v-e4e07306><h4 data-v-e4e07306>常见 DNS 记录类型</h4><div class="record-list" data-v-e4e07306><div class="record-item" data-v-e4e07306><strong data-v-e4e07306>A</strong><span data-v-e4e07306>IPv4 地址记录，将域名指向 IPv4 地址</span></div><div class="record-item" data-v-e4e07306><strong data-v-e4e07306>AAAA</strong><span data-v-e4e07306>IPv6 地址记录，将域名指向 IPv6 地址</span></div><div class="record-item" data-v-e4e07306><strong data-v-e4e07306>CNAME</strong><span data-v-e4e07306>别名记录，将一个域名指向另一个域名</span></div><div class="record-item" data-v-e4e07306><strong data-v-e4e07306>MX</strong><span data-v-e4e07306>邮件交换记录，指定接收邮件的服务器</span></div><div class="record-item" data-v-e4e07306><strong data-v-e4e07306>TXT</strong><span data-v-e4e07306>文本记录，常用于 SPF、DKIM 等验证</span></div><div class="record-item" data-v-e4e07306><strong data-v-e4e07306>NS</strong><span data-v-e4e07306>名称服务器记录，指定权威 DNS 服务器</span></div></div></div><pre class="mini-code" data-v-e4e07306><code data-v-e4e07306>const dns = require(&#39;node:dns&#39;)
+
+// 查询 A 记录（IPv4）
+dns.lookup(&#39;example.com&#39;, (err, address, family) =&gt; {
+  console.log(\`地址: \${address}, 协议族: IPv\${family}\`)
+})
+
+// 使用系统 DNS 解析（更可靠）
+dns.resolve4(&#39;example.com&#39;, (err, addresses) =&gt; {
+  console.log(&#39;IPv4 地址:&#39;, addresses)
+})
+
+// 反向解析（IP → 域名）
+dns.reverse(&#39;8.8.8.8&#39;, (err, hostnames) =&gt; {
+  console.log(&#39;主机名:&#39;, hostnames)
+})</code></pre><small data-v-e4e07306>要点：<code data-v-e4e07306>dns.lookup()</code> 使用系统配置（如 <code data-v-e4e07306>/etc/hosts</code>），<code data-v-e4e07306>dns.resolve()</code> 直接使用 DNS 服务器，行为略有不同。</small></div></figure><h2>解析路径与缓存</h2><p> 域名解析不是一个函数，而是一条有分叉的路径：<code>lookup</code> 走系统、和真实连接一致，<code>resolve*</code> 直连 DNS 服务器、能查各种记录类型。分清「我要的是连接结果，还是记录本身」，再给解析加上按 TTL 的缓存与失败降级，域名这一环才算稳。 </p><div class="lesson-term"><span class="term-name">「TTL」</span>全称 Time to Live，指一条 DNS 记录允许被缓存器保留的秒数；它决定了改完解析记录后，旧地址还要在缓存里存活多久。边界与例外：不同的解析器和中间缓存可能不完全遵守 TTL；TTL 设为 0 表示不缓存，会带来更高的查询频率；查询失败的结果也会被「负缓存」一段时间，所以刚配好的域名可能暂时仍报 <code>ENOTFOUND</code>。 </div><!--]--></article></section><section class="lesson-section"><h2>关键代码</h2><div class="code-block-wrapper"><div class="code-block-toolbar"><span class="code-block-lang">JavaScript</span><button class="code-copy-btn" type="button" aria-label="复制代码"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>复制</span></button></div><pre class="code-block"><code><span class="hljs-comment">// ═══════════════════════════════════════════</span>
+<span class="hljs-comment">// D29 - dns 域名解析</span>
+<span class="hljs-comment">// ═══════════════════════════════════════════</span>
+
+<span class="hljs-keyword">import</span> dns <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:dns&#x27;</span>
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">Resolver</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:dns&#x27;</span>
+
+<span class="hljs-comment">// ───────── 域名解析 ─────────</span>
+
+<span class="hljs-comment">// 1. 查找 A 记录（IPv4 地址）</span>
+dns.<span class="hljs-title function_">lookup</span>(<span class="hljs-string">&#x27;example.com&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">err, address, family</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (err) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;解析失败:&#x27;</span>, err.<span class="hljs-property">message</span>)
+    <span class="hljs-keyword">return</span>
+  }
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;IPv4 地址:&#x27;</span>, address)
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;地址族:&#x27;</span>, family) <span class="hljs-comment">// 4 或 6</span>
+})
+
+<span class="hljs-comment">// 2. 查找 IPv6</span>
+dns.<span class="hljs-title function_">lookup</span>(<span class="hljs-string">&#x27;example.com&#x27;</span>, { <span class="hljs-attr">family</span>: <span class="hljs-number">6</span> }, <span class="hljs-function">(<span class="hljs-params">err, address</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (!err) <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;IPv6 地址:&#x27;</span>, address)
+})
+
+<span class="hljs-comment">// 3. 获取所有地址</span>
+dns.<span class="hljs-title function_">lookup</span>(<span class="hljs-string">&#x27;example.com&#x27;</span>, { <span class="hljs-attr">all</span>: <span class="hljs-literal">true</span> }, <span class="hljs-function">(<span class="hljs-params">err, addresses</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (!err) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;所有地址:&#x27;</span>, addresses)
+    <span class="hljs-comment">// [{ address: &#x27;93.184.216.34&#x27;, family: 4 }]</span>
+  }
+})
+
+<span class="hljs-comment">// Promise 版本（Node 15+）</span>
+<span class="hljs-comment">// import { lookup } from &#x27;node:dns/promises&#x27;</span>
+<span class="hljs-comment">// const address = await lookup(&#x27;example.com&#x27;)</span>
+
+<span class="hljs-comment">// ───────── dns.lookup vs dns.resolve ─────────</span>
+
+<span class="hljs-comment">// dns.lookup:</span>
+<span class="hljs-comment">// - 使用系统的 DNS 解析机制</span>
+<span class="hljs-comment">// - 会读取 hosts 文件</span>
+<span class="hljs-comment">// - 会走系统配置的 DNS 服务器</span>
+<span class="hljs-comment">// - 结果会被缓存</span>
+<span class="hljs-comment">// - 只返回 A/AAAA 记录</span>
+
+<span class="hljs-comment">// dns.resolve:</span>
+<span class="hljs-comment">// - 直接连接 DNS 服务器</span>
+<span class="hljs-comment">// - 不读取 hosts 文件</span>
+<span class="hljs-comment">// - 可以查询各种记录类型</span>
+<span class="hljs-comment">// - 用的是 c-ares 库</span>
+
+<span class="hljs-comment">// 重要区别：</span>
+<span class="hljs-comment">// dns.lookup 是系统级的，可能受系统配置影响</span>
+<span class="hljs-comment">// dns.resolve 是纯网络的，更快但可能和系统不一致</span>
+
+<span class="hljs-comment">// 实际开发中，http.get 等用的是 dns.lookup</span>
+
+<span class="hljs-comment">// ───────── 解析各种记录类型 ─────────</span>
+
+<span class="hljs-comment">// A 记录（IPv4）</span>
+dns.<span class="hljs-title function_">resolve4</span>(<span class="hljs-string">&#x27;example.com&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">err, addresses</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (!err) <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;A 记录:&#x27;</span>, addresses)
+})
+
+<span class="hljs-comment">// AAAA 记录（IPv6）</span>
+dns.<span class="hljs-title function_">resolve6</span>(<span class="hljs-string">&#x27;example.com&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">err, addresses</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (!err) <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;AAAA 记录:&#x27;</span>, addresses)
+})
+
+<span class="hljs-comment">// MX 记录（邮件服务器）</span>
+dns.<span class="hljs-title function_">resolveMx</span>(<span class="hljs-string">&#x27;gmail.com&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">err, records</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (!err) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;MX 记录:&#x27;</span>)
+    records.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">r</span> =&gt;</span> {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`  优先级 <span class="hljs-subst">${r.priority}</span>: <span class="hljs-subst">${r.exchange}</span>`</span>)
+    })
+  }
+})
+
+<span class="hljs-comment">// TXT 记录（文本记录，常用于验证）</span>
+dns.<span class="hljs-title function_">resolveTxt</span>(<span class="hljs-string">&#x27;example.com&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">err, records</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (!err) <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;TXT 记录:&#x27;</span>, records)
+})
+
+<span class="hljs-comment">// NS 记录（域名服务器）</span>
+dns.<span class="hljs-title function_">resolveNs</span>(<span class="hljs-string">&#x27;example.com&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">err, records</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (!err) <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;NS 记录:&#x27;</span>, records)
+})
+
+<span class="hljs-comment">// CNAME 记录（别名）</span>
+dns.<span class="hljs-title function_">resolveCname</span>(<span class="hljs-string">&#x27;www.example.com&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">err, records</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (!err) <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;CNAME 记录:&#x27;</span>, records)
+})
+
+<span class="hljs-comment">// SOA 记录（起始授权记录）</span>
+dns.<span class="hljs-title function_">resolveSoa</span>(<span class="hljs-string">&#x27;example.com&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">err, soa</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (!err) <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;SOA 记录:&#x27;</span>, soa)
+})
+
+<span class="hljs-comment">// SRV 记录（服务定位）</span>
+<span class="hljs-comment">// dns.resolveSrv(&#x27;_xmpp-server._tcp.gmail.com&#x27;, ...)</span>
+
+<span class="hljs-comment">// PTR 记录（反向解析，IP → 域名）</span>
+dns.<span class="hljs-title function_">reverse</span>(<span class="hljs-string">&#x27;8.8.8.8&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">err, hostnames</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (!err) <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;反向解析 8.8.8.8:&#x27;</span>, hostnames)
+})
+
+<span class="hljs-comment">// 任意类型</span>
+dns.<span class="hljs-title function_">resolve</span>(<span class="hljs-string">&#x27;example.com&#x27;</span>, <span class="hljs-string">&#x27;ANY&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">err, records</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (!err) <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;ANY 记录:&#x27;</span>, records)
+})
+
+<span class="hljs-comment">// ───────── 自定义 DNS 服务器 ─────────</span>
+
+<span class="hljs-comment">// 使用指定的 DNS 服务器</span>
+<span class="hljs-keyword">const</span> resolver = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Resolver</span>()
+resolver.<span class="hljs-title function_">setServers</span>([<span class="hljs-string">&#x27;8.8.8.8&#x27;</span>, <span class="hljs-string">&#x27;8.8.4.4&#x27;</span>]) <span class="hljs-comment">// Google DNS</span>
+
+resolver.<span class="hljs-title function_">resolve4</span>(<span class="hljs-string">&#x27;example.com&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">err, addresses</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (!err) <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;通过 Google DNS 解析:&#x27;</span>, addresses)
+})
+
+<span class="hljs-comment">// 其他公共 DNS：</span>
+<span class="hljs-comment">// Cloudflare: 1.1.1.1, 1.0.0.1</span>
+<span class="hljs-comment">// Google: 8.8.8.8, 8.8.4.4</span>
+<span class="hljs-comment">// 阿里: 223.5.5.5, 223.6.6.6</span>
+<span class="hljs-comment">// 腾讯: 119.29.29.29</span>
+
+<span class="hljs-comment">// 获取当前 DNS 服务器</span>
+<span class="hljs-keyword">const</span> servers = dns.<span class="hljs-title function_">getServers</span>()
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;当前 DNS 服务器:&#x27;</span>, servers)
+
+<span class="hljs-comment">// ───────── DNS 缓存 ─────────</span>
+
+<span class="hljs-comment">// Node.js 内置的 dns.lookup 会用系统的 DNS 缓存</span>
+<span class="hljs-comment">// dns.resolve 系列默认没有缓存</span>
+
+<span class="hljs-comment">// 简单的 DNS 缓存实现</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">DnsCache</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">ttl = <span class="hljs-number">300000</span></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">cache</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>()
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">ttl</span> = ttl <span class="hljs-comment">// 默认 5 分钟</span>
+  }
+
+  <span class="hljs-title function_">resolve</span>(<span class="hljs-params">hostname, type = <span class="hljs-string">&#x27;A&#x27;</span></span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+      <span class="hljs-keyword">const</span> key = <span class="hljs-string">`<span class="hljs-subst">${hostname}</span>:<span class="hljs-subst">${type}</span>`</span>
+      <span class="hljs-keyword">const</span> cached = <span class="hljs-variable language_">this</span>.<span class="hljs-property">cache</span>.<span class="hljs-title function_">get</span>(key)
+
+      <span class="hljs-comment">// 缓存命中且未过期</span>
+      <span class="hljs-keyword">if</span> (cached &amp;&amp; <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>() &lt; cached.<span class="hljs-property">expireAt</span>) {
+        <span class="hljs-title function_">resolve</span>(cached.<span class="hljs-property">value</span>)
+        <span class="hljs-keyword">return</span>
+      }
+
+      <span class="hljs-comment">// 实际查询</span>
+      dns.<span class="hljs-title function_">resolve</span>(hostname, type, <span class="hljs-function">(<span class="hljs-params">err, records</span>) =&gt;</span> {
+        <span class="hljs-keyword">if</span> (err) {
+          <span class="hljs-title function_">reject</span>(err)
+          <span class="hljs-keyword">return</span>
+        }
+
+        <span class="hljs-comment">// 存入缓存</span>
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">cache</span>.<span class="hljs-title function_">set</span>(key, {
+          <span class="hljs-attr">value</span>: records,
+          <span class="hljs-attr">expireAt</span>: <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>() + <span class="hljs-variable language_">this</span>.<span class="hljs-property">ttl</span>
+        })
+
+        <span class="hljs-title function_">resolve</span>(records)
+      })
+    })
+  }
+
+  <span class="hljs-title function_">clear</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">cache</span>.<span class="hljs-title function_">clear</span>()
+  }
+}
+
+<span class="hljs-comment">// 使用：</span>
+<span class="hljs-comment">// const dnsCache = new DnsCache(60000) // 1 分钟缓存</span>
+<span class="hljs-comment">// const result = await dnsCache.resolve(&#x27;example.com&#x27;)</span>
+
+<span class="hljs-comment">// 注意：生产环境建议用专业的 DNS 缓存库</span>
+<span class="hljs-comment">// 或者直接用操作系统的 DNS 缓存</span>
+
+<span class="hljs-comment">// ───────── DNS 超时和重试 ─────────</span>
+
+<span class="hljs-comment">// 设置超时</span>
+dns.<span class="hljs-title function_">setDefaultResultOrder</span>(<span class="hljs-string">&#x27;verbatim&#x27;</span>)
+<span class="hljs-comment">// 解析顺序：</span>
+<span class="hljs-comment">// &#x27;verbatim&#x27; - 按 DNS 返回的顺序</span>
+<span class="hljs-comment">// &#x27;ipv4first&#x27; - 优先 IPv4 (默认，旧行为)</span>
+<span class="hljs-comment">// &#x27;ipv6first&#x27; - 优先 IPv6</span>
+
+<span class="hljs-comment">// 超时设置（需要用 Resolver）</span>
+<span class="hljs-keyword">const</span> resolverWithTimeout = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Resolver</span>({
+  <span class="hljs-attr">timeout</span>: <span class="hljs-number">5000</span>,      <span class="hljs-comment">// 5 秒超时</span>
+  <span class="hljs-attr">tries</span>: <span class="hljs-number">3</span>            <span class="hljs-comment">// 重试 3 次</span>
+})
+
+<span class="hljs-comment">// ───────── 反向 DNS 查询 ─────────</span>
+
+<span class="hljs-comment">// IP → 域名</span>
+dns.<span class="hljs-title function_">reverse</span>(<span class="hljs-string">&#x27;127.0.0.1&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">err, hostnames</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (err) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;反向解析失败（通常正常）&#x27;</span>)
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;反向解析结果:&#x27;</span>, hostnames)
+  }
+})
+
+<span class="hljs-comment">// ───────── HTTP 请求的 DNS 解析 ─────────</span>
+
+<span class="hljs-comment">// http/https 模块内部使用 dns.lookup</span>
+<span class="hljs-comment">// 可以自定义 lookup 函数</span>
+
+<span class="hljs-keyword">import</span> http <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:http&#x27;</span>
+
+<span class="hljs-comment">// 自定义 DNS 解析（比如加缓存）</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">customLookup</span>(<span class="hljs-params">hostname, options, callback</span>) {
+  <span class="hljs-comment">// 可以加缓存、限流、自定义 DNS 服务器等</span>
+  dns.<span class="hljs-title function_">lookup</span>(hostname, options, callback)
+}
+
+<span class="hljs-comment">// 请求时指定</span>
+<span class="hljs-comment">// http.get({</span>
+<span class="hljs-comment">//   hostname: &#x27;example.com&#x27;,</span>
+<span class="hljs-comment">//   path: &#x27;/&#x27;,</span>
+<span class="hljs-comment">//   lookup: customLookup</span>
+<span class="hljs-comment">// }, (res) =&gt; { ... })</span>
+
+<span class="hljs-comment">// 或者全局设置（不推荐）</span>
+
+<span class="hljs-comment">// ───────── 常见 DNS 错误码 ─────────</span>
+
+<span class="hljs-comment">// dns.NODATA         没有数据</span>
+<span class="hljs-comment">// dns.FORMERR        请求格式错误</span>
+<span class="hljs-comment">// dns.SERVFAIL       服务器失败</span>
+<span class="hljs-comment">// dns.NOTFOUND       域名不存在 (NXDOMAIN)</span>
+<span class="hljs-comment">// dns.NOTIMP         未实现</span>
+<span class="hljs-comment">// dns.REFUSED        服务器拒绝</span>
+<span class="hljs-comment">// dns.BADQUERY       坏请求</span>
+<span class="hljs-comment">// dns.BADNAME        坏名字</span>
+<span class="hljs-comment">// dns.TIMEOUT        超时</span>
+<span class="hljs-comment">// dns.CONNREFUSED    连接被拒绝</span>
+<span class="hljs-comment">// dns.EADDRNOTAVAIL  地址不可用</span>
+
+<span class="hljs-comment">// 错误处理</span>
+dns.<span class="hljs-title function_">resolve</span>(<span class="hljs-string">&#x27;nonexistent.example.com&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (err) {
+    <span class="hljs-keyword">if</span> (err.<span class="hljs-property">code</span> === <span class="hljs-string">&#x27;ENOTFOUND&#x27;</span>) {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;域名不存在&#x27;</span>)
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (err.<span class="hljs-property">code</span> === <span class="hljs-string">&#x27;ETIMEOUT&#x27;</span>) {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;DNS 查询超时&#x27;</span>)
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;DNS 错误:&#x27;</span>, err.<span class="hljs-property">code</span>)
+    }
+  }
+})
+
+<span class="hljs-comment">// ───────── 最佳实践 ─────────</span>
+<span class="hljs-comment">// 大多数情况用 dns.lookup 就行（和系统行为一致）</span>
+<span class="hljs-comment">// 需要特殊记录类型用 dns.resolve 系列</span>
+<span class="hljs-comment">// 高并发场景加 DNS 缓存，减少 DNS 查询</span>
+<span class="hljs-comment">// 设置合理的超时和重试</span>
+<span class="hljs-comment">// 监控 DNS 解析延迟和失败率</span>
+<span class="hljs-comment">// 生产环境配置多个 DNS 服务器，提高可靠性</span>
+<span class="hljs-comment">// 注意 dns.lookup 和 dns.resolve 的区别</span>
+<span class="hljs-comment">// 内网服务考虑用 hosts 文件或内网 DNS</span>
+<span class="hljs-comment">// 全球服务考虑 DNS 智能解析（按地理位置）</span>
+<span class="hljs-comment">// DNS 故障切换方案（多域名、客户端降级）</span></code></pre></div></section><nav class="lesson-next" aria-label="下一章节"><div class="bottom-nav-row"><a href="https://nodejs.org/docs/latest/api/" target="_blank" rel="noopener" class="official-link">Node.js 官网 → </a><div class="lesson-pager"><a href="/nodejs/d-26/net-tcp" class="previous-lesson-link"><span>上一颗</span><strong>🌰26 TCP</strong></a><a href="/nodejs/d-24/cli" class="next-lesson-link"><span>下一颗</span><strong>🌰28 CLI</strong></a></div></div></nav></main><!--]--></div><footer class="site-footer"><p class="site-footer-line"> © 2026 小松鼠举栗子 · 用 🌰 记录技术知识 · <a href="mailto:gzx_miller@foxmail.com">gzx_miller@foxmail.com</a></p></footer></div><!--]--><button type="button" class="squirrel-pet" style="" aria-label="松鼠小助手：点击提问，拖拽移动" title="点我提问，拖拽移动" data-v-235d5ef5><span class="pet-inner" aria-hidden="true" data-v-235d5ef5><span class="pet-ai-badge" data-v-235d5ef5>AI</span><span class="pet-zzz" aria-hidden="true" data-v-235d5ef5>z<span data-v-235d5ef5>z</span><span data-v-235d5ef5>z</span></span><span class="pet-flip" data-v-235d5ef5><span class="pet-wobble" data-v-235d5ef5><svg viewBox="0 0 136 120" width="68" height="60" data-v-235d5ef5><defs data-v-235d5ef5><linearGradient id="sq-body" x1="0" y1="0" x2="0" y2="1" data-v-235d5ef5><stop offset="0" stop-color="#f0904a" data-v-235d5ef5></stop><stop offset="1" stop-color="#d95a24" data-v-235d5ef5></stop></linearGradient><linearGradient id="sq-tail" x1="0" y1="1" x2="1" y2="0" data-v-235d5ef5><stop offset="0" stop-color="#c1441e" data-v-235d5ef5></stop><stop offset="1" stop-color="#f5a040" data-v-235d5ef5></stop></linearGradient></defs><g class="pet-tail" data-v-235d5ef5><path d="M58 96 C96 106 122 86 122 50 C121.5 30 112 13 97 8 C83 3.5 72.5 9 71.5 17.5 C70.8 24 74.5 28.5 76.5 33.5 C63 44 58 66 56.5 86 C56 92 57 95 58 96 Z" fill="url(#sq-tail)" data-v-235d5ef5></path><path d="M76 88 C96 80 106 58 99 40 C105 58 98 80 82 90 Z" fill="#f6c15a" opacity="0.5" data-v-235d5ef5></path></g><ellipse class="pet-foot pet-foot-l" cx="41.4" cy="107" rx="9.6" ry="5.4" fill="#b7431f" data-v-235d5ef5></ellipse><ellipse class="pet-foot pet-foot-r" cx="64.6" cy="107" rx="9.6" ry="5.4" fill="#b7431f" data-v-235d5ef5></ellipse><ellipse cx="52" cy="84" rx="27" ry="27" fill="url(#sq-body)" data-v-235d5ef5></ellipse><ellipse cx="51" cy="90" rx="16" ry="17" fill="#ffe3c2" opacity="0.95" data-v-235d5ef5></ellipse><path d="M33.5 38 L38.5 12 L48 27 Z" fill="#d95a24" stroke="#d95a24" stroke-width="3" stroke-linejoin="round" data-v-235d5ef5></path><path d="M36.8 30.5 L39 17 L44 25.5 Z" fill="#f2a582" data-v-235d5ef5></path><path d="M70.5 38 L65.5 12 L56 27 Z" fill="#d95a24" stroke="#d95a24" stroke-width="3" stroke-linejoin="round" data-v-235d5ef5></path><path d="M67.2 30.5 L65 17 L60 25.5 Z" fill="#f2a582" data-v-235d5ef5></path><circle cx="52" cy="47" r="22" fill="url(#sq-body)" data-v-235d5ef5></circle><circle cx="33" cy="54" r="9.5" fill="#e8793c" data-v-235d5ef5></circle><circle cx="71" cy="54" r="9.5" fill="#e8793c" data-v-235d5ef5></circle><circle cx="41" cy="53" r="4" fill="#f6c15a" opacity="0.6" data-v-235d5ef5></circle><circle cx="63" cy="53" r="4" fill="#f6c15a" opacity="0.6" data-v-235d5ef5></circle><g stroke="#b7431f" stroke-width="0.9" stroke-linecap="round" opacity="0.7" data-v-235d5ef5><path d="M32 50 L25 49" data-v-235d5ef5></path><path d="M32 54 L25 55" data-v-235d5ef5></path><path d="M32.5 58 L26 60" data-v-235d5ef5></path><path d="M72 50 L79 49" data-v-235d5ef5></path><path d="M72 54 L79 55" data-v-235d5ef5></path><path d="M71.5 58 L78 60" data-v-235d5ef5></path></g><g class="pet-eyes" data-v-235d5ef5><circle cx="44" cy="44" r="3.4" fill="#32190f" data-v-235d5ef5></circle><circle cx="45" cy="43" r="1.1" fill="#fffaf2" data-v-235d5ef5></circle><circle cx="60" cy="44" r="3.4" fill="#32190f" data-v-235d5ef5></circle><circle cx="61" cy="43" r="1.1" fill="#fffaf2" data-v-235d5ef5></circle></g><g class="pet-face-happy" data-v-235d5ef5><path d="M40.5 44.5 Q44 40.5 47.5 44.5" fill="none" stroke="#32190f" stroke-width="2" stroke-linecap="round" data-v-235d5ef5></path><path d="M56.5 44.5 Q60 40.5 63.5 44.5" fill="none" stroke="#32190f" stroke-width="2" stroke-linecap="round" data-v-235d5ef5></path><circle cx="36" cy="50.5" r="2.8" fill="#f0806e" opacity="0.6" data-v-235d5ef5></circle><circle cx="68" cy="50.5" r="2.8" fill="#f0806e" opacity="0.6" data-v-235d5ef5></circle></g><g class="pet-face-sleep" data-v-235d5ef5><path d="M40.5 45 Q44 47.5 47.5 45" fill="none" stroke="#32190f" stroke-width="2" stroke-linecap="round" data-v-235d5ef5></path><path d="M56.5 45 Q60 47.5 63.5 45" fill="none" stroke="#32190f" stroke-width="2" stroke-linecap="round" data-v-235d5ef5></path></g><ellipse cx="52" cy="55" rx="9" ry="7" fill="#ffe3c2" data-v-235d5ef5></ellipse><ellipse cx="52" cy="50.5" rx="2.4" ry="1.8" fill="#7b351d" data-v-235d5ef5></ellipse><path d="M48.5 54.5 Q52 57.5 55.5 54.5" fill="none" stroke="#7b351d" stroke-width="1.4" stroke-linecap="round" data-v-235d5ef5></path><rect x="50.2" y="56.4" width="1.6" height="2.6" rx="0.5" fill="#fffdf6" data-v-235d5ef5></rect><rect x="52.2" y="56.4" width="1.6" height="2.6" rx="0.5" fill="#fffdf6" data-v-235d5ef5></rect><ellipse cx="39.6" cy="74.6" rx="5.5" ry="7.2" fill="#c1441e" transform="rotate(18 39.6 74.6)" data-v-235d5ef5></ellipse><ellipse cx="40" cy="80.4" rx="3.6" ry="2.4" fill="#f0a06a" data-v-235d5ef5></ellipse><g class="pet-arm" data-v-235d5ef5><ellipse cx="66.4" cy="71.6" rx="5.4" ry="7" fill="#c1441e" transform="rotate(-24 66.4 71.6)" data-v-235d5ef5></ellipse><circle cx="69.2" cy="66.4" r="2.8" fill="#d95a24" data-v-235d5ef5></circle><circle cx="71.4" cy="63.8" r="1.7" fill="#d95a24" data-v-235d5ef5></circle></g></svg></span></span></span><span class="pet-hint" aria-hidden="true" data-v-235d5ef5><span class="pet-hint-text" data-v-235d5ef5></span></span></button><!----><!--]--></div><div id="teleports"></div><script>window.__NUXT__={};window.__NUXT__.config={public:{zhipuApiKey:"4a144c581416035e180b03574714070553061642165f46465c5f1958545145181c047f743904140e2b350009195b2a3503"},app:{baseURL:"/",buildId:"e714b28c-1387-4a7d-a2e1-4256272ad9f2",buildAssetsDir:"/_nuxt/",cdnURL:""}}</script><script type="application/json" data-nuxt-data="nuxt-app" data-ssr="true" id="__NUXT_DATA__" data-src="/nodejs/d-29/dns/_payload.json?e714b28c-1387-4a7d-a2e1-4256272ad9f2">[{"state":1,"once":5,"_errors":6,"serverRendered":3,"path":8,"pinia":9,"prerenderedAt":11},["Reactive",2],{"$ssidebarExpanded":3,"$stheme":4},true,"light",["Set"],["ShallowReactive",7],{"lesson-code-D_29":-1},"\u002Fnodejs\u002Fd-29\u002Fdns",["Reactive",10],{},1791203790928]</script></body></html>

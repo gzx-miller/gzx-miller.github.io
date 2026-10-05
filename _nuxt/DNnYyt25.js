@@ -1,0 +1,12 @@
+const n=`@use "sass:color";
+
+$brand: #c45125;
+$brand-hover: color.scale($brand, $lightness: -18%);
+$brand-soft: color.mix(white, $brand, 78%);
+
+.button {
+  background: $brand;
+  &:hover { background: $brand-hover; }
+}
+// 计算配色后仍应使用对比度工具验证文字可读性。
+`;export{n as default};

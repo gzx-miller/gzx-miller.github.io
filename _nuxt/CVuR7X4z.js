@@ -1,0 +1,11 @@
+const a=`<article class="grid grid-cols-[auto_minmax(0,1fr)] gap-[clamp(.75rem,2vw,1.5rem)] rounded-[18px] shadow-[0_16px_35px_rgb(120_53_15_/_0.18)]">
+  <span>🌰</span><div>一次性精确约束</div>
+</article>
+
+<!-- 任意属性与数据属性变体 -->
+<button class="[touch-action:manipulation] data-[state=active]:bg-orange-600" data-state="active">
+  当前课程
+</button>
+
+<!-- 动态类名不要写成 \`bg-\${color}-600\`，构建器无法可靠静态发现。 -->
+`;export{a as default};

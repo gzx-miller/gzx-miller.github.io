@@ -1,0 +1,68 @@
+const n=`/* 物理属性（left/right/top/bottom） */
+.physical-box {
+  margin-left: 16px;
+  padding-right: 24px;
+  border-left: 4px solid #e8590c;
+  text-align: left;
+  width: 200px;
+  height: 100px;
+}
+
+/* 逻辑属性：margin-inline / margin-block */
+.logical-margin {
+  margin-inline-start: 16px;
+  /* LTR: margin-left，RTL: margin-right */
+  margin-inline-end: 16px;
+  margin-block-start: 8px;
+  /* 相当于 margin-top */
+  margin-block-end: 8px;
+}
+
+/* 简写：margin-inline / margin-block */
+.logical-margin-shorthand {
+  margin-inline: 16px;
+  /* 左右（逻辑）各 16px */
+  margin-block: 8px 12px;
+  /* 上 8px，下 12px（逻辑） */
+}
+
+/* padding 逻辑属性 */
+.logical-padding {
+  padding-inline: 24px;
+  padding-block: 16px;
+}
+
+/* border 逻辑属性 */
+.logical-border {
+  border-inline-start: 4px solid #e8590c;
+  border-block-end: 2px solid #ddd;
+  border-start-start-radius: 8px;
+  /* 左上角（LTR）*/
+}
+
+/* 尺寸逻辑属性 */
+.logical-size {
+  inline-size: 200px;
+  /* LTR: width，垂直书写模式: height */
+  block-size: 100px;
+  /* LTR: height，垂直书写模式: width */
+  min-inline-size: 100px;
+  max-block-size: 200px;
+}
+
+/* 定位逻辑属性 */
+.logical-position {
+  position: absolute;
+  inset-inline-start: 0;
+  /* LTR: left: 0 */
+  inset-block-start: 0;
+  /* top: 0 */
+  inset: 0;
+  /* 等价于 top:0; right:0; bottom:0; left:0 */
+}
+
+/* 文本对齐逻辑属性 */
+.logical-text {
+  text-align: start;
+  /* LTR: left，RTL: right */
+}`;export{n as default};

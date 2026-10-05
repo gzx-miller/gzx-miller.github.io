@@ -1,0 +1,97 @@
+const n=`/* aspect-ratio：固定宽高比 */
+
+/* 16:9 宽屏比例 */
+.ratio-16-9 {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  /* 高度自动计算，保持 16:9 */
+}
+
+/* 1:1 正方形 */
+.ratio-square {
+  aspect-ratio: 1 / 1;
+}
+
+/* 4:3 传统比例 */
+.ratio-4-3 {
+  aspect-ratio: 4 / 3;
+}
+
+/* 21:9 超宽屏 */
+.ratio-ultrawide {
+  aspect-ratio: 21 / 9;
+}
+
+/* 与 min-width/max-width 配合 */
+.responsive-ratio {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  max-width: 800px;
+}
+
+/* 旧版 hack（不推荐，用 aspect-ratio 替代） */
+/*
+.ratio-old {
+  position: relative;
+  padding-top: 56.25%;
+}
+.ratio-old > * {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+}
+*/
+
+/* object-fit：替换元素的填充方式 */
+
+/* cover：裁剪填满（保持比例） */
+.img-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* 图片填满容器，超出部分裁剪 */
+}
+
+/* contain：完整显示（可能留白） */
+.img-contain {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* 图片完整显示，可能有留白 */
+}
+
+/* fill：拉伸填满（变形） */
+.img-fill {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  /* 拉伸填满，可能变形（默认值） */
+}
+
+/* none：保持原始尺寸 */
+.img-none {
+  width: 100%;
+  height: 100%;
+  object-fit: none;
+  /* 不缩放，保持原始尺寸 */
+}
+
+/* scale-down：取 none 或 contain 中较小的 */
+.img-scale-down {
+  object-fit: scale-down;
+}
+
+/* object-position：调整显示位置 */
+.img-position {
+  object-fit: cover;
+  object-position: center top;
+  /* 居中顶部 */
+}
+
+/* 防止 CLS（布局偏移）最佳实践 */
+.img-cls {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  /* 图片加载前就预留好空间 */
+}`;export{n as default};

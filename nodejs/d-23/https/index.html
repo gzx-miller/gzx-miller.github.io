@@ -1,0 +1,264 @@
+<!DOCTYPE html><html  lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>HTTPS - 小松鼠举栗子</title><script>(function(){try{var t=localStorage.getItem('theme-preference');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script><style>.squirrel-pet[data-v-235d5ef5]{position:fixed;right:20px;top:50%;transform:translateY(-50%);z-index:1000;width:76px;height:76px;padding:0;border:none;background:transparent;cursor:grab;touch-action:none;-webkit-user-select:none;-moz-user-select:none;user-select:none;filter:drop-shadow(0 8px 16px rgba(98,42,18,.28));transition:left 2.4s cubic-bezier(.45,.05,.55,.95),top 2.4s cubic-bezier(.45,.05,.55,.95),filter .2s ease}.squirrel-pet[data-v-235d5ef5]:hover{filter:drop-shadow(0 10px 20px rgba(98,42,18,.4))}.squirrel-pet.dragging[data-v-235d5ef5]{cursor:grabbing;filter:drop-shadow(0 14px 24px rgba(98,42,18,.45));transition:filter .2s ease}.pet-inner[data-v-235d5ef5]{position:relative;display:block;animation:pet-bob-235d5ef5 3.2s ease-in-out infinite}.pet-ai-badge[data-v-235d5ef5]{position:absolute;top:-14px;left:50%;z-index:2;transform:translate(-50%);transform-origin:50% 100%;font-size:19px;font-weight:900;font-style:italic;letter-spacing:1px;line-height:1;background:linear-gradient(180deg,#ffe9a8,#f6c15a 35%,#d99a2b 55%,#fff3c4);background-clip:text;-webkit-background-clip:text;-webkit-text-stroke:.9px #8f2f18;paint-order:stroke fill;color:transparent;filter:drop-shadow(0 2px 3px rgba(98,42,18,.45));pointer-events:none;transition:filter .25s ease}.squirrel-pet:hover .pet-ai-badge[data-v-235d5ef5]{background:linear-gradient(110deg,#f6c15a,#ffe9a8 20%,#fff 38%,#ffe9a8 55%,#d99a2b 75%,#f6c15a);background-size:250% 100%;background-clip:text;-webkit-background-clip:text;filter:drop-shadow(0 0 6px rgba(246,193,90,.9)) drop-shadow(0 2px 3px rgba(98,42,18,.45));animation:ai-swing-235d5ef5 .62s ease-in-out infinite,ai-shine-235d5ef5 1.4s linear infinite}@keyframes ai-swing-235d5ef5{0%,to{transform:translate(-50%) rotate(-9deg) scale(1.06)}50%{transform:translate(-50%) rotate(9deg) scale(1.06)}}@keyframes ai-shine-235d5ef5{0%{background-position:120% 0}to{background-position:-120% 0}}.squirrel-pet.pricked .pet-inner[data-v-235d5ef5]{animation:prick-jump-235d5ef5 .68s cubic-bezier(.3,.9,.4,1)}@keyframes prick-jump-235d5ef5{0%{transform:translateY(0) scale(1)}28%{transform:translateY(-30px) scale(1.07)}52%{transform:translateY(-20px) scale(1.02) rotate(-5deg)}76%{transform:translateY(2px) scale(.96,.88)}to{transform:translateY(0) scale(1)}}.squirrel-pet.dragging .pet-ai-badge[data-v-235d5ef5],.squirrel-pet.dragging .pet-arm[data-v-235d5ef5],.squirrel-pet.dragging .pet-eyes[data-v-235d5ef5],.squirrel-pet.dragging .pet-face-happy[data-v-235d5ef5],.squirrel-pet.dragging .pet-foot-l[data-v-235d5ef5],.squirrel-pet.dragging .pet-foot-r[data-v-235d5ef5],.squirrel-pet.dragging .pet-hint-text[data-v-235d5ef5],.squirrel-pet.dragging .pet-inner[data-v-235d5ef5],.squirrel-pet.dragging .pet-tail[data-v-235d5ef5]{animation-play-state:paused}.pet-foot[data-v-235d5ef5]{transform-box:fill-box}.squirrel-pet.crawling .pet-foot-l[data-v-235d5ef5]{animation:foot-step-235d5ef5 .42s ease-in-out infinite alternate}.squirrel-pet.crawling .pet-foot-r[data-v-235d5ef5]{animation:foot-step-235d5ef5 .42s ease-in-out infinite alternate-reverse}@keyframes foot-step-235d5ef5{0%{transform:translate(2.5px,-1.2px) rotate(3deg)}to{transform:translate(-2.5px,1.2px) rotate(-3deg)}}.pet-wobble[data-v-235d5ef5]{display:block}.squirrel-pet.crawling .pet-wobble[data-v-235d5ef5]{transform-origin:50% 100%;animation:crawl-wobble-235d5ef5 .42s ease-in-out infinite alternate}@keyframes crawl-wobble-235d5ef5{0%{transform:rotate(-4deg) translate(1.5px)}to{transform:rotate(4deg) translate(-1.5px)}}.pet-arm[data-v-235d5ef5]{transform-box:fill-box;transform-origin:50% 90%}.squirrel-pet.waving .pet-arm[data-v-235d5ef5]{animation:arm-wave-235d5ef5 1.1s ease-in-out infinite}@keyframes arm-wave-235d5ef5{0%,to{transform:rotate(0)}30%{transform:rotate(-46deg)}55%{transform:rotate(10deg)}80%{transform:rotate(-36deg)}}.pet-eyes[data-v-235d5ef5],.pet-face-happy[data-v-235d5ef5]{transition:opacity .2s ease}.pet-face-happy[data-v-235d5ef5]{opacity:0}.squirrel-pet.waving .pet-face-happy[data-v-235d5ef5]{opacity:1}.squirrel-pet.waving .pet-eyes[data-v-235d5ef5]{opacity:0}.pet-face-sleep[data-v-235d5ef5]{opacity:0;transition:opacity .2s ease}.squirrel-pet.sleeping .pet-eyes[data-v-235d5ef5],.squirrel-pet.sleeping .pet-face-happy[data-v-235d5ef5]{opacity:0}.squirrel-pet.sleeping .pet-face-sleep[data-v-235d5ef5]{opacity:1}.squirrel-pet.sleeping .pet-eyes[data-v-235d5ef5],.squirrel-pet.sleeping .pet-inner[data-v-235d5ef5],.squirrel-pet.sleeping .pet-tail[data-v-235d5ef5]{animation:none}.pet-zzz[data-v-235d5ef5]{position:absolute;top:-16px;right:-14px;z-index:3;display:inline-flex;gap:3px;font-size:12px;font-weight:700;color:var(--muted);line-height:1;pointer-events:none;opacity:0;transition:opacity .3s ease}.squirrel-pet.sleeping .pet-zzz[data-v-235d5ef5]{opacity:1}.pet-zzz span[data-v-235d5ef5]{display:inline-block;animation:pet-zzz-float-235d5ef5 2.4s ease-in-out infinite}.pet-zzz span[data-v-235d5ef5]:nth-child(2){animation-delay:.4s}.pet-zzz span[data-v-235d5ef5]:nth-child(3){animation-delay:.8s}@keyframes pet-zzz-float-235d5ef5{0%{transform:translateY(0) scale(.6);opacity:0}30%{opacity:1}to{transform:translateY(-14px) scale(1.15);opacity:0}}@media(prefers-reduced-motion:reduce){.squirrel-pet.sleeping .pet-zzz span[data-v-235d5ef5]{animation:none;opacity:1}}.pet-tail[data-v-235d5ef5]{transform-origin:bottom left;animation:tail-wag-235d5ef5 2.6s ease-in-out infinite}.pet-eyes[data-v-235d5ef5],.pet-tail[data-v-235d5ef5]{transform-box:fill-box}.pet-eyes[data-v-235d5ef5]{transform-origin:center;animation:pet-blink-235d5ef5 4.4s ease-in-out infinite}.pet-hint[data-v-235d5ef5]{position:absolute;top:6px;right:calc(100% + 10px);width:-moz-max-content;width:max-content;max-width:170px;padding:3px 10px;border-radius:12px;font-size:11px;line-height:1.6;color:#fffaf2;background:linear-gradient(135deg,var(--leaf-red),var(--leaf-orange));box-shadow:0 4px 10px #8f2f1859;opacity:0;transform:translate(8px) scale(.9);transform-origin:100% 70%;pointer-events:none;transition:opacity .28s ease,transform .28s cubic-bezier(.34,1.56,.64,1)}.pet-hint[data-v-235d5ef5]:after{content:"";position:absolute;top:10px;left:100%;border:5px solid transparent;border-left:7px solid #e0652f}.pet-hint.show[data-v-235d5ef5]{opacity:1;transform:translate(0) scale(1)}.pet-hint-text[data-v-235d5ef5]{display:inline-block}.squirrel-pet.hint-on-right .pet-hint[data-v-235d5ef5]{right:auto;left:calc(100% + 10px);transform-origin:0 70%;transform:translate(-8px) scale(.9)}.squirrel-pet.hint-on-right .pet-hint.show[data-v-235d5ef5]{transform:translate(0) scale(1)}.squirrel-pet.hint-on-right .pet-hint[data-v-235d5ef5]:after{left:auto;right:100%;border:5px solid transparent;border-right:7px solid #e0652f;border-left:none}.pet-hint.show .pet-hint-text[data-v-235d5ef5]{animation:tip-talk-235d5ef5 .8s ease-in-out infinite}@keyframes tip-talk-235d5ef5{0%,to{transform:translateY(0) scale(1)}50%{transform:translateY(-1px) scale(1.04)}}@media(prefers-reduced-motion:reduce){.pet-hint.show .pet-hint-text[data-v-235d5ef5],.squirrel-pet.crawling .pet-foot-l[data-v-235d5ef5],.squirrel-pet.crawling .pet-foot-r[data-v-235d5ef5],.squirrel-pet.crawling .pet-wobble[data-v-235d5ef5],.squirrel-pet.waving .pet-arm[data-v-235d5ef5],.squirrel-pet:hover .pet-ai-badge[data-v-235d5ef5]{animation:none}}@keyframes pet-bob-235d5ef5{0%,to{transform:translateY(0)}50%{transform:translateY(-5px)}}@keyframes tail-wag-235d5ef5{0%,to{transform:rotate(0)}50%{transform:rotate(5deg)}}@keyframes pet-blink-235d5ef5{0%,93%,to{transform:scaleY(1)}96%{transform:scaleY(.12)}}</style><style>.tabs button[data-v-f7b995b5]{padding:4px 12px;border:1px solid #e2e8f0;border-radius:4px;background:#fff;cursor:pointer;font-size:13px}.tabs .active[data-v-f7b995b5]{background:#e8590c;color:#fff;border-color:#e8590c}.step-content[data-v-f7b995b5]{margin:.6rem 0}.grid-2[data-v-f7b995b5]{display:grid;grid-template-columns:1fr 1fr;gap:10px}.col[data-v-f7b995b5]{padding:10px;border-radius:6px}.col.bad[data-v-f7b995b5]{background:#fef2f2;border:1px solid #fecaca}.col.good[data-v-f7b995b5]{background:#f0fdf4;border:1px solid #bbf7d0}.col ul[data-v-f7b995b5]{margin:6px 0 0;padding-left:18px;font-size:12px;line-height:1.8}.cert-list[data-v-f7b995b5]{display:grid;gap:8px}.cert-item[data-v-f7b995b5]{background:#fff9f0;padding:8px 12px;border-radius:6px;font-size:12px}.cert-item strong[data-v-f7b995b5]{color:#e8590c}.cert-item p[data-v-f7b995b5]{margin:4px 0;color:#64748b}.tls-list[data-v-f7b995b5]{display:grid;gap:6px}.tls-item[data-v-f7b995b5]{display:flex;align-items:center;gap:12px;padding:6px 10px;border-radius:4px;font-size:12px}.tls-item.secure[data-v-f7b995b5]{background:#f0fdf4}.tls-item.insecure[data-v-f7b995b5]{background:#fef2f2}.tls-version[data-v-f7b995b5]{font-weight:600;width:80px}.tls-note[data-v-f7b995b5]{flex:1;color:#64748b}.tls-badge[data-v-f7b995b5]{font-size:11px;padding:2px 8px;border-radius:10px}.secure .tls-badge[data-v-f7b995b5]{background:#16a34a;color:#fff}.insecure .tls-badge[data-v-f7b995b5]{background:#dc2626;color:#fff}</style><link rel="stylesheet" href="/_nuxt/entry.CGN0g2Ra.css" crossorigin><link rel="preload" as="fetch" crossorigin="anonymous" href="/nodejs/d-23/https/_payload.json?e714b28c-1387-4a7d-a2e1-4256272ad9f2"><script type="module" src="/_nuxt/ClZcEZ7f.js" crossorigin></script><meta name="author" content="gzx-miller"><meta name="robots" content="index, follow"><meta property="og:site_name" content="小松鼠举栗子"><meta property="og:locale" content="zh_CN"><meta property="og:url" content="https://gzx-miller.github.io/"><meta property="og:image:width" content="2560"><meta property="og:image:height" content="1440"><meta name="twitter:title" content="小松鼠举栗子 - 通过独立真实内容学习软件技术"><meta name="twitter:description" content="中文技术知识内容库：22 大分类 500+ 真实内容，每个栗子只讲一个知识点。"><meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8b369"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1210"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"小松鼠举栗子","url":"https://gzx-miller.github.io/","description":"中文技术知识内容库：通过独立真实小内容学习 Vue3、TypeScript、React、Node.js、CSS、WebGL、C++、uni-app 等。","inLanguage":"zh-CN"}</script><link rel="canonical" href="https://gzx-miller.github.io/nodejs/d-23/https"><meta name="og:image:alt" content="理解 HTTPS 的原理，掌握 Node.js HTTPS 服务器的创建和 TLS 配置。"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"首页","item":"https://gzx-miller.github.io/"},{"@type":"ListItem","position":2,"name":"Node.js","item":"https://gzx-miller.github.io/nodejs"},{"@type":"ListItem","position":3,"name":"HTTPS","item":"https://gzx-miller.github.io/nodejs/d-23/https"}]}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"LearningResource","name":"HTTPS 与 TLS 配置","description":"理解 HTTPS 的原理，掌握 Node.js HTTPS 服务器的创建和 TLS 配置。","url":"https://gzx-miller.github.io/nodejs/d-23/https","inLanguage":"zh-CN","learningResourceType":"CourseContent","about":{"@type":"WebSite","name":"Node.js","url":"https://gzx-miller.github.io/nodejs"},"isPartOf":{"@type":"WebSite","name":"小松鼠举栗子","url":"https://gzx-miller.github.io/"}}</script><meta name="description" content="理解 HTTPS 的原理，掌握 Node.js HTTPS 服务器的创建和 TLS 配置。"><meta property="og:title" content="HTTPS 与 TLS 配置 - 小松鼠举栗子"><meta property="og:description" content="理解 HTTPS 的原理，掌握 Node.js HTTPS 服务器的创建和 TLS 配置。"><meta property="og:type" content="article"><meta property="og:image" content="https://gzx-miller.github.io/og-image.jpg"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://gzx-miller.github.io/og-image.jpg"></head><body><div id="__nuxt"><!--[--><!--[--><a class="skip-link" href="#main-content">跳到正文</a><div class="app-frame"><header class="top-nav"><div class="top-bar"><a href="/" class="top-brand" aria-label="回到首页"><img class="brand-avatar" src="/_nuxt/squirrel-chestnut-avatar.BUhAFRCm.webp" alt="小松鼠举着栗子" width="48" height="48" fetchpriority="high"><div class="brand-text"><strong>小松鼠举栗子 </strong><span class="brand-tagline">中文技术知识内容库</span></div></a><div class="site-intro-group"><p class="site-intro">记录与分享可复用的软件技术内容</p><p class="site-stats"><span class="stat-pill">免费开源</span><span class="stat-pill">持续更新</span></p></div><div class="top-actions"><a class="contact-mail" href="mailto:gzx_miller@foxmail.com" title="给我发邮件">gzx_miller@foxmail.com</a><a class="github-link" href="https://github.com/gzx-miller/gzx-miller.github.io" target="_blank" rel="noopener" aria-label="查看开源代码" title="查看开源代码"><svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"></path></svg></a><button class="theme-toggle" aria-label="切换深色主题" title="切换深色主题"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></button></div></div><div class="tabs-row"><nav class="knowledge-tabs" aria-label="知识类别导航"><!--[--><div class="knowledge-tab-wrapper"><a href="/javascript" class="knowledge-tab" aria-disabled="false"><span>JavaScript</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/typescript" class="knowledge-tab" aria-disabled="false"><span>TypeScript</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/vue" class="knowledge-tab" aria-disabled="false"><span>Vue3</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/element-plus" class="knowledge-tab" aria-disabled="false"><span>Element Plus</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/vue-flow" class="knowledge-tab" aria-disabled="false"><span>Vue Flow</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/nestjs" class="knowledge-tab" aria-disabled="false"><span>Nest.js</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/nuxt" class="knowledge-tab" aria-disabled="false"><span>Nuxt</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a aria-current="page" href="/nodejs" class="knowledge-tab active" aria-disabled="false"><span>Node.js</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/css" class="knowledge-tab" aria-disabled="false"><span>CSS</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/tailwind-css" class="knowledge-tab" aria-disabled="false"><span>Tailwind CSS</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/sass" class="knowledge-tab" aria-disabled="false"><span>Sass</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/vite" class="knowledge-tab" aria-disabled="false"><span>Vite</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/react" class="knowledge-tab" aria-disabled="false"><span>React</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/nextjs" class="knowledge-tab" aria-disabled="false"><span>Next.js</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/langchain" class="knowledge-tab" aria-disabled="false"><span>LangChain</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/llm-principles" class="knowledge-tab" aria-disabled="false"><span>LLM 原理</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/cpp" class="knowledge-tab" aria-disabled="false"><span>C++</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/electron" class="knowledge-tab" aria-disabled="false"><span>Electron</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/ffmpeg" class="knowledge-tab" aria-disabled="false"><span>FFmpeg</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/webgl" class="knowledge-tab" aria-disabled="false"><span>WebGL</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/webassembly" class="knowledge-tab" aria-disabled="false"><span>WebAssembly</span><!----></a><!----></div><div class="knowledge-tab-wrapper"><a href="/uni-app" class="knowledge-tab" aria-disabled="false"><span>uni-app</span><!----></a><!----></div><!--]--></nav><!----></div><div class="nprogress-rail" aria-hidden="true"></div></header><div class="sidebar-expanded app-shell"><aside class="sidebar-temporarily-expanded sidebar" aria-label="Node.js 知识点导航"><div class="sidebar-heading"><button class="expanded sidebar-toggle" aria-label="收起侧边栏"><span class="toggle-icon" aria-hidden="true"></span><strong class="sidebar-toggle-label">Node.js</strong></button><label class="lesson-search"><span class="sr-only">搜索当前分类课程</span><input value="" type="search" placeholder="搜索课程…" autocomplete="off"></label></div><nav class="lesson-nav"><!--[--><section class="lesson-group"><h2 class="lesson-group-title">运行时与模块</h2><!--[--><a href="/nodejs/d-1/module-system" class="lesson-link" aria-label="🌰1 模块系统" title="模块系统"><span>🌰1</span><strong>模块系统</strong></a><a href="/nodejs/d-2/path-url" class="lesson-link" aria-label="🌰2 路径与 URL" title="路径与 URL"><span>🌰2</span><strong>路径与 URL</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">文件与事件</h2><!--[--><a href="/nodejs/d-3/file-system" class="lesson-link" aria-label="🌰3 文件系统" title="文件系统"><span>🌰3</span><strong>文件系统</strong></a><a href="/nodejs/d-4/event-emitter" class="lesson-link" aria-label="🌰4 事件发布订阅" title="事件发布订阅"><span>🌰4</span><strong>事件发布订阅</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">流与网络</h2><!--[--><a href="/nodejs/d-5/streams" class="lesson-link" aria-label="🌰5 流与背压" title="流与背压"><span>🌰5</span><strong>流与背压</strong></a><a href="/nodejs/d-6/http-server" class="lesson-link" aria-label="🌰6 HTTP 服务" title="HTTP 服务"><span>🌰6</span><strong>HTTP 服务</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">进程与并发</h2><!--[--><a href="/nodejs/d-7/process-env" class="lesson-link" aria-label="🌰7 进程与配置" title="进程与配置"><span>🌰7</span><strong>进程与配置</strong></a><a href="/nodejs/d-8/concurrency" class="lesson-link" aria-label="🌰8 并发控制" title="并发控制"><span>🌰8</span><strong>并发控制</strong></a><a href="/nodejs/d-16/worker-threads" class="lesson-link" aria-label="🌰9 Worker 线程" title="Worker 线程"><span>🌰9</span><strong>Worker 线程</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">可靠性</h2><!--[--><a href="/nodejs/d-9/error-logging" class="lesson-link" aria-label="🌰10 错误与日志" title="错误与日志"><span>🌰10</span><strong>错误与日志</strong></a><a href="/nodejs/d-10/node-test" class="lesson-link" aria-label="🌰11 Node 测试" title="Node 测试"><span>🌰11</span><strong>Node 测试</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">安全与依赖</h2><!--[--><a href="/nodejs/d-11/security" class="lesson-link" aria-label="🌰12 输入安全" title="输入安全"><span>🌰12</span><strong>输入安全</strong></a><a href="/nodejs/d-12/package-management" class="lesson-link" aria-label="🌰13 依赖管理" title="依赖管理"><span>🌰13</span><strong>依赖管理</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">Web 框架</h2><!--[--><a href="/nodejs/d-13/express-fastify" class="lesson-link" aria-label="🌰14 Express/Fastify" title="Express/Fastify"><span>🌰14</span><strong>Express/Fastify</strong></a><a href="/nodejs/d-14/websocket" class="lesson-link" aria-label="🌰15 WebSocket" title="WebSocket"><span>🌰15</span><strong>WebSocket</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">数据与存储</h2><!--[--><a href="/nodejs/d-15/database" class="lesson-link" aria-label="🌰16 数据库" title="数据库"><span>🌰16</span><strong>数据库</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">事件循环</h2><!--[--><a href="/nodejs/d-17/event-loop" class="lesson-link" aria-label="🌰17 事件循环" title="事件循环"><span>🌰17</span><strong>事件循环</strong></a><a href="/nodejs/d-25/timers" class="lesson-link" aria-label="🌰18 定时器" title="定时器"><span>🌰18</span><strong>定时器</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">二进制</h2><!--[--><a href="/nodejs/d-18/buffer" class="lesson-link" aria-label="🌰19 Buffer" title="Buffer"><span>🌰19</span><strong>Buffer</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">多进程</h2><!--[--><a href="/nodejs/d-19/child-process" class="lesson-link" aria-label="🌰20 子进程" title="子进程"><span>🌰20</span><strong>子进程</strong></a><a href="/nodejs/d-20/cluster" class="lesson-link" aria-label="🌰21 cluster" title="cluster"><span>🌰21</span><strong>cluster</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">安全</h2><!--[--><a href="/nodejs/d-21/crypto" class="lesson-link" aria-label="🌰22 加密" title="加密"><span>🌰22</span><strong>加密</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">性能</h2><!--[--><a href="/nodejs/d-22/perf-hooks" class="lesson-link" aria-label="🌰23 性能分析" title="性能分析"><span>🌰23</span><strong>性能分析</strong></a><a href="/nodejs/d-27/zlib" class="lesson-link" aria-label="🌰24 压缩" title="压缩"><span>🌰24</span><strong>压缩</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">网络</h2><!--[--><a aria-current="page" href="/nodejs/d-23/https" class="router-link-active router-link-exact-active lesson-link active" aria-label="🌰25 HTTPS" title="HTTPS"><span>🌰25</span><strong>HTTPS</strong></a><a href="/nodejs/d-26/net-tcp" class="lesson-link" aria-label="🌰26 TCP" title="TCP"><span>🌰26</span><strong>TCP</strong></a><a href="/nodejs/d-29/dns" class="lesson-link" aria-label="🌰27 DNS" title="DNS"><span>🌰27</span><strong>DNS</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">CLI</h2><!--[--><a href="/nodejs/d-24/cli" class="lesson-link" aria-label="🌰28 CLI" title="CLI"><span>🌰28</span><strong>CLI</strong></a><a href="/nodejs/d-30/readline" class="lesson-link" aria-label="🌰29 readline" title="readline"><span>🌰29</span><strong>readline</strong></a><!--]--></section><section class="lesson-group"><h2 class="lesson-group-title">系统</h2><!--[--><a href="/nodejs/d-28/os" class="lesson-link" aria-label="🌰30 系统信息" title="系统信息"><span>🌰30</span><strong>系统信息</strong></a><!--]--></section><!--]--><!----></nav></aside><!--[--><main id="main-content" class="lesson-page" data-category="nodejs" tabindex="-1"><nav class="breadcrumb" aria-label="面包屑"><a href="/nodejs" class="">Node.js</a><span aria-hidden="true">/</span><span aria-current="page">HTTPS</span><small>25 / 30</small></nav><div class="lesson-progress" role="progressbar" aria-label="Node.js 学习进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="83"><span style="width:83%;"></span></div><header class="lesson-header"><div class="lesson-copy"><p class="eyebrow">🌰25 · 网络 <span class="reading-time">约 1 分钟读完</span></p><h1>HTTPS 与 TLS 配置</h1><p>理解 HTTPS 的原理，掌握 Node.js HTTPS 服务器的创建和 TLS 配置。</p></div></header><section class="lesson-section lesson-demo"><article class="lesson-article"><!--[--><div class="lesson-question"><strong>开场问题：</strong>你用 OpenSSL 生成了一对自签名证书，<code>https.createServer</code> 也跑起来了，浏览器地址栏却挂着「不安全」的红色警告；同事那边少发了一层中间证书，Chrome 干脆拒绝连接，而加 <code>-k</code> 跳过校验的 <code>curl</code> 却能通。同样是「用了 HTTPS」，为什么一个警告、一个能连、一个被拒？ </div><h2>明文传输窃听风险</h2><p> HTTP 是明文传输，链路上的任何一跳都能偷看和改写你的请求。你想「加密」，于是把服务从 <code>http</code> 换成 <code>https</code>。但「加密」其实只解决了一半问题，旧办法留下的三笔成本，必须由你自己补上： </p><ul><li>明文可被窃听、篡改：公共 WiFi 能给你注入广告，运营商能看到你请求里的全部内容。</li><li>没有身份验证：你以为连的是银行，中间人却分别跟你和银行各建一条 TLS，把你的加密流量在自己这里解密、再转发，你全程毫无察觉。</li><li>只加密不认证：攻击者可以在链路中间篡改请求内容与响应，你既不知道对方是谁，也判断不了拿到的数据真假。</li></ul><p><strong>怎么让对方除了「加密」，还能证明「它确实是自称的那台服务器」？</strong></p><h2>私钥与证书加载</h2><p> 最直接的做法：把私钥和证书读进来，交给 <code>https.createServer({ key, cert }, handler)</code>，监听 443 端口。 </p><p> 它做对了一件很重要的事：<strong>建立了一条加密通道</strong>。TLS 握手会协商出会话密钥，此后应用数据在网络上看都是密文，窃听者拿不到明文——这一步是 HTTPS 的基础，不可省略。 </p><h2>自签证书信任缺失</h2><ul><li>加密不等于可信身份：自签名证书不在操作系统的受信任根证书库里，浏览器没法验证「证书上的域名是否真的归你」，于是报不安全。</li><li>少发中间证书：服务器只发了自己的证书、没带中间 CA，客户端就无法把「你的证书」一路接到任何受信任根上，链是断的。</li><li>协议版本过旧：SSLv3 与 TLS 1.0/1.1 存在已被公开的漏洞，继续开放等于给攻击者留后门。</li><li>私钥管理松懈：权限过松或被提交进仓库，谁拿到私钥谁就能冒充你的站点。</li><li>证书到期无人监控：到期那一刻，所有客户端直接拒绝连接，等于全站宕机。</li></ul><h2>证书链信任验证</h2><p> 先补<strong>证书链</strong>。证书不是孤立的一张纸，而是「服务器证书 → 中间 CA → 受信任根 CA」一条链，每一环都由上一环的私钥签名。客户端顺着这条链一路验到系统内置的受信任根，才能确认域名与身份。之所以先补它：没有身份验证的加密，等于「跟一个自称是银行的人加密聊天」——中间人照样能解密转发，这正是 HTTPS 要防的头号威胁。所以生产必须用 CA 签发的证书，本地开发用 <code>mkcert</code> 或 OpenSSL 自签名就够了，它提供加密，但不提供「被信任的身份」。 </p><p> 再补<strong>协议版本与密码套件</strong>。在服务器选项里显式设置最低版本，并优先使用 TLS 1.3： </p><ol class="lesson-steps"><li>准备证书：本地用自签名，生产用 CA 签发或 Let&#39;s Encrypt 自动续期。</li><li><code>https.createServer</code> 传入 <code>key</code> 与 <code>cert</code>；也可以在反向代理或负载均衡层终止 TLS。</li><li>显式设置 <code>minVersion: &#39;TLSv1.2&#39;</code> 与强密码套件，禁用 SSLv3 与 TLS 1.0/1.1。</li><li>用在线 TLS 检测报告核对协议版本与套件配置是否符合预期。</li></ol><p> 接着补<strong>全站强制加密</strong>：开启 HSTS，让浏览器此后只允许用 HTTPS 访问你的域名，堵住「第一次访问还是明文、被劫持降级」的口子。 </p><p> 最后补<strong>密钥与证书的生命周期管理</strong>。私钥要收紧文件权限、妥善备份、绝不进代码仓库；证书要设置到期监控，留出足够的续期窗口——Let&#39;s Encrypt 的证书有效期只有 90 天，靠自动续期才跑得稳，手动续期一定要提前量；方案还要预留更换私钥的路径，避免出问题时手忙脚乱。 </p><div class="lesson-box hint"><strong>架构上的选择：</strong>TLS 不一定非得在应用里终止，也可以交给反向代理或负载均衡层，应用只处理普通 HTTP。好处是证书集中管理、续期只改一处；代价是从网关到应用那段内网流量是否是明文，需要按你的安全边界单独评估。 </div><h2>四页签配置对照</h2><figure class="lesson-figure"><figcaption>依次点开「概览 / 创建证书 / 服务器配置 / 安全验证」四个页签：对比 HTTP 与 HTTPS 的差别，看自签名与 Let&#39;s Encrypt 的获取命令、Node 端 <code>key</code> / <code>cert</code> 的配置写法，以及哪些 TLS 版本已被列为不安全。</figcaption><div class="demo-card" data-v-f7b995b5><p data-v-f7b995b5>HTTPS 服务器需要 <code data-v-f7b995b5>TLS/SSL</code> 证书。Node.js 使用 <code data-v-f7b995b5>https</code> 模块（基于 OpenSSL）提供安全通信。</p><div class="tabs" data-v-f7b995b5><!--[--><button class="active" data-v-f7b995b5>概览</button><button class="" data-v-f7b995b5>创建证书</button><button class="" data-v-f7b995b5>服务器配置</button><button class="" data-v-f7b995b5>安全验证</button><!--]--></div><div class="step-content" data-v-f7b995b5><h4 data-v-f7b995b5>HTTP vs HTTPS</h4><div class="grid-2" data-v-f7b995b5><div class="col bad" data-v-f7b995b5><strong data-v-f7b995b5>HTTP</strong><ul data-v-f7b995b5><li data-v-f7b995b5>明文传输</li><li data-v-f7b995b5>易被窃听/篡改</li><li data-v-f7b995b5>无服务器身份验证</li></ul></div><div class="col good" data-v-f7b995b5><strong data-v-f7b995b5>HTTPS</strong><ul data-v-f7b995b5><li data-v-f7b995b5>加密传输（TLS）</li><li data-v-f7b995b5>防窃听/中间人攻击</li><li data-v-f7b995b5>证书验证服务器身份</li></ul></div></div></div><!----><!----><!----><small data-v-f7b995b5>要点：生产环境务必使用 HTTPS；Let&#39;s Encrypt 提供免费自动续期证书；Node.js 18+ 支持自动读取证书而无需手动配置。</small></div></figure><h2>加密与身份证明</h2><p> HTTPS 由两部分构成：TLS 负责把流量加密，证书链负责证明「对方是它自称的那台服务器」。只做前者，你得到的是一条「跟身份不明者加密对话」的通道；只有把证书验到受信任的根、再把废弃协议关掉、把证书当密钥一样管理起来，HTTPS 才真正成立。 </p><div class="lesson-term"><span class="term-name">「证书链」</span>是从服务器证书经由中间 CA 一路签名到受信任根 CA 的验证路径，客户端逐环校验签名与域名，最终把身份锚定在系统/浏览器内置的根证书上。边界：根证书由操作系统与浏览器预置，<strong>不随站点下发</strong>；自签名证书依然提供加密，但不在信任库里，浏览器会报「不安全」；服务器漏发中间证书会让链断掉，部分客户端直接拒绝握手；CA 签发的正式证书还需在到期前续期，否则验证链会因过期而失效。 </div><!--]--></article></section><section class="lesson-section"><h2>关键代码</h2><div class="code-block-wrapper"><div class="code-block-toolbar"><span class="code-block-lang">JavaScript</span><button class="code-copy-btn" type="button" aria-label="复制代码"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>复制</span></button></div><pre class="code-block"><code><span class="hljs-comment">// ═══════════════════════════════════════════</span>
+<span class="hljs-comment">// D23 - HTTPS 与 TLS 配置</span>
+<span class="hljs-comment">// ═══════════════════════════════════════════</span>
+
+<span class="hljs-keyword">import</span> https <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:https&#x27;</span>
+<span class="hljs-keyword">import</span> http <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:http&#x27;</span>
+<span class="hljs-keyword">import</span> fs <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:fs&#x27;</span>
+
+<span class="hljs-comment">// ───────── HTTPS 服务端 ─────────</span>
+
+<span class="hljs-comment">// 需要证书和私钥文件</span>
+<span class="hljs-comment">// 自签名证书生成命令（仅用于开发）：</span>
+<span class="hljs-comment">// openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365 -nodes</span>
+
+<span class="hljs-comment">// const options = {</span>
+<span class="hljs-comment">//   key: fs.readFileSync(&#x27;key.pem&#x27;),    // 私钥</span>
+<span class="hljs-comment">//   cert: fs.readFileSync(&#x27;cert.pem&#x27;),  // 证书</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//   // 推荐的安全配置</span>
+<span class="hljs-comment">//   minVersion: &#x27;TLSv1.2&#x27;,             // 最低 TLS 版本</span>
+<span class="hljs-comment">//   maxVersion: &#x27;TLSv1.3&#x27;,             // 最高 TLS 版本</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//   // 密码套件（推荐的安全套件）</span>
+<span class="hljs-comment">//   ciphers: [</span>
+<span class="hljs-comment">//     &#x27;TLS_AES_256_GCM_SHA384&#x27;,</span>
+<span class="hljs-comment">//     &#x27;TLS_CHACHA20_POLY1305_SHA256&#x27;,</span>
+<span class="hljs-comment">//     &#x27;TLS_AES_128_GCM_SHA256&#x27;,</span>
+<span class="hljs-comment">//     &#x27;ECDHE-RSA-AES256-GCM-SHA384&#x27;,</span>
+<span class="hljs-comment">//     &#x27;ECDHE-RSA-AES128-GCM-SHA256&#x27;</span>
+<span class="hljs-comment">//   ].join(&#x27;:&#x27;),</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//   // 优先使用服务器端的密码套件顺序</span>
+<span class="hljs-comment">//   honorCipherOrder: true,</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//   // OCSP Stapling（证书状态查询）</span>
+<span class="hljs-comment">//   // 需要 CA 提供的 OCSP 响应</span>
+<span class="hljs-comment">// }</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// const server = https.createServer(options, (req, res) =&gt; {</span>
+<span class="hljs-comment">//   res.writeHead(200, { &#x27;Content-Type&#x27;: &#x27;text/plain; charset=utf-8&#x27; })</span>
+<span class="hljs-comment">//   res.end(&#x27;Hello HTTPS!&#x27;)</span>
+<span class="hljs-comment">// })</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// server.listen(443, () =&gt; {</span>
+<span class="hljs-comment">//   console.log(&#x27;HTTPS Server running on port 443&#x27;)</span>
+<span class="hljs-comment">// })</span>
+
+<span class="hljs-comment">// ───────── HTTP 重定向到 HTTPS ─────────</span>
+
+<span class="hljs-comment">// 常见做法：80 端口重定向到 443</span>
+<span class="hljs-comment">// const httpServer = http.createServer((req, res) =&gt; {</span>
+<span class="hljs-comment">//   res.writeHead(301, {</span>
+<span class="hljs-comment">//     Location: `https://${req.headers.host}${req.url}`</span>
+<span class="hljs-comment">//   })</span>
+<span class="hljs-comment">//   res.end()</span>
+<span class="hljs-comment">// })</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// httpServer.listen(80, () =&gt; {</span>
+<span class="hljs-comment">//   console.log(&#x27;HTTP redirect server running on port 80&#x27;)</span>
+<span class="hljs-comment">// })</span>
+
+<span class="hljs-comment">// ───────── HTTPS 客户端请求 ─────────</span>
+
+<span class="hljs-comment">// GET 请求</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">httpsGet</span>(<span class="hljs-params">url</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+    https.<span class="hljs-title function_">get</span>(url, <span class="hljs-function">(<span class="hljs-params">res</span>) =&gt;</span> {
+      <span class="hljs-keyword">let</span> data = <span class="hljs-string">&#x27;&#x27;</span>
+
+      res.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;data&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">chunk</span>) =&gt;</span> {
+        data += chunk
+      })
+
+      res.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;end&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+        <span class="hljs-title function_">resolve</span>({
+          <span class="hljs-attr">statusCode</span>: res.<span class="hljs-property">statusCode</span>,
+          <span class="hljs-attr">headers</span>: res.<span class="hljs-property">headers</span>,
+          <span class="hljs-attr">body</span>: data
+        })
+      })
+    }).<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;error&#x27;</span>, reject)
+  })
+}
+
+<span class="hljs-comment">// 完整请求（带选项）</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">httpsRequest</span>(<span class="hljs-params">options, body = <span class="hljs-literal">null</span></span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+    <span class="hljs-keyword">const</span> req = https.<span class="hljs-title function_">request</span>(options, <span class="hljs-function">(<span class="hljs-params">res</span>) =&gt;</span> {
+      <span class="hljs-keyword">let</span> data = <span class="hljs-string">&#x27;&#x27;</span>
+
+      res.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;data&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">chunk</span>) =&gt;</span> {
+        data += chunk
+      })
+
+      res.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;end&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+        <span class="hljs-title function_">resolve</span>({
+          <span class="hljs-attr">statusCode</span>: res.<span class="hljs-property">statusCode</span>,
+          <span class="hljs-attr">headers</span>: res.<span class="hljs-property">headers</span>,
+          <span class="hljs-attr">body</span>: data
+        })
+      })
+    })
+
+    req.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;error&#x27;</span>, reject)
+    req.<span class="hljs-built_in">setTimeout</span>(<span class="hljs-number">10000</span>, <span class="hljs-function">() =&gt;</span> req.<span class="hljs-title function_">destroy</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;请求超时&#x27;</span>)))
+
+    <span class="hljs-keyword">if</span> (body) {
+      req.<span class="hljs-title function_">write</span>(body)
+    }
+    req.<span class="hljs-title function_">end</span>()
+  })
+}
+
+<span class="hljs-comment">// POST 请求示例</span>
+<span class="hljs-comment">// async function postJson() {</span>
+<span class="hljs-comment">//   const result = await httpsRequest({</span>
+<span class="hljs-comment">//     hostname: &#x27;api.example.com&#x27;,</span>
+<span class="hljs-comment">//     port: 443,</span>
+<span class="hljs-comment">//     path: &#x27;/api/users&#x27;,</span>
+<span class="hljs-comment">//     method: &#x27;POST&#x27;,</span>
+<span class="hljs-comment">//     headers: {</span>
+<span class="hljs-comment">//       &#x27;Content-Type&#x27;: &#x27;application/json&#x27;,</span>
+<span class="hljs-comment">//       &#x27;Authorization&#x27;: &#x27;Bearer token123&#x27;</span>
+<span class="hljs-comment">//     }</span>
+<span class="hljs-comment">//   }, JSON.stringify({ name: &#x27;张三&#x27; }))</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//   console.log(&#x27;状态码:&#x27;, result.statusCode)</span>
+<span class="hljs-comment">//   console.log(&#x27;响应:&#x27;, result.body)</span>
+<span class="hljs-comment">// }</span>
+
+<span class="hljs-comment">// ───────── TLS 相关选项 ─────────</span>
+
+<span class="hljs-comment">// 客户端 TLS 选项</span>
+<span class="hljs-keyword">const</span> tlsOptions = {
+  <span class="hljs-comment">// CA 证书（用于自签名证书或私有 CA）</span>
+  <span class="hljs-comment">// ca: fs.readFileSync(&#x27;ca.pem&#x27;),</span>
+
+  <span class="hljs-comment">// 客户端证书（双向认证时使用）</span>
+  <span class="hljs-comment">// key: fs.readFileSync(&#x27;client-key.pem&#x27;),</span>
+  <span class="hljs-comment">// cert: fs.readFileSync(&#x27;client-cert.pem&#x27;),</span>
+
+  <span class="hljs-comment">// 拒绝未授权的证书（默认 true）</span>
+  <span class="hljs-comment">// 设为 false 不安全，仅开发调试用！</span>
+  <span class="hljs-attr">rejectUnauthorized</span>: <span class="hljs-literal">true</span>,
+
+  <span class="hljs-comment">// 服务器名称指示（SNI）</span>
+  <span class="hljs-attr">servername</span>: <span class="hljs-string">&#x27;example.com&#x27;</span>,
+
+  <span class="hljs-comment">// 最低 TLS 版本</span>
+  <span class="hljs-attr">minVersion</span>: <span class="hljs-string">&#x27;TLSv1.2&#x27;</span>,
+
+  <span class="hljs-comment">// 检查证书有效期</span>
+  <span class="hljs-comment">// checkServerIdentity: (host, cert) =&gt; { ... }</span>
+}
+
+<span class="hljs-comment">// 警告：不要在生产环境使用 rejectUnauthorized: false</span>
+<span class="hljs-comment">// 这会完全禁用证书验证，极易受到中间人攻击！</span>
+<span class="hljs-comment">// process.env.NODE_TLS_REJECT_UNAUTHORIZED = &#x27;0&#x27; 同样危险</span>
+
+<span class="hljs-comment">// ───────── 证书相关概念 ─────────</span>
+
+<span class="hljs-comment">// 1. 证书类型</span>
+<span class="hljs-comment">//    - 自签名证书：自己生成，仅开发用</span>
+<span class="hljs-comment">//    - DV (Domain Validation)：验证域名所有权</span>
+<span class="hljs-comment">//    - OV (Organization Validation)：验证组织</span>
+<span class="hljs-comment">//    - EV (Extended Validation)：最高级别验证</span>
+
+<span class="hljs-comment">// 2. 免费证书：Let&#x27;s Encrypt</span>
+<span class="hljs-comment">//    - 免费、自动化</span>
+<span class="hljs-comment">//    - 90 天有效期，需自动续期</span>
+<span class="hljs-comment">//    - 工具：certbot, acme.sh</span>
+
+<span class="hljs-comment">// 3. 证书链</span>
+<span class="hljs-comment">//    服务器证书 → 中间 CA → 根 CA</span>
+<span class="hljs-comment">//    浏览器/系统内置信任的根 CA</span>
+
+<span class="hljs-comment">// 4. SNI (Server Name Indication)</span>
+<span class="hljs-comment">//    一个 IP 可以有多个域名的证书</span>
+<span class="hljs-comment">//    客户端在握手时告诉服务器要访问的域名</span>
+
+<span class="hljs-comment">// ───────── 安全配置建议 ─────────</span>
+
+<span class="hljs-comment">// TLS 版本：</span>
+<span class="hljs-comment">// ✓ 启用: TLS 1.2, TLS 1.3</span>
+<span class="hljs-comment">// ✗ 禁用: SSLv3, TLS 1.0, TLS 1.1（已知漏洞）</span>
+
+<span class="hljs-comment">// 密码套件选择原则：</span>
+<span class="hljs-comment">// - 优先 AEAD 认证加密（GCM, ChaCha20-Poly1305）</span>
+<span class="hljs-comment">// - 优先前向保密（ECDHE）</span>
+<span class="hljs-comment">// - 禁用 RC4, DES, 3DES, CBC 模式（有漏洞）</span>
+<span class="hljs-comment">// - 禁用弱密钥交换（RSA 密钥交换，无前向保密）</span>
+
+<span class="hljs-comment">// 推荐的密码套件（TLS 1.2 + 1.3）：</span>
+<span class="hljs-comment">// TLS_AES_256_GCM_SHA384</span>
+<span class="hljs-comment">// TLS_CHACHA20_POLY1305_SHA256</span>
+<span class="hljs-comment">// TLS_AES_128_GCM_SHA256</span>
+<span class="hljs-comment">// ECDHE-ECDSA-AES256-GCM-SHA384</span>
+<span class="hljs-comment">// ECDHE-RSA-AES256-GCM-SHA384</span>
+<span class="hljs-comment">// ECDHE-ECDSA-CHACHA20-POLY1305</span>
+<span class="hljs-comment">// ECDHE-RSA-CHACHA20-POLY1305</span>
+<span class="hljs-comment">// ECDHE-ECDSA-AES128-GCM-SHA256</span>
+<span class="hljs-comment">// ECDHE-RSA-AES128-GCM-SHA256</span>
+
+<span class="hljs-comment">// ───────── 常见安全头 ─────────</span>
+
+<span class="hljs-comment">// 在 HTTP 响应中添加这些头增强安全性</span>
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">addSecurityHeaders</span>(<span class="hljs-params">res</span>) {
+  <span class="hljs-comment">// 强制 HTTPS（HSTS）</span>
+  res.<span class="hljs-title function_">setHeader</span>(
+    <span class="hljs-string">&#x27;Strict-Transport-Security&#x27;</span>,
+    <span class="hljs-string">&#x27;max-age=31536000; includeSubDomains; preload&#x27;</span>
+  )
+
+  <span class="hljs-comment">// 内容安全策略</span>
+  res.<span class="hljs-title function_">setHeader</span>(
+    <span class="hljs-string">&#x27;Content-Security-Policy&#x27;</span>,
+    <span class="hljs-string">&quot;default-src &#x27;self&#x27;; script-src &#x27;self&#x27;&quot;</span>
+  )
+
+  <span class="hljs-comment">// 防止 MIME 类型嗅探</span>
+  res.<span class="hljs-title function_">setHeader</span>(<span class="hljs-string">&#x27;X-Content-Type-Options&#x27;</span>, <span class="hljs-string">&#x27;nosniff&#x27;</span>)
+
+  <span class="hljs-comment">// 防止点击劫持</span>
+  res.<span class="hljs-title function_">setHeader</span>(<span class="hljs-string">&#x27;X-Frame-Options&#x27;</span>, <span class="hljs-string">&#x27;DENY&#x27;</span>)
+
+  <span class="hljs-comment">// XSS 保护（现代浏览器主要靠 CSP）</span>
+  res.<span class="hljs-title function_">setHeader</span>(<span class="hljs-string">&#x27;X-XSS-Protection&#x27;</span>, <span class="hljs-string">&#x27;1; mode=block&#x27;</span>)
+
+  <span class="hljs-comment">// 引荐来源信息控制</span>
+  res.<span class="hljs-title function_">setHeader</span>(<span class="hljs-string">&#x27;Referrer-Policy&#x27;</span>, <span class="hljs-string">&#x27;strict-origin-when-cross-origin&#x27;</span>)
+}
+
+<span class="hljs-comment">// ───────── 测试 HTTPS 配置 ─────────</span>
+
+<span class="hljs-comment">// 在线工具：</span>
+<span class="hljs-comment">// - SSL Labs Server Test (ssllabs.com)</span>
+<span class="hljs-comment">// - testssl.sh (命令行工具)</span>
+
+<span class="hljs-comment">// 命令行测试：</span>
+<span class="hljs-comment">// openssl s_client -connect example.com:443 -tls1_2</span>
+<span class="hljs-comment">// openssl s_client -connect example.com:443 -tls1_3</span>
+<span class="hljs-comment">// curl -v https://example.com</span>
+<span class="hljs-comment">// nmap --script ssl-enum-ciphers -p 443 example.com</span>
+
+<span class="hljs-comment">// ───────── 生产环境最佳实践 ─────────</span>
+<span class="hljs-comment">// 使用 Let&#x27;s Encrypt 等免费证书</span>
+<span class="hljs-comment">// 启用 TLS 1.2 和 1.3，禁用旧版本</span>
+<span class="hljs-comment">// 使用强密码套件，禁用弱套件</span>
+<span class="hljs-comment">// 启用 HSTS，强制 HTTPS</span>
+<span class="hljs-comment">// 配置证书自动续期</span>
+<span class="hljs-comment">// 定期扫描 TLS 配置</span>
+<span class="hljs-comment">// 考虑使用 CDN（内置 HTTPS 和安全优化）</span>
+<span class="hljs-comment">// 不要在代码中硬编码证书路径，用配置管理</span>
+<span class="hljs-comment">// 证书私钥妥善保管，不要提交到代码仓库</span>
+<span class="hljs-comment">// 双向认证（mTLS）用于内部服务间通信</span>
+
+<span class="hljs-comment">// ───────── 常见错误 ─────────</span>
+<span class="hljs-comment">// 1. rejectUnauthorized: false（完全禁用验证）</span>
+<span class="hljs-comment">// 2. 硬编码证书和私钥到代码中</span>
+<span class="hljs-comment">// 3. 使用已过期的证书</span>
+<span class="hljs-comment">// 4. 只配置证书，忘记配置中间证书</span>
+<span class="hljs-comment">// 5. 启用了 SSLv3/TLS 1.0 等不安全协议</span>
+<span class="hljs-comment">// 6. 私钥文件权限太宽松（应该 600）</span></code></pre></div></section><nav class="lesson-next" aria-label="下一章节"><div class="bottom-nav-row"><a href="https://nodejs.org/docs/latest/api/" target="_blank" rel="noopener" class="official-link">Node.js 官网 → </a><div class="lesson-pager"><a href="/nodejs/d-27/zlib" class="previous-lesson-link"><span>上一颗</span><strong>🌰24 压缩</strong></a><a href="/nodejs/d-26/net-tcp" class="next-lesson-link"><span>下一颗</span><strong>🌰26 TCP</strong></a></div></div></nav></main><!--]--></div><footer class="site-footer"><p class="site-footer-line"> © 2026 小松鼠举栗子 · 用 🌰 记录技术知识 · <a href="mailto:gzx_miller@foxmail.com">gzx_miller@foxmail.com</a></p></footer></div><!--]--><button type="button" class="squirrel-pet" style="" aria-label="松鼠小助手：点击提问，拖拽移动" title="点我提问，拖拽移动" data-v-235d5ef5><span class="pet-inner" aria-hidden="true" data-v-235d5ef5><span class="pet-ai-badge" data-v-235d5ef5>AI</span><span class="pet-zzz" aria-hidden="true" data-v-235d5ef5>z<span data-v-235d5ef5>z</span><span data-v-235d5ef5>z</span></span><span class="pet-flip" data-v-235d5ef5><span class="pet-wobble" data-v-235d5ef5><svg viewBox="0 0 136 120" width="68" height="60" data-v-235d5ef5><defs data-v-235d5ef5><linearGradient id="sq-body" x1="0" y1="0" x2="0" y2="1" data-v-235d5ef5><stop offset="0" stop-color="#f0904a" data-v-235d5ef5></stop><stop offset="1" stop-color="#d95a24" data-v-235d5ef5></stop></linearGradient><linearGradient id="sq-tail" x1="0" y1="1" x2="1" y2="0" data-v-235d5ef5><stop offset="0" stop-color="#c1441e" data-v-235d5ef5></stop><stop offset="1" stop-color="#f5a040" data-v-235d5ef5></stop></linearGradient></defs><g class="pet-tail" data-v-235d5ef5><path d="M58 96 C96 106 122 86 122 50 C121.5 30 112 13 97 8 C83 3.5 72.5 9 71.5 17.5 C70.8 24 74.5 28.5 76.5 33.5 C63 44 58 66 56.5 86 C56 92 57 95 58 96 Z" fill="url(#sq-tail)" data-v-235d5ef5></path><path d="M76 88 C96 80 106 58 99 40 C105 58 98 80 82 90 Z" fill="#f6c15a" opacity="0.5" data-v-235d5ef5></path></g><ellipse class="pet-foot pet-foot-l" cx="41.4" cy="107" rx="9.6" ry="5.4" fill="#b7431f" data-v-235d5ef5></ellipse><ellipse class="pet-foot pet-foot-r" cx="64.6" cy="107" rx="9.6" ry="5.4" fill="#b7431f" data-v-235d5ef5></ellipse><ellipse cx="52" cy="84" rx="27" ry="27" fill="url(#sq-body)" data-v-235d5ef5></ellipse><ellipse cx="51" cy="90" rx="16" ry="17" fill="#ffe3c2" opacity="0.95" data-v-235d5ef5></ellipse><path d="M33.5 38 L38.5 12 L48 27 Z" fill="#d95a24" stroke="#d95a24" stroke-width="3" stroke-linejoin="round" data-v-235d5ef5></path><path d="M36.8 30.5 L39 17 L44 25.5 Z" fill="#f2a582" data-v-235d5ef5></path><path d="M70.5 38 L65.5 12 L56 27 Z" fill="#d95a24" stroke="#d95a24" stroke-width="3" stroke-linejoin="round" data-v-235d5ef5></path><path d="M67.2 30.5 L65 17 L60 25.5 Z" fill="#f2a582" data-v-235d5ef5></path><circle cx="52" cy="47" r="22" fill="url(#sq-body)" data-v-235d5ef5></circle><circle cx="33" cy="54" r="9.5" fill="#e8793c" data-v-235d5ef5></circle><circle cx="71" cy="54" r="9.5" fill="#e8793c" data-v-235d5ef5></circle><circle cx="41" cy="53" r="4" fill="#f6c15a" opacity="0.6" data-v-235d5ef5></circle><circle cx="63" cy="53" r="4" fill="#f6c15a" opacity="0.6" data-v-235d5ef5></circle><g stroke="#b7431f" stroke-width="0.9" stroke-linecap="round" opacity="0.7" data-v-235d5ef5><path d="M32 50 L25 49" data-v-235d5ef5></path><path d="M32 54 L25 55" data-v-235d5ef5></path><path d="M32.5 58 L26 60" data-v-235d5ef5></path><path d="M72 50 L79 49" data-v-235d5ef5></path><path d="M72 54 L79 55" data-v-235d5ef5></path><path d="M71.5 58 L78 60" data-v-235d5ef5></path></g><g class="pet-eyes" data-v-235d5ef5><circle cx="44" cy="44" r="3.4" fill="#32190f" data-v-235d5ef5></circle><circle cx="45" cy="43" r="1.1" fill="#fffaf2" data-v-235d5ef5></circle><circle cx="60" cy="44" r="3.4" fill="#32190f" data-v-235d5ef5></circle><circle cx="61" cy="43" r="1.1" fill="#fffaf2" data-v-235d5ef5></circle></g><g class="pet-face-happy" data-v-235d5ef5><path d="M40.5 44.5 Q44 40.5 47.5 44.5" fill="none" stroke="#32190f" stroke-width="2" stroke-linecap="round" data-v-235d5ef5></path><path d="M56.5 44.5 Q60 40.5 63.5 44.5" fill="none" stroke="#32190f" stroke-width="2" stroke-linecap="round" data-v-235d5ef5></path><circle cx="36" cy="50.5" r="2.8" fill="#f0806e" opacity="0.6" data-v-235d5ef5></circle><circle cx="68" cy="50.5" r="2.8" fill="#f0806e" opacity="0.6" data-v-235d5ef5></circle></g><g class="pet-face-sleep" data-v-235d5ef5><path d="M40.5 45 Q44 47.5 47.5 45" fill="none" stroke="#32190f" stroke-width="2" stroke-linecap="round" data-v-235d5ef5></path><path d="M56.5 45 Q60 47.5 63.5 45" fill="none" stroke="#32190f" stroke-width="2" stroke-linecap="round" data-v-235d5ef5></path></g><ellipse cx="52" cy="55" rx="9" ry="7" fill="#ffe3c2" data-v-235d5ef5></ellipse><ellipse cx="52" cy="50.5" rx="2.4" ry="1.8" fill="#7b351d" data-v-235d5ef5></ellipse><path d="M48.5 54.5 Q52 57.5 55.5 54.5" fill="none" stroke="#7b351d" stroke-width="1.4" stroke-linecap="round" data-v-235d5ef5></path><rect x="50.2" y="56.4" width="1.6" height="2.6" rx="0.5" fill="#fffdf6" data-v-235d5ef5></rect><rect x="52.2" y="56.4" width="1.6" height="2.6" rx="0.5" fill="#fffdf6" data-v-235d5ef5></rect><ellipse cx="39.6" cy="74.6" rx="5.5" ry="7.2" fill="#c1441e" transform="rotate(18 39.6 74.6)" data-v-235d5ef5></ellipse><ellipse cx="40" cy="80.4" rx="3.6" ry="2.4" fill="#f0a06a" data-v-235d5ef5></ellipse><g class="pet-arm" data-v-235d5ef5><ellipse cx="66.4" cy="71.6" rx="5.4" ry="7" fill="#c1441e" transform="rotate(-24 66.4 71.6)" data-v-235d5ef5></ellipse><circle cx="69.2" cy="66.4" r="2.8" fill="#d95a24" data-v-235d5ef5></circle><circle cx="71.4" cy="63.8" r="1.7" fill="#d95a24" data-v-235d5ef5></circle></g></svg></span></span></span><span class="pet-hint" aria-hidden="true" data-v-235d5ef5><span class="pet-hint-text" data-v-235d5ef5></span></span></button><!----><!--]--></div><div id="teleports"></div><script>window.__NUXT__={};window.__NUXT__.config={public:{zhipuApiKey:"4a144c581416035e180b03574714070553061642165f46465c5f1958545145181c047f743904140e2b350009195b2a3503"},app:{baseURL:"/",buildId:"e714b28c-1387-4a7d-a2e1-4256272ad9f2",buildAssetsDir:"/_nuxt/",cdnURL:""}}</script><script type="application/json" data-nuxt-data="nuxt-app" data-ssr="true" id="__NUXT_DATA__" data-src="/nodejs/d-23/https/_payload.json?e714b28c-1387-4a7d-a2e1-4256272ad9f2">[{"state":1,"once":5,"_errors":6,"serverRendered":3,"path":8,"pinia":9,"prerenderedAt":11},["Reactive",2],{"$ssidebarExpanded":3,"$stheme":4},true,"light",["Set"],["ShallowReactive",7],{"lesson-code-D_23":-1},"\u002Fnodejs\u002Fd-23\u002Fhttps",["Reactive",10],{},1791203790804]</script></body></html>

@@ -1,0 +1,143 @@
+const n=`// .env.local - 本地环境变量（不提交到 git）
+// 仅服务端可用的变量（无 NEXT_PUBLIC_ 前缀）
+DATABASE_URL=postgresql://user:pass@localhost:5432/mydb
+SECRET_KEY=your-secret-key-here
+API_KEY=sk-xxxxxxxxxxxxxxxx
+
+// 客户端可用的变量（NEXT_PUBLIC_ 前缀）
+NEXT_PUBLIC_SITE_URL=https://example.com
+NEXT_PUBLIC_ANALYTICS_ID=G-XXXXXXXXXX
+
+// ============================================
+
+// .env.development - 开发环境
+NODE_ENV=development
+NEXT_PUBLIC_API_BASE=http://localhost:3000/api
+
+// .env.production - 生产环境
+NODE_ENV=production
+NEXT_PUBLIC_API_BASE=https://api.example.com
+
+// ============================================
+
+// env 文件优先级（从高到低）：
+// 1. .env.local - 本地覆盖（最高优先级）
+// 2. .env.[environment] - 环境特定（development/production）
+// 3. .env - 默认值（最低优先级）
+
+// ============================================
+
+// 服务端使用环境变量
+// app/lib/db.ts
+import { PrismaClient } from '@prisma/client'
+
+// 直接使用，不会暴露到客户端
+const prisma = new PrismaClient({
+  datasources: {
+    db: {
+      url: process.env.DATABASE_URL,
+    },
+  },
+})
+
+// ============================================
+
+// 客户端使用环境变量
+// 必须有 NEXT_PUBLIC_ 前缀
+'use client'
+
+export function Analytics() {
+  // NEXT_PUBLIC_ 前缀的变量可以在客户端使用
+  const analyticsId = process.env.NEXT_PUBLIC_ANALYTICS_ID
+
+  return (
+    <div>
+      <p>Analytics ID: {analyticsId}</p>
+    </div>
+  )
+}
+
+// ============================================
+
+// next.config.js - 完整配置示例
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  // React 严格模式
+  reactStrictMode: true,
+
+  // 图片配置
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.example.com',
+      },
+    ],
+    formats: ['image/avif', 'image/webp'],
+  },
+
+  // 重写规则
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'https://api.example.com/:path*',
+      },
+    ]
+  },
+
+  // 重定向规则
+  async redirects() {
+    return [
+      {
+        source: '/old-path',
+        destination: '/new-path',
+        permanent: true, // 308 永久重定向
+      },
+    ]
+  },
+
+  // 自定义页面扩展名
+  pageExtensions: ['ts', 'tsx', 'js', 'jsx'],
+
+  // 输出模式
+  // output: 'standalone', // Node.js 自托管
+  // output: 'export',     // 纯静态导出
+  // output: undefined,    // 默认（Node.js 服务）
+
+  // 压缩
+  compress: true,
+
+  // 构建指示器
+  devIndicators: {
+    buildActivity: true,
+    buildActivityPosition: 'bottom-right',
+  },
+}
+
+module.exports = nextConfig
+
+// ============================================
+
+// output: 'standalone' - 独立部署
+// 构建时生成最小化的 node_modules，方便 Docker 部署
+// 需要手动复制静态资源和 public 目录
+
+// output: 'export' - 纯静态导出
+// 生成完全静态的 HTML 文件，可部署到任何静态托管
+// 限制：不支持 Server Actions、Middleware、Image Optimization、API Routes
+
+// ============================================
+
+// 在 next.config.js 中使用环境变量
+// next.config.js
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  env: {
+    // 也可以在这里定义，但推荐用 .env 文件
+    CUSTOM_VAR: 'value',
+  },
+}
+
+// 更推荐的方式：用 .env.local 文件管理敏感配置
+// .env.local 会被 git 忽略，不要提交到仓库`;export{n as default};

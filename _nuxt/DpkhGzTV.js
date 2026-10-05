@@ -1,0 +1,27 @@
+const n=`#include <iostream>
+#include <string>
+
+class Vector {
+private:
+    double x, y;
+
+public:
+    Vector(double x, double y) : x(x), y(y) {}
+
+    // 运算符重载：+
+    Vector operator+(const Vector& other) const {
+        return Vector(x + other.x, y + other.y);
+    }
+
+    // 运算符重载：<<（输出）
+    friend std::ostream& operator<<(std::ostream& os, const Vector& v) {
+        os << "(" << v.x << ", " << v.y << ")";
+        return os;
+    }
+};
+
+int main() {
+    Vector v1(1, 2), v2(3, 4);
+    std::cout << "v1 + v2 = " << v1 + v2 << std::endl;
+    return 0;
+}`;export{n as default};

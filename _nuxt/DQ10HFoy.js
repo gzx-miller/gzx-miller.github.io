@@ -1,0 +1,166 @@
+const s=`import { ChatOpenAI } from '@langchain/openai'
+import { ChatPromptTemplate, MessagesPlaceholder } from '@langchain/core/prompts'
+import { StringOutputParser } from '@langchain/core/output_parsers'
+import { RunnableSequence, RunnablePassthrough } from '@langchain/core/runnables'
+import { HumanMessage, AIMessage, SystemMessage } from '@langchain/core/messages'
+import { ChatMessageHistory } from 'langchain/stores/message/in_memory'
+
+const model = new ChatOpenAI({ model: 'gpt-4o-mini' })
+
+// 示例1: ChatMessageHistory - 基础消息历史
+const history = new ChatMessageHistory()
+
+// 添加消息
+await history.addMessage(new HumanMessage('你好，我叫小明'))
+await history.addMessage(new AIMessage('你好小明！有什么我可以帮助你的吗？'))
+await history.addMessage(new HumanMessage('我喜欢编程'))
+await history.addMessage(new AIMessage('太棒了！你最喜欢哪种编程语言？'))
+
+// 获取历史消息
+const messages = await history.getMessages()
+console.log('历史消息数:', messages.length)
+messages.forEach(msg => {
+  console.log(\`[\${msg._getType()}] \${msg.content}\`)
+})
+
+// 示例2: 带记忆的对话链 - 完整历史
+const promptWithHistory = ChatPromptTemplate.fromMessages([
+  ['system', '你是一个友好的 AI 助手，请用中文回答问题。'],
+  new MessagesPlaceholder('chat_history'),
+  ['human', '{input}'],
+])
+
+const chainWithHistory = RunnableSequence.from([
+  {
+    input: (input: { input: string; chat_history: any[] }) => input.input,
+    chat_history: (input) => input.chat_history,
+  },
+  promptWithHistory,
+  model,
+  new StringOutputParser(),
+])
+
+async function chatWithFullMemory() {
+  const history = new ChatMessageHistory()
+  
+  // 第一轮对话
+  await history.addUserMessage('你好，我叫小红')
+  const response1 = await chainWithHistory.invoke({
+    input: '你好，我叫小红',
+    chat_history: await history.getMessages(),
+  })
+  await history.addAIChatMessage(response1)
+  console.log('AI 1:', response1)
+
+  // 第二轮对话 - 模型应该记得名字
+  const response2 = await chainWithHistory.invoke({
+    input: '我叫什么名字？',
+    chat_history: await history.getMessages(),
+  })
+  await history.addAIChatMessage(response2)
+  console.log('AI 2:', response2)
+}
+
+// 示例3: BufferWindowMemory - 只保留最近 k 轮
+async function getWindowMessages(history: ChatMessageHistory, k: number) {
+  const allMessages = await history.getMessages()
+  // 保留最近 k 轮对话（2*k 条消息）
+  return allMessages.slice(-2 * k)
+}
+
+async function chatWithWindowMemory() {
+  const history = new ChatMessageHistory()
+  
+  // 添加多轮对话
+  await history.addUserMessage('第一轮问题')
+  await history.addAIChatMessage('第一轮回答')
+  await history.addUserMessage('第二轮问题')
+  await history.addAIChatMessage('第二轮回答')
+  await history.addUserMessage('第三轮问题')
+  await history.addAIChatMessage('第三轮回答')
+
+  const windowMessages = await getWindowMessages(history, 2)
+  console.log('窗口记忆消息数:', windowMessages.length) // 应该是 4 条（2轮）
+}
+
+// 示例4: ConversationSummaryMemory - 摘要记忆
+const summarizePrompt = ChatPromptTemplate.fromTemplate(\`
+请将以下对话历史压缩为一段简洁的摘要：
+
+{conversation}
+
+摘要:
+\`)
+
+async function summarizeHistory(history: ChatMessageHistory) {
+  const messages = await history.getMessages()
+  const conversation = messages
+    .map(m => \`\${m._getType().toUpperCase()}: \${m.content}\`)
+    .join('\\n')
+  
+  const summaryChain = summarizePrompt.pipe(model).pipe(new StringOutputParser())
+  return summaryChain.invoke({ conversation })
+}
+
+async function chatWithSummaryMemory() {
+  const history = new ChatMessageHistory()
+  let summary = ''
+
+  // 对话
+  await history.addUserMessage('你好，我在学习 LangChain')
+  await history.addAIChatMessage('很好！LangChain 是构建 LLM 应用的强大框架')
+  await history.addUserMessage('它支持哪些功能？')
+  await history.addAIChatMessage('支持模型调用、提示模板、链式调用、Agent、RAG 等')
+
+  // 当历史太长时，生成摘要
+  const allMessages = await history.getMessages()
+  if (allMessages.length > 10) {
+    summary = await summarizeHistory(history)
+    // 清空历史，只保留摘要
+    await history.clear()
+    await history.addMessage(new SystemMessage(\`之前对话的摘要: \${summary}\`))
+  }
+}
+
+// 示例5: 使用 RunnableWithMessageHistory
+import { RunnableWithMessageHistory } from '@langchain/core/runnables'
+
+const simplePrompt = ChatPromptTemplate.fromMessages([
+  ['system', '你是一个 helpful 的助手。'],
+  new MessagesPlaceholder('history'),
+  ['human', '{input}'],
+])
+
+const chain = simplePrompt.pipe(model).pipe(new StringOutputParser())
+
+const messageHistories: Record<string, ChatMessageHistory> = {}
+
+function getMessageHistory(sessionId: string) {
+  if (!messageHistories[sessionId]) {
+    messageHistories[sessionId] = new ChatMessageHistory()
+  }
+  return messageHistories[sessionId]
+}
+
+const chainWithHistory2 = new RunnableWithMessageHistory({
+  runnable: chain,
+  getMessageHistory,
+  inputMessagesKey: 'input',
+  historyMessagesKey: 'history',
+})
+
+async function testRunnableHistory() {
+  const sessionId = 'user-123'
+  
+  const res1 = await chainWithHistory2.invoke(
+    { input: '我叫小明' },
+    { configurable: { sessionId } }
+  )
+  console.log('回答1:', res1)
+
+  const res2 = await chainWithHistory2.invoke(
+    { input: '我叫什么名字？' },
+    { configurable: { sessionId } }
+  )
+  console.log('回答2:', res2)
+}`;export{s as default};

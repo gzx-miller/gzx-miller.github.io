@@ -1,0 +1,264 @@
+const n=`// 递归类型：描述树形结构和深嵌套对象
+
+// ── 树形结构 ──
+// 递归类型最常用于描述树、JSON 等嵌套结构
+
+interface TreeNode {
+  value: string
+  children: TreeNode[]  // 递归引用自身
+}
+
+const tree: TreeNode = {
+  value: 'root',
+  children: [
+    {
+      value: 'child-1',
+      children: [
+        { value: 'grandchild-1-1', children: [] },
+        { value: 'grandchild-1-2', children: [] },
+      ],
+    },
+    {
+      value: 'child-2',
+      children: [
+        { value: 'grandchild-2-1', children: [] },
+      ],
+    },
+  ],
+}
+
+// 遍历树
+function traverse(node: TreeNode, depth = 0): void {
+  console.log(' '.repeat(depth * 2) + node.value)
+  node.children.forEach(child => traverse(child, depth + 1))
+}
+
+// ── DeepReadonly：深度只读 ──
+// 递归地将对象所有属性变为只读
+
+type DeepReadonly<T> = {
+  readonly [K in keyof T]: T[K] extends object
+    ? T[K] extends Function
+      ? T[K]  // 函数保持不变
+      : DeepReadonly<T[K]>
+    : T[K]
+}
+
+interface NestedConfig {
+  app: {
+    name: string
+    version: string
+    settings: {
+      debug: boolean
+      theme: 'light' | 'dark'
+      features: {
+        auth: boolean
+        analytics: boolean
+      }
+    }
+  }
+  server: {
+    port: number
+    host: string
+  }
+}
+
+type ReadonlyConfig = DeepReadonly<NestedConfig>
+
+const config: ReadonlyConfig = {
+  app: {
+    name: 'MyApp',
+    version: '1.0.0',
+    settings: {
+      debug: false,
+      theme: 'light',
+      features: {
+        auth: true,
+        analytics: true,
+      },
+    },
+  },
+  server: {
+    port: 3000,
+    host: 'localhost',
+  },
+}
+
+// config.app.name = 'NewApp'  // 错误：只读属性
+// config.app.settings.theme = 'dark'  // 错误：只读属性
+
+// ── DeepPartial：深度可选 ──
+// 递归地将对象所有属性变为可选
+
+type DeepPartial<T> = {
+  [K in keyof T]?: T[K] extends object
+    ? T[K] extends Function
+      ? T[K]
+      : DeepPartial<T[K]>
+    : T[K]
+}
+
+// 深度更新配置
+function updateConfig(
+  target: NestedConfig,
+  patch: DeepPartial<NestedConfig>
+): NestedConfig {
+  return {
+    ...target,
+    app: {
+      ...target.app,
+      ...patch.app,
+      settings: {
+        ...target.app.settings,
+        ...patch.app?.settings,
+        features: {
+          ...target.app.settings.features,
+          ...patch.app?.settings?.features,
+        },
+      },
+    },
+    server: {
+      ...target.server,
+      ...patch.server,
+    },
+  }
+}
+
+const updated = updateConfig(config as NestedConfig, {
+  app: {
+    settings: {
+      theme: 'dark',
+      features: {
+        analytics: false,
+      },
+    },
+  },
+})
+
+// ── DeepRequired：深度必填 ──
+// 递归地将所有可选属性变为必填
+
+type DeepRequired<T> = {
+  [K in keyof T]-?: T[K] extends object
+    ? T[K] extends Function
+      ? T[K]
+      : DeepRequired<T[K]>
+    : T[K]
+}
+
+interface PartialData {
+  id?: number
+  info?: {
+    name?: string
+    address?: {
+      city?: string
+      street?: string
+    }
+  }
+}
+
+type FullData = DeepRequired<PartialData>
+
+const fullData: FullData = {
+  id: 1,
+  info: {
+    name: '张三',
+    address: {
+      city: '北京',
+      street: '长安街',
+    },
+  },
+}
+
+// ── 递归类型与 JSON ──
+// 描述任意 JSON 值的类型
+
+type JSONValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JSONValue[]
+  | { [key: string]: JSONValue }
+
+const jsonData: JSONValue = {
+  name: 'Test',
+  values: [1, 2, 3],
+  nested: {
+    a: true,
+    b: null,
+    c: ['x', 'y'],
+  },
+}
+
+// ── 递归类型与目录树 ──
+
+type FileNode = {
+  type: 'file'
+  name: string
+  size: number
+}
+
+type DirectoryNode = {
+  type: 'directory'
+  name: string
+  children: FileSystemNode[]
+}
+
+type FileSystemNode = FileNode | DirectoryNode
+
+const fileSystem: DirectoryNode = {
+  type: 'directory',
+  name: 'src',
+  children: [
+    { type: 'file', name: 'index.ts', size: 1024 },
+    {
+      type: 'directory',
+      name: 'components',
+      children: [
+        { type: 'file', name: 'Button.tsx', size: 2048 },
+        { type: 'file', name: 'Input.tsx', size: 1536 },
+      ],
+    },
+    {
+      type: 'directory',
+      name: 'utils',
+      children: [
+        { type: 'file', name: 'helpers.ts', size: 512 },
+      ],
+    },
+  ],
+}
+
+// 统计目录大小
+function getTotalSize(node: FileSystemNode): number {
+  if (node.type === 'file') {
+    return node.size
+  }
+  return node.children.reduce((sum, child) => sum + getTotalSize(child), 0)
+}
+
+console.log(getTotalSize(fileSystem))  // 5120
+
+// ── 递归条件类型：扁平化数组 ──
+
+type FlatArray<T> = T extends (infer U)[]
+  ? U extends any[]
+    ? FlatArray<U>
+    : U
+  : T
+
+type NestedArray = number[][][]  // [[[1]]]
+type Flattened = FlatArray<NestedArray>  // number
+
+// ── 类型级别的字符串反转 ──
+
+type ReverseString<S extends string> = S extends \`\${infer First}\${infer Rest}\`
+  ? \`\${ReverseString<Rest>}\${First}\`
+  : S
+
+type Hello = 'hello'
+type Olleh = ReverseString<Hello>  // 'olleh'
+
+console.log('递归类型演示完成')
+`;export{n as default};

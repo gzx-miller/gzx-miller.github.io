@@ -1,0 +1,15 @@
+const n=`#include <iostream>
+#include <map>
+#include <string>
+
+int main() {
+    std::map<std::string, int> ages;
+    ages["Alice"] = 25;
+    ages["Bob"] = 30;
+
+    for (const auto& [name, age] : ages) {
+        std::cout << name << ": " << age << std::endl;
+    }
+
+    return 0;
+}`;export{n as default};

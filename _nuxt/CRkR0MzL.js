@@ -1,0 +1,156 @@
+const e=`// infer 关键字：在条件类型中声明待推断的类型变量
+
+// ── infer 基础：提取函数返回类型 ──
+// 经典的 ReturnType 实现
+
+type MyReturnType<T> = T extends (...args: any[]) => infer R ? R : never
+
+function greet(name: string): string {
+  return \`Hello, \${name}!\`
+}
+
+type GreetReturn = MyReturnType<typeof greet>  // string
+
+function sum(a: number, b: number): number {
+  return a + b
+}
+
+type SumReturn = MyReturnType<typeof sum>  // number
+
+// ── 提取函数参数类型 ──
+// Parameters 的实现
+
+type MyParameters<T> = T extends (...args: infer P) => any ? P : never
+
+type GreetParams = MyParameters<typeof greet>  // [name: string]
+type SumParams = MyParameters<typeof sum>      // [a: number, b: number]
+
+// 提取第一个参数
+type FirstParam<T> = T extends (first: infer F, ...rest: any[]) => any ? F : never
+
+type GreetFirst = FirstParam<typeof greet>  // string
+type SumFirst = FirstParam<typeof sum>      // number
+
+// ── 提取 Promise 内部类型 ──
+
+type UnwrapPromise<T> = T extends Promise<infer U> ? U : T
+
+type StrPromise = Promise<string>
+type UnwrappedStr = UnwrapPromise<StrPromise>  // string
+
+type NumPromise = Promise<number>
+type UnwrappedNum = UnwrapPromise<NumPromise>  // number
+
+// 普通类型直接返回
+type JustNumber = UnwrapPromise<number>  // number
+
+// ── 递归解包嵌套 Promise ──
+
+type DeepUnwrapPromise<T> = T extends Promise<infer U> ? DeepUnwrapPromise<U> : T
+
+type Nested = Promise<Promise<Promise<string>>>
+type DeepUnwrapped = DeepUnwrapPromise<Nested>  // string
+
+// ── 提取数组元素类型 ──
+
+type ArrayElement<T> = T extends (infer E)[] ? E : never
+
+type StringArray = string[]
+type StrEl = ArrayElement<StringArray>  // string
+
+type NumberArray = number[]
+type NumEl = ArrayElement<NumberArray>  // number
+
+// 也可以用 T extends Array<infer E>
+type ArrayElement2<T> = T extends Array<infer E> ? E : never
+
+// ── 提取对象属性类型 ──
+// 从对象类型中提取特定类型的属性键
+
+type KeysOfType<T, V> = {
+  [K in keyof T]: T[K] extends V ? K : never
+}[keyof T]
+
+interface Person {
+  name: string
+  age: number
+  email: string
+  active: boolean
+}
+
+type StringKeys = KeysOfType<Person, string>    // 'name' | 'email'
+type NumberKeys = KeysOfType<Person, number>    // 'age'
+type BooleanKeys = KeysOfType<Person, boolean>  // 'active'
+
+// ── 提取构造函数的实例类型 ──
+// InstanceType 的实现
+
+type MyInstanceType<T> = T extends new (...args: any[]) => infer I ? I : never
+
+class User {
+  constructor(public id: number, public name: string) {}
+}
+
+type UserInstance = MyInstanceType<typeof User>  // User
+
+const user: UserInstance = new User(1, 'Tom')
+
+// ── 提取构造函数参数类型 ──
+// ConstructorParameters 的实现
+
+type MyConstructorParameters<T> = T extends new (...args: infer P) => any ? P : never
+
+type UserCtorParams = MyConstructorParameters<typeof User>  // [id: number, name: string]
+
+// ── 模板字面量类型中的 infer ──
+// 从字符串类型中提取子串
+
+type GetPrefix<T extends string> = T extends \`\${infer P}:\${string}\` ? P : never
+
+type Event1 = 'click:button'
+type Event2 = 'hover:card'
+
+type Prefix1 = GetPrefix<Event1>  // 'click'
+type Prefix2 = GetPrefix<Event2>  // 'hover'
+
+// 提取文件名和扩展名
+type SplitExt<T extends string> = T extends \`\${infer Name}.\${infer Ext}\` ? [Name, Ext] : never
+
+type File1 = 'document.pdf'
+type File2 = 'image.png'
+
+type Split1 = SplitExt<File1>  // ['document', 'pdf']
+type Split2 = SplitExt<File2>  // ['image', 'png']
+
+// ── 多个 infer 变量 ──
+// 同一位置可以有多个 infer 变量
+
+type SwapTuple<T> = T extends [infer A, infer B] ? [B, A] : T
+
+type Pair = [string, number]
+type Swapped = SwapTuple<Pair>  // [number, string]
+
+// ── 函数重载的 infer ──
+// 注意：infer 对重载函数取最后一个签名
+
+function overloaded(x: number): number
+function overloaded(x: string): string
+function overloaded(x: any) {
+  return x
+}
+
+// 取最后一个签名的返回类型
+type OverloadedReturn = MyReturnType<typeof overloaded>  // string
+
+// ── 实用工具：获取函数 this 类型 ──
+
+type ThisParameterType<T> = T extends (this: infer U, ...args: any[]) => any ? U : unknown
+
+function greetUser(this: { name: string }, greeting: string) {
+  return \`\${greeting}, I'm \${this.name}\`
+}
+
+type ThisType = ThisParameterType<typeof greetUser>  // { name: string }
+
+console.log('infer 关键字演示完成')
+`;export{e as default};

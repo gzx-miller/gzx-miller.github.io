@@ -1,0 +1,1 @@
+import{_ as s,h as t,Y as c,c as n}from"./ClZcEZ7f.js";const o={},_={class:"lesson-article"};function r(e,a){return n(),t("article",_,[c(e.$slots,"default")])}const i=Object.assign(s(o,[["render",r]]),{__name:"LessonArticle"});export{i as _};
