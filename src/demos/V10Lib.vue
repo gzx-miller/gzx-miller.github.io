@@ -57,7 +57,7 @@ npm publish
 
 <template>
   <div class="v10">
-    <p class="intro">Vite 库模式可同时输出 ESM、UMD、CJS 格式，适合开发可复用的 npm 包。</p>
+    <p class="hint">Vite 库模式可同时输出 ESM、UMD、CJS 格式，适合开发可复用的 npm 包。</p>
     <div class="tabs">
       <button v-for="(v,k) in contents" :key="k" :class="{active: tab===k}" @click="tab=k">{{ k }}</button>
     </div>
@@ -67,7 +67,7 @@ npm publish
 
 <style scoped>
 .v10 { display: flex; flex-direction: column; gap: 10px; }
-.intro { font-size: 13px; color: #64748b; }
+.hint { font-size: 13px; color: #64748b; }
 .tabs button { padding: 4px 12px; border: 1px solid #e2e8f0; border-radius: 4px; background: #fff; cursor: pointer; font-size: 13px; }
 .tabs .active { background: #14b8a6; color: #fff; border-color: #14b8a6; }
 .code-block { background: #1e1e2e; color: #cdd6f4; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; white-space: pre-wrap; }

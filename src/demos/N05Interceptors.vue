@@ -67,7 +67,7 @@ async function sendRequest() {
       </tbody>
     </table>
 
-    <p class="note">
+    <p class="hint">
       <strong>核心 API：</strong><code>next.handle()</code> 返回 Observable，前置代码写在调用前，
       后置逻辑用 <code>map / tap</code> 处理响应流。
     </p>
@@ -102,7 +102,7 @@ async function sendRequest() {
   padding: 6px 10px;
 }
 
-.note {
+.hint {
   margin: 12px 0 0;
   font-size: 13px;
   color: var(--muted);

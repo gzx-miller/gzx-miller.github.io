@@ -43,7 +43,7 @@ function navigateBack() {
       </div>
     </div>
 
-    <p class="status">{{ status || '页面栈视图：新页叠加在旧页之上，返回则逐层弹出。' }}</p>
+    <p class="status-panel">{{ status || '页面栈视图：新页叠加在旧页之上，返回则逐层弹出。' }}</p>
   </div>
 </template>
 
@@ -80,7 +80,7 @@ function navigateBack() {
   color: #fff;
   font-size: 12px;
 }
-.status {
+.status-panel {
   margin: 0;
   border: 1px dashed var(--border);
   border-radius: 8px;

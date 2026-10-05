@@ -174,7 +174,7 @@ const filteredHooks = computed(() => {
         <h4>Vite 插件 = Rollup 插件 + Vite 扩展</h4>
         <p class="intro-text">Vite 插件系统基于 Rollup 插件接口扩展，兼容大多数 Rollup 插件，同时提供 Vite 特有的钩子。</p>
         
-        <div class="compare-cards">
+        <div class="grid-2">
           <div class="compare-card">
             <div class="card-header vite">
               <span class="card-icon">⚡</span>
@@ -254,7 +254,7 @@ const filteredHooks = computed(() => {
       <div class="demo-panel">
         <div class="demo-toolbar">
           <span class="demo-title">🔌 {{ pluginDemo.name }}</span>
-          <div class="demo-actions">
+          <div class="controls">
             <button class="action-btn primary" @click="runPluginDemo">▶ 运行插件</button>
             <button class="action-btn" @click="resetDemo">↺ 重置</button>
           </div>
@@ -304,7 +304,7 @@ const filteredHooks = computed(() => {
 .tab-btn.active { background: #e85d04; color: #fff; border-color: #e85d04; }
 .tips-box p { margin: 0; font-size: 13px; color: #78350f; }
 .intro-text { font-size: 13px; color: #78350f; margin: 8px 0 12px 0; }
-.compare-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .compare-card { background: #fffbeb; border-radius: 6px; overflow: hidden; }
 .card-header { display: flex; align-items: center; gap: 8px; padding: 10px 12px; color: #fff; font-size: 14px; }
 .card-header.vite { background: linear-gradient(135deg, #f97316, #ea580c); }
@@ -327,7 +327,7 @@ const filteredHooks = computed(() => {
 .hook-desc { width: 100%; margin: 6px 0 0 0; font-size: 12px; color: #78350f; }
 .demo-panel { background: #fffbeb; border-radius: 8px; padding: 12px; }
 .demo-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-.demo-actions { display: flex; gap: 6px; }
+.controls { display: flex; gap: 6px; }
 .action-btn { padding: 6px 12px; border: 1px solid #fdba74; border-radius: 4px; background: #fff; cursor: pointer; font-size: 12px; color: #92400e; }
 .action-btn.primary { background: #ea580c; color: #fff; border-color: #ea580c; }
 .demo-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }

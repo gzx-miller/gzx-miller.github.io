@@ -60,7 +60,7 @@ const themeLabel = computed(() => (theme.value === 'light' ? '浅色 🍂' : '�
           >
             <code class="wat-code">{{ item.wat }}</code>
             <code class="hex-code">{{ item.hex }}</code>
-            <span class="note">{{ item.note }}</span>
+            <span class="hint">{{ item.note }}</span>
           </li>
         </ul>
       </div>
@@ -141,7 +141,7 @@ const themeLabel = computed(() => (theme.value === 'light' ? '浅色 🍂' : '�
   text-align: right;
 }
 
-.note {
+.hint {
   grid-column: 1 / -1;
   color: var(--muted);
   font-size: 12px;

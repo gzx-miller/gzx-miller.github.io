@@ -27,7 +27,7 @@ const tlsVersions = [
 
   <div v-if="step === 'overview'" class="step-content">
     <h4>HTTP vs HTTPS</h4>
-    <div class="compare">
+    <div class="grid-2">
       <div class="col bad"><strong>HTTP</strong><ul><li>明文传输</li><li>易被窃听/篡改</li><li>无服务器身份验证</li></ul></div>
       <div class="col good"><strong>HTTPS</strong><ul><li>加密传输（TLS）</li><li>防窃听/中间人攻击</li><li>证书验证服务器身份</li></ul></div>
     </div>
@@ -84,7 +84,7 @@ server.listen(443)</code></pre>
 .tabs button { padding: 4px 12px; border: 1px solid #e2e8f0; border-radius: 4px; background: #fff; cursor: pointer; font-size: 13px; }
 .tabs .active { background: #e8590c; color: #fff; border-color: #e8590c; }
 .step-content { margin: 0.6rem 0; }
-.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .col { padding: 10px; border-radius: 6px; }
 .col.bad { background: #fef2f2; border: 1px solid #fecaca; }
 .col.good { background: #f0fdf4; border: 1px solid #bbf7d0; }

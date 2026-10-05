@@ -54,7 +54,7 @@ async function sendRequest() {
       <p v-for="(layer, i) in layerLabels" :key="i" class="layer-item">{{ layer }}</p>
     </div>
 
-    <p class="note">
+    <p class="hint">
       <strong>执行顺序：</strong>中间件 → 守卫 → 拦截器前置 → 管道 → 处理器 → 拦截器后置。
       越靠外越"通用"，越靠内越"业务"。
     </p>
@@ -99,7 +99,7 @@ async function sendRequest() {
   color: var(--muted);
 }
 
-.note {
+.hint {
   margin: 12px 0 0;
   font-size: 13px;
   color: var(--muted);

@@ -30,7 +30,7 @@ const tab = ref<'bem' | 'oocss' | 'smacss'>('bem')
     </div>
 
     <div v-if="tab === 'oocss'" class="method-demo">
-      <div class="media flex-row bg-white">
+      <div class="media controls bg-white">
         <img class="media__img rounded" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Crect fill='%23e8590c' width='48' height='48' rx='8'/%3E%3C/svg%3E" />
         <div class="media__body">
           <div class="text-bold">课程标题</div>
@@ -86,7 +86,7 @@ h3, p { margin: 0 0 8px; }</pre>
 .media { display: flex; gap: 12px; background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 12px; }
 .media__img { width: 48px; height: 48px; }
 .rounded { border-radius: 8px; }
-.flex-row { display: flex; gap: 8px; }
+.controls { display: flex; gap: 8px; }
 .bg-white { background: #fff; }
 .text-bold { font-weight: 700; }
 .text-muted { color: #868e96; font-size: 12px; }

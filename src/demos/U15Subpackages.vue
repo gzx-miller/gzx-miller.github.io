@@ -39,7 +39,7 @@ function enter(root: string) {
           <span v-for="pg in p.pages" :key="pg">{{ pg }}</span>
         </div>
         <div class="foot">
-          <span class="size">{{ p.size }}</span>
+          <span class="hint">{{ p.size }}</span>
           <button type="button" :disabled="loaded.includes(p.root)" @click="enter(p.root)">进入分包</button>
         </div>
       </div>
@@ -116,7 +116,7 @@ function enter(root: string) {
   align-items: center;
   margin-top: 10px;
 }
-.size {
+.hint {
   color: var(--muted);
   font-size: 13px;
 }

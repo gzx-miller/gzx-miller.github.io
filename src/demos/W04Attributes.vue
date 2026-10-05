@@ -244,7 +244,7 @@ gl_FragColor = vec4(vColor, 1.0);</code></pre>
       <div class="flow-chart">
         <div class="flow-level cpu-level">
           <span class="flow-label">CPU 端</span>
-          <div class="flow-items">
+          <div class="controls">
             <span class="flow-tag attribute">attribute → aPosition, aColor</span>
             <span class="flow-tag uniform">uniform → uTime, uUseAttributeColor</span>
           </div>
@@ -252,7 +252,7 @@ gl_FragColor = vec4(vColor, 1.0);</code></pre>
         <div class="flow-arrow-down">↓ 上传到 GPU</div>
         <div class="flow-level vs-level">
           <span class="flow-label">顶点着色器</span>
-          <div class="flow-items">
+          <div class="controls">
             <span class="flow-tag attribute">读取 aPosition, aColor</span>
             <span class="flow-tag uniform">读取 uTime</span>
             <span class="flow-tag varying">输出 vColor = aColor</span>
@@ -261,7 +261,7 @@ gl_FragColor = vec4(vColor, 1.0);</code></pre>
         <div class="flow-arrow-down">↓ 光栅化插值</div>
         <div class="flow-level fs-level">
           <span class="flow-label">片段着色器</span>
-          <div class="flow-items">
+          <div class="controls">
             <span class="flow-tag varying">读取插值后的 vColor</span>
             <span class="flow-tag uniform">读取 uTime, uUseAttributeColor</span>
             <span class="flow-tag output">输出 gl_FragColor</span>
@@ -463,7 +463,7 @@ gl_FragColor = vec4(vColor, 1.0);</code></pre>
   min-width: 80px;
 }
 
-.flow-items {
+.controls {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;

@@ -80,7 +80,7 @@ export default {
     <!-- 插件使用演示 -->
     <div class="demo-section">
       <h4>插件能力演示</h4>
-      <div class="button-row">
+      <div class="controls">
         <button class="btn success" @click="sendNotify('success')">成功通知</button>
         <button class="btn warning" @click="sendNotify('warning')">警告通知</button>
         <button class="btn error" @click="sendNotify('error')">错误通知</button>
@@ -117,7 +117,7 @@ notify('课程已更新')</pre>
 <style scoped>
 .demo-section { background: #fef9f3; border: 1px solid #e8c9a0; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
 h4 { margin: 0 0 10px; color: #8b5e3c; font-size: 14px; }
-.button-row { display: flex; gap: 8px; margin-bottom: 12px; }
+.controls { display: flex; gap: 8px; margin-bottom: 12px; }
 .btn { padding: 6px 14px; border: none; border-radius: 4px; cursor: pointer; color: #fff; font-size: 13px; }
 .btn.success { background: #6b9e78; }
 .btn.warning { background: #d4a574; }

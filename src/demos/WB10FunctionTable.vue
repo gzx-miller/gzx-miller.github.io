@@ -95,7 +95,7 @@ const themeLabel = computed(() => (theme.value === 'light' ? '浅色 🍂' : '�
             <span v-if="overwritten && i === 0" class="badge">已被 JS 改写</span>
           </li>
         </ul>
-        <div class="table-actions">
+        <div class="controls">
           <button @click="overwriteTable">🔧 改写第 0 项为 sub</button>
           <button v-if="overwritten" @click="resetTable">↩️ 还原</button>
         </div>
@@ -129,7 +129,7 @@ const themeLabel = computed(() => (theme.value === 'light' ? '浅色 🍂' : '�
       </div>
     </div>
 
-    <p class="status">{{ status }}</p>
+    <p class="hint">{{ status }}</p>
 
     <div class="tips-box">
       <p><strong>🌰 核心概念：</strong></p>
@@ -201,7 +201,7 @@ const themeLabel = computed(() => (theme.value === 'light' ? '浅色 🍂' : '�
   font-size: 11px;
 }
 
-.table-actions {
+.controls {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
@@ -237,7 +237,7 @@ const themeLabel = computed(() => (theme.value === 'light' ? '浅色 🍂' : '�
   font-weight: 700;
 }
 
-.status {
+.hint {
   margin: 0;
   color: var(--muted);
   font-size: 13px;

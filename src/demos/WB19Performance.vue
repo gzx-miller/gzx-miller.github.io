@@ -90,7 +90,7 @@ const maxTime = computed(() => Math.max(wasmTime.value, jsTime.value, 0.1))
         { label: 'Wasm', time: wasmTime, result: wasmResult, cls: 'wasm' },
         { label: 'JS', time: jsTime, result: jsResult, cls: 'js' },
       ]" :key="row.label">
-        <span class="bar-label">{{ row.label }}</span>
+        <span class="hint">{{ row.label }}</span>
         <div class="bar-track">
           <div
             class="bar"
@@ -107,7 +107,7 @@ const maxTime = computed(() => Math.max(wasmTime.value, jsTime.value, 0.1))
       <code>{{ wasmResult !== null && wasmResult === jsResult ? '✅ 两版结果相同' : '…' }}</code>
     </div>
 
-    <p class="status">{{ status }}</p>
+    <p class="hint">{{ status }}</p>
 
     <div class="tips-box">
       <p><strong>🌰 核心概念：</strong></p>
@@ -142,7 +142,7 @@ const maxTime = computed(() => Math.max(wasmTime.value, jsTime.value, 0.1))
   gap: 10px;
 }
 
-.bar-label {
+.hint {
   color: var(--muted);
   font-size: 13px;
 }
@@ -193,7 +193,7 @@ const maxTime = computed(() => Math.max(wasmTime.value, jsTime.value, 0.1))
   font-weight: 600;
 }
 
-.status {
+.hint {
   margin: 0;
   color: var(--muted);
   font-size: 13px;

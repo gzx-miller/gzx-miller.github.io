@@ -42,7 +42,7 @@ function onLabelInput(e: Event) {
       </div>
 
       <div class="field">
-        <span class="field-label">提醒频率</span>
+        <span class="hint">提醒频率</span>
         <div class="button-row">
           <label v-for="opt in frequencyOptions" :key="opt.value" class="radio">
             <input v-model="frequency" type="radio" :value="opt.value" />
@@ -54,7 +54,7 @@ function onLabelInput(e: Event) {
 
       <div class="field">
         <label class="text-field">
-          <span class="field-label">备注</span>
+          <span class="hint">备注</span>
           <input :value="label" @input="onLabelInput" placeholder="给提醒加个备注" />
         </label>
         <span class="hint">绑定 v-model:label.trim</span>
@@ -106,7 +106,7 @@ function onLabelInput(e: Event) {
   display: grid;
   gap: 6px;
 }
-.field-label {
+.hint {
   color: var(--muted);
   font-size: 13px;
 }

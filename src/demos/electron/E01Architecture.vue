@@ -55,7 +55,7 @@ const architecture = ref({
       >
         <h3>🖥️ 主进程</h3>
         <p>package.json 的 main 脚本运行在此进程</p>
-        <div class="api-list">
+        <div class="controls">
           <span v-for="api in architecture.mainProcess.apis" :key="api" class="api-tag">{{ api }}</span>
         </div>
       </div>
@@ -69,7 +69,7 @@ const architecture = ref({
       >
         <h3>🔌 预加载脚本</h3>
         <p>在渲染进程加载前运行，可访问两者 API</p>
-        <div class="api-list">
+        <div class="controls">
           <span v-for="api in architecture.preloadScript.apis" :key="api" class="api-tag">{{ api }}</span>
         </div>
       </div>
@@ -83,7 +83,7 @@ const architecture = ref({
       >
         <h3>🎨 渲染进程</h3>
         <p>每个 BrowserWindow 实例一个进程</p>
-        <div class="api-list">
+        <div class="controls">
           <span v-for="api in architecture.rendererProcess.apis" :key="api" class="api-tag">{{ api }}</span>
         </div>
       </div>
@@ -147,7 +147,7 @@ const architecture = ref({
   color: #666;
   font-size: 14px;
 }
-.api-list {
+.controls {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;

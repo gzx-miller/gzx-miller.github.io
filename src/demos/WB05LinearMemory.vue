@@ -113,7 +113,7 @@ const themeLabel = computed(() => (theme.value === 'light' ? '浅色 🍂' : '�
           <button @click="store">📦 写入 store8</button>
           <button @click="load">🔍 读取 load8</button>
         </div>
-        <p class="status">{{ status }}</p>
+        <p class="hint">{{ status }}</p>
       </div>
     </div>
 
@@ -199,7 +199,7 @@ const themeLabel = computed(() => (theme.value === 'light' ? '浅色 🍂' : '�
   flex-wrap: wrap;
 }
 
-.status {
+.hint {
   margin: 0;
   color: var(--muted);
   font-size: 13px;

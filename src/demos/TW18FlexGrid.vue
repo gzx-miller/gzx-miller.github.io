@@ -106,7 +106,7 @@ const decisionTable = [
         </div>
       </div>
 
-      <div class="code-compare">
+      <div class="grid-2">
         <div class="code-col">
           <h4>Flex 代码</h4>
           <pre class="mini-code" v-html="flexCode"></pre>
@@ -263,7 +263,7 @@ const decisionTable = [
 .gear-name { font-size: 13px; color: #7c2d12; font-weight: 500; }
 .gear-price { font-size: 14px; color: #c2410c; font-weight: 700; margin-top: 4px; }
 
-.code-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .code-col h4 { margin: 0 0 6px; font-size: 13px; color: #7c2d12; }
 .tips-box p { margin: 0 0 6px; color: #7c2d12; font-weight: 600; }
 .tips-box ul { margin: 0; padding-left: 20px; color: #9a3412; font-size: 13px; }

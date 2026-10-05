@@ -77,7 +77,7 @@ const themeLabel = computed(() => (theme.value === 'light' ? '浅色 🍂' : '�
         <h4>📜 导入函数 env.log 输出</h4>
         <ul class="log-list">
           <li v-for="(line, i) in logs" :key="i">{{ line }}</li>
-          <li v-if="logs.length === 0" class="empty">点击"上报"触发 Wasm 调用宿主函数</li>
+          <li v-if="logs.length === 0" class="hint">点击"上报"触发 Wasm 调用宿主函数</li>
         </ul>
       </div>
     </div>
@@ -103,7 +103,7 @@ const themeLabel = computed(() => (theme.value === 'light' ? '浅色 🍂' : '�
       </div>
     </div>
 
-    <p class="status">{{ status }}</p>
+    <p class="hint">{{ status }}</p>
 
     <div class="tips-box">
       <p><strong>🌰 核心概念：</strong></p>
@@ -168,7 +168,7 @@ const themeLabel = computed(() => (theme.value === 'light' ? '浅色 🍂' : '�
   font-size: 12px;
 }
 
-.log-list .empty {
+.log-list .hint {
   color: var(--muted);
   font-family: inherit;
   font-size: 13px;
@@ -203,7 +203,7 @@ const themeLabel = computed(() => (theme.value === 'light' ? '浅色 🍂' : '�
   font-size: 12px;
 }
 
-.status {
+.hint {
   color: var(--muted);
   font-size: 13px;
 }

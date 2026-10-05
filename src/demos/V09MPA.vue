@@ -51,7 +51,7 @@ const setTab = (key: string) => {
 
 <template>
   <div class="v09">
-    <p class="intro">Vite 支持多页面应用（MPA），每个 HTML 文件都是独立入口，共享依赖自动提取。</p>
+    <p class="hint">Vite 支持多页面应用（MPA），每个 HTML 文件都是独立入口，共享依赖自动提取。</p>
     <div class="tabs">
       <button v-for="(v,k) in contents" :key="k" :class="{active: tab===k}" @click="setTab(k)">{{ k }}</button>
     </div>
@@ -61,7 +61,7 @@ const setTab = (key: string) => {
 
 <style scoped>
 .v09 { display: flex; flex-direction: column; gap: 10px; }
-.intro { font-size: 13px; color: #64748b; }
+.hint { font-size: 13px; color: #64748b; }
 .tabs button { padding: 4px 12px; border: 1px solid #e2e8f0; border-radius: 4px; background: #fff; cursor: pointer; font-size: 13px; }
 .tabs .active { background: #ec4899; color: #fff; border-color: #ec4899; }
 .code-block { background: #1e1e2e; color: #cdd6f4; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; white-space: pre-wrap; }

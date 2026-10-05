@@ -62,7 +62,7 @@ export default function myPlugin() { ... }
 
 <template>
   <div class="v16">
-    <p class="intro">Vite 插件兼容 Rollup 插件接口，同时提供 Vite 独有的钩子。</p>
+    <p class="hint">Vite 插件兼容 Rollup 插件接口，同时提供 Vite 独有的钩子。</p>
     <div class="tabs">
       <button v-for="(v,k) in contents" :key="k" :class="{active: tab===k}" @click="tab=k">{{ k }}</button>
     </div>
@@ -72,7 +72,7 @@ export default function myPlugin() { ... }
 
 <style scoped>
 .v16 { display: flex; flex-direction: column; gap: 10px; }
-.intro { font-size: 13px; color: #64748b; }
+.hint { font-size: 13px; color: #64748b; }
 .tabs button { padding: 4px 12px; border: 1px solid #e2e8f0; border-radius: 4px; background: #fff; cursor: pointer; font-size: 13px; }
 .tabs .active { background: #059669; color: #fff; border-color: #059669; }
 .code-block { background: #1e1e2e; color: #cdd6f4; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; white-space: pre-wrap; }

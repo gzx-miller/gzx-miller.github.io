@@ -217,7 +217,7 @@ const backdropCode = `<span style="color:#7c7c99">// 背景滤镜（毛玻璃效
           </div>
         </div>
 
-        <div class="blend-modes">
+        <div class="controls">
           <button v-for="b in blendModes" :key="b.mode"
                   :class="{ active: selectedBlend === b.mode }"
                   @click="selectedBlend = b.mode"
@@ -389,7 +389,7 @@ const backdropCode = `<span style="color:#7c7c99">// 背景滤镜（毛玻璃效
 .overlay-text { text-align: center; font-size: 32px; font-weight: 800; color: #7c2d12; }
 .overlay-text small { display: block; font-size: 14px; font-weight: 400; letter-spacing: 4px; color: #9a3412; }
 
-.blend-modes { display: flex; flex-wrap: wrap; gap: 6px; }
+.controls { display: flex; flex-wrap: wrap; gap: 6px; }
 .blend-mode-btn { padding: 5px 10px; border: 1px solid #fed7aa; border-radius: 6px; background: #fff; color: #7c2d12; cursor: pointer; font-size: 12px; transition: all 0.2s; }
 .blend-mode-btn:hover { background: #fef3c7; }
 .blend-mode-btn.active { background: #f97316; color: #fff; border-color: #ea580c; }

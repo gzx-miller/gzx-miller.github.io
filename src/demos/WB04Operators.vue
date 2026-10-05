@@ -73,7 +73,7 @@ const themeLabel = computed(() => (theme.value === 'light' ? '浅色 🍂' : '�
         </label>
       </div>
 
-      <div class="op-picker">
+      <div class="controls">
         <button
           v-for="op in ops"
           :key="op.key"
@@ -91,7 +91,7 @@ const themeLabel = computed(() => (theme.value === 'light' ? '浅色 🍂' : '�
       </div>
     </div>
 
-    <p class="status">{{ status }}</p>
+    <p class="hint">{{ status }}</p>
 
     <div class="tips-box">
       <p><strong>🌰 核心概念：</strong></p>
@@ -121,7 +121,7 @@ const themeLabel = computed(() => (theme.value === 'light' ? '浅色 🍂' : '�
   grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
-.op-picker {
+.controls {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -146,7 +146,7 @@ const themeLabel = computed(() => (theme.value === 'light' ? '浅色 🍂' : '�
   font-weight: 700;
 }
 
-.status {
+.hint {
   color: var(--muted);
   font-size: 13px;
   margin: 0;

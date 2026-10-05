@@ -138,6 +138,11 @@
   color: var(--demo-accent-text);
 }
 
+/* .tab-bar / .tabs / .toolbar / .controls —— 「控制条」语义。
+   本轮归一化把 .filter-tabs / .button-row / .flex-row / .window-actions /
+   .op-picker / .table-actions / .api-list / .demo-actions / .shape-buttons /
+   .leaf-tags / .blend-modes / .flow-items / .toggle-row 等 12 处同义类名
+   统一为 .controls。 */
 .tab-bar,
 .tabs,
 .toolbar,
@@ -286,19 +291,38 @@
 
 /* ---------- 状态标签 ---------- */
 
-.status,
-.hint,
-.note {
+/* .hint 是「弱化说明文本」的统一类名。
+   原先散落在各演示里的 .status / .note / .intro / .muted-text / .bar-label
+   等同语义类名，已在本轮语义归一化中合并到 .hint（983 个演示中共 48 处）。
+   注意：.status 是「同名不同义」的典型——它另有「状态面板」形态，
+   那部分已改名为 .status-panel，不再与文本语义混淆。 */
+.hint {
   margin: 0;
   color: var(--demo-text-muted);
   font-size: 13px;
+  line-height: 1.6;
 }
 
-.status.success {
+/* .status-panel 是「状态面板 / 状态徽章」语义（带边框与内边距的画面块），
+   与纯文本的 .hint 区分开，避免同名不同义。 */
+.status-panel {
+  padding: 8px 12px;
+  border: 1px dashed var(--demo-border);
+  border-radius: 8px;
+  background: var(--demo-surface-soft);
+  color: var(--demo-text-muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* 兼容：历史上写成 .status.success / .status.error 的文本着色 */
+.hint.success,
+.status-panel.success {
   color: var(--demo-success);
 }
 
-.status.error {
+.hint.error,
+.status-panel.error {
   color: var(--demo-danger);
 }
 
@@ -359,6 +383,10 @@
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
+
+/* .compare / .preset-list / .transform-demo / .feature-grid / .format-grid /
+   .compare-cards / .code-compare / .tools-grid / .test-cases-grid 等 9 处
+   「两列网格容器」同义类名，已在本轮归一化中合并为 .grid-2。 */
 
 /* ---------- 小屏适配 ---------- */
 

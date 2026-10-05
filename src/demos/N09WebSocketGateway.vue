@@ -100,7 +100,7 @@ function leaveRoom() {
       </div>
     </div>
 
-    <p class="note">
+    <p class="hint">
       <strong>房间隔离：</strong><code>socket.join(roomId)</code> 加入房间，
       <code>client.to(roomId).emit()</code> 只向该房间广播——其它课堂互不干扰。
     </p>
@@ -209,7 +209,7 @@ function leaveRoom() {
   color: var(--muted);
 }
 
-.note {
+.hint {
   margin: 0;
   font-size: 13px;
   color: var(--muted);

@@ -98,7 +98,7 @@ function reset() {
       <p v-else class="result-ok">请求已进入控制器，参数已通过白名单校验。</p>
     </div>
 
-    <p class="note">
+    <p class="hint">
       <strong>DTO 规则（class-validator）：</strong>
       <code>@IsNotEmpty</code> · <code>@MaxLength(20)</code> · <code>@IsEmail</code> ·
       <code>@IsInt</code> · <code>@Min(18)</code> · <code>@Max(99)</code> · <code>@IsUUID('4')</code>
@@ -181,7 +181,7 @@ function reset() {
   color: var(--forest);
 }
 
-.note {
+.hint {
   margin: 12px 0 0;
   font-size: 13px;
   color: var(--muted);

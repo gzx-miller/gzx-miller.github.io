@@ -19,7 +19,7 @@ const items = [
       <div v-for="it in items" :key="it.tag" class="cell">
         <code class="tag">{{ it.tag }}</code>
         <p class="role">{{ it.role }}</p>
-        <p class="desc">{{ it.desc }}</p>
+        <p class="hint">{{ it.desc }}</p>
       </div>
     </div>
 
@@ -58,7 +58,7 @@ const items = [
   color: var(--text);
   font-size: 14px;
 }
-.desc {
+.hint {
   margin: 0;
   color: var(--muted);
   font-size: 12px;

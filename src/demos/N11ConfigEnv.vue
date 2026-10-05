@@ -108,7 +108,7 @@ const envFiles = [
       </tbody>
     </table>
 
-    <p class="note">
+    <p class="hint">
       <strong>访问方式：</strong>构造器注入 <code>ConfigService</code>，
       用 <code>this.config.get&lt;number&gt;('database.port')</code> 读取，默认值与类型转换集中在配置工厂。
     </p>
@@ -159,7 +159,7 @@ const envFiles = [
   color: var(--leaf-red);
 }
 
-.note {
+.hint {
   margin: 12px 0 0;
   font-size: 13px;
   color: var(--muted);

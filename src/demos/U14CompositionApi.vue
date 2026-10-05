@@ -45,7 +45,7 @@ function onUnload() {
         <ul>
           <li v-for="c in filtered" :key="c">{{ c }}</li>
         </ul>
-        <p v-if="!filtered.length" class="empty">无匹配。</p>
+        <p v-if="!filtered.length" class="hint">无匹配。</p>
       </div>
 
       <ol class="log">
@@ -92,7 +92,7 @@ function onUnload() {
   color: var(--text);
   font-size: 14px;
 }
-.empty {
+.hint {
   margin: 0;
   color: var(--muted);
   font-size: 13px;

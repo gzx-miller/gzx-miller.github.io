@@ -43,7 +43,7 @@ const rendered = await renderToString(app)`,
 
 <template>
   <div class="v11">
-    <p class="intro">Vite 原生支持 SSR，Nuxt 3/4 就是基于 Vite + Vue 3 SSR 构建的。</p>
+    <p class="hint">Vite 原生支持 SSR，Nuxt 3/4 就是基于 Vite + Vue 3 SSR 构建的。</p>
     <div class="tabs">
       <button v-for="(v,k) in contents" :key="k" :class="{active: tab===k}" @click="tab=k">{{ k }}</button>
     </div>
@@ -53,7 +53,7 @@ const rendered = await renderToString(app)`,
 
 <style scoped>
 .v11 { display: flex; flex-direction: column; gap: 10px; }
-.intro { font-size: 13px; color: #64748b; }
+.hint { font-size: 13px; color: #64748b; }
 .tabs button { padding: 4px 12px; border: 1px solid #e2e8f0; border-radius: 4px; background: #fff; cursor: pointer; font-size: 13px; }
 .tabs .active { background: #f97316; color: #fff; border-color: #f97316; }
 .code-block { background: #1e1e2e; color: #cdd6f4; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; white-space: pre-wrap; }

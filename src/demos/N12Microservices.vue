@@ -91,7 +91,7 @@ const transports = [
       </tbody>
     </table>
 
-    <p class="note">
+    <p class="hint">
       <strong>两种消息模式：</strong><code>send()</code> 请求-响应（等待回执），
       <code>emit()</code> 事件（发完即走，下游异步消费）。
     </p>
@@ -191,7 +191,7 @@ const transports = [
   color: var(--forest);
 }
 
-.note {
+.hint {
   margin: 12px 0 0;
   font-size: 13px;
   color: var(--muted);

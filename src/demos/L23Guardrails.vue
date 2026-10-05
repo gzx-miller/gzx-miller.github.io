@@ -400,7 +400,7 @@ const overallPassed = computed(() => {
         </div>
       </div>
 
-      <div class="test-cases-grid">
+      <div class="grid-2">
         <div v-for="test in filteredTestCases" :key="test.id" class="test-case-card">
           <div class="test-case-header">
             <span class="test-title">{{ test.title }}</span>
@@ -685,7 +685,7 @@ input:checked + .slider:before {
   color: #fff;
   border-color: #c8703c;
 }
-.test-cases-grid {
+.grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;

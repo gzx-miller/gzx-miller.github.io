@@ -216,7 +216,7 @@ const publishSteps = [
         Vite 库模式用于打包组件库、工具函数等，支持多种输出格式，可发布到 npm 供其他项目使用。
       </p>
       
-      <div class="format-grid">
+      <div class="grid-2">
         <div 
           v-for="(fmt, idx) in libFormats" 
           :key="fmt.name"
@@ -308,7 +308,7 @@ const publishSteps = [
 .tips-box p { margin: 0; font-size: 13px; color: #78350f; }
 .tips-box code { background: #fde68a; padding: 1px 4px; border-radius: 3px; font-size: 12px; }
 .intro-text { font-size: 13px; color: #78350f; margin: 0 0 12px 0; }
-.format-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .format-card { background: #fffbeb; padding: 12px; border-radius: 6px; border-left: 3px solid #fed7aa; cursor: pointer; transition: all 0.2s; }
 .format-card:hover { background: #fef3c7; }
 .format-card.selected { background: #ffedd5; border-left-color: #ea580c; }

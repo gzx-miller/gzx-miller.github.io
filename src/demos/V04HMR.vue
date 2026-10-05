@@ -39,7 +39,7 @@ if (import.meta.hot) {
 
 <template>
   <div class="v04">
-    <p class="intro">Vite 的 HMR 基于原生 ESM，只更新变化的模块，速度极快。</p>
+    <p class="hint">Vite 的 HMR 基于原生 ESM，只更新变化的模块，速度极快。</p>
     <div class="tabs">
       <button v-for="(v,k) in contents" :key="k" :class="{active: tab===k}" @click="tab=k">{{ k }}</button>
     </div>
@@ -49,7 +49,7 @@ if (import.meta.hot) {
 
 <style scoped>
 .v04 { display: flex; flex-direction: column; gap: 10px; }
-.intro { font-size: 13px; color: var(--muted); }
+.hint { font-size: 13px; color: var(--muted); }
 .tabs button { padding: 4px 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); cursor: pointer; font-size: 13px; }
 .tabs .active { background: linear-gradient(135deg, var(--leaf-red), var(--leaf-orange)); color: #fff; border-color: transparent; }
 .code-block { background: linear-gradient(180deg, #2a1e18, #231a16); color: #e0c8a8; padding: 14px; border-radius: 8px; font-size: 12px; overflow-x: auto; white-space: pre-wrap; line-height: 1.6; }

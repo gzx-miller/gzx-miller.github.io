@@ -98,7 +98,7 @@ function onNodeClick({ node }: NodeMouseEvent) {
           <p>讲师：{{ selected.data?.teacher ?? '未知' }}</p>
           <p>共 {{ selected.data?.lessons ?? 0 }} 节 · {{ selected.data?.stage ?? '未知' }}阶段</p>
         </template>
-        <p v-else class="empty">点击画布中的课程卡片查看详情</p>
+        <p v-else class="hint">点击画布中的课程卡片查看详情</p>
       </aside>
     </div>
   </div>
@@ -173,7 +173,7 @@ function onNodeClick({ node }: NodeMouseEvent) {
   margin: 0;
 }
 
-.vf-detail .empty {
+.vf-detail .hint {
   color: var(--muted);
 }
 

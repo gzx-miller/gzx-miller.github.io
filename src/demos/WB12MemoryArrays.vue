@@ -86,7 +86,7 @@ const maxBar = computed(() => Math.max(...bars.value, 1))
       <code>{{ result ?? '…' }}</code>
     </div>
 
-    <p class="status">{{ status }}</p>
+    <p class="hint">{{ status }}</p>
 
     <div class="tips-box">
       <p><strong>🌰 核心概念：</strong></p>
@@ -168,7 +168,7 @@ const maxBar = computed(() => Math.max(...bars.value, 1))
   font-weight: 700;
 }
 
-.status {
+.hint {
   margin: 0;
   color: var(--muted);
   font-size: 13px;

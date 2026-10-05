@@ -79,28 +79,28 @@ const injectDemo = [
           <tr>
             <th>imports</th>
             <td>
-              <span v-if="modules[activeModule].imports.length === 0" class="muted-text">—</span>
+              <span v-if="modules[activeModule].imports.length === 0" class="hint">—</span>
               <code v-for="item in modules[activeModule].imports" :key="item" class="chip">{{ item }}</code>
             </td>
           </tr>
           <tr>
             <th>controllers</th>
             <td>
-              <span v-if="modules[activeModule].controllers.length === 0" class="muted-text">—</span>
+              <span v-if="modules[activeModule].controllers.length === 0" class="hint">—</span>
               <code v-for="item in modules[activeModule].controllers" :key="item" class="chip">{{ item }}</code>
             </td>
           </tr>
           <tr>
             <th>providers</th>
             <td>
-              <span v-if="modules[activeModule].providers.length === 0" class="muted-text">—</span>
+              <span v-if="modules[activeModule].providers.length === 0" class="hint">—</span>
               <code v-for="item in modules[activeModule].providers" :key="item" class="chip">{{ item }}</code>
             </td>
           </tr>
           <tr>
             <th>exports</th>
             <td>
-              <span v-if="modules[activeModule].exports.length === 0" class="muted-text">—（不对外暴露）</span>
+              <span v-if="modules[activeModule].exports.length === 0" class="hint">—（不对外暴露）</span>
               <code v-for="item in modules[activeModule].exports" :key="item" class="chip chip-export">{{ item }}</code>
             </td>
           </tr>
@@ -135,7 +135,7 @@ const injectDemo = [
   color: var(--text);
 }
 
-.muted-text {
+.hint {
   color: var(--muted);
   font-size: 13px;
 }

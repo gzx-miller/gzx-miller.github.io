@@ -77,7 +77,7 @@ const themeLabel = computed(() => (theme.value === 'light' ? '浅色 🍂' : '�
       </div>
     </div>
 
-    <p class="status">{{ status }}</p>
+    <p class="hint">{{ status }}</p>
 
     <div class="i64-note">
       <strong>💡 大数怎么办？</strong>
@@ -146,7 +146,7 @@ const themeLabel = computed(() => (theme.value === 'light' ? '浅色 🍂' : '�
   color: var(--muted);
 }
 
-.status {
+.hint {
   margin: 0;
   color: var(--muted);
   font-size: 13px;

@@ -32,7 +32,7 @@ function broadcast() {
         <h3>{{ win.title }}</h3>
         <p>类型: {{ win.type }}</p>
         <p>状态: {{ win.status === 'open' ? '✅ 打开' : '❌ 关闭' }}</p>
-        <div class="window-actions">
+        <div class="controls">
           <button v-if="win.status === 'closed'" class="btn" @click="openWindow(win.id)">打开</button>
           <button v-if="win.status === 'open'" class="btn danger" @click="closeWindow(win.id)">关闭</button>
         </div>
@@ -90,7 +90,7 @@ ipcRenderer.on('refresh-data', (event, data) => {
 .window-card.open { border-color: #4caf50; background: #4caf5010; }
 .window-card h3 { margin: 0 0 8px 0; }
 .window-card p { margin: 0 0 8px 0; color: #666; font-size: 14px; }
-.window-actions { display: flex; gap: 8px; }
+.controls { display: flex; gap: 8px; }
 .btn { background: #ff6b35; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; }
 .btn.danger { background: #f44336; }
 .broadcast { background: #2196f3; margin-bottom: 20px; }

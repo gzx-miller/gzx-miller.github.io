@@ -39,7 +39,7 @@ function openCourse(c: string) {
           {{ joined.has(i) ? '已报名' : '报名' }}
         </button>
       </div>
-      <p v-if="!filtered.length" class="empty">没有匹配的课程。</p>
+      <p v-if="!filtered.length" class="hint">没有匹配的课程。</p>
     </div>
 
     <p class="bubble">{{ bubbleMsg || '点击「报名」用 @click.stop 阻止冒泡，不触发父级打开详情。' }}</p>
@@ -81,7 +81,7 @@ function openCourse(c: string) {
   color: #fff;
   padding: 6px 10px;
 }
-.empty {
+.hint {
   margin: 0;
   color: var(--muted);
 }

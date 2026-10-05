@@ -301,7 +301,7 @@ function clearChat() {
     </div>
 
     <div v-if="activeTab === 'tools'" class="tab-content">
-      <div class="tools-grid">
+      <div class="grid-2">
         <div v-for="tool in tools" :key="tool.name" class="tool-card" :class="{ disabled: !tool.enabled }">
           <div class="tool-card-header">
             <span class="tool-icon">{{ tool.icon }}</span>
@@ -520,7 +520,7 @@ h3 {
   color: #8b5e3c !important;
   border: 1px solid #d4a574 !important;
 }
-.tools-grid {
+.grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;

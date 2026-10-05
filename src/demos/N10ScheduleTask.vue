@@ -90,7 +90,7 @@ const cronFields = [
         <span class="cron-note">{{ field.note }}</span>
       </div>
     </div>
-    <p class="note">
+    <p class="hint">
       示例 <code>0 0 8 * * *</code> = 每天 08:00:00。<code>*</code> 任意值、<code>*/5</code> 每 5 单位、
       <code>1</code> 周一、<code>?</code> 不指定。
     </p>
@@ -162,7 +162,7 @@ const cronFields = [
   color: var(--muted);
 }
 
-.note {
+.hint {
   margin: 0;
   font-size: 13px;
   color: var(--muted);

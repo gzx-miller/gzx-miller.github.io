@@ -105,7 +105,7 @@ function logout() {
 
     <pre v-if="userInfo" class="code-block"><code>{{ userInfo }}</code></pre>
 
-    <p class="note">
+    <p class="hint">
       <strong>守卫位置：</strong>中间件之后、管道之前。返回 <code>true</code> 放行；
       抛 <code>UnauthorizedException</code> 返回 401。
     </p>
@@ -191,7 +191,7 @@ function logout() {
   color: var(--text);
 }
 
-.note {
+.hint {
   margin: 12px 0 0;
   font-size: 13px;
   color: var(--muted);

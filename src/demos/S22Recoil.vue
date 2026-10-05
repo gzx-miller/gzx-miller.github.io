@@ -199,7 +199,7 @@ function resetAtoms() {
           <input v-model="newLeafName" placeholder="输入树叶名称..." @keyup.enter="addLeaf" />
           <button @click="addLeaf">添加</button>
         </div>
-        <div class="leaf-tags">
+        <div class="controls">
           <span v-for="leaf in collectedLeaves" :key="leaf" class="leaf-tag">
             {{ leaf }}
             <button class="remove-tag" @click="removeLeaf(leaf)">×</button>
@@ -505,7 +505,7 @@ const userDataSelector = selector({
   margin-bottom: 12px;
 }
 .leaf-input input { flex: 1; }
-.leaf-tags {
+.controls {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;

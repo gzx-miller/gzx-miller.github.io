@@ -79,7 +79,7 @@ function delay() {
       <p v-for="(log, i) in logs" :key="i" class="tx-line">{{ log }}</p>
     </div>
 
-    <p class="note">
+    <p class="hint">
       <strong>事务语义：</strong>回调内所有 SQL 在同一事务中执行，任一步抛错 → 整体 ROLLBACK；
       全部成功 → COMMIT。名额检查与扣减因此是原子的，避免超额报名。
     </p>
@@ -161,7 +161,7 @@ function delay() {
   font-family: Consolas, Menlo, monospace;
 }
 
-.note {
+.hint {
   margin: 0;
   font-size: 13px;
   color: var(--muted);

@@ -257,7 +257,7 @@ onUnmounted(() => {
       <div class="control-panel">
         <div class="control-group">
           <label class="control-label">📐 形状选择</label>
-          <div class="shape-buttons">
+          <div class="controls">
             <button
               class="shape-btn"
               :class="{ active: shapeType === 'quad' }"
@@ -418,7 +418,7 @@ void main() {
   margin-bottom: 8px;
 }
 
-.shape-buttons {
+.controls {
   display: flex;
   gap: 6px;
 }

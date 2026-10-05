@@ -88,7 +88,7 @@ function trigger() {
       </tbody>
     </table>
 
-    <p class="note">
+    <p class="hint">
       <strong>@Catch()：</strong>空参数捕获所有异常；<code>@Catch(HttpException)</code> 只捕获 HTTP 异常。
       业务层只抛语义异常，格式统一交给过滤器。
     </p>
@@ -106,7 +106,7 @@ function trigger() {
   word-break: break-all;
 }
 
-.note {
+.hint {
   margin: 12px 0 0;
   font-size: 13px;
   color: var(--muted);

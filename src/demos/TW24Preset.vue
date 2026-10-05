@@ -435,7 +435,7 @@ module.exports = {
 
       <div class="preset-examples">
         <h5>📦 常用预设包</h5>
-        <div class="preset-list">
+        <div class="grid-2">
           <div class="preset-item">
             <span class="preset-icon">🎨</span>
             <div>
@@ -582,7 +582,7 @@ module.exports = {
 
 .preset-examples { margin-top: 16px; }
 .preset-examples h5 { margin: 0 0 10px; color: #7c2d12; font-size: 14px; }
-.preset-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .preset-item { display: flex; gap: 12px; padding: 12px; background: #fff7ed; border-radius: 10px; }
 .preset-icon { font-size: 28px; }
 .preset-item strong { display: block; color: #7c2d12; font-size: 13px; margin-bottom: 2px; }

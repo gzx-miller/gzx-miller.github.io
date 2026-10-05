@@ -42,7 +42,7 @@ function confirmDelete() {
       <button type="button" @click="sheetOpen = true">更多操作</button>
     </div>
 
-    <p class="result">{{ result || '点击上方按钮，体验各类交互反馈。' }}</p>
+    <p class="hint">{{ result || '点击上方按钮，体验各类交互反馈。' }}</p>
 
     <div v-if="toast" class="toast">{{ toast }}</div>
 
@@ -79,7 +79,7 @@ function confirmDelete() {
   flex-wrap: wrap;
   gap: 10px;
 }
-.result {
+.hint {
   margin: 0;
   color: var(--muted);
   font-size: 13px;
