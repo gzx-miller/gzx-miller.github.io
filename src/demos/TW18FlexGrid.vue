@@ -253,7 +253,6 @@ const decisionTable = [
 .mode-badge { padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; }
 .mode-badge.flex { background: #fde68a; color: #92400e; }
 .mode-badge.grid { background: #fed7aa; color: #c2410c; }
-.demo-title { font-size: 14px; color: #7c2d12; font-weight: 600; }
 
 .flex-demo .flex-items { display: flex; flex-wrap: wrap; gap: 12px; }
 .grid-demo .grid-items { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
@@ -266,9 +265,6 @@ const decisionTable = [
 
 .code-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .code-col h4 { margin: 0 0 6px; font-size: 13px; color: #7c2d12; }
-
-.mini-code { background: #1e1e2e; color: #e0e0e0; padding: 12px; border-radius: 6px; font-size: 11px; overflow-x: auto; line-height: 1.5; white-space: pre-wrap; }
-.tips-box { background: #fff7ed; padding: 12px; border-radius: 6px; border-left: 3px solid #ea580c; margin-top: 10px; }
 .tips-box p { margin: 0 0 6px; color: #7c2d12; font-weight: 600; }
 .tips-box ul { margin: 0; padding-left: 20px; color: #9a3412; font-size: 13px; }
 .tips-box li { margin: 4px 0; }

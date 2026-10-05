@@ -120,11 +120,6 @@ const architecture = ref({
 </template>
 
 <style scoped>
-.demo-container {
-  padding: 24px;
-  max-width: 900px;
-  margin: 0 auto;
-}
 
 .architecture-diagram {
   display: flex;

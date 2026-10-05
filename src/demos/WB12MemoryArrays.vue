@@ -101,12 +101,6 @@ const maxBar = computed(() => Math.max(...bars.value, 1))
 </template>
 
 <style scoped>
-.toolbar {
-  display: flex;
-  align-items: end;
-  gap: 10px;
-  flex-wrap: wrap;
-}
 .input-line input {
   min-width: 260px;
 }

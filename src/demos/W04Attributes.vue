@@ -489,13 +489,6 @@ gl_FragColor = vec4(vColor, 1.0);</code></pre>
   font-weight: 700;
 }
 
-.tips-box {
-  background: rgba(246, 193, 90, 0.12);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 14px;
-}
-
 .tips-box p {
   margin: 0 0 8px;
   color: var(--chestnut);

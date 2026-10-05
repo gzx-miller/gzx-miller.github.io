@@ -536,12 +536,6 @@ void main() {
   background: rgba(246, 193, 90, 0.08);
   color: var(--muted);
 }
-.tips-box {
-  background: rgba(246, 193, 90, 0.12);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 14px;
-}
 
 .tips-box p {
   margin: 0 0 8px;

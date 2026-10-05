@@ -46,18 +46,12 @@ mask: linear-gradient(black 0%, transparent 100%);
 </template>
 
 <style scoped>
-.demo-container { font-family: system-ui, sans-serif; --primary: #e8590c; --primary-light: #fff4e6; --border: #ffd8a8; }
-.demo-title { font-size: 18px; font-weight: 600; margin-bottom: 4px; color: var(--primary); }
-.demo-desc { font-size: 13px; color: #868e96; margin-bottom: 16px; }
-.controls { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
 .btn { padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; background: #fff; cursor: pointer; font-size: 12px; }
 
 .clip-demo { display: flex; justify-content: center; padding: 16px; margin-bottom: 12px; }
 .clip-box { width: 160px; height: 160px; background: linear-gradient(135deg, var(--primary), #ffd43b); color: #fff; font-weight: 600; display: flex; align-items: center; justify-content: center; transition: clip-path 0.3s; }
 .clip-box.masked { mask: linear-gradient(black 0%, transparent 100%); -webkit-mask: linear-gradient(black 0%, transparent 100%); }
 .code-block { background: #1e1e2e; color: #cdd6f4; padding: 12px; border-radius: 8px; font-size: 12px; line-height: 1.6; margin-bottom: 16px; overflow-x: auto; white-space: pre; }
-.prop-table { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; font-size: 11px; }
-.prop-row { display: grid; grid-template-columns: 1fr 2fr 2fr; border-bottom: 1px solid var(--border); }
 
 .prop-row > span { padding: 5px 8px; }
 

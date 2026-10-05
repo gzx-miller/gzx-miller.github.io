@@ -130,9 +130,6 @@ const utilityCode = `<span style="color:#7c7c99">// 传统 CSS 写法</span>
 </template>
 
 <style scoped>
-.mini-code { background: #1e1e2e; color: #e0e0e0; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; line-height: 1.5; white-space: pre-wrap; }
-.tips-box { background: #f0f7ff; padding: 10px; border-radius: 6px; border-left: 3px solid #0891b2; margin-top: 10px; }
-.toolbar { margin-bottom: 0.8rem; }
 .compact-btn { padding: 5px 14px; border: 1px solid #e0a06a !important; border-radius: 4px; background: #fff !important; color: var(--text) !important; cursor: pointer; font-size: 13px; }
 .compact-btn:hover { background: #fff3e0 !important; }
 .tab-btn.active { background: #e85d04 !important; color: #fff !important; border-color: #e85d04 !important; }

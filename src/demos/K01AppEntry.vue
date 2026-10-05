@@ -91,12 +91,10 @@ app.mount('#app')`
 </template>
 
 <style scoped>
-.mini-code { background: #1e1e2e; color: #e0e0e0; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; line-height: 1.5; white-space: pre-wrap; }
 .step-card { background: #fff8f0; padding: 10px; border-radius: 6px; border-left: 3px solid transparent; margin-bottom: 8px; cursor: pointer; transition: all 0.2s; }
 .step-card.active { border-left-color: #e85d04; background: #fff3e0; }
 .step-num { display: inline-block; width: 22px; height: 22px; line-height: 22px; text-align: center; background: #e85d04; color: #fff; border-radius: 50%; font-size: 12px; margin-right: 8px; }
 .btn { background: #e85d04; color: #fff; border: none; padding: 6px 16px; border-radius: 4px; cursor: pointer; font-size: 13px; margin-top: 4px; }
-.tips-box { background: #f0f7ff; padding: 10px; border-radius: 6px; border-left: 3px solid #0891b2; margin-top: 8px; }
 code { background: #f5f0eb; padding: 1px 4px; border-radius: 3px; font-size: 12px; }
 small { color: #8a6d42; }
 ul { padding-left: 18px; font-size: 12px; }

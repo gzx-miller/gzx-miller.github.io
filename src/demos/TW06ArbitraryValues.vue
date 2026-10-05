@@ -14,6 +14,5 @@ const className = computed(() => `rounded-[${radius.value}px] shadow-[0_${shadow
   </div>
 </template>
 
-<style scoped>
-.controls{display:flex;gap:1rem;flex-wrap:wrap}.controls label{display:grid;font-size:.82rem}.preview{margin:1rem 0;padding:1.5rem;text-align:center;background:#fff1d8;color:#7a3a20;transition:.2s}.tw-demo>code{display:block;overflow-wrap:anywhere;font-size:.75rem;color:#91421f}
+<style scoped>.controls label{display:grid;font-size:.82rem}.preview{margin:1rem 0;padding:1.5rem;text-align:center;background:#fff1d8;color:#7a3a20;transition:.2s}.tw-demo>code{display:block;overflow-wrap:anywhere;font-size:.75rem;color:#91421f}
 </style>

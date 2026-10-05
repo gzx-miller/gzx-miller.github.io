@@ -99,12 +99,6 @@ const themeLabel = computed(() => (theme.value === 'light' ? '浅色 🍂' : '�
 </template>
 
 <style scoped>
-.toolbar {
-  display: flex;
-  align-items: end;
-  gap: 10px;
-  flex-wrap: wrap;
-}
 .input-line input {
   min-width: 240px;
 }

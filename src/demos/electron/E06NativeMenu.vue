@@ -78,7 +78,6 @@ Menu.setApplicationMenu(menu)</pre>
 </template>
 
 <style scoped>
-.demo-container { padding: 24px; max-width: 900px; margin: 0 auto; }
 
 .menu-demo { margin-bottom: 20px; }
 .menu-bar { display: flex; background: #f5f5f5; padding: 8px; border-radius: 8px; gap: 4px; }

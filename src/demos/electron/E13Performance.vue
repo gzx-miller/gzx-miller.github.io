@@ -44,7 +44,6 @@ setInterval(() => {
 </template>
 
 <style scoped>
-.demo-container { padding: 24px; max-width: 900px; margin: 0 auto; }
 
 .tips-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; margin-bottom: 20px; }
 .tip-card { background: #f9f9f9; padding: 20px; border-radius: 12px; }

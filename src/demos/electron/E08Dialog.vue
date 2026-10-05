@@ -85,7 +85,6 @@ console.log(result.response) // 0, 1, 2</pre>
 </template>
 
 <style scoped>
-.demo-container { padding: 24px; max-width: 800px; margin: 0 auto; }
 
 .dialog-types { display: flex; gap: 12px; margin-bottom: 20px; }
 .dialog-types button { padding: 10px 20px; border: 2px solid #e0e0e0; background: white; border-radius: 8px; cursor: pointer; }

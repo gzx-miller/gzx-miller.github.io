@@ -108,27 +108,6 @@ function toggleItem(item: string) {
 </template>
 
 <style scoped>
-.demo-container {
-  font-family: system-ui, sans-serif;
-  --primary: #e8590c;
-  --primary-light: #fff4e6;
-  --border: #ffd8a8;
-  --text: #333;
-  --muted: #868e96;
-}
-
-.demo-title {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 4px;
-  color: var(--text);
-}
-
-.demo-desc {
-  font-size: 13px;
-  color: var(--muted);
-  margin-bottom: 16px;
-}
 
 /* ===== 通配选择器 * ===== */
 [data-selector="universal"] :where(*) {

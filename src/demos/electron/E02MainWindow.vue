@@ -134,7 +134,6 @@ mainWindow.on('closed', () => {
 </template>
 
 <style scoped>
-.demo-container { padding: 24px; max-width: 900px; margin: 0 auto; }
 
 .config-panel, .lifecycle-demo, .code-example, .security-notice {
   margin-bottom: 24px;

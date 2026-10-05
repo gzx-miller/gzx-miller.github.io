@@ -57,19 +57,14 @@ const active = ref('demo')
 
 <style scoped>
 .demo-container { font-family: system-ui, sans-serif; --primary: #e8590c; --primary-light: #fff4e6; --border: #ffd8a8; }
-.demo-title { font-size: 18px; font-weight: 600; margin-bottom: 4px; color: var(--primary); }
-.demo-desc { font-size: 13px; color: #868e96; margin-bottom: 16px; }
 .cards { display: flex; gap: 12px; flex-wrap: wrap; }
 .card { border: 2px solid var(--border); border-radius: 8px; padding: 12px 16px; background: var(--primary-light); transition: all 0.3s; flex: 1; min-width: 150px; }
 .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; margin-bottom: 8px; }
 .badge.error { background: #ffe3e3; color: #c92a2a; }
 .badge.success { background: #d3f9d8; color: #2b8a3e; }
-.controls { display: flex; gap: 6px; }
 .btn { padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; background: #fff; cursor: pointer; font-size: 12px; }
 
 .note { background: #fff3bf; border: 1px solid #ffd43b; border-radius: 6px; padding: 10px 12px; font-size: 12px; line-height: 1.6; }
-.prop-table { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; font-size: 12px; }
-.prop-row { display: grid; grid-template-columns: 1fr 2fr; border-bottom: 1px solid var(--border); }
 
 .prop-row > span { padding: 5px 10px; }
 

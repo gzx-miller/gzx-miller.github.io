@@ -153,8 +153,6 @@ const areaLayoutCode = `.layout {
 .tab-btn { padding: 6px 14px; border: 1px solid #e0a06a; border-radius: 6px; background: #fff; color: #5a2f22; cursor: pointer; font-size: 13px; transition: all 0.2s; }
 .tab-btn:hover { background: #fff3e0; }
 .tab-btn.active { background: #e85d04; color: #fff; border-color: #e85d04; }
-
-.controls { display: flex; gap: 24px; margin-bottom: 16px; padding: 12px; background: #fff7ed; border-radius: 8px; }
 .control-group { display: flex; flex-direction: column; gap: 4px; flex: 1; }
 .control-group label { font-size: 13px; color: #7c2d12; font-weight: 500; }
 .control-group input[type="range"] { accent-color: #ea580c; }
@@ -172,9 +170,6 @@ const areaLayoutCode = `.layout {
 .price small { font-size: 12px; font-weight: normal; color: #9a3412; }
 
 .selected-info { padding: 10px 14px; background: #fef3c7; border-radius: 6px; margin-bottom: 12px; font-size: 14px; color: #92400e; border-left: 3px solid #f59e0b; }
-
-.mini-code { background: #1e1e2e; color: #e0e0e0; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; line-height: 1.5; white-space: pre-wrap; }
-.tips-box { background: #fff7ed; padding: 12px; border-radius: 6px; border-left: 3px solid #ea580c; margin-top: 10px; }
 .tips-box p { margin: 0 0 6px; color: #7c2d12; font-weight: 600; }
 .tips-box ul { margin: 0; padding-left: 20px; color: #9a3412; font-size: 13px; }
 .tips-box li { margin: 4px 0; }

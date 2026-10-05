@@ -80,7 +80,6 @@ const buildConfig = ref({
 </template>
 
 <style scoped>
-.demo-container { padding: 24px; max-width: 900px; margin: 0 auto; }
 .config-panel { margin-bottom: 20px; }
 .config-panel h3 { margin: 0 0 12px 0; }
 .code-block { background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 8px; overflow-x: auto; font-size: 13px; margin-bottom: 20px; }

@@ -66,8 +66,6 @@ const useCases = [
 </template>
 
 <style scoped>
-.mini-code { background: #1e1e2e; color: #e0e0e0; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; line-height: 1.5; white-space: pre-wrap; }
-.detail-box { background: #fff8f0; padding: 8px 10px; border-radius: 6px; border-left: 3px solid #e85d04; margin-bottom: 8px; }
 .conv-card { background: #fff8f0; padding: 8px 10px; border-radius: 6px; border-left: 3px solid #e85d04; margin-bottom: 6px; }
 code { background: #f5f0eb; padding: 1px 4px; border-radius: 3px; font-size: 12px; }
 small { color: #8a6d42; }

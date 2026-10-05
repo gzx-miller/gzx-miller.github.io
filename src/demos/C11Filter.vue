@@ -50,10 +50,6 @@ const blends = ['normal','multiply','screen','overlay','difference'] as const
 </template>
 
 <style scoped>
-.demo-container { font-family: system-ui, sans-serif; --primary: #e8590c; --primary-light: #fff4e6; --border: #ffd8a8; }
-.demo-title { font-size: 18px; font-weight: 600; margin-bottom: 4px; color: var(--primary); }
-.demo-desc { font-size: 13px; color: #868e96; margin-bottom: 16px; }
-.controls { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; font-size: 12px; margin-bottom: 16px; }
 .controls select { padding: 2px 4px; border: 1px solid var(--border); border-radius: 4px; font-size: 12px; }
 .demo-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
 .img-box { text-align: center; }
@@ -62,8 +58,6 @@ const blends = ['normal','multiply','screen','overlay','difference'] as const
 .blend-box { position: relative; width: 200px; height: 120px; border-radius: 8px; overflow: hidden; }
 .blend-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #e8590c, #1971c2); }
 .blend-text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: white; }
-.prop-table { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; font-size: 12px; }
-.prop-row { display: grid; grid-template-columns: 1fr 2fr; border-bottom: 1px solid var(--border); }
 
 .prop-row > span { padding: 5px 10px; }
 

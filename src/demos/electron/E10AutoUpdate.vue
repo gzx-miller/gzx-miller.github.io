@@ -96,7 +96,6 @@ autoUpdater.on('update-downloaded', () => {
 </template>
 
 <style scoped>
-.demo-container { padding: 24px; max-width: 800px; margin: 0 auto; }
 
 .btn { background: #ff6b35; color: white; border: none; padding: 10px 24px; border-radius: 8px; cursor: pointer; margin-bottom: 20px; }
 .status-panel { margin-bottom: 20px; }

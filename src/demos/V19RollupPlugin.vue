@@ -302,8 +302,6 @@ const filteredHooks = computed(() => {
 
 .tab-btn { padding: 5px 12px; border: 1px solid #e0a06a; border-radius: 4px; background: #fff; color: #5c4033; cursor: pointer; font-size: 13px; }
 .tab-btn.active { background: #e85d04; color: #fff; border-color: #e85d04; }
-.mini-code { background: #1e1e2e; color: #e0e0e0; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; line-height: 1.6; white-space: pre-wrap; }
-.tips-box { background: #fef3c7; padding: 10px; border-radius: 6px; border-left: 3px solid #d97706; margin-top: 10px; }
 .tips-box p { margin: 0; font-size: 13px; color: #78350f; }
 .intro-text { font-size: 13px; color: #78350f; margin: 8px 0 12px 0; }
 .compare-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -329,7 +327,6 @@ const filteredHooks = computed(() => {
 .hook-desc { width: 100%; margin: 6px 0 0 0; font-size: 12px; color: #78350f; }
 .demo-panel { background: #fffbeb; border-radius: 8px; padding: 12px; }
 .demo-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-.demo-title { font-weight: 600; color: #92400e; font-size: 14px; }
 .demo-actions { display: flex; gap: 6px; }
 .action-btn { padding: 6px 12px; border: 1px solid #fdba74; border-radius: 4px; background: #fff; cursor: pointer; font-size: 12px; color: #92400e; }
 .action-btn.primary { background: #ea580c; color: #fff; border-color: #ea580c; }

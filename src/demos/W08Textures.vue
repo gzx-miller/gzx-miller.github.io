@@ -363,11 +363,6 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-.demo-card {
-  display: grid;
-  gap: 16px;
-  padding: 20px;
-}
 @media (max-width: 720px) {
   .layout {
     grid-template-columns: 1fr;
@@ -420,18 +415,6 @@ input[type='range'] {
     grid-template-columns: 1fr;
   }
 }
-.mini-code {
-  margin: 0;
-  padding: 10px;
-  border-radius: 6px;
-  background: rgba(123, 53, 29, 0.08);
-  color: var(--chestnut);
-  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
-  font-size: 12px;
-  line-height: 1.6;
-  white-space: pre;
-  overflow-x: auto;
-}
 
 .uv-diagram {
   display: grid;
@@ -474,13 +457,6 @@ input[type='range'] {
   font-size: 12px;
   color: var(--muted);
   margin: 4px 0 0;
-}
-
-.tips-box {
-  border-left: 3px solid var(--leaf-orange);
-  padding: 12px 14px;
-  border-radius: 6px;
-  background: rgba(246, 193, 90, 0.12);
 }
 
 .tips-box p {

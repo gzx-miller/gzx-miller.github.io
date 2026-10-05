@@ -366,9 +366,6 @@ const pseudoCode = `<span style="color:#7c7c99">// 首元素 / 尾元素</span>
 .stack-item { padding: 12px 16px; background: #fff; border: 1px solid #fed7aa; border-bottom: none; font-size: 13px; color: #7c2d12; }
 .stack-item:first-child { border-radius: 8px 8px 0 0; }
 .stack-item:last-child { border-radius: 0 0 8px 8px; border-bottom: 1px solid #fed7aa; }
-
-.mini-code { background: #1e1e2e; color: #e0e0e0; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; line-height: 1.5; white-space: pre-wrap; margin-top: 12px; }
-.tips-box { background: #fff7ed; padding: 12px; border-radius: 6px; border-left: 3px solid #ea580c; margin-top: 10px; }
 .tips-box p { margin: 0 0 6px; color: #7c2d12; font-weight: 600; }
 .tips-box ul { margin: 0; padding-left: 20px; color: #9a3412; font-size: 13px; }
 .tips-box li { margin: 4px 0; }

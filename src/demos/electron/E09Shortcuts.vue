@@ -97,7 +97,6 @@ const menu = Menu.buildFromTemplate([
 </template>
 
 <style scoped>
-.demo-container { padding: 24px; max-width: 800px; margin: 0 auto; }
 
 .shortcut-list { margin-bottom: 20px; }
 .shortcut-list h3 { margin: 0 0 12px 0; }

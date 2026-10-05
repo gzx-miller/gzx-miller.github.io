@@ -130,11 +130,6 @@ const themeLabel = computed(() => (theme.value === 'light' ? '浅色 🍂' : '�
 </template>
 
 <style scoped>
-.toolbar {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
 
 .layout {
   display: grid;
@@ -189,12 +184,6 @@ const themeLabel = computed(() => (theme.value === 'light' ? '浅色 🍂' : '�
 .hint {
   color: var(--muted);
   font-size: 12px;
-}
-
-.controls {
-  display: grid;
-  gap: 12px;
-  align-content: start;
 }
 
 .controls label {

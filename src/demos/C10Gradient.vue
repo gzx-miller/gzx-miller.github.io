@@ -46,10 +46,6 @@ const angle = ref(135)
 </template>
 
 <style scoped>
-.demo-container { font-family: system-ui, sans-serif; --primary: #e8590c; }
-.demo-title { font-size: 18px; font-weight: 600; margin-bottom: 4px; color: var(--primary); }
-.demo-desc { font-size: 13px; color: #868e96; margin-bottom: 16px; }
-.controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; font-size: 12px; margin-bottom: 16px; }
 .btn { padding: 6px 12px; border: 1px solid #ffd8a8; border-radius: 6px; background: #fff; cursor: pointer; font-size: 12px; }
 
 .controls input[type="range"] { width: 100px; }
@@ -57,8 +53,6 @@ const angle = ref(135)
 .gradient-box { height: 120px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 12px; font-weight: 600; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
 .gradient-presets { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 16px; }
 .preset { height: 80px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 12px; font-weight: 600; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
-.prop-table { border: 1px solid #ffd8a8; border-radius: 8px; overflow: hidden; font-size: 12px; }
-.prop-row { display: grid; grid-template-columns: 1fr 2fr; border-bottom: 1px solid #ffd8a8; }
 
 .prop-row > span { padding: 5px 10px; }
 

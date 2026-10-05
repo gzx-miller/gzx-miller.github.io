@@ -62,7 +62,6 @@ new BrowserWindow({
 </template>
 
 <style scoped>
-.demo-container { padding: 24px; max-width: 900px; margin: 0 auto; }
 
 .security-check { margin-bottom: 20px; }
 .security-check h3 { margin: 0 0 12px 0; }

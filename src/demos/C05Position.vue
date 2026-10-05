@@ -42,10 +42,6 @@ const positions = ['static','relative','absolute','fixed','sticky']
 </template>
 
 <style scoped>
-.demo-container { font-family: system-ui, sans-serif; --primary: #e8590c; --primary-light: #fff4e6; --border: #ffd8a8; }
-.demo-title { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
-.demo-desc { font-size: 13px; color: #868e96; margin-bottom: 16px; }
-.controls { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
 .btn { padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; background: #fff; cursor: pointer; font-size: 12px; }
 .pos-viewport { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 16px; }
 .pos-scroll-area { height: 220px; overflow-y: auto; padding: 16px; }
@@ -60,9 +56,6 @@ const positions = ['static','relative','absolute','fixed','sticky']
 .pos-absolute { position: absolute; top: 8px; right: 8px; }
 .pos-fixed { position: fixed; bottom: 16px; right: 16px; z-index: 100; }
 .pos-sticky { position: sticky; top: 0; z-index: 10; }
-
-.prop-table { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; font-size: 12px; }
-.prop-row { display: grid; grid-template-columns: 1fr 1fr 1fr; border-bottom: 1px solid var(--border); }
 
 .prop-row > span { padding: 5px 8px; word-break: break-all; }
 

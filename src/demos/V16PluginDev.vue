@@ -73,7 +73,6 @@ export default function myPlugin() { ... }
 <style scoped>
 .v16 { display: flex; flex-direction: column; gap: 10px; }
 .intro { font-size: 13px; color: #64748b; }
-.tabs { display: flex; gap: 6px; }
 .tabs button { padding: 4px 12px; border: 1px solid #e2e8f0; border-radius: 4px; background: #fff; cursor: pointer; font-size: 13px; }
 .tabs .active { background: #059669; color: #fff; border-color: #059669; }
 .code-block { background: #1e1e2e; color: #cdd6f4; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; white-space: pre-wrap; }

@@ -44,10 +44,6 @@ const active = ref('bfc')
 </template>
 
 <style scoped>
-.demo-container { font-family: system-ui, sans-serif; --primary: #e8590c; --primary-light: #fff4e6; --border: #ffd8a8; }
-.demo-title { font-size: 18px; font-weight: 600; margin-bottom: 4px; color: var(--primary); }
-.demo-desc { font-size: 13px; color: #868e96; margin-bottom: 16px; }
-.controls { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
 .btn { padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; background: #fff; cursor: pointer; font-size: 12px; }
 .bfc-demo { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
 .bfc-box { border: 1px solid var(--border); border-radius: 8px; padding: 12px; font-size: 12px; line-height: 1.6; }
@@ -63,9 +59,6 @@ const active = ref('bfc')
 .collapse-top { background: var(--primary-light); border: 1px solid var(--primary); border-radius: 6px; padding: 10px; margin-bottom: 30px; font-size: 12px; }
 .collapse-bottom { background: #e7f5ff; border: 1px solid #1971c2; border-radius: 6px; padding: 10px; margin-top: 20px; font-size: 12px; }
 .collapse-note { font-size: 12px; color: #666; margin-top: 8px; background: #fff3bf; padding: 6px 10px; border-radius: 4px; }
-
-.prop-table { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; font-size: 12px; }
-.prop-row { display: grid; grid-template-columns: 1fr 2fr 2fr; border-bottom: 1px solid var(--border); }
 
 .prop-row > span { padding: 5px 8px; }
 

@@ -68,7 +68,6 @@ export default defineConfig({
 .v13 { display: flex; flex-direction: column; gap: 10px; }
 .intro { font-size: 13px; color: var(--muted); }
 .intro code { background: rgba(246, 193, 90, 0.2); padding: 1px 5px; border-radius: 3px; font-size: 12px; }
-.tabs { display: flex; gap: 6px; flex-wrap: wrap; }
 .tabs button { padding: 4px 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); cursor: pointer; font-size: 13px; }
 .tabs .active { background: linear-gradient(135deg, var(--leaf-red), var(--leaf-orange)); color: #fff; border-color: transparent; }
 .code-block { background: linear-gradient(180deg, #2a1e18, #231a16); color: #e0c8a8; padding: 14px; border-radius: 8px; font-size: 12px; overflow-x: auto; white-space: pre-wrap; line-height: 1.6; }

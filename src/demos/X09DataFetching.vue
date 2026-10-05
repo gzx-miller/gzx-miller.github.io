@@ -67,7 +67,6 @@ const fetchFacts = [
 </template>
 
 <style scoped>
-.mini-code { background: #1e1e2e; color: #e0e0e0; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; line-height: 1.5; white-space: pre-wrap; }
 
 .tag { color: #fff; padding: 1px 6px; border-radius: 3px; font-size: 11px; margin-left: 6px; }
 code { background: #f5f0eb; padding: 1px 4px; border-radius: 3px; font-size: 12px; }

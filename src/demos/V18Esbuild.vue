@@ -250,8 +250,6 @@ function triggerTransform() {
 .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .feature-card { background: #fff8f0; padding: 10px; border-radius: 6px; border-left: 3px solid #e85d04; }
 .feature-icon { font-size: 20px; }
-.mini-code { background: #1e1e2e; color: #e0e0e0; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; line-height: 1.6; white-space: pre-wrap; }
-.tips-box { background: #fef3c7; padding: 10px; border-radius: 6px; border-left: 3px solid #d97706; margin-top: 10px; }
 .tips-box p { margin: 0; font-size: 13px; color: #78350f; }
 .tips-box code { background: #fde68a; padding: 1px 4px; border-radius: 3px; font-size: 12px; }
 table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 8px; }

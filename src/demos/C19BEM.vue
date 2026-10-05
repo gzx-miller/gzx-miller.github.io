@@ -72,10 +72,6 @@ h3, p { margin: 0 0 8px; }</pre>
 </template>
 
 <style scoped>
-.demo-container { font-family: system-ui, sans-serif; --primary: #e8590c; --primary-light: #fff4e6; --border: #ffd8a8; }
-.demo-title { font-size: 18px; font-weight: 600; margin-bottom: 4px; color: var(--primary); }
-.demo-desc { font-size: 13px; color: #868e96; margin-bottom: 16px; }
-.controls { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
 .btn { padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; background: #fff; cursor: pointer; font-size: 12px; }
 .method-demo { margin-bottom: 16px; }
 .card { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 16px; position: relative; margin-bottom: 12px; }
@@ -94,9 +90,6 @@ h3, p { margin: 0 0 8px; }</pre>
 .bg-white { background: #fff; }
 .text-bold { font-weight: 700; }
 .text-muted { color: #868e96; font-size: 12px; }
-
-.prop-table { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; font-size: 12px; }
-.prop-row { display: grid; grid-template-columns: 1fr 2fr 1fr; border-bottom: 1px solid var(--border); }
 
 .prop-row > span { padding: 5px 8px; }
 

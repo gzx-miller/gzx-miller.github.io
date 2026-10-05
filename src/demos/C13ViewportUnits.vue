@@ -49,10 +49,6 @@ const units = [
 </template>
 
 <style scoped>
-.demo-container { font-family: system-ui, sans-serif; --primary: #e8590c; --primary-light: #fff4e6; --border: #ffd8a8; }
-.demo-title { font-size: 18px; font-weight: 600; margin-bottom: 4px; color: var(--primary); }
-.demo-desc { font-size: 13px; color: #868e96; margin-bottom: 16px; }
-.controls { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
 .btn { padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; background: #fff; cursor: pointer; font-size: 12px; }
 
 .unit-demo { background: var(--primary-light); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 12px; min-height: 80px; }
@@ -61,8 +57,6 @@ const units = [
 .inner { background: var(--primary); color: #fff; border-radius: 6px; padding: 8px; font-size: 12px; font-weight: 600; text-align: center; }
 .unit-info { background: var(--primary-light); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; font-size: 12px; margin-bottom: 16px; display: flex; gap: 8px; align-items: baseline; }
 .unit-info strong { color: var(--primary); white-space: nowrap; }
-.prop-table { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; font-size: 12px; }
-.prop-row { display: grid; grid-template-columns: 1fr 1fr 2fr; border-bottom: 1px solid var(--border); }
 
 .prop-row > span { padding: 5px 8px; }
 

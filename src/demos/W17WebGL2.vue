@@ -470,9 +470,6 @@ gl.drawBuffers(attachments);
 </template>
 
 <style scoped>
-.demo-card {
-  padding: 24px;
-}
 .summary {
   color: var(--muted);
   margin-bottom: 16px;

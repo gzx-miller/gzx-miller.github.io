@@ -67,7 +67,6 @@ const routeRules = [
 </template>
 
 <style scoped>
-.detail-box { background: #fff8f0; padding: 10px; border-radius: 6px; border-left: 3px solid #e85d04; }
 table { width: 100%; border-collapse: collapse; font-size: 12px; }
 th, td { padding: 5px 8px; border: 1px solid #ddd; text-align: left; }
 th { background: #fff3e0; }

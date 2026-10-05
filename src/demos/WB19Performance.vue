@@ -122,12 +122,6 @@ const maxTime = computed(() => Math.max(wasmTime.value, jsTime.value, 0.1))
 </template>
 
 <style scoped>
-.toolbar {
-  display: flex;
-  align-items: end;
-  gap: 12px;
-  flex-wrap: wrap;
-}
 .input-line input {
   width: 90px;
 }

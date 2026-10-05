@@ -85,12 +85,6 @@ const themeLabel = computed(() => (theme.value === 'light' ? '秋日暖阳' : '�
 </template>
 
 <style scoped>
-.toolbar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
 
 .badge {
   border-radius: 999px;

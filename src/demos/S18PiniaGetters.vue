@@ -296,13 +296,6 @@ const useShopStore = defineStore('shop', () => {
   font-weight: 600;
   color: #b7431f;
 }
-.mini-btn {
-  padding: 3px 8px !important;
-  font-size: 12px !important;
-  background: transparent !important;
-  color: #b7431f !important;
-  border: 1px solid #b7431f !important;
-}
 .cart-total {
   margin: 10px 0 0;
   text-align: right;

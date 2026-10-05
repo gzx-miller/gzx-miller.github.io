@@ -81,7 +81,6 @@ server.listen(443)</code></pre>
 </div></template>
 
 <style scoped>
-.tabs { display: flex; gap: 6px; margin: 0.6rem 0; }
 .tabs button { padding: 4px 12px; border: 1px solid #e2e8f0; border-radius: 4px; background: #fff; cursor: pointer; font-size: 13px; }
 .tabs .active { background: #e8590c; color: #fff; border-color: #e8590c; }
 .step-content { margin: 0.6rem 0; }

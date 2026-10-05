@@ -156,7 +156,6 @@ ipcRenderer.on('save-data-reply', (event, result) => {
 </template>
 
 <style scoped>
-.demo-container { padding: 24px; max-width: 1000px; margin: 0 auto; }
 
 .mode-selector { display: flex; gap: 12px; margin-bottom: 24px; }
 .mode-selector button {

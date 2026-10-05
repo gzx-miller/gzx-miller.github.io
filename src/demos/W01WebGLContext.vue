@@ -335,12 +335,6 @@ onUnmounted(() => {
   line-height: 1;
   margin: 4px 0;
 }
-.tips-box {
-  background: rgba(246, 193, 90, 0.12);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 14px;
-}
 
 .tips-box p {
   margin: 0 0 8px;

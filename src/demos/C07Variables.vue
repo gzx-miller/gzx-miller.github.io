@@ -35,10 +35,6 @@ const themes = {
 </template>
 
 <style scoped>
-.demo-container { font-family: system-ui, sans-serif; --primary: #e8590c; --primary-light: #fff4e6; --border: #ffd8a8; }
-.demo-title { font-size: 18px; font-weight: 600; margin-bottom: 4px; color: var(--primary); }
-.demo-desc { font-size: 13px; color: #868e96; margin-bottom: 16px; }
-.controls { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; font-size: 12px; }
 .btn { padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; background: #fff; cursor: pointer; font-size: 12px; }
 
 .controls input[type="range"] { width: 80px; }
@@ -47,8 +43,6 @@ const themes = {
 .var-card h4 { color: var(--primary); margin: 0 0 8px; }
 .var-card code { background: var(--primary-light); padding: 1px 4px; border-radius: 3px; font-size: 11px; }
 .var-btn { background: var(--primary); color: #fff; border: none; padding: 6px 14px; border-radius: 6px; cursor: pointer; }
-.prop-table { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; font-size: 12px; }
-.prop-row { display: grid; grid-template-columns: 1fr 2fr; border-bottom: 1px solid var(--border); }
 
 .prop-row > span { padding: 5px 10px; }
 

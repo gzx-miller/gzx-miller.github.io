@@ -272,12 +272,6 @@ function selectImage(img: ImageSample) {
 </template>
 
 <style scoped>
-.demo-card {
-  border: 1px solid #e8c9a0;
-  border-radius: 12px;
-  padding: 20px;
-  background: linear-gradient(135deg, #fef9f3 0%, #fdf2e6 100%);
-}
 h3 {
   margin: 0 0 4px;
   color: #8b5e3c;

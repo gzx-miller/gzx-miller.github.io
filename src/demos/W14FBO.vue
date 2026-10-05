@@ -497,11 +497,6 @@ gl.framebufferRenderbuffer(
 </template>
 
 <style scoped>
-.demo-card {
-  padding: 20px;
-  display: grid;
-  gap: 16px;
-}
 
 .summary {
   color: var(--muted);

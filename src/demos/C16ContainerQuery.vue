@@ -42,10 +42,6 @@ const containerWidth = ref(400)
 </template>
 
 <style scoped>
-.demo-container { font-family: system-ui, sans-serif; --primary: #e8590c; --primary-light: #fff4e6; --border: #ffd8a8; }
-.demo-title { font-size: 18px; font-weight: 600; margin-bottom: 4px; color: var(--primary); }
-.demo-desc { font-size: 13px; color: #868e96; margin-bottom: 16px; }
-.controls { margin-bottom: 16px; font-size: 12px; }
 .controls input[type="range"] { width: 180px; vertical-align: middle; }
 
 .cq-container {
@@ -76,8 +72,6 @@ const containerWidth = ref(400)
 .cq-tag { background: var(--primary); color: #fff; font-size: 10px; padding: 1px 6px; border-radius: 4px; }
 
 .code-block { background: #1e1e2e; color: #cdd6f4; padding: 10px 12px; border-radius: 6px; font-size: 11px; line-height: 1.5; margin-bottom: 16px; overflow-x: auto; white-space: pre; }
-.prop-table { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; font-size: 12px; }
-.prop-row { display: grid; grid-template-columns: 1fr 2fr; border-bottom: 1px solid var(--border); }
 
 .prop-row > span { padding: 5px 10px; }
 

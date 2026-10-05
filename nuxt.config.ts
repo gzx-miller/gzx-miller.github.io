@@ -71,6 +71,10 @@ export default defineNuxtConfig({
     'highlight.js/styles/github.css',
     'nprogress/nprogress.css',
     '~/style.css',
+    // 演示统一基础样式（公共元素 + light/dark 令牌），约 5KB。
+    // 新增约 2KB（其余是替换掉的旧 scoped 规则），换来 347 个演示共用
+    // 一套定义，代价与收益相比可接受，因此走全局而不做动态注入。
+    '~/styles/demo.css',
   ],
   hooks: {
     // 构建前把生成的 sitemap.xml 写入 public/，nitro 构建时会一并拷入 .output/public

@@ -57,11 +57,6 @@ const wraps = ['nowrap','wrap','wrap-reverse'] as const
 </template>
 
 <style scoped>
-.demo-container { font-family: system-ui, sans-serif; --primary: #e8590c; --primary-light: #fff4e6; --border: #ffd8a8; }
-.demo-title { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
-.demo-desc { font-size: 13px; color: #868e96; margin-bottom: 16px; }
-
-.controls { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; font-size: 12px; align-items: center; }
 .controls label { display: flex; align-items: center; gap: 4px; }
 .controls select, .controls input { padding: 2px 4px; border: 1px solid var(--border); border-radius: 4px; font-size: 12px; }
 
@@ -88,9 +83,6 @@ const wraps = ['nowrap','wrap','wrap-reverse'] as const
   transition: all 0.3s;
 }
 .item-num { display: block; font-size: 10px; opacity: 0.8; margin-bottom: 2px; }
-
-.prop-table { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; font-size: 13px; }
-.prop-row { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--border); }
 
 .prop-row > span { padding: 5px 10px; }
 

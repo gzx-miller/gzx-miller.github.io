@@ -49,12 +49,8 @@ const imgStyle = computed<CSSProperties>(() => ({ objectFit: fitMode.value }))
 </template>
 
 <style scoped>
-.demo-container { font-family: system-ui, sans-serif; --primary: #099268; --primary-light: #ebfbee; --border: #63e6be; }
-.demo-title { font-size: 18px; font-weight: 600; margin-bottom: 4px; color: var(--primary); }
-.demo-desc { font-size: 13px; color: #868e96; margin-bottom: 16px; }
 .section { margin-bottom: 20px; }
 .section h4 { font-size: 14px; margin-bottom: 8px; color: var(--primary); }
-.controls { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
 .btn { padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; background: #fff; cursor: pointer; font-size: 12px; }
 .ratio-demo { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
 .ratio-box {
@@ -84,9 +80,6 @@ const imgStyle = computed<CSSProperties>(() => ({ objectFit: fitMode.value }))
   height: 100%;
   display: block;
 }
-
-.prop-table { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; font-size: 12px; margin-top: 16px; }
-.prop-row { display: grid; grid-template-columns: 1fr 2fr; border-bottom: 1px solid var(--border); }
 
 .prop-row > span { padding: 5px 10px; }
 

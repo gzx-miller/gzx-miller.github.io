@@ -76,8 +76,6 @@ export default function Page({
 </template>
 
 <style scoped>
-.mini-code { background: #1e1e2e; color: #e0e0e0; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; line-height: 1.5; white-space: pre-wrap; }
-.detail-box { background: #fff8f0; padding: 10px; border-radius: 6px; border-left: 3px solid #e85d04; }
 .url-input { width: 100%; padding: 6px 10px; border: 1px solid #e0a06a; border-radius: 4px; font-family: monospace; margin-bottom: 8px; }
 table { width: 100%; border-collapse: collapse; font-size: 12px; }
 th, td { padding: 5px 8px; border: 1px solid #ddd; text-align: left; }

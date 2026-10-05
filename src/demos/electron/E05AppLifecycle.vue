@@ -63,7 +63,6 @@ if (!gotTheLock) {
 </template>
 
 <style scoped>
-.demo-container { padding: 24px; max-width: 800px; margin: 0 auto; }
 .btn { background: #ff6b35; color: white; border: none; padding: 10px 24px; border-radius: 8px; cursor: pointer; margin-bottom: 20px; }
 .events { background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 8px; font-family: monospace; min-height: 100px; margin-bottom: 20px; }
 .event { padding: 8px; border-bottom: 1px solid #333; }

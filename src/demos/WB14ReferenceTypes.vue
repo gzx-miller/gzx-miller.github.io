@@ -89,11 +89,6 @@ const themeLabel = computed(() => (theme.value === 'light' ? '浅色 🍂' : '�
 </template>
 
 <style scoped>
-.toolbar {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
 
 .layout {
   display: grid;

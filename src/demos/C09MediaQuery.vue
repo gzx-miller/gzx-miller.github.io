@@ -41,10 +41,6 @@ const width = ref(1200)
 </template>
 
 <style scoped>
-.demo-container { font-family: system-ui, sans-serif; --primary: #e8590c; --primary-light: #fff4e6; --border: #ffd8a8; }
-.demo-title { font-size: 18px; font-weight: 600; margin-bottom: 4px; color: var(--primary); }
-.demo-desc { font-size: 13px; color: #868e96; margin-bottom: 16px; }
-.controls { margin-bottom: 16px; font-size: 12px; }
 .controls input[type="range"] { width: 200px; vertical-align: middle; }
 .viewport-simulator { border: 2px solid var(--border); border-radius: 8px; overflow: hidden; transition: width 0.3s; margin: 0 auto 16px; background: var(--primary-light); }
 .sim-header, .sim-footer { background: var(--primary); color: #fff; padding: 8px 12px; font-size: 12px; font-weight: 600; }
@@ -56,8 +52,6 @@ const width = ref(1200)
 .viewport-simulator[style*="1024"], .viewport-simulator[style*="1100"], .viewport-simulator[style*="1200"] .sim-body { grid-template-columns: repeat(4, 1fr); }
 .sim-card { background: #fff; border: 1px solid var(--border); border-radius: 6px; padding: 12px; font-size: 12px; font-weight: 600; text-align: center; }
 .code-block { background: #1e1e2e; color: #cdd6f4; padding: 12px; border-radius: 8px; font-size: 12px; line-height: 1.6; margin-bottom: 16px; overflow-x: auto; }
-.prop-table { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; font-size: 12px; }
-.prop-row { display: grid; grid-template-columns: 1fr 1fr 1fr; border-bottom: 1px solid var(--border); }
 
 .prop-row > span { padding: 5px 8px; }
 

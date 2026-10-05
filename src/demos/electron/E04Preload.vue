@@ -115,7 +115,6 @@ contextBridge.exposeInMainWorld('api', {
 </template>
 
 <style scoped>
-.demo-container { padding: 24px; max-width: 1000px; margin: 0 auto; }
 
 .comparison {
   display: grid;

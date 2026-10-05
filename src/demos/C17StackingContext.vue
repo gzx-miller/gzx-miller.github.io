@@ -36,10 +36,6 @@ const active = ref('default')
 </template>
 
 <style scoped>
-.demo-container { font-family: system-ui, sans-serif; --primary: #e8590c; --primary-light: #fff4e6; --border: #ffd8a8; }
-.demo-title { font-size: 18px; font-weight: 600; margin-bottom: 4px; color: var(--primary); }
-.demo-desc { font-size: 13px; color: #868e96; margin-bottom: 16px; }
-.controls { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
 .btn { padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; background: #fff; cursor: pointer; font-size: 12px; }
 .stacking-demo { position: relative; height: 200px; border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 16px; background: var(--primary-light); }
 .box { position: absolute; width: 140px; height: 80px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: #fff; }
@@ -49,9 +45,6 @@ const active = ref('default')
 .mode-opacity .box-b { opacity: 0.9; }  /* 创建新层叠上下文，内部 z-index 与外界隔离 */
 .mode-transform .box-b { transform: translateZ(0); } /* 同样创建新上下文 */
 .note { background: #fff3bf; border: 1px solid #ffd43b; border-radius: 6px; padding: 10px 12px; font-size: 12px; line-height: 1.6; margin-bottom: 16px; }
-
-.prop-table { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; font-size: 12px; }
-.prop-row { display: grid; grid-template-columns: 1fr 2fr; border-bottom: 1px solid var(--border); }
 
 .prop-row > span { padding: 5px 10px; }
 

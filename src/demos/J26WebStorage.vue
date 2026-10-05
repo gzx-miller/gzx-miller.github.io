@@ -75,7 +75,6 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
-.demo-card { padding: 16px; border: 1px solid #a5d8ff; border-radius: 8px; background: #e7f5ff; font-size: 13px; }
 .row { display: flex; gap: 8px; margin: 8px 0; align-items: center; }
 .input { padding: 6px 10px; border: 1px solid #a5d8ff; border-radius: 6px; font-size: 13px; }
 .btn { padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; color: #fff; }

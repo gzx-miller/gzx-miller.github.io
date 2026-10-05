@@ -122,8 +122,6 @@ Object.is(-0, +0)       <span style="color:#8a8a3a">// false（=== 是 true）</
 .result.true { color: #65a30d; }
 .result.false { color: #dc2626; }
 .note { color: #8a6d42; font-size: 12px; margin-top: 6px; }
-.mini-code { background: #1e1e2e; color: #e0e0e0; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; line-height: 1.5; white-space: pre-wrap; }
-.tips-box { background: #f0f7ff; padding: 10px; border-radius: 6px; border-left: 3px solid #0891b2; margin-top: 8px; }
 table { width: 100%; border-collapse: collapse; font-size: 12px; }
 th, td { padding: 5px 8px; border: 1px solid #ddd; text-align: left; }
 th { background: #fff3e0; }

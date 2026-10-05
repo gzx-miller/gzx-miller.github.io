@@ -137,8 +137,6 @@ const cardStyle = computed(() => ({
 .course p { color: #805f4d; margin: 4px 0; }
 .course button { color: var(--accent); border: 1px solid var(--accent); background: transparent; padding: 4px 12px; border-radius: 6px; cursor: pointer; }
 .course button:hover { background: var(--accent); color: #fff; }
-.mini-code { background: #1e1e2e; color: #e0e0e0; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; line-height: 1.5; white-space: pre-wrap; }
-.tips-box { background: #f0f7ff; padding: 10px; border-radius: 6px; border-left: 3px solid #0891b2; }
 .tab-btn { padding: 5px 14px; border: 1px solid #e0a06a !important; border-radius: 4px; background: #fff !important; color: var(--text) !important; cursor: pointer; font-size: 13px; }
 .tab-btn.active { background: #e85d04 !important; color: #fff !important; border-color: #e85d04 !important; }
 code { background: #f5f0eb; padding: 1px 4px; border-radius: 3px; font-size: 12px; }

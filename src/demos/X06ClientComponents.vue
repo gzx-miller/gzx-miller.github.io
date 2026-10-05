@@ -72,8 +72,6 @@ const hooksClient = ['useState', 'useReducer', 'useEffect', 'useRef', 'useLayout
 </template>
 
 <style scoped>
-.mini-code { background: #1e1e2e; color: #e0e0e0; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; line-height: 1.5; white-space: pre-wrap; }
-.detail-box { background: #fff8f0; padding: 10px; border-radius: 6px; border-left: 3px solid #e85d04; }
 .hooks-box { display: flex; flex-wrap: wrap; gap: 4px; }
 .hook-tag { background: #fff3e0; color: #e85d04; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-family: monospace; }
 table { width: 100%; border-collapse: collapse; font-size: 12px; }

@@ -455,11 +455,6 @@ N_world = normalize(normalMatrix * N_local);
 </template>
 
 <style scoped>
-.demo-card {
-  padding: 20px;
-  display: grid;
-  gap: 16px;
-}
 
 .summary {
   color: var(--muted);

@@ -114,12 +114,6 @@ th, td {
 th { color: #9f9fff; }
 code { color: #7fff7f; }
 code.cmd { font-size: 0.85em; word-break: break-all; }
-.tips-box {
-  background: rgba(255,255,255,0.05);
-  border-radius: 8px;
-  padding: 16px;
-  border-left: 3px solid #6a5acd;
-}
 .tips-box ul { padding-left: 20px; }
 .tips-box li { margin-bottom: 6px; line-height: 1.5; }
 h4 { color: #9f9fff; margin: 16px 0 8px 0; }

@@ -121,12 +121,6 @@ const themeLabel = computed(() => (theme.value === 'light' ? '浅色 🍂' : '�
 </template>
 
 <style scoped>
-.toolbar {
-  display: flex;
-  align-items: end;
-  gap: 12px;
-  flex-wrap: wrap;
-}
 .input-line input {
   width: 120px;
 }

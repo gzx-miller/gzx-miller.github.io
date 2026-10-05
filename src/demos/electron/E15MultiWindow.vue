@@ -84,7 +84,6 @@ ipcRenderer.on('refresh-data', (event, data) => {
 </template>
 
 <style scoped>
-.demo-container { padding: 24px; max-width: 900px; margin: 0 auto; }
 
 .windows-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; margin-bottom: 20px; }
 .window-card { background: #f9f9f9; padding: 20px; border-radius: 12px; border: 2px solid #e0e0e0; }

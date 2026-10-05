@@ -1,0 +1,404 @@
+/* ============================================================================
+   Demo 统一基础样式
+   ----------------------------------------------------------------------------
+   全站 983 个演示组件中，347 个曾各自编写 <style scoped>，累计 401KB 样式源码、
+   416 种硬编码颜色字面量、2201 个颜色实例。同一批界面元素（代码块、按钮、
+   表格、提示条、属性表、控制条…）在不同演示里被反复重写，且配色各不相同。
+
+   本文件把这些元素收敛为一套公共定义，只保留 light / dark 两种主题
+   （由 :root / [data-theme='dark'] 的令牌驱动，见 style.css）。
+
+   使用方式：
+     - 演示组件的 <style scoped> 只保留自己独有的布局规则；
+     - 凡属于下列公共元素，一律不再重复定义，直接使用对应类名。
+     - 需要局部微调时，演示自身的 scoped 规则特异性更高，可正常覆盖。
+
+   命名约定：公共元素沿用既有类名（.demo-card / .code-block / .btn …），
+   避免引入新体系导致二次分裂。
+   ============================================================================ */
+
+/* 兼容旧演示使用的局部变量名：统一映射到全局令牌，
+   使 --primary / --primary-light / --border / --text / --muted
+   等历史写法自动跟随 light/dark 主题切换。
+
+   必须挂在 .lesson-demo 上而非 .demo-container —— 实测有部分演示的根元素
+   并非 .demo-container，若只定义在后者会导致变量取不到值。 */
+.lesson-demo {
+  --primary: var(--demo-accent);
+  --primary-light: var(--demo-accent-soft);
+  --border: var(--demo-border);
+  --text: var(--demo-text);
+  --muted: var(--demo-text-muted);
+  --surface: var(--demo-surface);
+  --surface-soft: var(--demo-surface-soft);
+  --accent: var(--demo-accent);
+  --bg: var(--demo-surface);
+}
+
+/* ---------- 演示容器 ---------- */
+
+.demo-container {
+  color: var(--demo-text);
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  line-height: 1.6;
+}
+
+/* ---------- 标题与说明 ---------- */
+
+.demo-title {
+  margin: 0 0 4px;
+  color: var(--demo-title);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.demo-desc {
+  margin: 0 0 16px;
+  color: var(--demo-text-muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* ---------- 卡片 ---------- */
+
+.demo-card {
+  padding: 16px;
+  border: 1px solid var(--demo-border);
+  border-radius: var(--radius);
+  background: var(--demo-surface);
+}
+
+/* ---------- 按钮 ---------- */
+
+.btn {
+  padding: 6px 12px;
+  border: 1px solid var(--demo-border);
+  border-radius: 6px;
+  background: var(--demo-surface);
+  color: var(--demo-text);
+  cursor: pointer;
+  font-size: 12px;
+  font-family: inherit;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.btn:hover {
+  background: var(--demo-accent-soft);
+  border-color: var(--demo-accent);
+}
+
+.btn.active,
+.btn:active {
+  background: var(--demo-accent);
+  border-color: var(--demo-accent);
+  color: var(--demo-accent-text);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* 小号按钮 */
+.mini-btn {
+  padding: 4px 12px;
+  border: 1px solid var(--demo-border);
+  border-radius: 4px;
+  background: var(--demo-surface);
+  color: var(--demo-text);
+  cursor: pointer;
+  font-size: 12px;
+  font-family: inherit;
+}
+
+.mini-btn.active {
+  background: var(--demo-accent);
+  border-color: var(--demo-accent);
+  color: var(--demo-accent-text);
+}
+
+/* ---------- 选项卡 ---------- */
+
+.tab-btn {
+  padding: 5px 14px;
+  border: 1px solid var(--demo-border);
+  border-radius: 4px;
+  background: var(--demo-surface);
+  color: var(--demo-text);
+  cursor: pointer;
+  font-size: 13px;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+
+.tab-btn.active {
+  background: var(--demo-accent);
+  border-color: var(--demo-accent);
+  color: var(--demo-accent-text);
+}
+
+.tab-bar,
+.tabs,
+.toolbar,
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+  align-items: center;
+}
+
+/* ---------- 代码块（深色，演示内嵌片段） ---------- */
+
+/* 说明：课程正文的 .code-block 由 style.css 另行定义为浅色暖底，
+   那条规则限定在 .lesson-article 内；演示区域的 .code-block 使用深色。
+   两条规则作用域不重叠，互不干扰。 */
+.lesson-demo .code-block,
+.mini-code {
+  margin: 0;
+  padding: 12px;
+  border: 1px solid var(--code-border);
+  border-radius: 6px;
+  background: var(--code-bg);
+  color: var(--code-text);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
+.lesson-demo .code-block code,
+.mini-code code {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
+/* 行内代码 */
+.demo-container code,
+.lesson-demo code {
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: var(--demo-accent-soft);
+  color: var(--demo-accent);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.9em;
+}
+
+/* ---------- 提示条 ---------- */
+
+/* .tips-box 是「提示」语义，用信息蓝以区别于强调橙的 .detail-box；
+   .result-box / .info-card 属于强调类，走暖橙。 */
+.tips-box {
+  margin-top: 10px;
+  padding: 10px;
+  border-left: 3px solid var(--demo-info-border);
+  border-radius: 6px;
+  background: var(--demo-info-bg);
+  color: var(--demo-text);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.detail-box,
+.result-box,
+.info-card {
+  margin-top: 10px;
+  padding: 10px;
+  border-left: 3px solid var(--demo-accent);
+  border-radius: 6px;
+  background: var(--demo-surface-soft);
+  color: var(--demo-text);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.tips-box ul,
+.detail-box ul {
+  margin: 6px 0 0;
+  padding-left: 20px;
+}
+
+.tips-box li,
+.detail-box li {
+  margin-bottom: 4px;
+}
+
+/* ---------- 属性表 / 数据表 ---------- */
+
+.prop-table {
+  overflow: hidden;
+  border: 1px solid var(--demo-border);
+  border-radius: 8px;
+}
+
+.prop-table table,
+.demo-container table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.prop-table th,
+.prop-table td,
+.demo-container th,
+.demo-container td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--demo-border);
+}
+
+.prop-table th,
+.demo-container th {
+  background: var(--demo-table-head);
+  color: var(--demo-title);
+  font-weight: 600;
+}
+
+.prop-table tr:last-child td,
+.demo-container tr:last-child td {
+  border-bottom: none;
+}
+
+/* 属性表行（键值两列） */
+.prop-row {
+  display: grid;
+  grid-template-columns: minmax(80px, 1fr) 2fr;
+  border-bottom: 1px solid var(--demo-border);
+}
+
+.prop-row:last-child {
+  border-bottom: none;
+}
+
+.prop-row > span {
+  padding: 6px 10px;
+}
+
+.prop-row.header {
+  background: var(--demo-accent);
+  color: var(--demo-accent-text);
+  font-weight: 600;
+}
+
+/* ---------- 状态标签 ---------- */
+
+.status,
+.hint,
+.note {
+  margin: 0;
+  color: var(--demo-text-muted);
+  font-size: 13px;
+}
+
+.status.success {
+  color: var(--demo-success);
+}
+
+.status.error {
+  color: var(--demo-danger);
+}
+
+/* ---------- 表单控件 ---------- */
+
+.demo-container input[type='text'],
+.demo-container input[type='number'],
+.demo-container select,
+.demo-container textarea {
+  padding: 4px 8px;
+  border: 1px solid var(--demo-border);
+  border-radius: 4px;
+  background: var(--demo-surface);
+  color: var(--demo-text);
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.demo-container input[type='range'] {
+  accent-color: var(--demo-accent);
+}
+
+.demo-container label {
+  color: var(--demo-text);
+  font-size: 13px;
+}
+
+/* ---------- 日志 / 输出面板 ---------- */
+
+.log-panel,
+.output-panel {
+  padding: 12px;
+  border: 1px solid var(--demo-border);
+  border-radius: 8px;
+  background: var(--demo-surface-soft);
+  color: var(--demo-text);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+/* ---------- 通用布局工具 ---------- */
+
+.row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* ---------- 小屏适配 ---------- */
+
+@media (max-width: 720px) {
+  .grid-2,
+  .layout,
+  .demo-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- 强调 / 弱化文本 ---------- */
+
+.demo-container h4,
+.demo-container h5 {
+  margin: 0 0 8px;
+  color: var(--demo-title);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.demo-container small {
+  color: var(--demo-text-muted);
+  font-size: 12px;
+}
+
+.demo-container strong {
+  color: var(--demo-title);
+  font-weight: 600;
+}
+
+/* ---------- 滚动条（深色代码块内） ---------- */
+
+.lesson-demo .code-block::-webkit-scrollbar,
+.mini-code::-webkit-scrollbar {
+  height: 8px;
+}
+
+.lesson-demo .code-block::-webkit-scrollbar-thumb,
+.mini-code::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background: var(--code-border);
+}

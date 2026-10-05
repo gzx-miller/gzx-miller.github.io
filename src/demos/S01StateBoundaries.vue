@@ -95,9 +95,7 @@ const theme = useStorage('theme', 'light')`
 </template>
 
 <style scoped>
-.mini-code { background: #1e1e2e; color: #e0e0e0; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; line-height: 1.5; white-space: pre-wrap; }
 .result-box { background: #fff8f0; padding: 10px; border-radius: 6px; border-left: 3px solid #e85d04; margin-top: 8px; }
-.tips-box { background: #f0f7ff; padding: 10px; border-radius: 6px; border-left: 3px solid #0891b2; margin-top: 10px; }
 .scenario-list { display: flex; flex-wrap: wrap; gap: 6px; }
 .scenario-list .scenario-btn { padding: 4px 10px; border: 1px solid #e0a06a !important; border-radius: 4px; background: #fff !important; color: var(--text) !important; cursor: pointer; font-size: 12px; }
 .scenario-list .scenario-btn.active { background: #e85d04 !important; color: #fff !important; border-color: #e85d04 !important; }

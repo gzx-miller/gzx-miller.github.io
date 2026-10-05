@@ -87,8 +87,6 @@ const useCases = [
 </template>
 
 <style scoped>
-.mini-code { background: #1e1e2e; color: #e0e0e0; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; line-height: 1.5; white-space: pre-wrap; }
-.detail-box { background: #fff8f0; padding: 10px; border-radius: 6px; border-left: 3px solid #e85d04; }
 .layout-preview { display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: 1fr 1fr; gap: 4px; height: 120px; }
 .slot { display: flex; align-items: center; justify-content: center; border-radius: 4px; font-size: 12px; font-family: monospace; }
 .slot.main { grid-row: 1 / 3; background: #ffe0b2; border: 2px solid #e85d04; }

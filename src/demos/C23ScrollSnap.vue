@@ -32,10 +32,6 @@ const colors = ['#ff8787', '#ffc078', '#ffd43b', '#69db7c', '#66d9e8', '#a29bfe'
 </template>
 
 <style scoped>
-.demo-container { font-family: system-ui, sans-serif; --primary: #4263eb; --primary-light: #edf2ff; --border: #bac8ff; }
-.demo-title { font-size: 18px; font-weight: 600; margin-bottom: 4px; color: var(--primary); }
-.demo-desc { font-size: 13px; color: #868e96; margin-bottom: 16px; }
-.controls { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
 .btn { padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; background: #fff; cursor: pointer; font-size: 12px; }
 .scroll-demo {
   display: flex;
@@ -65,9 +61,6 @@ const colors = ['#ff8787', '#ffc078', '#ffd43b', '#69db7c', '#66d9e8', '#a29bfe'
   scroll-snap-align: center;
 }
 .mode-y-mandatory .snap-item { width: 100%; }
-
-.prop-table { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; font-size: 12px; margin-top: 16px; }
-.prop-row { display: grid; grid-template-columns: 1fr 2fr; border-bottom: 1px solid var(--border); }
 
 .prop-row > span { padding: 5px 10px; }
 
