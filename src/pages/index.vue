@@ -5,18 +5,6 @@ import { useLearningProgress } from '../composables/useLearningProgress'
 
 const { isVisited } = useLearningProgress()
 
-// 仅保留可序列化的课程元数据，避免把 demo 组件 / code 加载函数塞进预渲染 payload
-interface LessonMeta {
-  id: string
-  title: string
-  navTitle: string
-  category: string
-  path: string
-  summary: string
-  // 预计算的小写检索键，运行时搜索无需重复 toLocaleLowerCase
-  searchKey: string
-}
-
 definePageMeta({ layout: 'home' })
 
 useHead({
@@ -59,8 +47,9 @@ const categoryEmojis: Record<string, string> = {
   'uni-app': '📱',
 }
 
-// 首页精选：横跨前端框架 / 类型 / 后端 / 图形 / AI / 系统的代表性内容
-const featuredPaths = [
+// 首页精选：横跨前端框架 / 类型 / 后端 / 图形 / AI / 系统的代表性内容。
+// 数组顺序即展示顺序，Set 仅用于构建期快速判定是否属于精选。
+const FEATURED_PATH_LIST = [
   '/vue/k-3/reactivity',
   '/typescript/t-4/generics',
   '/react/r-2/state-updates',
@@ -71,31 +60,53 @@ const featuredPaths = [
   '/webgl/w-1/context-pipeline',
   '/webassembly/wb-1/what-is-wasm',
 ]
+const FEATURED_PATHS = new Set(FEATURED_PATH_LIST)
 
-// 构建期统计分类栗子数与总数、并加载全站课程元数据用于搜索与精选
+// 全站搜索数据以紧凑元组承载，而非对象数组。
+// 507 条课程若用对象序列化，光是键名与引号就要占掉近一半体积；
+// 元组形式 + 截断摘要，能把首页 payload 从约 236KB 压到 60KB 以内。
+// 字段顺序：[id, navTitle, title, path, categoryId, summaryPreview]
+type LessonTuple = [string, string, string, string, string, string]
+
+const SUMMARY_PREVIEW_LEN = 40
+
+/** 搜索结果的展示模型，由元组还原 */
+interface SearchHit {
+  id: string
+  navTitle: string
+  title: string
+  path: string
+  categoryId: string
+  summary: string
+}
+
+// 构建期统计分类栗子数与总数，并生成紧凑的搜索索引
 const { data } = await useAsyncData('home-overview', async () => {
   const counts: Record<string, number> = {}
-  const allLessons: LessonMeta[] = []
+  const lessons: LessonTuple[] = []
+  const featured: Record<string, LessonTuple> = {}
   let total = 0
   for (const category of knowledgeCategories) {
-    const lessons = await getLessonsByCategory(category.id)
-    counts[category.id] = lessons.length
-    total += lessons.length
-    for (const lesson of lessons) {
-      allLessons.push({
-        id: lesson.id,
-        title: lesson.title,
-        navTitle: lesson.navTitle,
-        category: lesson.category,
-        path: lesson.path,
-        summary: lesson.summary,
-        searchKey: [lesson.navTitle, lesson.title, lesson.category, lesson.summary]
-          .join(' ')
-          .toLocaleLowerCase('zh-CN'),
-      })
+    const list = await getLessonsByCategory(category.id)
+    counts[category.id] = list.length
+    total += list.length
+    for (const lesson of list) {
+      const summary = lesson.summary ?? ''
+      const tuple: LessonTuple = [
+        lesson.id,
+        lesson.navTitle,
+        lesson.title,
+        lesson.path,
+        category.id,
+        summary.length > SUMMARY_PREVIEW_LEN
+          ? `${summary.slice(0, SUMMARY_PREVIEW_LEN)}…`
+          : summary,
+      ]
+      lessons.push(tuple)
+      if (FEATURED_PATHS.has(lesson.path)) featured[lesson.path] = tuple
     }
   }
-  return { counts, total, allLessons }
+  return { counts, total, lessons, featured }
 })
 
 const totalLessons = computed(() => data.value?.total ?? 0)
@@ -105,15 +116,27 @@ function categoryCount(id: string): number | null {
   return data.value?.counts?.[id] ?? null
 }
 
+/** 把元组还原成便于模板消费的对象 */
+function toSearchHit(tuple: LessonTuple): SearchHit {
+  return {
+    id: tuple[0],
+    navTitle: tuple[1],
+    title: tuple[2],
+    path: tuple[3],
+    categoryId: tuple[4],
+    summary: tuple[5],
+  }
+}
+
+const allSearchHits = computed(() => (data.value?.lessons ?? []).map(toSearchHit))
+
 // 一次性统计每个分类的已探索课程数，避免逐卡片对全量课程做线性过滤。
 // 依赖 visitedPaths（响应式），首页浏览进度变化时自动重算。
 const visitedByCategory = computed(() => {
-  const lessons = data.value?.allLessons ?? []
   const map = new Map<string, number>()
-  for (const lesson of lessons) {
-    if (isVisited(lesson.path)) {
-      const id = categoryIdOf(lesson)
-      map.set(id, (map.get(id) ?? 0) + 1)
+  for (const hit of allSearchHits.value) {
+    if (isVisited(hit.path)) {
+      map.set(hit.categoryId, (map.get(hit.categoryId) ?? 0) + 1)
     }
   }
   return map
@@ -132,24 +155,15 @@ function categoryProgress(id: string): number {
   return Math.round((visited / count) * 100)
 }
 
-// 从课程路径首段推断所属知识分类（lesson.category 是分类内的子分组标签）
-function categoryIdOf(lesson: LessonMeta): string {
-  return lesson.path.split('/')[1] ?? ''
-}
-function categoryNameOf(lesson: LessonMeta): string {
-  return knowledgeCategoryMap.get(categoryIdOf(lesson))?.name ?? categoryIdOf(lesson)
+function categoryNameOf(hit: SearchHit): string {
+  return knowledgeCategoryMap.get(hit.categoryId)?.name ?? hit.categoryId
 }
 
-// 精选内容：按路径稳定映射，路径失效时优雅忽略
-const lessonPathMap = computed(() => {
-  const map = new Map<string, LessonMeta>()
-  for (const lesson of data.value?.allLessons ?? []) {
-    map.set(lesson.path, lesson)
-  }
-  return map
-})
+// 精选内容：构建期已按路径筛选好，路径失效时自然缺失，模板用 v-if 兜底
 const featuredLessons = computed(() =>
-  featuredPaths.map((path) => lessonPathMap.value.get(path)).filter((l): l is LessonMeta => !!l),
+  FEATURED_PATH_LIST.map((path) => data.value?.featured?.[path])
+    .filter((tuple): tuple is LessonTuple => !!tuple)
+    .map(toSearchHit),
 )
 
 // 全站搜索
@@ -159,12 +173,33 @@ const searchWrapRef = useTemplateRef<HTMLElement>('searchWrap')
 const searchInputRef = useTemplateRef<HTMLInputElement>('searchInput')
 const activeIndex = ref(0)
 
+/**
+ * 检索索引惰性构建：把预计算好的 searchKey 序列化进 payload 会让首页
+ * 多背一份与 summary 完全重复的字符串，而它只在用户真的开始输入时才有用。
+ * 因此改为首次搜索时在内存里建一次索引，之后复用。
+ */
+let searchIndex: { hit: SearchHit; key: string }[] | null = null
+
+function ensureSearchIndex() {
+  if (searchIndex) return searchIndex
+  searchIndex = allSearchHits.value.map((hit) => ({
+    hit,
+    key: `${hit.navTitle} ${hit.summary} ${hit.categoryId}`.toLocaleLowerCase('zh-CN'),
+  }))
+  return searchIndex
+}
+
 const searchResults = computed(() => {
   const query = searchQuery.value.trim().toLocaleLowerCase('zh-CN')
   if (!query) return []
-  return (data.value?.allLessons ?? [])
-    .filter((lesson) => lesson.searchKey.includes(query))
-    .slice(0, 8)
+  const results: SearchHit[] = []
+  for (const entry of ensureSearchIndex()) {
+    if (entry.key.includes(query)) {
+      results.push(entry.hit)
+      if (results.length >= 8) break
+    }
+  }
+  return results
 })
 
 // 结果变化时回到首项，保证始终有一个默认选中项

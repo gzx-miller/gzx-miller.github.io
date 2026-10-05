@@ -25,6 +25,8 @@ import X21Middleware from '../../demos/X21MiddlewareArticle.vue'
 import X22EnvConfig from '../../demos/X22EnvConfigArticle.vue'
 import X23I18n from '../../demos/X23I18nArticle.vue'
 import X24Deployment from '../../demos/X24DeploymentArticle.vue'
+// 该分类专属的演示样式，随分类数据一起按需加载
+import '../../styles/category-nextjs.css'
 
 const nextjsCodeModules = import.meta.glob<string>('../../demos/nextjs-code/*', { query: '?raw', import: 'default' })
 

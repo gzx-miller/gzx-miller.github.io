@@ -1,0 +1,64 @@
+/* typescript 分类专属演示样式（7 条）。
+ *
+ * 这些规则原本集中在 src/demos-shared.css，由 nuxt.config 的全局 css 数组
+ * 引入，导致 532 个页面无论属于哪个分类都要下载全部 16 个分类的样式
+ * （压缩后约 39KB，其中 webgl 一家占 28KB）。
+ *
+ * 现在按分类拆分，并在对应的 src/data/lessons/typescript.ts 顶部 import：
+ * 该文件正是按分类动态加载的数据入口，样式于是自动并入该分类的 chunk，
+ * 只在用户真正进入这个分类时才下载。
+ * 选择器仍以 :where([data-category='typescript']) .lesson-demo 收窄，
+ * :where() 特异性为 0，作用范围与层叠表现和拆分前完全一致。
+ */
+
+
+  :where([data-category='typescript']) .lesson-demo .mini-btn {
+    padding:4px 12px;
+    border:1px solid #e0a06a;
+    border-radius:4px;
+    background:#fff;
+    cursor:pointer;
+    font-size:12px;
+  }
+  :where([data-category='typescript']) .lesson-demo .mini-btn.active {
+    background:#e85d04;
+    color:#fff;
+    border-color:#e85d04;
+  }
+  :where([data-category='typescript']) .lesson-demo .mini-code {
+    background:#1e1e2e;
+    color:#e0e0e0;
+    padding:10px;
+    border-radius:6px;
+    font-size:12px;
+    overflow-x:auto;
+    line-height:1.5;
+    white-space:pre-wrap;
+  }
+  :where([data-category='typescript']) .lesson-demo .result-box {
+    background:#fff8f0;
+    padding:10px;
+    border-radius:6px;
+    border-left:3px solid #e85d04;
+  }
+  :where([data-category='typescript']) .lesson-demo .tab-btn {
+    padding:5px 14px;
+    border:1px solid #e0a06a !important;
+    border-radius:4px;
+    background:#fff !important;
+    color:var(--text) !important;
+    cursor:pointer;
+    font-size:13px;
+  }
+  :where([data-category='typescript']) .lesson-demo .tab-btn.active {
+    background:#e85d04 !important;
+    color:#fff !important;
+    border-color:#e85d04 !important;
+  }
+  :where([data-category='typescript']) .lesson-demo .tips-box {
+    background:#f0f7ff;
+    padding:10px;
+    border-radius:6px;
+    border-left:3px solid #0891b2;
+    margin-top:10px;
+  }

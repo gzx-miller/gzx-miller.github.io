@@ -22,6 +22,8 @@ import V18Esbuild from '../../demos/V18EsbuildArticle.vue'
 import V19RollupPlugin from '../../demos/V19RollupPluginArticle.vue'
 import V20LibraryMode from '../../demos/V20LibraryModeArticle.vue'
 import V21MultiPage from '../../demos/V21MultiPageArticle.vue'
+// 该分类专属的演示样式，随分类数据一起按需加载
+import '../../styles/category-vite.css'
 
 // 文案需要原样显示 import.meta 环境变量令牌时用该常量拼接：直接写字面量会被 Nitro 的替换规则命中，污染预渲染 HTML 与 payload
 const metaEnv = ['import', 'meta', 'env'].join('.')

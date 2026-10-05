@@ -16,6 +16,8 @@ import U12UiFeedback from '../../demos/U12UiFeedbackArticle.vue'
 import U13AppLifecycle from '../../demos/U13AppLifecycleArticle.vue'
 import U14CompositionApi from '../../demos/U14CompositionApiArticle.vue'
 import U15Subpackages from '../../demos/U15SubpackagesArticle.vue'
+// 该分类专属的演示样式，随分类数据一起按需加载
+import '../../styles/category-uni-app.css'
 
 const vueCodeModules = import.meta.glob<string>('../../demos/*.vue', { query: '?raw', import: 'default' })
 const uniCodeModules = import.meta.glob<string>('../../demos/uni-code/*', { query: '?raw', import: 'default' })

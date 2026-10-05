@@ -197,7 +197,7 @@ const selectedPattern = ref(0)
         <div v-if="dataType === 'user' && 'name' in resultData && 'role' in resultData && 'email' in resultData && 'avatar' in resultData">
           <h4 style="margin:0 0 8px 0;">👤 用户信息</h4>
           <div style="display:flex;gap:12px;align-items:center;">
-            <img :src="resultData.avatar" style="width:48px;height:48px;border-radius:50%;background:#fff3e0;" />
+            <img :src="resultData.avatar" loading="lazy" decoding="async" alt="用户头像" style="width:48px;height:48px;border-radius:50%;background:#fff3e0;" />
             <div>
               <p style="margin:0;"><strong>{{ resultData.name }}</strong>（ID: {{ resultData.id }}）</p>
               <p style="margin:0;font-size:12px;color:#8a6d42;">{{ resultData.email }} · {{ resultData.role }}</p>

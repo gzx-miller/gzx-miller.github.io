@@ -39,6 +39,8 @@ import K35PiniaActions from '../../demos/S19PiniaActionsArticle.vue'
 import K36PiniaDevtools from '../../demos/S20PiniaDevtoolsArticle.vue'
 import K37PiniaTesting from '../../demos/S21PiniaTestingArticle.vue'
 import K38DefineModel from '../../demos/K38DefineModelArticle.vue'
+// 该分类专属的演示样式，随分类数据一起按需加载
+import '../../styles/category-vue.css'
 
 const vueCodeModules = import.meta.glob<string>('../../demos/*.vue', { query: '?raw', import: 'default' })
 const jsxCodeModules = import.meta.glob<string>('../../demos/react-jsx/*.jsx', { query: '?raw', import: 'default' })

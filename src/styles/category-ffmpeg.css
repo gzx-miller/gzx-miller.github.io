@@ -1,0 +1,44 @@
+/* ffmpeg 分类专属演示样式（5 条）。
+ *
+ * 这些规则原本集中在 src/demos-shared.css，由 nuxt.config 的全局 css 数组
+ * 引入，导致 532 个页面无论属于哪个分类都要下载全部 16 个分类的样式
+ * （压缩后约 39KB，其中 webgl 一家占 28KB）。
+ *
+ * 现在按分类拆分，并在对应的 src/data/lessons/ffmpeg.ts 顶部 import：
+ * 该文件正是按分类动态加载的数据入口，样式于是自动并入该分类的 chunk，
+ * 只在用户真正进入这个分类时才下载。
+ * 选择器仍以 :where([data-category='ffmpeg']) .lesson-demo 收窄，
+ * :where() 特异性为 0，作用范围与层叠表现和拆分前完全一致。
+ */
+
+
+  :where([data-category='ffmpeg']) .lesson-demo .demo-card {
+    padding:20px;
+    background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);
+    border-radius:12px;
+    color:#e0e0e0;
+  }
+  :where([data-category='ffmpeg']) .lesson-demo .info-card {
+    background:rgba(255,255,255,0.05);
+    border-radius:8px;
+    padding:16px;
+    border-left:3px solid #6a5acd;
+  }
+  :where([data-category='ffmpeg']) .lesson-demo .summary {
+    color:#a0a0c0;
+    margin-bottom:16px;
+  }
+  :where([data-category='ffmpeg']) .lesson-demo .tab-btn {
+    padding:8px 16px;
+    border:1px solid #4a4a6a;
+    background:transparent;
+    color:#c0c0e0;
+    border-radius:6px;
+    cursor:pointer;
+    transition:all 0.2s;
+  }
+  :where([data-category='ffmpeg']) .lesson-demo .tab-btn.active, .tab-btn:hover {
+    background:#6a5acd;
+    color:white;
+    border-color:#6a5acd;
+  }

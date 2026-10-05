@@ -15,6 +15,8 @@ import E12Security from '../../demos/electron/E12SecurityArticle.vue'
 import E13Performance from '../../demos/electron/E13PerformanceArticle.vue'
 import E14Storage from '../../demos/electron/E14StorageArticle.vue'
 import E15MultiWindow from '../../demos/electron/E15MultiWindowArticle.vue'
+// 该分类专属的演示样式，随分类数据一起按需加载
+import '../../styles/category-electron.css'
 
 const E01Code = () => Promise.resolve(`// ========== 1. 主进程入口 main.js ==========
 // 主进程管理应用生命周期和所有原生能力

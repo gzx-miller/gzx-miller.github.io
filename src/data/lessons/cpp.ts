@@ -31,6 +31,8 @@ import CPP27Demo from '../../demos/CPP27CompileTimeComputationArticle.vue'
 import CPP28Demo from '../../demos/CPP28ModulesArticle.vue'
 import CPP29Demo from '../../demos/CPP29DesignPatternsArticle.vue'
 import CPP30Demo from '../../demos/CPP30CodingStandardsArticle.vue'
+// 该分类专属的演示样式，随分类数据一起按需加载
+import '../../styles/category-cpp.css'
 
 const vueCodeModules = import.meta.glob<string>('../../demos/*.vue', { query: '?raw', import: 'default' })
 const jsxCodeModules = import.meta.glob<string>('../../demos/react-jsx/*.jsx', { query: '?raw', import: 'default' })

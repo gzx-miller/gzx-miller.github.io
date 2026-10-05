@@ -25,6 +25,8 @@ import TW21Filters from '../../demos/TW21FiltersArticle.vue'
 import TW22SvgIcons from '../../demos/TW22SVGIconsArticle.vue'
 import TW23Plugins from '../../demos/TW23PluginsArticle.vue'
 import TW24Preset from '../../demos/TW24PresetArticle.vue'
+// 该分类专属的演示样式，随分类数据一起按需加载
+import '../../styles/category-tailwind-css.css'
 
 const vueCodeModules = import.meta.glob<string>('../../demos/*.vue', { query: '?raw', import: 'default' })
 const jsxCodeModules = import.meta.glob<string>('../../demos/react-jsx/*.jsx', { query: '?raw', import: 'default' })

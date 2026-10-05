@@ -1,0 +1,161 @@
+/* webgl 分类专属演示样式（26 条）。
+ *
+ * 这些规则原本集中在 src/demos-shared.css，由 nuxt.config 的全局 css 数组
+ * 引入，导致 532 个页面无论属于哪个分类都要下载全部 16 个分类的样式
+ * （压缩后约 39KB，其中 webgl 一家占 28KB）。
+ *
+ * 现在按分类拆分，并在对应的 src/data/lessons/webgl.ts 顶部 import：
+ * 该文件正是按分类动态加载的数据入口，样式于是自动并入该分类的 chunk，
+ * 只在用户真正进入这个分类时才下载。
+ * 选择器仍以 :where([data-category='webgl']) .lesson-demo 收窄，
+ * :where() 特异性为 0，作用范围与层叠表现和拆分前完全一致。
+ */
+
+
+  :where([data-category='webgl']) .lesson-demo .checkbox-group input[type='checkbox'] {
+    accent-color:var(--accent);
+  }
+  :where([data-category='webgl']) .lesson-demo .checkbox-group label {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    cursor:pointer;
+    color:var(--text);
+    font-weight:500;
+  }
+  :where([data-category='webgl']) .lesson-demo .checkbox-item {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:8px;
+    cursor:pointer;
+    color:var(--text);
+    font-size:14px;
+  }
+  :where([data-category='webgl']) .lesson-demo .checkbox-item input {
+    accent-color:var(--accent);
+  }
+  :where([data-category='webgl']) .lesson-demo .code-display {
+    background:rgba(123,53,29,0.06);
+    border:1px solid rgba(123,53,29,0.15);
+    border-radius:8px;
+    padding:12px;
+  }
+  :where([data-category='webgl']) .lesson-demo .code-display code {
+    color:var(--forest);
+    font-family:ui-monospace,monospace;
+  }
+  :where([data-category='webgl']) .lesson-demo .code-display h5 {
+    margin:0 0 8px;
+    color:var(--leaf-orange);
+  }
+  :where([data-category='webgl']) .lesson-demo .code-section {
+    margin-bottom:16px;
+  }
+  :where([data-category='webgl']) .lesson-demo .code-section h4 {
+    margin-bottom:8px;
+    color:var(--chestnut);
+  }
+  :where([data-category='webgl']) .lesson-demo .control-item input[type="range"] {
+    width:100%;
+    accent-color:var(--leaf-red);
+  }
+  :where([data-category='webgl']) .lesson-demo .controls {
+    display:grid;
+    gap:12px;
+    align-content:start;
+  }
+  :where([data-category='webgl']) .lesson-demo .desc {
+    color:var(--muted);
+    margin-bottom:16px;
+    line-height:1.7;
+  }
+  :where([data-category='webgl']) .lesson-demo .fps-badge {
+    position:absolute;
+    top:8px;
+    right:8px;
+    background:var(--chestnut);
+    color:#fff;
+    padding:4px 10px;
+    border-radius:12px;
+    font-size:12px;
+    font-weight:600;
+  }
+  :where([data-category='webgl']) .lesson-demo .glsl-snippet {
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:10px 12px;
+    background:var(--surface);
+    font-size:12px;
+  }
+  :where([data-category='webgl']) .lesson-demo .glsl-snippet pre {
+    margin:0;
+    font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+    font-size:12px;
+    line-height:1.5;
+    color:var(--text);
+    white-space:pre-wrap;
+  }
+  :where([data-category='webgl']) .lesson-demo .glsl-snippet strong {
+    color:var(--chestnut);
+    display:block;
+    margin-bottom:6px;
+  }
+  :where([data-category='webgl']) .lesson-demo .grid {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+    margin-bottom:16px;
+  }
+  :where([data-category='webgl']) .lesson-demo .info-block {
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:12px;
+    background:var(--surface-soft);
+  }
+  :where([data-category='webgl']) .lesson-demo .info-block h4 {
+    margin:0 0 8px;
+    color:var(--chestnut);
+    font-size:13px;
+  }
+  :where([data-category='webgl']) .lesson-demo .info-note {
+    margin:0;
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.7;
+  }
+  :where([data-category='webgl']) .lesson-demo .info-text {
+    margin:0 0 10px;
+    padding:12px;
+    border-radius:8px;
+    background:var(--surface);
+    font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+    font-size:12px;
+    line-height:1.6;
+    white-space:pre-wrap;
+    color:var(--text);
+  }
+  :where([data-category='webgl']) .lesson-demo .layout {
+    display:grid;
+    grid-template-columns:1fr 280px;
+    gap:16px;
+  }
+  :where([data-category='webgl']) .lesson-demo .shader-section {
+    margin-bottom:16px;
+  }
+  :where([data-category='webgl']) .lesson-demo .shader-section h4 {
+    margin-bottom:8px;
+    color:var(--chestnut);
+  }
+  :where([data-category='webgl']) .lesson-demo .toggle {
+    display:flex !important;
+    align-items:center;
+    gap:8px;
+    font-size:13px;
+    color:var(--text) !important;
+  }
+@media (max-width: 720px) {
+    :where([data-category='webgl']) .lesson-demo .demo-layout {
+      grid-template-columns:1fr;
+    }
+}

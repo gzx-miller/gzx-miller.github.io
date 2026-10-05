@@ -25,6 +25,8 @@ import T21InferKeyword from '../../demos/T21InferKeywordArticle.vue'
 import T22RecursiveTypes from '../../demos/T22RecursiveTypesArticle.vue'
 import T23TypeLevelProgramming from '../../demos/T23TypeLevelProgrammingArticle.vue'
 import T24AsyncReturnType from '../../demos/T24AsyncReturnTypeArticle.vue'
+// 该分类专属的演示样式，随分类数据一起按需加载
+import '../../styles/category-typescript.css'
 
 const vueCodeModules = import.meta.glob<string>('../../demos/*.vue', { query: '?raw', import: 'default' })
 const jsxCodeModules = import.meta.glob<string>('../../demos/react-jsx/*.jsx', { query: '?raw', import: 'default' })

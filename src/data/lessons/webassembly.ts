@@ -21,6 +21,8 @@ import WB17Simd from '../../demos/WB17SimdArticle.vue'
 import WB18ExceptionHandling from '../../demos/WB18ExceptionHandlingArticle.vue'
 import WB19Performance from '../../demos/WB19PerformanceArticle.vue'
 import WB20ToolchainDeploy from '../../demos/WB20ToolchainDeployArticle.vue'
+// 该分类专属的演示样式，随分类数据一起按需加载
+import '../../styles/category-webassembly.css'
 
 const vueCodeModules = import.meta.glob<string>('../../demos/*.vue', { query: '?raw', import: 'default' })
 const wasmCodeModules = import.meta.glob<string>('../../demos/wasm-code/*', { query: '?raw', import: 'default' })

@@ -13,6 +13,8 @@ import VF09Demo from '../../demos/VF09StateManageArticle.vue'
 import VF10Demo from '../../demos/VF10DragDropArticle.vue'
 import VF11Demo from '../../demos/VF11AutoLayoutArticle.vue'
 import VF12Demo from '../../demos/VF12ReadonlyThemeArticle.vue'
+// 该分类专属的演示样式，随分类数据一起按需加载
+import '../../styles/category-vue-flow.css'
 
 const vueCodeModules = import.meta.glob<string>('../../demos/*.vue', { query: '?raw', import: 'default' })
 

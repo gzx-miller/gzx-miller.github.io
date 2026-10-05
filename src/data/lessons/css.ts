@@ -25,6 +25,8 @@ import C21CascadeLayers from '../../demos/C21CascadeLayersArticle.vue'
 import C22HasSelector from '../../demos/C22HasSelectorArticle.vue'
 import C23ScrollSnap from '../../demos/C23ScrollSnapArticle.vue'
 import C24AspectRatio from '../../demos/C24AspectRatioArticle.vue'
+// 该分类专属的演示样式，随分类数据一起按需加载
+import '../../styles/category-css.css'
 
 const cssCodeModules = import.meta.glob<string>('../../demos/css-code/*', { query: '?raw', import: 'default' })
 

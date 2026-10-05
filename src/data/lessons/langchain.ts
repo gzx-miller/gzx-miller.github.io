@@ -24,6 +24,8 @@ import L20MultiModal from '../../demos/L20MultiModalArticle.vue'
 import L21FunctionCalling from '../../demos/L21FunctionCallingArticle.vue'
 import L22PromptEngineering from '../../demos/L22PromptEngineeringArticle.vue'
 import L23Guardrails from '../../demos/L23GuardrailsArticle.vue'
+// 该分类专属的演示样式，随分类数据一起按需加载
+import '../../styles/category-langchain.css'
 
 const langchainCodeModules = import.meta.glob<string>('../../demos/langchain-code/*', { query: '?raw', import: 'default' })
 

@@ -21,6 +21,8 @@ import N17SSG from '../../demos/N17SSGArticle.vue'
 import N18RuntimeConfig from '../../demos/N18RuntimeConfigArticle.vue'
 import N19ErrorHandling from '../../demos/N19ErrorHandlingArticle.vue'
 import N20Modules from '../../demos/N20ModulesArticle.vue'
+// 该分类专属的演示样式，随分类数据一起按需加载
+import '../../styles/category-nuxt.css'
 
 const vueCodeModules = import.meta.glob<string>('../../demos/*.vue', { query: '?raw', import: 'default' })
 const jsxCodeModules = import.meta.glob<string>('../../demos/react-jsx/*.jsx', { query: '?raw', import: 'default' })

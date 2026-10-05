@@ -4,7 +4,9 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 const SITE_URL = 'https://gzx-miller.github.io'
 
-// 收集全站 URL：分类路径（单段）+ 课程路径（双段）
+// 收集全站 URL：分类路径（单段）+ 课程路径（段数不限）
+// 课程 path 的段数并不固定（/vue/k-1/app-entry、/vue/k-12/routing/lee …），
+// 因此统一用「/ 开头、不含空白和引号」的通用模式，避免漏掉多段路径。
 function collectSitePaths(): string[] {
   const paths = new Set<string>(['/'])
 
@@ -13,12 +15,12 @@ function collectSitePaths(): string[] {
     paths.add(match[1])
   }
 
-  // 课程路径，如 /vue/k-1/app-entry：读取每个分类课程文件
+  // 课程路径：逐个读取分类课程文件
   const lessonsDir = new URL('./src/data/lessons/', import.meta.url)
   for (const file of readdirSync(lessonsDir)) {
     if (!file.endsWith('.ts')) continue
     const source = readFileSync(new URL(file, lessonsDir), 'utf8')
-    for (const match of source.matchAll(/\bpath:\s*'(\/[a-z-]+\/[^']+)'/g)) {
+    for (const match of source.matchAll(/\bpath:\s*'(\/[^'\s]+)'/g)) {
       paths.add(match[1])
     }
   }
@@ -56,26 +58,52 @@ export default defineNuxtConfig({
   modules: ['@pinia/nuxt'],
   runtimeConfig: {
     public: {
-      zhipuApiKey: '4a144c581416035e180b03574714070553061642165f46465c5f1958545145181c047f743904140e2b350009195b2a3503',
+      // 智谱 API Key（已混淆）。优先读取 NUXT_PUBLIC_ZHIPU_API_KEY，
+      // 未设置时用内置默认值，保证 CI / 本地构建结果一致。
+      // 该值会随 SSG 打进前端产物，属于客户端可见信息，
+      // 混淆只提高取值门槛，不等同于保密——真正的防护应放在服务端代理。
+      zhipuApiKey:
+        process.env.NUXT_PUBLIC_ZHIPU_API_KEY ||
+        '4a144c581416035e180b03574714070553061642165f46465c5f1958545145181c047f743904140e2b350009195b2a3503',
     },
   },
   css: [
     'highlight.js/styles/github.css',
     'nprogress/nprogress.css',
     '~/style.css',
-    '~/demos-shared.css',
   ],
   hooks: {
     // 构建前把生成的 sitemap.xml 写入 public/，nitro 构建时会一并拷入 .output/public
     'build:before': () => {
       writeFileSync(new URL('./public/sitemap.xml', import.meta.url), buildSitemapXml(), 'utf8')
     },
-    // 关闭动态 chunk 的 prefetch：否则每页都会预取全部 22 个分类课程数据
-    // （实测约 6.4MB），而首屏真正需要的只有当前分类。动态 import 改为
-    // 进入对应路由时按需加载；同步依赖仍由 modulepreload 保底。
+    // 关闭动态 chunk 的 prefetch 与 preload。
+    //
+    // prefetch：否则每页都会预取全部 22 个分类课程数据（实测约 6.4MB），
+    // 而首屏真正需要的只有当前分类。动态 import 改为进入对应路由时按需加载。
+    //
+    // preload：Vite 会把「主 chunk 直接 import 的模块」统一标为 preload，
+    // 于是 500+ 个课程页会各自预加载自己那一个分类的 JS/CSS。教学内容的分类
+    // chunk 动辄数百 KB（webgl.css 49KB、tailwind-css.css 65KB），
+    // 让它们与首屏正文抢带宽会直接拖慢 LCP。真正需要保底的是当前路由的
+    // 同步依赖，而 modulepreload 只保留入口链路上的少数几个 chunk 即可。
     'build:manifest': (manifest) => {
+      // 入口链路上必须同步就绪的 chunk——除此之外一律不预加载
+      const entryChunk = manifest['node_modules/nuxt/dist/app/entry.js']
+      const critical = new Set<string>(
+        [entryChunk?.file, ...(entryChunk?.imports ?? [])].filter(Boolean) as string[],
+      )
+      // imports 是间接引用，需要递归展开一层，拿到真正会被同步执行的模块
+      for (const key of [...critical]) {
+        for (const dep of manifest[key]?.imports ?? []) critical.add(dep)
+      }
+
       for (const key of Object.keys(manifest)) {
-        manifest[key].prefetch = false
+        const chunk = manifest[key]
+        chunk.prefetch = false
+        if (!critical.has(key) && !critical.has(chunk.file)) {
+          chunk.preload = false
+        }
       }
     },
   },
@@ -151,12 +179,10 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       crawlLinks: true,
-      routes: [
-        ...prerenderRoutes,
-        '/total-vue/vue/k-1/app-entry',
-        '/vue/k-12/routing/lee',
-        '/vue/k-12/routing/ming',
-      ],
+      // 预渲染路径全部由 collectSitePaths() 从课程数据推导，不再手工维护。
+      // 历史遗留的 /total-vue/... 与 /vue/k-12/routing/ming 在数据源中已不存在，
+      // 继续保留只会白白多渲染两个 404 页。
+      routes: [...prerenderRoutes],
     },
   },
   typescript: {

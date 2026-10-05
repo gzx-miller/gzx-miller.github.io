@@ -1,0 +1,60 @@
+/* electron 分类专属演示样式（9 条）。
+ *
+ * 这些规则原本集中在 src/demos-shared.css，由 nuxt.config 的全局 css 数组
+ * 引入，导致 532 个页面无论属于哪个分类都要下载全部 16 个分类的样式
+ * （压缩后约 39KB，其中 webgl 一家占 28KB）。
+ *
+ * 现在按分类拆分，并在对应的 src/data/lessons/electron.ts 顶部 import：
+ * 该文件正是按分类动态加载的数据入口，样式于是自动并入该分类的 chunk，
+ * 只在用户真正进入这个分类时才下载。
+ * 选择器仍以 :where([data-category='electron']) .lesson-demo 收窄，
+ * :where() 特异性为 0，作用范围与层叠表现和拆分前完全一致。
+ */
+
+
+  :where([data-category='electron']) .lesson-demo .code-example pre {
+    background:#1e1e1e;
+    color:#d4d4d4;
+    padding:16px;
+    border-radius:8px;
+    overflow-x:auto;
+    font-size:13px;
+    line-height:1.6;
+  }
+  :where([data-category='electron']) .lesson-demo .desc {
+    color:#666;
+    margin-bottom:20px;
+  }
+  :where([data-category='electron']) .lesson-demo .description {
+    color:#666;
+    margin-bottom:24px;
+    line-height:1.6;
+  }
+  :where([data-category='electron']) .lesson-demo .log-panel {
+    background:#f9f9f9;
+    padding:16px;
+    border-radius:12px;
+    margin-bottom:24px;
+  }
+  :where([data-category='electron']) .lesson-demo .platform-selector {
+    display:flex;
+    gap:20px;
+    margin-bottom:20px;
+  }
+  :where([data-category='electron']) .lesson-demo .platform-selector label {
+    cursor:pointer;
+  }
+  :where([data-category='electron']) .lesson-demo .result {
+    background:#e8f5e9;
+    padding:12px;
+    border-radius:8px;
+    margin-bottom:20px;
+  }
+  :where([data-category='electron']) .lesson-demo .tips li {
+    margin-bottom:8px;
+    line-height:1.6;
+  }
+  :where([data-category='electron']) .lesson-demo .tips ul {
+    margin:0;
+    padding-left:20px;
+  }

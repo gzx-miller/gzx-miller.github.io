@@ -21,6 +21,8 @@ import W17WebGL2 from '../../demos/W17WebGL2Article.vue'
 import W18Instancing from '../../demos/W18InstancingArticle.vue'
 import W19Particles from '../../demos/W19ParticlesArticle.vue'
 import W20Performance from '../../demos/W20PerformanceArticle.vue'
+// 该分类专属的演示样式，随分类数据一起按需加载
+import '../../styles/category-webgl.css'
 
 const vueCodeModules = import.meta.glob<string>('../../demos/*.vue', { query: '?raw', import: 'default' })
 const glslCodeModules = import.meta.glob<string>('../../demos/glsl-code/*.glsl', { query: '?raw', import: 'default' })

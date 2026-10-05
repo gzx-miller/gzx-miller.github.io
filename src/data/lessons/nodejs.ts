@@ -31,6 +31,8 @@ import D27Zlib from '../../demos/D27ZlibArticle.vue'
 import D28Os from '../../demos/D28OsArticle.vue'
 import D29Dns from '../../demos/D29DnsArticle.vue'
 import D30Readline from '../../demos/D30ReadlineArticle.vue'
+// 该分类专属的演示样式，随分类数据一起按需加载
+import '../../styles/category-nodejs.css'
 
 const vueCodeModules = import.meta.glob<string>('../../demos/*.vue', { query: '?raw', import: 'default' })
 const jsxCodeModules = import.meta.glob<string>('../../demos/react-jsx/*.jsx', { query: '?raw', import: 'default' })

@@ -1,0 +1,68 @@
+/* vue 分类专属演示样式（11 条）。
+ *
+ * 这些规则原本集中在 src/demos-shared.css，由 nuxt.config 的全局 css 数组
+ * 引入，导致 532 个页面无论属于哪个分类都要下载全部 16 个分类的样式
+ * （压缩后约 39KB，其中 webgl 一家占 28KB）。
+ *
+ * 现在按分类拆分，并在对应的 src/data/lessons/vue.ts 顶部 import：
+ * 该文件正是按分类动态加载的数据入口，样式于是自动并入该分类的 chunk，
+ * 只在用户真正进入这个分类时才下载。
+ * 选择器仍以 :where([data-category='vue']) .lesson-demo 收窄，
+ * :where() 特异性为 0，作用范围与层叠表现和拆分前完全一致。
+ */
+
+
+  :where([data-category='vue']) .lesson-demo .code-toggle {
+    text-align:center;
+  }
+  :where([data-category='vue']) .lesson-demo .demo-kicker {
+    color:#8f2f18;
+    font-size:12px;
+    font-weight:700;
+  }
+  :where([data-category='vue']) .lesson-demo .demo-note {
+    color:#7c563f;
+    font-size:13px;
+    line-height:1.6;
+  }
+  :where([data-category='vue']) .lesson-demo .empty-tip {
+    text-align:center;
+    color:#9c7a5f;
+    padding:30px 0;
+  }
+  :where([data-category='vue']) .lesson-demo .knowledge-points {
+    padding:14px 18px;
+    border-radius:10px;
+    background:linear-gradient(135deg,#f0f8e8,#e0eec8);
+    border-left:4px solid #4b6d33;
+  }
+  :where([data-category='vue']) .lesson-demo .knowledge-points code {
+    background:#fffaf2;
+    padding:1px 6px;
+    border-radius:4px;
+    font-size:12px;
+    color:#b7431f;
+  }
+  :where([data-category='vue']) .lesson-demo .knowledge-points h5 {
+    margin:0 0 8px;
+    color:#4b6d33;
+  }
+  :where([data-category='vue']) .lesson-demo .knowledge-points li {
+    font-size:13px;
+    color:#5a6d40;
+    line-height:1.7;
+  }
+  :where([data-category='vue']) .lesson-demo .knowledge-points ul {
+    margin:0;
+    padding-left:20px;
+  }
+  :where([data-category='vue']) .lesson-demo .secondary {
+    border-color:#b7431f;
+    background:transparent;
+    color:#8f2f18;
+  }
+  :where([data-category='vue']) .lesson-demo .tab-row button.active {
+    background:linear-gradient(135deg,#d94b26,#f08a24);
+    color:#fff;
+    border-color:#b7431f;
+  }

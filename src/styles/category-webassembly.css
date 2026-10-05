@@ -1,0 +1,81 @@
+/* webassembly 分类专属演示样式（12 条）。
+ *
+ * 这些规则原本集中在 src/demos-shared.css，由 nuxt.config 的全局 css 数组
+ * 引入，导致 532 个页面无论属于哪个分类都要下载全部 16 个分类的样式
+ * （压缩后约 39KB，其中 webgl 一家占 28KB）。
+ *
+ * 现在按分类拆分，并在对应的 src/data/lessons/webassembly.ts 顶部 import：
+ * 该文件正是按分类动态加载的数据入口，样式于是自动并入该分类的 chunk，
+ * 只在用户真正进入这个分类时才下载。
+ * 选择器仍以 :where([data-category='webassembly']) .lesson-demo 收窄，
+ * :where() 特异性为 0，作用范围与层叠表现和拆分前完全一致。
+ */
+
+
+  :where([data-category='webassembly']) .lesson-demo .big-result code {
+    color:var(--accent-strong);
+    font-size:26px;
+    font-weight:700;
+  }
+  :where([data-category='webassembly']) .lesson-demo .big-result span {
+    color:var(--muted);
+  }
+  :where([data-category='webassembly']) .lesson-demo .desc {
+    color:var(--muted);
+    line-height:1.7;
+  }
+  :where([data-category='webassembly']) .lesson-demo .input-line {
+    display:grid;
+    gap:6px;
+    color:var(--muted);
+    font-size:13px;
+  }
+  :where([data-category='webassembly']) .lesson-demo .inputs label {
+    display:grid;
+    gap:6px;
+    color:var(--muted);
+    font-size:13px;
+  }
+  :where([data-category='webassembly']) .lesson-demo .op-btn {
+    border:1px solid var(--border) !important;
+    background:var(--surface) !important;
+    color:var(--text) !important;
+  }
+  :where([data-category='webassembly']) .lesson-demo .op-btn.active {
+    border-color:var(--accent) !important;
+    background:var(--accent) !important;
+    color:#fff !important;
+  }
+  :where([data-category='webassembly']) .lesson-demo .result-box {
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:var(--surface);
+    padding:16px;
+    display:grid;
+    gap:12px;
+  }
+  :where([data-category='webassembly']) .lesson-demo .tips-box {
+    border-radius:8px;
+    background:rgba(255,218,159,0.24);
+    padding:12px 16px;
+  }
+  :where([data-category='webassembly']) .lesson-demo .tips-box ul {
+    margin:6px 0 0;
+    padding-left:20px;
+    color:var(--muted);
+    line-height:1.8;
+  }
+  :where([data-category='webassembly']) .lesson-demo .wat {
+    margin:0;
+    font-family:ui-monospace,Consolas,monospace;
+    font-size:12px;
+    line-height:1.7;
+    color:var(--forest);
+    white-space:pre-wrap;
+    overflow-x:auto;
+  }
+@media (max-width: 720px) {
+    :where([data-category='webassembly']) .lesson-demo .layout {
+      grid-template-columns:1fr;
+    }
+}

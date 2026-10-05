@@ -25,6 +25,8 @@ import F21ColorSpace from '../../demos/F21ColorSpaceArticle.vue'
 import F22Batch from '../../demos/F22BatchArticle.vue'
 import F23Gif from '../../demos/F23GifArticle.vue'
 import F24Metadata from '../../demos/F24MetadataArticle.vue'
+// 该分类专属的演示样式，随分类数据一起按需加载
+import '../../styles/category-ffmpeg.css'
 
 const ffmpegCodeModules = import.meta.glob<string>('../../demos/ffmpeg-code/*', { query: '?raw', import: 'default' })
 

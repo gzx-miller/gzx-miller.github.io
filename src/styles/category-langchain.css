@@ -1,0 +1,111 @@
+/* langchain 分类专属演示样式（18 条）。
+ *
+ * 这些规则原本集中在 src/demos-shared.css，由 nuxt.config 的全局 css 数组
+ * 引入，导致 532 个页面无论属于哪个分类都要下载全部 16 个分类的样式
+ * （压缩后约 39KB，其中 webgl 一家占 28KB）。
+ *
+ * 现在按分类拆分，并在对应的 src/data/lessons/langchain.ts 顶部 import：
+ * 该文件正是按分类动态加载的数据入口，样式于是自动并入该分类的 chunk，
+ * 只在用户真正进入这个分类时才下载。
+ * 选择器仍以 :where([data-category='langchain']) .lesson-demo 收窄，
+ * :where() 特异性为 0，作用范围与层叠表现和拆分前完全一致。
+ */
+
+
+  :where([data-category='langchain']) .lesson-demo .code-block {
+    margin:0;
+    font-size:12px;
+    line-height:1.6;
+    white-space:pre-wrap;
+    color:#5a3e2b;
+  }
+  :where([data-category='langchain']) .lesson-demo .code-section {
+    background:#fef9f3;
+    border:1px solid #e8c9a0;
+    border-radius:8px;
+    padding:12px;
+  }
+  :where([data-category='langchain']) .lesson-demo .code-section h4 {
+    margin:0 0 8px;
+    color:#8b5e3c;
+    font-size:14px;
+  }
+  :where([data-category='langchain']) .lesson-demo .config-row label {
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:14px;
+  }
+  :where([data-category='langchain']) .lesson-demo .cursor {
+    animation:blink 0.8s infinite;
+  }
+  :where([data-category='langchain']) .lesson-demo .desc {
+    color:#8b5e3c;
+    font-size:13px;
+    margin-bottom:8px;
+  }
+  :where([data-category='langchain']) .lesson-demo .empty-icon {
+    font-size:48px;
+    margin:0 0 12px;
+  }
+  :where([data-category='langchain']) .lesson-demo .knowledge-card {
+    padding:14px;
+    background:#fff;
+    border:1px solid #e8c9a0;
+    border-radius:8px;
+  }
+  :where([data-category='langchain']) .lesson-demo .knowledge-card h5 {
+    margin:0 0 8px;
+    color:#c8703c;
+    font-size:14px;
+  }
+  :where([data-category='langchain']) .lesson-demo .knowledge-card p {
+    margin:0;
+    font-size:12px;
+    line-height:1.6;
+    color:#5a3e2b;
+  }
+  :where([data-category='langchain']) .lesson-demo .knowledge-grid {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+  :where([data-category='langchain']) .lesson-demo .results-list {
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  :where([data-category='langchain']) .lesson-demo .run-btn {
+    padding:6px 16px;
+    background:#c8703c;
+    color:#fff;
+    border:none;
+    border-radius:4px;
+    cursor:pointer;
+    margin-bottom:12px;
+  }
+  :where([data-category='langchain']) .lesson-demo .run-btn:disabled {
+    opacity:0.6;
+    cursor:not-allowed;
+  }
+  :where([data-category='langchain']) .lesson-demo .subtitle {
+    margin:0 0 16px;
+    color:#a0623a;
+    font-size:13px;
+  }
+  :where([data-category='langchain']) .lesson-demo .switch input {
+    opacity:0;
+    width:0;
+    height:0;
+  }
+  :where([data-category='langchain']) .lesson-demo .tabs {
+    display:flex;
+    gap:4px;
+    margin-bottom:16px;
+    border-bottom:2px solid #e8c9a0;
+  }
+  :where([data-category='langchain']) .lesson-demo .tabs button.active {
+    color:#c8703c;
+    border-bottom-color:#c8703c;
+    font-weight:bold;
+  }
