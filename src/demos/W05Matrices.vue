@@ -305,9 +305,11 @@ onUnmounted(() => {
       <h4>🧮 变换矩阵 (3×3, 行主序)</h4>
       <div class="matrix-display">
         <table class="matrix-table">
-          <tr v-for="(row, ri) in matrixDisplay" :key="ri">
-            <td v-for="(val, ci) in row" :key="ci" class="matrix-cell">{{ val }}</td>
-          </tr>
+          <tbody>
+            <tr v-for="(row, ri) in matrixDisplay" :key="ri">
+              <td v-for="(val, ci) in row" :key="ci" class="matrix-cell">{{ val }}</td>
+            </tr>
+          </tbody>
         </table>
         <div class="matrix-latex">
           <code>M = T(tx,ty) × R(θ) × S(sx,sy)</code>
@@ -319,33 +321,39 @@ onUnmounted(() => {
       <div class="component-card">
         <h4>平移矩阵 T</h4>
         <table>
-          <tr><td>1</td><td>0</td><td>{{ tx.toFixed(2) }}</td></tr>
-          <tr><td>0</td><td>1</td><td>{{ ty.toFixed(2) }}</td></tr>
-          <tr><td>0</td><td>0</td><td>1.00</td></tr>
+          <tbody>
+            <tr><td>1</td><td>0</td><td>{{ tx.toFixed(2) }}</td></tr>
+            <tr><td>0</td><td>1</td><td>{{ ty.toFixed(2) }}</td></tr>
+            <tr><td>0</td><td>0</td><td>1.00</td></tr>
+          </tbody>
         </table>
       </div>
       <div class="component-card">
         <h4>旋转矩阵 R</h4>
         <table>
-          <tr>
-            <td>{{ Math.cos(rotation).toFixed(3) }}</td>
-            <td>{{ (-Math.sin(rotation)).toFixed(3) }}</td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>{{ Math.sin(rotation).toFixed(3) }}</td>
-            <td>{{ Math.cos(rotation).toFixed(3) }}</td>
-            <td>0</td>
-          </tr>
-          <tr><td>0</td><td>0</td><td>1</td></tr>
+          <tbody>
+            <tr>
+              <td>{{ Math.cos(rotation).toFixed(3) }}</td>
+              <td>{{ (-Math.sin(rotation)).toFixed(3) }}</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <td>{{ Math.sin(rotation).toFixed(3) }}</td>
+              <td>{{ Math.cos(rotation).toFixed(3) }}</td>
+              <td>0</td>
+            </tr>
+            <tr><td>0</td><td>0</td><td>1</td></tr>
+          </tbody>
         </table>
       </div>
       <div class="component-card">
         <h4>缩放矩阵 S</h4>
         <table>
-          <tr><td>{{ scaleX.toFixed(2) }}</td><td>0</td><td>0</td></tr>
-          <tr><td>0</td><td>{{ scaleY.toFixed(2) }}</td><td>0</td></tr>
-          <tr><td>0</td><td>0</td><td>1.00</td></tr>
+          <tbody>
+            <tr><td>{{ scaleX.toFixed(2) }}</td><td>0</td><td>0</td></tr>
+            <tr><td>0</td><td>{{ scaleY.toFixed(2) }}</td><td>0</td></tr>
+            <tr><td>0</td><td>0</td><td>1.00</td></tr>
+          </tbody>
         </table>
       </div>
     </div>
