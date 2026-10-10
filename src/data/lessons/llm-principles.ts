@@ -66,14 +66,8 @@ const LLM21Code = createCodeLoader('llm-principles-code/LLM21Code.py.txt')
 const LLM22Code = createCodeLoader('llm-principles-code/LLM22Code.py.txt')
 const LLM23Code = createCodeLoader('llm-principles-code/LLM23Code.py.txt')
 const LLM24Code = createCodeLoader('llm-principles-code/LLM24Code.py.txt')
-const LLM25Code = createCodeLoader('llm-principles-code/LLM25Code.py.txt')
-const LLM26Code = createCodeLoader('llm-principles-code/LLM26Code.py.txt')
 const LLM27Code = createCodeLoader('llm-principles-code/LLM27Code.py.txt')
 const LLM28Code = createCodeLoader('llm-principles-code/LLM28Code.py.txt')
-const LLM29Code = createCodeLoader('llm-principles-code/LLM29Code.py.txt')
-const LLM30Code = createCodeLoader('llm-principles-code/LLM30Code.py.txt')
-const LLM31Code = createCodeLoader('llm-principles-code/LLM31Code.py.txt')
-const LLM32Code = createCodeLoader('llm-principles-code/LLM32Code.py.txt')
 
 export const lessons: Lesson[] = [
   {
@@ -373,8 +367,6 @@ export const lessons: Lesson[] = [
     summary: '从「会接话」到「会帮忙」要跨三步：预训练在海量文本上预测下一个词获得知识，SFT 用指令-回答范例且只算回答段损失学格式，RLHF 用人类两两偏好炼出奖励模型、配合 KL 缰绳拧出价值观（PPO → DPO）。',
     demo: null,
     demoComponent: LLM25Training,
-    code: LLM25Code,
-    language: 'python',
   },
   {
     id: 'LLM_26',
@@ -385,8 +377,6 @@ export const lessons: Lesson[] = [
     summary: '注意力的账单是 O(n²)：稀疏注意力只让部分 token 配对来「少算」，KV 缓存复用已算好的 K/V 来「不重算」，FlashAttention 用在线 softmax 分块在 SRAM 中计算、使大矩阵不落显存来「快搬」；三者可叠加支撑长上下文。',
     demo: null,
     demoComponent: LLM26Sparse,
-    code: LLM26Code,
-    language: 'python',
   },
   {
     id: 'LLM_27',
@@ -421,8 +411,6 @@ export const lessons: Lesson[] = [
     summary: '把 30 课串成一条线——每一代技术，都是来解上一代那个死结的。',
     demo: null,
     demoComponent: LLM29Recap,
-    code: LLM29Code,
-    language: 'python',
   },
   {
     id: 'LLM_30',
@@ -433,8 +421,6 @@ export const lessons: Lesson[] = [
     summary: '看懂当下最活跃的方向与几道硬墙：推理与测试时计算（多想几步）、多模态、智能体、更长上下文与更省（MoE/量化/蒸馏），以及数据、对齐与安全、架构 O(n²)、评测这四道绕不开的难题。',
     demo: null,
     demoComponent: LLM30Frontier,
-    code: LLM30Code,
-    language: 'python',
   },
   {
     id: 'LLM_31',
@@ -445,8 +431,6 @@ export const lessons: Lesson[] = [
     summary: '把 30 课零件拼回一座可旋转的 Transformer：分词 → 词向量 → 加位置 → 自注意力 → FFN → 多层 Block → Softmax；每次「生成下一个词」都让整条流水线再从头跑一遍（自回归）。',
     demo: null,
     demoComponent: LLM31Transformer3D,
-    code: LLM31Code,
-    language: 'python',
   },
   {
     id: 'LLM_32',
@@ -457,7 +441,5 @@ export const lessons: Lesson[] = [
     summary: '按原文顺序读完《Attention Is All You Need》：缩放点积注意力除以 √d_k 防饱和、多头把 Q/K/V 投影 h 次再拼接、位置编码、残差 + LayerNorm 的 N=6 层 block，以及「为何用自注意力」的动机对比。',
     demo: null,
     demoComponent: LLM32AttentionPaper,
-    code: LLM32Code,
-    language: 'python',
   },
 ]

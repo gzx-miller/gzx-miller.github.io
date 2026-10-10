@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, h, nextTick, onMounted, ref, shallowRef, watch } from 'vue'
 import CodeBlock from './CodeBlock.vue'
+import { isCommentOnlySource } from '../data/code-quality'
 import { useLessonNavigation } from '../composables/useLessonNavigation'
 import { useLearningProgress } from '../composables/useLearningProgress'
 
@@ -27,6 +28,15 @@ const {
   () => `lesson-code-${currentLesson.value.id}`,
   () => currentLesson.value.code ? currentLesson.value.code() : Promise.resolve(null),
   { watch: [() => currentLesson.value.id] },
+)
+
+// 「关键代码」只在真正有代码时才出现。若源码去掉注释与空行后一行不剩
+// （整段写成注释的要点 / 被整段注释掉的示例），直接隐藏该段落，
+// 避免留下一个只有标题的「关键代码」空壳。
+const showCodeSection = computed(
+  () =>
+    Boolean(currentLesson.value.code) &&
+    !isCommentOnlySource(lessonCode.value, currentLesson.value.language),
 )
 
 // 正文渲染策略：
@@ -208,7 +218,7 @@ useSeoMeta({
       </ClientOnly>
     </section>
 
-    <section v-if="currentLesson.code" class="lesson-section">
+    <section v-if="showCodeSection" class="lesson-section">
       <h2>关键代码</h2>
       <!-- 源码与正文同时到达，这里始终保留与代码块同高的骨架，
            避免「正文已铺开、代码块后弹出」造成的高度跳变。 -->

@@ -85,12 +85,6 @@ const D11Code = createCodeLoader('nodejs-code/D11Security.js')
 
 const D12Code = createCodeLoader('nodejs-code/D12PackageManagement.js')
 
-const D13Code = createCodeLoader('nodejs-code/D13ExpressFastify.js')
-
-const D14Code = createCodeLoader('nodejs-code/D14WebSocket.js')
-
-const D15Code = createCodeLoader('nodejs-code/D15Database.js')
-
 const D16Code = createCodeLoader('nodejs-code/D16WorkerThreads.js')
 
 const D17Code = createCodeLoader('nodejs-code/D17EventLoop.js')
@@ -246,7 +240,7 @@ export const lessons: Lesson[] = [
     id: 'D_13', title: 'Express 与 Fastify 路由对比', navTitle: 'Express/Fastify', category: 'Web 框架',
     path: '/nodejs/d-13/express-fastify', summary: '对比 Express 中间件链和 Fastify Schema 验证两种路由模式。',
     demo: null,
-    demoComponent: D13ExpressFastify, code: D13Code, language: 'javascript',
+    demoComponent: D13ExpressFastify,
     principle: 'Express 以顺序执行的中间件链（调用 next 传递）处理请求，灵活但约束较少；Fastify 以生命周期钩子与插件组织逻辑，并用 JSON Schema 在启动阶段编译路由、验证输入输出、加速序列化，适合接口契约严格的项目。选型没有绝对优劣，关键是团队熟悉度与接口约束强度。',
     flow: ['Express 侧用 app.use 依次挂载中间件，请求沿链条传递、命中路由后返回响应。', 'Fastify 侧把校验与业务拆进 Schema 和插件：启动时编译路由，声明式验证输入、加速输出序列化。', '按项目诉求选型：生态与灵活度优先 Express，性能与接口契约优先 Fastify。', '用同一份接口用例分别压测两个框架，对照吞吐与延迟数据。'],
     notes: ['Express 中间件是线性 next 传递，洋葱式模型属于 Koa。', 'Fastify 的 Schema 同时做输入验证与输出序列化加速，并结合 pino 内置日志。', '中间件按注册顺序执行，鉴权、日志等通用逻辑应排在业务路由之前。', '迁移框架时先保持路由与响应格式不变，再做内部优化。'],
@@ -256,7 +250,7 @@ export const lessons: Lesson[] = [
     id: 'D_14', title: 'WebSocket 实时通信', navTitle: 'WebSocket', category: 'Web 框架',
     path: '/nodejs/d-14/websocket', summary: '用 WebSocket 实现实时聊天，掌握连接、心跳、广播和重连策略。',
     demo: null,
-    demoComponent: D14WebSocket, code: D14Code, language: 'javascript',
+    demoComponent: D14WebSocket,
     principle: 'WebSocket 在 HTTP 握手后升级为双向持久连接，服务端可随时主动推送；长连接可能被中间设备静默断开，因此需要应用层心跳探测活性，断线后按指数退避重连。服务端维护连接表向目标集合广播消息，是聊天、协同与实时通知的基础设施。连接数量增长后，先把心跳与广播做成可观测指标。',
     flow: ['客户端与服务端完成 HTTP Upgrade 握手，建立双向连接。', '应用层定时互发心跳（ping/pong），超时即判定连接失效并触发重连。', '服务端向全部或指定客户端广播消息；断线后按指数退避重试。', '断开网络再恢复，验证重连与消息补发符合预期。'],
     notes: ['WebSocket 是持久资源，服务端要限制单机连接数并维护连接表。', '鉴权需在握手阶段或首条消息中完成，不能复用 HTTP 中间件那套逻辑。', '多实例部署时用 Redis Pub/Sub 适配器实现跨节点广播。', '重连要有随机抖动（jitter），避免大量客户端同一时刻重连形成惊群。'],
@@ -266,7 +260,7 @@ export const lessons: Lesson[] = [
     id: 'D_15', title: '数据库连接与迁移', navTitle: '数据库', category: '数据与存储',
     path: '/nodejs/d-15/database', summary: '比较原生 SQL、查询构建器和 ORM，掌握数据库迁移工作流。',
     demo: null,
-    demoComponent: D15Database, code: D15Code, language: 'javascript',
+    demoComponent: D15Database,
     principle: '数据库访问分三个层次：原生 SQL 最贴近数据库、灵活但需自行防注入；查询构建器以代码拼 SQL，兼顾灵活与安全；ORM 提供对象映射、开发快，但会隐藏执行细节与性能成本。数据库连接必须经连接池复用；表结构变更则由迁移脚本版本化管理，保证各环境结构一致且可回滚。',
     flow: ['按场景选数据访问层：复杂查询偏原生 SQL/查询构建器，CRUD 为主可上 ORM。', '配置连接池的最大连接数与获取超时，避免每个请求新建连接拖垮数据库。', '用迁移脚本描述 Schema 变更，在部署流程中按版本顺序执行。', '在临时库上演练一次迁移与回滚，确认脚本双向可用。'],
     notes: ['连接池大小要结合数据库最大连接数与实例数核算，并非越大越好。', '迁移脚本必须可重复执行、可回滚，并纳入部署流程自动执行。', 'ORM 的 N+1 查询与隐式全表加载是常见性能隐患，复杂查询应回退原生 SQL 并显式指定字段。', '开启慢查询日志定期巡检，比等到线上报警再排查更主动。'],

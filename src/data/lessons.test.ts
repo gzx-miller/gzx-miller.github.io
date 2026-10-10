@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { isCommentOnlySource } from './code-quality'
 import { getAllLessons, getLessonsByCategory, knowledgeCategories } from './lessons'
 
 describe('课程注册表', () => {
@@ -43,7 +44,7 @@ describe('课程注册表', () => {
     }
   }, 20000)
 
-  it('每个内容都归属于已知分类，并能按需读取源码', async () => {
+  it('每个内容都归属于已知分类，已声明源码的课程能按需读取到源码', async () => {
     const categoryIds = new Set(knowledgeCategories.map((category) => category.id))
     const allLessons = await getAllLessons()
 
@@ -55,16 +56,34 @@ describe('课程注册表', () => {
       expect(lesson.summary.trim()).not.toBe('')
     }
 
-    const sources = await Promise.all(
-      allLessons.map((lesson) => (lesson.code ? lesson.code() : Promise.resolve('')))
-    )
+    // 课程可以不声明「关键代码」（例如正文已把要点讲完，没有独立代码样本），
+    // 一旦声明就必须能读到有内容的源码。
+    const lessonsWithCode = allLessons.filter((lesson) => lesson.code)
+    const sources = await Promise.all(lessonsWithCode.map((lesson) => lesson.code!()))
 
     for (const [index, source] of sources.entries()) {
-      expect(source.trim().length, `${allLessons[index].id} 的源码为空或过短`).toBeGreaterThan(80)
+      const lesson = lessonsWithCode[index]
 
-      if (allLessons[index].language === 'vue') {
+      expect(source.trim().length, `${lesson.id} 的源码为空或过短`).toBeGreaterThan(80)
+
+      if (lesson.language === 'vue') {
         expect(source).toContain('<script')
       }
+    }
+  })
+
+  it('每段「关键代码」都必须含实际代码，不能只有注释', async () => {
+    const allLessons = await getAllLessons()
+    const lessonsWithCode = allLessons.filter((lesson) => lesson.code)
+    const sources = await Promise.all(
+      lessonsWithCode.map((lesson) => lesson.code!().then((source) => [lesson, source] as const)),
+    )
+
+    for (const [lesson, source] of sources) {
+      expect(
+        isCommentOnlySource(source, lesson.language),
+        `${lesson.id}（${lesson.path}）的「关键代码」只剩注释，请补齐真实代码，或不要声明 code/language`,
+      ).toBe(false)
     }
   })
 })
