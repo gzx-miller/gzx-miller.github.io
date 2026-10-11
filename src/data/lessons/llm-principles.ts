@@ -31,8 +31,6 @@ import LLM27Moe from '../../demos/LLM27Moe.vue'
 import LLM28Distill from '../../demos/LLM28Distill.vue'
 import LLM29Recap from '../../demos/LLM29Recap.vue'
 import LLM30Frontier from '../../demos/LLM30Frontier.vue'
-import LLM31Transformer3D from '../../demos/LLM31Transformer3D.vue'
-import LLM32AttentionPaper from '../../demos/LLM32AttentionPaper.vue'
 
 const llmPrinciplesCodeModules = import.meta.glob<string>('../../demos/llm-principles-code/*', { query: '?raw', import: 'default' })
 
@@ -421,25 +419,5 @@ export const lessons: Lesson[] = [
     summary: '看懂当下最活跃的方向与几道硬墙：推理与测试时计算（多想几步）、多模态、智能体、更长上下文与更省（MoE/量化/蒸馏），以及数据、对齐与安全、架构 O(n²)、评测这四道绕不开的难题。',
     demo: null,
     demoComponent: LLM30Frontier,
-  },
-  {
-    id: 'LLM_31',
-    title: 'Transformer3D架构全景图',
-    navTitle: 'Transformer 全景图',
-    category: '附录',
-    path: '/llm-principles/llm-31/transformer-3d',
-    summary: '把 30 课零件拼回一座可旋转的 Transformer：分词 → 词向量 → 加位置 → 自注意力 → FFN → 多层 Block → Softmax；每次「生成下一个词」都让整条流水线再从头跑一遍（自回归）。',
-    demo: null,
-    demoComponent: LLM31Transformer3D,
-  },
-  {
-    id: 'LLM_32',
-    title: 'Attention论文原文译文',
-    navTitle: 'Attention 论文译文',
-    category: '附录',
-    path: '/llm-principles/llm-32/attention-paper',
-    summary: '按原文顺序读完《Attention Is All You Need》：缩放点积注意力除以 √d_k 防饱和、多头把 Q/K/V 投影 h 次再拼接、位置编码、残差 + LayerNorm 的 N=6 层 block，以及「为何用自注意力」的动机对比。',
-    demo: null,
-    demoComponent: LLM32AttentionPaper,
   },
 ]
