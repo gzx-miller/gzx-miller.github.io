@@ -47,7 +47,7 @@
 | [React](https://gzx-miller.github.io/react) | 35 | 22 | Hooks、并发渲染、错误边界、逻辑复用、状态集成与性能优化 |
 | [Next.js](https://gzx-miller.github.io/nextjs) | 24 | 6 | App Router、服务端组件、数据获取、Server Actions 与部署 |
 | [LangChain](https://gzx-miller.github.io/langchain) | 23 | 14 | 模型调用、提示模板、链式调用、RAG 与 Agent |
-| [LLM 原理](https://gzx-miller.github.io/llm-principles) | 30 | 4 | 向量、神经网络、注意力机制与 Transformer 预训练范式 |
+| [Transformer](https://gzx-miller.github.io/llm-principles) | 30 | 4 | 向量、神经网络、注意力机制与 Transformer 预训练范式 |
 | [C++](https://gzx-miller.github.io/cpp) | 30 | 12 | 内存管理、面向对象、模板、STL 与现代 C++ 核心特性 |
 | [Electron](https://gzx-miller.github.io/electron) | 15 | 7 | 主进程与渲染进程、IPC 通信、窗口管理、系统托盘与打包分发 |
 | [FFmpeg](https://gzx-miller.github.io/ffmpeg) | 24 | 1 | 格式转换、音视频处理、滤镜效果、字幕、流媒体与硬件加速 |

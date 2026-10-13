@@ -5,7 +5,7 @@
 </template>
 
 <style>
-/* LLM 原理长文通用排版：贴合秋日森林 / 红橙枫叶 / 暖光 / 小松鼠的视觉基调 */
+/* Transformer 分类长文通用排版：贴合秋日森林 / 红橙枫叶 / 暖光 / 小松鼠的视觉基调 */
 .llm-article {
   --llm-primary: #e8590c;
   --llm-primary-deep: #c0392b;
