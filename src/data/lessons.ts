@@ -35,14 +35,12 @@ export interface KnowledgeCategory {
 
 export const knowledgeCategories: KnowledgeCategory[] = [
   { id: 'javascript', name: 'JavaScript', path: '/javascript', status: 'ready', intro: 'JavaScript 是 Web 平台的核心语言。本分类从类型、函数和对象模型出发，逐步覆盖异步机制、模块化与浏览器事件。', officialUrl: 'https://developer.mozilla.org/zh-CN/docs/Web/JavaScript' },
-  { id: 'typescript', name: 'TypeScript', path: '/typescript', status: 'ready', intro: 'TypeScript 为 JavaScript 增加可渐进采用的静态类型系统。本分类以 Vue 3 真实业务数据为背景，覆盖建模、收窄、泛型、类型操作与组件类型实践。', officialUrl: 'https://www.typescriptlang.org/' },
   { id: 'vue', name: 'Vue3', path: '/vue', status: 'ready', intro: 'Vue3 是渐进式 JavaScript 框架。本分类用真实小业务场景拆解组合式 API、组件、路由、状态管理和工程实践。', officialUrl: 'https://vuejs.org/' },
   { id: 'element-plus', name: 'Element Plus', path: '/element-plus', status: 'ready', intro: 'Element Plus 是基于 Vue 3 的组件库，提供丰富的企业级 UI 组件，覆盖表格、表单、弹窗、导航等常见场景。', officialUrl: 'https://element-plus.org/' },
   { id: 'vue-flow', name: 'Vue Flow', path: '/vue-flow', status: 'ready', intro: 'Vue Flow 是基于 Vue 3 的流程图与节点编辑器。本分类从数据模型与内置节点出发，覆盖连接桩校验、连线定制、交互编排、useVueFlow 状态管理、拖拽搭建、自动布局、只读展示与双主题适配。', officialUrl: 'https://vueflow.dev/' },
   { id: 'nestjs', name: 'Nest.js', path: '/nestjs', status: 'ready', intro: 'NestJS 是构建高效、可扩展 Node.js 服务端应用的企业级框架。本分类从模块化架构出发，覆盖依赖注入、控制器与路由、管道校验、守卫鉴权、拦截器、中间件、异常过滤器、TypeORM 数据库、WebSocket 网关、定时任务、配置管理与微服务。', officialUrl: 'https://docs.nestjs.com/' },
   { id: 'nuxt', name: 'Nuxt', path: '/nuxt', status: 'ready', intro: 'Nuxt 是基于 Vue 3 的全栈框架，内置文件路由、自动导入、SSR/SSG、服务端 API 等能力，让 Vue 项目从单页应用升级为全栈应用。', officialUrl: 'https://nuxt.com/' },
   { id: 'nodejs', name: 'Node.js', path: '/nodejs', status: 'ready', intro: 'Node.js 让 JavaScript 运行在服务端和工具链中。本分类覆盖模块、文件、事件、流、HTTP、进程、测试、安全与依赖管理。', officialUrl: 'https://nodejs.org/docs/latest/api/' },
-  { id: 'css', name: 'CSS', path: '/css', status: 'ready', intro: 'CSS 是 Web 样式的核心语言。本分类从选择器、盒模型、布局系统出发，逐步覆盖定位、层叠、变量、动画、响应式、裁剪、逻辑属性、容器查询与性能优化。', officialUrl: 'https://developer.mozilla.org/zh-CN/docs/Web/CSS' },
   { id: 'tailwind-css', name: 'Tailwind CSS', path: '/tailwind-css', status: 'ready', intro: 'Tailwind CSS 以原子化工具类直接组合界面。本分类基于 v4 的 CSS-first 模型，覆盖响应式、状态变体、主题令牌、暗色模式、任意值与容器查询。', officialUrl: 'https://tailwindcss.com/docs' },
   { id: 'sass', name: 'Sass', path: '/sass', status: 'ready', intro: 'Sass 为 CSS 增加模块、变量、嵌套、Mixin、函数与集合操作。本分类使用现代模块系统组织可维护样式，避开已弃用的 @import 工作流。', officialUrl: 'https://sass-lang.com/documentation/' },
   { id: 'vite', name: 'Vite', path: '/vite', status: 'ready', intro: 'Vite 是新一代前端构建工具，以原生 ESM 开发服务器和基于 Rollup 的生产构建为核心。本分类覆盖配置、插件、HMR、环境变量、静态资源、依赖预构建、构建优化、MPA、库模式、SSR、CSS、TypeScript、代理、性能分析与自定义插件。', officialUrl: 'https://vite.dev/' },

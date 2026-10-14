@@ -12,9 +12,9 @@ useHead({
 })
 
 useSeoMeta({
-  description: '小松鼠举栗子中文技术知识内容库：Vue3、TypeScript、React、Node.js、CSS、WebGL、C++、uni-app 等 23 大分类 500+ 真实内容，每个栗子只讲一个知识点。',
+  description: '小松鼠举栗子中文技术知识内容库：Vue3、React、Node.js、Tailwind CSS、WebGL、C++、uni-app 等 21 大分类数百个真实内容，每个栗子只讲一个知识点。',
   ogTitle: '小松鼠举栗子',
-  ogDescription: '通过独立真实内容学习软件技术，500+ 颗栗子等你来摘。',
+  ogDescription: '通过独立真实内容学习软件技术，每颗栗子只讲一个知识点。',
   ogType: 'website',
   ogImage: 'https://gzx-miller.github.io/og-image.jpg',
   twitterCard: 'summary_large_image',
@@ -24,14 +24,12 @@ useSeoMeta({
 // 为每个分类挑选一枚贴合气质的徽标
 const categoryEmojis: Record<string, string> = {
   javascript: '⚡',
-  typescript: '📘',
   vue: '💚',
   'element-plus': '🧩',
   'vue-flow': '🕸️',
   nestjs: '🦁',
   nuxt: '🌲',
   nodejs: '🍃',
-  css: '🎨',
   'tailwind-css': '💨',
   sass: '💗',
   vite: '🚀',
@@ -52,9 +50,7 @@ const categoryEmojis: Record<string, string> = {
 // 数组顺序即展示顺序，Set 仅用于构建期快速判定是否属于精选。
 const FEATURED_PATH_LIST = [
   '/vue/k-3/reactivity',
-  '/typescript/t-4/generics',
   '/react/r-2/state-updates',
-  '/css/c-3/flexbox',
   '/nestjs/n-1/modules-di',
   '/nodejs/d-5/streams',
   '/langchain/l-1/llm-call',
@@ -64,7 +60,7 @@ const FEATURED_PATH_LIST = [
 const FEATURED_PATHS = new Set(FEATURED_PATH_LIST)
 
 // 全站搜索数据以紧凑元组承载，而非对象数组。
-// 507 条课程若用对象序列化，光是键名与引号就要占掉近一半体积；
+// 数百条课程若用对象序列化，光是键名与引号就要占掉近一半体积；
 // 元组形式 + 截断摘要，能把首页 payload 从约 236KB 压到 60KB 以内。
 // 字段顺序：[id, navTitle, title, path, categoryId, summaryPreview]
 type LessonTuple = [string, string, string, string, string, string]
@@ -269,7 +265,7 @@ function clearSearch() {
       <div class="hero-inner">
         <h1 class="hero-title"><span class="hero-title-brand">小松鼠举栗子</span> 🌰</h1>
         <p class="hero-subtitle">
-          通过独立的内容，学懂 Vue3、TypeScript、React、Node.js、CSS、AI 等软件技术 ——
+          通过独立的内容，学懂 Vue3、React、Node.js、Tailwind CSS、AI 等软件技术 ——
           每一颗栗子只讲一个知识点。
         </p>
         <div class="hero-stats" aria-label="站点统计">
