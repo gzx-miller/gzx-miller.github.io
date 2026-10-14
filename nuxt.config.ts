@@ -83,7 +83,7 @@ export default defineNuxtConfig({
     },
     // 关闭动态 chunk 的 prefetch 与 preload。
     //
-    // prefetch：否则每页都会预取全部 22 个分类课程数据（实测约 6.4MB），
+    // prefetch：否则每页都会预取全部 23 个分类课程数据（实测约 6.4MB），
     // 而首屏真正需要的只有当前分类。动态 import 改为进入对应路由时按需加载。
     //
     // preload：Vite 会把「主 chunk 直接 import 的模块」统一标为 preload，
@@ -139,7 +139,7 @@ export default defineNuxtConfig({
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         {
           name: 'description',
-          content: '小松鼠举栗子中文技术知识内容库：Vue3、TypeScript、React、Node.js、CSS、WebGL、C++、uni-app 等 22 大分类 500+ 真实内容，通过独立小内容学懂软件技术。',
+          content: '小松鼠举栗子中文技术知识内容库：Vue3、TypeScript、React、Node.js、CSS、WebGL、C++、uni-app 等 23 大分类 500+ 真实内容，通过独立小内容学懂软件技术。',
         },
         { name: 'author', content: 'gzx-miller' },
         { name: 'robots', content: 'index, follow' },
@@ -149,7 +149,7 @@ export default defineNuxtConfig({
         { property: 'og:title', content: '小松鼠举栗子 - 通过独立真实内容学习软件技术' },
         {
           property: 'og:description',
-          content: '中文技术知识内容库：通过独立真实小内容学习 Vue3、TypeScript、React、Node.js、CSS、WebGL、C++、uni-app 等 22 大分类。',
+          content: '中文技术知识内容库：通过独立真实小内容学习 Vue3、TypeScript、React、Node.js、CSS、WebGL、C++、uni-app 等 23 大分类。',
         },
         { property: 'og:url', content: `${SITE_URL}/` },
         { property: 'og:image', content: `${SITE_URL}/og-image.jpg` },
@@ -160,7 +160,7 @@ export default defineNuxtConfig({
         { name: 'twitter:title', content: '小松鼠举栗子 - 通过独立真实内容学习软件技术' },
         {
           name: 'twitter:description',
-          content: '中文技术知识内容库：22 大分类 500+ 真实内容，每个栗子只讲一个知识点。',
+          content: '中文技术知识内容库：23 大分类 500+ 真实内容，每个栗子只讲一个知识点。',
         },
         { name: 'twitter:image', content: `${SITE_URL}/og-image.jpg` },
         { name: 'theme-color', media: '(prefers-color-scheme: light)', content: '#f8b369' },

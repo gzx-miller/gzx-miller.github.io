@@ -12,7 +12,7 @@ useHead({
 })
 
 useSeoMeta({
-  description: '小松鼠举栗子中文技术知识内容库：Vue3、TypeScript、React、Node.js、CSS、WebGL、C++、uni-app 等 22 大分类 500+ 真实内容，每个栗子只讲一个知识点。',
+  description: '小松鼠举栗子中文技术知识内容库：Vue3、TypeScript、React、Node.js、CSS、WebGL、C++、uni-app 等 23 大分类 500+ 真实内容，每个栗子只讲一个知识点。',
   ogTitle: '小松鼠举栗子',
   ogDescription: '通过独立真实内容学习软件技术，500+ 颗栗子等你来摘。',
   ogType: 'website',
@@ -38,6 +38,7 @@ const categoryEmojis: Record<string, string> = {
   react: '⚛️',
   nextjs: '▲',
   langchain: '🦜',
+  langgraph: '🧭',
   'llm-principles': '🧠',
   cpp: '⚙️',
   electron: '🪟',

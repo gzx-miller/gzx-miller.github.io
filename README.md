@@ -8,7 +8,7 @@
 
 ## 特性
 
-- **500+ 个独立内容**，覆盖 22 个软件技术知识分类
+- **500+ 个独立内容**，覆盖 23 个软件技术知识分类
 - **交互式演示** — 每个内容包含可运行的 Demo、关键代码、原理说明、处理流程和注意事项
 - **纯静态部署** — `nuxt generate` 预渲染全部路由，零服务端依赖
 - **类型安全** — 全项目 TypeScript strict mode，Vitest 单元测试覆盖核心逻辑
@@ -47,6 +47,7 @@
 | [React](https://gzx-miller.github.io/react) | 35 | 22 | Hooks、并发渲染、错误边界、逻辑复用、状态集成与性能优化 |
 | [Next.js](https://gzx-miller.github.io/nextjs) | 24 | 6 | App Router、服务端组件、数据获取、Server Actions 与部署 |
 | [LangChain](https://gzx-miller.github.io/langchain) | 23 | 14 | 模型调用、提示模板、链式调用、RAG 与 Agent |
+| [LangGraph](https://gzx-miller.github.io/langgraph) | 14 | 6 | ReAct 智能体、状态图、中间件、人机交互、记忆与上下文、MCP、多智能体、RAG 与流式界面 |
 | [Transformer](https://gzx-miller.github.io/llm-principles) | 30 | 4 | 向量、神经网络、注意力机制与 Transformer 预训练范式 |
 | [C++](https://gzx-miller.github.io/cpp) | 30 | 12 | 内存管理、面向对象、模板、STL 与现代 C++ 核心特性 |
 | [Electron](https://gzx-miller.github.io/electron) | 15 | 7 | 主进程与渲染进程、IPC 通信、窗口管理、系统托盘与打包分发 |

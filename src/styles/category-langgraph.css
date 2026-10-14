@@ -1,0 +1,577 @@
+/* langgraph 分类专属演示样式（14 条）。
+ *
+ * 与 category-langchain.css 同机制：规则以
+ * :where([data-category='langgraph']) .lesson-demo 收窄，
+ * :where() 特异性为 0，作用范围与拆分前的共享样式表现一致。
+ * 样式文件由 src/data/lessons/langgraph.ts 顶部 import，
+ * 随该分类的数据 chunk 一起按需加载。
+ *
+ * 覆盖的公共元素：
+ *   - lg-panel / lg-kv / lg-log-line / lg-badge / lg-stat / lg-pre  —— 面板与日志
+ *   - lg-canvas / lg-node / lg-arrow / lg-edge-note                —— 节点图
+ *   - lg-timeline-*                                                —— 执行时间线
+ *   - lg-chat-* / lg-steps-bar / lg-step-chip                      —— 聊天与进度
+ *   - lg-server-* / lg-tool                                        —— MCP / 团队卡片
+ *   - lg-trio / lg-todo / lg-check / lg-trace-*                    —— 网格、待办与追踪
+ */
+
+/* ---------- 面板与键值 ---------- */
+
+:where([data-category='langgraph']) .lesson-demo .lg-panel {
+  padding: 12px;
+  border: 1px solid var(--demo-border);
+  border-radius: 8px;
+  background: var(--demo-surface-soft);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-panel h4 {
+  margin: 0 0 8px;
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-panel h4 small {
+  font-weight: 400;
+  color: var(--demo-text-muted);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-kv {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0 0 6px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--demo-text-muted);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-kv strong {
+  color: var(--demo-text);
+  font-weight: 600;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  text-align: right;
+  word-break: break-all;
+}
+
+/* ---------- 日志行 ---------- */
+
+:where([data-category='langgraph']) .lesson-demo .lg-log-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+  margin: 0 0 6px;
+  padding: 6px 8px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: var(--demo-surface);
+  font-size: 12px;
+  line-height: 1.65;
+  color: var(--demo-text);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-log-line.pass {
+  border-left: 3px solid var(--demo-success);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-log-line.modify {
+  border-left: 3px solid var(--demo-warning);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-log-line.block {
+  border-left: 3px solid var(--demo-danger);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-log-line.skip,
+:where([data-category='langgraph']) .lesson-demo .lg-dimmed {
+  opacity: 0.55;
+}
+
+/* ---------- 徽章与状态 ---------- */
+
+:where([data-category='langgraph']) .lesson-demo .lg-badge {
+  display: inline-block;
+  padding: 1px 8px;
+  border: 1px solid var(--demo-border);
+  border-radius: 10px;
+  background: var(--demo-surface-soft);
+  color: var(--demo-text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-badge.think {
+  border-color: var(--demo-title);
+  color: var(--demo-title);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-badge.action {
+  border-color: var(--demo-warning);
+  color: var(--demo-warning);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-badge.observe {
+  border-color: var(--demo-info-border);
+  color: var(--demo-info-border);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-badge.ok,
+:where([data-category='langgraph']) .lesson-demo .lg-badge.answer {
+  border-color: var(--demo-success);
+  color: var(--demo-success);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-badge.warn {
+  border-color: var(--demo-warning);
+  color: var(--demo-warning);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-badge.err {
+  border-color: var(--demo-danger);
+  color: var(--demo-danger);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 4px;
+  border-radius: 50%;
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-dot.on {
+  background: var(--demo-success);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-dot.off {
+  background: var(--demo-text-muted);
+  opacity: 0.4;
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-stat {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--demo-warning);
+}
+
+/* ---------- 预格式文本 ---------- */
+
+:where([data-category='langgraph']) .lesson-demo .lg-pre {
+  margin: 6px 0 0;
+  padding: 10px;
+  border: 1px solid var(--demo-border);
+  border-radius: 6px;
+  background: var(--demo-surface);
+  color: var(--demo-text);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
+/* ---------- 节点图 ---------- */
+
+:where([data-category='langgraph']) .lesson-demo .lg-canvas {
+  margin: 12px 0;
+  padding: 14px;
+  border: 1px dashed var(--demo-border);
+  border-radius: 8px;
+  background: var(--demo-surface-soft);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-node {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 84px;
+  padding: 8px 12px;
+  border: 2px solid var(--demo-border);
+  border-radius: 8px;
+  background: var(--demo-surface);
+  color: var(--demo-text);
+  font-size: 11px;
+  text-align: center;
+  transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-node-title {
+  font-size: 12px;
+  font-weight: 700;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-node-sub {
+  font-size: 10px;
+  color: var(--demo-text-muted);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-node-tag {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--demo-warning);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-node.active,
+:where([data-category='langgraph']) .lesson-demo .lg-node.running {
+  border-color: var(--demo-accent);
+  background: var(--demo-accent-soft);
+  box-shadow: 0 0 10px rgba(232, 120, 74, 0.28);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-node.done {
+  border-color: var(--demo-success);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-node.terminator {
+  padding: 8px 10px;
+  border-style: double;
+  border-radius: 16px;
+  color: var(--demo-text-muted);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-node.fanout {
+  border-style: dashed;
+  color: var(--demo-text-muted);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-arrow {
+  color: var(--demo-accent);
+  font-size: 14px;
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-edge-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 6px 10px;
+  border: 1px dashed var(--demo-border);
+  border-radius: 6px;
+  font-size: 11px;
+  color: var(--demo-text-muted);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-edge-note.hit {
+  border-color: var(--demo-accent);
+  background: var(--demo-accent-soft);
+  color: var(--demo-text);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-branch-col {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ---------- 执行时间线 ---------- */
+
+:where([data-category='langgraph']) .lesson-demo .lg-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-timeline-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--demo-border);
+  border-radius: 8px;
+  background: var(--demo-surface-soft);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-timeline-item.think {
+  border-left: 3px solid var(--demo-title);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-timeline-item.action {
+  border-left: 3px solid var(--demo-warning);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-timeline-item.observe {
+  border-left: 3px solid var(--demo-info-border);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-timeline-item.answer {
+  border-left: 3px solid var(--demo-success);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-timeline-body strong {
+  display: block;
+  font-size: 13px;
+  color: var(--demo-text);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-timeline-body p {
+  margin: 2px 0 0;
+  font-size: 12px;
+  line-height: 1.65;
+  color: var(--demo-text-muted);
+}
+
+/* ---------- 审批卡片 ---------- */
+
+:where([data-category='langgraph']) .lesson-demo .lg-approval {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0;
+  padding: 12px 14px;
+  border: 1px solid var(--demo-warning);
+  border-left: 4px solid var(--demo-warning);
+  border-radius: 8px;
+  background: var(--demo-warning-bg);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-approval strong {
+  font-size: 13px;
+  color: var(--demo-text);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-approval p {
+  margin: 4px 0 0;
+  font-size: 12px;
+  line-height: 1.65;
+  color: var(--demo-text);
+}
+
+/* ---------- 聊天 ---------- */
+
+:where([data-category='langgraph']) .lesson-demo .lg-chat-log {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 260px;
+  margin-bottom: 12px;
+  overflow-y: auto;
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-chat-log.lg-chat-tall {
+  max-height: 340px;
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-chat-msg {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-chat-msg.user {
+  align-items: flex-end;
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-chat-msg.ai {
+  align-items: flex-start;
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-chat-bubble {
+  max-width: 88%;
+  padding: 8px 12px;
+  border: 1px solid var(--demo-border);
+  border-radius: 10px;
+  background: var(--demo-surface);
+  color: var(--demo-text);
+  font-size: 13px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-chat-msg.user .lg-chat-bubble {
+  border-color: var(--demo-accent);
+  background: var(--demo-accent);
+  color: var(--demo-accent-text);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-chat-source {
+  font-size: 10px;
+  color: var(--demo-text-muted);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-cursor {
+  color: var(--demo-accent);
+  animation: lg-blink 0.8s infinite;
+}
+
+@keyframes lg-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ---------- 步骤条 ---------- */
+
+:where([data-category='langgraph']) .lesson-demo .lg-steps-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-step-chip {
+  padding: 3px 12px;
+  border: 1px solid var(--demo-border);
+  border-radius: 14px;
+  background: var(--demo-surface);
+  color: var(--demo-text-muted);
+  font-size: 12px;
+  transition: all 0.25s;
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-step-chip.active {
+  border-color: var(--demo-accent);
+  background: var(--demo-accent-soft);
+  color: var(--demo-accent);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-step-chip.done {
+  border-color: var(--demo-success);
+  color: var(--demo-success);
+}
+
+/* ---------- 服务 / 成员卡片 ---------- */
+
+:where([data-category='langgraph']) .lesson-demo .lg-server {
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--demo-border);
+  border-radius: 8px;
+  background: var(--demo-surface);
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-server.active {
+  border-color: var(--demo-accent);
+  box-shadow: 0 0 0 2px var(--demo-accent-soft);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-server-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-server-head strong {
+  font-size: 13px;
+  color: var(--demo-text);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-tool {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--demo-text-muted);
+}
+
+/* ---------- 三列网格 ---------- */
+
+:where([data-category='langgraph']) .lesson-demo .lg-trio {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 900px) {
+  :where([data-category='langgraph']) .lesson-demo .lg-trio {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- 待办清单 ---------- */
+
+:where([data-category='langgraph']) .lesson-demo .lg-todo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  color: var(--demo-text);
+  font-size: 12px;
+  line-height: 1.6;
+  transition: color 0.25s;
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-todo.done {
+  color: var(--demo-success);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-check {
+  font-weight: 700;
+}
+
+/* ---------- 运行追踪 ---------- */
+
+:where([data-category='langgraph']) .lesson-demo .lg-trace {
+  margin-bottom: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--demo-border);
+  border-radius: 8px;
+  background: var(--demo-surface);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-trace.active {
+  border-color: var(--demo-accent);
+  background: var(--demo-accent-soft);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-trace-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-trace-head strong {
+  font-size: 12px;
+  color: var(--demo-text);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-trace-head .lg-stat {
+  margin-left: auto;
+  font-weight: 400;
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-trace-bar {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--demo-surface-soft);
+}
+
+:where([data-category='langgraph']) .lesson-demo .lg-trace-fill {
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+  background: var(--demo-accent);
+  transition: width 0.4s ease;
+}
