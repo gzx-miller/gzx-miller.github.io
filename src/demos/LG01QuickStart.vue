@@ -76,7 +76,7 @@ async function run() {
 </script>
 
 <template>
-  <div class="demo-card">
+  <div class="demo-card demo-container">
     <h3>ReAct 智能体运行轨迹</h3>
     <p class="demo-desc">
       输入问题或点快捷问题，观察智能体在「思考 → 行动 → 观察」之间的循环——数据不够时它自己决定调用工具，够用就直接回答。
@@ -96,7 +96,7 @@ async function run() {
 
     <ol v-if="steps.length" class="lg-timeline">
       <li v-for="(s, i) in steps" :key="i" class="lg-timeline-item" :class="s.kind">
-        <span class="lg-badge" :class="s.kind">{{ kindLabel[s.kind] }}</span>
+        <span class="badge" :class="s.kind">{{ kindLabel[s.kind] }}</span>
         <div class="lg-timeline-body">
           <strong>{{ s.title }}</strong>
           <p>{{ s.detail }}</p>
@@ -104,9 +104,9 @@ async function run() {
       </li>
     </ol>
 
-    <div v-if="messageTrail.length > 1" class="lg-panel">
+    <div v-if="messageTrail.length > 1" class="demo-panel">
       <h4>消息序列</h4>
-      <p class="lg-kv">{{ messageTrail.join(' → ') }}</p>
+      <p class="hint"><code>{{ messageTrail.join(' → ') }}</code></p>
       <p class="hint">每次工具调用都会追加两条消息，ReAct 循环靠这份消息历史自我衔接。</p>
     </div>
   </div>

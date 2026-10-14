@@ -54,7 +54,7 @@ async function run() {
 </script>
 
 <template>
-  <div class="demo-card">
+  <div class="demo-card demo-container">
     <h3>联网搜索、去重与引用回答</h3>
     <p class="demo-desc">
       实时信息不在模型的知识里——它必须「出去查」：规划搜索词、调搜索、去重挑源、再带引用作答。点运行看一次完整流程。
@@ -66,14 +66,14 @@ async function run() {
     </div>
 
     <div class="grid-2">
-      <div class="lg-panel">
+      <div class="demo-panel">
         <h4>搜索结果</h4>
         <p v-if="phase === 'idle'" class="hint">尚未检索。</p>
         <div
           v-for="item in rawResults.slice(0, phase === 'idle' ? 0 : 5)"
           :key="item.id"
-          class="lg-log-line"
-          :class="{ 'lg-dimmed': item.duplicateOf && phase !== 'searched' }"
+          class="log-line"
+          :class="{ dimmed: item.duplicateOf && phase !== 'searched' }"
         >
           <code>[{{ item.id }}]</code>
           <span>
@@ -82,15 +82,15 @@ async function run() {
             <br />
             {{ item.snippet }}
           </span>
-          <span v-if="item.duplicateOf && phase === 'searched'" class="lg-badge warn">疑似转载 [{{ item.duplicateOf }}]</span>
-          <span v-if="item.duplicateOf && phase !== 'searched'" class="lg-badge err">已去重</span>
+          <span v-if="item.duplicateOf && phase === 'searched'" class="badge warning">疑似转载 [{{ item.duplicateOf }}]</span>
+          <span v-if="item.duplicateOf && phase !== 'searched'" class="badge error">已去重</span>
         </div>
       </div>
 
-      <div class="lg-panel">
+      <div class="demo-panel">
         <h4>执行步骤</h4>
         <p v-if="!steps.length" class="hint">尚未运行。</p>
-        <p v-for="(step, i) in steps" :key="i" class="lg-log-line">{{ step }}</p>
+        <p v-for="(step, i) in steps" :key="i" class="log-line">{{ step }}</p>
         <div v-if="answer" class="tips-box">
           <strong>带引用回答：</strong>{{ answer }}
           <p class="hint" style="margin-top: 6px">来源：[1] langchain.dev · [3] blog.example.com · [4] docs.langchain.com</p>

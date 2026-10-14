@@ -65,7 +65,7 @@ async function run() {
 </script>
 
 <template>
-  <div class="demo-card">
+  <div class="demo-card demo-container">
     <h3>Deep Agent 的规划、委派与沉淀</h3>
     <p class="demo-desc">
       Deep Agent 自带四件套：待办规划、虚拟文件系统、子智能体委派、对话记忆。点运行，看它先列计划、再派人干活、最后落文件——全程自我组织。
@@ -77,7 +77,7 @@ async function run() {
     </div>
 
     <div class="grid-2">
-      <div class="lg-panel">
+      <div class="demo-panel">
         <h4>待办清单（write_todos）</h4>
         <div v-for="todo in todos" :key="todo.id" class="lg-todo" :class="{ done: todo.done }">
           <span class="lg-check">{{ todo.done ? '✓' : '○' }}</span>
@@ -86,16 +86,16 @@ async function run() {
 
         <h4 style="margin-top: 14px">虚拟文件系统</h4>
         <p v-if="!files.length" class="hint">还没有产出文件。</p>
-        <p v-for="(file, i) in files" :key="i" class="lg-log-line">
+        <p v-for="(file, i) in files" :key="i" class="log-line">
           <code>{{ file }}</code>
         </p>
       </div>
 
-      <div class="lg-panel">
+      <div class="demo-panel">
         <h4>行动轨迹</h4>
         <p v-if="!trail.length" class="hint">尚未运行。</p>
-        <div v-for="(item, i) in trail" :key="i" class="lg-log-line">
-          <span class="lg-badge" :class="item.badge === '委派' ? 'action' : item.badge === '写入' ? 'observe' : 'think'">
+        <div v-for="(item, i) in trail" :key="i" class="log-line">
+          <span class="badge" :class="item.badge === '委派' ? 'action' : item.badge === '写入' ? 'observe' : 'think'">
             {{ item.badge }}
           </span>
           <span>{{ item.text }}</span>
@@ -105,7 +105,7 @@ async function run() {
 
     <div v-if="report" class="tips-box">
       <strong>最终产出（/report.md）：</strong>
-      <pre class="lg-pre">{{ report }}</pre>
+      <pre class="mini-code">{{ report }}</pre>
     </div>
   </div>
 </template>

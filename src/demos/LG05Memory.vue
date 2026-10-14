@@ -89,7 +89,7 @@ async function send() {
 </script>
 
 <template>
-  <div class="demo-card">
+  <div class="demo-card demo-container">
     <h3>短期与长期记忆</h3>
     <p class="demo-desc">
       先发送「我叫小明，正在学 LangGraph」，再切到会话 2 追问「还记得我是谁吗」：会话历史清空了，但 Store 里的长期档案还在。气泡下方标注了每条回答的记忆来源。
@@ -110,7 +110,7 @@ async function send() {
     </div>
 
     <div class="grid-2">
-      <div class="lg-panel">
+      <div class="demo-panel">
         <h4>对话窗口（{{ currentThread }}）</h4>
         <div class="lg-chat-log">
           <p v-if="!currentMessages.length" class="hint">本会话还没有消息。{{ currentThread === 'session-2' ? '短期记忆已随切换清空。' : '' }}</p>
@@ -125,15 +125,15 @@ async function send() {
         </div>
       </div>
 
-      <div class="lg-panel">
+      <div class="demo-panel">
         <h4>长期记忆 Store（跨会话）</h4>
-        <div class="lg-kv"><span>namespace</span><strong>['profiles', 'student-01']</strong></div>
-        <div class="lg-kv"><span>name</span><strong>{{ storeProfile.name ?? '（空）' }}</strong></div>
-        <div class="lg-kv"><span>topic</span><strong>{{ storeProfile.topic ?? '（空）' }}</strong></div>
-        <div class="lg-kv"><span>updated_at</span><strong>{{ storeProfile.updated_at ?? '—' }}</strong></div>
+        <div class="prop-row"><span>namespace</span><span><code>['profiles', 'student-01']</code></span></div>
+        <div class="prop-row"><span>name</span><span><code>{{ storeProfile.name ?? '（空）' }}</code></span></div>
+        <div class="prop-row"><span>topic</span><span><code>{{ storeProfile.topic ?? '（空）' }}</code></span></div>
+        <div class="prop-row"><span>updated_at</span><span><code>{{ storeProfile.updated_at ?? '—' }}</code></span></div>
         <h4 style="margin-top: 12px">写入记录</h4>
         <p v-if="!storeWrites.length" class="hint">还没有写入长期记忆。</p>
-        <p v-for="(w, i) in storeWrites" :key="i" class="lg-log-line">{{ w }}</p>
+        <p v-for="(w, i) in storeWrites" :key="i" class="log-line">{{ w }}</p>
         <p class="hint">Store 与 thread 无关：清空对话、更换会话都不影响它，适合放用户偏好、画像这类长期数据。</p>
       </div>
     </div>

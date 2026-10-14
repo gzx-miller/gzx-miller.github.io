@@ -80,7 +80,7 @@ async function run() {
 </script>
 
 <template>
-  <div class="demo-card">
+  <div class="demo-card demo-container">
     <h3>状态图执行与条件边回环</h3>
     <p class="demo-desc">
       「内容生产线」被画成一张图：节点干活、边管流转。点运行看 review 质检节点如何用条件边把不合格的稿子打回 content——这条回环正是线性链表达不了的。
@@ -117,27 +117,27 @@ async function run() {
         <span class="lg-node terminator" :class="{ done: state.status === '完成' }">END</span>
       </div>
       <div class="lg-edge-note" :class="{ hit: !passed && state.attempts === 1 }">
-        <span class="lg-badge warn">条件边</span>
+        <span class="badge warning">条件边</span>
         review 不通过 → 沿虚线回到 content（改到合格为止）
       </div>
       <div class="lg-edge-note" :class="{ hit: passed }">
-        <span class="lg-badge ok">条件边</span>
+        <span class="badge success">条件边</span>
         review 通过 → 直达 summary
       </div>
     </div>
 
     <div class="grid-2">
-      <div class="lg-panel">
+      <div class="demo-panel">
         <h4>状态快照（随节点更新）</h4>
-        <div class="lg-kv"><span>outline</span><strong>{{ state.outline }}</strong></div>
-        <div class="lg-kv"><span>content</span><strong>{{ state.content }}</strong></div>
-        <div class="lg-kv"><span>attempts</span><strong>{{ state.attempts }}</strong></div>
-        <div class="lg-kv"><span>status</span><strong>{{ state.status }}</strong></div>
+        <div class="prop-row"><span>outline</span><span><strong>{{ state.outline }}</strong></span></div>
+        <div class="prop-row"><span>content</span><span><strong>{{ state.content }}</strong></span></div>
+        <div class="prop-row"><span>attempts</span><span><strong>{{ state.attempts }}</strong></span></div>
+        <div class="prop-row"><span>status</span><span><strong>{{ state.status }}</strong></span></div>
       </div>
-      <div class="lg-panel">
+      <div class="demo-panel">
         <h4>节点执行日志</h4>
         <p v-if="!logs.length" class="hint">尚未运行。</p>
-        <p v-for="(log, i) in logs" :key="i" class="lg-log-line">{{ log }}</p>
+        <p v-for="(log, i) in logs" :key="i" class="log-line">{{ log }}</p>
       </div>
     </div>
   </div>

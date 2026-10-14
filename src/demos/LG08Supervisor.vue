@@ -63,7 +63,7 @@ async function run() {
 </script>
 
 <template>
-  <div class="demo-card">
+  <div class="demo-card demo-container">
     <h3>监督者分派与子智能体接力</h3>
     <p class="demo-desc">
       监督者自己不做调研也不写文章——它拆解目标，把子任务派给「当工具的」子智能体，再汇总交付。点运行看一次完整的委派接力。
@@ -75,12 +75,12 @@ async function run() {
     </div>
 
     <div class="grid-2">
-      <div class="lg-panel">
+      <div class="demo-panel">
         <h4>团队名册</h4>
         <div v-for="member in team" :key="member.id" class="lg-server" :class="{ active: activeMember === member.id }">
           <div class="lg-server-head">
             <strong>{{ member.name }}</strong>
-            <span class="lg-badge" :class="activeMember === member.id ? 'ok' : 'warn'">
+            <span class="badge" :class="activeMember === member.id ? 'success' : 'warning'">
               {{ activeMember === member.id ? '工作中' : '待命' }}
             </span>
           </div>
@@ -89,11 +89,11 @@ async function run() {
         </div>
       </div>
 
-      <div class="lg-panel">
+      <div class="demo-panel">
         <h4>委派轨迹</h4>
         <p v-if="!trail.length" class="hint">尚未运行。</p>
-        <div v-for="(item, i) in trail" :key="i" class="lg-log-line">
-          <span class="lg-badge" :class="item.badge === '委派' ? 'action' : item.badge === '返回' ? 'observe' : 'think'">
+        <div v-for="(item, i) in trail" :key="i" class="log-line">
+          <span class="badge" :class="item.badge === '委派' ? 'action' : item.badge === '返回' ? 'observe' : 'think'">
             {{ item.badge }}
           </span>
           <span><strong>{{ item.from }}：</strong>{{ item.text }}</span>

@@ -71,16 +71,16 @@ async function run() {
 </script>
 
 <template>
-  <div class="demo-card">
+  <div class="demo-card demo-container">
     <h3>三层上下文的组装与注入</h3>
     <p class="demo-desc">
       同一个问题「接下来该学什么？」，改变注入的上下文，模型答案就不同。分别切换水平、关掉浏览历史，观察右侧「送入模型的消息」如何变化。
     </p>
 
     <div class="grid-2">
-      <div class="lg-panel">
+      <div class="demo-panel">
         <h4>① State：图内状态</h4>
-        <div class="lg-kv"><span>query</span><strong>{{ query }}</strong></div>
+        <div class="prop-row"><span>query</span><span><code>{{ query }}</code></span></div>
         <p class="hint">随本次运行存在，节点之间读写共享。</p>
 
         <h4 style="margin-top: 12px">② Context：运行时注入</h4>
@@ -93,7 +93,7 @@ async function run() {
         </div>
 
         <h4 style="margin-top: 12px">③ Store：跨会话档案</h4>
-        <div class="lg-kv"><span>viewed</span><strong>{{ viewedTopics.join('、') }}</strong></div>
+        <div class="prop-row"><span>viewed</span><span><code>{{ viewedTopics.join('、') }}</code></span></div>
         <div class="controls">
           <label><input v-model="includeStore" type="checkbox" :disabled="running" /> 读取浏览记录</label>
         </div>
@@ -103,13 +103,13 @@ async function run() {
         </div>
       </div>
 
-      <div class="lg-panel">
+      <div class="demo-panel">
         <h4>送入模型的消息</h4>
         <p v-if="!assembled.length" class="hint">运行后展示每次模型调用前装配出的消息列表。</p>
-        <div v-for="(msg, i) in assembled" :key="i" class="lg-log-line">
+        <div v-for="(msg, i) in assembled" :key="i" class="log-line">
           <code>[{{ msg.role }}]</code>
           <span>{{ msg.text }}</span>
-          <span class="lg-badge ok">来自 {{ msg.origin }}</span>
+          <span class="badge success">来自 {{ msg.origin }}</span>
         </div>
         <div v-if="output" class="tips-box">
           <strong>模型输出：</strong>{{ output }}
@@ -117,10 +117,10 @@ async function run() {
       </div>
     </div>
 
-    <div class="lg-panel" style="margin-top: 12px">
+    <div class="demo-panel" style="margin-top: 12px">
       <h4>节点读取日志</h4>
       <p v-if="!logs.length" class="hint">尚未运行。</p>
-      <p v-for="(log, i) in logs" :key="i" class="lg-log-line">{{ log }}</p>
+      <p v-for="(log, i) in logs" :key="i" class="log-line">{{ log }}</p>
     </div>
   </div>
 </template>

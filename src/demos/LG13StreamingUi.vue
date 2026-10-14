@@ -88,7 +88,7 @@ function stop() {
 </script>
 
 <template>
-  <div class="demo-card">
+  <div class="demo-card demo-container">
     <h3>事件流驱动的聊天界面</h3>
     <p class="demo-desc">
       一次提问会同时产生两种事件：updates 推进节点进度条，messages 逐 token 填充气泡。生成中点「停止」可以中断流——就像真实的 SSE 断流。
@@ -99,7 +99,7 @@ function stop() {
     </div>
 
     <div class="grid-2">
-      <div class="lg-panel">
+      <div class="demo-panel">
         <h4>对话</h4>
         <div ref="chatRef" class="lg-chat-log lg-chat-tall">
           <p v-if="!messages.length" class="hint">发送一条消息，看回答如何逐字浮现。</p>
@@ -127,15 +127,34 @@ function stop() {
         </div>
       </div>
 
-      <div v-if="showEvents" class="lg-panel">
+      <div v-if="showEvents" class="demo-panel">
         <h4>事件流（SSE）</h4>
         <p v-if="!events.length" class="hint">发送后这里会滚动两类事件：updates（节点进度）与 messages（token）。</p>
-        <p v-for="(event, i) in events" :key="i" class="lg-log-line">{{ event }}</p>
+        <p v-for="(event, i) in events" :key="i" class="log-line">{{ event }}</p>
       </div>
-      <div v-else class="lg-panel">
+      <div v-else class="demo-panel">
         <h4>提示</h4>
         <p class="hint">勾选「显示事件流」，观察 updates 与 messages 两类事件如何交错到达，驱动同一个界面。</p>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+/* 打字光标：仅本演示使用，随组件走，不进公共样式表 */
+.lg-cursor {
+  color: var(--demo-accent);
+  animation: lg-blink 0.8s infinite;
+}
+
+@keyframes lg-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+</style>

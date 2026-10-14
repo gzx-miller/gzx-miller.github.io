@@ -68,7 +68,7 @@ async function run() {
 </script>
 
 <template>
-  <div class="demo-card">
+  <div class="demo-card demo-container">
     <h3>MCP Server 工具接入与跨服务调用</h3>
     <p class="demo-desc">
       两个 MCP Server 各自暴露工具，Agent 用同一套接口发现并调用它们。点运行，看一次提问如何跨越「课程库」与「计算器」两个服务完成。
@@ -80,12 +80,12 @@ async function run() {
     </div>
 
     <div class="grid-2">
-      <div class="lg-panel">
+      <div class="demo-panel">
         <h4>已连接的 MCP Server</h4>
         <div v-for="server in servers" :key="server.id" class="lg-server" :class="{ active: activeServer === server.id }">
           <div class="lg-server-head">
             <strong>{{ server.id }}</strong>
-            <span class="lg-badge" :class="activeServer === server.id ? 'ok' : 'warn'">
+            <span class="badge" :class="activeServer === server.id ? 'success' : 'warning'">
               {{ activeServer === server.id ? '调用中' : server.transport.split(' · ')[0] }}
             </span>
           </div>
@@ -98,11 +98,16 @@ async function run() {
         <p class="hint">工具名带 Server 前缀，一眼看出每次调用跨了哪个服务。</p>
       </div>
 
-      <div class="lg-panel">
+      <div class="demo-panel">
         <h4>调用轨迹</h4>
         <p v-if="!trail.length" class="hint">尚未运行。</p>
-        <div v-for="(item, i) in trail" :key="i" class="lg-log-line" :class="item.kind">
-          <span class="lg-badge" :class="item.kind === 'agent' ? 'think' : item.kind === 'call' ? 'action' : 'observe'">
+        <div
+          v-for="(item, i) in trail"
+          :key="i"
+          class="log-line"
+          :class="item.kind === 'agent' ? 'think' : item.kind === 'call' ? 'action' : 'observe'"
+        >
+          <span class="badge" :class="item.kind === 'agent' ? 'think' : item.kind === 'call' ? 'action' : 'observe'">
             {{ item.kind === 'agent' ? 'Agent' : item.kind === 'call' ? '调用' : '返回' }}
           </span>
           <span>{{ item.text }}</span>

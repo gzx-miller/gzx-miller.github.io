@@ -69,6 +69,16 @@
   background: var(--demo-surface);
 }
 
+/* .demo-panel 是演示内部的次级分区面板（比 .demo-card 更轻），
+   用于把长演示切分成并列区域。原先 vite 与 langgraph 分类的演示
+   各自重复实现过同款面板，现收敛为公共定义。 */
+.demo-panel {
+  padding: 12px;
+  border: 1px solid var(--demo-border);
+  border-radius: 8px;
+  background: var(--demo-surface-soft);
+}
+
 /* ---------- 按钮 ---------- */
 
 .btn {
@@ -326,6 +336,38 @@
   color: var(--demo-danger);
 }
 
+/* ---------- 徽章 ---------- */
+
+/* .badge 是「状态徽章」统一类名（wasm 与 langgraph 分类的演示均有使用）。
+   默认描边风格，状态语义用 .success / .warning / .error 修饰。 */
+.badge {
+  display: inline-block;
+  padding: 1px 8px;
+  border: 1px solid var(--demo-border);
+  border-radius: 10px;
+  background: var(--demo-surface-soft);
+  color: var(--demo-text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.badge.success {
+  border-color: var(--demo-success);
+  color: var(--demo-success);
+}
+
+.badge.warning {
+  border-color: var(--demo-warning);
+  color: var(--demo-warning);
+}
+
+.badge.error {
+  border-color: var(--demo-danger);
+  color: var(--demo-danger);
+}
+
 /* ---------- 表单控件 ---------- */
 
 .demo-container input[type='text'],
@@ -364,6 +406,35 @@
   line-height: 1.7;
 }
 
+/* 日志行：配合 .log-panel / .demo-panel 使用。
+   不加背景，深浅两种面板底色上均可读；
+   状态色只用左侧色条表达，语义与 .badge 一致。 */
+.log-line {
+  margin: 0 0 6px;
+  padding: 4px 8px;
+  border-left: 3px solid transparent;
+  border-radius: 6px;
+  color: var(--demo-text);
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.log-line:last-child {
+  margin-bottom: 0;
+}
+
+.log-line.success {
+  border-left-color: var(--demo-success);
+}
+
+.log-line.warning {
+  border-left-color: var(--demo-warning);
+}
+
+.log-line.error {
+  border-left-color: var(--demo-danger);
+}
+
 /* ---------- 通用布局工具 ---------- */
 
 .row {
@@ -384,6 +455,13 @@
   gap: 16px;
 }
 
+/* 三列网格（三路对比场景） */
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
 /* .compare / .preset-list / .transform-demo / .feature-grid / .format-grid /
    .compare-cards / .code-compare / .tools-grid / .test-cases-grid 等 9 处
    「两列网格容器」同义类名，已在本轮归一化中合并为 .grid-2。 */
@@ -392,6 +470,7 @@
 
 @media (max-width: 720px) {
   .grid-2,
+  .grid-3,
   .layout,
   .demo-layout {
     grid-template-columns: 1fr;
@@ -416,6 +495,11 @@
 .demo-container strong {
   color: var(--demo-title);
   font-weight: 600;
+}
+
+/* 弱化的行 / 条目（如被跳过、被去重的内容） */
+.dimmed {
+  opacity: 0.55;
 }
 
 /* ---------- 滚动条（深色代码块内） ---------- */

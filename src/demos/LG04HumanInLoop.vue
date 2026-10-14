@@ -57,7 +57,7 @@ async function finish(decision: 'approved' | 'rejected') {
 </script>
 
 <template>
-  <div class="demo-card">
+  <div class="demo-card demo-container">
     <h3>退款审批：中断与恢复</h3>
     <p class="demo-desc">
       金额超过 ￥500 的退款必须人工审批。提交后流程会停在 interrupt 处挂起——检查点里留着完整状态；你点「批准」或「驳回」，流程从断点恢复，而不是从头重跑。
@@ -106,17 +106,17 @@ async function finish(decision: 'approved' | 'rejected') {
     </div>
 
     <div class="grid-2">
-      <div class="lg-panel">
+      <div class="demo-panel">
         <h4>检查点快照（thread: {{ threadId }}）</h4>
-        <p class="lg-kv">next: {{ phase === 'waiting' ? "['review']" : phase === 'done' ? '[]' : '—' }}</p>
-        <p class="lg-kv">amount: {{ amount }}</p>
-        <p class="lg-kv">decision: {{ result ? (result.includes('已退款') ? "'approved'" : "'rejected'") : 'null' }}</p>
+        <div class="prop-row"><span>next</span><span><code>{{ phase === 'waiting' ? "['review']" : phase === 'done' ? '[]' : '—' }}</code></span></div>
+        <div class="prop-row"><span>amount</span><span><code>{{ amount }}</code></span></div>
+        <div class="prop-row"><span>decision</span><span><code>{{ result ? (result.includes('已退款') ? "'approved'" : "'rejected'") : 'null' }}</code></span></div>
         <p class="hint">检查点每次状态变更都会更新；恢复时框架从此处重建状态，不需要重跑前面节点。</p>
       </div>
-      <div class="lg-panel">
+      <div class="demo-panel">
         <h4>执行日志</h4>
         <p v-if="!logs.length" class="hint">尚未提交申请。</p>
-        <p v-for="(log, i) in logs" :key="i" class="lg-log-line">{{ log }}</p>
+        <p v-for="(log, i) in logs" :key="i" class="log-line">{{ log }}</p>
       </div>
     </div>
 

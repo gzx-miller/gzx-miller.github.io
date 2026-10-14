@@ -89,7 +89,7 @@ async function run() {
 </script>
 
 <template>
-  <div class="demo-card">
+  <div class="demo-card demo-container">
     <h3>扇出并发与 fan-in 汇总</h3>
     <p class="demo-desc">
       一份作业三个维度审查。先跑默认的并行，再切到串行对比总耗时——三个分支互不依赖，唯一正确的等待，是等所有分支都完成后再汇总。
@@ -103,7 +103,7 @@ async function run() {
         串行对比
       </button>
       <button class="btn" type="button" :disabled="running" @click="run">{{ running ? '批改中…' : '开始批改' }}</button>
-      <span class="lg-stat">总耗时：{{ running || elapsed ? `${elapsed}ms` : '—' }}</span>
+      <span class="hint">总耗时：{{ running || elapsed ? `${elapsed}ms` : '—' }}</span>
     </div>
 
     <div class="lg-canvas">
@@ -129,10 +129,10 @@ async function run() {
       </div>
     </div>
 
-    <div class="lg-panel">
+    <div class="demo-panel">
       <h4>执行日志</h4>
       <p v-if="!logs.length" class="hint">尚未运行。默认并行模式：三个分支同时开始，总耗时接近最慢的那个。</p>
-      <p v-for="(log, i) in logs" :key="i" class="lg-log-line">{{ log }}</p>
+      <p v-for="(log, i) in logs" :key="i" class="log-line">{{ log }}</p>
     </div>
   </div>
 </template>

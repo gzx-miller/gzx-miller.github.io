@@ -112,7 +112,7 @@ const strategies = [
 </script>
 
 <template>
-  <div class="demo-card">
+  <div class="demo-card demo-container">
     <h3>三种检索策略同题对比</h3>
     <p class="demo-desc">
       同一个问题分别交给向量、关键词与混合检索。切换提问方式再跑一次：语义型提问看关键词如何失手，术语型提问看两路如何互证。
@@ -132,19 +132,19 @@ const strategies = [
       </button>
       <button class="btn" type="button" :disabled="running" @click="run">{{ running ? '检索中…' : '运行三路检索' }}</button>
     </div>
-    <p class="lg-kv">当前查询：「{{ scenario.query }}」</p>
+    <p class="hint">当前查询：「{{ scenario.query }}」</p>
 
-    <div class="lg-trio">
-      <div v-for="s in strategies" :key="s.key" class="lg-panel">
+    <div class="grid-3">
+      <div v-for="s in strategies" :key="s.key" class="demo-panel">
         <h4>{{ s.name }} <small>{{ s.sub }}</small></h4>
         <p v-if="!visible[s.key]" class="hint">等待检索…</p>
-        <div v-for="hit in scenario[s.key].hits.slice(0, visible[s.key])" :key="hit.id" class="lg-log-line">
+        <div v-for="hit in scenario[s.key].hits.slice(0, visible[s.key])" :key="hit.id" class="log-line">
           <code>[{{ hit.id }}]</code>
           <span>{{ hit.text }}</span>
-          <span class="lg-badge warn">{{ hit.score }}</span>
+          <span class="badge warning">{{ hit.score }}</span>
         </div>
-        <p v-if="visible[s.key] && !scenario[s.key].hits.length" class="lg-log-line">
-          <span class="lg-badge err">未命中</span>
+        <p v-if="visible[s.key] && !scenario[s.key].hits.length" class="log-line">
+          <span class="badge error">未命中</span>
         </p>
         <div v-if="visible[s.key]" class="tips-box">
           <strong>回答：</strong>{{ scenario[s.key].answer }}
