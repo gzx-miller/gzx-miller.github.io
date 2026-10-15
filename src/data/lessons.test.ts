@@ -5,7 +5,7 @@ import { getAllLessons, getLessonsByCategory, knowledgeCategories } from './less
 describe('课程注册表', () => {
   it('新增专题课程按子类别形成完整章节', async () => {
     const expectedCurriculum = [
-      { id: 'javascript', lessonCount: 28, groupCount: 9 },
+      { id: 'javascript', lessonCount: 22, groupCount: 8 },
       { id: 'nodejs', lessonCount: 30, groupCount: 16 },
       { id: 'vue', lessonCount: 38, groupCount: 15 },
       { id: 'react', lessonCount: 35, groupCount: 22 },

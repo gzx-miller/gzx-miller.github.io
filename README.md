@@ -32,15 +32,13 @@
 
 | 分类 | 课程数 | 章节数 | 说明 |
 |---|---|---|---|
-| [JavaScript](https://gzx-miller.github.io/javascript) | 28 | 9 | 类型与对象模型、原型链、异步机制、模块化与浏览器事件 |
-| [TypeScript](https://gzx-miller.github.io/typescript) | 24 | 4 | 类型建模、类型收窄、泛型、类型操作与 Vue 组件类型实践 |
+| [JavaScript](https://gzx-miller.github.io/javascript) | 22 | 8 | 语法与作用域、类型判断、函数与对象模型、集合、异步、事件、网络、模块与存储 |
 | [Vue3](https://gzx-miller.github.io/vue) | 37 | 15 | 组合式 API、组件、路由、Pinia、过渡动画、插件开发与工程实践 |
 | [Element Plus](https://gzx-miller.github.io/element-plus) | 20 | 7 | 表格、表单、弹窗、导航、数据展示与反馈等企业级组件 |
 | [Vue Flow](https://gzx-miller.github.io/vue-flow) | 12 | 4 | 流程图与节点编辑器：连线校验、useVueFlow、拖拽搭建与自动布局 |
 | [Nest.js](https://gzx-miller.github.io/nestjs) | 12 | 4 | 模块化架构、依赖注入、守卫鉴权、管道校验与 TypeORM |
 | [Nuxt](https://gzx-miller.github.io/nuxt) | 20 | 10 | 文件路由、自动导入、SSR/SSG、Nitro 服务端 API 与模块生态 |
 | [Node.js](https://gzx-miller.github.io/nodejs) | 30 | 16 | 模块、文件、事件、流、HTTP、进程、测试、安全与依赖管理 |
-| [CSS](https://gzx-miller.github.io/css) | 24 | 21 | 选择器、盒模型、布局、层叠、变量、动画、容器查询与性能 |
 | [Tailwind CSS](https://gzx-miller.github.io/tailwind-css) | 24 | 12 | v4 CSS-first、响应式变体、主题令牌、暗色模式与容器查询 |
 | [Sass](https://gzx-miller.github.io/sass) | 24 | 9 | 模块系统、变量、嵌套、Mixin、函数与集合操作 |
 | [Vite](https://gzx-miller.github.io/vite) | 21 | 10 | 配置、插件、HMR、依赖预构建、构建优化、库模式与 SSR |
@@ -80,7 +78,7 @@ pnpm dev
 /                          # 首页
 /vue                       # Vue3 分类首页
 /vue/k-1/app-entry         # Vue3 > 工程起点 > 创建应用
-/javascript/j-7/promise    # JavaScript > 异步机制 > Promise 并发
+/javascript/j-7/closure    # JavaScript > 函数与组合 > 作用域链与闭包
 /react/r-10/memoization    # React > 性能 > 记忆化优化
 ```
 

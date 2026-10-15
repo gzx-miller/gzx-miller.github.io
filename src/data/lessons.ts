@@ -34,7 +34,7 @@ export interface KnowledgeCategory {
 }
 
 export const knowledgeCategories: KnowledgeCategory[] = [
-  { id: 'javascript', name: 'JavaScript', path: '/javascript', status: 'ready', intro: 'JavaScript 是 Web 平台的核心语言。本分类从类型、函数和对象模型出发，逐步覆盖异步机制、模块化与浏览器事件。', officialUrl: 'https://developer.mozilla.org/zh-CN/docs/Web/JavaScript' },
+  { id: 'javascript', name: 'JavaScript', path: '/javascript', status: 'ready', intro: 'JavaScript 是 Web 平台的核心语言。本分类从语法、变量作用域与类型判断出发，经函数与对象模型、集合与数据，逐步覆盖异步编程、浏览器事件、网络请求、模块化与存储通信。', officialUrl: 'https://developer.mozilla.org/zh-CN/docs/Web/JavaScript' },
   { id: 'vue', name: 'Vue3', path: '/vue', status: 'ready', intro: 'Vue3 是渐进式 JavaScript 框架。本分类用真实小业务场景拆解组合式 API、组件、路由、状态管理和工程实践。', officialUrl: 'https://vuejs.org/' },
   { id: 'element-plus', name: 'Element Plus', path: '/element-plus', status: 'ready', intro: 'Element Plus 是基于 Vue 3 的组件库，提供丰富的企业级 UI 组件，覆盖表格、表单、弹窗、导航等常见场景。', officialUrl: 'https://element-plus.org/' },
   { id: 'vue-flow', name: 'Vue Flow', path: '/vue-flow', status: 'ready', intro: 'Vue Flow 是基于 Vue 3 的流程图与节点编辑器。本分类从数据模型与内置节点出发，覆盖连接桩校验、连线定制、交互编排、useVueFlow 状态管理、拖拽搭建、自动布局、只读展示与双主题适配。', officialUrl: 'https://vueflow.dev/' },

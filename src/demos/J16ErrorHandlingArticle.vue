@@ -5,74 +5,95 @@ import J16ErrorHandling from './J16ErrorHandling.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>表单提交失败时界面只弹一句「操作失败」，你怎么分辨这次到底是「姓名太短」还是「服务器 503」？
+      <strong>开场问题：</strong>报名表单里，姓名字段没填够两个字，和服务器返回 503，失败后进了同一个 <code>catch</code>，前端一律弹出「提交失败，请重试」。同事排查了半天才发现：一个是用户自己填错了，重试一百次也没用；一个是网络抖动，重试一次就好。两句完全不同的失败被同一句话糊住了——可它们本来就该被分开对待。
     </div>
 
-    <h2>失败来源分类</h2>
+    <h2>错误与抛出</h2>
     <p>
-      真实程序里，失败来自四面八方：<code>JSON.parse()</code> 拿到坏数据会抛错、网络请求会超时、业务规则校验会不通过。你希望它们能被<strong>分别处理</strong>，并且在向上传递时保留「到底哪一步出的错」，好在界面上给出准确的提示。
+      你想做的是一件小事：出错时别让程序闷头崩掉，得有个地方把它接住。语言给的初版答案就是 <code>try/catch</code>——把可能出错的代码包进 <code>try</code>，一旦抛错就跳到 <code>catch</code> 里执行。
     </p>
     <p>
-      不做统一处理的代价是：错误散落各处，有的被静默吞掉，有的只剩一句笼统的「失败」，排查时只能靠猜。
+      先看清被接住的到底是什么。运行时抛出的错误不是一句字符串，而是对象，并且按来源分成几族：<code>SyntaxError</code>（代码本身没法解析）、<code>TypeError</code>（值的类型不对，比如对 <code>undefined</code> 取属性）、<code>ReferenceError</code>（引用了不存在的变量）、<code>RangeError</code>（数值或长度超出允许范围）。
     </p>
-    <p>
-      更麻烦的是，同一个错误往往要在多层函数之间传递：底层知道原因，上层要给用户提示，中间几层只负责转发。如果没有一种能承载上下文的载体，信息会在每一层被压扁成一句笼统的话，等真正要处理时，原始原因早就丢失了。
-    </p>
-
-    <h2>返回值错误表达</h2>
-    <p>
-      最省事的做法：用返回值表达错误——函数失败就 <code>return</code> 一个错误字符串或 <code>false</code>，让调用方自己判断。
-    </p>
-    <p>
-      这个方案做对了一件事：<strong>不打断执行流程</strong>，逻辑线性、简单直接，适合纯粹的、可预期的失败分支。
-    </p>
-    <p>
-      但它有个隐含前提：调用方足够自觉。只要有一个人少写一个判断，错误就顺着返回值一路漂过去，最后在别处爆发成更难查的问题——那时你已经看不到它最初是从哪冒出来的了。
-    </p>
-
-    <h2>错误信息表达局限</h2>
     <ul>
-      <li>可被无视：调用方完全可以不检查返回值继续往下跑，错误被悄悄吞掉。</li>
-      <li>只有一条消息：拿到的是一句字符串，没法按「类型」分流，只能去解析 <code>message</code> 文本，脆弱又难维护。</li>
-      <li>丢上下文：原始错误（哪个字段、哪次请求）在层层传参途中就丢了。</li>
-      <li>异步更别扭：Promise 与 <code>await</code> 的结果里混着错误，用返回值表达非常难受。</li>
+      <li>它们都继承自 <code>Error</code>，所以 <code>catch</code> 拿到的对象自带 <code>message</code> 与 <code>stack</code>——前者是文字说明，后者是调用栈。</li>
+      <li>这套内置类型的好处是：<strong>光看 <code>name</code> 就能判断错误出在哪一类</strong>，不用去猜字符串内容。</li>
+      <li>还有一个常见误解要纠正：<code>throw</code> 并不要求你抛 <code>Error</code>，抛数字、字符串、对象都合法。</li>
+    </ul>
+    <p>
+      但合法不等于应该。一旦抛出的是字符串，<code>catch</code> 里既没有 <code>message</code> 也没有 <code>stack</code>，链路上每一层都只能靠猜。所以约定是：<strong><code>throw</code> 只抛 <code>Error</code> 或它的子类</strong>。
+    </p>
+
+    <h2>捕获与收尾的顺序</h2>
+    <p>
+      最省事的做法是：<code>try</code> 里写业务，<code>catch</code> 里写提示。它确实做对了一件事——错误被局部接住，后面的代码还能继续跑，不至于因为一次失败整页停摆。
+    </p>
+    <p>
+      可它漏掉了「无论如何都要收尾」这件事：请求既然发出去了，不管成功还是失败，加载状态都得关掉、连接都得释放——而 <code>catch</code> 只在出错时才执行，正常返回时它根本轮不到。这时就需要 <code>finally</code>：它<strong>无条件</strong>在 <code>try</code> 与 <code>catch</code> 之后执行，即使 <code>try</code> 里已经 <code>return</code> 了也照样会跑。执行顺序固定为 <code>try</code> →（出错则）<code>catch</code> → <code>finally</code>。
+    </p>
+    <p>
+      其中有两个细节最容易忽略：
+    </p>
+    <ul>
+      <li><code>catch</code> 的绑定可以省略（ES2019 起）：<code>catch { ... }</code>，当你不关心错误对象、只想「接住并忽略」时更简洁。</li>
+      <li><code>finally</code> 里写 <code>return</code> 会<strong>覆盖</strong> <code>try</code> 与 <code>catch</code> 的返回值——前面算好的结果会被直接丢弃。</li>
+    </ul>
+    <p>
+      所以给 <code>finally</code> 划一条界线：只用它做清理，不要在里面写 <code>return</code>。
+    </p>
+
+    <h2>给错误起个名字</h2>
+    <p>
+      回到开头的困惑。默认的 <code>Error</code> 只有一个 <code>message</code>，<code>catch</code> 接到的无论是校验失败还是网络失败，都长得一模一样，只能靠字符串里有没有「503」去猜。
+    </p>
+    <p>
+      更好的做法是<strong>继承 <code>Error</code>，定义业务异常类，并在构造函数里把 <code>name</code> 设成类名</strong>。这样 <code>err.name</code> 直接告诉你是哪一类，<code>instanceof</code> 也能精确区分：
+    </p>
+    <ul>
+      <li><code>class ValidationError extends Error</code>，构造里 <code>this.name = 'ValidationError'</code>，并把业务字段（比如 <code>field</code>）一并挂上去。</li>
+      <li>这样造出的实例仍然是 <code>Error</code>（<code>instanceof Error</code> 为真），所以兜底的 <code>catch</code> 也接得住它。</li>
+      <li>分流时用 <code>instanceof</code>：是 <code>ValidationError</code> 就提示用户改输入，是 <code>NetworkError</code> 就提示稍后重试。</li>
+    </ul>
+    <p>
+      于是「同一个 <code>catch</code> 里的两种失败」终于有了不同的后续处理——这正是开头那个问题需要的答案。
+    </p>
+
+    <h2>别丢掉原始错误</h2>
+    <p>
+      分层调用里，错误常常被「翻译」：底层抛的是 <code>SyntaxError</code>（配置文件没法解析），可你希望上层抛一句业务话「解析配置失败」，好让调用方读懂。于是你新建一个 <code>Error</code> 抛出去。
+    </p>
+    <p>
+      可这样一来，底层那条原始错误就没了——排查时只看到业务话，根本不知道根因是解析失败。更准确地说，你把「是什么」替换成了「看起来像什么」。补救方式是 <code>cause</code> 选项：<code>new Error('解析配置失败', { cause: lowError })</code>，把原始错误挂在 <code>cause</code> 上。
+    </p>
+    <p>
+      这样形成的是一条<strong>错误链</strong>：上层读 <code>err.message</code> 得到业务化的说明，顺着 <code>err.cause</code> 才能拿到根因；链可以一层层串下去，一直到最初那个错误。既保留了可读的提示文案，又不丢失排错线索。
+    </p>
+
+    <h2>异步边界的漏网</h2>
+    <p>
+      还有一个最容易踩的边界：<code>try/catch</code> <strong>接不住异步回调里抛出的同步错误</strong>。<code>try { setTimeout(() =&gt; { throw new Error() }, 0) } catch (e) { ... }</code> 里的 <code>catch</code> 根本不会执行——定时器回调是在当前调用栈清空之后才运行的，那时 <code>try/catch</code> 早就退出了。Promise 被拒绝同理，它不会自己走进 <code>try/catch</code>（除非你 <code>await</code> 它）。
+    </p>
+    <p>
+      这类「谁都没接住」的错误，只能靠全局兜底：
+    </p>
+    <ul>
+      <li><code>window.onerror</code> 或 <code>window.addEventListener('error', ...)</code> 接住未捕获的同步错误。</li>
+      <li><code>window.addEventListener('unhandledrejection', ...)</code> 接住没有被任何 <code>catch</code> 处理的 Promise 拒绝。</li>
+      <li>它们的作用是<strong>把漏网的错误送到日志或监控</strong>，而不是就地恢复流程——到那时出错的上下文早已不在。</li>
     </ul>
 
-    <h2>异常抛出与捕获</h2>
-    <p>
-      不推翻「判断失败」，而是让失败升级为一种<strong>可抛、可捕获、可携带信息的一等对象</strong>。
-    </p>
-    <p>
-      核心是 <code>try/catch/finally</code>。用 <code>try</code> 包住可能抛错的代码，<code>catch</code> 捕获抛出的异常，<code>finally</code> 无论成功失败都执行——适合放清理逻辑（关闭连接、复位状态）。关键的一点是，<code>catch</code> 不只捕获同步异常，也能捕获 <code>async/await</code> 中被<strong>拒绝的 Promise</strong>，于是同步与异步边界的失败可以汇入同一处来处理。
-    </p>
-    <p>
-      接着把错误<strong>分类</strong>：继承 <code>Error</code> 定义自定义异常类，比如 <code>class ValidationError extends Error</code>，在构造函数里塞进业务字段（哪个字段不合法），并设置 <code>this.name</code>。处理时就可以用 <code>instanceof</code> 或 <code>err.name</code> 分支，而不再去解析 <code>message</code> 字符串这种脆弱做法。这样一来，「姓名太短」和「服务器 503」就是两种能被程序分辨的类型，界面自然给得出不同文案。
-    </p>
-    <p>
-      再解决上下文丢失：<code>Error</code> 构造器支持 <code>cause</code> 选项（ES2022），<code>super(message, { cause: err })</code> 能把原始错误挂到新错误上，形成<strong>错误链</strong>——你在外层抛出更友好的错误，同时底层原因完整保留。
-    </p>
-    <p>
-      自定义异常还有个实际好处：调用方可以用 <code>instanceof</code> 精确判断「这是我关心的业务错误」还是「意料之外的崩溃」。前者给用户一句友好提示，后者记录日志并上报，两条处理路径泾渭分明。反观只拿一句 <code>message</code> 字符串去判断，靠的是文本比对，改动一处文案就可能让分支逻辑失效。
-    </p>
-    <div class="lesson-box warn">
-      两个边界要知道：<code>try/catch</code> 捕获不到 <code>setTimeout</code> 这类<strong>异步回调内部</strong>的同步抛出，因为回调在另一个任务里执行，调用栈早已不同；Promise 链连续 <code>then</code> 时用最后的 <code>catch</code> 兜底，未处理的拒绝还要配置全局监听，否则会静默丢失。
-    </div>
-
-    <h2>类型分流与上下文</h2>
+    <h2>异常链路逐步观察</h2>
     <figure class="lesson-figure">
-      <figcaption>分别点三个按钮，观察 <code>instanceof</code> 如何分流错误类型，以及 <code>cause</code> 怎样把字段信息带出来。</figcaption>
+      <figcaption>三个按钮分别是正常提交、触发校验错误、模拟网络异常。注意 <code>catch</code> 里用 <code>err.name</code> 区分了两类异常，又用 <code>err.cause</code> 读出了出错字段。先看 <code>try/catch/finally</code> 的执行顺序，再看 <code>name</code> 与 <code>cause</code> 如何把错误分层。</figcaption>
       <J16ErrorHandling />
     </figure>
 
-    <h2>系统边界统一收口</h2>
+    <h2>先分类再处理</h2>
     <p>
-      错误处理的关键，是把失败当成设计对象而非意外：在系统边界统一收口，用类型清晰分流，用 <code>cause</code> 保留底层上下文。这样「失败」才是一条可追踪、可恢复的路径。
-    </p>
-    <p>
-      从一个笼统的字符串，到一条带类型、带原因、可被精确捕获的错误链，中间差的不是语法，而是把「失败」纳入设计的态度。
+      错误处理从来不是「用一个 <code>catch</code> 包住所有东西」。内置错误类型族帮你认出错误来源，<code>try/catch/finally</code> 负责执行顺序与收尾，自定义 <code>Error</code> 子类配合 <code>name</code> 与 <code>instanceof</code> 让业务能按类型分流，<code>cause</code> 把原始错误串成链，全局兜底接住异步边界的漏网之鱼。写 <code>catch</code> 时先问一句：<strong>这个错误属于哪一类、原始错误又在哪里</strong>，再决定怎么处理。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「异常与错误链」</span><code>try/catch</code> 捕获同步异常以及 <code>async/await</code> 中被拒绝的 Promise，<code>finally</code> 无论成败都执行清理；继承 <code>Error</code> 可定义携带业务字段的自定义异常，按类型或 <code>name</code> 分流；<code>super(message, { cause: err })</code> 用 <code>cause</code>（ES2022）把原始错误挂到新错误上，形成错误链、保留底层上下文。
+      <span class="term-name">「错误链」</span>指错误在被逐层「翻译」时，用 <code>new Error('上层说明', { cause: 原始错误 })</code> 把底层错误挂在 <code>cause</code> 属性上所形成的一条链。上层读到的是业务化的 <code>message</code>，沿着 <code>cause</code> 一路向下就能找到最初的根因——既保留了可读的提示，又不丢失排错线索。
     </div>
   </LessonArticle>
 </template>
