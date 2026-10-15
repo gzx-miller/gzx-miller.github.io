@@ -1,14 +1,83 @@
+// ═══════════════════════════════════════════
+// 1. 算术、关系与位运算符
+// ═══════════════════════════════════════════
+
 #include <iostream>
 
 int main() {
     int a = 10, b = 3;
-    std::cout << a + b << std::endl;
-    std::cout << a / b << std::endl;
-    std::cout << a % b << std::endl;
+    std::cout << a + b << std::endl;        // 结果：13
+    std::cout << a / b << std::endl;        // 结果：3，整数除法向零取整
+    std::cout << a % b << std::endl;        // 结果：1，取余只用于整数
+    std::cout << (a > b) << std::endl;      // 结果：1，关系运算给出 bool
 
-    int x = 0;
-    if (a > b && ++x) { }
-    std::cout << x << std::endl;
+    int bits = 5;                           // 二进制 0101
+    std::cout << (bits << 1) << std::endl;  // 结果：10，左移一位等于乘 2
+    std::cout << (bits & 3) << std::endl;   // 结果：1，0101 & 0011 = 0001
+    return 0;
+}
 
+// ═══════════════════════════════════════════
+// 2. 逻辑运算符与短路求值
+// ═══════════════════════════════════════════
+
+int main() {
+    int a = 10, b = 3, x = 0;
+    if (a > b && ++x) { }                   // a > b 为真，右侧 ++x 被求值
+    std::cout << x << std::endl;            // 结果：1，x 自增了
+
+    x = 0;
+    if (a < b && ++x) { }                   // a < b 为假，右侧被短路跳过
+    std::cout << x << std::endl;            // 结果：0，x 未被修改
+    return 0;
+}
+
+// ═══════════════════════════════════════════
+// 3. 优先级与结合律
+// ═══════════════════════════════════════════
+
+int main() {
+    int a = 12, mask = 0;
+    bool wrong = (a & mask == 0);           // == 优先级高于 &，实际为 a & (mask == 0)
+    bool right = ((a & mask) == 0);         // 结果：true，括号恢复了本意
+    int c = 1 + 2 * 3;                      // 结果：7，乘法先于加法
+    int d = (1 + 2) * 3;                    // 结果：9，括号改变结合顺序
+    int e = a > 5 ? a : 5;                  // 结果：12，条件运算符
+    return 0;
+}
+
+// ═══════════════════════════════════════════
+// 4. 整数提升、算术转换与显式转换
+// ═══════════════════════════════════════════
+
+int main() {
+    char c1 = 100, c2 = 200;
+    int sum = c1 + c2;                      // 结果：300，char 先提升为 int
+    // char bad = c1 + c2;                  // 塞回 char 会截断，结果不可预期
+
+    int total = 350, count = 4;
+    double avg = static_cast<double>(total) / count;  // 结果：87.5，显式转 double
+    int again = total / count;              // 结果：87，整数除法丢小数
+
+    unsigned int u = 10;
+    if (-1 < u) { }                         // 结果：false，-1 被转成无符号大数
+    return 0;
+}
+
+// ═══════════════════════════════════════════
+// 5. 自增前后缀、求值顺序与未定义行为
+// ═══════════════════════════════════════════
+
+#include <climits>
+
+int main() {
+    int i = 5;
+    int pre  = ++i;                         // 结果：6，先自增再取值
+    int post = i++;                         // 结果：6，先取值再自增，i 变为 7
+
+    // int bad = i++ + ++i;                 // 未定义行为：同一变量被多次修改
+    // int overflow = INT_MAX + 1;          // 未定义行为：有符号整数溢出
+
+    unsigned int wrap = 0u - 1u;            // 结果：4294967295，无符号按模回绕
     return 0;
 }

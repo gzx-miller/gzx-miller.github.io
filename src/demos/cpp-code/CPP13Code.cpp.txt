@@ -1,25 +1,126 @@
-#include <iostream>
-#include <memory>
+// ═══════════════════════════════════════════
+// 1. 继承语法与三种继承方式
+// ═══════════════════════════════════════════
 
-// 抽象基类
-class Shape {
+#include <iostream>
+
+class Base {
 public:
-    virtual double area() const = 0;  // 纯虚函数
-    virtual ~Shape() {}
+    int open = 1;                          // 公有：任何继承方式下都可被外部访问（public 继承时）
+protected:
+    int guarded = 2;                       // 受保护：仅本类与派生类可访问
+private:
+    int hidden = 3;                        // 私有：派生类也不可直接访问
 };
 
-class Circle : public Shape {
-private:
-    double radius;
+class Pub : public Base {};                // public 继承：保持原权限
+class Pro : protected Base {};             // protected 继承：public 成员降为 protected
+class Pri : private Base {};               // private 继承：成员全部降为 private
+
+int main() {
+    Pub p;
+    std::cout << p.open << std::endl;      // 输出：1，public 继承下 open 对外可见
+    return 0;
+}
+
+// ═══════════════════════════════════════════
+// 2. 构造与析构顺序：基类在前，派生类在后
+// ═══════════════════════════════════════════
+
+class Animal {
 public:
-    Circle(double r) : radius(r) {}
-    double area() const override {
-        return 3.14159 * radius * radius;
+    Animal() { std::cout << "Animal 构造" << std::endl; }
+    ~Animal() { std::cout << "Animal 析构" << std::endl; }
+};
+
+class Dog : public Animal {
+public:
+    Dog() : Animal() { std::cout << "Dog 构造" << std::endl; }   // 显式调用基类构造
+    ~Dog() { std::cout << "Dog 析构" << std::endl; }
+};
+
+int main() {
+    Dog d;   // 输出顺序：Animal 构造 → Dog 构造 → Dog 析构 → Animal 析构
+    return 0;
+}
+
+// ═══════════════════════════════════════════
+// 3. 名字隐藏与作用域限定
+// ═══════════════════════════════════════════
+
+class Animal {
+public:
+    void show() const { std::cout << "Animal::show" << std::endl; }
+};
+
+class Dog : public Animal {
+public:
+    void show() const {                     // 同名成员遮蔽基类所有同名成员
+        std::cout << "Dog::show" << std::endl;
     }
 };
 
 int main() {
-    std::unique_ptr<Shape> shape = std::make_unique<Circle>(5.0);
-    std::cout << "面积：" << shape->area() << std::endl;
+    Dog d;
+    d.show();                               // 输出：Dog::show
+    d.Animal::show();                       // 输出：Animal::show，作用域限定取回基类版本
+    return 0;
+}
+
+// ═══════════════════════════════════════════
+// 4. 对象切片：按值赋值会丢掉派生部分
+// ═══════════════════════════════════════════
+
+#include <string>
+
+class Animal {
+public:
+    virtual std::string name() const { return "Animal"; }
+};
+
+class Dog : public Animal {
+public:
+    std::string name() const override { return "Dog"; }
+};
+
+int main() {
+    Dog d;
+    Animal a = d;                           // 对象切片：只复制基类子对象
+    std::cout << a.name() << std::endl;     // 输出：Animal，多态失效
+    Animal& ref = d;                        // 引用不切片，绑定完整的派生对象
+    std::cout << ref.name() << std::endl;   // 输出：Dog，动态绑定生效
+    return 0;
+}
+
+// ═══════════════════════════════════════════
+// 5. 多继承与虚基类：共享唯一一份基类
+// ═══════════════════════════════════════════
+
+class Animal {
+public:
+    explicit Animal(int a) : age(a) {}
+protected:
+    int age;                                // 由虚基类 Animal 唯一持有
+};
+
+class Land : virtual public Animal {        // 虚继承：共享同一份 Animal
+public:
+    explicit Land(int a) : Animal(a) {}
+};
+
+class Water : virtual public Animal {
+public:
+    explicit Water(int a) : Animal(a) {}
+};
+
+class Amphibian : public Land, public Water {
+public:
+    Amphibian() : Animal(1), Land(1), Water(1) {}   // 最派生类负责初始化虚基类
+    int getAge() const { return age; }              // 无歧义：整条链只有一份 age
+};
+
+int main() {
+    Amphibian frog;
+    std::cout << frog.getAge() << std::endl;   // 输出：1
     return 0;
 }

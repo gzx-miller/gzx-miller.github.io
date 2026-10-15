@@ -1,36 +1,113 @@
+// ═══════════════════════════════════════════
+// 1. 默认构造、带参构造与委托构造
+// ═══════════════════════════════════════════
+
 #include <iostream>
-#include <string>
 
-class Student {
-private:
-    std::string* name;
-
+class Point {
 public:
-    Student(const std::string& n) {
-        name = new std::string(n);
-    }
-
-    // 拷贝构造函数（深拷贝）
-    Student(const Student& other) {
-        name = new std::string(*other.name);
-    }
-
-    // 拷贝赋值运算符
-    Student& operator=(const Student& other) {
-        if (this != &other) {
-            delete name;
-            name = new std::string(*other.name);
-        }
-        return *this;
-    }
-
-    ~Student() {
-        delete name;
-    }
+    Point() : x(0), y(0) {}                    // 默认构造：全零
+    Point(int v) : Point(v, v) {}              // 委托构造：转交给下面的构造函数
+    Point(int x, int y) : x(x), y(y) {}        // 带参构造
+    void show() const { std::cout << x << ", " << y << std::endl; }
+private:
+    int x;
+    int y;
 };
 
 int main() {
-    Student s1("小明");
-    Student s2 = s1;
+    Point a;
+    Point b(4);
+    a.show();                                  // 输出：0, 0
+    b.show();                                  // 输出：4, 4
+    return 0;
+}
+
+// ═══════════════════════════════════════════
+// 2. 初始化列表与成员初始化顺序
+// ═══════════════════════════════════════════
+
+class Order {
+public:
+    Order() : total(0), item(++total) {}       // 顺序由声明顺序决定，与书写无关
+    int getItem() const { return item; }
+private:
+    int total;                                 // 声明在前，先初始化：0
+    int item;                                  // 声明在后，total 此时为 1
+};
+
+int main() {
+    Order o;
+    std::cout << o.getItem() << std::endl;     // 输出：1
+    return 0;
+}
+
+// ═══════════════════════════════════════════
+// 3. explicit：关闭单参构造的隐式转换
+// ═══════════════════════════════════════════
+
+class Meter {
+public:
+    explicit Meter(double v) : value(v) {}     // explicit 禁止 double 隐式转 Meter
+    double value;
+};
+
+void print(Meter m) {                          // 参数按值传递
+    std::cout << m.value << std::endl;
+}
+
+int main() {
+    Meter m(2.5);                              // 显式构造，合法
+    print(m);                                  // 输出：2.5
+    // print(3.0);                             // 若无 explicit，这行会隐式转换，现在编译不过
+    return 0;
+}
+
+// ═══════════════════════════════════════════
+// 4. 析构函数：构造函数取资源，析构函数还资源
+// ═══════════════════════════════════════════
+
+#include <cstdio>
+
+class FileHolder {
+public:
+    explicit FileHolder(const char* name)
+        : handle(std::fopen(name, "r")) {      // 构造即取得资源
+        if (!handle) std::cout << "打开失败" << std::endl;
+    }
+    ~FileHolder() {
+        if (handle) std::fclose(handle);       // 析构即释放资源，避免泄漏
+    }
+private:
+    std::FILE* handle;
+};
+
+int main() {
+    {
+        FileHolder f("data.txt");
+    }                                          // 离开作用域，handle 自动关闭
+    return 0;
+}
+
+// ═══════════════════════════════════════════
+// 5. 组合对象：构造与析构的先后次序
+// ═══════════════════════════════════════════
+
+class Engine {
+public:
+    Engine() { std::cout << "Engine 构造" << std::endl; }
+    ~Engine() { std::cout << "Engine 析构" << std::endl; }
+};
+
+class Car {
+public:
+    Car() { std::cout << "Car 构造" << std::endl; }    // 成员先构造，自身后构造
+    ~Car() { std::cout << "Car 析构" << std::endl; }   // 自身先析构，成员后析构
+private:
+    Engine engine;                                     // 组合对象
+};
+
+int main() {
+    Car car;   // 输出顺序：Engine 构造 → Car 构造 → Car 析构 → Engine 析构
     return 0;
 }

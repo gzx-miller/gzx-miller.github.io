@@ -5,75 +5,83 @@ import CPP04ControlFlow from './CPP04ControlFlow.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>你想删掉数组里所有偶数，用 C++11 的范围 for 写得很顺手：<code>for (int x : nums) { if (x % 2 == 0) nums.erase(...); }</code>，结果程序要么直接崩、要么漏删一部分——明明只是「边遍历边筛选」，为什么这个看起来更安全的新语法反而出了事？
+      <strong>开场问题：</strong>成绩判定想输出「优秀 / 及格 / 不及格」，可 <code>if (score &gt;= 90) … if (score &gt;= 60) … else …</code> 这样写下去，一个 95 分的成绩会同时落进「优秀」和「及格」两个分支。问题不在条件，而在这几个 <code>if</code> 之间的<strong>连接方式</strong>——它们到底该怎么串？
     </div>
 
-    <h2>非结构化跳转</h2>
+    <h2>先朴素做法：一个条件接一个条件地判</h2>
     <p>
-      程序不能只会从上往下执行，它得能「按条件走不同的路」和「重复做同一件事」。最原始的控制靠 <code>goto</code> 加标签，但用多了代码会变成一张跳来跳去的网，读的人根本追不上执行流从哪来、到哪去。于是语言提供了结构化的分支与循环：<code>if/else</code> 二选一、<code>switch</code> 多路选一、<code>while</code> 与 <code>for</code> 重复执行。
+      分支最朴素的形式就是「条件为真就做一件事」：<code>if (score &gt;= 90) { cout &lt;&lt; "优秀"; }</code>。它做对了什么？把「判断」和「动作」分开了，条件为真就执行花括号里的语句，为假就跳过——<code>if</code> 的本质是一个受布尔条件守卫的语句块。
     </p>
     <p>
-      可结构化只解决了「跳转清楚」，没解决「边界正确」。手工控制下标时，你要自己承担这些成本：<code>for (int i = 0; i &lt;= n; i++)</code> 这种差一错误你每写一次都要数一遍；容器大小随时可能变，你手写的大小边界可能在上一次删除之后就过期了；<code>switch</code> 忘了 <code>break</code> 会「穿透」到下一个分支，执行你根本没打算执行的代码。
+      不足在于「多个条件」时容易写成相互独立的 <code>if</code>。若把上面那段写成两个并列的 <code>if</code>，95 分两个条件都为真，于是「优秀」「及格」都会被打印。真正的意图是<strong>互斥的多路选择</strong>：落进某一档就不再往下判。这就引出了 <code>else if</code>——它把后面的判断挂在前面条件为假的分支上，形成一条「只会命中一次」的链。
     </p>
     <p>
-      所以问题落到：<strong>怎么让「按条件重复」这件事，既不用手数边界，又不容易在容器变动时踩空？</strong>
-    </p>
-
-    <h2>手写分支循环</h2>
-    <p>
-      最朴素的做法：用 <code>if/else</code> 做分支、用 <code>switch</code> 做多路、用 <code>for (int i = 0; i &lt; size; i++)</code> 或 <code>while</code> 做循环，全部手动控制。
-    </p>
-    <p>
-      这个方案做对了一件事：<strong>它把控制流显式写了出来，执行路径一眼可读</strong>，而且它其实是所有循环的基础形态——不管上层语法多花哨，最后都会落回到这套「判断条件、执行、更新」的骨架。基础形态必须先站稳。
-    </p>
-    <p>
-      问题在于，每一处边界都由你亲手维护，漏掉任何一处都不会报错，只会让程序在某个特定输入下静默出错。
+      把链写全就是 <code>if / else if / else</code>：条件从上到下依次求值，第一个为真的分支胜出，其后全部跳过；若都不满足，则落到 <code>else</code>。这块「守卫 + 跳链」的结构，是所有分支语法的共同骨架。
     </p>
 
-    <h2>贯穿执行越界</h2>
+    <h2>switch：把等值判断收敛成一张跳转表</h2>
+    <p>
+      当判断是「多个离散常量之间的等值比较」时，用一长串 <code>else if (x == A) …</code> 会显得冗余——每个条件都在重复写 <code>x ==</code>。朴素做法于是转向 <code>switch</code>：把表达式算一次，再和各个 <code>case</code> 标签比较。它做对了什么？语义上把「对同一个值做多路等值匹配」表达得非常集中，编译器也常能把它优化成一张跳转表。
+    </p>
+    <p>
+      但 <code>switch</code> 有一个反直觉的默认行为：<strong>case 会「穿透」</strong>。当某个 <code>case</code> 匹配成功后，程序从这个标签往下<strong>依次执行</strong>，直到遇见 <code>break</code> 或到达 <code>switch</code> 末尾为止——它并不会自动停在下一个 <code>case</code> 前。所以朴素写法里最常见的 bug，就是忘了写 <code>break</code>，导致多个分支被连续执行。
+    </p>
+    <p>
+      迭代的方向不是「记住每个 case 都要 break」，而是分清意图：<strong>要独立的就补 <code>break</code>；要故意合并的（多个 case 共享同一段逻辑）就让几个 <code>case</code> 空着、叠在一起</strong>。后者是合法且常见的写法，例如把 <code>case 1:</code> 和 <code>case 2:</code> 放在一起、共用后面一段代码。关键是让「穿透」成为<strong>有意为之</strong>，而不是遗漏。另有一条硬约束：<code>case</code> 标签必须是编译期的整型常量表达式，不能是变量。
+    </p>
+
+    <h2>循环三兄弟：while、do-while 与 for</h2>
+    <p>
+      循环的朴素动机很直接：把一件重复的事写一遍，让机器替我们重复执行。三种循环在结构上各有分工：
+    </p>
     <ul>
-      <li><code>switch (day)</code> 里 <code>case 1:</code> 后面忘了 <code>break</code>，就会连同 <code>case 2:</code> 一起执行——你以为只打印「周一」，实际打印出一串。</li>
-      <li><code>for (int i = 0; i &lt;= nums.size(); i++)</code> 手滑写成 <code>&lt;=</code>，最后一次循环访问的下标已经越界，读到的是不存在的元素。</li>
-      <li>迭代器版本 <code>for (auto it = v.begin(); it != v.end(); ++it) { if (bad(*it)) v.erase(it); }</code>，在 <code>erase</code> 之后 <code>it</code> 立刻失效，下一次 <code>++it</code> 就是在操作一个悬空的迭代器，直接崩。</li>
-      <li><code>for (;;)</code> 忘了写出跳出口，程序永远出不来，只能强杀。</li>
-      <li>遍历时用 <code>auto x</code> 取值，每个元素都被复制一份，容器里装大对象时代价明显——而且你改 <code>x</code> 改的是副本，容器里的元素纹丝不动。</li>
+      <li><code>while (cond) { ... }</code>：<strong>先判后做</strong>，条件可能一次都不成立，循环体一次都不执行。</li>
+      <li><code>do { ... } while (cond);</code>：<strong>先做后判</strong>，循环体至少执行一次，适合「先试一次再决定要不要继续」的场景，如菜单输入。</li>
+      <li><code>for (init; cond; step) { ... }</code>：把「初始化、条件、步进」三件事集中写在头部的括号里，适合已知迭代次数或需要显式计数器的场景。</li>
     </ul>
+    <p>
+      三者可以互相改写，但表达力并不等价。选择的标准是「循环的控制信息放在哪里最自然」：计数器驱动的用 <code>for</code>，状态驱动的用 <code>while</code>，至少执行一次的用 <code>do-while</code>。<strong>把 <code>for</code> 的三个部分写清楚，本身就是一种文档</strong>，读代码的人一眼就能看出循环的起点、终点与步长。
+    </p>
 
-    <h2>条件分支完善</h2>
+    <h2>范围 for 与 break / continue</h2>
     <p>
-      不推翻「结构化控制流」，而是把常见的边界判断一步步交给语法去兜底。先补分支这一层，因为它最容易出现「结构性错误」而不是「算错值」。
+      手动写下标遍历容器时，容易在边界上出错：<code>i &lt;= v.size()</code> 就多了最后一次越界访问。C++11 的<strong>范围 for</strong> 把「逐个取出元素」这件事交给语法：<code>for (auto x : container)</code>，无需自己维护下标与终止条件。
     </p>
     <p>
-      <code>if/else if/else</code> 用于条件分支；<code>switch</code> 用于「基于整型常量多路选一」。留意 <code>switch</code> 的两个硬约束：<code>case</code> 标签<strong>必须是整型常量表达式</strong>，字符串和浮点数都不行；默认每个 <code>case</code> 末尾都要 <code>break</code>。<strong>穿透</strong>本身不是错误，只是一种容易被遗忘的行为——如果你确实想故意穿透，C++17 提供了 <code>[[fallthrough]]</code>，写出来告诉编译器这是你有意为之。
+      但范围 for 里「取出的东西是什么」由写法决定，这决定了它的用途：
     </p>
+    <ul>
+      <li><code>for (auto x : container)</code>：每次<strong>拷贝</strong>一个元素，修改 <code>x</code> 不影响容器。读值可以，改值不行。</li>
+      <li><code>for (const auto&amp; x : container)</code>：绑定到元素的<strong>只读引用</strong>，避免拷贝，大对象时性能更好，是只读遍历的推荐写法。</li>
+      <li><code>for (auto&amp; x : container)</code>：绑定到元素的<strong>可写引用</strong>，改 <code>x</code> 即改容器中的元素。</li>
+    </ul>
     <p>
-      补完分支，接着补循环形态的选择：<code>for</code> 适合已知迭代次数，<code>while</code> 适合条件驱动（可能一次都不执行），<code>do-while</code> 保证至少执行一次，范围 for 用于遍历容器。按「是否预知次数 / 是否至少执行一次」来选，很多边界问题自然就消失了。
+      与循环体配合的两个流程控制是 <code>break</code> 与 <code>continue</code>：<code>break</code> 立即跳出<strong>整个</strong>循环或 <code>switch</code>；<code>continue</code> 只跳过<strong>本轮</strong>剩余语句，回到循环的条件判断处。需要提醒的是：范围 for 遍历时不要同时增删容器元素，容器结构一旦改变，迭代器就可能失效，行为随之变得不可预期。
     </p>
-    <p>
-      这一节真正的新东西是第三层——<strong>C++11 的范围 for</strong>。写法 <code>for (auto&amp; x : container)</code> 是一层<strong>语法糖</strong>：它被编译器展开成「用 <code>begin()</code> 拿起点、用 <code>end()</code> 拿终点、每次 <code>++</code> 前进」的迭代器循环。它替你省掉了下标和终点条件，让差一错误无从发生，但<strong>语义并没有变</strong>——它仍然依赖容器的 <code>begin()</code> / <code>end()</code>。
-    </p>
-    <p>
-      正因为只是语法糖，取值范围方式的差别就直接决定了行为：<code>const auto&amp; x</code> 是只读引用、不复制，应作为默认选择；<code>auto&amp; x</code> 是可修改的引用；<code>auto x</code> 会复制每个元素。而最重要的一条边界是——<strong>遍历过程中不能增删容器元素</strong>。因为 <code>erase</code> 会让后面的迭代器失效，范围 for 手里那个「当前位置」就悬空了，这正是开场崩溃的原因。要在遍历中改变大小，就得退回传统 <code>for</code> 或 <code>while</code>，并且在每次修改后重新取回迭代器，比如 <code>it = v.erase(it);</code>。
-    </p>
-    <p>
-      最后收一个作用域的尾：C++17 起，<code>if</code> 和 <code>switch</code> 允许在条件位置初始化变量，写成 <code>if (auto it = m.find(k); it != m.end()) {...}</code>，<code>it</code> 只在 <code>if</code> 内部存活，用完即弃，也就减少了和外面重名的机会。
-    </p>
-    <div class="lesson-box warn">
-      <strong>范围 for 最该记住的一条：</strong>它只是迭代器循环的语法糖，帮你免掉了手写下标，但<strong>没有</strong>替你处理「遍历中容器被修改」这件事。凡是循环体里可能 <code>erase</code> / <code>push_back</code>，就应该改用传统循环并手动管理迭代器。
-    </div>
 
-    <h2>循环分支写法对照</h2>
+    <h2>C++17 的域内初始化：把变量关进它该在的作用域</h2>
+    <p>
+      朴素写法常为了一个「只在判断里用一次」的变量，在函数体开头先声明：<code>auto it = find(...); if (it != v.end()) { ... }</code>。它做对了什么？变量能用在条件里。不足是 <code>it</code> 的作用域<strong>泄漏</strong>到了整个函数——后面若同名复用或误用，编译器不会拦你。
+    </p>
+    <p>
+      C++17 允许把初始化直接写进条件：<code>if (auto it = find(...); it != v.end()) { ... }</code>，<code>switch</code> 也支持同样的写法。分号前是初始化语句，分号后是条件。这样 <code>it</code> 的作用域被<strong>限制在 if / else 的两条分支之内</strong>，出了这段就不可见，既少一次变量提前声明，也避免名字污染。
+    </p>
+    <p>
+      它体现的是一条贯穿 C++ 的原则：<strong>尽量缩小变量可见范围</strong>，让名字只在真正需要它的地方存在。
+    </p>
+
+    <h2>看一遍分支与循环的写法对照</h2>
     <figure class="lesson-figure">
-      <figcaption>在「分支 / 循环 / 范围 for」三个页签里，对照 <code>if-else</code> 与 <code>switch</code> 的写法、四种循环各自适用的场景，以及范围 for 三种取值写法（复制 / 只读引用 / 可改引用）的区别。</figcaption>
+      <figcaption>切换「分支 / 循环 / 范围 for」三个标签，对照 if-else 链与 switch 的结构，比较 while、do-while、for 的适用场景，并看清范围 for 中 auto、const auto&amp;、auto&amp; 三种写法的差别。</figcaption>
       <CPP04ControlFlow />
     </figure>
 
-    <h2>结构化控制流</h2>
+    <h2>把控制流当成一条「会分岔的路」</h2>
     <p>
-      结构化控制流把 <code>goto</code> 的乱跳换成了清晰的分支与循环；选 <code>if</code> 还是 <code>switch</code>、<code>for</code> 还是 <code>while</code> 看场景。范围 for 让边界不必再手数，但它是语法糖不是护身符——<strong>遍历过程中容器被改，那条线依然要你自己守</strong>。
+      条件分支与循环，本质上是给程序的执行路径<strong>造分岔与回路</strong>：<code>if / else if / else</code> 负责互斥的多路选择，<code>switch</code> 把等值匹配收敛成跳转表（并提醒你 <code>break</code> 的穿透语义），三种循环按「判与做的先后」各司其职，范围 for 把容器遍历简化到只剩元素本身，C++17 的域内初始化则把临时变量的作用域收进分支。<code>break</code> 与 <code>continue</code> 再给出提前退出与跳过本轮的两个出口。把这些结构按「意图」而不是「惯性」来选，控制流就会既短又清晰。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「范围 for」</span>是 C++11 的语法糖，<code>for (auto&amp; x : c)</code> 会展开为基于 <code>c.begin()</code> 与 <code>c.end()</code> 的迭代器遍历，要求容器提供这对接口（内置数组也可用）。取值方式决定语义：<code>const auto&amp;</code> 只读且不复制（推荐默认）、<code>auto&amp;</code> 可改原元素、<code>auto</code> 复制元素。例外：遍历中增删元素会使迭代器失效，此时必须改用传统循环并重新获取迭代器。
+      <span class="term-name">「穿透（fallthrough）」</span>指 <code>switch</code> 中某 <code>case</code> 匹配后未遇 <code>break</code> 而继续执行其后各 <code>case</code> 的行为，可刻意利用也可因遗漏成错；<span class="term-name">「迭代语句」</span>是 <code>while</code>、<code>do-while</code>、<code>for</code> 与范围 for 的总称；<span class="term-name">「迭代器失效」</span>指遍历中增删容器元素导致迭代器不再可用。
     </div>
   </LessonArticle>
 </template>

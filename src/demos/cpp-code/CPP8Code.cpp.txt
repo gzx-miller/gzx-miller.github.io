@@ -1,16 +1,99 @@
+// ═══════════════════════════════════════════
+// 1. 三种存储区：全局区、栈区与堆区
+// ═══════════════════════════════════════════
+
 #include <iostream>
 
+int gCounter = 0;                          // 全局区：整个程序生命周期都存在
+
+void stackScope() {
+    int local = 10;                        // 栈区：进入函数时分配
+    gCounter += local;                     // 传给全局变量，退出后仍保留
+}                                          // local 在此自动销毁，无需手动释放
+
 int main() {
-    int* p = new int(42);
-    std::cout << *p << std::endl;
-    delete p;
-    p = nullptr;
-
-    int* arr = new int[5]{1, 2, 3, 4, 5};
-    for (int i = 0; i < 5; i++) {
-        std::cout << arr[i] << " ";
-    }
-    delete[] arr;
-
+    stackScope();
+    std::cout << gCounter << std::endl;    // 输出：10
+    int* heapValue = new int(20);          // 堆区：由 new 分配，生命周期自行管理
+    std::cout << *heapValue << std::endl;  // 输出：20
+    delete heapValue;                      // 必须手动释放，否则泄漏
     return 0;
+}
+
+// ═══════════════════════════════════════════
+// 2. new 与 delete：一次分配对应一次释放
+// ═══════════════════════════════════════════
+
+int* makeCounter(int start) {
+    int* p = new int(start);               // 分配后直接初始化，值为 start
+    return p;                              // 所有权移交给调用方
+}
+
+int main() {
+    int* p = makeCounter(7);
+    std::cout << *p << std::endl;          // 输出：7
+    *p = 8;                                // 通过指针修改堆上的值
+    delete p;                              // 释放，与前面一次 new 配对
+    p = nullptr;                           // 置空，避免悬垂指针
+    return 0;
+}
+
+// ═══════════════════════════════════════════
+// 3. new[] 与 delete[]：数组是另一本账
+// ═══════════════════════════════════════════
+
+int main() {
+    int* arr = new int[5]{1, 2, 3, 4, 5};  // 动态数组，长度可在运行时决定
+    int sum = 0;
+    for (int i = 0; i < 5; ++i) {
+        sum += arr[i];                     // 下标 0 到 4，越界不会被检查
+    }
+    std::cout << sum << std::endl;         // 输出：15
+    delete[] arr;                          // 数组必须用 delete[]，与 new[] 配对
+    arr = nullptr;
+    return 0;
+}
+
+// ═══════════════════════════════════════════
+// 4. 三类事故：泄漏、悬垂与重复释放
+// ═══════════════════════════════════════════
+
+int main() {
+    int* leaked = new int(1);              // 若始终不 delete，就是内存泄漏
+    std::cout << *leaked << std::endl;     // 输出：1
+    delete leaked;                         // 补上释放，修正泄漏
+    leaked = nullptr;
+
+    int* dangling = new int(2);
+    delete dangling;
+    dangling = nullptr;                    // 释放后立即置空，堵住悬垂指针
+    if (dangling != nullptr) {             // 使用前判空，防御性写法
+        std::cout << *dangling << std::endl;
+    }
+
+    int* twice = new int(3);
+    delete twice;                          // 只释放一次
+    twice = nullptr;                       // 置空后再删也安全，避免重复释放
+    return 0;
+}
+
+// ═══════════════════════════════════════════
+// 5. RAII 雏形：把释放交给析构函数
+// ═══════════════════════════════════════════
+
+class IntBuffer {
+public:
+    explicit IntBuffer(int n) : data(new int[n]), size(n) {}   // 构造即取得资源
+    ~IntBuffer() { delete[] data; }                            // 析构即释放资源
+    int& operator[](int i) { return data[i]; }                 // 边界由调用方保证
+private:
+    int* data;
+    int size;
+};
+
+int main() {
+    IntBuffer buf(3);
+    buf[0] = 100;
+    std::cout << buf[0] << std::endl;      // 输出：100
+    return 0;                              // 离开作用域，析构自动 delete[]
 }

@@ -5,74 +5,83 @@ import CPP20SmartPointers from './CPP20SmartPointers.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>你写了个函数，<code>new</code> 出一个对象，中间几条分支各有各的提前 <code>return</code>。上线后，进程的内存占用随着这个函数的调用次数一路往上爬——你回头数了数，每一处 <code>new</code> 明明都配了 <code>delete</code>，那内存到底是怎么漏出去的？
+      <strong>开场问题：</strong>用 <code>new</code> 申请的资源本该由 <code>delete</code> 释放，可只要中途有一次提前 <code>return</code>、或某一步抛出异常，<code>delete</code> 就被跳过 —— 有没有一种写法，能让「释放」像栈上的普通变量一样，无论如何都自动发生？
     </div>
 
-    <h2>堆对象创建与释放</h2>
+    <h2>先朴素做法：new 与 delete 成对出现</h2>
     <p>
-      你要在运行时<strong>按需创建</strong>对象——大小、数量、时机都要等程序跑起来才知道，所以只能在堆上 <code>new</code>，并且得在想清楚「用完了」时把这块内存还回去。最朴素的老办法就是手动 <code>new</code> / <code>delete</code> 配对。它能跑，但代价全压在人身上：
+      最直接的管理方式是裸指针：<code>new</code> 返回一个指向堆对象的指针，用完再手动 <code>delete</code>。
     </p>
     <ul>
-      <li><strong>释放点分散</strong>：每一处提前 <code>return</code>、每一次抛出异常、每一个中途分支，都可能<strong>跳过</strong>那行 <code>delete</code>，函数正常跑没问题，一旦走上别的路径就漏了。</li>
-      <li><strong>释放时机靠记忆</strong>：哪儿申请、哪儿释放，得靠人记住并保证一定走到，代码一长就没人敢打包票。</li>
-      <li><strong>容易重复释放</strong>：两个对象各自持有一份<strong>浅拷贝</strong>的指针，析构时都去 <code>delete</code> 同一块内存，就是 <code>double free</code>。</li>
-      <li><strong>所有权不明</strong>：一个函数返回裸指针，调用方根本看不出「这块内存该我 <code>delete</code>，还是别人管」。</li>
+      <li>做对的地方：控制精确，何时申请、何时释放一清二楚，没有隐含成本。</li>
+      <li>不足：释放点与申请点被代码路径隔开。函数中途 <code>return</code>、循环里的 <code>continue</code> / <code>break</code>、乃至抛出异常，都会绕过 <code>delete</code>；一旦漏写就是内存泄漏，重复写就是双重释放。</li>
     </ul>
     <p>
-      所以要问的是：<strong>能不能让「释放」这件事不再依赖你手写的那几行，而是自动地、在所有退出路径上都发生？</strong>
+      问题的根源是：<strong>手动释放与所有退出路径没有绑定</strong>。只要退出路径多于一条，就总有一天会漏掉。真正需要的，是一种「无论怎么离开作用域都会被执行」的释放时机。
     </p>
 
-    <h2>手动配对申请释放</h2>
+    <h2>RAII：把释放交给析构函数</h2>
     <p>
-      最直接的做法是继续 <code>new</code> / <code>delete</code> 配对，或者用 <code>try</code> / <code>catch</code> 把 <code>delete</code> 保证执行一遍。
+      C++ 恰好提供了这样一个时机：<strong>局部对象离开作用域时，其析构函数一定会被调用</strong> —— 正常返回会，因异常而中断（栈展开）也会。RAII（Resource Acquisition Is Initialization，资源获取即初始化）就是把这个规律用起来：在构造函数中获取资源，在析构函数中释放资源。
     </p>
-    <p>
-      这个方案做对了一件事：<strong>它把「申请」和「释放」都摊在了明面上</strong>，你完全掌控时机，看得见每一次分配和回收。问题只在于——它把「保证每一步都成对」这个责任，整个交还给了人，而人恰恰是最不可靠的一环。
-    </p>
-
-    <h2>提前返回释放漏洞</h2>
     <ul>
-      <li>任意一条提前 <code>return</code> 或者中途抛出的异常，都能让那行 <code>delete</code> 彻底走不到。</li>
-      <li>默认的拷贝是<strong>浅拷贝</strong>，两个对象析构时对同一块内存各 <code>delete</code> 一次，直接双重释放崩溃。</li>
-      <li>如果拿<strong>同一个裸指针</strong>去构造两个 <code>shared_ptr</code>，会生成两个各自独立的控制块，对象会被释放两次。</li>
-      <li>函数交了裸指针出来，所有权归属完全靠文档和口头约定，调用方一不小心就漏删或者错删。</li>
+      <li>资源的生存期与对象的生存期绑定，两者同生共死。</li>
+      <li>退出路径再多，也只会触发一次析构，因此不存在「漏掉某条分支」的可能。</li>
+      <li>智能指针正是管理「指向对象的指针」的 RAII 包装：内部持有裸指针，析构时执行 <code>delete</code>。</li>
+    </ul>
+    <p>
+      于是「用不用智能指针」不再是风格问题，而是正确性问题：只要资源需要成对地获取与释放，就应该交给一个 RAII 对象来托管。
+    </p>
+
+    <h2>unique_ptr：独占所有权</h2>
+    <p>
+      <code>std::unique_ptr</code> 表达<strong>独占所有权</strong>：同一时刻只有一个 <code>unique_ptr</code> 拥有该对象。这一语义由「不可拷贝」来保证 —— 它的拷贝构造与拷贝赋值被删除，只能通过 <code>std::move</code> 转移。
+    </p>
+    <ul>
+      <li>移动后源指针变为空（<code>nullptr</code>），但对象仍然有效，只是不再拥有资源；转移的是所有权，不是对象本身。</li>
+      <li>默认删除器下它是零额外开销的：大小与裸指针相同，几乎可优化到与手写 <code>delete</code> 等价。</li>
+      <li>用 <code>std::make_unique&lt;T&gt;(args)</code> 创建（C++14 起），避免裸 <code>new</code>。</li>
+      <li>所有权语义也体现在函数边界：作为返回值返回时无需显式 <code>move</code>（有返回值优化与隐式移动）；作为参数需要交出所有权时，才用 <code>std::move</code> 显式转移。</li>
     </ul>
 
-    <h2>RAII与所有权划分</h2>
+    <h2>shared_ptr、引用计数与 weak_ptr</h2>
     <p>
-      第一层要补的不是「更小心地写 delete」，而是换一个思路：<strong>让某个对象来替你看管那块堆内存，靠它自己的析构自动释放</strong>。这就是 RAII，而 <code>unique_ptr</code> 是它在动态内存上的最基本形态。你把 <code>unique_ptr</code> 当成一个<strong>栈对象</strong>来持有，它内部存着真正的堆指针；无论函数是正常返回、提前 <code>return</code>，还是抛异常退出，栈对象都会被析构，析构函数里替你 <code>delete</code>。<strong>释放时机从此挂在对象生命周期上，不再挂在某一行代码上。</strong>
+      <code>std::shared_ptr</code> 表达<strong>共享所有权</strong>：多个 <code>shared_ptr</code> 可指向同一对象，内部用一块<strong>控制块</strong>记录引用计数。每拷贝一次计数加一，每析构一次计数减一，减到零时才真正释放对象。因此可安全地拷贝、放进容器、跨函数传递。
     </p>
+    <ul>
+      <li>优先用 <code>std::make_shared&lt;T&gt;(args)</code>：它把对象与控制块一次性分配，比 <code>shared_ptr&lt;T&gt;(new T)</code> 更快、更省内存。</li>
+      <li>计数增减是原子的（线程安全），但<strong>对象本身不是</strong>：多线程访问同一对象仍要自己加同步。</li>
+      <li><strong>循环引用</strong>是它最大的陷阱：A 持有 <code>shared_ptr&lt;B&gt;</code>、B 又持有 <code>shared_ptr&lt;A&gt;</code> 时，两边的计数永远不会归零，对象永不释放。</li>
+    </ul>
     <p>
-      <code>unique_ptr</code> 体现的是<strong>独占所有权</strong>：同一时刻只能有<strong>一个</strong> <code>unique_ptr</code> 拥有那个对象，所以它<strong>不能拷贝、只能移动</strong>。把所有权交出去要显式写 <code>std::move</code>，转移之后原来那个 <code>unique_ptr</code> 变成 <code>nullptr</code>，再去用它就是访问空指针。它的体积和裸指针一样，没有任何额外开销——所以它是<strong>默认首选</strong>。用 <code>std::make_unique&lt;T&gt;(args)</code>（C++14）创建最省事。
-    </p>
-    <p>
-      第二层要补的是「<strong>确实有多个地方要共享同一个对象</strong>」。这就轮到 <code>shared_ptr</code>，它体现<strong>共享所有权</strong>：多个 <code>shared_ptr</code> 可以指向同一个对象，靠一份共享的<strong>控制块</strong>里的引用计数来记「现在有几个持有者」。每拷贝一个计数加一，每销毁一个计数减一，<strong>减到零时才真正释放对象</strong>。用 <code>std::make_shared&lt;T&gt;(args)</code> 创建（C++11），它会把对象和控制块一次分配出来，比其他写法更高效。
-    </p>
-    <p>
-      但共享所有权会引出一个经典死角——<strong>循环引用</strong>。假如对象 A 里有个 <code>shared_ptr</code> 指向 B，B 里又有个 <code>shared_ptr</code> 指回 A，那么它俩的引用计数永远至少是 1，谁都降不到零，最后谁都释放不掉，整块内存静静地泄漏。补这个洞的是 <code>weak_ptr</code>：它是 <code>shared_ptr</code> 的<strong>弱引用</strong>，指向同一个对象却<strong>不增加引用计数</strong>，因此不会阻止对象被释放。要用的时候通过 <code>lock()</code> 把它「提升」成一个临时的 <code>shared_ptr</code>——对象还活着就拿到一个非空的 <code>shared_ptr</code>，已经销毁了就拿到空的。于是双向引用、父子互相引用这类结构，就把其中一侧改成 <code>weak_ptr</code>，环就断开了。
-    </p>
-    <p>
-      补充几条日常写法上的安全边界。创建时<strong>始终用 <code>make_unique</code> / <code>make_shared</code>，或从已有的智能指针构造</strong>，绝不用同一个裸指针去构造多个 <code>shared_ptr</code>。<code>unique_ptr</code> 作为函数<strong>返回值</strong>时不需要显式 <code>std::move</code>（编译器会处理），作为<strong>参数</strong>要转移所有权时才写 <code>std::move</code>。<code>shared_ptr</code> 的<strong>引用计数增减是原子的、线程安全</strong>的，但要注意——它只保护计数本身，<strong>被指向的对象并不是线程安全的</strong>，多线程读写那个对象仍然得你自己加同步。
-    </p>
-    <div class="lesson-box warn">
-      <strong>两个高频陷阱：</strong>其一，<code>unique_ptr</code> 允许带<strong>自定义删除器</strong>（比如关闭文件句柄、断开网络连接），而删除器是<strong>类型的一部分</strong>（模板的第二个参数），所以 <code>unique_ptr&lt;T, D1&gt;</code> 和 <code>unique_ptr&lt;T, D2&gt;</code> 是两个<strong>不同的类型</strong>，不能随意互相赋值。其二，在类内部想把 <code>this</code> 变成 <code>shared_ptr</code> 时，<strong>千万不要用 <code>this</code> 裸指针去构造</strong>（会凭空多出一个独立控制块，最终双重释放），正确做法是让这个类继承 <code>std::enable_shared_from_this&lt;T&gt;</code>，再调用 <code>shared_from_this()</code>。
-    </div>
-    <p>
-      顺着这套逻辑，现代 C++ 的内存策略可以一句话概括：<strong>优先用栈对象</strong>（本来就不需要手动释放）；确实需要堆对象时用 <code>unique_ptr</code>；确实需要共享所有权时才升级到 <code>shared_ptr</code>；共享里出现了环，就用 <code>weak_ptr</code> 打断。而<strong>原始指针退回它该待的位置</strong>——只做「不拥有、只观察」的引用，几乎不再用它来管理资源。
+      <code>std::weak_ptr</code> 是配套的解法：它指向 <code>shared_ptr</code> 管理的对象，却<strong>不增加引用计数</strong>。把循环中的一个方向改成 <code>weak_ptr</code> 即可打破循环。要用时通过 <code>lock()</code> 临时提升为 <code>shared_ptr</code> —— 对象还活着就拿到非空指针，已销毁则得到空指针，从而避免了访问已释放对象。
     </p>
 
-    <h2>引用计数与指针置空</h2>
+    <h2>make_* 与自定义删除器</h2>
+    <p>
+      创建阶段首选 <code>make_unique</code> / <code>make_shared</code>，除了简洁，更因为它在异常安全上一锤定音：临时对象的构造与智能指针的接管之间不再有可乘之隙。
+    </p>
+    <ul>
+      <li><strong>自定义删除器</strong>：<code>unique_ptr&lt;T, D&gt;</code> 把删除器类型 <code>D</code> 作为模板第二参数，因此 <code>unique_ptr&lt;T, D1&gt;</code> 与 <code>unique_ptr&lt;T, D2&gt;</code> 是不同类型；它适合文件句柄、网络连接等非内存资源。带状态的删除器需作为构造参数传入。</li>
+      <li><strong>控制块陷阱</strong>：绝不能用同一个裸指针构造多个 <code>shared_ptr</code>，否则会生成多块控制块，导致重复释放；始终从已有 <code>shared_ptr</code> / <code>unique_ptr</code> 派生。</li>
+      <li><strong>this 陷阱</strong>：不要在对象内部用裸 <code>this</code> 构造 <code>shared_ptr</code>。需要返回自身时，让类继承 <code>std::enable_shared_from_this&lt;T&gt;</code> 并调用 <code>shared_from_this()</code>。</li>
+    </ul>
+    <p>
+      选择策略可以一句话概括：能用栈对象就别上堆；确需堆对象就用 <code>unique_ptr</code>；确需共享所有权再上 <code>shared_ptr</code>；裸指针只保留为「非拥有」的观察者，不再用它管理资源。
+    </p>
+
+    <h2>看一遍三种所有权的实际行为</h2>
     <figure class="lesson-figure">
-      <figcaption>对着代码和选择表看：<code>unique_ptr</code> 为什么被 <code>std::move</code> 之后原指针就成了 <code>nullptr</code>，<code>shared_ptr</code> 的 <code>use_count()</code> 在作用域进出时如何从 1 变成 2 再落回 1，以及 <code>weak_ptr</code> 如何在不加计数的情况下经 <code>lock()</code> 拿到对象。</figcaption>
+      <figcaption>示例在同一段程序里演示 unique_ptr 的创建与 std::move 转移、shared_ptr 的引用计数随作用域增减、以及 weak_ptr 通过 lock() 提升访问；可对照输出验证「独占可移动、共享可计数、弱引用不计入」这三种所有权语义。</figcaption>
       <CPP20SmartPointers />
     </figure>
 
-    <h2>所有权归属判定</h2>
+    <h2>把所有权当作设计的一部分</h2>
     <p>
-      智能指针把「释放内存」从你手写的某一行，搬到了对象的生命周期上，于是所有退出路径都被自动覆盖。默认用栈对象；需要堆对象就用 <code>unique_ptr</code>；确实要共享所有权才用 <code>shared_ptr</code>；共享里一旦成环，就用 <code>weak_ptr</code> 断环。原始指针从此只负责「看」，不负责「管」。
+      智能指针不是「更安全的裸指针」，而是一套<strong>所有权声明</strong>：<code>unique_ptr</code> 说「这里唯一拥有」，<code>shared_ptr</code> 说「这里分享拥有」，<code>weak_ptr</code> 说「这里只观察、不拥有」。把所有权写进类型，编译器就能替你阻止拷贝独占资源、提醒你补充弱引用来切断循环。真正的内存安全，来自在写下每一个指针类型时都想清楚：这个资源，到底归谁管、什么时候放。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「引用计数」</span>是 <code>shared_ptr</code> 用来管理共享所有权的一门记账方式：一份共享的控制块记录着「当前有多少个 <code>shared_ptr</code> 指向这个对象」，每拷贝一个就加一、每销毁一个就减一，<strong>减到零时自动析构并释放对象</strong>。边界：计数的增减是原子的、线程安全，但被指向的<strong>对象本身不是线程安全</strong>的，并发读写仍需自行同步；更要当心<strong>循环引用</strong>——两个对象互相持有 <code>shared_ptr</code> 会让计数永远降不到零、内存无法回收，此时应把其中一侧改为 <code>weak_ptr</code>（它不计入引用计数，需要时才用 <code>lock()</code> 提升为 <code>shared_ptr</code>）。
+      <span class="term-name">「RAII」</span>指把资源的获取放进构造函数、释放放进析构函数，使资源生存期与对象生存期绑定的惯用法。<span class="term-name">「所有权」</span>描述谁负责在何时释放资源，智能指针类型本身即是对所有权的声明。<span class="term-name">「控制块」</span>是 <code>shared_ptr</code> 内部记录引用计数与删除器的结构，<span class="term-name">「引用计数」</span>归零时才真正销毁对象。
     </div>
   </LessonArticle>
 </template>

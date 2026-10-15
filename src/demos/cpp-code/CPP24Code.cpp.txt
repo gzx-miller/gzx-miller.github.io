@@ -1,28 +1,68 @@
+// ═══════════════════════════════════════════
+// 1. 写入文件：ofstream 与打开模式
+// ═══════════════════════════════════════════
+
 #include <iostream>
-#include <fstream>
-#include <sstream>
+#include <fstream>                             // ifstream / ofstream
+#include <sstream>                             // istringstream / ostringstream
+#include <string>
+#include <vector>
 
-int main() {
-    // 写入文件
-    std::ofstream outFile("example.txt");
-    outFile << "Hello, C++!" << std::endl;
-    outFile.close();
+void writeDemo() {
+    std::ofstream out("data.txt");             // 默认 out|trunc：清空并写入
+    out << "line one" << '\n';                 // RAII：析构时自动关闭文件
+    out << "line two" << std::endl;            // endl 额外刷新缓冲区
 
-    // 读取文件
-    std::ifstream inFile("example.txt");
-    std::string line;
-    while (std::getline(inFile, line)) {
-        std::cout << "读取: " << line << std::endl;
+    std::ofstream app("log.txt", std::ios::app);   // app 模式：追加而不截断
+    app << "appended" << '\n';
+}
+
+// ═══════════════════════════════════════════
+// 2. 读取文件：ifstream 与状态检查
+// ═══════════════════════════════════════════
+
+void readDemo() {
+    std::ifstream in("data.txt");
+    if (!in.is_open()) {                       // 流可隐式转 bool，为真即未失败
+        std::cout << "open failed" << std::endl;
+        return;
     }
+    std::string line;
+    while (std::getline(in, line)) {           // 读整行，读到 EOF 结束循环
+        std::cout << line << std::endl;        // 结果：line one / line two
+    }
+    // 循环结束后 in.eof() 为 true
+}
 
-    // 字符串流
-    std::string data = "42 3.14 Hello";
-    std::istringstream iss(data);
-    int num;
-    double pi;
-    std::string word;
-    iss >> num >> pi >> word;
-    std::cout << num << ", " << pi << ", " << word << std::endl;
+// ═══════════════════════════════════════════
+// 3. 字符串流：解析与格式化
+// ═══════════════════════════════════════════
 
-    return 0;
+void stringStreamDemo() {
+    std::istringstream iss("42 3.14 hello");   // 从字符串解析：替代 sscanf
+    int n; double d; std::string w;
+    iss >> n >> d >> w;                        // 按空白分隔依次提取
+    std::cout << n << "," << d << "," << w << std::endl;   // 结果：42,3.14,hello
+
+    std::ostringstream oss;                    // 格式化到字符串：替代 sprintf
+    oss << "size=" << 10 << ", pi=" << 3.14;   // 可自由拼接不同类型
+    std::string text = oss.str();              // 取出结果字符串
+    std::cout << text << std::endl;            // 结果：size=10, pi=3.14
+}
+
+// ═══════════════════════════════════════════
+// 4. 二进制读写与文件流的所有权
+// ═══════════════════════════════════════════
+
+struct Record { int id; double value; };
+
+void binaryDemo() {
+    Record r{1, 2.5};
+    std::ofstream out("data.bin", std::ios::binary);
+    out.write(reinterpret_cast<const char*>(&r), sizeof(r));   // 按字节写入
+
+    Record back{};
+    std::ifstream in("data.bin", std::ios::binary);
+    in.read(reinterpret_cast<char*>(&back), sizeof(back));     // 按字节读回
+    std::cout << back.id << "," << back.value << std::endl;    // 结果：1,2.5
 }

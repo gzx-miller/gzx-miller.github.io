@@ -5,86 +5,73 @@ import CPP07PointersReferences from './CPP07PointersReferences.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>手里有一个指向数组首元素的指针 <code>q</code>，你写下 <code>*(q + 1)</code>，本以为是把地址往后挪一个字节，结果它直接读到了第二个元素——这个「加一」，加的到底是什么？
+      <strong>开场问题：</strong>一个函数接受指针 <code>int* p</code>，当你传进一个已经离开作用域的局部变量的地址时，函数里的 <code>*p</code> 有时能读出「正确」的值，有时却读到一堆垃圾。同样一段代码、同样的语法，为什么结果全凭运气？
     </div>
 
-    <h2>按值传参限制</h2>
+    <h2>先朴素做法：用变量名直接操作数据</h2>
     <p>
-      你经常需要让函数去操作调用方的数据。可 C++ 默认<strong>按值传参</strong>，函数拿到的只是一份副本，在函数里改副本，原件纹丝不动。于是「怎么让函数真正操作到那个对象」成了必须回答的问题。
+      一开始，我们只认识变量名：<code>int x = 42;</code>，之后 <code>x = 100;</code> 就改了它。这套做法做对了什么？变量名是数据的直接入口，读写都最直观。但有一个场景它办不到——<strong>函数之间想共享同一个对象</strong>。前面函数一章里，按值传递只能改副本，正说明「名字是各管各的」。要让两个地方操作<strong>同一个</strong>对象，就需要一种「指向某块内存」的东西，这便是指针与引用的动因。
+    </p>
+
+    <h2>取址与解引用：指针是什么</h2>
+    <p>
+      指针是一个<strong>存着地址的变量</strong>。要拿到地址，用取址运算符 <code>&amp;</code>：<code>int* p = &amp;x;</code> 让 <code>p</code> 保存 <code>x</code> 的地址。要访问它指向的那块内存，用解引用运算符 <code>*</code>：<code>*p</code> 就是 <code>x</code> 本身，读 <code>*p</code> 得到 42，写 <code>*p = 100;</code> 就把 <code>x</code> 改成了 100。
     </p>
     <p>
-      直觉上最省事的答案是「把对象复制一份给函数」。但这份「省事」背后压着几笔必须由人承担的账：
+      这里有一个人容易混淆的地方：<code>*</code> 和 <code>&amp;</code> 在不同位置含义不同。声明 <code>int* p</code> 时，<code>*</code> 是类型的一部分（表示「指向 int 的指针」），不是运算；而表达式里的 <code>*p</code> 才是解引用运算。同理 <code>int&amp; r = x;</code> 里的 <code>&amp;</code> 表示「引用类型」，表达式里的 <code>&amp;x</code> 才是取址。判断歧义的简单办法是看它出现在<strong>声明</strong>里还是<strong>表达式</strong>里。
+    </p>
+
+    <h2>指针算术与数组的关系</h2>
+    <p>
+      指针不是孤立的地址，它可以做算术，而这正好和数组对上：<code>int arr[] = {10, 20, 30}; int* q = arr;</code>——数组名退化成指向首元素的指针，所以 <code>q</code> 指向 <code>arr[0]</code>。指针加 1 并<strong>不是地址加 1 个字节</strong>，而是<strong>前进一个元素</strong>，即偏移 <code>sizeof(int)</code> 个字节。于是 <code>*(q + 1)</code> 就等价于 <code>arr[1]</code>，得到 20。这也解释了为什么 <code>arr[i]</code> 与 <code>*(arr + i)</code> 是同一件事——下标运算本质就是「指针加偏移再解引用」。
+    </p>
+    <p>
+      指针算术要守住一条边界：只能在<strong>同一数组</strong>（或同一分配块）的范围内移动，指针可以指向「最后一个元素之后」的位置，但越界解引用就是未定义行为。<strong>它做对了「用统一的方式在连续内存上移动」，做不足的仍是「不记录边界」</strong>，边界依旧需要程序员自己守着。
+    </p>
+
+    <h2>nullptr 与「const 指针 vs 指向 const 的指针」</h2>
+    <p>
+      指针有一个内置的「没有指向任何对象」的值：<strong>空指针</strong>。C++11 起用 <code>nullptr</code> 表示它——它是有明确类型的空指针常量，比老式的 <code>NULL</code>（本质是 <code>0</code>）更安全，因为它不会和整数 <code>0</code> 混淆。在解引用之前先判空，是使用指针的基本纪律：<code>if (p != nullptr) { ... *p ... }</code>。
+    </p>
+    <p>
+      再往下一步，是把 <code>const</code> 加进来。指针和 <code>const</code> 组合有<strong>两种截然不同的含义</strong>，读法是从右往左看：
     </p>
     <ul>
-      <li><strong>复制本身有代价</strong>：对象越大，每次调用拷贝一次，开销随规模增长。</li>
-      <li><strong>表达不了「没有」</strong>：有些参数本来就可能不存在，纯副本无法如实描述这种「可选」。</li>
-      <li><strong>改不到「指针本身」</strong>：有时函数要换掉调用方手里那个地址，副本做不到。</li>
+      <li><code>const int* p</code>（也可写 <code>int const* p</code>）：「<strong>指向 const int 的指针</strong>」——<code>p</code> 自身可以改指向别处，但<strong>不能通过 <code>p</code> 修改</strong>它指向的值。</li>
+      <li><code>int* const p</code>：「<strong>const 指针</strong>」——<code>p</code> 一旦初始化就不能再指向别处，但<strong>可以通过它修改</strong>所指的值。</li>
+      <li><code>const int* const p</code>：两者兼有——指针不能重指向，值也不能改。</li>
     </ul>
     <p>
-      所以真正要回答的是：怎样用「指向某对象」或「某对象的别名」来表达，既不复制，又能分清「必然存在」与「可能为空 / 可重定向」？
+      记住口诀「<strong>const 修饰它左边最近的东西；若左边没有，则修饰右边</strong>」，就能一眼分清 <code>const</code> 约束的到底是「指针本身」还是「被指向的值」。
     </p>
 
-    <h2>记录对象地址</h2>
+    <h2>引用即别名，以及悬垂、野指针</h2>
     <p>
-      最直接的做法：记下对象的位置，也就是地址。
+      引用是 C++ 为「共享同一对象」提供的更省心的工具。<code>int&amp; r = x;</code> 让 <code>r</code> 成为 <code>x</code> 的<strong>别名</strong>：此后对 <code>r</code> 的任何读写都直接作用在 <code>x</code> 上，不需要写 <code>*</code>。与指针相比，引用有三条天然的安全约定：<strong>必须初始化、不能重新绑定、不存在空引用</strong>。所以「引用更像一个改不了指向的、非空的指针」，语法上更轻。这也确立了工程里的取舍：<strong>能表达成引用就别用指针</strong>（函数参数、别名），只有需要「可为空」「可重新指向」「做数组式移动」时，指针才不可替代。
     </p>
     <p>
-      <code>int x = 42;</code><br />
-      <code>int* p = &amp;x;</code><br />
-      <code>*p = 100;</code>
+      指针真正危险的地方，是指向已经不存在的对象，分为两种：
     </p>
-    <p>
-      <code>p</code> 里存的是 <code>x</code> 的地址，<code>*p</code> 解引用就拿到 <code>x</code> 本身，对它赋值等于直接改 <code>x</code>。函数只要改成收 <code>int* p</code>、调用时传 <code>&amp;x</code>，函数里 <code>*p = 100</code> 就能改到原对象。
-    </p>
-    <p>
-      这个方案做对了一件事：它把<strong>「对象本身」和「对象的位置」分开了</strong>。传一个地址很便宜（一个指针大小），解引用之后又能直达原件，「复制太贵」和「改不到原件」两个问题一起解掉。
-    </p>
-
-    <h2>空指针与野指针</h2>
     <ul>
-      <li>指针可以指向「什么都没有」：<code>int* p;</code> 未初始化时存的是随机值，解引用就是未定义行为。</li>
-      <li>用法不顺手：每次访问都得写 <code>*p</code>，想让「像普通变量一样直接用」就做不到。</li>
-      <li>算术不直观：<code>p + 1</code> 加的不是一个字节，凭直觉就会算错。</li>
-      <li>类型上看不出「一定非空」：函数签名 <code>void f(int* p)</code> 根本没说明 <code>p</code> 能不能是 <code>nullptr</code>。</li>
+      <li><strong>悬垂指针（dangling pointer）</strong>：指针曾指向一个合法对象，但该对象已被销毁（局部变量出了作用域、堆内存被 <code>delete</code>），指针却还在。此时解引用就是未定义行为。</li>
+      <li><strong>野指针（wild pointer）</strong>：指针从未被初始化，存着一个随机地址，直接解引用更是未定义行为。</li>
     </ul>
+    <p>
+      这正好解释了开场的现象：读一块<strong>已经归还、随时可能被复用</strong>的内存，内容自然不可预期，有时「恰好」还是旧值，有时已被覆盖。规避手段是固定成纪律——<strong>指针一律初始化（没有对象就赋 <code>nullptr</code>）、对象销毁后立刻把指针置空、解引用前判空、绝不让引用或指针活过它所指对象的生命周期</strong>。现代 C++ 更推荐用智能指针（<code>unique_ptr</code>、<code>shared_ptr</code>）把「谁负责释放、何时失效」交给类型去管。
+    </p>
 
-    <h2>引用别名机制</h2>
-    <p>
-      先补「别名」这一层，这就是引用：
-    </p>
-    <p>
-      <code>int y = 5;</code><br />
-      <code>int&amp; r = y;</code><br />
-      <code>r = 10; // y 也变成 10</code>
-    </p>
-    <p>
-      <code>r</code> 是 <code>y</code> 的别名，用起来和普通变量一模一样，不用写 <code>*</code>。引用必须<strong>定义时初始化</strong>，之后不能改绑——所以不存在「空引用」。于是分工清晰了：需要一个必然存在的别名、且想当变量用时，用引用（函数参数首选 <code>Type&amp;</code>）；需要表达「可能为空」或「函数要改指针本身」时，才用指针。
-    </p>
-    <p>
-      接着把指针算术说清楚。<code>int arr[] = {10, 20, 30}; int* q = arr;</code>（等价于 <code>&amp;arr[0]</code>）。这里的 <code>q + n</code> 不是地址加 <code>n</code> 个字节，而是加 <code>n * sizeof(int)</code> 个字节，所以 <code>*(q + 1)</code> 得的是 20。这也正是 <code>arr[i]</code> 等价于 <code>*(arr + i)</code> 的原因。
-    </p>
-    <p>
-      再补几条必须记住的边界。第一，比较：<code>==</code> / <code>!=</code> 对指向不同对象的指针是良定义的（通常为假）；但 <code>&lt;</code>、<code>&lt;=</code> 这类关系比较，只有两个指针指向同一数组的元素时才有意义，否则结果是未指定或实现定义的。第二，引用不是独立对象：既然它不单独占存储，就既没有「引用的引用」，也没有「指向引用的指针」——<code>int&amp; *p</code> 是非法语法，想拿 r 所绑定对象的指针要写 <code>int* p = &amp;r;</code>（<code>&amp;r</code> 得到的正是那个对象的地址）。第三，声明别被骗：<code>int* p, q;</code> 里只有 <code>p</code> 是指针，<code>q</code> 是普通的 <code>int</code>，推荐分行声明或写成 <code>int *p, q;</code>。
-    </p>
-    <p>
-      最后把「空」和「const」补上。C++11 的 <code>nullptr</code> 取代了 <code>NULL</code>（后者往往是宏 <code>0</code> 或 <code>(void*)0</code>）：<code>nullptr</code> 能隐式转换成任何指针类型，却不能转成 <code>int</code>，从而消除了 <code>NULL</code> 带来的重载二义性；解引用前记得先判 <code>if (p != nullptr)</code>。const 则分两层：<code>int* const p</code> 是顶层 const，<code>p</code> 自己不能再改指向；<code>const int* p</code> 是底层 const，指向的内容不能改；两者叠加的 <code>const int* const p</code> 就都锁死了。
-    </p>
-    <div class="lesson-box warn">
-      <strong>「引用不能重新绑定」这句要分清：</strong><code>r = 10</code> 并不是让 <code>r</code> 改去指向 10，而是把 10 赋给 <code>r</code> 所绑定的那个对象。想「改指向」只能用指针。
-    </div>
-
-    <h2>解引用指针算术</h2>
+    <h2>看一遍指针与引用的对照</h2>
     <figure class="lesson-figure">
-      <figcaption>对照代码看解引用与指针算术的实际结果，再把下方对照表里指针与引用的差异一项项验过去。</figcaption>
+      <figcaption>对照这段代码，看取址 &amp; 与解引用 * 如何读写同一变量、指针算术如何通过偏移访问数组元素、引用如何作为别名直接修改变量，以及 nullptr 判空与「指针 vs 引用」特性的逐项对照。</figcaption>
       <CPP07PointersReferences />
     </figure>
 
-    <h2>地址与别名分工</h2>
+    <h2>把地址当成一条「通往对象的路」</h2>
     <p>
-      指针和引用是同一件事的两副面孔：都在描述「别处的某个对象」。指针是「可以换、可以为空的地址」，引用是「装成变量、不能改绑的别名」。要改原件又不复制，用引用；要表达可选或重定向，用指针；而 <code>p + n</code>、<code>p-&gt;m</code>、const 的先后顺序，都是围绕这个地址做文章。
+      指针与引用讲的是同一件事——<strong>如何间接地指向并操作一个对象</strong>。指针保存地址、能算术、可为空、可重指向，是接近机器的灵活工具；引用是别名，必须绑定、不可空、不可重指向，把大多数常见用法表达得更安全。两者共享同一个责任：<strong>必须清楚它指向的对象是否仍然活着</strong>。把「初始化、判空、置空、不越生命周期」这四条当成纪律，悬垂与野指针这两类最难调试的错误就能在很大程度上被挡在门外。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「解引用」</span>指对指针使用一元 <code>*</code> 运算符，取得它所指向的对象本身，结果是一个左值，可以直接被赋值（<code>*p = 100</code> 即修改目标对象）。边界：只能对指向有效对象的指针解引用，对 <code>nullptr</code>、未初始化指针或已释放内存的指针解引用都是未定义行为；<code>p-&gt;member</code> 只是 <code>(*p).member</code> 的简写。
+      <span class="term-name">「解引用」</span>指通过指针访问它所指向的对象，写作 <code>*p</code>；<span class="term-name">「引用」</span>是对象的别名，必须初始化且不可重新绑定；<span class="term-name">「悬垂指针」</span>指所指对象已销毁而指针未更新的指针；<span class="term-name">「野指针」</span>指未初始化的指针；<span class="term-name">「智能指针」</span>指以类型机制管理对象生命周期的指针封装。
     </div>
   </LessonArticle>
 </template>

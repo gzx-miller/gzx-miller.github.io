@@ -5,82 +5,76 @@ import CPP12Inheritance from './CPP12Inheritance.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>你写了个按动物描述的函数 <code>void describe(Animal a)</code>，把一只 <code>Dog</code> 传进去，函数里让它叫一声，叫出来却是基类那句"发出声音"，而且函数里再也读不到狗自己的数据——一只 Dog 装进 Animal 之后，怎么像被削掉了一半？
+      <strong>开场问题：</strong>已经写好了 <code>Animal</code> 类，现在还需要一个 <code>Dog</code>：它拥有 <code>Animal</code> 的全部数据与行为，只多出几项自己的。最直接的办法是把 <code>Animal</code> 的代码整段复制过来再改，可两处几乎一样的代码各自维护，改一处漏一处。有没有一种写法，既能完整复用，又能表达「Dog 是一种 Animal」？
     </div>
 
-    <h2>字段与行为复用</h2>
+    <h2>从复制代码到继承</h2>
     <p>
-      你遇到的是复用问题：<code>Dog</code> 和 <code>Animal</code> 共享同一套字段（名字）与行为（构造、析构、说话的方式），只是狗要多一点自己的东西。最省事的办法，是把 <code>Animal</code> 的代码整段复制进 <code>Dog</code>，改掉类名。
+      复制代码做对的事是：让 <code>Dog</code> 确实拥有 <code>Animal</code> 的一切。不足也很明显：两份代码没有关联，无法从关系上表达「Dog 是一种 Animal」，也无法在不改动 <code>Dog</code> 的前提下统一升级 <code>Animal</code> 的公共部分。
     </p>
     <p>
-      但这个"复制粘贴"里藏着三笔要人自己扛的成本：
+      <strong>继承</strong>正是为了消除这层重复：让 <code>Dog</code> 直接<strong>复用</strong> <code>Animal</code> 的成员，只声明自己新增或需要改变的部分。被继承的类叫<strong>基类</strong>（父类），继承它的叫<strong>派生类</strong>（子类）。当派生类与基类满足「派生类 is-a 基类」（Dog is-a Animal）时，继承表达的就是这种<strong>是一种</strong>关系。
+    </p>
+
+    <h2>继承语法与三种继承方式</h2>
+    <p>
+      继承写在类名之后：<code>class Dog : public Animal</code>。冒号后面就是<strong>继承方式</strong>，它决定基类成员在派生类中的访问权限如何变化，共三种：
     </p>
     <ul>
-      <li>基类里一个字段改名、一个函数改逻辑，你得把所有复制出来的类都改一遍，漏一个就埋下一个不一致的 bug。</li>
-      <li>两个类在语言层面彼此<strong>没有关系</strong>，编译器不知道"Dog 也是一种 Animal"，于是任何"接受 Animal、统一处理一批动物"的函数都没法把 Dog 收进来。</li>
-      <li>想让一段逻辑同时作用于多种类型，只能靠重载或模板把每种类型各写一遍，代码条数随类型数线性增长。</li>
+      <li><code>public</code> 继承：保持原权限。<code>public</code> 成员在派生类中仍是 <code>public</code>，表达 is-a 关系，是最常用的方式。</li>
+      <li><code>protected</code> 继承：基类的 <code>public</code> 与 <code>protected</code> 成员都降为 <code>protected</code>，只对继续派生的类开放。</li>
+      <li><code>private</code> 继承：基类成员全部降为 <code>private</code>，外部与更下游的派生类都看不见。<code>class</code> 的默认继承方式就是它（<code>struct</code> 默认是 <code>public</code>）。</li>
     </ul>
     <p>
-      所以要问的是：<strong>能不能让一个新类型"基于"已有类型去定义，既继承它的成员，又和它建立起可替换的关系？</strong>
-    </p>
-
-    <h2>公有继承写法</h2>
-    <p>
-      最直接的写法是 <code>class Dog : public Animal { ... }</code>。这样 Dog 自动拥有了 Animal 的全部成员，还能往上添加自己的成员和自己的函数。
+      以 <code>public</code> 继承为例：基类的 <code>public</code> 与 <code>protected</code> 成员在派生类里保持原样，<code>private</code> 成员则无论哪种继承方式都<strong>不可直接访问</strong>——派生类只能用基类提供的接口间接操作它们。
     </p>
     <p>
-      这个方案做对了一件关键的事：<strong>它把"是一种"这层关系写进了类型系统</strong>——<code>public</code> 继承表达的正是 is-a。于是凡需要 Animal 的地方（函数参数、容器元素）都能放 Dog，复用不必再靠复制粘贴。剩下要弄清的，是这份关系在内存和生命周期里究竟怎么运转。
+      那些为派生类预留、又不希望外部直接碰的成员，正是放在 <code>protected</code> 里的（上一章讲过它的定位），这样派生类能直接用，外部却够不着。
     </p>
 
-    <h2>构造顺序陷阱</h2>
+    <h2>构造、析构顺序与名字隐藏</h2>
+    <p>
+      <strong>构造与析构顺序</strong>是继承里最确定的一条规定：构造时<strong>先基类、后派生类</strong>，析构时<strong>先派生类、后基类</strong>，恰好相反。原因在于派生类可能依赖基类的初始化结果，得等基类就位才能动；销毁时则要先把派生层拆掉，再交给基类收尾。因此派生类构造函数必须在初始化列表里显式调用基类构造。
+    </p>
+    <p>
+      另一件常被误解的事是<strong>名字隐藏</strong>：派生类只要定义了与基类<strong>同名</strong>的成员，基类中所有同名成员就会被<strong>隐藏</strong>，不论参数是否相同，也不能靠重载「找回来」。想调用被隐藏的基类版本，必须用作用域限定，写成 <code>d.Base::show()</code> 这种形式。
+    </p>
+
+    <h2>对象切片与 is-a 关系</h2>
+    <p>
+      继承真正的价值在<strong>多态</strong>：通过基类指针或引用操作派生类对象，调用到派生类的行为。这里有一个陷阱值得单独说明——<strong>对象切片</strong>。
+    </p>
+    <p>
+      当把一个派生类对象<strong>按值</strong>赋给基类对象时，如 <code>Animal a = dog;</code>，发生的是「切掉派生类独有的那部分、只保留基类子对象」的复制，得到一个 <strong>纯基类对象</strong>；此后通过它调用行为，只会走基类的版本，多态失效。这就是对象切片。
+    </p>
     <ul>
-      <li>派生类构造函数体里想用基类的 <code>name</code>，可它的值从哪来、什么时候就绪，说不清——构造顺序一旦弄反，就会读到未初始化的成员。</li>
-      <li>用基类对象接住派生对象：<code>Animal a = dog;</code>，Dog 特有的成员被"切掉"，<code>a</code> 里只剩基类那部分——开场"少了一半"的现象就是这么来的。</li>
-      <li>通过基类指针 <code>delete</code> 一个派生对象时，若基类析构函数不是虚的，就只执行基类析构，Dog 自己的资源没人回收。</li>
-      <li>指望派生类改写基类行为，基类那个函数却是普通（非虚）函数，通过基类指针调用时调到的仍是基类版本。</li>
+      <li>切片发生在<strong>按值传递或按值赋值</strong>时，因为值语义只复制「基类那一部分」。</li>
+      <li>避开的方法：用<strong>指针或引用</strong>传递，如 <code>Animal&amp; a = dog;</code>，被绑定的仍是完整的派生类对象，不发生切片。</li>
     </ul>
+    <p>
+      <strong>is-a 关系</strong>是判断继承是否合理的准绳：只有当「派生类确实是一种基类」时，<code>public</code> 继承才恰当。若只是为了借用基类的实现（has-a，或纯粹的实现复用），用<strong>组合</strong>（把基类对象作为成员）往往更合适，也更不易切片。
+    </p>
 
-    <h2>派生对象内存布局</h2>
+    <h2>多继承与虚基类（基础）</h2>
     <p>
-      不推翻"派生"，而是把这份关系一层层讲清楚。先看内存：<strong>派生类对象 = 基类子对象 + 派生类新增成员</strong>。正因为 Dog 内部真的"装"了一块完整的 Animal，<code>Animal* p = &amp;dog;</code> 才合法——指针只是记下地址，指向的仍是那只完整的狗。
+      C++ 允许一个类同时继承多个基类，写法是逗号分隔：<code>class Amphibian : public Land, public Water</code>。多继承能表达「兼具多种能力」，但它会带来一个典型问题——<strong>菱形继承</strong>：若 <code>Land</code> 与 <code>Water</code> 都继承自同一个 <code>Animal</code>，那么 <code>Amphibian</code> 里会出现<strong>两份</strong> <code>Animal</code> 子对象，访问 <code>Animal</code> 的成员就产生歧义。
     </p>
     <p>
-      接着理清生命周期，这是继承最常出错的地方：<strong>构造顺序是基类 → 派生类成员 → 派生类构造体，析构顺序与它完全相反</strong>。为什么？构造时派生类可能要用基类已经建好的成员，所以基类必须先就绪；析构时反过来，是因为派生类的清理可能还要用到基类资源。派生类构造函数用初始化列表显式调用基类构造即可：
+      解决办法是<strong>虚继承</strong>：在继承时写 <code>class Land : virtual public Animal</code>，让这条继承链共享<strong>唯一一份</strong>基类子对象，菱形中被共享的那个基类就叫<strong>虚基类</strong>。相应地，虚基类的初始化由<strong>最派生类</strong>负责，不能只交给中间类。若把对象切片、名字隐藏、菱形多继承放在一起看，会发现它们都是「派生类与基类的关系没有摆正」在不同层面的表现。
     </p>
-    <p>
-      <code>Dog(const std::string&amp; n) : Animal(n) { ... }</code>
-    </p>
-    <p>
-      如果不写，编译器会去调用基类的默认构造函数；基类若没有默认构造，这段代码直接编译不过。
-    </p>
-    <p>
-      再补上"通过基类指针删除派生对象"的正确性：只要有人可能这么干，基类的析构函数就必须声明为 <code>virtual</code>。否则 <code>delete animal;</code> 只会调用 <code>~Animal()</code>，Dog 的析构被直接跳过，它持有的资源全部泄漏。
-    </p>
-    <p>
-      然后是"重写"这件事的两个工具。C++11 的 <code>override</code> 让你在派生类里显式标记"这是在重写基类虚函数"，一旦签名没对上（比如漏了 <code>const</code>），编译器就报错；没有它，签名不匹配会悄悄变成<strong>隐藏</strong>而非重写，调用时莫名其妙走了基类版本。<code>final</code> 则相反，用来禁止某个类被继承、或某个虚函数被继续重写。
-    </p>
-    <p>
-      最后回到开场那个"被削掉一半"的现象，它的正式名字叫<strong>对象切片</strong>：<code>Animal a = dog;</code> 触发的是"按基类那部分"的一次拷贝构造，Dog 新增的成员根本没有落脚之地，被就地切掉。正解是<strong>始终用基类指针或引用</strong>去接派生对象——<code>Animal* p = &amp;dog;</code> 或 <code>Animal&amp; r = dog;</code>，它们只保存地址，指向的依旧是完整的 Dog。
-    </p>
-    <p>
-      还有三处继承的边界值得记住。访问控制上，<code>protected</code> 继承会把基类的 public / protected 成员变成 protected（只在继承层次内部可见），<code>private</code> 继承则把它们全部变成 private，只借用实现、不暴露 is-a；日常表达"是一个"关系，几乎都用 <code>public</code>。若派生类需要把基类某个被保护的名字引入自己的作用域，可以写 <code>using Base::method;</code>。而一个类同时继承多个基类（多重继承）虽然合法，却可能带来菱形继承问题，通常要靠虚继承化解——当能用组合表达关系时，就先别急着上多重继承。
-    </p>
-    <div class="lesson-box warn">
-      <strong>按值传递会切片：</strong><code>void describe(Animal a)</code> 这种按值接收基类对象的函数，会把传进来的 Dog 切成 Animal；把派生对象放进存放基类对象的容器也一样。要保留派生身份或使用多态，参数和容器里都应该放<strong>基类的指针或引用</strong>，而不是基类对象本身。
-    </div>
 
-    <h2>基类指针调用</h2>
+    <h2>看图对照：多态与切片</h2>
     <figure class="lesson-figure">
-      <figcaption>对照代码里构造与析构的打印：<code>Dog dog("旺财")</code> 是先打印基类构造还是派生类构造？<code>delete</code> 时析构顺序又怎样？再留意通过基类指针调用 <code>speak()</code> 的结果。</figcaption>
+      <figcaption>这份示例用 <code>Animal</code> 与 <code>Dog</code> 展示 <code>public</code> 继承、虚函数重写与虚析构函数如何协作，可对照看到通过基类指针调用派生类行为（动态绑定）与按值赋值导致对象切片之间的差别。</figcaption>
       <CPP12Inheritance />
     </figure>
 
-    <h2>继承与类型关系</h2>
+    <h2>用「是一种」而不是「像是一种」来决定继承</h2>
     <p>
-      继承先回答"两个类型是什么关系"：公有继承表达 is-a，派生对象在内存里就是"基类子对象 + 新增成员"。构造从基类走到派生、析构反过来；要让基类指针正确清理和改写行为，析构要是虚的、重写要用 <code>override</code>；要保住派生对象的完整身份，就只能用指针或引用，一旦用基类对象按值接收，它就会被切片。
+      继承带来的最大收益，是让基类的接口成为一纸契约：所有派生类都得遵守它，调用方则可以统一地通过基类指针或引用来使用不同的派生对象。反过来，它也带来最容易被忽视的陷阱——切片与名字隐藏。判断继承是否该用的标准始终只有一条：派生对象<strong>确实是一种</strong>基类对象；只是「实现看起来能复用」时，组合才是更稳妥的选择。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「对象切片」</span>指把一个派生类对象<strong>按值</strong>赋给基类对象（或按值传参）时，只有基类那一部分被拷贝过去，派生类新增的成员被丢弃的现象。它静默发生、不报错，却让你以为在用派生对象，实际调用的全是基类行为。避免的办法是始终用基类的指针或引用指向派生对象；需要按基类类型成批处理时，容器里也应存指针（或智能指针）而非对象本身。
+      <span class="term-name">「基类 / 派生类」</span>分别指被继承的类与继承它的类，公有继承表达 is-a 关系；<span class="term-name">「继承方式」</span>用 <code>public</code>、<code>protected</code>、<code>private</code> 决定基类成员在派生类中的访问权限；<span class="term-name">「名字隐藏」</span>指派生类的同名成员遮蔽了基类所有同名成员，需用作用域限定符访问；<span class="term-name">「对象切片」</span>指把派生类对象按值赋给基类对象时派生部分被切掉，多态随之失效；<span class="term-name">「虚基类」</span>是虚继承下被整条继承链共享的唯一基类子对象。
     </div>
   </LessonArticle>
 </template>

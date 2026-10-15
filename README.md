@@ -47,7 +47,7 @@
 | [LangChain](https://gzx-miller.github.io/langchain) | 23 | 14 | 模型调用、提示模板、链式调用、RAG 与 Agent |
 | [LangGraph](https://gzx-miller.github.io/langgraph) | 14 | 6 | ReAct 智能体、状态图、中间件、人机交互、记忆与上下文、MCP、多智能体、RAG 与流式界面 |
 | [Transformer](https://gzx-miller.github.io/llm-principles) | 30 | 4 | 向量、神经网络、注意力机制与 Transformer 预训练范式 |
-| [C++](https://gzx-miller.github.io/cpp) | 30 | 12 | 内存管理、面向对象、模板、STL 与现代 C++ 核心特性 |
+| [C++](https://gzx-miller.github.io/cpp) | 25 | 11 | 内存管理、面向对象、模板、STL 与现代 C++ 核心特性 |
 | [Electron](https://gzx-miller.github.io/electron) | 15 | 7 | 主进程与渲染进程、IPC 通信、窗口管理、系统托盘与打包分发 |
 | [FFmpeg](https://gzx-miller.github.io/ffmpeg) | 24 | 1 | 格式转换、音视频处理、滤镜效果、字幕、流媒体与硬件加速 |
 | [WebGL](https://gzx-miller.github.io/webgl) | 20 | 7 | 着色器、缓冲区、矩阵变换、纹理贴图、光照模型与后处理 |

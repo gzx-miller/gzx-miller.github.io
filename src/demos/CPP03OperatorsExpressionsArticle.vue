@@ -5,75 +5,86 @@ import CPP03OperatorsExpressions from './CPP03OperatorsExpressions.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>你想判断变量 <code>a</code> 里某些二进制位是否全为 0，写下 <code>if (a &amp; mask == 0)</code>，结果不管 <code>a</code>、<code>mask</code> 取什么，这个分支要么永远不进、要么永远进——代码看着像「先按位与、再比较」，编译器却按另一套理解执行。
+      <strong>开场问题：</strong>下面这个判断想筛出「掩码位为 0」的情况，逻辑上没错，可它永远得不到你想要的结果：<code>if (a &amp; mask == 0)</code>。同样的两个运算符、同样的操作数，为什么多加一对括号 <code>if ((a &amp; mask) == 0)</code> 就对了？
     </div>
 
-    <h2>运算符优先级规则</h2>
+    <h2>先朴素做法：把式子照直觉写下来</h2>
     <p>
-      一行表达式里可以塞进很多运算符：<code>a + b * c</code>、<code>p &amp;&amp; q || r</code>、<code>x &lt;&lt; 1 &amp; 3</code>。人读的时候靠直觉——从左到右、按数学习惯来；但机器必须有一套毫不含糊的规则，否则同一行代码在不同编译器下能算出不同结果。
+      写表达式时，多数人是照数学直觉直译的：加法先于乘法、先算括号，比较给出真假，<code>&amp;&amp;</code> 与 <code>||</code> 连着两个条件。这套直觉在小学算术范围内基本不出错，也解释了一个事实——C++ 的运算符<strong>确实有一套确定的优先级与结合律</strong>，表达式不是从左到右随便算的。
     </p>
     <p>
-      这套规则的第一层是<strong>优先级</strong>：谁来先结合。第二层是<strong>结合律</strong>：优先级相同时从左还是从右。光这两层还不够，因为 C++ 还有两件事会让结果进一步偏离直觉：计算时数值用多少位（类型），以及子表达式谁先被真正求值（求值顺序）。你在脑子里默认「从左到右、位宽不变、谁先写谁先算」，可语言的默认并不是这样。
+      但直觉覆盖不到的地方恰恰是出错的地方。C++ 的运算符一共几十个，优先级表比四则运算长得多；<code>&amp;</code> 既可能是「按位与」，也可能是「取地址」；<code>&lt;&lt;</code> 既可能是「位移」，也可能是「流插入」。当人凭感觉把这些符号连起来时，编译器却严格按优先级表解析，两边一错位，就出现开场那种「看起来对、结果不对」的表达式。
     </p>
     <p>
-      旧办法（凭直觉写表达式、不加括号）要人承担的成本很具体：你得把整张优先级表背下来；就算背下来，位运算和相等运算谁高谁低也常常记反；即便优先级对上了，整数提升和求值顺序仍可能让同一个式子算出你没想到的值。
-    </p>
-    <p>
-      所以问题落到：<strong>一行复杂表达式里同时出现算术、比较、位、逻辑、赋值，到底按什么顺序算成什么类型？哪些写法干脆是「没定义结果」的？</strong>
+      要解决它，得先把运算符分类理清，再谈优先级。
     </p>
 
-    <h2>默认读法失效</h2>
+    <h2>按用途分类：算术、关系、逻辑与位运算</h2>
     <p>
-      最省事的做法：相信从左到右、相信数学直觉来读。<code>a &amp; mask == 0</code> 读起来就像 <code>(a &amp; mask) == 0</code>；<code>1/2</code> 读起来就该是 0.5。
+      把常用运算符按用途摊开：
     </p>
-    <p>
-      这个方案确实做对了一件事：<strong>对于只用算术和关系、并且都加了括号的简单表达式，从左到右读是没问题的</strong>。大部分日常代码也确实落在这个范围内，所以「凭直觉」在小规模时够用。
-    </p>
-    <p>
-      问题在于，一旦把位运算符、逻辑运算符和比较运算符混在一行，「直觉」会和真正的规则悄悄错开，而且错得毫无提示。
-    </p>
-
-    <h2>位运算优先级</h2>
     <ul>
-      <li><code>a &amp; mask == 0</code> 实际等价于 <code>a &amp; (mask == 0)</code>——因为 <code>==</code> 的优先级高于 <code>&amp;</code>。<code>mask == 0</code> 先算出一个 0 或 1，再和 <code>a</code> 按位与，判断的语义就彻底变了味。</li>
-      <li><code>char c1 = 100, c2 = 200; char sum = c1 + c2;</code>，<code>sum</code> 得不到 300——因为 <code>c1 + c2</code> 先被提升成 <code>int</code> 得到 300，再赋回 <code>char</code> 时才截断溢出，报错的位置和你以为的不一样。</li>
-      <li><code>i = i++;</code> 的结果是<strong>未定义</strong>：同一个表达式里既读 <code>i</code> 又改 <code>i</code>，编译器怎么排都合法，不同编译器给出不同的值。</li>
-      <li><code>int x = INT_MAX + 1;</code> 是<strong>未定义行为</strong>（有符号溢出），并不是「温和地回绕成负数」。</li>
-      <li><code>1 &lt;&lt; 32</code> 对一个 32 位的 <code>int</code> 是未定义，因为位移位数超过了类型的位宽。</li>
+      <li><strong>算术</strong>：<code>+ - * / %</code>。其中 <code>/</code> 对整数是向零取整，<code>%</code> 取余且只能作用于整数。</li>
+      <li><strong>关系</strong>：<code>&lt; &lt;= &gt; &gt;=</code> 与 <code>== !=</code>，结果是 <code>bool</code>。</li>
+      <li><strong>逻辑</strong>：<code>! &amp;&amp; ||</code>，同样给出 <code>bool</code>，其中 <code>&amp;&amp;</code> 与 <code>||</code> 具有短路性质。</li>
+      <li><strong>位运算</strong>：<code>&amp; | ^ ~</code> 与 <code>&lt;&lt; &gt;&gt;</code>，直接操作二进制位，只对整数类型有效。</li>
     </ul>
+    <p>
+      这里最容易混淆的是「按位」与「逻辑」两组的写法：<code>&amp;</code> 与 <code>&amp;&amp;</code>、<code>|</code> 与 <code>||</code>。它们做的事完全不同——<code>a &amp; b</code> 逐位相与，<code>a &amp;&amp; b</code> 先判断 <code>a</code> 的真假再决定要不要看 <code>b</code>。写条件判断时若手滑少打一个符号，程序可能照样能编译，却做了截然不同的事。
+    </p>
 
-    <h2>显式括号分组</h2>
+    <h2>短路求值：逻辑运算的隐性顺序</h2>
     <p>
-      不推翻「表达式能一行写完」，而是把这几条规则一层层补上，让每一层各自管住一类意外。先补的第一层是<strong>分组</strong>，因为它决定了后面两层在讨论什么。
+      朴素写法里，逻辑运算符常被当成「两个条件都算一遍再合起来」。但 <code>&amp;&amp;</code> 与 <code>||</code> 的真正价值在于<strong>短路求值</strong>：
     </p>
+    <ul>
+      <li><code>a &amp;&amp; b</code>：先算 <code>a</code>，若 <code>a</code> 为假，整个表达式已确定为假，<code>b</code> <strong>根本不会求值</strong>。</li>
+      <li><code>a || b</code>：先算 <code>a</code>，若 <code>a</code> 为真，整个表达式已确定为真，<code>b</code> <strong>根本不会求值</strong>。</li>
+    </ul>
     <p>
-      用括号把分组意图钉死。优先级从高到低大致是：<code>::</code>、成员与调用 <code>() [] -&gt; .</code> 与后缀自增、前缀运算符、<code>* / %</code>、<code>+ -</code>、<code>&lt;&lt; &gt;&gt;</code>、关系 <code>&lt; &lt;= &gt; &gt;=</code>、相等 <code>== !=</code>、<code>&amp;</code>、<code>^</code>、<code>|</code>、<code>&amp;&amp;</code>、<code>||</code>、<code>?:</code>、赋值、逗号最低。但你不需要背它——只要记住一条操作性的规则：<strong>只要位运算、逻辑运算、比较混在一行，就一律加括号</strong>。把 <code>a &amp; mask == 0</code> 写成 <code>(a &amp; mask) == 0</code>，括号是给你自己看的，不是给编译器看的。
+      这既是优化，也是安全边界。它让「先判空、再解引用」成为一种可靠写法：<code>if (p != nullptr &amp;&amp; *p &gt; 0)</code>——只要前半段不成立，后半段对空指针的解引用就绝不会被执行。反过来也埋了一个坑：如果 <code>b</code> 带着副作用（比如自增），而你以为它总会执行，那么短路发生时副作用就被静默跳过了；<code>if (a &gt; b &amp;&amp; ++x)</code> 里 <code>x</code> 到底加没加，取决于 <code>a &gt; b</code> 的真假。
     </p>
-    <p>
-      补完分组，接着要理解<strong>位宽会被悄悄改写</strong>，否则你加对了括号也算不对值。C++ 规定：小整数类型（<code>bool</code>、<code>char</code>、<code>short</code>）在参与表达式时先做<strong>整数提升</strong>，升成 <code>int</code>（只要 <code>int</code> 装得下原类型的全部取值），所以 <code>char + char</code> 的实际类型是 <code>int</code>。两个操作数类型不同时，再按<strong>算术转换</strong>统一到更高的那个类型，大致顺序是 <code>int → long → long long → float → double → long double</code>。这一层正好解释了 <code>c1 + c2</code> 为什么不会当场溢出——溢出发生在赋回 <code>char</code> 的那一刻；也解释了 <code>1/2</code> 为什么是 0 而不是 0.5（两个 <code>int</code> 相除，结果还是 <code>int</code>）。
-    </p>
-    <p>
-      最后一层，也是唯一无法靠加括号解决的：<strong>求值顺序</strong>。C++17 起，只有少数运算符明确了左操作数先于右操作数求值——赋值、复合赋值、<code>&amp;&amp;</code>、<code>||</code>、<code>?:</code>、逗号。其余多数运算符的子表达式<strong>谁先算，标准没有规定</strong>。所以「别在同一表达式里既改一个变量又读它」不是风格建议，而是避免未定义行为的硬要求：把 <code>i = i++;</code> 拆成单独一行 <code>i++;</code>。
-    </p>
-    <p>
-      把这些零碎规则串起来，还有几个在写表达式时天天用到的行为值得一起记住。<code>&amp;&amp;</code> 和 <code>||</code> 是<strong>短路</strong>的——左操作数已经能定结果，右边就不评估，所以 <code>if (p != nullptr &amp;&amp; p-&gt;ok())</code> 才安全，判空之后才解引用。前缀 <code>++i</code> 返回自增<em>后</em>的值，后缀 <code>i++</code> 返回自增<em>前</em>的旧值，对迭代器来说后缀还要多复制一份，性能上有差别。逗号运算符顺序求值，整个表达式的值和类型取最右边那一项，正好适合放在 <code>for</code> 里做多重初始化或更新。
-    </p>
-    <div class="lesson-box warn">
-      <strong>位移的两个硬约束：</strong><code>&lt;&lt;</code> 和 <code>&gt;&gt;</code> 的操作数必须是整数类型，且右操作数必须非负、并且小于左操作数的位宽。违反这两条（例如对 32 位 <code>int</code> 写 <code>1 &lt;&lt; 32</code>）都是未定义行为，不是「结果为零」。
-    </div>
 
-    <h2>四类陷阱对照</h2>
+    <h2>优先级、结合律与「直接加括号」</h2>
+    <p>
+      回到开场的谜题。<code>==</code> 的优先级<strong>高于</strong> <code>&amp;</code>，所以编译器把 <code>a &amp; mask == 0</code> 解析成了 <code>a &amp; (mask == 0)</code>：先算出 <code>mask == 0</code> 这个布尔值，再拿它跟 <code>a</code> 按位与。这跟写代码的人心里想的 <code>(a &amp; mask) == 0</code> 完全不是一回事。加一对括号，就恢复了本意。
+    </p>
+    <p>
+      这类错位的根源是：优先级表很长，但人的短期记忆装不下。<code>==</code> 与 <code>&amp;</code>、<code>&lt;&lt;</code> 与 <code>+ -</code>、<code>?:</code> 与赋值，这几组的相对顺序都反直觉。与其背表，不如把工程习惯定下来：<strong>只要一个表达式里混用了三个以上运算符，就主动加括号显式表达意图</strong>。括号的代价为零，读代码的人（包括三个月后的自己）却能一眼看懂。
+    </p>
+
+    <h2>整数提升、算术转换与显式转换</h2>
+    <p>
+      朴素做法常假定「运算结果就是参与运算的那个类型」。但两个不同类型的值放在一起运算时，C++ 会先做一组隐式转换，这叫<strong>通常算术转换</strong>。它分两步：
+    </p>
+    <ul>
+      <li><strong>整数提升</strong>：比 <code>int</code> 窄的整数类型（<code>char</code>、<code>short</code>、<code>bool</code>）先被提升为 <code>int</code>。所以 <code>char c1 = 100, c2 = 200;</code> 时，<code>c1 + c2</code> 是按 <code>int</code> 算的，结果是 300；若把它塞回 <code>char</code> 才会截断。</li>
+      <li><strong>类型对齐</strong>：若一方是有符号、另一方是无符号且宽度相同，有符号的一方会被转成无符号。这正是「<code>-1 &lt; 0u</code> 为假」的由来。</li>
+    </ul>
+    <p>
+      隐式转换方便，却把意图藏了起来。C++ 的迭代是提供一组<strong>命名的显式转换</strong>，让「这里发生了转换」在代码里可见：<code>static_cast</code>（相关类型间的转换、去掉 <code>const</code> 以外的大多数场景）、<code>const_cast</code>（增删 <code>const</code>）、<code>reinterpret_cast</code>（重新解释位模式）、<code>dynamic_cast</code>（多态类型的安全向下转换）。日常最常用的是 <code>static_cast</code>：<code>static_cast&lt;double&gt;(sum) / count</code> 一眼就表明「这里要把整数转成浮点」，比 C 风格的 <code>(double)sum</code> 更容易被搜到、也更安全。
+    </p>
+
+    <h2>自增前后缀、求值顺序与未定义行为</h2>
+    <p>
+      先看自增。朴素理解是「<code>i++</code> 和 <code>++i</code> 都让 <code>i</code> 加 1」，差别只在返回值：<code>i++</code> 返回加之前的旧值，<code>++i</code> 返回加之后的新值。这个理解在单独成句时没问题——<code>i++;</code> 与 <code>++i;</code> 效果一样。差别只在「拿它当表达式的值」时才显现，比如 <code>int a = i++;</code> 与 <code>int a = ++i;</code> 得到的 <code>a</code> 不同，后者也更直接、少一次临时拷贝。
+    </p>
+    <p>
+      更严重的问题在求值顺序。多数运算符（包括 <code>+</code>）<strong>不规定</strong>两侧操作数的求值先后，由编译器自行安排。于是 <code>i = i++;</code> 这种写法里，「读 <code>i</code> 的旧值」和「给 <code>i</code> 加 1」两件事的先后没有保证；若它们在同一表达式里交错，标准将其定义为<strong>未定义行为</strong>——结果可以是任何值，程序也可能直接崩溃。<code>int x = INT_MAX + 1;</code> 则是另一种未定义行为：<strong>有符号整数溢出</strong>在 C++ 中是未定义的，不能指望它回绕成负数；要回绕语义就改用无符号类型。这类问题的共同点是「编译不一定报错、运行结果不可预期」，只能靠写法规避：一条语句里只修改一个变量一次。
+    </p>
+
+    <h2>看一遍优先级与陷阱的对照</h2>
     <figure class="lesson-figure">
-      <figcaption>在「优先级 / 代码示例 / 常见陷阱」三个页签里，先对着优先级表看位运算排在哪个位置，再逐条对照四个陷阱的错误写法与修正写法。</figcaption>
+      <figcaption>切换「优先级 / 代码示例 / 常见陷阱」三个标签，核对运算符优先级表，并对照优先级错位、整数提升、未定义行为与有符号溢出这四类典型错误及其修正写法。</figcaption>
       <CPP03OperatorsExpressions />
     </figure>
 
-    <h2>表达式求值要素</h2>
+    <h2>把表达式当成一场「有规则的解析」</h2>
     <p>
-      一行表达式的结果由三件事共同决定：<strong>优先级决定怎么分组、整数提升与算术转换决定用多少位算、求值顺序决定谁先真的执行</strong>。别背优先级，混用场景一律加括号；别去依赖没被规定的求值顺序，同一个变量不要在一行里又读又改。
+      运算符与表达式，说到底是一场<strong>有规则的解析</strong>：编译器按优先级与结合律把符号串拆成树，再按类型规则插入隐式转换。人的直觉与这张规则表不总是一致，所以稳妥的做法是——混用运算符时主动加括号，逻辑运算善用短路特性，涉及不同类型时用 <code>static_cast</code> 把转换写明白，且永远不要在一条语句里重复修改同一个变量。把这些习惯固定下来，表达式就从「碰运气」变成了可预期的确定行为。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「未定义行为」</span>（undefined behavior，UB）指标准没有规定结果、编译器可以做任何事的代码，例如 <code>i = i++</code> 或有符号整数溢出。它不等于「结果随机」也不等于「回绕」——优化器甚至可以据此删掉整段分支。与之相近的是「未指定行为」，如多数运算符的求值顺序，结果由具体实现决定但不算非法。记住：能不写就不写，用括号和拆行消灭歧义。
+      <span class="term-name">「优先级」</span>决定相邻运算符谁先结合，<span class="term-name">「结合律」</span>决定同优先级运算符从哪一侧开始；<span class="term-name">「短路求值」</span>指逻辑运算在结果已定时跳过后续操作数的求值；<span class="term-name">「整数提升」</span>把窄于 <code>int</code> 的类型抬到 <code>int</code> 再运算；<span class="term-name">「未定义行为」</span>指标准未规定结果的情形，必须靠写法规避而非依赖。
     </div>
   </LessonArticle>
 </template>

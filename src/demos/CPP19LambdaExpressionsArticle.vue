@@ -5,82 +5,81 @@ import CPP19LambdaExpressions from './CPP19LambdaExpressions.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>你只是想让一串数字从大到小排，需要告诉 <code>std::sort</code>「谁该排在前面」。为了这一个判断，你不得不在文件另一头另外起一个命名函数 <code>bool cmp(int a, int b) { return a &gt; b; }</code>，再回到调用处把函数名填进去——参数和实现隔了半个文件，只为一个只用一次的小逻辑，为什么要写一个如此「正式」的函数？
+      <strong>开场问题：</strong>想给 <code>std::sort</code> 传一条「按成绩降序」的规则，按老办法要么在类外另写一个只被调用一次的函数，要么专门定义一个只为了塞进参数列表的仿函数类 —— 有没有办法把这一小段逻辑就地写出来，还顺带带上外部的阈值？
     </div>
 
-    <h2>行为参数化引入</h2>
+    <h2>先朴素做法：命名函数与函数对象</h2>
     <p>
-      你要做的是把一段「行为」——比如「怎么比大小」「收到数据后干什么」——当成参数交给别人：交给算法做谓词，交给回调稍后调用，交给线程让它在另一边执行。最朴素的老办法是写命名函数，或者写一个函数对象（重载了 <code>operator()</code> 的类）。它能跑，但成本都落在你身上：
+      算法需要的从来不是一个「值」，而是一段<strong>可调用对象</strong>（callable）。最直接的朴素做法有两种。
     </p>
     <ul>
-      <li><strong>样板太多</strong>：一个只用一次的比较逻辑，要郑重其事地写成一个函数或一整个类，代码主体被这层壳包住。</li>
-      <li><strong>够不着现场变量</strong>：命名函数看不见调用点的局部变量，想用只能靠额外传参，或干脆开个全局变量去藏。</li>
-      <li><strong>污染名字</strong>：一堆「只活一个调用点」的小函数占着文件里的正式名字，读代码时很难分辨谁重要。</li>
-      <li><strong>调用点与定义点分离</strong>：想改这段行为，得先想起它在哪儿定义，再跳过去改，来回折腾。</li>
+      <li><strong>单独写一个命名函数</strong>：把比较规则写成顶层函数，把函数名（会退化成函数指针）传给 <code>std::sort</code>。</li>
+      <li><strong>写一个函数对象</strong>：定义一个重载了 <code>operator()</code> 的类，实例化后传进去。</li>
     </ul>
     <p>
-      所以要问的是：<strong>能不能就在使用的地方，把这段「行为」直接写出来、连同它要用到的现场变量一起交给别人？</strong>
+      朴素做法做对了两件事：规则可以复用，也能携带状态（仿函数把阈值存成成员）。但不足同样明显：为了一个只用一次、只写三行的规则，你被迫在类外多造一个名字或一整个类；逻辑离使用现场很远，读代码时要来回跳转。更麻烦的是，函数指针无法携带运行时状态，想带上阈值就只能上仿函数，样板代码随之膨胀。
     </p>
 
-    <h2>命名函数充当谓词</h2>
+    <h2>Lambda：就地写出可调用对象</h2>
     <p>
-      先照老办法来：写一个命名函数或函数对象传进去，比如 <code>std::sort(v.begin(), v.end(), cmp)</code>。
+      C++11 想解决的正是「就地定义一小段逻辑」这件事，于是给出 lambda 表达式，语法为 <code>[capture](params) -&gt; ret { body }</code>：<code>[capture]</code> 是捕获列表，后面依次是参数列表、可选的返回类型和函数体。<code>[]() { ... }</code> 就是一个匿名函数。
     </p>
     <p>
-      这个方案做对了一件根本的事：<strong>它承认「行为」本身也是一种可以传递的值</strong>——算法不关心你给的是一个函数、一个对象还是别的什么，只要它能被「调用」，就能拿来用。这一步是后面一切的前提；缺的只是「写的成本太高」和「看不见现场变量」这两点。
+      关键要认识到：<strong>lambda 不是一个函数，而是一个对象的字面量</strong> —— 编译器为它生成一个唯一的<strong>闭包类型</strong>（closure type），该类型重载了 <code>operator()</code>。因此每个 lambda 的类型都独一无二且写不出来，只能交给 <code>auto</code> 去接收，或用 <code>std::function</code> 包装成统一类型。也正因为它本质是对象，lambda 才能被拷贝、被存进容器、被当作成员。
+    </p>
+    <p>
+      把 lambda 传给算法时，它等价于那个手写的仿函数 —— 只不过这个类由编译器替你生成，没有名字，也不能再被别人复用。这正是它「就地」的代价与收益。
     </p>
 
-    <h2>局部变量访问缺口</h2>
+    <h2>捕获列表：值捕获、引用捕获与 this</h2>
+    <p>
+      lambda 的一大能力是访问外部变量，但外部变量不会自动进入函数体，必须在捕获列表里显式声明。捕获方式决定了 lambda 与外部世界的连接是「快照」还是「通道」。
+    </p>
     <ul>
-      <li>要为一个表达式级的逻辑写一整段函数定义，读的时候眼睛得在两个地方来回跳。</li>
-      <li>命名函数够不到调用点的局部变量，像「按当前这个 <code>factor</code> 去乘」这种需求，只能靠传参曲线救国。</li>
-      <li>函数对象虽然能通过成员变量带上状态，但你得先写一个类、定义构造、重载运算符，样板更长。</li>
-      <li>散落的小函数挤占了命名空间，越写越难分辨哪些才是真正的业务接口。</li>
+      <li><code>[x]</code>：<strong>值捕获</strong>，在 lambda 创建时复制一份 <code>x</code>。之后外部 <code>x</code> 怎么变都与它无关，副本在 lambda 内默认是 <code>const</code> 的。</li>
+      <li><code>[&amp;x]</code>：<strong>引用捕获</strong>，捕获的是 <code>x</code> 的引用，调用时读到的永远是外部的最新值。</li>
+      <li><code>[=]</code> / <code>[&amp;]</code>：默认按值 / 按引用捕获所有用到的自动变量。</li>
+      <li><code>[x, &amp;y]</code>：混合捕获，按需分别指定，往往比 <code>[=]</code> / <code>[&amp;]</code> 更清晰、更安全。</li>
+      <li><code>[this]</code>：在成员函数里捕获 <code>this</code> 指针，从而访问成员；C++17 起还可写 <code>[*this]</code> 按值捕获整个对象的副本。</li>
     </ul>
-
-    <h2>就地定义匿名函数</h2>
     <p>
-      先补最核心的一步：<strong>把行为就地写出来</strong>。这就是 lambda：<code>[](int a, int b) { return a &gt; b; }</code> 可以直接塞进 <code>std::sort</code> 的第三个参数，不用再另起名字。它的完整语法是 <code>[capture](params) -&gt; ret { body }</code>——中括号里是捕获列表，圆括号是参数，箭头后面是返回类型，最后是函数体。
-    </p>
-    <p>
-      这里要先认清一个事实，它解释了后面所有细节：<strong>lambda 根本不是「函数」，而是编译器替你生成的一个匿名函数对象的语法糖</strong>。每写一个 lambda，编译器就生成一个带 <code>operator()</code> 的类，并给它一个<strong>独一无二的类型</strong>。所以两个长得一模一样的 lambda 也是两种不同类型——你要用它，通常就用 <code>auto</code> 接住；要是想把它存进容器或当统一接口，才用 <code>std::function</code> 把类型擦掉。
-    </p>
-    <p>
-      接着补「怎么够到外面的现场变量」——这正是命名函数做不到的，靠<strong>捕获列表</strong>解决。它要回答两个问题：捕获哪些变量、以什么方式捕获。
-    </p>
-    <ol class="lesson-steps">
-      <li><strong>值捕获</strong> <code>[factor]</code>：把变量<strong>创建 lambda 那一刻的副本</strong>拷进去，之后外部怎么改都不影响它。</li>
-      <li><strong>引用捕获</strong> <code>[&amp;total]</code>：只记一个引用，lambda 里改的就是外部那个变量本身（所以它常用来「累加进外部结果」）。</li>
-      <li><strong>默认捕获</strong> <code>[=]</code> 值捕获、<code>[&amp;]</code> 引用捕获，把用到的自动存储期变量统统收进来。</li>
-    </ol>
-    <p>
-      这里有个容易绊住人的边界：<strong>值捕获进来的变量，在 lambda 里默认是 <code>const</code> 的，不能改</strong>。想让 lambda 内的副本可变，要加 <code>mutable</code>——但要记住，改的始终是那份<strong>副本</strong>，外部的原变量纹丝不动。
-    </p>
-    <p>
-      再补上第一个真正危险的坑：<strong>引用捕获不延长被捕获变量的寿命</strong>。如果你把一个引用捕获的 lambda 存起来、当回调注册、或作为返回值带出作用域，那么等原变量销毁之后再调用它，访问的就是已经不存在的东西——悬垂引用，未定义行为。判断标准只有一条：<strong>被引用捕获的变量，生命周期必须长于 lambda 本身</strong>。要让它「逃出」当前作用域，就改用值捕获，或下面要说的初始化捕获。
-    </p>
-    <div class="lesson-box warn">
-      <strong>默认捕获别懒得写：</strong><code>[=]</code> 和 <code>[&amp;]</code> 看起来最省事，但它会把你<strong>实际用到</strong>的所有自动变量都捕获进来。这既可能悄悄捕获一个大对象（白白拷贝一遍、性能受损），也可能在成员函数里把 <code>this</code> 一起带进 lambda，埋下同一个生命周期隐患。工程上更稳妥的做法是<strong>显式列出真正需要的捕获项</strong>，让「这个 lambda 依赖了什么」一眼可见。
-    </div>
-    <p>
-      再补「把资源搬进去」的需求。有些东西（比如 <code>unique_ptr</code>）只能移动、不能拷贝，普通的 <code>[x]</code> 值捕获拷不动它。C++14 的<strong>初始化捕获</strong>解决了这个问题：<code>[vec = std::move(oldVec)]() { ... }</code>，在捕获的同时用一个新名字接住它，正好把所有权一次性转移进 lambda——这也是「把资源安全交出去」的标准写法。
-    </p>
-    <p>
-      最后补「一个 lambda 服务多种类型」。C++14 的<strong>泛型 lambda</strong> 允许参数写 <code>auto</code>：<code>[](auto a, auto b) { return a + b; }</code>，同一个 lambda 拿 <code>int</code> 调、拿 <code>double</code> 调都行。C++20 更进一步给了<strong>模板 lambda</strong>，可以用显式模板参数列表 <code>[]&lt;typename T&gt;(T x) { ... }</code> 来写，比单纯用 <code>auto</code> 更能做精确的类型约束与推导。
+      选择的原则很简单：需要「记住当下的值、之后不随外部变化」就用值捕获；需要「实时读改写外部状态」才用引用捕获。默认捕获 <code>[=]</code> / <code>[&amp;]</code> 虽然省事，却会把用到的所有变量一并捕获，其中 <code>[=]</code> 在成员函数里会隐式捕获 <code>this</code>，是最常见的隐患来源，因此能显式列出就不要偷懒。
     </p>
 
-    <h2>捕获列表与可见范围</h2>
+    <h2>mutable、返回类型推导与泛型 lambda</h2>
+    <p>
+      值捕获的副本默认不可修改：若 lambda 体内要改写它，必须把 lambda 声明为 <code>mutable</code>。这里要特别留意，<code>mutable</code> 改的是<strong>副本</strong>，外部的原变量纹丝不动 —— 这与「用引用捕获去真正修改外部变量」是两回事，二者目的不同。
+    </p>
+    <p>
+      返回类型通常无需写出：函数体只有一条 <code>return</code> 语句时编译器按该表达式推导；有多条返回语句且类型不一致时，则需用 <code>-&gt; ret</code> 显式指定。C++14 起函数体里可以写任意复杂语句，推导规则也放宽，但「返回类型要能唯一确定」这条约束始终成立。
+    </p>
+    <p>
+      另一个 C++14 能力是<strong>泛型 lambda</strong>：把参数写成 <code>auto</code>，如 <code>[](auto a, auto b) { return a + b; }</code>。它等价于一个模板化的 <code>operator()</code>，同一个 lambda 可对不同参数类型分别实例化。代价是它不再有单一的调用签名，无法直接转成函数指针去传给按具体类型取回调的接口。
+    </p>
+
+    <h2>生命周期陷阱与 std::function 的配合</h2>
+    <p>
+      lambda 最容易踩的坑几乎都出在<strong>捕获与生命周期的错位</strong>。引用捕获只是借用外部变量，一旦 lambda 活过了被捕获变量的生命周期，调用它就会访问已销毁的对象，属于未定义行为。危险往往不在立即调用，而在 lambda 逃逸：被存进 <code>std::function</code>、放进容器，或在函数返回后才异步执行时，栈上的局部变量早已析构。相较之下值捕获是自持副本，逃逸后依然安全。
+    </p>
+    <p>
+      当接口需要一个固定的可调用类型时，可以用 <code>std::function&lt;int(int)&gt;</code> 做类型擦除，把任意签名匹配的 lambda 装进去，代价是一次间接调用开销，且被包装的 lambda 一旦跨出作用域，就必须靠值捕获或初始化捕获来保证安全。C++14 的<strong>初始化捕获</strong> <code>[ptr = std::move(owner)]</code> 允许在捕获时就地构造新变量、把 <code>unique_ptr</code> 之类移动独占的资源搬进 lambda，正好补齐了值捕获不能转移所有权的短板。
+    </p>
+    <p>
+      实践结论：能就地用就用 lambda，能用 <code>auto</code> 接收就用 <code>auto</code>，确实需要统一回调类型或跨作用域保存时再上 <code>std::function</code>；捕获列表尽量显式列出，避开 <code>[=]</code> 在成员函数里对 <code>this</code> 的隐式捕获，并让 lambda 的存活期短于它所引用的一切。
+    </p>
+
+    <h2>看一遍 lambda 的各种写法</h2>
     <figure class="lesson-figure">
-      <figcaption>对着代码和捕获列表看：<code>[]</code>、<code>[factor]</code>、<code>[&amp;total]</code>、<code>[=]</code>、<code>[&amp;]</code>、<code>[this]</code> 各能看见什么、改得动什么——重点看值捕获的那份副本与外部变量如何互不影响。</figcaption>
+      <figcaption>示例并列出基本 lambda、带参数 lambda、值捕获、引用捕获（配合 std::for_each 求和）与泛型 lambda 的写法；可对照捕获列表逐条验证捕获语义，并确认值捕获默认是 const、需要 mutable 才能修改这一约定。</figcaption>
       <CPP19LambdaExpressions />
     </figure>
 
-    <h2>匿名可调用对象</h2>
+    <h2>把 lambda 当成一个匿名的函数对象</h2>
     <p>
-      lambda 把一段行为变成「就地可写、随手可传、还能带上现场变量」的匿名可调用物，它的真身是编译器生成的一个函数对象类型。写捕获时先问自己一句：<strong>这份数据要不要陪着 lambda 一起活下去？</strong>要，就用值捕获或初始化捕获；不要、且确定它的寿命足够长，才用引用捕获。默认捕获能少写几个字，但也顺手藏起了你真正依赖的东西。
+      一旦把 lambda 理解成「编译器现场生成的、唯一类型的函数对象」，它的诸多特性就都有了解释：为什么必须用 <code>auto</code> 接收、为什么泛型 lambda 没有单一签名、为什么捕获本质是往这个对象的成员里塞数据。用好它的关键不在语法，而在每次写捕获列表时都想清楚一件事 —— 我需要的是外部变量的<strong>快照</strong>，还是一条随时可用的<strong>通道</strong>？想清楚这一点，绝大多数悬垂陷阱就能在源头避免。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「捕获列表」</span>是 lambda 开头的那个中括号，规定它能访问哪些外部局部变量、以何种方式访问：值捕获 <code>[x]</code> 取的是创建时的<strong>副本</strong>，引用捕获 <code>[&amp;x]</code> 取的是<strong>引用</strong>，<code>[=]</code> 与 <code>[&amp;]</code> 则是分别按值、按引用捕获所有用到的自动变量。边界：值捕获的变量在 lambda 内默认为 <code>const</code>，要修改得加 <code>mutable</code>，且改的只是副本；引用捕获<strong>不延长</strong>被捕获变量的生命周期，lambda 若活得比变量久，调用它就是悬垂引用与未定义行为——此时应改用值捕获或 <code>[obj = std::move(src)]</code> 这样的初始化捕获。
+      <span class="term-name">「闭包」</span>指 lambda 表达式在运行期生成的那个对象，它把捕获到的外部变量存成自身成员；<span class="term-name">「闭包类型」</span>是这个对象的唯一匿名类型，由编译器生成。<span class="term-name">「捕获列表」</span>决定这些成员是按值（快照）还是按引用（通道）绑定到外部变量。
     </div>
   </LessonArticle>
 </template>

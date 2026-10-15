@@ -5,84 +5,78 @@ import CPP06ArraysStrings from './CPP06ArraysStrings.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>一个只做「复制字符串」的小函数，源码里就是一句 <code>strcpy</code>，平时运行得好好的；可某次输入变长之后，程序悄悄改掉了隔壁某个变量，甚至直接崩溃——写一段文字，怎么会写到别的变量头上？
+      <strong>开场问题：</strong>写了一个参数是 <code>int arr[]</code> 的函数想遍历数组，可函数里 <code>sizeof(arr)</code> 得到的是指针大小而不是数组大小——同样一个 <code>arr</code>，为什么在函数外面「是数组」，一进函数就「变成了指针」？
     </div>
 
-    <h2>字符串与数组同源</h2>
+    <h2>先朴素做法：用内置数组把一串数装起来</h2>
     <p>
-      你要处理的是一串文本：用户输入的名字、一段报文、一组编号。在 C 的世界里根本没有独立的「字符串类型」，字符串和数组是同一件事——<strong>一块连续内存</strong>。于是你必须先回答：多长？哪里结束？
+      要存五个学员的成绩，最直接的做法是声明一个内置数组：<code>int scores[5] = {90, 85, 60};</code>。它做对了什么？用一段连续内存存下<strong>同类型</strong>的一组元素，并用下标 <code>scores[0]</code>、<code>scores[1]</code> 直接访问——元素在内存里紧挨着排布，靠「起始地址 + 下标 × 元素大小」就能定位任意一个。
     </p>
     <p>
-      把文本当成 <code>char</code> 数组、末尾放一个 <code>\0</code> 做结束标记，是最早的答案。但它把两三个成本悄悄转嫁给了你：
+      但内置数组也有它「朴素」的代价。第一，<strong>它不记录自己的长度</strong>：<code>scores</code> 这个名字只知道首地址，长度 5 是你心里记着、编译器不会替你保存。第二，越界访问不报错——<code>scores[10] = 5;</code> 语法合法，却写到数组之外，属于未定义行为。第三，一旦把它交给函数，长度信息就彻底丢失了，这正是开场那个现象的来源。
+    </p>
+
+    <h2>数组退化：为什么长度会「消失」</h2>
+    <p>
+      在多数表达式里，数组名会被<strong>隐式转换成指向其首元素的指针</strong>，这个转换叫<strong>数组退化（decay）</strong>。于是 <code>void foo(int a[])</code> 在编译器眼里和 <code>void foo(int* a)</code> 完全等价——形参 <code>a</code> 只是一个 <code>int*</code>，而 <code>sizeof(a)</code> 得到的自然是指针大小，不是数组总大小。
+    </p>
+    <p>
+      这个机制带来一个必须遵守的约定：<strong>把数组传给函数时，长度要额外用一个参数传过去</strong>，比如 <code>void foo(int a[], int n)</code>，或让调用方与函数约定一个哨兵值。它初看像是设计缺陷，其实是数组退化的必然结果——函数只知道「从哪里开始」，不知道「到哪里结束」。换句话说，<strong>数组做了对的事（连续存储、随机访问），却在跨函数边界时丢掉了元信息</strong>，需要由调用约定补上。
+    </p>
+
+    <h2>C 风格字符串与 '\0' 终止符</h2>
+    <p>
+      字符串在 C 里的朴素表示，就是「字符的数组」。为了让长度信息不再丢失，C 风格字符串采用了<strong>哨兵</strong>方案：用一个特殊字符表示结束，约定字符串以 <code>'\0'</code>（空字符，编码值 0）结尾。于是 <code>char greeting[] = "Hello";</code> 实际占 6 个字节——5 个可见字符加末尾一个 <code>'\0'</code>。<code>strlen(greeting)</code> 就是<strong>从头数到 <code>'\0'</code> 之前的字符个数</strong>，得到 5。
+    </p>
+    <p>
+      这种做法用「多存一个字节」换来了「长度自描述」，函数不必再额外接收长度参数。但代价也很实在：一切依赖 <code>'\0'</code> 的库函数都会<strong>一直往后扫</strong>，如果忘了写终止符，或字符串在中间被截断，<code>strlen</code>、字符串拷贝就会越过真实边界、读到不属于自己的内存。这类问题在 C 代码里长期是主要的安全隐患来源。
+    </p>
+
+    <h2>std::string：把「字符串」当成一个自管理对象</h2>
+    <p>
+      与其让使用方处处操心 <code>'\0'</code> 与边界，C++ 选择把字符串封装成一个类：<code>std::string</code>。它做对了什么？<strong>自己记住字符个数、自己管理内存、自己维护终止符</strong>，使用方拿到的就是一个「完整的字符串对象」，长度随时可查（<code>s.size()</code>），不用再传额外参数。常用的操作也一并内聚进来：
     </p>
     <ul>
-      <li>数组<strong>不记录自己多大</strong>。数组名一旦传进函数就退化成指针，大小信息当场丢失，你只能另传一个长度参数，或者指望调用方别越界。</li>
-      <li>越界<strong>不报错</strong>。写 <code>arr[10]</code> 编译照过，运行时悄悄读坏或写坏相邻内存，这就是未定义行为。</li>
-      <li><code>strcpy</code> / <code>strcat</code> <strong>不检查目标缓冲区多大</strong>。目标 10 字节、源 12 字节，多出来的那两个字节就覆盖到相邻变量上了。</li>
+      <li>拼接：<code>s1 + ", " + s2 + "!"</code>，用运算符表达连接，比手工拼 C 字符串清爽得多。</li>
+      <li>取长度：<code>s.size()</code>，常数时间返回。</li>
+      <li>取子串：<code>s.substr(pos, len)</code>。</li>
+      <li>查找：<code>s.find("World")</code>，返回首次出现的下标，找不到时返回 <code>npos</code>。</li>
     </ul>
     <p>
-      所以真正要回答的是：能不能让「一块字符内存」和「它有多长」绑在同一个东西里，让谁都不会算错？
+      有两种访问方式需要注意区别：<code>s[i]</code>（<code>operator[]</code>）<strong>不检查越界</strong>，追求速度；<code>s.at(i)</code> 会检查越界并抛出异常 <code>std::out_of_range</code>，追求安全。选哪个取决于这段代码对边界的信任程度。
     </p>
 
-    <h2>裸缓冲区管理</h2>
+    <h2>string 与 char* 互转，以及 std::array、std::vector 的取舍</h2>
     <p>
-      最朴素但真的能跑的做法：手动开一个足够大的缓冲区，用 <code>\0</code> 结尾，用 <code>strlen</code> 数长度。
+      现实里 C++ 常要和 C 接口打交道，于是需要互转：
     </p>
-    <p>
-      <code>char buf[64];</code><br />
-      <code>strcpy(buf, "Hello");</code><br />
-      <code>std::cout &lt;&lt; buf &lt;&lt; std::endl;</code>
-    </p>
-    <p>
-      这个方案做对了一件很扎实的事：它立起了<strong>「字符串 = 一串字符 + 一个结束标记」</strong>这个模型。<code>strlen</code> 只要一路扫到 <code>\0</code> 就知道长度，输出函数也靠它知道何时停。在没有更好工具的年代，这套约定撑起了无数 C 程序。
-    </p>
-
-    <h2>越界写入后果</h2>
     <ul>
-      <li><code>char s[5] = "Hello";</code> 里源串是 5 个字符加一个 <code>\0</code>、共 6 字节，塞进 5 字节数组后 <code>\0</code> 被挤掉，之后任何按 C 字符串进行的操作都会一路读到数组外。</li>
-      <li><code>strcpy(dst, src)</code> 在 <code>strlen(src) + 1 &gt; sizeof(dst)</code> 时照写不误，直接覆盖相邻内存——正是开场那个 bug。</li>
-      <li>数组传给函数后退化：<code>void foo(int a[])</code> 等价于 <code>void foo(int* a)</code>，函数里 <code>sizeof(a)</code> 得到的是指针大小，不是数组字节数，依赖它的循环全算错。</li>
-      <li>想拼接两段字符串，得自己 <code>strlen</code> 两边、算总长、确认缓冲区够大、再 <code>strcat</code>——每一步都能算错，且错一步就是内存被破坏。</li>
+      <li><strong>string → const char*</strong>：调用 <code>s.c_str()</code>，得到一个指向内部缓冲区的只读指针。注意这个指针<strong>只在 <code>s</code> 存在且未被改动期间有效</strong>，<code>s</code> 一旦修改或销毁，它就可能悬垂。</li>
+      <li><strong>C 风格字符串 → string</strong>：直接用 <code>std::string s = greeting;</code>，类会把 <code>'\0'</code> 之前的部分拷贝进来。</li>
     </ul>
+    <p>
+      数组这边，C++ 也给了两个封装。取舍原则是<strong>「长度固定就用 std::array，长度可变就用 std::vector」</strong>：
+    </p>
+    <ul>
+      <li><code>std::array&lt;T, N&gt;</code>：长度是<strong>编译期常量</strong>，元素存在栈或对象内部，没有堆分配开销；代价是长度不可变。</li>
+      <li><code>std::vector&lt;T&gt;</code>：长度运行期可变，能 <code>push_back</code>、能扩容、能自动管理堆内存；代价是可能多一次动态分配，且扩容时元素要搬移、已有迭代器会失效。</li>
+    </ul>
+    <p>
+      无论用哪个，都提供了一致的<strong>范围遍历</strong>接口，配合范围 for（<code>for (const auto&amp; x : v)</code>）就能安全地读、<code>for (auto&amp; x : v)</code> 就能安全地改，而不用再操心下标与长度。
+    </p>
 
-    <h2>缓冲区长度封装</h2>
-    <p>
-      不推翻「字符 + 结束标记」，而是把「缓冲区」和「长度」封进一个对象里。这就是 <code>std::string</code>：容量不够时它自己扩容，拼接用 <code>+</code>、比较用 <code>==</code>，长度随时 <code>size()</code> 可取。
-    </p>
-    <p>
-      <code>std::string s1 = "Hello";</code><br />
-      <code>std::string s2 = "World";</code><br />
-      <code>std::string s3 = s1 + ", " + s2 + "!";</code><br />
-      <code>std::cout &lt;&lt; s3.size() &lt;&lt; std::endl; // 13</code>
-    </p>
-    <p>
-      长度跟着对象走，再也不用单独传。<code>s3.substr(0, 5)</code> 取出前 5 个字符、<code>s3.find("World")</code> 返回第一次出现的位置，这些都是 <code>std::string</code> 的成员函数。短字符串还有 <strong>SSO（短字符串优化）</strong>：内容足够短时直接存在对象自身缓冲里，连堆分配都省了。
-    </p>
-    <p>
-      接着补「和旧接口打交道的桥」。很多老 API 只认 <code>const char*</code>，于是有了 <code>s3.c_str()</code>——返回一个以 <code>\0</code> 结尾的 <code>const char*</code>。C++11 起，<code>data()</code> 与 <code>c_str()</code> 都保证返回 <code>\0</code> 结尾的连续缓冲区。
-    </p>
-    <p>
-      再补数组这一侧：内置数组「定长、易退化」的毛病并没消失，所以现代写法用 <code>std::array</code>（固定大小、带 <code>size()</code>、不退化）和 <code>std::vector</code>（动态大小）来替代。
-    </p>
-    <p>
-      但这里必须补一条边界，否则很容易从一种错觉掉进另一种：<strong><code>std::string</code> 的 <code>operator[]</code> 并不检查越界</strong>，<code>s[100]</code> 同样是未定义行为；要检查就用 <code>.at()</code>，越界会抛异常。换成 <code>std::string</code> 只是把最容易出错的容量管理接管了，界限判断仍要你自己守。另一个坑是字符串字面量：<code>"Hello"</code> 的类型是 <code>const char[N]</code>，能隐式转成 <code>const char*</code>，却<strong>不能转成 <code>char*</code></strong>——<code>char* p = "Hello";</code> 在现代 C++ 里就该报错，因为改写它指向的字面量是未定义行为。
-    </p>
-    <div class="lesson-box warn">
-      <strong>别再用 <code>strcpy</code> / <code>strcat</code>：</strong>它们完全不看目标缓冲区多大。退而求其次可用 <code>strncpy</code> / <code>strncat</code>，但要记得自己补 <code>\0</code>；更省心的做法是根本不用它们，直接用 <code>std::string</code>。
-    </div>
-
-    <h2>数组退化代价</h2>
+    <h2>看一遍数组、C 字符串与 string 的对照</h2>
     <figure class="lesson-figure">
-      <figcaption>对照代码逐行核对：内置数组如何用初始化列表补零、数组退化到底丢掉了什么、C 风格字符串靠什么求长度，以及 <code>std::string</code> 的拼接、查找与 <code>c_str()</code>。</figcaption>
+      <figcaption>对照这段代码，观察内置数组未初始化元素如何补 0、数组交给函数后退化成指针、C 风格字符串如何靠 '\0' 让 strlen 数出长度，以及 std::string 的拼接、size、substr、find 与 c_str() 的用法。</figcaption>
       <CPP06ArraysStrings />
     </figure>
 
-    <h2>类型接管长度</h2>
+    <h2>把「一串数据」交给合适的容器</h2>
     <p>
-      数组与字符串这件事，说到底就是把「容量」和「长度」从人的记忆里搬进类型里。裸数组和 C 风格字符串把这两件事全交给你，<code>std::string</code> 与 <code>std::array</code> / <code>std::vector</code> 把它们接管过去——只要不与 C 风格接口打交道，你几乎不必再手算长度。
+      数组、C 风格字符串与 <code>std::string</code>，讲的是同一件事在三个抽象层级上的权衡：内置数组最短小、最贴近内存，却不带长度、易越界；C 风格字符串用 <code>'\0'</code> 哨兵换来自描述长度，却把安全责任留给了使用者；<code>std::string</code> 与 <code>std::array</code>、<code>std::vector</code> 则把长度管理与内存管理收进对象，用一点点封装换来边界安全与统一遍历。写新代码时优先选容器，只在需要对接 C 接口、或追求极致布局控制时才退回裸数组——<strong>「谁来记住长度、谁来管内存」这两个问题一旦交给类型本身，一大类错误就消失了</strong>。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「数组到指针退化」</span>指在多数表达式语境里，数组名会隐式转换（退化）为指向首元素的指针，转换之后不再携带数组长度；只有 <code>sizeof</code> 与取地址 <code>&amp;</code> 作用于数组名本身时例外。正因如此，<code>int a[10]</code> 传给 <code>void f(int a[])</code> 后，函数内 <code>sizeof(a)</code> 得到的是指针大小而非 40，必须额外传入元素个数。
+      <span class="term-name">「数组退化」</span>指数组名在表达式中被隐式转换成指向首元素的指针，从而丢失长度信息；<span class="term-name">「哨兵」</span>指用特殊值（此处是 <code>'\0'</code>）标记序列结束的做法；<span class="term-name">「npos」</span>是 <code>std::string::find</code> 未找到时的返回值；<span class="term-name">「越界访问」</span>指用超出有效范围的下标读写元素，属于未定义行为。
     </div>
   </LessonArticle>
 </template>

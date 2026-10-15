@@ -5,105 +5,92 @@ import CPP10CtorDtor from './CPP10CtorDtor.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>一个内部用 <code>new</code> 存着字符串的类，你只写了一句 <code>Student s2 = s1;</code> 做拷贝，程序结束时却在释放同一块内存——你只是想「复制一份」，怎么会变成「两次删除同一个东西」？
+      <strong>开场问题：</strong>一个对象里藏着用 <code>new</code> 申请来的资源，按理说销毁对象就该把资源还回去；可只写 <code>delete</code> 却不写析构函数，对象一销毁，那块内存就永远没人认领。为什么「对象消失」和「资源归还」这两件事，不能自动连在一起？
     </div>
 
-    <h2>生命周期与资源</h2>
+    <h2>对象的诞生与消亡：两个被保证调用的时刻</h2>
     <p>
-      对象有「生」也有「死」。生：一块内存变成一个有意义、字段都合法的对象；死：对象占用的资源要还回去——堆内存、文件句柄、锁。
-    </p>
-    <p>
-      如果只让程序员手动开关，就会背上几笔账：
+      把对象的生命拉成一条线，它的两端各站着一个特殊成员函数：
     </p>
     <ul>
-      <li><strong>忘记初始化</strong>：对象带着垃圾值就开始干活，行为无法预测。</li>
-      <li><strong>忘记清理</strong>：堆内存泄漏、句柄耗尽，程序越跑越沉。</li>
-      <li><strong>每一处创建 / 销毁点都要记得配对</strong>：分支路径一多，必漏。</li>
+      <li><strong>构造函数</strong>（constructor）：对象<strong>创建时</strong>被自动调用，负责把对象带到一个合法、可用的初始状态。</li>
+      <li><strong>析构函数</strong>（destructor）：对象<strong>销毁时</strong>被自动调用，负责收尾，通常是把对象持有过的资源还回去。</li>
     </ul>
     <p>
-      所以问题落成一句：能不能把「对象一出现就初始化好、一消失就清理干净」变成语言自动完成、且与生命周期严格绑定的行为？
+      这两个函数看着只是普通成员函数，特殊之处在于<strong>调用时机由编译器保证</strong>：只要对象被创建，构造函数一定跑；只要对象离开作用域或被 <code>delete</code>，析构函数一定跑，不论中间是否提前返回、是否抛异常。名字与类名相同的是构造函数，前面加波浪号的是析构函数，二者都没有返回类型。
+    </p>
+    <p>
+      正因为「一定被调用」，它们是 C++ 里安放资源管理的天然位置。这里先把二者当作一对开关来理解，后面的顺序与初始化细节都围绕它们展开。
     </p>
 
-    <h2>构造析构接管</h2>
+    <h2>构造函数家族：默认、带参、委托与拷贝</h2>
     <p>
-      最直接的做法：用构造函数和析构函数把初值与清理写进类。
+      一个类可以有多个构造函数，靠参数列表区分，各有别名：
     </p>
-    <p>
-      <code>class Student {</code><br />
-      <code>&nbsp;&nbsp;public:</code><br />
-      <code>&nbsp;&nbsp;&nbsp;&nbsp;Student(const std::string&amp; n) { name = new std::string(n); }</code><br />
-      <code>&nbsp;&nbsp;&nbsp;&nbsp;~Student() { delete name; }</code><br />
-      <code>&nbsp;&nbsp;private:</code><br />
-      <code>&nbsp;&nbsp;&nbsp;&nbsp;std::string* name;</code><br />
-      <code>};</code>
-    </p>
-    <p>
-      对象一构造就把内部资源 <code>new</code> 好，一析构就 <code>delete</code> 掉，创建与清理配上了对。这个方案做对了一件事：<strong>构造与析构的调用时机由语言自动安排</strong>，不需要调用方记得手动调用——你把「生」和「死」的规则挂到了类型上。
-    </p>
-
-    <h2>默认浅拷贝风险</h2>
     <ul>
-      <li>拷贝会出事：<code>Student s2 = s1;</code> 如果用的是编译器生成的默认拷贝构造，它只做<strong>浅拷贝</strong>——逐成员复制，于是 <code>s2.name</code> 和 <code>s1.name</code> 指向同一块内存。两个对象析构时各 <code>delete</code> 一次，就是重复释放。</li>
-      <li>初始化顺序有陷阱：成员真正的初始化顺序由<strong>声明顺序</strong>决定，不是你写在初始化列表里的顺序；写反了就可能读到还没初始化的成员。</li>
-      <li>参数一多，容易漏初始化某个成员，留下未定义状态。</li>
-      <li>一旦类被继承，用基类指针删除派生类对象时可能只调到基类析构，派生类那部分资源就漏了。</li>
+      <li><strong>默认构造函数</strong>：可以不传参就调用，如 <code>Point()</code>。类没写任何构造函数时，编译器会自动生成一个；一旦自己写了带参构造，这个自动版本就消失，需要显式补回。</li>
+      <li><strong>带参构造函数</strong>：接受参数完成初始化，如 <code>Person(const std::string&amp; n, int a)</code>。</li>
+      <li><strong>委托构造函数</strong>：一个构造函数把活转交给同类的另一个构造函数，如 <code>Point(int v) : Point(v, v) {}</code>，用来复用公共初始化逻辑。</li>
+      <li><strong>拷贝构造函数</strong>：以同类型对象的引用为参数，如 <code>Student(const Student&amp; other)</code>，在「用已有对象创建新对象」时被调用。</li>
+    </ul>
+    <p>
+      朴素做法是每种构造都把初始化逻辑各写一遍，但一旦初始化规则变了，就要到处改、还可能改漏。委托构造把公共部分收敛到一处，是更省心的写法。
+    </p>
+
+    <h2>初始化列表：为什么不是函数体赋值</h2>
+    <p>
+      构造函数有一处特别的语法——<strong>初始化列表</strong>，写在参数列表之后、函数体之前：<code>Person(const std::string&amp; n, int a) : name(n), age(a) {}</code>。
+    </p>
+    <p>
+      它和「进函数体再赋值」看着结果一样，差别却在过程：
+    </p>
+    <ul>
+      <li>数据成员<strong>在进函数体之前</strong>就已经被初始化；函数体里的 <code>name = n;</code> 是<strong>赋值</strong>，意味着先默认构造一次、再覆盖一次，多做一遍工。</li>
+      <li>对 <code>const</code> 成员与引用成员，它们<strong>必须</strong>在初始化列表里初始化，函数体里无法赋值，写法上直接编译不过。</li>
+    </ul>
+    <p>
+      结论很明确：能进初始化列表的成员就进列表，别留到函数体。这既是对无法赋值的成员的必要写法，也是省掉一次默认构造的效率写法。
+    </p>
+
+    <h2>析构函数：资源的最后一道闸门</h2>
+    <p>
+      析构函数负责收尾。一个类需要自己写析构函数的信号通常只有一个：<strong>它直接持有需要手动释放的资源</strong>，比如裸指针指向的堆内存、打开的文件句柄、占用的网络连接。
+    </p>
+    <p>
+      把这些资源的释放写进析构函数，就得到一条极强的保证：<strong>只要对象的生命周期正常结束，资源就一定被归还</strong>，无论中间走了多少条 <code>return</code>、有没有抛异常。这正是上一章 RAII 思路落地的地方。
+    </p>
+    <ul>
+      <li>析构函数不接受参数，因此不能重载，一个类只有一个。</li>
+      <li>析构函数通常不该抛异常；若析构时真要抛，必须自己就地捕获处理，否则可能直接终止程序。</li>
+      <li>一个需要自己写析构函数的类，往往也还需要自己写拷贝构造与拷贝赋值——这条线索下一章会展开。</li>
     </ul>
 
-    <h2>深拷贝内存分配</h2>
+    <h2>初始化顺序、explicit 与组合对象</h2>
     <p>
-      先补「拷贝语义」。既然类自己管理资源，就必须自己定义拷贝构造函数做<strong>深拷贝</strong>——为新对象重新分配一块内存并复制内容，让两个对象各持各的资源：
+      三个容易踩坑、又常被问到的问题，放在一起说。
     </p>
     <p>
-      <code>Student(const Student&amp; other) { name = new std::string(*other.name); }</code>
+      <strong>初始化顺序</strong>：多个数据成员按<strong>声明顺序</strong>初始化，与初始化列表里书写的顺序无关。若列表顺序和声明顺序不一致，请相信声明顺序；一旦某个成员的初始化依赖另一个成员，把依赖关系摆对声明次序才安全。
     </p>
     <p>
-      接着补「赋值」。拷贝构造管的是「用一个对象初始化另一个新对象」；给一个已经存在的对象赋值是另一回事，要写 <code>operator=</code>：
+      <code>explicit</code>：单参构造函数会带来一件副作用——允许隐式类型转换，比如把 <code>3.0</code> 悄悄变成一个对象。若这种转换并非本意，就在构造函数前加 <code>explicit</code> 关掉它，只允许显式构造。
     </p>
     <p>
-      <code>Student&amp; operator=(const Student&amp; other) {</code><br />
-      <code>&nbsp;&nbsp;if (this != &amp;other) { delete name; name = new std::string(*other.name); }</code><br />
-      <code>&nbsp;&nbsp;return *this;</code><br />
-      <code>}</code>
+      <strong>组合对象</strong>：一个类可以把别的类对象作为成员。这时构造与析构遵循固定次序：<strong>成员先于自身构造，自身先于成员析构</strong>；若有继承，则整体是「基类 → 成员 → 自身」构造、「自身 → 成员 → 基类」析构，恰好相反。
     </p>
-    <p>
-      这里的自赋值检查 <code>this != &amp;other</code> 不能省：<code>s = s</code> 时若先 <code>delete name</code>，再去读 <code>*other.name</code>，读的就是已释放的内存；返回 <code>*this</code> 则支持连续赋值。
-    </p>
-    <p>
-      走到这里，一条贯穿全局的法则就浮出来了：<strong>如果一个类需要自定义析构函数，通常也需要自定义拷贝构造和拷贝赋值</strong>——这就是「三法则（Rule of Three）」。理由很直接：会写析构，本身就说明这个类在管理资源，而编译器默认的拷贝是浅拷贝，配不上它。
-    </p>
-    <p>
-      C++11 加入移动构造、移动赋值后，这条法则扩展成「五法则（Rule of Five）」：五个特殊成员函数要放在一起考虑。移动语义让临时对象里的资源可以<strong>转移</strong>而不是复制，省掉一次深拷贝。若确实想要编译器给的默认版本，用 <code>= default</code> 明确写出来；要禁用某个特殊成员函数，用 <code>= delete</code>。
-    </p>
-    <p>
-      再补对象生命周期这张全景图：
-    </p>
-    <ol class="lesson-steps">
-      <li><strong>自动对象</strong>（局部变量）：在定义处构造，离开作用域时析构。</li>
-      <li><strong>动态对象</strong>：<code>new</code> 时构造，<code>delete</code> 时析构。</li>
-      <li><strong>全局 / 静态对象</strong>：在 <code>main</code> 之前构造，<code>main</code> 返回之后析构；同一编译单元内按定义顺序构造，不同编译单元之间的顺序则未指定。</li>
-    </ol>
-    <p>
-      构造与析构的顺序也有规律：构造时是「基类 → 成员 → 自身」，析构时正好反过来「自身 → 成员 → 基类」——先构造的后释放，资源的依赖关系才不会被破坏。
-    </p>
-    <p>
-      最后补构造本身的几条性质：构造函数与类同名、无返回类型、可以有参数因而能重载；析构函数名为 <code>~类名()</code>、无参数无返回类型、不能重载。C++11 的委托构造函数让一个构造函数调用同类另一个构造函数，省掉重复代码；<code>constexpr</code> 构造函数能创建编译期常量对象（C++14 起其函数体允许非空，但初始化列表里的表达式仍须是常量表达式）。另外，如果类会被继承，析构函数通常应声明为 <code>virtual</code>，这样通过基类指针 <code>delete</code> 派生类对象时才能调到正确的析构函数。
-    </p>
-    <div class="lesson-box warn">
-      <strong>初始化列表的顺序不等于初始化顺序：</strong>真正决定顺序的是成员在类里的<strong>声明顺序</strong>。如果成员之间有依赖，请按声明顺序排好，别指望列表里的书写顺序能起作用。
-    </div>
 
-    <h2>拷贝路径判定</h2>
+    <h2>看图对照：构造与析构的调用顺序</h2>
     <figure class="lesson-figure">
-      <figcaption>对照代码看构造、拷贝构造、拷贝赋值、析构分别在什么时候被调用——重点盯住 <code>Student s2 = s1;</code> 到底走的是哪一个函数。</figcaption>
+      <figcaption>这份示例用一个持有动态资源的 <code>Student</code> 类，展示构造函数、拷贝构造函数、拷贝赋值运算符与析构函数分别在什么时候被调用，可对照输出顺序理解对象的生命周期，并看到自定义析构与拷贝控制之间的关联。</figcaption>
       <CPP10CtorDtor />
     </figure>
 
-    <h2>三法则与五法则</h2>
+    <h2>把「初始化」与「清理」绑定到生命周期上</h2>
     <p>
-      构造函数与析构函数把对象的「生」与「死」钉在生命周期上：一出现就初始化、一消失就清理。可一旦类自己管资源，编译器默认的浅拷贝就会出问题，于是「三法则」乃至「五法则」逼着你把析构、拷贝、移动一并定义清楚——对象的边界，正靠这组函数来守。
+      构造函数与析构函数之所以值得单独成章，在于它们把两件原本靠人记性的事——<strong>对象要有合法初值、资源要有人归还</strong>——变成了编译器必须执行的动作。再回看开头那个问题：如果当初把 <code>delete</code> 写进析构函数，那么对象销毁的那一刻，资源就已经被归还，「对象消失」与「资源归还」也就自动连在了一起。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「浅拷贝」</span>指编译器为类生成的默认拷贝构造 / 拷贝赋值只做逐成员复制：对指针成员，复制的是地址而不是它指向的内容，于是两个对象共享同一块资源，析构时重复释放。与之相对的<strong>深拷贝</strong>会为新对象重新分配资源并复制内容。边界：如果类不管理任何需要手动释放的资源，默认的浅拷贝通常就是正确行为。
+      <span class="term-name">「构造函数」</span>在对象创建时自动调用，用于建立合法初值；<span class="term-name">「析构函数」</span>在对象销毁时自动调用，用于释放资源，一个类只有一个且不可重载；<span class="term-name">「初始化列表」</span>在构造函数体执行前初始化数据成员，是 <code>const</code> 成员与引用成员唯一可行的初始化方式；<span class="term-name">「委托构造」</span>指某个构造函数把初始化工作转交给同类的另一个构造函数。
     </div>
   </LessonArticle>
 </template>

@@ -1,21 +1,91 @@
+// ═══════════════════════════════════════════
+// 1. std::thread 的创建与 join
+// ═══════════════════════════════════════════
+
 #include <iostream>
-#include <thread>
-#include <mutex>
+#include <thread>                              // std::thread
+#include <mutex>                               // std::mutex / lock_guard / unique_lock
+#include <atomic>                              // std::atomic
+#include <condition_variable>                  // condition_variable
+#include <queue>                               // 生产者-消费者队列
+#include <future>                              // std::async / std::future
 #include <vector>
-#include <future>
 
-int main() {
-    // 创建线程
-    std::thread t1([]() {
-        std::cout << "线程 1 正在执行" << std::endl;
-    });
-    t1.join();
+void printId(int id) {
+    std::cout << "thread " << id << std::endl; // 结果：输出线程编号
+}
 
-    // 使用 async 异步任务
-    std::future<int> result = std::async([]() {
-        return 42;
-    });
-    std::cout << "结果：" << result.get() << std::endl;
+void threadDemo() {
+    std::thread t1(printId, 1);                // 构造即启动，参数按值拷贝
+    std::thread t2(printId, 2);
+    t1.join();                                 // 等待线程结束
+    t2.join();                                 // 析构前必须 join 或 detach，否则 terminate
+}
 
-    return 0;
+// ═══════════════════════════════════════════
+// 2. mutex 与 lock_guard 保护共享数据
+// ═══════════════════════════════════════════
+
+std::mutex mtx;
+int counter = 0;
+
+void mutexDemo() {
+    std::vector<std::thread> threads;
+    for (int i = 0; i < 10; ++i) {
+        threads.emplace_back([] {
+            std::lock_guard<std::mutex> lock(mtx);   // RAII：构造加锁，析构解锁
+            ++counter;                                // 临界区保护，无数据竞争
+        });
+    }
+    for (auto& t : threads) t.join();
+    std::cout << counter << std::endl;         // 结果：10
+}
+
+// ═══════════════════════════════════════════
+// 3. std::atomic：无需互斥的原子操作
+// ═══════════════════════════════════════════
+
+void atomicDemo() {
+    std::atomic<int> a{0};                     // 原子计数，操作保证不可分割
+    std::vector<std::thread> threads;
+    for (int i = 0; i < 10; ++i) {
+        threads.emplace_back([&a] { a.fetch_add(1); });
+    }
+    for (auto& t : threads) t.join();
+    std::cout << a.load() << std::endl;        // 结果：10
+}
+
+// ═══════════════════════════════════════════
+// 4. condition_variable：等待与通知
+// ═══════════════════════════════════════════
+
+std::mutex qmtx;
+std::condition_variable cv;
+std::queue<int> q;
+
+void consumer() {
+    std::unique_lock<std::mutex> lock(qmtx);
+    cv.wait(lock, [] { return !q.empty(); });  // 谓词版：循环检查，防虚假唤醒
+    int v = q.front(); q.pop();
+    std::cout << "got " << v << std::endl;     // 结果：got 7
+}
+
+void producer() {
+    {
+        std::lock_guard<std::mutex> lock(qmtx);
+        q.push(7);                             // 在锁内修改条件
+    }
+    cv.notify_one();                           // 出锁后通知等待的线程
+}
+
+// ═══════════════════════════════════════════
+// 5. std::async 与 future
+// ═══════════════════════════════════════════
+
+int compute(int x) { return x * x; }
+
+void asyncDemo() {
+    std::future<int> fut = std::async(std::launch::async, compute, 6);  // 启动异步任务
+    std::cout << fut.get() << std::endl;       // 结果：36；get 阻塞并传播任务中的异常
+    // fut.get();                             // 不可再调用：future 已失效
 }

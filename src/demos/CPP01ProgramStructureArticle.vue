@@ -5,68 +5,80 @@ import CPP01ProgramStructure from './CPP01ProgramStructure.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>你在 <code>main.cpp</code> 里调用了一个写在 <code>helper.cpp</code> 里的函数，两个文件分别编译都不报错，可一旦链接就弹出 <code>undefined reference to 'helper()'</code>——为什么「每个文件都没错」，合起来却生成不了程序？
+      <strong>开场问题：</strong>语法写得挑不出毛病，编译器也从头到尾没报一句错，可最后生成可执行文件那一步却停在 <code>undefined reference to `add(int, int)'</code> —— 明明定义了 <code>add</code>，为什么编译器「过」了、链接器却「不认」？
     </div>
 
-    <h2>源码转换二进制</h2>
+    <h2>从源代码到可执行文件</h2>
     <p>
-      你可能一直把「把 C++ 变成可执行文件」当成一步。但 C++ 不是解释型语言，编译器不能拿着源码边读边跑，它必须先把你写的东西翻译成机器能直接执行的二进制。而「翻译」这件事本身装着好几种性质完全不同的工作：有些只是纯文本替换——把 <code>#include &lt;iostream&gt;</code> 指向的头文件整段复制进来、把宏展开；有些需要理解语法——判断 <code>int x = "abc";</code> 是不是错的；还有些只有把好几个文件拼在一起才能判断——这个名字到底有没有人给它写过实现。
+      你想要的是一个能跑的程序：双击它，屏幕上出现一行字。这件事听起来一步就能完成，可机器并不认识 <code>int main()</code>，它只认识一串机器码。中间这段翻译过程不是一次跳转，而是<strong>四段接力</strong>——预处理、编译、汇编、链接，每一段只负责把源文件往机器码推进一步。
     </p>
     <p>
-      如果把这些全塞进一个黑盒，出错时你只会收到一句「编译失败」，根本不知道该从哪一步查起。不拆流程，你要承担的隐藏成本很具体：报错信息全混在一起，语法错误和「符号找不到」糊在同一段输出里，只能靠经验猜；改一个头文件，整个项目可能要整体重编，等到怀疑人生；想单独验证一个函数，也得先把整个程序编译完。
-    </p>
-    <p>
-      所以问题落到一句话上：<strong>从 <code>.cpp</code> 到可执行文件，中间到底发生了什么，我该在哪一步、用什么手段去查错？</strong>
+      四段接力最容易被当成一步。很多人敲下 <code>g++ main.cpp -o main</code>，看到它直接吐出可执行文件，就以为编译是一个不可分割的动作。于是当错误出现时，也就分不清是「语法写错了」还是「某个定义没接上」，只能凭猜。
     </p>
 
-    <h2>单条编译命令</h2>
+    <h2>程序的骨架只有三样东西</h2>
     <p>
-      最朴素的做法：把整件事当成一步走，<code>g++ main.cpp -o main</code>，源码进去、程序出来。这个方案确实做对了一件事：<strong>它给了你一个真的能跑的入口</strong>，小到几十行的练习程序，一条命令就够了。
+      先撇开过程，看一个 C++ 源文件里到底写了什么。剥掉全部细节，只剩三类成分：
     </p>
-    <p>
-      但它把四件性质不同的事打包成了一键，代价是出了问题你没法把责任定位到具体的某一步。
-    </p>
-
-    <h2>报错信息混杂</h2>
     <ul>
-      <li>把 <code>#include &lt;iostream&gt;</code> 误拼成 <code>&lt;iosteam&gt;</code>，报的是「找不到头文件」；把 <code>std::cout</code> 写成 <code>std::coutt</code>，报的是「未声明的标识符」——这两个错误发生在完全不同的阶段，却被糊在同一条命令的输出里。</li>
-      <li>你把函数定义挪进 <code>helper.cpp</code>，只跑 <code>g++ main.cpp -o main</code>，会直接报 <code>undefined reference to 'helper()'</code>——因为这条命令根本没把 <code>helper.cpp</code> 交给编译器，而报错信息不会告诉你「你少给了一个文件」。</li>
-      <li>两个 <code>.cpp</code> 里都定义了同一个函数，前面阶段的编译全都是通过的，只在最后一步才报「重复定义」，让人以为是写错了语法。</li>
-      <li>你只是想看一眼宏展开后的样子，却没有办法「只做这一步、停下来」，只能整体编译再想办法翻找。</li>
+      <li><strong>预处理指令</strong>：以 <code>#</code> 开头，如 <code>#include &lt;iostream&gt;</code> 与 <code>#define</code>。它们在预处理阶段被当成文本处理，编译器真正读到的正文里已经没有它们。</li>
+      <li><strong>函数</strong>：程序的执行单位。每个函数有名字、参数、返回类型和一段函数体。</li>
+      <li><strong>语句与变量</strong>：函数体内的每一行，声明变量、做运算、调函数，以分号 <code>;</code> 结尾。</li>
     </ul>
+    <p>
+      这三样东西里，有一个函数是特殊的：<code>main</code>。操作系统启动程序时，<strong>只会去调用 <code>main</code></strong>，别的地方没有入口。也就是说，一个 C++ 程序可以没有别的任何函数，但不能没有 <code>main</code>——它决定了程序从哪一行开始跑。
+    </p>
 
-    <h2>四个编译阶段</h2>
+    <h2>main 的约定与返回值</h2>
     <p>
-      不推翻「一步编译」，而是把它拆成四个阶段：每一阶段只做一件事，而且各自可以单独停下来检查。拆开之后，报错会自然落到某一阶段上，你也就知道该看哪一类信息。
+      最简的写法是：
     </p>
-    <ol class="lesson-steps">
-      <li><strong>预处理</strong>：处理所有以 <code>#</code> 开头的指令——把 <code>#include</code> 指向的头文件内容原地展开进来、替换宏。产物仍然是纯文本。<code>g++ -E main.cpp -o main.i</code> 能让你亲眼看到展开后多出来的几万行。</li>
-      <li><strong>编译</strong>：把预处理后的 C++ 文本翻译成汇编代码，这一步做真正的语法检查和类型检查，<code>int x = "abc";</code> 就是在这里被拦下的。用 <code>g++ -S</code> 得到汇编文件。</li>
-      <li><strong>汇编</strong>：把汇编翻译成机器码，生成目标文件 <code>.o</code>（Windows 上是 <code>.obj</code>）。这一步只翻译，不做跨文件的事，所以单个目标文件里可以留着「我引用了某个还没见过的函数」这样的空位。用 <code>g++ -c</code> 可以停在这一步。</li>
-      <li><strong>链接</strong>：把若干个目标文件和库文件拼在一起，给每一个空位找到真正的定义，生成可执行文件，例如 <code>g++ main.o helper.o -o main</code>。</li>
-    </ol>
+    <ul>
+      <li><code>int main()</code>：无参版本，绝大多数控制台程序用它。</li>
+      <li><code>int main(int argc, char* argv[])</code>：带参版本，<code>argc</code> 是命令行参数个数，<code>argv</code> 是参数字符串数组，供需要接收命令行的程序使用。</li>
+    </ul>
     <p>
-      拿着这四步回头看开场就通了：每个 <code>.cpp</code> 单独编译只走前三个阶段，此时「<code>helper</code> 到底在哪」这个问题根本还没被提出来，所以单独编译永远不会报这个错；只有走到第四步链接，链接器才去凑齐所有符号，发现没人定义 <code>helper</code>，于是<code>undefined reference</code>。同理，<strong>重复定义</strong>也是在链接阶段才暴露的——前三个阶段各自只看自己的文件，看不见别人。
+      返回类型是 <code>int</code> 而不是 <code>void</code>：<strong>这个返回值是「退出码」，交给操作系统</strong>。<code>return 0</code> 表示正常结束，非零表示异常退出。它会被脚本、CI、Shell 的 <code>&amp;&amp;</code> 用来判断上一条命令成功与否，所以别随手省略。
     </p>
-    <p>
-      顺着这条线，还有几个必须记住的边界。其一，<strong>头文件里通常只放声明、<code>.cpp</code> 里放实现</strong>，因为 <code>#include</code> 本质是文本替换而不是「导入模块」，同一个头文件被两个源文件包含就会把声明抄两遍，所以要用包含卫士或 <code>#pragma once</code> 挡住重复包含。其二，<code>main</code> 是程序的入口——链接器默认要找 <code>main</code> 的地址作为程序起点，没有它就不能生成可执行文件。
-    </p>
-    <div class="lesson-box warn">
-      <strong>先分清错误属于哪一类：</strong>编译错误（语法错误、类型错误）出现在第二阶段，说明你某个文件本身写错了；链接错误（<code>undefined reference</code> 未定义引用、<code>multiple definition</code> 重复定义）出现在第四阶段，说明文件之间对不上——要么少给了一个目标文件，要么同一个符号被定义了两次。看到报错先判断它属于哪一类，能省掉一半排查时间。
-    </div>
 
-    <h2>四阶段命令对照</h2>
+    <h2>编译四阶段：每一段各管什么</h2>
+    <p>
+      现在回到那四段接力。拆开看，<code>g++ main.cpp -o main</code> 其实等于下面四步的合并，而每一步都可以单独执行、单独观察：
+    </p>
+    <ul>
+      <li><strong>预处理</strong>：展开所有宏、把 <code>#include</code> 的头文件内容原地插入、删掉注释。产物是 <code>.i</code> 的纯文本，用 <code>g++ -E main.cpp -o main.i</code> 即可看到。</li>
+      <li><strong>编译</strong>：把预处理后的正文翻译成汇编代码，同时做语法检查与类型检查。这一步报的是「语言层面的错」，产物是 <code>.s</code>，用 <code>g++ -S</code> 得到。</li>
+      <li><strong>汇编</strong>：把汇编翻译成机器码，得到目标文件 <code>.o</code>（Windows 上是 <code>.obj</code>），用 <code>g++ -c</code> 只编译不链接。</li>
+      <li><strong>链接</strong>：把所有目标文件和用到的库合并，解析「谁定义了、谁引用了」的符号关系，最后写出可执行文件。这一步才把 <code>main</code> 里对 <code>add</code> 的调用和别处对 <code>add</code> 的定义接上。</li>
+    </ul>
+    <p>
+      关键在最后一步：编译阶段是<strong>单个源文件为单位</strong>做的，它只要求「用到的名字有声明」；至于这个名字的定义到底在不在、在哪个文件里，编译阶段一概不管——这正是 <code>undefined reference</code> 出现在链接阶段的原因。
+    </p>
+
+    <h2>分离「声明」与「定义」</h2>
+    <p>
+      既然编译只认声明、链接才认定义，工程里就顺势把它们拆到两个地方：
+    </p>
+    <ul>
+      <li><strong>头文件</strong>（<code>.h</code> / <code>.hpp</code>）放声明：函数原型、类定义、常量声明，用 <code>#include</code> 被各处共享。</li>
+      <li><strong>源文件</strong>（<code>.cpp</code>）放定义：函数体的具体实现，一个 <code>.cpp</code> 编译成一个 <code>.o</code>。</li>
+    </ul>
+    <p>
+      这样做的直接好处是<strong>分离编译</strong>：改一个 <code>.cpp</code> 只重编这一个文件，其余 <code>.o</code> 直接复用，再一起链接即可。代价是必须遵守两条铁律——头文件里<strong>只放声明</strong>（放定义会因被多处包含而触发重复定义），函数定义<strong>只能出现一次</strong>（否则链接器报 <code>multiple definition</code>）。
+    </p>
+
+    <h2>看一遍编译流程与常见报错</h2>
     <figure class="lesson-figure">
-      <figcaption>切换「程序结构 / 编译流程 / 代码示例」三个页签，对照程序的每个组成部分和四个编译阶段分别对应哪条 <code>g++</code> 命令、会产出什么文件。</figcaption>
+      <figcaption>切换「程序结构 / 编译流程 / 代码示例」三个标签，对照每个阶段的命令与产物，分清编译错误和链接错误。</figcaption>
       <CPP01ProgramStructure />
     </figure>
 
-    <h2>编译链接分界</h2>
+    <h2>把过程当成分诊图</h2>
     <p>
-      从源码到可执行文件是一条<strong>预处理 → 编译 → 汇编 → 链接</strong>的流水线。单独编译一个文件只走前三步，所以它查不出「符号缺失」；只有链接这一步才把各个文件拼在一起。下次看到报错，先问一句「它卡在哪一步」，答案往往就在问题本身里。
+      程序结构、编译流程这两件事，本质上是一张<strong>分诊图</strong>：写 C++ 时把预处理指令、函数、语句三类成分摆对位置，把声明与定义分到该去的文件；报错时按「编译期 / 链接期」先定位是哪一段接力出的问题——语法与类型问题问编译器，符号找不到或重复问链接器。有了这张图，入门阶段的大部分红字就不再是玄学。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「分离编译」</span>指把程序拆成多个 <code>.cpp</code> 各自独立编译成目标文件、最后统一链接的机制。每个 <code>.cpp</code> 的编译互不依赖，所以改一个文件只需重编它自己，能缩短编译时间、便于多人协作；代价是跨文件的符号问题只能推迟到链接阶段才暴露。记住：<strong>编译错误 ≠ 链接错误</strong>，前者是语法与类型问题，后者是未定义引用或重复定义。
+      <span class="term-name">「编译单元」</span>指一个 <code>.cpp</code> 源文件经预处理后、供编译阶段翻译的整份正文，通常对应一个目标文件 <code>.o</code>；<span class="term-name">「翻译单元」</span>是它的标准叫法。区分<span class="term-name">「声明」</span>（告诉编译器名字与类型存在）与<span class="term-name">「定义」</span>（给出实体本身），是把编译错误与链接错误分开定位的基础。
     </div>
   </LessonArticle>
 </template>
