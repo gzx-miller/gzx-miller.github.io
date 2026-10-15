@@ -38,7 +38,7 @@
 | [Vue Flow](https://gzx-miller.github.io/vue-flow) | 12 | 4 | 流程图与节点编辑器：连线校验、useVueFlow、拖拽搭建与自动布局 |
 | [Nest.js](https://gzx-miller.github.io/nestjs) | 12 | 4 | 模块化架构、依赖注入、守卫鉴权、管道校验与 TypeORM |
 | [Nuxt](https://gzx-miller.github.io/nuxt) | 20 | 10 | 文件路由、自动导入、SSR/SSG、Nitro 服务端 API 与模块生态 |
-| [Node.js](https://gzx-miller.github.io/nodejs) | 30 | 16 | 模块、文件、事件、流、HTTP、进程、测试、安全与依赖管理 |
+| [Node.js](https://gzx-miller.github.io/nodejs) | 25 | 12 | 运行时与模块、文件与事件、流与网络、进程与并发、可靠性与安全依赖 |
 | [Tailwind CSS](https://gzx-miller.github.io/tailwind-css) | 24 | 12 | v4 CSS-first、响应式变体、主题令牌、暗色模式与容器查询 |
 | [Sass](https://gzx-miller.github.io/sass) | 24 | 9 | 模块系统、变量、嵌套、Mixin、函数与集合操作 |
 | [Vite](https://gzx-miller.github.io/vite) | 21 | 10 | 配置、插件、HMR、依赖预构建、构建优化、库模式与 SSR |

@@ -1,153 +1,98 @@
 // ═══════════════════════════════════════════
-// D04 - EventEmitter 事件发布订阅
+// 1. on / once / emit / off 基本用法
 // ═══════════════════════════════════════════
 
 import { EventEmitter } from 'node:events'
 
-// ───────── 基本用法 ─────────
+const bus = new EventEmitter()
 
-// 创建事件发射器实例
-const emitter = new EventEmitter()
-
-// 监听事件（on = addListener）
-emitter.on('greet', (name) => {
-  console.log(`你好, ${name}!`)
+bus.on('order:paid', (order) => {          // 说明：长期监听，触发多少次执行多少次
+  console.log('通知库存', order.id)
+})
+bus.once('app:ready', () => {              // 说明：一次性监听，触发后自动移除
+  console.log('初始化一次')
 })
 
-// 只监听一次（触发后自动移除）
-emitter.once('welcome', (name) => {
-  console.log(`欢迎, ${name}！（只显示一次）`)
-})
+bus.emit('order:paid', { id: 1001 })       // 结果：同步触发上面的监听器
+bus.emit('app:ready')                      // 结果：触发一次
+bus.emit('app:ready')                      // 结果：无输出，once 已移除
 
-// 触发事件
-emitter.emit('greet', 'Alice')
-emitter.emit('greet', 'Bob')
-emitter.emit('welcome', 'Charlie')
-emitter.emit('welcome', 'Dave') // 不会触发，因为 once
+const handler = () => console.log('命中')
+bus.on('tick', handler)
+bus.off('tick', handler)                   // 结果：移除监听，再 emit 不再触发
+bus.emit('tick')
 
-// ───────── 自定义事件类 ─────────
+// ═══════════════════════════════════════════
+// 2. 用类继承 EventEmitter
+// ═══════════════════════════════════════════
 
-class MyService extends EventEmitter {
-  constructor() {
-    super()
-    this.data = []
-  }
-
-  addItem(item) {
-    this.data.push(item)
-    this.emit('itemAdded', item, this.data.length)
-  }
-
-  removeItem(index) {
-    if (index >= 0 && index < this.data.length) {
-      const removed = this.data.splice(index, 1)[0]
-      this.emit('itemRemoved', removed)
-      return removed
-    } else {
-      this.emit('error', new Error('索引超出范围'))
-    }
+class OrderService extends EventEmitter {
+  pay(id) {
+    this.emit('paid', { id })              // 说明：变更方只广播事件名与载荷
   }
 }
 
-const service = new MyService()
+const service = new OrderService()
+service.on('paid', ({ id }) => console.log('收到支付', id))  // 说明：订阅方各自订阅
+service.pay(2002)                          // 结果：收到支付 2002
 
-service.on('itemAdded', (item, count) => {
-  console.log(`添加了 ${item}，当前共 ${count} 项`)
-})
+// ═══════════════════════════════════════════
+// 3. emit 是同步派发
+// ═══════════════════════════════════════════
 
-service.on('itemRemoved', (item) => {
-  console.log(`移除了 ${item}`)
-})
+const order = []
+const sync = new EventEmitter()
 
-service.on('error', (err) => {
-  console.error('发生错误:', err.message)
-})
-
-service.addItem('苹果')
-service.addItem('香蕉')
-service.removeItem(0)
-service.removeItem(99) // 触发 error 事件
-
-// ───────── 事件监听管理 ─────────
-
-const handler = () => console.log('事件触发')
-
-emitter.on('test', handler)
-emitter.emit('test')       // 触发
-emitter.off('test', handler) // 移除监听
-emitter.emit('test')       // 不再触发
-
-// 移除所有监听
-emitter.removeAllListeners('test')
-
-// 获取监听器数量
-emitter.on('a', () => {})
-emitter.on('a', () => {})
-EventEmitter.listenerCount(emitter, 'a') // 2
-emitter.listenerCount('a')               // 2
-
-// 获取事件名列表
-emitter.eventNames() // ['greet', 'welcome', 'test', 'a', ...]
-
-// ───────── 同步 vs 异步 ─────────
-
-// EventEmitter 是同步触发的！
-const syncEmitter = new EventEmitter()
-let order = []
-
-syncEmitter.on('sync-event', () => {
-  order.push('listener')
-})
-
+sync.on('msg', () => order.push('listener'))
 order.push('before')
-syncEmitter.emit('sync-event')
+sync.emit('msg')
 order.push('after')
-// order: ['before', 'listener', 'after']
-// 监听函数在 emit 调用栈内同步执行
+order.join(' > ')                          // 结果：before > listener > after，回调在栈内跑完
 
-// 如需异步，手动用 setImmediate / process.nextTick
-syncEmitter.on('async-event', (...args) => {
-  process.nextTick(() => {
-    console.log('异步处理:', args)
-  })
-})
+// 想异步处理就自己在监听器里排队
+sync.on('later', (...args) => process.nextTick(() => console.log('异步', args)))
 
-// ───────── error 事件的特殊性 ─────────
+// ═══════════════════════════════════════════
+// 4. 监听器抛错与 error 事件
+// ═══════════════════════════════════════════
 
-// 如果 EventEmitter 触发 'error' 事件且没有监听器，会抛出异常并终止进程
-const badEmitter = new EventEmitter()
-// badEmitter.emit('error', new Error('没人处理我！')) // 会崩溃
-
-// 最佳实践：始终为 EventEmitter 添加 error 监听
-const safeEmitter = new EventEmitter()
-safeEmitter.on('error', (err) => {
-  console.error('捕获到错误:', err.message)
-})
-safeEmitter.emit('error', new Error('安全处理')) // 不会崩溃
-
-// ───────── 最大监听器数量 ─────────
-
-// 默认每个事件最多 10 个监听器（防止内存泄漏警告）
-const manyEmitter = new EventEmitter()
-for (let i = 0; i < 15; i++) {
-  manyEmitter.on('many', () => {})
+const risky = new EventEmitter()
+risky.on('work', () => { throw new Error('炸了') })  // 说明：异常沿 emit 的调用栈向上抛
+try {
+  risky.emit('work')
+} catch (err) {
+  console.log('捕获', err.message)         // 结果：捕获 炸了
 }
-manyEmitter.emit('many')
-// 会输出警告: MaxListenersExceededWarning
 
-// 设置最大监听器数
-manyEmitter.setMaxListeners(20) // 单个实例
-EventEmitter.defaultMaxListeners = 50 // 全局默认
+const safe = new EventEmitter()
+safe.emit('error', new Error('无人处理'))  // 结果：没有监听器时直接抛出，严重时终止进程
+safe.on('error', (err) => console.log('兜底', err.message))
+                                           // 说明：关键组件务必注册 error 监听
+safe.emit('error', new Error('已处理'))    // 结果：兜底 已处理，不再崩溃
 
-// ───────── 常见应用场景 ─────────
-// 1. HTTP 服务的 request/response 事件
-// 2. Stream 的 data/end/error 事件
-// 3. 进程的 signal/exit 事件
-// 4. 自定义业务事件总线
+// ═══════════════════════════════════════════
+// 5. 监听器数量与泄漏排查
+// ═══════════════════════════════════════════
 
-// ───────── 最佳实践 ─────────
-// 用类继承 EventEmitter，而不是直接使用实例
-// 始终监听 error 事件，避免进程崩溃
-// 注意事件触发是同步的，不要在监听器中做阻塞操作
-// 及时移除不再需要的监听器，防止内存泄漏
-// 使用 prependListener / prependOnceListener 调整监听顺序
+const leaky = new EventEmitter()
+for (let i = 0; i < 12; i++) leaky.on('many', () => {})
+                                           // 结果：超过默认 10 个会打印告警
+EventEmitter.listenerCount(leaky, 'many')  // 结果：12
+leaky.listenerCount('many')                // 结果：12，实例方法同样可查
+
+// 覆盖前先查清为什么会有这么多订阅，而不是一味抬高上限
+leaky.setMaxListeners(20)                  // 说明：只是调高告警阈值，不解决泄漏
+leaky.removeAllListeners('many')           // 结果：计数器归零，避免长期累积
+
+// ═══════════════════════════════════════════
+// 6. 事件名与载荷约定，events.once
+// ═══════════════════════════════════════════
+
+// 命名约定「领域 + 动作」，载荷结构固定，订阅方才有稳定契约
+const EVENT = { PAID: 'order:paid', SHIPPED: 'order:shipped' }
+
+import { once } from 'node:events'
+async function waitReady(target) {
+  await once(target, 'ready')              // 结果：等一次事件，返回参数数组
+  console.log('服务就绪')
+}

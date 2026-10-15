@@ -6,7 +6,7 @@ describe('课程注册表', () => {
   it('新增专题课程按子类别形成完整章节', async () => {
     const expectedCurriculum = [
       { id: 'javascript', lessonCount: 22, groupCount: 8 },
-      { id: 'nodejs', lessonCount: 30, groupCount: 16 },
+      { id: 'nodejs', lessonCount: 25, groupCount: 12 },
       { id: 'vue', lessonCount: 38, groupCount: 15 },
       { id: 'react', lessonCount: 35, groupCount: 22 },
       { id: 'langchain', lessonCount: 23, groupCount: 14 },

@@ -1,244 +1,77 @@
 // ═══════════════════════════════════════════
-// D21 - crypto 加密实践
+// 1. 哈希：完整性校验与摘要长度
 // ═══════════════════════════════════════════
 
-import crypto from 'node:crypto'
+import {
+  createHash, createHmac, createCipheriv, createDecipheriv,
+  randomBytes, randomUUID, scryptSync, timingSafeEqual,
+  generateKeyPairSync, sign, createVerify
+} from 'node:crypto'
 
-// ───────── 哈希 (Hash) ─────────
-// 单向、不可逆，用于验证数据完整性
+const fileCheck = createHash('sha256').update('订单 1024 的内容').digest('hex')  // 结果：64 位十六进制摘要
+const sha256Len = createHash('sha256').update('订单 1024').digest('hex').length  // 结果：64，对应 256 位
+const md5Len = createHash('md5').update('订单 1024').digest('hex').length        // 结果：32，仅遗留兼容
+const sha1Len = createHash('sha1').update('订单 1024').digest('hex').length      // 结果：40，已证明碰撞
 
-// 1. MD5（不安全，仅用于兼容旧系统）
-const md5Hash = crypto.createHash('md5')
-  .update('Hello, World!')
-  .digest('hex')
-console.log('MD5:', md5Hash)
+// ═══════════════════════════════════════════
+// 2. HMAC：带密钥的消息认证
+// ═══════════════════════════════════════════
 
-// 2. SHA-256（推荐）
-const sha256Hash = crypto.createHash('sha256')
-  .update('Hello, World!')
-  .digest('hex')
-console.log('SHA-256:', sha256Hash)
-
-// 3. SHA-512
-const sha512Hash = crypto.createHash('sha512')
-  .update('Hello, World!')
-  .digest('base64')
-console.log('SHA-512 (base64):', sha512Hash)
-
-// 流式哈希（大文件）
-// const fs = require('fs')
-// const hash = crypto.createHash('sha256')
-// const stream = fs.createReadStream('file.txt')
-// stream.on('data', (chunk) => hash.update(chunk))
-// stream.on('end', () => console.log(hash.digest('hex')))
-
-// ───────── HMAC (带密钥的哈希) ─────────
-// 用于验证消息的完整性和真实性
-
-const secret = 'my-secret-key'
-const message = '重要消息'
-
-const hmac = crypto.createHmac('sha256', secret)
-  .update(message)
-  .digest('hex')
-
-console.log('HMAC:', hmac)
-
-// 验证 HMAC
-function verifyHmac(message, signature, secret) {
-  const expected = crypto.createHmac('sha256', secret)
-    .update(message)
-    .digest('hex')
-  // 用 timingSafeEqual 防止时序攻击
-  return crypto.timingSafeEqual(
-    Buffer.from(signature, 'hex'),
-    Buffer.from(expected, 'hex')
-  )
+const secret = process.env.APP_SECRET                     // 说明：密钥来自环境变量，不硬编码
+function signPayload(payload) {
+  return createHmac('sha256', secret).update(payload).digest('hex')   // 结果：64 位签名
+}
+function verifyPayload(payload, signature) {
+  const expected = createHmac('sha256', secret).update(payload).digest('hex')
+  return timingSafeEqual(Buffer.from(signature), Buffer.from(expected))  // 结果：true，常数时间比较
 }
 
-// ───────── 对称加密 ─────────
-// 同一个密钥用于加密和解密
+// ═══════════════════════════════════════════
+// 3. 加盐慢哈希：密码存储
+// ═══════════════════════════════════════════
 
-// AES-256-GCM（推荐，带认证）
-function encrypt(text, secretKey) {
-  // 密钥必须是 32 字节（256位）
-  const key = crypto.scryptSync(secretKey, 'salt', 32)
-
-  // 初始化向量 IV，每次加密都要不同
-  const iv = crypto.randomBytes(16)
-
-  const cipher = crypto.createCipheriv('aes-256-gcm', key, iv)
-
-  let encrypted = cipher.update(text, 'utf-8', 'hex')
-  encrypted += cipher.final('hex')
-
-  // 获取认证标签（用于验证数据完整性）
-  const authTag = cipher.getAuthTag().toString('hex')
-
-  // 返回 iv + authTag + 密文（都需要保存/传输）
-  return {
-    iv: iv.toString('hex'),
-    authTag,
-    encryptedData: encrypted
-  }
+function hashPassword(password) {
+  const salt = randomBytes(16).toString('hex')            // 说明：每个用户独立随机盐
+  const hash = scryptSync(password, salt, 64).toString('hex')   // 说明：刻意拖慢，压低每秒尝试次数
+  return `${salt}:${hash}`                                 // 结果：盐与摘要一并存储
+}
+function verifyPassword(password, stored) {
+  const [salt, hash] = stored.split(':')                   // 说明：取出当初的盐
+  const candidate = scryptSync(password, salt, 64)         // 说明：用同一个盐重算
+  return timingSafeEqual(candidate, Buffer.from(hash, 'hex'))   // 结果：true / false
 }
 
-function decrypt(encryptedData, iv, authTag, secretKey) {
-  const key = crypto.scryptSync(secretKey, 'salt', 32)
+// ═══════════════════════════════════════════
+// 4. AES-256-GCM：每次随机 IV 与 authTag
+// ═══════════════════════════════════════════
 
-  const decipher = crypto.createDecipheriv(
-    'aes-256-gcm',
-    key,
-    Buffer.from(iv, 'hex')
-  )
-
-  decipher.setAuthTag(Buffer.from(authTag, 'hex'))
-
-  let decrypted = decipher.update(encryptedData, 'hex', 'utf-8')
-  decrypted += decipher.final('utf-8')
-
-  return decrypted
+function encrypt(plain, key) {
+  const iv = randomBytes(12)                               // 说明：IV 每次加密都随机生成，绝不复用
+  const cipher = createCipheriv('aes-256-gcm', key, iv)
+  const data = Buffer.concat([cipher.update(plain, 'utf8'), cipher.final()])
+  return { iv, authTag: cipher.getAuthTag(), data }        // 结果：密文、IV、认证标签都要保存
+}
+function decrypt({ iv, authTag, data }, key) {
+  const decipher = createDecipheriv('aes-256-gcm', key, iv)
+  decipher.setAuthTag(authTag)                             // 说明：密文被改则 final() 抛错
+  return Buffer.concat([decipher.update(data), decipher.final()]).toString('utf8')
 }
 
-// 使用示例
-const secretKey = 'my-super-secret-password'
-const originalText = '这是需要加密的敏感信息'
+// ═══════════════════════════════════════════
+// 5. 安全随机数与签名验签
+// ═══════════════════════════════════════════
 
-const encrypted = encrypt(originalText, secretKey)
-console.log('加密结果:', encrypted)
+const resetToken = randomBytes(32).toString('hex')         // 结果：64 位随机令牌，不可预测
+const requestId = randomUUID()                             // 结果：v4 UUID
+const { privateKey, publicKey } = generateKeyPairSync('ec', { namedCurve: 'P-256' })
+const signature = sign(null, Buffer.from('转账 100 元'), privateKey)   // 说明：私钥签名
+const ok = createVerify(null).update('转账 100 元').verify(publicKey, signature)  // 结果：true
 
-const decrypted = decrypt(
-  encrypted.encryptedData,
-  encrypted.iv,
-  encrypted.authTag,
-  secretKey
-)
-console.log('解密结果:', decrypted)
+// ═══════════════════════════════════════════
+// 6. 用途选择与禁区
+// ═══════════════════════════════════════════
 
-// ───────── 非对称加密 (RSA) ─────────
-// 公钥加密，私钥解密；私钥签名，公钥验签
-
-// 生成密钥对
-// crypto.generateKeyPair('rsa', {
-//   modulusLength: 2048,
-//   publicKeyEncoding: { type: 'spki', format: 'pem' },
-//   privateKeyEncoding: { type: 'pkcs8', format: 'pem' }
-// }, (err, publicKey, privateKey) => {
-//   console.log('公钥:', publicKey)
-//   console.log('私钥:', privateKey)
-// })
-
-// 公钥加密，私钥解密
-function encryptWithPublicKey(publicKey, text) {
-  return crypto.publicEncrypt(
-    publicKey,
-    Buffer.from(text, 'utf-8')
-  ).toString('base64')
-}
-
-function decryptWithPrivateKey(privateKey, encryptedData) {
-  return crypto.privateDecrypt(
-    privateKey,
-    Buffer.from(encryptedData, 'base64')
-  ).toString('utf-8')
-}
-
-// 私钥签名，公钥验签
-function signData(privateKey, data) {
-  const sign = crypto.createSign('SHA256')
-  sign.update(data)
-  sign.end()
-  return sign.sign(privateKey, 'hex')
-}
-
-function verifySignature(publicKey, data, signature) {
-  const verify = crypto.createVerify('SHA256')
-  verify.update(data)
-  verify.end()
-  return verify.verify(publicKey, signature, 'hex')
-}
-
-// ───────── 随机数生成 ─────────
-
-// 加密安全的随机数
-const randomBytes = crypto.randomBytes(16)
-console.log('随机字节 (hex):', randomBytes.toString('hex'))
-
-// 生成随机整数
-function randomInt(min, max) {
-  return crypto.randomInt(min, max + 1)
-}
-
-// 生成 UUID
-const uuid = crypto.randomUUID()
-console.log('UUID:', uuid)
-
-// ───────── 密码哈希 ─────────
-// 注意：生产环境用 bcrypt/argon2，不要自己实现！
-
-// 简单的 PBKDF2 示例（内置）
-function hashPassword(password, salt) {
-  salt = salt || crypto.randomBytes(16).toString('hex')
-  const hash = crypto.pbkdf2Sync(
-    password,
-    salt,
-    100000,  // 迭代次数
-    64,      // 密钥长度
-    'sha512'
-  ).toString('hex')
-  return { salt, hash }
-}
-
-function verifyPassword(password, salt, hash) {
-  const inputHash = crypto.pbkdf2Sync(
-    password,
-    salt,
-    100000,
-    64,
-    'sha512'
-  ).toString('hex')
-  return crypto.timingSafeEqual(
-    Buffer.from(hash, 'hex'),
-    Buffer.from(inputHash, 'hex')
-  )
-}
-
-// 但更推荐：
-// - bcrypt (简单，经过验证)
-// - argon2 (更现代，抗 GPU 攻击)
-
-// ───────── 常见加密算法对比 ─────────
-
-// 哈希算法：
-// MD5       - 不安全，已破解，仅兼容
-// SHA-1     - 不安全，已破解
-// SHA-256   - 安全，推荐
-// SHA-512   - 安全，更慢
-// SHA-3     - 最新标准
-
-// 对称加密：
-// AES-128-CBC - 安全，但需要自己处理认证
-// AES-256-GCM - 推荐，带认证标签
-// ChaCha20    - 移动设备友好
-
-// 非对称加密：
-// RSA-2048    - 常用，密钥至少 2048 位
-// RSA-4096    - 更安全，更慢
-// ECDSA       - 椭圆曲线，密钥更小更快
-
-// 密码哈希：
-// PBKDF2      - 内置，可用
-// bcrypt      - 推荐，简单易用
-// argon2      - 最强，最新标准
-
-// ───────── 安全最佳实践 ─────────
-// 永远不要自己实现加密算法
-// 不要用 MD5 和 SHA-1 做安全用途
-// 对称加密用 AES-GCM（带认证）
-// 密码存储用 bcrypt/argon2，不要用普通哈希
-// 密钥不要硬编码在代码中，用环境变量或密钥管理服务
-// IV（初始化向量）每次都要随机生成
-// 比较敏感数据用 timingSafeEqual 防止时序攻击
-// 用 crypto.randomBytes 生成安全随机数，不要用 Math.random
-// 定期轮换密钥
-// 保持依赖更新，修复加密库的安全漏洞
+const forbiddenForSecurity = ['md5', 'sha1']               // 说明：碰撞已证明，禁用于密码与签名
+const integrityAlgos = ['sha256', 'sha512', 'sha3-256']    // 结果：完整性校验可选的安全算法
+const passwordSchemes = ['scrypt', 'pbkdf2', 'bcrypt', 'argon2']  // 结果：加盐慢哈希阵营
+const keyRotationPlanned = true                            // 说明：预留轮换路径，旧密钥仍能解历史数据

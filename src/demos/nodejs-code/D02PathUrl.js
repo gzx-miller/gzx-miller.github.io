@@ -1,94 +1,84 @@
 // ═══════════════════════════════════════════
-// D02 - node:path 和 node:url 路径处理
+// 1. join 只拼接，resolve 从右向左求绝对路径
 // ═══════════════════════════════════════════
 
 import path from 'node:path'
+
+const baseDir = '/app/data'
+
+// join：把各段拼起来并规范化，绝对片段只当成普通一段
+path.join(baseDir, 'reports/2026.json')       // 结果：/app/data/reports/2026.json
+path.join('/app', '/etc')                     // 结果：/app/etc，不是 /etc
+
+// resolve：从右向左解析，遇到绝对片段即停下并丢弃左侧
+path.resolve('/app', '/etc')                  // 结果：/etc
+path.resolve(baseDir, '../../etc/passwd')     // 结果：/etc/passwd，向上跳没被拦住
+
+// 求绝对路径用 resolve；安全拼接则先固定基准、再 join 相对片段
+const absBase = path.resolve(baseDir)         // 结果：基准显式求绝对路径，不依赖 cwd
+const safe = path.join(absBase, 'reports/2026.json')
+                                              // 结果：/app/data/reports/2026.json
+
+// ═══════════════════════════════════════════
+// 2. 分隔符交给 path，别在字符串里手写
+// ═══════════════════════════════════════════
+
+path.sep        // 结果：Windows '\\'，POSIX '/'
+path.delimiter  // 结果：Windows ';'，POSIX ':'，用于拼接 PATH 类列表
+
+// 不要写 'a' + '\\' + 'b'，交给 join 让平台自己决定
+path.join('a', 'b')                           // 结果：Windows a\b，POSIX a/b
+
+// ═══════════════════════════════════════════
+// 3. win32 / posix 显式指定平台规则
+// ═══════════════════════════════════════════
+
+// 在任一平台都能算出另一种平台的解析结果，便于测试与核对
+path.win32.join('C:\\Users', 'name')          // 结果：C:\Users\name
+path.posix.join('/home', 'user')              // 结果：/home/user
+path.posix.isAbsolute('/home/user')           // 结果：true
+
+// ═══════════════════════════════════════════
+// 4. 拆解一段路径：basename / extname / parse
+// ═══════════════════════════════════════════
+
+const fullPath = '/app/docs/report.tar.gz'
+
+path.basename(fullPath)             // 结果：report.tar.gz
+path.dirname(fullPath)              // 结果：/app/docs
+path.extname(fullPath)              // 结果：.gz，只取最后一段扩展名
+path.basename(fullPath, '.gz')      // 结果：report.tar，去掉指定后缀
+
+const parts = path.parse(fullPath)  // 说明：一次拿到 root/dir/base/ext/name
+parts.name                          // 结果：report.tar
+parts.ext                           // 结果：.gz
+parts.root                          // 结果：/
+
+// ═══════════════════════════════════════════
+// 5. ESM 里找回 __dirname / __filename
+// ═══════════════════════════════════════════
+
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
-// ───────── path 模块核心 API ─────────
+// ESM 没有 __dirname，模块自身位置是一条 file: URL
+const __filename = fileURLToPath(import.meta.url)   // 结果：/app/src/index.mjs
+const __dirname = path.dirname(__filename)          // 结果：/app/src
+import.meta.dirname                                 // 结果：Node 20.11+ 直接给出，等同上一行
 
-// 1. 路径拼接与解析
-const baseDir = '/home/user/projects'
-const fileName = 'src/index.js'
+// 反过来，把普通路径包装成 file URL 交给需要 URL 的 API
+pathToFileURL('/app/data/2026.json').href           // 结果：file:///app/data/2026.json
 
-// path.join: 拼接路径片段，会规范化结果
-const joinedPath = path.join(baseDir, fileName)
-// '/home/user/projects/src/index.js'
+// ═══════════════════════════════════════════
+// 6. URL 类与查询串解析
+// ═══════════════════════════════════════════
 
-// path.resolve: 解析为绝对路径（从右向左，遇到绝对路径停止）
-const resolvedPath = path.resolve('src', 'index.js')
-// 相当于 process.cwd() + '/src/index.js'
+const u = new URL('https://shop.example.com:8443/order?id=42&tag=hot#detail')
+u.protocol              // 结果：https:
+u.hostname              // 结果：shop.example.com
+u.pathname              // 结果：/order
+u.searchParams.get('id')  // 结果：42，直接从查询串取一项
+u.origin                // 结果：https://shop.example.com:8443
 
-// 2. 路径信息提取
-const fullPath = '/home/user/docs/report.pdf'
-
-path.dirname(fullPath)   // '/home/user/docs'  — 目录名
-path.basename(fullPath)  // 'report.pdf'        — 文件名（含扩展名）
-path.basename(fullPath, '.pdf')  // 'report'  — 文件名（不含扩展名）
-path.extname(fullPath)   // '.pdf'              — 扩展名
-
-// 3. 路径规范化
-path.normalize('/home//user/../user/docs/./file.txt')
-// '/home/user/docs/file.txt' — 解析 . 和 ..，合并重复分隔符
-
-// 4. 相对路径计算
-path.relative('/home/user/a', '/home/user/b/c')
-// '../b/c' — 从第一个路径到第二个路径的相对路径
-
-// 5. 路径分隔符与环境判断
-path.sep        // Windows: '\\', POSIX: '/'
-path.delimiter  // Windows: ';',  POSIX: ':'
-path.isAbsolute('/home')  // true — 是否绝对路径
-
-// ───────── 跨平台兼容 ─────────
-
-// Windows 特有
-path.win32.join('C:\\Users', 'name')  // 'C:\\Users\\name'
-
-// POSIX 特有（Linux/macOS）
-path.posix.join('/home', 'user')      // '/home/user'
-
-// ───────── url 模块与 file URL 转换 ─────────
-
-// 1. 文件路径转 file URL
-const filePath = '/home/user/data.json'
-const fileUrl = pathToFileURL(filePath)
-// URL { href: 'file:///home/user/data.json' }
-
-// 2. file URL 转文件路径
-const urlStr = 'file:///home/user/data.json'
-const convertedPath = fileURLToPath(urlStr)
-// '/home/user/data.json'
-
-// 3. ESM 中获取 __dirname 和 __filename（替代方案）
-import.meta.url              // 当前模块的 file URL
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-
-// Node.js 21+ 可直接用：
-// import.meta.filename
-// import.meta.dirname
-
-// ───────── URL 解析（WHATWG URL API） ─────────
-
-const url = new URL('https://user:pass@example.com:8080/path?query=1#hash')
-url.protocol    // 'https:'
-url.hostname    // 'example.com'
-url.port        // '8080'
-url.pathname    // '/path'
-url.search      // '?query=1'
-url.hash        // '#hash'
-url.username    // 'user'
-url.origin      // 'https://example.com:8080'
-
-// 构造 URL
-const apiUrl = new URL('/api/users', 'https://api.example.com')
-apiUrl.searchParams.set('page', '1')
-apiUrl.searchParams.set('limit', '10')
-// 'https://api.example.com/api/users?page=1&limit=10'
-
-// ───────── 最佳实践 ─────────
-// 始终用 path.join / path.resolve 拼接路径，不要手动拼字符串
-// 跨平台项目避免硬编码路径分隔符
-// 处理文件 URL 用 fileURLToPath / pathToFileURL
-// ESM 模块中用 import.meta.url 获取当前文件路径
+// 相对地址拼到基准上，再由 searchParams 组装查询串
+const api = new URL('/api/courses', 'https://api.example.com')
+api.searchParams.set('page', '1')   // 结果：https://api.example.com/api/courses?page=1

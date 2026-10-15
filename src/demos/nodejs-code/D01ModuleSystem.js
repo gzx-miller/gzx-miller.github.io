@@ -1,72 +1,58 @@
 // ═══════════════════════════════════════════
-// D01 - Node.js 模块系统：ESM 与 CommonJS 对比
+// 1. CommonJS：同步 require，值拷贝导出
 // ═══════════════════════════════════════════
 
-// ───────── CommonJS 风格（Node.js 默认） ─────────
-// 导出：module.exports / exports
-// 导入：require()
-// 同步加载，运行时解析
+// counter.cjs —— 模块内部维护一个自增计数器
+let count = 0                                  // 模块作用域变量，不污染全局
+function increment() { count += 1 }            // 每次调用把 count 加一
+const counterModule = { count, increment }     // 导出那一刻的 count 被快照成值
 
-// math.cjs (CommonJS 模块)
-// function add(a, b) { return a + b }
-// module.exports = { add, subtract: (a, b) => a - b }
+counterModule.increment()                      // 模拟引用方调用模块内部自增
+console.log(counterModule.count)               // 结果：0，值拷贝拿不到后续变化
 
-// 导入方式
-// const math = require('./math.cjs')
-// const { add } = require('./math.cjs')
+// ═══════════════════════════════════════════
+// 2. ES Modules：静态 import，实时绑定导出
+// ═══════════════════════════════════════════
 
-// ───────── ESM 风格（ECMAScript Modules） ─────────
-// 导出：export / export default
-// 导入：import ... from '...'
-// 静态分析，编译时确定依赖，支持 Tree Shaking
+// counter.mjs —— 同样的自增逻辑
+// export let count = 0
+// export function increment() { count += 1 }
+// app.mjs —— 引用方
+// import { count, increment } from './counter.mjs'
+// increment()
+// console.log(count)                          // 结果：1，实时绑定读到最新值
 
-// math.js (ESM 模块)
-// export function add(a, b) { return a + b }
-// export function subtract(a, b) { return a - b }
-// export default function multiply(a, b) { return a * b }
+// ═══════════════════════════════════════════
+// 3. 模块格式由扩展名与 type 字段决定
+// ═══════════════════════════════════════════
 
-// 导入方式
-// import multiply, { add, subtract } from './math.js'
-// import * as math from './math.js'
+// package.json
+// { "type": "module" }                        // .js 按 ESM 解释；缺省则按 CommonJS
+const esmExtensions = ['.mjs', '.mts']         // .mjs 恒为 ESM
+const cjsExtensions = ['.cjs', '.cts']         // .cjs 恒为 CommonJS
+console.log(esmExtensions.length + cjsExtensions.length)   // 结果：4，两类强制后缀
 
-// ───────── 关键差异对比 ─────────
+// ═══════════════════════════════════════════
+// 4. 跨格式互操作：默认导出即 module.exports
+// ═══════════════════════════════════════════
 
-// 1. 加载方式
-// CommonJS: 同步加载，运行时执行
-// ESM: 异步加载，静态解析（支持 Top-level await）
+// utils.cjs —— 老模块用 CommonJS 导出
+// const { join } = require('node:path')
+// module.exports = { greet: (name) => `Hello, ${name}` }
+// app.mjs —— ESM 导入 CommonJS，default 即 module.exports
+// import utils from './utils.cjs'
+// console.log(utils.greet('栗子'))            // 结果：Hello, 栗子
+// legacy.cjs —— CommonJS 只能异步动态 import 一个 ESM
+// const { greet } = await import('./app.mjs')
 
-// 2. 导出值的绑定
-// CommonJS: 值拷贝（导出时快照）
-// ESM: 实时绑定（引用关系，导出方变化会反映到导入方）
+// ═══════════════════════════════════════════
+// 5. 双格式发布：exports 字段分设入口
+// ═══════════════════════════════════════════
 
-// 3. 文件名与 package.json 配置
-// - .cjs 后缀强制 CommonJS
-// - .mjs 后缀强制 ESM
-// - package.json 中 "type": "module" 则 .js 默认为 ESM
-
-// 4. 内置变量差异
-// CommonJS: __dirname, __filename, require, module, exports
-// ESM: 需用 import.meta.url, import.meta.dirname (Node 21+)
-
-// ───────── 混合使用场景 ─────────
-
-// ESM 中可以动态 import CommonJS 模块
-async function loadCommonJS() {
-  const cjsModule = await import('./legacy-utils.cjs')
-  console.log(cjsModule.default)
-}
-
-// CommonJS 中不能直接 require ESM，需用动态 import
-async function requireEsm() {
-  const esmModule = await import('./modern-utils.js')
-  return esmModule
-}
-
-// ───────── 最佳实践 ─────────
-// 新项目推荐使用 ESM
-// 库项目可同时发布两种格式（dual package）
-// package.json 中 "exports" 字段定义入口点
+// package.json
 // "exports": {
-//   "import": "./dist/index.mjs",
-//   "require": "./dist/index.cjs"
+//   "import": "./dist/index.mjs",             // ESM 走这里
+//   "require": "./dist/index.cjs"             // CommonJS 走这里
 // }
+const moduleEntryKeys = ['import', 'require']  // 一份源码，两套入口
+console.log(moduleEntryKeys.join(' / '))       // 结果：import / require

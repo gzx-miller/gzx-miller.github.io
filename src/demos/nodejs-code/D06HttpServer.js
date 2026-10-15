@@ -1,169 +1,91 @@
 // ═══════════════════════════════════════════
-// D06 - 原生 HTTP 服务与路由
+// 1. createServer：req 与 res 两个流式对象
 // ═══════════════════════════════════════════
 
 import http from 'node:http'
-import url from 'node:url'
-
-// ───────── 最简单的 HTTP 服务 ─────────
 
 const server = http.createServer((req, res) => {
-  // req: IncomingMessage（可读流）
-  // res: ServerResponse（可写流）
-
-  res.statusCode = 200
-  res.setHeader('Content-Type', 'text/plain; charset=utf-8')
-  res.end('Hello, Node.js HTTP Server!')
+  res.statusCode = 200                                     // 结果：状态码
+  res.setHeader('Content-Type', 'application/json; charset=utf-8')
+                                                           // 说明：必须在 write / end 之前设
+  res.end(JSON.stringify({ ok: true }))                    // 结果：显式结束，否则连接挂起
 })
 
-// server.listen(3000, () => {
-//   console.log('Server running at http://localhost:3000/')
-// })
-
-// ───────── 路由处理 ─────────
-
-function handleRequest(req, res) {
-  const parsedUrl = url.parse(req.url, true)
-  const pathname = parsedUrl.pathname
-  const method = req.method
-
-  // 设置响应头
-  const sendJSON = (statusCode, data) => {
-    res.writeHead(statusCode, {
-      'Content-Type': 'application/json; charset=utf-8'
-    })
-    res.end(JSON.stringify(data))
-  }
-
-  const sendText = (statusCode, text) => {
-    res.writeHead(statusCode, {
-      'Content-Type': 'text/plain; charset=utf-8'
-    })
-    res.end(text)
-  }
-
-  // 路由表
-  if (method === 'GET' && pathname === '/') {
-    sendText(200, '首页 - Node.js HTTP Server')
-  } else if (method === 'GET' && pathname === '/api/users') {
-    // 查询参数
-    const query = parsedUrl.query
-    const users = [
-      { id: 1, name: 'Alice', page: query.page || 1 }
-    ]
-    sendJSON(200, { code: 0, data: users })
-  } else if (method === 'GET' && pathname.startsWith('/api/users/')) {
-    // 路径参数
-    const id = pathname.split('/')[3]
-    sendJSON(200, { code: 0, data: { id, name: '用户' + id } })
-  } else if (method === 'POST' && pathname === '/api/users') {
-    // 读取请求体
-    let body = ''
-    req.on('data', (chunk) => {
-      body += chunk.toString()
-      // 防止超大请求体
-      if (body.length > 1e6) {
-        req.destroy()
-        sendJSON(413, { code: 413, message: '请求体过大' })
-      }
-    })
-    req.on('end', () => {
-      try {
-        const user = JSON.parse(body)
-        sendJSON(201, { code: 0, data: { id: Date.now(), ...user } })
-      } catch (e) {
-        sendJSON(400, { code: 400, message: 'JSON 格式错误' })
-      }
-    })
-  } else if (method === 'GET' && pathname === '/redirect') {
-    // 重定向
-    res.writeHead(302, { Location: '/' })
-    res.end()
-  } else {
-    sendJSON(404, { code: 404, message: 'Not Found' })
-  }
+function inspect(req) {
+  req.method        // 结果：GET / POST / ...，路由要连方法一起匹配
+  req.url           // 结果：/api/courses?page=1，含查询串
+  req.headers.host  // 结果：请求头里的 Host（键都是小写）
 }
 
-// ───────── 更健壮的服务器 ─────────
+// ═══════════════════════════════════════════
+// 2. 路由要同时匹配方法与路径
+// ═══════════════════════════════════════════
 
-const robustServer = http.createServer(handleRequest)
+const courses = [{ id: 1, title: 'Vue3 入门' }, { id: 2, title: 'Nuxt 实战' }]
 
-// 最大请求头大小（默认 16KB）
-robustServer.maxHeadersCount = 100
+function handle(req, res) {
+  const { method } = req
+  const { pathname } = new URL(req.url, 'http://localhost')  // 结果：只取路径，丢掉查询串
 
-// 超时设置
-robustServer.timeout = 30000 // 请求超时 30 秒
-robustServer.keepAliveTimeout = 5000 // keep-alive 超时
-
-// 监听错误
-robustServer.on('error', (err) => {
-  if (err.code === 'EADDRINUSE') {
-    console.error('端口已被占用')
-  } else {
-    console.error('服务器错误:', err)
+  if (method === 'GET' && pathname === '/api/courses') {
+    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
+    res.end(JSON.stringify(courses))                        // 结果：命中，返回 200
+    return
   }
+
+  res.writeHead(404, { 'Content-Type': 'application/json' })
+  res.end(JSON.stringify({ message: 'Not Found' }))         // 结果：未命中一律 404 兜底
+}
+
+// ═══════════════════════════════════════════
+// 3. req 是 Readable 流，读取要限制体积
+// ═══════════════════════════════════════════
+
+const MAX_BODY = 1e6   // 1MB
+
+function readBody(req, res) {
+  let body = ''
+  let size = 0
+  req.on('data', (chunk) => {
+    size += chunk.length
+    if (size > MAX_BODY) {                                  // 结果：超限立即收手，防 DoS
+      res.writeHead(413).end('请求体过大')                  // 结果：413 Payload Too Large
+      req.destroy()
+      return
+    }
+    body += chunk.toString('utf8')
+  })
+  req.on('end', () => {
+    try {
+      res.writeHead(200).end(JSON.stringify(JSON.parse(body)))  // 结果：解析成功
+    } catch {
+      res.writeHead(400).end('JSON 格式错误')                  // 结果：400 Bad Request
+    }
+  })
+}
+
+// ═══════════════════════════════════════════
+// 4. 超时、错误与优雅关闭
+// ═══════════════════════════════════════════
+
+server.setTimeout(30_000)                       // 说明：请求 30 秒未完成即超时
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') console.error('端口被占用')  // 结果：常见启动错误分支
 })
+server.on('connection', (socket) => { socket.setNoDelay(true) })
+                                               // 说明：小响应即时发出
 
-// 连接事件
-robustServer.on('connection', (socket) => {
-  console.log('新的连接:', socket.remoteAddress)
-})
+function shutdown() {
+  server.close(() => process.exit(0))           // 结果：停止接收新连接，处理完已有的再退出
+  setTimeout(() => process.exit(1), 10_000)     // 说明：强制兜底，防止一直挂着
+}
 
-// robustServer.listen(3000, '127.0.0.1', () => {
-//   console.log('健壮服务器已启动')
-// })
+// ═══════════════════════════════════════════
+// 5. 状态码与 Content-Type 速查
+// ═══════════════════════════════════════════
 
-// ───────── 请求对象 (req) 常用属性 ─────────
-// req.url          请求路径（含查询字符串）
-// req.method       HTTP 方法
-// req.headers      请求头对象（键都是小写）
-// req.httpVersion  HTTP 版本
-// req.socket       底层 socket
-
-// req.headers.host
-// req.headers['user-agent']
-// req.headers['content-type']
-// req.headers['content-length']
-
-// ───────── 响应对象 (res) 常用方法 ─────────
-// res.writeHead(statusCode, headers)  设置状态码和响应头
-// res.setHeader(name, value)          设置单个响应头
-// res.getHeader(name)                 获取响应头
-// res.removeHeader(name)              移除响应头
-// res.write(chunk)                    写入响应体（可多次调用）
-// res.end([data])                     结束响应（可选最后一块数据）
-// res.statusCode                      设置状态码
-
-// ───────── HTTP 状态码速查 ─────────
-// 200 OK           请求成功
-// 201 Created      资源创建成功
-// 301 Moved        永久重定向
-// 302 Found        临时重定向
-// 400 Bad Request  请求参数错误
-// 401 Unauthorized 未授权
-// 403 Forbidden    禁止访问
-// 404 Not Found    资源不存在
-// 500 Internal Server Error 服务器内部错误
-
-// ───────── 优雅关闭 ─────────
-
-// function gracefulShutdown(server) {
-//   server.close(() => {
-//     console.log('服务器已关闭，所有连接处理完毕')
-//     process.exit(0)
-//   })
-//   // 强制超时
-//   setTimeout(() => process.exit(1), 10000)
-// }
-//
-// process.on('SIGTERM', () => gracefulShutdown(robustServer))
-// process.on('SIGINT', () => gracefulShutdown(robustServer))
-
-// ───────── 最佳实践 ─────────
-// 生产环境使用 Express/Koa/Fastify 等框架
-// 设置合理的超时，防止连接挂起
-// 限制请求体大小，防止内存溢出
-// 正确设置 Content-Type 和编码
-// 使用 try/catch 处理 JSON 解析错误
-// 实现优雅关闭，确保请求处理完成
-// 生产环境放在反向代理（Nginx）后面
+const STATUS = { OK: 200, CREATED: 201, BAD_REQUEST: 400, NOT_FOUND: 404, PAYLOAD_TOO_LARGE: 413 }
+const TYPES = {
+  json: 'application/json; charset=utf-8',      // 结果：前端可安全地 json()
+  text: 'text/plain; charset=utf-8'             // 说明：省略 charset 中文可能乱码
+}
