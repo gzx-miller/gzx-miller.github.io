@@ -12,7 +12,7 @@ useHead({
 })
 
 useSeoMeta({
-  description: '小松鼠举栗子中文技术知识内容库：Vue3、React、Node.js、Tailwind CSS、WebGL、C++、uni-app 等 21 大分类数百个真实内容，每个栗子只讲一个知识点。',
+  description: '小松鼠举栗子中文技术知识内容库：Vue3、React、Node.js、Tailwind CSS、WebGL、C++、uni-app 等 20 大分类数百个真实内容，每个栗子只讲一个知识点。',
   ogTitle: '小松鼠举栗子',
   ogDescription: '通过独立真实内容学习软件技术，每颗栗子只讲一个知识点。',
   ogType: 'website',
@@ -31,7 +31,6 @@ const categoryEmojis: Record<string, string> = {
   nuxt: '🌲',
   nodejs: '🍃',
   'tailwind-css': '💨',
-  sass: '💗',
   vite: '🚀',
   react: '⚛️',
   nextjs: '▲',

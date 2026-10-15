@@ -13,7 +13,6 @@ describe('课程注册表', () => {
       { id: 'langgraph', lessonCount: 14, groupCount: 6 },
       { id: 'element-plus', lessonCount: 20, groupCount: 7 },
       { id: 'tailwind-css', lessonCount: 24, groupCount: 12 },
-      { id: 'sass', lessonCount: 16, groupCount: 7 },
       { id: 'webgl', lessonCount: 20, groupCount: 7 },
       { id: 'webassembly', lessonCount: 20, groupCount: 8 },
       { id: 'uni-app', lessonCount: 15, groupCount: 10 },

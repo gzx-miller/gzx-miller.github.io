@@ -8,7 +8,7 @@
 
 ## 特性
 
-- **数百个独立内容**，覆盖 21 个软件技术知识分类
+- **数百个独立内容**，覆盖 20 个软件技术知识分类
 - **交互式演示** — 每个内容包含可运行的 Demo、关键代码、原理说明、处理流程和注意事项
 - **纯静态部署** — `nuxt generate` 预渲染全部路由，零服务端依赖
 - **类型安全** — 全项目 TypeScript strict mode，Vitest 单元测试覆盖核心逻辑
@@ -40,7 +40,6 @@
 | [Nuxt](https://gzx-miller.github.io/nuxt) | 20 | 10 | 文件路由、自动导入、SSR/SSG、Nitro 服务端 API 与模块生态 |
 | [Node.js](https://gzx-miller.github.io/nodejs) | 25 | 12 | 运行时与模块、文件与事件、流与网络、进程与并发、可靠性与安全依赖 |
 | [Tailwind CSS](https://gzx-miller.github.io/tailwind-css) | 24 | 12 | v4 CSS-first、响应式变体、主题令牌、暗色模式与容器查询 |
-| [Sass](https://gzx-miller.github.io/sass) | 24 | 9 | 模块系统、变量、嵌套、Mixin、函数与集合操作 |
 | [Vite](https://gzx-miller.github.io/vite) | 21 | 10 | 配置、插件、HMR、依赖预构建、构建优化、库模式与 SSR |
 | [React](https://gzx-miller.github.io/react) | 35 | 22 | Hooks、并发渲染、错误边界、逻辑复用、状态集成与性能优化 |
 | [Next.js](https://gzx-miller.github.io/nextjs) | 24 | 6 | App Router、服务端组件、数据获取、Server Actions 与部署 |
