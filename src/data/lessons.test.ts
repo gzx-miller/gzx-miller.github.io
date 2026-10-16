@@ -7,6 +7,7 @@ describe('课程注册表', () => {
     const expectedCurriculum = [
       { id: 'javascript', lessonCount: 22, groupCount: 8 },
       { id: 'nodejs', lessonCount: 25, groupCount: 12 },
+      { id: 'python', lessonCount: 20, groupCount: 7 },
       { id: 'vue', lessonCount: 38, groupCount: 15 },
       { id: 'react', lessonCount: 35, groupCount: 22 },
       { id: 'langchain', lessonCount: 23, groupCount: 14 },

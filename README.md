@@ -8,7 +8,7 @@
 
 ## 特性
 
-- **数百个独立内容**，覆盖 20 个软件技术知识分类
+- **数百个独立内容**，覆盖 21 个软件技术知识分类
 - **交互式演示** — 每个内容包含可运行的 Demo、关键代码、原理说明、处理流程和注意事项
 - **纯静态部署** — `nuxt generate` 预渲染全部路由，零服务端依赖
 - **类型安全** — 全项目 TypeScript strict mode，Vitest 单元测试覆盖核心逻辑
@@ -39,6 +39,7 @@
 | [Nest.js](https://gzx-miller.github.io/nestjs) | 12 | 4 | 模块化架构、依赖注入、守卫鉴权、管道校验与 TypeORM |
 | [Nuxt](https://gzx-miller.github.io/nuxt) | 20 | 10 | 文件路由、自动导入、SSR/SSG、Nitro 服务端 API 与模块生态 |
 | [Node.js](https://gzx-miller.github.io/nodejs) | 25 | 12 | 运行时与模块、文件与事件、流与网络、进程与并发、可靠性与安全依赖 |
+| [Python](https://gzx-miller.github.io/python) | 20 | 7 | 基础入门、数据结构、函数与迭代、面向对象、异常与模块、标准库与进阶能力 |
 | [Tailwind CSS](https://gzx-miller.github.io/tailwind-css) | 24 | 12 | v4 CSS-first、响应式变体、主题令牌、暗色模式与容器查询 |
 | [Vite](https://gzx-miller.github.io/vite) | 21 | 10 | 配置、插件、HMR、依赖预构建、构建优化、库模式与 SSR |
 | [React](https://gzx-miller.github.io/react) | 35 | 22 | Hooks、并发渲染、错误边界、逻辑复用、状态集成与性能优化 |
