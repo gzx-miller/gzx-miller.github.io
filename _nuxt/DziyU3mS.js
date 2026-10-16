@@ -1,0 +1,133 @@
+const n=`// vite.config.ts - esbuild 配置
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+
+export default defineConfig({
+  plugins: [vue()],
+  
+  // esbuild 配置（同时影响开发和构建）
+  esbuild: {
+    // 目标环境
+    target: 'es2020',
+    // 等价于: ['es2020', 'chrome80', 'safari14', 'firefox72']
+    
+    // 支持的平台: 'browser' | 'node' | 'neutral'
+    platform: 'browser',
+    
+    // 是否启用 JSX 自动转换
+    jsxFactory: 'h',
+    jsxFragment: 'Fragment',
+    jsxInject: "import { h, Fragment } from 'vue'",
+    
+    // 构建时移除特定代码
+    // drop: ['console', 'debugger'],
+    
+    // 保留所有注释
+    // legalComments: 'none' | 'inline' | 'end-of-file' | 'external'
+  },
+  
+  // 开发环境下的 esbuild 配置
+  optimizeDeps: {
+    esbuildOptions: {
+      target: 'es2020',
+      // 预构建时的 esbuild 插件
+      plugins: []
+    }
+  }
+})
+
+// ====================
+// TypeScript 转换流程
+// ====================
+
+// 开发环境:
+// .ts 文件请求 → esbuild 转译（移除类型）→ 浏览器执行
+// 特点: 极快（Go 编写），不做类型检查
+
+// 构建环境:
+// .ts 文件 → Rollup (esbuild 转译) → 打包 → 输出
+// 类型检查: 由 vue-tsc / tsc 单独负责
+
+// 输入:
+// interface User {
+//   name: string
+//   age: number
+// }
+// 
+// function greet(user: User): string {
+//   return \`Hello, \${user.name}!\`
+// }
+
+// 输出 (esbuild 转译后):
+// function greet(user) {
+//   return \`Hello, \${user.name}!\`
+// }
+
+// ====================
+// JSX 转换示例
+// ====================
+
+// 输入 (TSX):
+// const element = <div className="app">Hello</div>
+
+// 输出 (经典模式):
+// const element = React.createElement("div", { className: "app" }, "Hello")
+
+// 输出 (自动转换模式):
+// import { jsx as _jsx } from "react/jsx-runtime"
+// const element = _jsx("div", { className: "app", children: "Hello" })
+
+// Vue JSX 配置:
+// esbuild: {
+//   jsxFactory: 'h',
+//   jsxFragment: 'Fragment'
+// }
+
+// ====================
+// esbuild 不支持的 TypeScript 特性
+// ====================
+
+// 1. const enum（需要配置 preserveValueImports）
+// 2. export = / import = (CommonJS 风格)
+// 3. 装饰器的 emitDecoratorMetadata
+// 4. 某些严格模式下的检查（类型检查阶段做）
+
+// 解决方案:
+// 1. 使用普通 enum 代替 const enum
+// 2. 使用 ES Module 语法
+// 3. 装饰器用 Babel 插件或其他工具
+// 4. 类型检查交给 vue-tsc
+
+// ====================
+// 手动使用 esbuild（API 示例）
+// ====================
+
+import * as esbuild from 'esbuild'
+
+// 转换 TypeScript
+async function transformTS(code: string) {
+  const result = await esbuild.transform(code, {
+    loader: 'ts',
+    target: 'es2020'
+  })
+  return result.code
+}
+
+// 转换 JSX
+async function transformJSX(code: string) {
+  const result = await esbuild.transform(code, {
+    loader: 'tsx',
+    jsxFactory: 'h',
+    jsxFragment: 'Fragment'
+  })
+  return result.code
+}
+
+// 构建
+await esbuild.build({
+  entryPoints: ['src/main.ts'],
+  bundle: true,
+  outfile: 'dist/bundle.js',
+  minify: true,
+  target: 'es2020'
+})`;export{n as default};

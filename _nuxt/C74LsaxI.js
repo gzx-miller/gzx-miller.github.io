@@ -1,0 +1,53 @@
+const n=`// Vite 开发服务器启动示例
+import { createServer } from 'vite'
+
+async function startDevServer() {
+  // 创建 Vite 开发服务器
+  const server = await createServer({
+    root: process.cwd(),
+    server: {
+      port: 5173,
+      open: true
+    }
+  })
+  
+  // 启动服务器
+  await server.listen()
+  
+  // 打印服务器地址
+  server.printUrls()
+}
+
+startDevServer()
+
+// ====================
+// 原生 ESM 导入示例
+// ====================
+
+// 浏览器直接通过 ESM 加载模块，无需打包
+import { ref } from '/node_modules/.vite/deps/vue.js'
+import App from './src/App.vue'
+
+// Vite 对 Vue SFC 的即时编译
+// 请求 /src/App.vue → Vite 即时编译 → 返回 JS 模块
+
+// ====================
+// 生产构建示例
+// ====================
+
+import { build } from 'vite'
+
+async function buildForProduction() {
+  // 基于 Rollup 的生产构建
+  const result = await build({
+    root: process.cwd(),
+    build: {
+      outDir: 'dist',
+      sourcemap: true
+    }
+  })
+  
+  console.log('构建完成:', result)
+}
+
+buildForProduction()`;export{n as default};

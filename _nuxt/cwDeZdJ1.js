@@ -1,0 +1,17 @@
+const n=`# 查看 FFmpeg 版本
+ffmpeg -version
+
+# 查看媒体文件信息
+ffprobe -v error -show_format -show_streams input.mp4
+
+# 最简单的格式转换（重新编码）
+ffmpeg -i input.mp4 output.avi
+
+# 快速转封装（不重新编码）
+ffmpeg -i input.mp4 -c copy output.mkv
+
+# 查看支持的编码器
+ffmpeg -encoders | grep 264
+
+# 查看支持的滤镜
+ffmpeg -filters | grep scale`;export{n as default};

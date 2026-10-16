@@ -1,0 +1,73 @@
+const n=`// 记忆：短期记忆靠 checkpointer，长期记忆靠 Store
+// 场景：学习助手——会话内记住上下文，跨会话记住学生偏好
+import { StateGraph, Annotation, START, END, MemorySaver, InMemoryStore } from '@langchain/langgraph'
+import { ChatOpenAI } from '@langchain/openai'
+import { HumanMessage, SystemMessage } from '@langchain/core/messages'
+
+const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 })
+
+type AssistantState = {
+  messages: any[]
+  profile: string
+}
+
+// 示例1: 短期记忆——用 checkpointer 按 thread_id 保存会话内的消息历史
+// 同一个 thread_id 的每一次 invoke 都能读到之前的消息
+const checkpointer = new MemorySaver()
+
+async function chatNode(state: AssistantState, runtime: any) {
+  // 示例2: 长期记忆——从 Store 里读学生档案（跨会话、跨 thread）
+  const userId = runtime.configurable?.user_id ?? 'student-01'
+  const saved = await runtime.store.get(['profiles'], userId)
+  const profile = saved?.value?.summary ?? '暂无档案'
+
+  // 示例3: 组装回答——短期消息 + 长期档案一起进入模型上下文
+  const response = await model.invoke([
+    new SystemMessage(\`你是学习助手。学生长期档案：\${profile}\`),
+    ...state.messages,
+  ])
+
+  // 示例4: 从本轮对话里提炼新偏好，写回长期记忆
+  const lastUser = state.messages.at(-1)?.content ?? ''
+  if (String(lastUser).includes('我')) {
+    const merged = \`\${saved?.value?.summary ? saved.value.summary + '；' : ''}用户自述：\${String(lastUser).slice(0, 40)}\`
+    await runtime.store.put(['profiles'], userId, { summary: merged, updatedAt: Date.now() })
+  }
+
+  return { messages: [response] }
+}
+
+const graph = new StateGraph<AssistantState>({
+  channels: {
+    messages: {
+      default: () => [],
+      reducer: (left: any[], right: any[]) => left.concat(right),
+    },
+    profile: null,
+  } as any,
+})
+
+graph.addNode('chat', chatNode)
+graph.addEdge(START, 'chat')
+graph.addEdge('chat', END)
+
+// 示例5: 编译时同时挂上 checkpointer（短期）与 store（长期）
+const app = graph.compile({
+  checkpointer,
+  store: new InMemoryStore(),
+})
+
+// 第一次对话：告诉我姓名
+const config1 = { configurable: { thread_id: 'session-1', user_id: 'student-01' } }
+await app.invoke({ messages: [new HumanMessage('我叫小明，正在学 LangGraph')] }, config1)
+
+// 同一会话再问：短期记忆起效，能接住「我叫什么」
+const follow = await app.invoke({ messages: [new HumanMessage('我叫什么名字？')] }, config1)
+console.log('会话内追问:', follow.messages.at(-1)?.content)
+
+// 示例6: 换一个新会话（thread_id 变了，短期记忆清零）
+// 但长期记忆还在——模型仍能从 Store 里读到小明是谁
+const config2 = { configurable: { thread_id: 'session-2', user_id: 'student-01' } }
+const cross = await app.invoke({ messages: [new HumanMessage('还记得我是谁吗？')] }, config2)
+console.log('跨会话召回:', cross.messages.at(-1)?.content)
+`;export{n as default};

@@ -1,0 +1,11 @@
+const n=`import numpy as np
+
+# 蒸馏：让“学生”小模型去学“教师”大模型输出的概率分布
+# 温度 T 把分布“升温”，让软化标签含有更多暗知识，
+# 即非正确答案之间的相对高下也被当作“软标签”传给学生
+def softmax_t(logits, T):
+    e = np.exp(np.array(logits) / T - np.max(np.array(logits) / T))
+    return e / e.sum()
+
+# 损失 = alpha*KL(学生(T=T) vs 教师(T=T)) + (1-alpha)*交叉熵(学生T=1 vs 硬标签)
+# 局限：学生通常翻不过教师，蒸馏补的是“压缩部署”，不是超越`;export{n as default};

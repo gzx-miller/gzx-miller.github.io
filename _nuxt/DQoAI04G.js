@@ -1,0 +1,107 @@
+const n=`// vite.config.ts - 依赖预构建详细配置
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+
+export default defineConfig({
+  plugins: [vue()],
+  optimizeDeps: {
+    // 强制预构建的依赖
+    include: [
+      // 完整的包
+      'lodash-es',
+      'dayjs',
+      // 子模块（如果未被自动发现）
+      'lodash-es/debounce',
+      'lodash-es/throttle',
+      // 作用域包
+      '@vueuse/core',
+      // monorepo 内部包
+      '@my-org/utils'
+    ],
+    
+    // 排除不预构建的依赖
+    exclude: [
+      // Vue 插件通常不需要预构建
+      'vue-demi',
+      // 纯 ESM 且模块少的包
+      'nanoid'
+    ],
+    
+    // esbuild 转换选项
+    esbuildOptions: {
+      // 目标环境
+      target: 'es2020',
+      // 支持的平台
+      platform: 'browser',
+      // 插件
+      plugins: [
+        // 自定义 esbuild 插件
+      ]
+    },
+    
+    // 是否强制重新预构建（忽略缓存）
+    force: false,
+    
+    // 预构建的入口文件
+    entries: ['index.html']
+  }
+})
+
+// ====================
+// 缓存机制详解
+// ====================
+
+// 缓存位置:
+// Linux/Mac:  node_modules/.vite/deps/
+// Windows:    node_modules\\.vite\\deps\\
+
+// 缓存文件:
+// - vue.js              # 预构建后的 Vue
+// - vue.js.map          # sourcemap
+// - _metadata.json      # 元数据（依赖列表、hash 等）
+
+// 缓存失效条件:
+// 1. package.json 的 dependencies 变化
+// 2. 包管理器 lockfile 变化 (package-lock.json / yarn.lock / pnpm-lock.yaml)
+// 3. vite.config.ts 中 optimizeDeps 配置变化
+// 4. VITE_ 前缀的环境变量变化（如果配置文件用到了）
+// 5. NODE_ENV 变化
+// 6. force: true 或 vite --force
+
+// ====================
+// 手动控制缓存
+// ====================
+
+// 清除缓存并强制重新构建:
+// 1. 删除目录: rm -rf node_modules/.vite
+// 2. 启动参数: vite --force
+// 3. 配置选项: optimizeDeps.force = true
+
+// 缓存预热（开发服务器启动时）:
+// server.warmup 可以提前转换常用模块
+
+// ====================
+// 常见问题与解决方案
+// ====================
+
+// 问题 1: 某个包找不到（动态 import 的依赖）
+// 解决: 手动添加到 include
+optimizeDeps: {
+  include: ['some-dynamic-dep']
+}
+
+// 问题 2: CommonJS 包报错
+// 解决: esbuild 通常能自动转换，如不行则:
+optimizeDeps: {
+  include: ['problematic-cjs-package']
+}
+
+// 问题 3: 启动太慢
+// 解决:
+// 1. 确保缓存有效
+// 2. 减少 include 中的包
+// 3. 升级 esbuild
+// 4. 使用 SSD
+
+// 问题 4: 依赖更新后没生效
+// 解决: 删除缓存或使用 --force 重新构建`;export{n as default};

@@ -1,0 +1,17 @@
+const p=`# 调整音量（减半）
+ffmpeg -i input.mp4 -af "volume=0.5" -c:v copy output.mp4
+
+# 调整音量（+3 dB）
+ffmpeg -i input.mp4 -af "volume=3dB" -c:v copy output.mp4
+
+# EBU R128 响度标准化（网络视频 -16 LUFS）
+ffmpeg -i input.mp4 -af "loudnorm=I=-16:TP=-1.5:LRA=11" -c:v copy output.mp4
+
+# 广播响度标准（-24 LUFS）
+ffmpeg -i input.mp4 -af "loudnorm=I=-24:TP=-2:LRA=7" -c:v copy output_broadcast.mp4
+
+# 静音检测
+ffmpeg -i input.mp4 -af silencedetect=noise=-30dB:d=0.5 -f null -
+
+# 检测音频峰值（防止削波）
+ffprobe -f lavfi -i "amovie=input.mp4,volumedetect" -f null -`;export{p as default};

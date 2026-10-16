@@ -1,0 +1,112 @@
+const n=`// ═══════════════════════════════════════════
+// 1. map：红黑树有序键值、operator[] 会插入
+// ═══════════════════════════════════════════
+
+#include <iostream>
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <functional>
+#include <string>
+
+void mapDemo() {
+    std::map<std::string, int> ages;
+    ages["Alice"] = 25;                       // 键不存在 → 先插入 {Alice, 0} 再赋值
+    ages["Bob"] = 30;
+    std::cout << ages.size() << std::endl;    // 2
+
+    if (ages.find("Carol") == ages.end()) {   // find 只查，不插入
+        std::cout << "no Carol" << std::endl; // 输出 no Carol
+    }
+    // 只读请用 at()（越界抛 out_of_range）或 find()；operator[] 会悄悄插入默认值
+
+    for (const auto& [name, age] : ages) {    // 结构化绑定，遍历按键升序
+        std::cout << name << "=" << age << " ";   // Alice=25 Bob=30
+    }
+    std::cout << std::endl;
+}
+
+// ═══════════════════════════════════════════
+// 2. set：有序、去重的红黑树集合
+// ═══════════════════════════════════════════
+
+void setDemo() {
+    std::set<int> s{5, 2, 8, 1, 2};          // 重复的 2 被丢弃
+    s.insert(3);
+    for (int x : s) std::cout << x << " ";   // 升序输出：1 2 3 5 8
+    std::cout << std::endl;
+    std::cout << s.count(2) << " " << s.count(9) << std::endl;   // 1 0
+}
+
+// ═══════════════════════════════════════════
+// 3. multimap / multiset：允许重复键
+// ═══════════════════════════════════════════
+
+void multiDemo() {
+    std::multiset<int> ms{1, 2, 2, 3};       // 允许重复，故没有 operator[]
+    std::cout << ms.count(2) << std::endl;   // 2
+    auto range = ms.equal_range(2);          // [first, last) 覆盖所有 2
+    for (auto it = range.first; it != range.second; ++it)
+        std::cout << *it << " ";             // 2 2
+    std::cout << std::endl;
+}
+
+// ═══════════════════════════════════════════
+// 4. unordered_map：哈希、平均 O(1)、顺序不定
+// ═══════════════════════════════════════════
+
+void unorderedDemo() {
+    std::unordered_map<std::string, int> stock;
+    stock["pen"] = 100;
+    stock["book"] = 20;
+    stock.reserve(16);                       // 预留桶，减少 rehash
+    std::cout << stock["pen"] << std::endl;  // 100
+    std::cout << stock.bucket_count() << std::endl;   // 桶数 ≥ 16
+    // 遍历顺序未指定，不能假设按 pen/book 的字典序
+}
+
+// ═══════════════════════════════════════════
+// 5. 自定义比较与哈希：让自定义类型可作键
+// ═══════════════════════════════════════════
+
+struct User {
+    int id;
+    std::string name;
+};
+
+struct UserById {                    // 有序容器所需：严格弱序比较器
+    bool operator()(const User& a, const User& b) const { return a.id < b.id; }
+};
+
+struct UserHash {                    // 无序容器所需：哈希函数
+    std::size_t operator()(const User& u) const {
+        return std::hash<int>{}(u.id);       // 复用标准 int 哈希
+    }
+};
+
+struct UserEqual {                   // 无序容器所需：相等判断，须与哈希一致
+    bool operator()(const User& a, const User& b) const { return a.id == b.id; }
+};
+
+void customKeyDemo() {
+    std::set<User, UserById> orderedUsers;                      // 按 id 排序、去重
+    std::unordered_map<User, int, UserHash, UserEqual> table;   // 哈希 + 相等比较
+    orderedUsers.insert(User{2, "Bob"});
+    orderedUsers.insert(User{1, "Alice"});
+    table[User{1, "Alice"}] = 90;                               // 需要 hash/equal 才能存
+    std::cout << orderedUsers.begin()->name << std::endl;       // Alice（id 最小排在前）
+}
+
+// ═══════════════════════════════════════════
+// 6. 汇总调用
+// ═══════════════════════════════════════════
+
+int main() {
+    mapDemo();
+    setDemo();
+    multiDemo();
+    unorderedDemo();
+    customKeyDemo();
+    return 0;
+}
+`;export{n as default};

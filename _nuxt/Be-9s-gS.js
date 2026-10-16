@@ -1,0 +1,81 @@
+const n=`// ═══════════════════════════════════════════
+// 1. vector：连续内存与自动扩容
+// ═══════════════════════════════════════════
+
+#include <iostream>
+#include <vector>
+#include <deque>
+#include <list>
+#include <array>
+#include <iterator>
+#include <string>
+
+void vectorDemo() {
+    std::vector<int> v{1, 2, 3};
+    v.push_back(4);                                    // 尾插，均摊 O(1)
+    v.insert(v.begin() + 1, 99);                       // 中间插入 O(n) → 1 99 2 3 4
+    v[0] = 10;                                         // operator[] 不做边界检查
+    std::cout << v.at(1) << std::endl;                 // at 带边界检查，输出 99
+    std::cout << v.size() << " " << v.capacity() << std::endl;   // size ≤ capacity
+    // 若 push_back 触发扩容，capacity 成倍增长，所有迭代器/指针/引用失效
+}
+
+// ═══════════════════════════════════════════
+// 2. deque：双端 O(1) 与分页存储
+// ═══════════════════════════════════════════
+
+void dequeDemo() {
+    std::deque<int> dq;
+    dq.push_back(2);                    // 尾部 O(1)
+    dq.push_front(1);                   // 头部 O(1)
+    dq.push_front(0);                   // 结果 0 1 2
+    std::cout << dq[0] << dq[2] << std::endl;    // 02，仍支持随机访问
+}
+
+// ═══════════════════════════════════════════
+// 3. list 与 array：链表与固定数组
+// ═══════════════════════════════════════════
+
+void listDemo() {
+    std::list<int> lst{1, 2, 3};
+    lst.push_front(0);                          // 头部 O(1)，不移动其它元素
+    lst.insert(std::next(lst.begin()), 99);     // 中间插入 O(1) → 0 1 99 2 3
+    std::cout << lst.size() << std::endl;       // 5，但不支持随机访问
+}
+
+void arrayDemo() {
+    std::array<int, 3> a{1, 2, 3};      // 大小编译期固定，无堆分配、零额外开销
+    std::cout << a.size() << std::endl; // 3
+    std::cout << a.at(1) << std::endl;  // 2，带边界检查
+}
+
+// ═══════════════════════════════════════════
+// 4. emplace_back 与 push_back 的差异
+// ═══════════════════════════════════════════
+
+struct Item {
+    std::string name;
+    int qty;
+    Item(std::string n, int q) : name(std::move(n)), qty(q) {}
+};
+
+void emplaceDemo() {
+    std::vector<Item> cart;
+    cart.push_back(Item("苹果", 3));       // 先构造临时对象，再移动进容器
+    cart.emplace_back("梨", 2);            // 参数完美转发，就地构造，少一次移动
+    std::cout << cart.back().name << std::endl;   // 梨
+}
+
+// ═══════════════════════════════════════════
+// 5. 汇总调用
+// ═══════════════════════════════════════════
+
+int main() {
+    vectorDemo();
+    dequeDemo();
+    listDemo();
+    arrayDemo();
+    emplaceDemo();
+    return 0;
+}
+`;export{n as default};

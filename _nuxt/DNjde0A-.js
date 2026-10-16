@@ -1,0 +1,77 @@
+const n=`// 上下文工程：分清 State、Store 与 Runtime 三种上下文
+// 场景：课程推荐智能体——图内状态、跨会话记忆、运行时注入三层分工
+import { StateGraph, Annotation, START, END, InMemoryStore } from '@langchain/langgraph'
+import { ChatOpenAI } from '@langchain/openai'
+import { createMiddleware } from 'langchain'
+import { HumanMessage, SystemMessage } from '@langchain/core/messages'
+import { z } from 'zod'
+
+const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 })
+
+// 示例1: 第一层——State 是「图内状态」：跟着这次运行走，节点间共享读写
+const RecState = Annotation.Root({
+  query: Annotation<string>,
+  answer: Annotation<string>,
+  logs: Annotation<string[]>({
+    reducer: (left, right) => left.concat(right),
+    default: () => [],
+  }),
+})
+
+// 示例2: 第二层——Context 是「运行时配置」：外部注入、节点只读
+// 用 Zod 声明上下文结构，invoke 时通过 context 传入
+const ContextSchema = z.object({
+  grade: z.enum(['beginner', 'advanced']).describe('学生水平，决定内容深度'),
+  locale: z.string().default('zh-CN'),
+})
+
+// 示例3: 第三层——Store 是「跨会话长期数据」：不受 thread 限制
+async function recommendNode(state: typeof RecState.State, runtime: any) {
+  // 从运行时上下文读取注入参数
+  const { grade } = runtime.context
+  // 从 Store 读取长期偏好
+  const history = await runtime.store.get(['learning', 'student-01'], 'viewed')
+  const viewed = history?.value?.topics?.join('、') || '无'
+
+  const response = await model.invoke([
+    new SystemMessage(\`学生水平：\${grade}；最近浏览：\${viewed}\`),
+    new HumanMessage(state.query),
+  ])
+
+  return { answer: response.content, logs: [\`按 \${grade} 难度推荐，参考浏览记录（\${viewed}）\`] }
+}
+
+const graph = new StateGraph(RecState)
+  .addNode('recommend', recommendNode)
+  .addEdge(START, 'recommend')
+  .addEdge('recommend', END)
+
+const store = new InMemoryStore()
+const app = graph.compile({ store })
+
+// 示例4: invoke 时同时传入「图输入」和「运行时上下文」，两者互不干扰
+await store.put(['learning', 'student-01'], 'viewed', { topics: ['组合式 API', '响应式原理'] })
+
+const result = await app.invoke(
+  { query: '接下来该学什么？' },
+  { context: { grade: 'beginner', locale: 'zh-CN' } },
+)
+console.log('推荐:', result.answer)
+console.log('过程日志:', result.logs)
+
+// 示例5: 中间件同样能读到 context——用它给模型动态注入系统提示
+const contextualPrompt = createMiddleware({
+  name: 'ContextualSystemPrompt',
+  wrapModelCall: async (request, handler) => {
+    const grade = (request.runtime.context as any)?.grade ?? 'beginner'
+    const system = new SystemMessage(\`当前学生水平：\${grade}。请据此调整讲解深度。\`)
+    return handler({ ...request, systemPrompt: system })
+  },
+})
+
+// 示例6: 三层上下文的分工口诀
+// State   —— 单次运行的共享白板：临时结果、流程数据
+// Context —— 每次调用的注入参数：用户身份、环境配置，节点只读
+// Store   —— 跨运行的长期档案：偏好、历史，可读可写可检索
+console.log('State 管一次运行，Context 管一次调用，Store 管长期记忆')
+`;export{n as default};

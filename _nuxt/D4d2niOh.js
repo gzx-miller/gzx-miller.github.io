@@ -1,0 +1,31 @@
+const n=`<template>
+  <view class="box">
+    <view class="half">宽 375rpx（占屏宽一半）</view>
+    <view class="full">宽 750rpx（占满屏宽）</view>
+    <view class="hairline">1px 物理细边框</view>
+  </view>
+</template>
+
+<script>
+export default {
+  onReady() {
+    // 把 rpx 转成当前设备实际 px，便于动态计算
+    const px = uni.upx2px(375)
+    console.log('375rpx =', px, 'px')
+  },
+}
+<\/script>
+
+<style scoped>
+.half {
+  width: 375rpx;
+  background: #ffe6c0;
+}
+.full {
+  width: 750rpx;
+  background: #f6c15a;
+}
+.hairline {
+  border: 1px solid #b7431f;
+}
+</style>`;export{n as default};

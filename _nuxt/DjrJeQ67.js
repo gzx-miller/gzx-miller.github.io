@@ -1,0 +1,131 @@
+const n=`// 基础 Server Action - 表单提交
+// app/actions.ts
+'use server'
+
+import { revalidatePath } from 'next/cache'
+
+// 声明为服务端函数
+export async function createPost(formData: FormData) {
+  // 这里的代码只在服务端运行
+  const title = formData.get('title') as string
+  const content = formData.get('content') as string
+
+  // 可以直接操作数据库
+  // await db.posts.create({ data: { title, content } })
+
+  console.log('创建文章:', title)
+
+  // 重新验证缓存，让页面显示最新数据
+  revalidatePath('/blog')
+}
+
+// ============================================
+
+// 表单中使用 Server Action
+// app/blog/page.tsx
+import { createPost } from './actions'
+
+export default function BlogPage() {
+  return (
+    <div>
+      <h1>写文章</h1>
+      {/* form action 直接绑定 Server Action */}
+      <form action={createPost}>
+        <input type="text" name="title" placeholder="标题" required />
+        <textarea name="content" placeholder="内容" required />
+        <button type="submit">发布</button>
+      </form>
+    </div>
+  )
+}
+
+// ============================================
+
+// useFormState - 跟踪返回值
+// app/components/PostForm.tsx
+'use client'
+
+import { useFormState } from 'react-dom'
+import { createPost } from '../actions'
+
+const initialState = { message: '', errors: {} }
+
+export function PostForm() {
+  const [state, formAction] = useFormState(createPost, initialState)
+
+  return (
+    <form action={formAction}>
+      <input name="title" />
+      {state.errors?.title && <p>{state.errors.title}</p>}
+
+      <textarea name="content" />
+      <button type="submit">发布</button>
+
+      {state.message && <p>{state.message}</p>}
+    </form>
+  )
+}
+
+// ============================================
+
+// useFormStatus - 跟踪提交状态
+// app/components/SubmitButton.tsx
+'use client'
+
+import { useFormStatus } from 'react-dom'
+
+export function SubmitButton({ children }: { children: React.ReactNode }) {
+  const { pending } = useFormStatus()
+
+  return (
+    <button type="submit" disabled={pending}>
+      {pending ? '提交中...' : children}
+    </button>
+  )
+}
+
+// ============================================
+
+// useOptimistic - 乐观更新
+// app/components/LikeButton.tsx
+'use client'
+
+import { useOptimistic } from 'react'
+import { likePost } from '../actions'
+
+type Post = { id: string; likes: number }
+
+export function LikeButton({ post }: { post: Post }) {
+  const [optimisticPost, addOptimisticLike] = useOptimistic(
+    post,
+    (state) => ({ ...state, likes: state.likes + 1 })
+  )
+
+  async function handleLike() {
+    addOptimisticLike()
+    await likePost(post.id)
+  }
+
+  return (
+    <button onClick={handleLike}>
+      ♥ {optimisticPost.likes}
+    </button>
+  )
+}
+
+// ============================================
+
+// 编程式调用 Server Action
+'use client'
+
+import { updateUser } from './actions'
+
+export function UserProfile() {
+  async function handleClick() {
+    // 直接调用，不需要 form
+    const result = await updateUser({ name: '新名字' })
+    console.log(result)
+  }
+
+  return <button onClick={handleClick}>更新资料</button>
+}`;export{n as default};

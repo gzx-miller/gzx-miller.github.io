@@ -1,0 +1,4 @@
+const e=`<script setup lang="ts">import { computed, ref } from 'vue'; const files = ref(120); const matched = computed(() => Math.round(files.value * .62))<\/script>
+<template><div class="demo-card prod-demo"><label>扫描文件 {{ files }} <input v-model.number="files" type="range" min="20" max="300" step="10"></label><div class="meter"><i :style="{ width: \`\${matched / files * 100}%\` }"></i></div><p>发现候选源 {{ matched }} 个；生成 CSS 只包含被检测到的工具。</p><code>@source "../shared-ui";　@source not "../legacy";</code><small>生产优化依赖静态候选检测、正确的源路径和压缩。不要用巨型 safelist 掩盖动态类名设计问题。</small></div></template>
+<style scoped>label{display:flex;gap:.6rem}.meter{height:10px;margin:1rem 0;border-radius:9px;background:#ead7be;overflow:hidden}.meter i{display:block;height:100%;background:#c65328}.prod-demo>code{font-size:.72rem}</style>
+`;export{e as default};

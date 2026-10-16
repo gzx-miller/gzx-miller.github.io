@@ -1,0 +1,16 @@
+const t=`@import "tailwindcss";
+
+@utility content-auto {
+  content-visibility: auto;
+}
+
+@utility tab-* {
+  tab-size: --value(integer);
+}
+
+@layer components {
+  .course-card { border-radius: var(--radius-xl); }
+}
+
+/* @utility 生成的工具可继续使用 hover:、md: 等变体。 */
+`;export{t as default};

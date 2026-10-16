@@ -1,0 +1,208 @@
+const n=`// 目录结构：
+// app/
+//   [lang]/
+//     layout.tsx
+//     page.tsx
+//     about/
+//       page.tsx
+// middleware.ts
+// i18n/
+//   config.ts
+//   dictionaries/
+//     zh.json
+//     en.json
+
+// ============================================
+
+// i18n/config.ts - 语言配置
+export const i18n = {
+  defaultLocale: 'zh',
+  locales: ['zh', 'en', 'ja'],
+} as const
+
+export type Locale = typeof i18n.locales[number]
+
+// ============================================
+
+// i18n/dictionaries/zh.json
+{
+  "home": {
+    "title": "欢迎来到我们的网站",
+    "description": "这是一个 Next.js 多语言示例"
+  },
+  "nav": {
+    "home": "首页",
+    "about": "关于",
+    "contact": "联系我们"
+  }
+}
+
+// i18n/dictionaries/en.json
+{
+  "home": {
+    "title": "Welcome to our website",
+    "description": "This is a Next.js i18n example"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact"
+  }
+}
+
+// ============================================
+
+// i18n/get-dictionary.ts - 字典加载
+import 'server-only'
+import type { Locale } from './config'
+
+const dictionaries = {
+  zh: () => import('./dictionaries/zh.json').then(m => m.default),
+  en: () => import('./dictionaries/en.json').then(m => m.default),
+  ja: () => import('./dictionaries/ja.json').then(m => m.default),
+}
+
+export const getDictionary = async (locale: Locale) => {
+  return dictionaries[locale]?.() ?? dictionaries.zh()
+}
+
+// ============================================
+
+// app/[lang]/layout.tsx - 布局
+import type { Metadata } from 'next'
+import { i18n } from '@/i18n/config'
+
+export async function generateStaticParams() {
+  return i18n.locales.map(locale => ({ lang: locale }))
+}
+
+export default function RootLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode
+  params: { lang: string }
+}) {
+  return (
+    <html lang={params.lang}>
+      <body>{children}</body>
+    </html>
+  )
+}
+
+// 动态 metadata
+export async function generateMetadata({
+  params,
+}: {
+  params: { lang: string }
+}): Promise<Metadata> {
+  const titles: Record<string, string> = {
+    zh: '我的网站',
+    en: 'My Website',
+    ja: '私のウェブサイト',
+  }
+
+  return {
+    title: titles[params.lang] || titles.zh,
+  }
+}
+
+// ============================================
+
+// app/[lang]/page.tsx - 首页
+import { getDictionary } from '@/i18n/get-dictionary'
+import { Locale } from '@/i18n/config'
+
+export default async function HomePage({
+  params,
+}: {
+  params: { lang: Locale }
+}) {
+  const dict = await getDictionary(params.lang)
+
+  return (
+    <main>
+      <h1>{dict.home.title}</h1>
+      <p>{dict.home.description}</p>
+    </main>
+  )
+}
+
+// ============================================
+
+// Client Component 中使用翻译
+// app/[lang]/components/LanguageSwitcher.tsx
+'use client'
+
+import { usePathname, useRouter } from 'next/navigation'
+import { i18n } from '@/i18n/config'
+
+export function LanguageSwitcher() {
+  const router = useRouter()
+  const pathname = usePathname()
+
+  function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    const newLang = e.target.value
+    // 替换路径中的语言前缀
+    const segments = pathname.split('/')
+    segments[1] = newLang
+    router.push(segments.join('/'))
+  }
+
+  return (
+    <select onChange={handleChange} defaultValue={pathname.split('/')[1]}>
+      {i18n.locales.map(locale => (
+        <option key={locale} value={locale}>
+          {locale === 'zh' ? '中文' : locale === 'en' ? 'English' : '日本語'}
+        </option>
+      ))}
+    </select>
+  )
+}
+
+// ============================================
+
+// middleware.ts - 自动语言检测
+import { NextResponse, type NextRequest } from 'next/server'
+import { i18n } from './i18n/config'
+
+function getLocale(request: NextRequest): string {
+  // 从 cookie 读取
+  const cookieLocale = request.cookies.get('locale')?.value
+  if (cookieLocale && i18n.locales.includes(cookieLocale as any)) {
+    return cookieLocale
+  }
+
+  // 从 Accept-Language 检测
+  const acceptLanguage = request.headers.get('accept-language')
+  if (acceptLanguage) {
+    const preferred = acceptLanguage.split(',')[0].slice(0, 2)
+    if (i18n.locales.includes(preferred as any)) {
+      return preferred
+    }
+  }
+
+  return i18n.defaultLocale
+}
+
+export function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname
+
+  // 检查路径是否已有 locale
+  const pathnameIsMissingLocale = i18n.locales.every(
+    locale => !pathname.startsWith(\`/\${locale}\`) && pathname !== \`/\${locale}\`
+  )
+
+  if (pathnameIsMissingLocale) {
+    const locale = getLocale(request)
+    return NextResponse.redirect(
+      new URL(\`/\${locale}\${pathname === '/' ? '' : pathname}\`, request.url)
+    )
+  }
+
+  return NextResponse.next()
+}
+
+export const config = {
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+}`;export{n as default};

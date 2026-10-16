@@ -1,0 +1,120 @@
+const n=`// ═══════════════════════════════════════════
+// 1. 基本内置类型与取值范围
+// ═══════════════════════════════════════════
+
+#include <iostream>
+
+int main() {
+    short  s  = 32767;                      // 16 位有符号整数上界
+    int    n  = 2147483647;                 // 通常是 32 位有符号整数上界
+    long long ll = 9223372036854775807LL;   // 64 位有符号整数上界，后缀 LL
+    unsigned int u = 4294967295u;           // 无符号 32 位上界，后缀 u
+    float  f  = 3.14159f;                   // 单精度，约 7 位有效数字
+    double d  = 3.141592653589793;          // 双精度，约 15~16 位有效数字
+    char   c  = 'A';                        // 1 字节，实际存的是编码值 65
+    bool   b  = true;                       // 只取 true 或 false
+
+    std::cout << sizeof(int) << std::endl;  // 结果：4（本平台）
+    std::cout << sizeof(char) << std::endl; // 结果：1
+    return 0;
+}
+
+// ═══════════════════════════════════════════
+// 2. 变量的三种初始化与窄化转换
+// ═══════════════════════════════════════════
+
+int main() {
+    int a = 5;          // 拷贝初始化：传统写法
+    int b(5);           // 直接初始化：圆括号
+    int c{5};           // 列表初始化：花括号，C++11 起
+    int d{};            // 值初始化：空花括号，初值为 0
+    // int bad{3.14};   // 编译错误：窄化转换，double 到 int 被花括号拒绝
+    int ok = 3.14;      // 同样内容用等号初始化：静默截断为 3
+    return 0;
+}
+
+// ═══════════════════════════════════════════
+// 3. const 与 constexpr
+// ═══════════════════════════════════════════
+
+const int kDay = 7;                         // 运行期常量，初始化后不可修改
+
+constexpr int power2(int e) {               // constexpr 函数，可用于编译期求值
+    return 1 << e;
+}
+
+int main() {
+    constexpr int kBits = power2(3);        // 编译期即算出 8
+    int buffer[power2(4)];                   // 结果：数组长度 16，编译期确定
+    const int n = 10;                        // const 只保证不可改，不保证编译期可算
+    return 0;
+}
+
+// ═══════════════════════════════════════════
+// 4. 作用域与生命周期
+// ═══════════════════════════════════════════
+
+int counter = 0;                            // 全局变量，静态存储期，贯穿程序
+
+void tick() {
+    static int calls = 0;                   // 静态局部变量，只初始化一次
+    ++calls;                                // 说明：每次进入 tick 都保留上次的值
+    ++counter;
+}
+
+int main() {
+    int local = 1;                          // 自动存储期，出块即销毁
+    {
+        int local = 2;                      // 内层块作用域，遮蔽外层同名变量
+    }
+    return 0;
+}
+
+// ═══════════════════════════════════════════
+// 5. auto 与 decltype 类型推导
+// ═══════════════════════════════════════════
+
+#include <vector>
+
+int main() {
+    auto x = 5;                             // 推导为 int
+    auto y = 3.14;                          // 推导为 double
+    const int ci = 42;
+    auto z = ci;                            // 推导为 int，顶层 const 被丢弃
+    auto& r = ci;                           // 推导为 const int&，保留 const
+    decltype(ci) w = 7;                     // 推导为 const int，原样保留限定
+    std::vector<int> v{1, 2, 3};
+    auto it = v.begin();                    // 推导为 std::vector<int>::iterator
+    return 0;
+}
+
+// ═══════════════════════════════════════════
+// 6. 标准输入输出与格式控制
+// ═══════════════════════════════════════════
+
+#include <iomanip>
+
+int main() {
+    int age = 0;
+    std::cin >> age;                        // 从标准输入读入一个整数
+    std::cout << "age=" << age << '\\n';     // 输出：age=<读入的值>
+    double pi = 3.14159265;
+    std::cout << std::fixed << std::setprecision(2) << pi << std::endl;  // 结果：3.14
+    if (!(std::cin >> age)) {               // 读入失败时 failbit 置位
+        std::cin.clear();                   // 清除错误状态才能继续读
+    }
+    return 0;
+}
+
+// ═══════════════════════════════════════════
+// 7. 有符号与无符号混用的陷阱
+// ═══════════════════════════════════════════
+
+int main() {
+    unsigned int u = -1;                    // 结果：4294967295，负数按模回绕
+    int s = -1;
+    bool cmp = (s < 0u);                    // 结果：false，比较时 s 被转成无符号
+    for (unsigned i = 5; i >= 0; --i) { }   // 危险：i 永不为负，条件恒真
+    return 0;
+}
+`;export{n as default};

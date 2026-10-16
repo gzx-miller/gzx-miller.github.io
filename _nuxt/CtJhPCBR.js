@@ -1,0 +1,137 @@
+const n=`// 基础用法 - 本地图片
+// app/page.tsx
+import Image from 'next/image'
+import profilePic from './profile.jpg' // 导入本地图片
+
+export default function Page() {
+  return (
+    <div>
+      <h1>我的头像</h1>
+      {/* 本地图片自动获取宽高，防止 CLS */}
+      <Image
+        src={profilePic}
+        alt="头像"
+        // width 和 height 会自动从导入的图片获取
+        placeholder="blur" // 模糊占位
+      />
+    </div>
+  )
+}
+
+// ============================================
+
+// 远程图片 - 需要配置域名白名单
+// next.config.js
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.example.com',
+        pathname: '/photos/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.unsplash.com',
+      },
+    ],
+  },
+}
+
+module.exports = nextConfig
+
+// 使用远程图片
+import Image from 'next/image'
+
+export default function Page() {
+  return (
+    <Image
+      src="https://images.example.com/photos/1.jpg"
+      alt="示例图片"
+      width={800}
+      height={600}
+      sizes="(max-width: 768px) 100vw, 50vw"
+    />
+  )
+}
+
+// ============================================
+
+// fill 属性 - 填充父容器
+import Image from 'next/image'
+
+export default function Page() {
+  return (
+    <div style={{ position: 'relative', width: '100%', height: '400px' }}>
+      <Image
+        src="/hero.jpg"
+        alt="Hero 图片"
+        fill
+        style={{ objectFit: 'cover' }}
+        priority // 首屏关键图片，预加载
+      />
+    </div>
+  )
+}
+
+// ============================================
+
+// 响应式图片 - sizes 属性
+import Image from 'next/image'
+
+export default function PhotoGallery() {
+  return (
+    <div className="photo-grid">
+      <Image
+        src="/photo.jpg"
+        alt="照片"
+        width={1200}
+        height={800}
+        // 告诉浏览器不同视口下图片的显示宽度
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        className="photo"
+      />
+    </div>
+  )
+}
+
+// ============================================
+
+// priority 属性 - 首屏 LCP 图片
+import Image from 'next/image'
+
+export default function HeroSection() {
+  return (
+    <section className="hero">
+      <Image
+        src="/hero-image.jpg"
+        alt="主图"
+        width={1920}
+        height={1080}
+        priority // 优先加载，提升 LCP
+        sizes="100vw"
+      />
+    </section>
+  )
+}
+
+// ============================================
+
+// 占位符
+import Image from 'next/image'
+
+export default function PhotoCard() {
+  return (
+    <Image
+      src="/photo.jpg"
+      alt="照片"
+      width={400}
+      height={300}
+      placeholder="blur" // 低质量模糊占位
+      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRg..." // 可选：自定义 blur 图
+    />
+  )
+}
+
+// 本地图片导入会自动生成 blurDataURL`;export{n as default};
