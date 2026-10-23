@@ -21,7 +21,9 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: false,
     minify: 'esbuild',
-    target: 'es2015'
+    // Vite 7 默认值是 'baseline-widely-available'
+    // 等价于 chrome107 / edge107 / firefox104 / safari16
+    target: 'baseline-widely-available'
   },
   
   // 路径别名

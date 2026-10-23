@@ -40,9 +40,7 @@ const evalResult = await evaluateAnswer(
 )
 console.log('评估结果:\n', evalResult)
 
-// 示例2: 结构化评估输出（Zod Schema）
-import { StructuredOutputParser } from 'langchain/output_parsers'
-
+// 示例2: 结构化评估输出（Zod Schema + withStructuredOutput）
 const evaluationSchema = z.object({
   relevance: z.number().min(1).max(5).describe('相关性评分 1-5'),
   accuracy: z.number().min(1).max(5).describe('准确性评分 1-5'),
@@ -51,7 +49,9 @@ const evaluationSchema = z.object({
   feedback: z.string().describe('评价说明'),
 })
 
-const structuredParser = StructuredOutputParser.fromZodSchema(evaluationSchema)
+const modelWithEvaluation = model.withStructuredOutput(evaluationSchema, {
+  name: 'evaluate_answer_quality',
+})
 
 const structuredEvalPrompt = ChatPromptTemplate.fromTemplate(`
 请评估以下问答对的质量。
@@ -64,11 +64,9 @@ const structuredEvalPrompt = ChatPromptTemplate.fromTemplate(`
 - 相关性：回答与问题的相关程度
 - 准确性：回答内容的事实准确性，与参考答案对比
 - 完整性：回答是否完整覆盖了问题
-
-{format_instructions}
 `)
 
-const structuredEvalChain = structuredEvalPrompt.pipe(model).pipe(structuredParser)
+const structuredEvalChain = structuredEvalPrompt.pipe(modelWithEvaluation)
 
 async function structuredEvaluate(
   question: string,

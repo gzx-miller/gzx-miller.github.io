@@ -75,130 +75,108 @@ const orangeShades = [
 
 const designTokens = [
   { category: '间距', tokens: [
-    { name: 'spacing.0', value: '0px', example: 'p-0' },
-    { name: 'spacing.1', value: '0.25rem (4px)', example: 'p-1' },
-    { name: 'spacing.2', value: '0.5rem (8px)', example: 'p-2' },
-    { name: 'spacing.4', value: '1rem (16px)', example: 'p-4' },
-    { name: 'spacing.8', value: '2rem (32px)', example: 'p-8' },
+    { name: '--spacing × 0', value: '0px', example: 'p-0' },
+    { name: '--spacing × 1', value: '0.25rem (4px)', example: 'p-1' },
+    { name: '--spacing × 2', value: '0.5rem (8px)', example: 'p-2' },
+    { name: '--spacing × 4', value: '1rem (16px)', example: 'p-4' },
+    { name: '--spacing × 8', value: '2rem (32px)', example: 'p-8' },
   ]},
   { category: '字号', tokens: [
-    { name: 'fontSize.xs', value: '0.75rem (12px)', example: 'text-xs' },
-    { name: 'fontSize.sm', value: '0.875rem (14px)', example: 'text-sm' },
-    { name: 'fontSize.base', value: '1rem (16px)', example: 'text-base' },
-    { name: 'fontSize.lg', value: '1.125rem (18px)', example: 'text-lg' },
-    { name: 'fontSize.xl', value: '1.25rem (20px)', example: 'text-xl' },
+    { name: '--text-xs', value: '0.75rem (12px)', example: 'text-xs' },
+    { name: '--text-sm', value: '0.875rem (14px)', example: 'text-sm' },
+    { name: '--text-base', value: '1rem (16px)', example: 'text-base' },
+    { name: '--text-lg', value: '1.125rem (18px)', example: 'text-lg' },
+    { name: '--text-xl', value: '1.25rem (20px)', example: 'text-xl' },
   ]},
   { category: '圆角', tokens: [
-    { name: 'borderRadius.sm', value: '0.25rem (4px)', example: 'rounded-sm' },
-    { name: 'borderRadius.md', value: '0.375rem (6px)', example: 'rounded-md' },
-    { name: 'borderRadius.lg', value: '0.5rem (8px)', example: 'rounded-lg' },
-    { name: 'borderRadius.xl', value: '0.75rem (12px)', example: 'rounded-xl' },
-    { name: 'borderRadius.full', value: '9999px', example: 'rounded-full' },
+    { name: '--radius-sm', value: '0.25rem (4px)', example: 'rounded-sm' },
+    { name: '--radius-md', value: '0.375rem (6px)', example: 'rounded-md' },
+    { name: '--radius-lg', value: '0.5rem (8px)', example: 'rounded-lg' },
+    { name: '--radius-xl', value: '0.75rem (12px)', example: 'rounded-xl' },
+    { name: '--radius-full', value: '9999px', example: 'rounded-full' },
   ]},
   { category: '阴影', tokens: [
-    { name: 'boxShadow.sm', value: '0 1px 2px rgb(0 0 0 / 0.05)', example: 'shadow-sm' },
-    { name: 'boxShadow.md', value: '0 4px 6px -1px rgb(0 0 0 / 0.1)', example: 'shadow-md' },
-    { name: 'boxShadow.lg', value: '0 10px 15px -3px rgb(0 0 0 / 0.1)', example: 'shadow-lg' },
-    { name: 'boxShadow.xl', value: '0 20px 25px -5px rgb(0 0 0 / 0.1)', example: 'shadow-xl' },
+    { name: '--shadow-sm', value: '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)', example: 'shadow-sm' },
+    { name: '--shadow-md', value: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)', example: 'shadow-md' },
+    { name: '--shadow-lg', value: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)', example: 'shadow-lg' },
+    { name: '--shadow-xl', value: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)', example: 'shadow-xl' },
   ]},
 ]
 
-const presetCode = `/** @type {import('tailwindcss').Config} */
-module.exports = {
-  <span style="color:#7c7c99">// 扩展预设主题</span>
-  theme: {
-    extend: {
-      <span style="color:#7c7c99">// 自定义颜色</span>
-      colors: {
-        <span style="color:#8a8a3a">autumn</span>: {
-          50: <span style="color:#a31414">'#fff7ed'</span>,
-          100: <span style="color:#a31414">'#ffedd5'</span>,
-          200: <span style="color:#a31414">'#fed7aa'</span>,
-          300: <span style="color:#a31414">'#fdba74'</span>,
-          400: <span style="color:#a31414">'#fb923c'</span>,
-          500: <span style="color:#a31414">'#f97316'</span>,
-          600: <span style="color:#a31414">'#ea580c'</span>,
-          700: <span style="color:#a31414">'#c2410c'</span>,
-          800: <span style="color:#a31414">'#9a3412'</span>,
-          900: <span style="color:#a31414">'#7c2d12'</span>,
-        },
-        <span style="color:#8a8a3a">forest</span>: <span style="color:#a31414">'#166534'</span>,
-      },
+const presetCode = `<span style="color:#7c7c99">/* app.css：v4 用 @theme 定义令牌 */</span>
+@import "tailwindcss";
 
-      <span style="color:#7c7c99">// 自定义字体</span>
-      fontFamily: {
-        <span style="color:#8a8a3a">sans</span>: [<span style="color:#a31414">'Inter'</span>, <span style="color:#a31414">'system-ui'</span>, <span style="color:#a31414">'sans-serif'</span>],
-        <span style="color:#8a8a3a">serif</span>: [<span style="color:#a31414">'Merriweather'</span>, <span style="color:#a31414">'serif'</span>],
-      },
+@theme {
+  <span style="color:#7c7c99">/* 自定义颜色 */</span>
+  --color-autumn-50: <span style="color:#a31414">#fff7ed</span>;
+  --color-autumn-100: <span style="color:#a31414">#ffedd5</span>;
+  --color-autumn-200: <span style="color:#a31414">#fed7aa</span>;
+  --color-autumn-300: <span style="color:#a31414">#fdba74</span>;
+  --color-autumn-400: <span style="color:#a31414">#fb923c</span>;
+  --color-autumn-500: <span style="color:#a31414">#f97316</span>;
+  --color-autumn-600: <span style="color:#a31414">#ea580c</span>;
+  --color-autumn-700: <span style="color:#a31414">#c2410c</span>;
+  --color-autumn-800: <span style="color:#a31414">#9a3412</span>;
+  --color-autumn-900: <span style="color:#a31414">#7c2d12</span>;
+  --color-forest: <span style="color:#a31414">#166534</span>;
 
-      <span style="color:#7c7c99">// 自定义间距</span>
-      spacing: {
-        <span style="color:#8a8a3a">'128'</span>: <span style="color:#a31414">'32rem'</span>,
-        <span style="color:#8a8a3a">'144'</span>: <span style="color:#a31414">'36rem'</span>,
-      },
+  <span style="color:#7c7c99">/* 自定义字体 */</span>
+  --font-sans: <span style="color:#a31414">"Inter"</span>, <span style="color:#a31414">system-ui</span>, <span style="color:#a31414">sans-serif</span>;
+  --font-serif: <span style="color:#a31414">"Merriweather"</span>, <span style="color:#a31414">serif</span>;
 
-      <span style="color:#7c7c99">// 自定义动画</span>
-      animation: {
-        <span style="color:#8a8a3a">'float'</span>: <span style="color:#a31414">'float 3s ease-in-out infinite'</span>,
-      },
-      keyframes: {
-        float: {
-          <span style="color:#8a8a3a">'0%, 100%'</span>: { transform: <span style="color:#a31414">'translateY(0)'</span> },
-          <span style="color:#8a8a3a">'50%'</span>: { transform: <span style="color:#a31414">'translateY(-10px)'</span> },
-        }
-      }
-    }
+  <span style="color:#7c7c99">/* 自定义间距：命名值生成 p-snug / p-roomy */</span>
+  --spacing-snug: <span style="color:#a31414">0.75rem</span>;
+  --spacing-roomy: <span style="color:#a31414">2rem</span>;
+
+  <span style="color:#7c7c99">/* 自定义动画 */</span>
+  --animate-float: <span style="color:#a31414">float 3s ease-in-out infinite</span>;
+
+  @keyframes float {
+    <span style="color:#8a8a3a">0%, 100%</span> { transform: <span style="color:#a31414">translateY(0)</span>; }
+    <span style="color:#8a8a3a">50%</span> { transform: <span style="color:#a31414">translateY(-10px)</span>; }
   }
 }`
 
-const designSystemCode = `<span style="color:#7c7c99">// 设计系统配置示例</span>
-<span style="color:#7c7c99">// tailwind.config.js</span>
-module.exports = {
-  theme: {
-    extend: {
-      <span style="color:#7c7c99">// 色彩系统</span>
-      colors: {
-        primary: { ... },   <span style="color:#7c7c99">// 主色</span>
-        secondary: { ... }, <span style="color:#7c7c99">// 辅色</span>
-        accent: { ... },    <span style="color:#7c7c99">// 强调色</span>
-        neutral: { ... },   <span style="color:#7c7c99">// 中性色</span>
-        success: { ... },   <span style="color:#7c7c99">// 成功色</span>
-        warning: { ... },   <span style="color:#7c7c99">// 警告色</span>
-        danger: { ... },    <span style="color:#7c7c99">// 危险色</span>
-      },
+const designSystemCode = `<span style="color:#7c7c99">/* design-system.css：共享设计系统令牌 */</span>
+@theme {
+  <span style="color:#7c7c99">/* 色彩系统 */</span>
+  --color-primary-500: <span style="color:#a31414">#f97316</span>;
+  --color-secondary-500: <span style="color:#a31414">#d97706</span>;
+  --color-accent-500: <span style="color:#a31414">#dc2626</span>;
+  --color-neutral-500: <span style="color:#a31414">#78716c</span>;
+  --color-success-500: <span style="color:#a31414">#16a34a</span>;
+  --color-warning-500: <span style="color:#a31414">#f59e0b</span>;
+  --color-danger-500: <span style="color:#a31414">#dc2626</span>;
 
-      <span style="color:#7c7c99">// 字体系统</span>
-      fontSize: {
-        'display': ['3rem', { lineHeight: '1.2', fontWeight: '700' }],
-        'h1': ['2.25rem', { lineHeight: '2.5rem', fontWeight: '700' }],
-        'h2': ['1.875rem', { lineHeight: '2.25rem', fontWeight: '600' }],
-        'body': ['1rem', { lineHeight: '1.6' }],
-      },
+  <span style="color:#7c7c99">/* 字体系统：--text-*--line-height 配套写行高与字重 */</span>
+  --font-display: <span style="color:#a31414">"Satoshi"</span>, <span style="color:#a31414">sans-serif</span>;
+  --text-display: <span style="color:#a31414">3rem</span>;
+  --text-display--line-height: <span style="color:#a31414">1.2</span>;
+  --text-display--font-weight: <span style="color:#a31414">700</span>;
+  --text-h1: <span style="color:#a31414">2.25rem</span>;
+  --text-h1--line-height: <span style="color:#a31414">2.5rem</span>;
+  --text-h1--font-weight: <span style="color:#a31414">700</span>;
+  --text-h2: <span style="color:#a31414">1.875rem</span>;
+  --text-h2--line-height: <span style="color:#a31414">2.25rem</span>;
+  --text-h2--font-weight: <span style="color:#a31414">600</span>;
 
-      <span style="color:#7c7c99">// 间距系统（4px 基准）</span>
-      spacing: {
-        'xs': '0.25rem',   <span style="color:#7c7c99">// 4px</span>
-        'sm': '0.5rem',    <span style="color:#7c7c99">// 8px</span>
-        'md': '1rem',      <span style="color:#7c7c99">// 16px</span>
-        'lg': '1.5rem',    <span style="color:#7c7c99">// 24px</span>
-        'xl': '2rem',      <span style="color:#7c7c99">// 32px</span>
-      },
+  <span style="color:#7c7c99">/* 间距系统（4px 基准，p-1 / p-2 自动按倍生成） */</span>
+  --spacing: <span style="color:#a31414">0.25rem</span>;
+  --spacing-xs: <span style="color:#a31414">0.25rem</span>;
+  --spacing-sm: <span style="color:#a31414">0.5rem</span>;
+  --spacing-md: <span style="color:#a31414">1rem</span>;
+  --spacing-lg: <span style="color:#a31414">1.5rem</span>;
+  --spacing-xl: <span style="color:#a31414">2rem</span>;
 
-      <span style="color:#7c7c99">// 圆角系统</span>
-      borderRadius: {
-        'card': '0.75rem',
-        'button': '0.5rem',
-        'pill': '9999px',
-      },
+  <span style="color:#7c7c99">/* 圆角系统 */</span>
+  --radius-card: <span style="color:#a31414">0.75rem</span>;
+  --radius-button: <span style="color:#a31414">0.5rem</span>;
+  --radius-pill: <span style="color:#a31414">9999px</span>;
 
-      <span style="color:#7c7c99">// 阴影系统</span>
-      boxShadow: {
-        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-        'dropdown': '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-        'modal': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-      }
-    }
-  }
+  <span style="color:#7c7c99">/* 阴影系统 */</span>
+  --shadow-card: <span style="color:#a31414">0 4px 6px -1px rgb(0 0 0 / 0.1)</span>;
+  --shadow-dropdown: <span style="color:#a31414">0 10px 15px -3px rgb(0 0 0 / 0.1)</span>;
+  --shadow-modal: <span style="color:#a31414">0 25px 50px -12px rgb(0 0 0 / 0.25)</span>;
 }`
 </script>
 
@@ -396,16 +374,16 @@ module.exports = {
 
     <div v-if="activeTab === 'preset'">
       <div class="preset-intro">
-        <h4>⚙️ Tailwind Preset 预设</h4>
-        <p>Preset 是可复用的 Tailwind 配置包，可以将设计系统封装成预设，在多个项目间共享。</p>
+        <h4>⚙️ Tailwind 主题预设</h4>
+        <p>v4 推荐把设计系统写成共享的 CSS 文件（<code>@theme</code> 令牌），用 <code>@import</code> 跨项目复用；旧式的 JS Preset 仍可通过 <code>@config</code> 加载。</p>
       </div>
 
       <div class="preset-workflow">
         <div class="wf-step">
           <span class="wf-num">1</span>
           <div class="wf-content">
-            <strong>创建预设包</strong>
-            <p>将主题配置、插件、自定义工具类打包成 npm 包</p>
+            <strong>创建共享主题包</strong>
+            <p>把主题令牌写成 CSS（或打包成旧式 preset 包）发布到 npm</p>
           </div>
         </div>
         <div class="wf-arrow">→</div>
@@ -413,7 +391,7 @@ module.exports = {
           <span class="wf-num">2</span>
           <div class="wf-content">
             <strong>项目中引用</strong>
-            <p>在 tailwind.config.js 的 presets 数组中引入</p>
+            <p>入口 CSS 用 <code>@import</code> 引入；旧式 preset 在 <code>@config</code> 加载的配置里用 <code>presets</code> 数组引入</p>
           </div>
         </div>
         <div class="wf-arrow">→</div>
@@ -421,7 +399,7 @@ module.exports = {
           <span class="wf-num">3</span>
           <div class="wf-content">
             <strong>项目级覆盖</strong>
-            <p>项目配置可以覆盖和扩展预设中的设置</p>
+            <p>在项目自己的 <code>@theme</code> 里覆盖同名令牌，只保留差异</p>
           </div>
         </div>
       </div>
@@ -468,13 +446,13 @@ module.exports = {
       </div>
 
       <div class="tips-box">
-        <p><strong>Preset 使用技巧：</strong></p>
+        <p><strong>主题复用技巧：</strong></p>
         <ul>
-          <li><code>presets</code> 数组可以包含多个预设，后面的优先级更高</li>
-          <li>项目配置总是覆盖预设中的相同配置</li>
-          <li>预设可以嵌套其他预设，构建层级化的配置体系</li>
-          <li>适合大型团队、多项目复用设计系统</li>
-          <li>配合 Monorepo 管理多个预设包更高效</li>
+          <li>v4 首选共享 CSS：把 <code>@theme</code> 令牌发布成 CSS 文件或 npm 包，入口 <code>@import</code> 即可</li>
+          <li>项目自己的 <code>@theme</code> 里写同名变量即可覆盖共享主题</li>
+          <li>旧式 JS 配置（v3 写法，v4 需经 <code>@config</code> 加载）里，<code>presets</code> 数组可包含多个预设，后面的优先级更高</li>
+          <li>旧式配置中项目配置总是覆盖预设中的相同配置，预设也可嵌套其他预设</li>
+          <li>适合大型团队、多项目复用设计系统，配合 Monorepo 管理更高效</li>
         </ul>
       </div>
     </div>

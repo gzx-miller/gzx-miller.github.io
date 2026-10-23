@@ -14,14 +14,15 @@ const supported = ref(false)
 const status = ref('')
 
 let moduleBytes: ArrayBuffer | null = null
+let sharedMemory: WebAssembly.Memory | null = null
 let sab: SharedArrayBuffer | null = null
 let pool: Worker[] = []
 
-// Worker 内脚本：实例化 atomic 模块，对共享内存做原子自增
+// Worker 内脚本：实例化 atomic 模块（导入宿主创建的共享内存），对共享内存做原子自增
 const WORKER_SRC = `
 self.onmessage = async (e) => {
-  const { bytes, iters } = e.data
-  const { instance } = await WebAssembly.instantiate(bytes)
+  const { bytes, memory, iters } = e.data
+  const { instance } = await WebAssembly.instantiate(bytes, { env: { memory } })
   const add = instance.exports.atomicAdd
   for (let i = 0; i < iters; i++) add(0)
   self.postMessage('done')
@@ -32,12 +33,9 @@ onMounted(async () => {
   supported.value = typeof window !== 'undefined' && window.crossOriginIsolated === true
   try {
     moduleBytes = getWasmBytes('atomic').slice().buffer as ArrayBuffer
-    // 借助同一模块先拿一份共享内存实例（仅用于获得 SharedArrayBuffer）
-    const result = (await WebAssembly.instantiate(moduleBytes.slice(0))) as
-      | WebAssembly.Instance
-      | { instance: WebAssembly.Instance }
-    const inst = 'instance' in result ? result.instance : result
-    sab = (inst.exports.memory as WebAssembly.Memory).buffer as unknown as SharedArrayBuffer
+    // 模块本身不创建内存，而是导入宿主内存：所有 Worker 必须共享同一份 Memory 实例
+    sharedMemory = new WebAssembly.Memory({ initial: 1, maximum: 1, shared: true })
+    sab = sharedMemory.buffer as unknown as SharedArrayBuffer
     new Int32Array(sab)[0] = 0
     status.value = '共享内存就绪，可启动多个 Worker 并发补货'
   } catch (e) {
@@ -46,7 +44,7 @@ onMounted(async () => {
 })
 
 function run() {
-  if (!sab || !moduleBytes || running.value) return
+  if (!sab || !moduleBytes || !sharedMemory || running.value) return
   running.value = true
   workerLogs.value = []
   finalCount.value = null
@@ -73,7 +71,7 @@ function run() {
       status.value = `Worker 错误：${e.message}`
       running.value = false
     }
-    worker.postMessage({ bytes: moduleBytes, iters: k })
+    worker.postMessage({ bytes: moduleBytes, memory: sharedMemory, iters: k })
     pool.push(worker)
   }
 }
@@ -90,8 +88,9 @@ const themeLabel = computed(() => (theme.value === 'light' ? '浅色 🍂' : '�
   <div class="demo-card">
     <h3>多线程与 Worker：四个店员并发补货</h3>
     <p class="desc">
-      Wasm 单线程无法并行，但配合 Web Worker 和共享内存就能真正利用多核。下面启动多个
-      Worker，各自对共享内存执行 <code>atomicAdd</code>——若不用原子指令，结果会因竞态丢失。
+      单个 Wasm 实例同一时刻只在一条线程上顺序执行，但同一模块可以在多个 Web Worker 中
+      各自实例化，配合共享内存就能真正利用多核。下面启动多个 Worker，共享同一份内存并执行
+      <code>atomicAdd</code>——若不用原子指令，结果会因竞态丢失。
     </p>
 
     <div class="toolbar">

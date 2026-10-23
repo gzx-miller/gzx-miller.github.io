@@ -84,27 +84,27 @@ void main() {
 }`
 
 function createBoxSmooth() {
+  const s = 1.0
+  // 8 个共享角点；法线取归一化的角点方向，使棱边两侧连续。
+  const corners = [
+    [-s,-s, s], [ s,-s, s], [ s, s, s], [-s, s, s],
+    [-s,-s,-s], [ s,-s,-s], [ s, s,-s], [-s, s,-s],
+  ]
   const v: number[] = []
   const n: number[] = []
-  const idx: number[] = []
-  const s = 1.0
-  const faces = [
-    { n: [0,0,1], verts: [[-s,-s,s],[s,-s,s],[s,s,s],[-s,s,s]] },
-    { n: [0,0,-1], verts: [[s,-s,-s],[-s,-s,-s],[-s,s,-s],[s,s,-s]] },
-    { n: [1,0,0], verts: [[s,-s,s],[s,-s,-s],[s,s,-s],[s,s,s]] },
-    { n: [-1,0,0], verts: [[-s,-s,-s],[-s,-s,s],[-s,s,s],[-s,s,-s]] },
-    { n: [0,1,0], verts: [[-s,s,s],[s,s,s],[s,s,-s],[-s,s,-s]] },
-    { n: [0,-1,0], verts: [[-s,-s,-s],[s,-s,-s],[s,-s,s],[-s,-s,s]] },
-  ]
-  let vi = 0
-  for (const f of faces) {
-    for (const vert of f.verts) {
-      v.push(vert[0], vert[1], vert[2])
-      n.push(f.n[0], f.n[1], f.n[2])
-    }
-    idx.push(vi, vi+1, vi+2, vi, vi+2, vi+3)
-    vi += 4
+  for (const [x, y, z] of corners) {
+    const len = Math.hypot(x, y, z)
+    v.push(x, y, z)
+    n.push(x / len, y / len, z / len)
   }
+  const idx = [
+    0,1,2, 0,2,3,       // +Z
+    5,4,7, 5,7,6,       // -Z
+    1,5,6, 1,6,2,       // +X
+    4,0,3, 4,3,7,       // -X
+    3,2,6, 3,6,7,       // +Y
+    4,5,1, 4,1,0,       // -Y
+  ]
   return { vertices: new Float32Array(v), normals: new Float32Array(n), indices: new Uint16Array(idx) }
 }
 
@@ -171,9 +171,9 @@ function mat4Scale(sx: number, sy: number, sz: number) {
 
 function mat4Multiply(a: Float32Array, b: Float32Array) {
   const r = new Float32Array(16)
-  for (let i=0; i<4; i++)
-    for (let j=0; j<4; j++)
-      r[i*4+j] = a[i*4+0]*b[0*4+j] + a[i*4+1]*b[1*4+j] + a[i*4+2]*b[2*4+j] + a[i*4+3]*b[3*4+j]
+  for (let row=0; row<4; row++)
+    for (let col=0; col<4; col++)
+      r[col*4+row] = a[0*4+row]*b[col*4+0] + a[1*4+row]*b[col*4+1] + a[2*4+row]*b[col*4+2] + a[3*4+row]*b[col*4+3]
   return r
 }
 

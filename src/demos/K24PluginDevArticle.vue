@@ -5,7 +5,7 @@ import K24PluginDev from './K24PluginDev.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>好几个项目都需要同一套「通知提示」能力，难道每个项目都要把注册代码再抄一遍、每个组件都要手动 import 同一个工具函数？
+      <strong>承接上文：</strong>好几个项目都需要同一套「通知提示」能力，难道每个项目都要把注册代码再抄一遍、每个组件都要手动 import 同一个工具函数？
     </div>
 
     <h2>全局提示能力</h2>

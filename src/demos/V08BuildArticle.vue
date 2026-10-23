@@ -43,7 +43,7 @@ import V08Build from './V08Build.vue'
       再补「压缩」。分割决定「下多少个文件」，压缩决定「每个文件传多小」。默认 <code>minify: 'esbuild'</code>，胜在快；想要更高压缩率、还想顺手删掉 <code>console</code>，就切到 <code>minify: 'terser'</code> 并配 <code>terserOptions.compress.drop_console</code>。这是速度与体积的权衡：esbuild 快而够用，terser 慢一点但更小。
     </p>
     <p>
-      最后定「阈值与目标」。<code>chunkSizeWarningLimit</code>（默认 500kb）只控制构建时的体积警告，<strong>并不改变分包行为</strong>，看到某个 chunk 超过阈值不等于它必须被拆——但要去查是哪个依赖把它撑起来的。<code>build.target</code> 决定语法降级的目标，面向现代浏览器时可以适当提高，少做降级，产物更小。
+      最后定「阈值与目标」。<code>chunkSizeWarningLimit</code>（默认 500kb）只控制构建时的体积警告，<strong>并不改变分包行为</strong>，看到某个 chunk 超过阈值不等于它必须被拆——但要去查是哪个依赖把它撑起来的。<code>build.target</code> 决定语法降级的目标：Vite 7 默认是 <code>'baseline-widely-available'</code>（chrome107 / edge107 / firefox104 / safari16），已覆盖主流浏览器，通常不必改动；只有需要兼容更旧的浏览器时才显式下调，代价是更多降级代码、产物更大。
     </p>
     <div class="lesson-box warn">
       <strong>两点提醒：</strong>分包不是越细越好，拆得过散会让请求数暴涨，建议按「变更频率」归组（框架 / UI 库 / 工具库分开即可，不必每个包一个 chunk）；<code>chunkSizeWarningLimit</code> 只影响警告，不改实际产物，别把它当成分包开关。

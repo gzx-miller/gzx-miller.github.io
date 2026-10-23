@@ -15,12 +15,12 @@ const nitroFeatures = [
 ]
 
 const presets = [
-  { preset: 'node-server', target: 'Node.js 服务器', cmd: 'npx nitro build --preset=node-server' },
-  { preset: 'cloudflare-pages', target: 'Cloudflare Pages', cmd: 'npx nitro build --preset=cloudflare-pages' },
-  { preset: 'vercel', target: 'Vercel', cmd: 'npx nitro build --preset=vercel' },
-  { preset: 'netlify', target: 'Netlify', cmd: 'npx nitro build --preset=netlify' },
-  { preset: 'deno-server', target: 'Deno', cmd: 'npx nitro build --preset=deno-server' },
-  { preset: 'static', target: '纯静态站点', cmd: 'npx nuxi generate' },
+  { preset: 'node-server', target: 'Node.js 服务器', cmd: 'NITRO_PRESET=node-server npx nuxt build' },
+  { preset: 'cloudflare-pages', target: 'Cloudflare Pages', cmd: 'NITRO_PRESET=cloudflare-pages npx nuxt build' },
+  { preset: 'vercel', target: 'Vercel', cmd: 'NITRO_PRESET=vercel npx nuxt build' },
+  { preset: 'netlify', target: 'Netlify', cmd: 'NITRO_PRESET=netlify npx nuxt build' },
+  { preset: 'deno-server', target: 'Deno', cmd: 'NITRO_PRESET=deno-server npx nuxt build' },
+  { preset: 'static', target: '纯静态站点', cmd: 'npx nuxt generate' },
 ]
 
 const routeRules = `// nuxt.config.ts

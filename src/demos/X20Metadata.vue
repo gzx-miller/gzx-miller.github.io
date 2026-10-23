@@ -25,9 +25,10 @@ export const metadata: Metadata = {
 export async function generateMetadata({
   params
 }: {
-  params: { slug: string }
+  params: Promise&lt;{ slug: string }&gt;
 }): Promise&lt;Metadata&gt; {
-  const post = await getPost(params.slug)
+  const { slug } = await params
+  const post = await getPost(slug)
   return {
     title: post.title,
     description: post.excerpt,

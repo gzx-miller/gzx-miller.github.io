@@ -18,7 +18,7 @@ import N03DynamicRoute from './N03DynamicRoute.vue'
 
     <h2>查询串参数传递</h2>
     <p>
-      最省事的做法：用查询串。写一个 <code>pages/course.vue</code>，所有数据都走 <code>/course?id=3</code>，组件里用 <code>useRoute().query.id</code> 把参数取出来。
+      最省事的做法：用查询串。写一个 <code>app/pages/course.vue</code>，所有数据都走 <code>/course?id=3</code>，组件里用 <code>useRoute().query.id</code> 把参数取出来。
     </p>
     <p>
       这个方案做对了一件重要的事：<strong>它把「变动的那一部分」从页面里抽了出来，变成了参数</strong>，于是同一个文件能服务所有 id。但它把资源地址退化成了「一个固定页面加一串参数」，URL 不再表达「这就是第 3 号资源的地址」。
@@ -37,10 +37,10 @@ import N03DynamicRoute from './N03DynamicRoute.vue'
       不推翻「把变动部分抽成参数」，而是让<strong>路径本身</strong>来承载这个参数——用方括号把文件名的某一段标成可变段。分三步补齐。
     </p>
     <p>
-      先看单段参数。<code>pages/courses/[id].vue</code> 匹配 <code>/courses/</code> 下的<strong>一个</strong>路径段，组件里用 <code>useRoute().params.id</code> 取值。这里立刻撞上开场那个坑：<strong>参数值始终是字符串</strong>。地址里写的是 3，取出来的是 <code>'3'</code>，所以 <code>=== 3</code> 恒为 <code>false</code>，而 <code>'3' + 1</code> 会按字符串拼接成 <code>'31'</code>。要参与数值运算，必须先 <code>Number()</code> 转换，并判掉 <code>NaN</code>——像 <code>/courses/abc</code> 这样的非法段转出来正是 <code>NaN</code>，不处理就会带着脏值往下走。
+      先看单段参数。<code>app/pages/courses/[id].vue</code> 匹配 <code>/courses/</code> 下的<strong>一个</strong>路径段，组件里用 <code>useRoute().params.id</code> 取值。这里立刻撞上开场那个坑：<strong>参数值始终是字符串</strong>。地址里写的是 3，取出来的是 <code>'3'</code>，所以 <code>=== 3</code> 恒为 <code>false</code>，而 <code>'3' + 1</code> 会按字符串拼接成 <code>'31'</code>。要参与数值运算，必须先 <code>Number()</code> 转换，并判掉 <code>NaN</code>——像 <code>/courses/abc</code> 这样的非法段转出来正是 <code>NaN</code>，不处理就会带着脏值往下走。
     </p>
     <p>
-      再补多段路径。<code>pages/docs/[...slug].vue</code> 匹配余下的<strong>全部</strong>路径段：访问 <code>/docs/guide/installation</code>，得到的是 <code>params.slug</code>，而它的类型和单参数不一样——<strong>单参数是一个字符串，catch-all 则是一个字符串数组</strong>，这里是 <code>['guide', 'installation']</code>，这一点最容易记混。它的匹配优先级低于更具体的静态与动态路由，所以它天然承担「前面都没命中的收尾路径」。
+      再补多段路径。<code>app/pages/docs/[...slug].vue</code> 匹配余下的<strong>全部</strong>路径段：访问 <code>/docs/guide/installation</code>，得到的是 <code>params.slug</code>，而它的类型和单参数不一样——<strong>单参数是一个字符串，catch-all 则是一个字符串数组</strong>，这里是 <code>['guide', 'installation']</code>，这一点最容易记混。它的匹配优先级低于更具体的静态与动态路由，所以它天然承担「前面都没命中的收尾路径」。
     </p>
     <p>
       最后补校验。在页面的 <code>definePageMeta</code> 里写一个 <code>validate</code> 函数，对参数做格式检查，返回 <code>false</code> 就让这次匹配失效、把请求转交错误处理（例如落到 404）。要留意的是，<code>validate</code> 在服务端渲染<strong>与</strong>客户端导航上都会执行，两端的逻辑必须写一致，否则同一地址在两种场景下会给出不同结果。

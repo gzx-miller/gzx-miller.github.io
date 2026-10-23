@@ -5,7 +5,7 @@ import N12Plugins from './N12Plugins.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>你按文档把 UI 组件库装进应用，顺手写在了 <code>App.vue</code> 的 setup 里：<code>app.use(ElementPlus)</code>。开发时每改几次代码，控制台就冒出一串「Plugin has already been applied to target app」；换成需要 <code>window</code> 的图表库写在同一个位置，一开 SSR 直接 500。都只是「启动时初始化一次」这种小事，为什么放哪儿都不太对？
+      <strong>开场问题：</strong>你按文档把 UI 组件库装进应用，顺手写在了 <code>app/app.vue</code> 的 setup 里：<code>app.use(ElementPlus)</code>。开发时每改几次代码，控制台就冒出一串「Plugin has already been applied to target app」；换成需要 <code>window</code> 的图表库写在同一个位置，一开 SSR 直接 500。都只是「启动时初始化一次」这种小事，为什么放哪儿都不太对？
     </div>
 
     <h2>应用启动全局工作</h2>
@@ -21,10 +21,10 @@ import N12Plugins from './N12Plugins.vue'
 
     <h2>目录约定自动注册</h2>
     <p>
-      在 <code>plugins/</code> 目录下建一个文件，默认导出 <code>defineNuxtPlugin((nuxtApp) =&gt; { ... })</code>，在函数体里完成安装，例如 <code>nuxtApp.vueApp.use(ElementPlus)</code>。
+      在 <code>app/plugins/</code> 目录下建一个文件，默认导出 <code>defineNuxtPlugin((nuxtApp) =&gt; { ... })</code>，在函数体里完成安装，例如 <code>nuxtApp.vueApp.use(ElementPlus)</code>。
     </p>
     <p>
-      这个方案做对了一件事：<strong>约定即注册</strong>。<code>plugins/</code> 下的文件会被自动扫描并执行，不需要在 <code>nuxt.config.ts</code> 里手写一张插件清单；而且它们在组件树之外运行，属于应用级的一次性初始化，不受任何组件重复挂载的影响。
+      这个方案做对了一件事：<strong>约定即注册</strong>。<code>app/plugins/</code> 下的文件会被自动扫描并执行，不需要在 <code>nuxt.config.ts</code> 里手写一张插件清单；而且它们在组件树之外运行，属于应用级的一次性初始化，不受任何组件重复挂载的影响。
     </p>
 
     <h2>字母序执行顺序</h2>
@@ -32,7 +32,7 @@ import N12Plugins from './N12Plugins.vue'
       <li><strong>执行顺序由文件名的字母序决定</strong>，不由你想要的依赖顺序决定：<code>analytics.ts</code> 排在 <code>i18n.ts</code> 前面，如果 analytics 要用 i18n 注入的能力，此刻拿到的是 <code>undefined</code>。</li>
       <li>把依赖 <code>window</code> 的库（如 echarts）放进普通的 <code>.ts</code> 插件，服务端那份产物也会执行到这里，直接 <code>window is not defined</code>。</li>
       <li>插件里想读某个组件 provide 出来的值，写 <code>inject()</code> 会失败——此刻组件上下文还不存在，注入链根本没建立。</li>
-      <li>在插件里 <code>provide('i18n', fn)</code>，组件里按 <code>useNuxtApp().i18n</code> 去取却取不到：注入的键会被自动加上 <code>$</code> 前缀。</li>
+      <li>在插件里用 <code>provide</code> 选项注入 <code>i18n</code>，组件里按 <code>useNuxtApp().i18n</code> 去取却取不到：插件 <code>provide</code> 的键会被自动加上 <code>$</code> 前缀，应写成 <code>useNuxtApp().$i18n</code>。</li>
     </ul>
 
     <h2>数字前缀与端侧后缀</h2>
@@ -63,7 +63,7 @@ import N12Plugins from './N12Plugins.vue'
 
     <h2>启动逻辑集中注册</h2>
     <p>
-      插件系统给「应用启动时要做的全局事」找了一个固定归处：文件放进 <code>plugins/</code> 就自动注册，数字前缀管顺序，<code>.client.ts</code> / <code>.server.ts</code> 管端侧，<code>nuxtApp.provide()</code> 把能力注入出去、组件用 <code>useNuxtApp().$xxx</code> 取回来。它只在启动时跑一次，所以要把「应用级」的活放这里，把「组件级」的活留给 composable。
+      插件系统给「应用启动时要做的全局事」找了一个固定归处：文件放进 <code>app/plugins/</code> 就自动注册，数字前缀管顺序，<code>.client.ts</code> / <code>.server.ts</code> 管端侧，<code>nuxtApp.provide()</code> 把能力注入出去、组件用 <code>useNuxtApp().$xxx</code> 取回来。它只在启动时跑一次，所以要把「应用级」的活放这里，把「组件级」的活留给 composable。
     </p>
     <div class="lesson-term">
       <span class="term-name">「provide / inject（依赖注入）」</span>Vue 的一对 API：祖先通过 <code>provide</code> 向下提供值，任意后代用 <code>inject</code> 按 key 取用，中间不必逐层透传 props。在 Nuxt 插件里它只有一半可用——插件处于组件上下文之外，<strong>只能 <code>provide</code> 不能 <code>inject</code></strong>，且插件注入的 key 会被自动加上 <code>$</code> 前缀，组件侧用 <code>useNuxtApp().$key</code> 读取。边界：它传递的是运行时提供的值而非编译期常量，key 拼错不会报错、只会取到 <code>undefined</code>，排查时先核对 <code>$</code> 前缀与拼写。

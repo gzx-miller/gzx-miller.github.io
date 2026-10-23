@@ -5,7 +5,7 @@ import K04ComputedWatch from './K04ComputedWatch.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>「合计金额」这种数据，到底是该单独存一个变量、每次手动同步，还是根本不存、随用随算？
+      <strong>承接上文：</strong>「合计金额」这种数据，到底是该单独存一个变量、每次手动同步，还是根本不存、随用随算？
     </div>
 
     <h2>合计金额存与算</h2>

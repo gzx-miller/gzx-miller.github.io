@@ -18,7 +18,7 @@ import L03OutputParser from './L03OutputParser.vue'
       <li>抠出来的全是字符串，想要数组、想要枚举，还得自己手写转换和校验。</li>
     </ol>
     <p>
-      问题落成一句：<strong>能不能让模型按程序要的形状输出，再用一个统一的解析器把它变成带类型的对象？</strong>
+      问题落成一句：<strong>能不能让模型按程序要的形状输出，再让框架直接把它变成带类型的对象？</strong>
     </p>
 
     <h2>链尾解析器挂载</h2>
@@ -37,15 +37,15 @@ import L03OutputParser from './L03OutputParser.vue'
       <li>格式随温度漂移：想要模型稳定输出结构化内容，默认温度通常不够用。</li>
     </ul>
 
-    <h2>输出格式约定</h2>
+    <h2>输出契约约定</h2>
     <p>
-      不推翻「链尾接解析器」，而是先给模型一个明确的形状。第一步补<strong>格式指令</strong>：让解析器自动把「该按什么格式输出」注入到提示词里，模板中留一个 <code>{format_instructions}</code> 占位即可。先补它，是因为不先约定「期望的格式」，后面解析什么都是在猜。
+      不推翻「让模型按固定形状输出」，而是把这个约定前置。第一步补<strong>输出契约</strong>：v1 用 <code>model.withStructuredOutput(schema)</code> 直接把 Zod schema 交给模型，格式约束与结果校验由框架完成；智能体场景则用 <code>createAgent({ responseFormat: schema })</code>，结构化结果落在 <code>structuredResponse</code> 上。先补它，是因为不先约定「期望的形状」，后面拿到什么都是在猜。
     </p>
     <p>
-      第二步补<strong>类型</strong>：用 Zod 定义输出结构，例如 <code>z.object({ courseName: z.string(), difficulty: z.enum(['入门', '中级', '高级']) })</code>，再交给 <code>StructuredOutputParser.fromZodSchema</code>。解析器据此把文本变成带类型的对象，字段缺失或枚举越界会被 schema 拦下。用 Zod 还和 TypeScript 天然集成，类型更安全——模型输出的形状，第一次在类型层面被写清楚了。
+      第二步补<strong>类型</strong>：用 Zod 定义输出结构，例如 <code>z.object({ courseName: z.string(), difficulty: z.enum(['入门', '中级', '高级']) })</code>，再交给 <code>withStructuredOutput</code>。返回值直接是带类型的对象，字段缺失或枚举越界会被 schema 拦下。旧版 <code>StructuredOutputParser.fromZodSchema</code> 加 <code>{format_instructions}</code> 的链式拼装仍可运行，但不再作为 v1 的首选写法。
     </p>
     <p>
-      第三步补<strong>数组场景</strong>：要一批结果，就把外层换成 <code>z.array(...)</code>，解析出来直接是可遍历的数组，<code>.map()</code> 立刻能用，不再需要按行切割。
+      第三步补<strong>数组场景</strong>：要一批结果，就把数组放进对象字段，例如 <code>z.object({ items: z.array(itemSchema) })</code>，拿到后直接 <code>.map()</code>，不再需要按行切割。
     </p>
     <p>
       最后补<strong>稳定性与兜底</strong>：要求输出 JSON 时把温度压到 <code>0</code> 到 <code>0.2</code> 减少格式偏差；解析失败时提供兜底逻辑（重试，或返回一个默认值），别让一次格式抖动把整条链带崩。
@@ -62,10 +62,10 @@ import L03OutputParser from './L03OutputParser.vue'
 
     <h2>模型与程序对齐</h2>
     <p>
-      解析器做的事，是在模型和程序之间搭一座形状对齐的桥：先让模型知道该输出什么格式，再用 schema 把文本收成一个带类型的对象。台阶是「先约定格式、再定义类型、再稳住温度、最后兜底」，缺了哪一级，桥都会晃。
+      结构化输出做的事，是在模型和程序之间搭一座形状对齐的桥：先把 Zod schema 作为契约交给模型，再由框架校验并返回带类型的对象。台阶是「先约定 schema、再锁定类型、再稳住温度、最后兜底」，缺了哪一级，桥都会晃。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「结构化输出」</span>指让模型按预先定义的结构（如 Zod schema）产出内容，再由解析器转成程序可直接使用的对象。边界是：模型并不保证百分百遵守结构，schema 越复杂越容易偏差，因此必须配合较低温度和解析失败时的兜底逻辑。
+      <span class="term-name">「结构化输出」</span>指让模型按预先定义的结构（如 Zod schema）产出内容，并由 <code>withStructuredOutput</code> 或智能体的 <code>responseFormat</code> 转成程序可直接使用的对象。边界是：模型并不保证百分百遵守结构，schema 越复杂越容易偏差，因此必须配合较低温度和失败时的兜底逻辑。
     </div>
   </LessonArticle>
 </template>

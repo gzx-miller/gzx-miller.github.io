@@ -22,10 +22,24 @@ export default async function HomePage() {
 
 // ============================================
 
-// 缓存策略：force-cache（默认）- 构建时缓存
+// 缓存策略：use cache + cacheLife（Cache Components 推荐）
+import { cacheLife, cacheTag } from 'next/cache'
+
+async function getCachedPosts() {
+  'use cache'
+  cacheLife('hours')
+  cacheTag('posts')
+
+  const res = await fetch('https://api.example.com/posts')
+  return res.json()
+}
+
+// ============================================
+
+// 缓存策略：force-cache - 显式持久缓存（fetch 默认 auto no cache）
 async function getCachedData() {
   const res = await fetch('https://api.example.com/data', {
-    cache: 'force-cache', // 默认值，可省略
+    cache: 'force-cache',
   })
   return res.json()
 }
@@ -74,8 +88,9 @@ async function getUsers() {
 }
 
 // 在 Server Action 或 Route Handler 中主动失效
-// import { revalidateTag } from 'next/cache'
-// revalidateTag('posts') // 失效所有带 posts 标签的 fetch
+// import { revalidateTag, updateTag } from 'next/cache'
+// revalidateTag('posts', 'max') // 后台刷新，期间继续提供旧内容
+// updateTag('posts') // 仅在 Server Action 中使用，下一次请求立即读到新数据
 
 // ============================================
 
@@ -92,7 +107,7 @@ async function getPageData() {
 
 // ============================================
 
-// 路由级 revalidate 配置
+// 路由级 revalidate 配置（旧模型；启用 Cache Components 后改用 cacheLife）
 // app/blog/page.tsx
 
 // 整个路由每 30 秒重新生成

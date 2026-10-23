@@ -5,7 +5,7 @@ import R20Transition from './R20Transition.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>你在一个有一百多门课程的搜索框里连着敲「并发」两个字，手指明明很快，输入框却像被拖住——第一个字的结果还没渲染完，第二个字已经打上去了，于是框里的字符迟迟不肯出现。
+      <strong>承接上文：</strong>你在一个有一百多门课程的搜索框里连着敲「并发」两个字，手指明明很快，输入框却像被拖住——第一个字的结果还没渲染完，第二个字已经打上去了，于是框里的字符迟迟不肯出现。
     </div>
 
     <h2>同一优先级更新冲突</h2>

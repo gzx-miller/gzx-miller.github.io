@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-type StreamMode = 'invoke' | 'stream' | 'astream_events'
+type StreamMode = 'invoke' | 'stream' | 'streamEvents'
 
 const activeMode = ref<StreamMode>('stream')
 const output = ref('')
@@ -38,7 +38,7 @@ async function runDemo() {
     }
     eventLog.value.push({ event: 'stream 完成', data: '所有 token 接收完毕' })
   } else {
-    // astream_events: 事件级别，包含 metadata
+    // streamEvents: 事件级别，包含 metadata
     eventLog.value.push({ event: 'start', data: 'chain: RunnableSequence' })
     await new Promise(r => setTimeout(r, 300))
     eventLog.value.push({ event: 'start', data: 'llm: ChatOpenAI' })
@@ -69,15 +69,15 @@ const stream = await chain.stream({ input: "..." })
 for await (const chunk of stream) {
   process.stdout.write(chunk) // 逐块输出
 }`,
-  astream_events: `// astream_events: 事件级流式
-const eventStream = chain.astreamEvents({
+  streamEvents: `// streamEvents: 事件级流式
+const eventStream = chain.streamEvents({
   input: "..."
 }, { version: "v2" })
 for await (const event of eventStream) {
   // event.name: 事件名称
   // event.data: 事件数据
   // event.tags: 标签元数据
-  if (event.event === "on_llm_stream") {
+  if (event.event === "on_chat_model_stream") {
     process.stdout.write(event.data.chunk)
   }
 }`,
@@ -88,7 +88,7 @@ for await (const event of eventStream) {
   <div class="demo-card">
     <h3>流式输出策略对比</h3>
     <div class="mode-tabs">
-      <button v-for="m in (['invoke', 'stream', 'astream_events'] as StreamMode[])" :key="m" :class="{ active: activeMode === m }" @click="activeMode = m">
+      <button v-for="m in (['invoke', 'stream', 'streamEvents'] as StreamMode[])" :key="m" :class="{ active: activeMode === m }" @click="activeMode = m">
         {{ m }}
       </button>
     </div>

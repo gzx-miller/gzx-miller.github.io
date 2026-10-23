@@ -53,10 +53,10 @@ import L08Agent from './L08Agent.vue'
       拿到观察结果后回到第一步，再判断信息够不够：够了就给出<strong>最终答案</strong>，不够就再转一圈。核心在于「推理」和「行动」是<strong>交替</strong>发生的——模型不是在最后一刻才做决定，而是每一步都根据刚刚看到的东西重新决策。
     </p>
     <p>
-      第三步补<strong>驱动器</strong>：<code>AgentExecutor</code> 负责把这个循环真正转起来——每一轮把模型的思考、工具调用、观察结果拼回给它，直到它给出最终答案。它还必须带一个<strong>最大迭代次数</strong>（<code>maxIterations</code>），因为模型的循环是不可预测的，没有上限就可能一直绕下去、把 token 烧光。
+      第三步补<strong>驱动器</strong>：v1 用 <code>createAgent({ model, tools, systemPrompt })</code> 负责把这个循环真正转起来——每一轮把模型的思考、工具调用、观察结果拼回给它，直到它给出最终答案。旧版的 <code>AgentExecutor</code> / <code>createReactAgent</code> / <code>initializeAgentExecutorWithOptions</code> 已不再作为推荐写法，只用于维护旧代码。循环必须带上限，可在运行配置里限制递归次数，因为模型的循环是不可预测的，没有上限就可能一直绕下去、把 token 烧光。
     </p>
     <p>
-      最后补两条边界：<strong>工具描述写得清不清楚，直接决定模型挑不挑得对</strong>；而简单任务其实用一条普通链更可控、更便宜——不是所有任务都值得上 Agent。开着 <code>verbose</code> 把每轮的思考和工具调用记下来，出问题时才有回放可查。
+      最后补两条边界：<strong>工具描述写得清不清楚，直接决定模型挑不挑得对</strong>；而简单任务其实用一条普通链更可控、更便宜——不是所有任务都值得上 Agent。用 <code>stream</code> 或中间件钩子把每轮的思考和工具调用记下来，出问题时才有回放可查。
     </p>
     <div class="lesson-box warn">
       <strong>Agent 不是「更聪明的链」：</strong>它的推理过程不可预测，同样的输入两次可能走不同的路，而每一轮绕圈都在消耗 token。所以它需要迭代上限和日志回放，也需要一个兜底——Agent 走不出结果时，能回退到一条确定的简单链，而不是把用户晾在那儿。
@@ -73,7 +73,7 @@ import L08Agent from './L08Agent.vue'
       Agent 的价值不是「更会聊天」，而是把「下一步做什么」的决策权从代码交给了模型。用思考、行动、观察交替的循环，它能根据中间结果挑选工具、逐步逼近目标；而代价是过程不再可预测，必须用迭代上限和日志把它框住，才敢放进真实业务。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「ReAct」</span>是一种让模型「推理与行动交替」的 Agent 模式：每一轮先由模型思考当前缺什么（Thought），再选择工具并给出参数执行（Action），然后读回工具结果（Observation），如此循环直到信息足够给出最终答案。边界是：它是循环而非单向流程，必须设最大迭代次数防止无限循环；模型能否选对工具，取决于工具描述写得多清楚。
+      <span class="term-name">「ReAct」</span>是一种让模型「推理与行动交替」的 Agent 模式：每一轮先由模型思考当前缺什么（Thought），再选择工具并给出参数执行（Action），然后读回工具结果（Observation），如此循环直到信息足够给出最终答案。边界是：它是循环而非单向流程，必须设置递归/迭代上限防止无限循环；模型能否选对工具，取决于工具描述写得多清楚。
     </div>
   </LessonArticle>
 </template>

@@ -20,10 +20,12 @@ const codeExample = `<!-- 方式1：ClientOnly 组件 -->
   </template>
 </ClientOnly>
 
-<!-- 方式2：import.meta.client 判断 -->
-<div v-if="import.meta.client">
-  仅客户端渲染的内容
-</div>
+<!-- 方式2：import.meta.client 判断（在脚本中取值） -->
+// <script setup> 内
+const isClient = import.meta.client
+
+<!-- 模板中使用 -->
+<div v-if="isClient">仅客户端渲染的内容</div>
 
 <!-- 方式3：onMounted 中赋值 -->
 const browserInfo = ref('')
@@ -32,7 +34,7 @@ onMounted(() => {
 })
 
 <!-- 方式4：插件中仅客户端注册 -->
-// plugins/chart.client.ts
+// app/plugins/chart.client.ts
 // 文件名加 .client 后缀，仅在客户端加载`
 </script>
 

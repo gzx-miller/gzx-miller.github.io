@@ -76,9 +76,10 @@ export default function Error({
 
 // ============================================
 
-// next.config.js - Next.js 配置文件
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+// next.config.ts - Next.js 配置文件
+import type { NextConfig } from 'next'
+
+const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
     remotePatterns: [
@@ -90,4 +91,4 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
+export default nextConfig

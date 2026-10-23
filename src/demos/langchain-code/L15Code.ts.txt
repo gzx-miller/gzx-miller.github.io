@@ -1,6 +1,6 @@
+import { createAgent } from 'langchain'
 import { ChatOpenAI } from '@langchain/openai'
 import { z } from 'zod'
-import { StructuredOutputParser } from 'langchain/output_parsers'
 import { ChatPromptTemplate } from '@langchain/core/prompts'
 
 const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 })
@@ -51,23 +51,19 @@ const result2 = await jsonChain.invoke({
 })
 console.log('JSON Mode:', JSON.stringify(result2, null, 2))
 
-// 示例3: StructuredOutputParser 方式
-const parser = StructuredOutputParser.fromZodSchema(userSchema)
-
-const prompt = ChatPromptTemplate.fromTemplate(`
-提取用户信息。
-
-用户描述: {userDescription}
-
-{format_instructions}
-`)
-
-const chain = prompt.pipe(model).pipe(parser)
-
-const result3 = await chain.invoke({
-  userDescription: '王五，28岁，wangwu@example.com，喜欢音乐、电影、健身',
+// 示例3: 智能体结构化输出 - createAgent 的 responseFormat
+const extractionAgent = createAgent({
+  model,
+  tools: [],
+  responseFormat: userSchema,
 })
-console.log('StructuredOutputParser:', JSON.stringify(result3, null, 2))
+
+const result3 = await extractionAgent.invoke({
+  messages: [
+    { role: 'user', content: '提取用户信息：王五，28岁，wangwu@example.com，喜欢音乐、电影、健身' },
+  ],
+})
+console.log('智能体结构化输出:', JSON.stringify(result3.structuredResponse, null, 2))
 
 // 示例4: 嵌套结构
 const addressSchema = z.object({

@@ -5,7 +5,7 @@ import S24Overmind from './S24Overmind.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>你写了一个「加载待办」的函数，里面 <code>fetch</code> 了一下、<code>setState</code> 了一下、顺手把 token 存进 <code>localStorage</code>。后来接口报错，你花半天才分清到底是网络挂了、状态写错了、还是存储满了；更头疼的是想给这段逻辑补个单测，得先把 <code>fetch</code> 和 <code>localStorage</code> 都 mock 一遍。
+      <strong>承接上文：</strong>你写了一个「加载待办」的函数，里面 <code>fetch</code> 了一下、<code>setState</code> 了一下、顺手把 token 存进 <code>localStorage</code>。后来接口报错，你花半天才分清到底是网络挂了、状态写错了、还是存储满了；更头疼的是想给这段逻辑补个单测，得先把 <code>fetch</code> 和 <code>localStorage</code> 都 mock 一遍。
     </div>
 
     <h2>状态变更与副作用</h2>

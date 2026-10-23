@@ -18,7 +18,7 @@ import WB11ControlFlow from './WB11ControlFlow.vue'
 
     <h2>结构化控制流</h2>
     <p>
-      Wasm 给出的答案是<strong>结构化控制流</strong>：只有三种块——<code>block</code>、<code>loop</code>、<code>if/else</code>，再用 <code>br</code> / <code>br_if</code> 在这些块之间跳。跳转不写地址，只写标签所在的「深度」。
+      Wasm 给出的答案是<strong>结构化控制流</strong>：核心是 <code>block</code>、<code>loop</code>、<code>if/else</code> 三种块（现代标准还包含 <code>try_table</code>），再用 <code>br</code> / <code>br_if</code> / <code>br_table</code> 在这些块之间跳。跳转不写地址，只写标签所在的「深度」。
     </p>
     <p>
       这个方案做对了一件事：<strong>它把跳转限定在嵌套的块结构里</strong>。<code>block</code> 定义一个块，<code>br</code> 一旦跳出这个块就直接落到块尾，再也回不去；<code>loop</code> 定义一个循环体，<code>br</code> 则跳到它的开头。控制流因此长成一棵可静态验证的树，验证和优化都能只看局部。
@@ -62,10 +62,10 @@ import WB11ControlFlow from './WB11ControlFlow.vue'
 
     <h2>可验证控制流树</h2>
     <p>
-      Wasm 用 <code>block</code>、<code>loop</code>、<code>if/else</code> 三种结构化块替换掉了 goto，<code>br</code> 只按相对深度在块之间跳，控制流于是成为一棵可验证的树：分支交给 <code>if/else</code>，循环用 <code>loop</code> 加 <code>br_if</code>，跨函数复用交给 <code>call</code>，递归则是 <code>call</code> 自身。
+      Wasm 用 <code>block</code>、<code>loop</code>、<code>if/else</code> 等结构化块替换掉了 goto（标准还包含 <code>try_table</code>），<code>br</code> 只按相对深度在块之间跳，控制流于是成为一棵可验证的树：分支交给 <code>if/else</code>，循环用 <code>loop</code> 加 <code>br_if</code>，跨函数复用交给 <code>call</code>，递归则是 <code>call</code> 自身。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「结构化控制流与 br 标签深度」</span>指 Wasm 没有 goto，仅提供 <code>block</code>（<code>br</code> 跳出，语义近 <code>break</code>）、<code>loop</code>（<code>br</code> 回跳，语义近 <code>continue</code>）与 <code>if/else</code> 三种块，<code>br</code> / <code>br_if</code> 按<strong>相对深度</strong>跳转，<code>br 0</code> 指最近的外层块。边界：深度数错会跳到错误的块；<code>if</code> 需 <code>end</code> 收尾、返回值要写 <code>result</code> 类型；<code>loop</code> 不自动判条件，漏写退出即成死循环；递归靠 <code>call</code>，深递归会耗尽栈帧而 trap。
+      <span class="term-name">「结构化控制流与 br 标签深度」</span>指 Wasm 没有 goto，核心提供 <code>block</code>（<code>br</code> 跳出，语义近 <code>break</code>）、<code>loop</code>（<code>br</code> 回跳，语义近 <code>continue</code>）与 <code>if/else</code> 三种块（标准还包含 <code>try_table</code>），<code>br</code> / <code>br_if</code> 按<strong>相对深度</strong>跳转，<code>br 0</code> 指最近的外层块。边界：深度数错会跳到错误的块；<code>if</code> 需 <code>end</code> 收尾、返回值要写 <code>result</code> 类型；<code>loop</code> 不自动判条件，漏写退出即成死循环；递归靠 <code>call</code>，深递归会耗尽栈帧而 trap。
     </div>
   </LessonArticle>
 </template>

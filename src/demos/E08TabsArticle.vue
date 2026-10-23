@@ -41,7 +41,7 @@ import E08Tabs from './E08Tabs.vue'
       第一步，用一个变量表示当前激活的面板。用 <code>v-model</code> 绑定当前激活 pane 的 <code>name</code>——它就是一个字符串标识。同时每个 <code>el-tab-pane</code> 上，<code>label</code> 负责显示给人看的文字，<code>name</code> 负责作为身份标识。这一步把原来「文字与状态混在一起」的写法，拆成了「显示什么」和「代表谁」两项职责，切换逻辑从此只认 name，不认文案。
     </p>
     <p>
-      第二步，把每份内容放进对应的 pane 里。这里有一条必须记住的规则：<strong>切换时只渲染当前激活 pane 的内容</strong>，各 pane 之间应当保持独立、互不依赖。如果两个面板需要共享同一份数据，请把状态提到父级，而不是让它们互相读对方内部的东西——否则你在标签 A 里改了数据，却指望 B 自动跟上，结果往往对不上。
+      第二步，把每份内容放进对应的 pane 里。这里有一条必须记住的规则：<strong>各 pane 之间应当保持独立、互不依赖</strong>。默认情况下，<code>el-tab-pane</code> 会随标签页一起把内容渲染出来，切换只是显隐；如果希望某块内容延迟到第一次激活再渲染，给对应 pane 加 <code>lazy</code>。无论是否懒加载，如果两个面板需要共享同一份数据，请把状态提到父级，而不是让它们互相读对方内部的东西——否则你在标签 A 里改了数据，却指望 B 自动跟上，结果往往对不上。
     </p>
     <p>
       第三步，补齐行为细节。<code>disabled</code> 标在某个 pane 上，它就不能被点选——用于那种「内容还没准备好，先占个位」的页签，避免用户点到一片空白。用 <code>@tab-click</code> 监听切换事件，做统计或联动其他状态。顶部导航想换成另一种视觉时，给 <code>type="card"</code> 即可得到卡片样式，适合当作分组标签。
@@ -64,7 +64,7 @@ import E08Tabs from './E08Tabs.vue'
       标签页把「同一块区域要装多份内容」的矛盾，用切换而非跳转化解了：v-model 记住当前是谁，label 与 name 分工负责显示与身份，pane 之间保持独立。内容是平级的、用户会来回切换的，就适合放进标签页；一旦有了先后顺序或依赖关系，就该考虑步骤条或独立页面。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「标签页」</span>在同一区域内轮换展示多个面板。用 <code>v-model</code> 绑定当前激活 pane 的 <code>name</code>，每个 <code>el-tab-pane</code> 用 <code>label</code> 设标签文本、<code>name</code> 标识身份；切换触发 <code>@tab-click</code>，<code>disabled</code> 禁用页签，<code>type="card"</code> 切换为卡片样式。切换时只渲染当前 pane，各面板应保持独立；需要拦截切换时用 <code>before-leave</code>。
+      <span class="term-name">「标签页」</span>在同一区域内轮换展示多个面板。用 <code>v-model</code> 绑定当前激活 pane 的 <code>name</code>，每个 <code>el-tab-pane</code> 用 <code>label</code> 设标签文本、<code>name</code> 标识身份；切换触发 <code>@tab-click</code>，<code>disabled</code> 禁用页签，<code>type="card"</code> 切换为卡片样式。pane 默认随标签页一起渲染、仅显隐切换，需要延迟渲染时给 pane 加 <code>lazy</code>，各面板应保持独立；需要拦截切换时用 <code>before-leave</code>。
     </div>
   </LessonArticle>
 </template>

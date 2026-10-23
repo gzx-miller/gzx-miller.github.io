@@ -23,7 +23,7 @@ import LG14DebugDeploy from './LG14DebugDeploy.vue'
     <ol class="lesson-steps">
       <li><strong>langgraph dev + Studio（开发期）</strong>：写一份 <code>langgraph.json</code> 声明图入口，<code>npx @langchain/langgraph-cli dev</code> 启动调试服务，浏览器打开即得可视化画布——输入初始状态、逐节点回放、展开每个节点的输入与输出、还能<strong>「从这里重跑」</strong>：改掉中间某个状态，从断点处继续，不必从头再来。</li>
       <li><strong>结构化日志（本地与 CI）</strong>：没有 Studio 的环境用 <code>stream({ streamMode: 'updates' })</code> 逐节点打印「节点名 + 耗时 + 更新字段 + 消息条数」——排障三件套。流式本身就自带一条现成的执行时间线。</li>
-      <li><strong>LangSmith（生产）</strong>：设置 <code>LANGCHAIN_TRACING_V2</code> 与 API Key 环境变量，<strong>代码零改动</strong>，每次运行自动上报成树形 trace：「节点 → 模型调用 → 工具调用」，附带完整输入输出、token 用量、失败堆栈。线上问题有了第一手的复现材料。</li>
+      <li><strong>LangSmith（生产）</strong>：设置 <code>LANGSMITH_TRACING</code> 与 <code>LANGSMITH_API_KEY</code> 环境变量，<strong>代码零改动</strong>，每次运行自动上报成树形 trace：「节点 → 模型调用 → 工具调用」，附带完整输入输出、token 用量、失败堆栈。线上问题有了第一手的复现材料。旧版变量名 <code>LANGCHAIN_TRACING_V2</code> / <code>LANGCHAIN_API_KEY</code> 仅作兼容，不再作为推荐写法。</li>
     </ol>
     <div class="lesson-box warn">
       <strong>上线前把「调试配置」换成「生产配置」：</strong>开发期的 <code>MemorySaver</code> 检查点重启即丢，生产必须换成持久化后端（Postgres / Redis）；Studio 只是开发工具，部署产物只需要「编译好的图 + 环境变量」；追踪数据可能含用户输入，上报前按合规要求做脱敏或采样。

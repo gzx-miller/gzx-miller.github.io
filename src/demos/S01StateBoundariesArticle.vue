@@ -5,7 +5,7 @@ import S01StateBoundaries from './S01StateBoundaries.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>把弹窗开关也放进全局 Store 之后，关掉弹窗竟然把搜索框里的关键词一起清空了——两件毫不相干的事，为什么会互相影响？
+      <strong>承接上文：</strong>把弹窗开关也放进全局 Store 之后，关掉弹窗竟然把搜索框里的关键词一起清空了——两件毫不相干的事，为什么会互相影响？
     </div>
 
     <h2>页面状态来源</h2>

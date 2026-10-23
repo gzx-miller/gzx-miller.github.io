@@ -33,23 +33,23 @@
 | 分类 | 课程数 | 章节数 | 说明 |
 |---|---|---|---|
 | [JavaScript](https://gzx-miller.github.io/javascript) | 22 | 8 | 语法与作用域、类型判断、函数与对象模型、集合、异步、事件、网络、模块与存储 |
-| [Vue3](https://gzx-miller.github.io/vue) | 37 | 15 | 组合式 API、组件、路由、Pinia、过渡动画、插件开发与工程实践 |
+| [Vue3](https://gzx-miller.github.io/vue) | 24 | 12 | 组合式 API、组件、路由、Pinia、过渡动画、插件开发与工程实践 |
 | [Element Plus](https://gzx-miller.github.io/element-plus) | 20 | 7 | 表格、表单、弹窗、导航、数据展示与反馈等企业级组件 |
-| [Vue Flow](https://gzx-miller.github.io/vue-flow) | 12 | 4 | 流程图与节点编辑器：连线校验、useVueFlow、拖拽搭建与自动布局 |
-| [Nest.js](https://gzx-miller.github.io/nestjs) | 12 | 4 | 模块化架构、依赖注入、守卫鉴权、管道校验与 TypeORM |
+| [Vue Flow](https://gzx-miller.github.io/vue-flow) | 16 | 5 | 流程图与节点编辑器：节点连线、自定义渲染、交互状态、自动布局、序列化与性能 |
+| [Nest.js](https://gzx-miller.github.io/nestjs) | 18 | 6 | 基础架构、请求处理、数据与持久化、实时与集成、工程实践、质量保障 |
 | [Nuxt](https://gzx-miller.github.io/nuxt) | 20 | 10 | 文件路由、自动导入、SSR/SSG、Nitro 服务端 API 与模块生态 |
 | [Node.js](https://gzx-miller.github.io/nodejs) | 25 | 12 | 运行时与模块、文件与事件、流与网络、进程与并发、可靠性与安全依赖 |
 | [Python](https://gzx-miller.github.io/python) | 20 | 7 | 基础入门、数据结构、函数与迭代、面向对象、异常与模块、标准库与进阶能力 |
 | [Tailwind CSS](https://gzx-miller.github.io/tailwind-css) | 24 | 12 | v4 CSS-first、响应式变体、主题令牌、暗色模式与容器查询 |
 | [Vite](https://gzx-miller.github.io/vite) | 21 | 10 | 配置、插件、HMR、依赖预构建、构建优化、库模式与 SSR |
-| [React](https://gzx-miller.github.io/react) | 35 | 22 | Hooks、并发渲染、错误边界、逻辑复用、状态集成与性能优化 |
+| [React](https://gzx-miller.github.io/react) | 24 | 7 | Hooks、并发渲染、错误边界、逻辑复用、状态集成与性能优化 |
 | [Next.js](https://gzx-miller.github.io/nextjs) | 24 | 6 | App Router、服务端组件、数据获取、Server Actions 与部署 |
-| [LangChain](https://gzx-miller.github.io/langchain) | 23 | 14 | 模型调用、提示模板、链式调用、RAG 与 Agent |
-| [LangGraph](https://gzx-miller.github.io/langgraph) | 14 | 6 | ReAct 智能体、状态图、中间件、人机交互、记忆与上下文、MCP、多智能体、RAG 与流式界面 |
-| [Transformer](https://gzx-miller.github.io/llm-principles) | 30 | 4 | 向量、神经网络、注意力机制与 Transformer 预训练范式 |
+| [LangChain](https://gzx-miller.github.io/langchain) | 23 | 12 | 模型调用、提示模板、结构化输出、RAG 与 Agent |
+| [LangGraph](https://gzx-miller.github.io/langgraph) | 18 | 6 | 快速入门、运行时控制、记忆与上下文、多智能体、应用实战、工程保障 |
+| [Transformer](https://gzx-miller.github.io/llm-principles) | 24 | 5 | 向量与相似度、神经网络、自然语言处理、大语言模型与前沿展望 |
 | [C++](https://gzx-miller.github.io/cpp) | 25 | 11 | 内存管理、面向对象、模板、STL 与现代 C++ 核心特性 |
 | [Electron](https://gzx-miller.github.io/electron) | 15 | 7 | 主进程与渲染进程、IPC 通信、窗口管理、系统托盘与打包分发 |
-| [FFmpeg](https://gzx-miller.github.io/ffmpeg) | 24 | 1 | 格式转换、音视频处理、滤镜效果、字幕、流媒体与硬件加速 |
+| [FFmpeg](https://gzx-miller.github.io/ffmpeg) | 24 | 7 | 基础与信息、尺寸与画质、画面增强、音频与字幕、编码与色彩、输出与分发、自动化与元数据 |
 | [WebGL](https://gzx-miller.github.io/webgl) | 20 | 7 | 着色器、缓冲区、矩阵变换、纹理贴图、光照模型与后处理 |
 | [WebAssembly](https://gzx-miller.github.io/webassembly) | 20 | 8 | WAT 指令、线性内存、JS 互操作、SIMD、多线程与工具链 |
 | [uni-app](https://gzx-miller.github.io/uni-app) | 15 | 10 | 项目结构、条件编译、页面/应用生命周期、内置组件、路由与分包、rpx 适配、easycom、组合式 API 与请求存储 |

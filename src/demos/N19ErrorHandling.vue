@@ -3,7 +3,7 @@ import { ref } from 'vue'
 
 const activeSection = ref<'error-page' | 'on-error' | 'api-error'>('error-page')
 
-const errorPageCode = `<!-- error.vue（项目根目录或 src/ 下） -->
+const errorPageCode = `<!-- app/error.vue -->
 <script setup lang="ts">
 const props = defineProps<{
   error: {
@@ -25,7 +25,7 @@ const handleError = () => clearError({ redirect: '/' })
   </div>
 </template>`
 
-const onErrorCode = `// plugins/error-handler.ts
+const onErrorCode = `// app/plugins/error-handler.ts
 export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.hook('vue:error', (error, instance, info) => {
     console.error('Vue 错误：', error)

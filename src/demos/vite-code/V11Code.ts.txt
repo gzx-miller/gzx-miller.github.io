@@ -101,3 +101,12 @@ export default defineConfig({
     external: ['some-cjs-only-package']
   }
 })
+
+// ====================
+// 构建命令
+// ====================
+
+// 客户端产物
+// vite build
+// 服务端产物（指定 SSR 入口）
+// vite build --ssr src/entry-server.ts

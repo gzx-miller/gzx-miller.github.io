@@ -7,8 +7,8 @@ const dirs = [
   { path: 'app/page.tsx', desc: '首页，对应 / 路由', tag: '页面' },
   { path: 'app/globals.css', desc: '全局样式', tag: '样式' },
   { path: 'public/', desc: '静态资源，直接通过 / 访问', tag: '静态' },
-  { path: 'next.config.js', desc: 'Next.js 配置文件', tag: '配置' },
-  { path: 'middleware.ts', desc: '中间件，放在 src 或项目根', tag: '中间件' },
+  { path: 'next.config.ts', desc: 'Next.js 配置文件', tag: '配置' },
+  { path: 'proxy.ts', desc: '请求代理，放在 src 或项目根', tag: '代理' },
   { path: 'package.json', desc: '依赖与脚本', tag: '配置' },
 ]
 

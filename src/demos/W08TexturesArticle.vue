@@ -34,10 +34,10 @@ import W08Textures from './W08Textures.vue'
 
     <h2>轴向颠倒成因</h2>
     <ul>
-      <li><strong>方向颠倒。</strong>UV 的 <code>(0, 0)</code> 在左下、V 向上，而纹理图像的第一行却在顶部——两者的 y 轴方向相反，直接把 UV 用上去，图就是上下翻的。</li>
-      <li><strong>边缘拉伸。</strong>UV 一旦超出 <code>[0, 1]</code>，越界该怎么取色没定义，默认会把边缘像素一路拉出去，形成难看的拖尾条纹。</li>
-      <li><strong>平铺出缝。</strong>想让图重复两遍，把 UV 乘 2 变成 <code>0</code> 到 <code>2</code>，结果并不是无缝重复，接缝处出现明显折线或错位。</li>
-      <li><strong>采样到空白。</strong>图片是异步加载的，如果没等解码完成就调用 <code>texImage2D</code> 上传，传进去的可能是一片空白。</li>
+      <li><strong>方向颠倒。</strong>UV 的 <code>(0, 0)</code> 在左下、V 向上；但 DOM 图片按自上而下存储，WebGL 默认把图像首行传到 <code>v = 0</code>（纹理底行），直接把 UV 用上去，图就是上下颠倒的。</li>
+      <li><strong>边缘拉伸。</strong>UV 超出 <code>[0, 1]</code> 时由 wrap 参数决定取色；默认 <code>REPEAT</code> 会环绕，只有显式设为 <code>CLAMP_TO_EDGE</code> 才会把坐标夹到边缘，形成拖尾条纹。</li>
+      <li><strong>平铺出缝。</strong><code>REPEAT</code> 只负责坐标环绕；如果纹理左右或上下边缘的内容不连续，UV 乘 2 平铺后接缝处仍会出现明显折线或错位。</li>
+      <li><strong>采样到空白。</strong>图片是异步加载的，如果没等解码完成就调用 <code>texImage2D</code> 上传，可能拿到 0×0 或未完成的图像数据，纹理呈黑或白。</li>
     </ul>
 
     <h2>越界采样处理</h2>
@@ -51,13 +51,13 @@ import W08Textures from './W08Textures.vue'
       <li>片段着色器先对 <code>vUV</code> 做平铺与偏移，再调用 <code>texture2D(uTexture, uv)</code> 采样输出。</li>
     </ol>
     <p>
-      先补 <strong>wrap（环绕）参数</strong>，它专门管「UV 越界时怎么办」：<code>CLAMP_TO_EDGE</code> 把越界坐标夹紧到最近的边缘像素，适合单张图、不希望重复的情形；<code>REPEAT</code> 则会环绕回绕，让 UV 取 <code>1.2</code> 时自动采样到 <code>0.2</code> 的位置，从而实现无缝平铺。
+      先补 <strong>wrap（环绕）参数</strong>，它专门管「UV 越界时怎么办」：<code>CLAMP_TO_EDGE</code> 把越界坐标夹紧到最近的边缘像素，适合单张图、不希望重复的情形；<code>REPEAT</code> 则会环绕回绕，让 UV 取 <code>1.2</code> 时自动采样到 <code>0.2</code> 的位置，从而实现坐标层面的平铺。
     </p>
     <p>
-      有了 <code>REPEAT</code>，平铺就成了对 UV 的简单缩放：采样前算一次 <code>uv = vUV * tile + offset</code>。<code>tile</code> 大于 1 就重复铺满，<code>offset</code> 负责把图像整体挪位——<strong>不改网格、不重传图片，只改两个 uniform</strong>。演示里叠的 UV 网格，就是让你看到每个屏幕像素其实是在问「我对应的 UV 是多少」。
+      有了 <code>REPEAT</code>，平铺就成了对 UV 的简单缩放：采样前算一次 <code>uv = vUV * tile + offset</code>。<code>tile</code> 大于 1 就重复铺满，<code>offset</code> 负责把图像整体挪位——<strong>不改网格、不重传图片，只改两个 uniform</strong>。纹理边缘能否无缝衔接取决于图像内容本身，<code>REPEAT</code> 不会自动消除接缝。演示里叠的 UV 网格，就是让你看到每个屏幕像素其实是在问「我对应的 UV 是多少」。
     </p>
     <div class="lesson-box warn">
-      <strong>两个容易踩的坑：</strong>其一，纹理的 y 轴方向与 WebGL 屏幕坐标相反（图像第一行对应纹理顶部，而 UV 原点在左下），所以上传前通常在 CPU 端把图片上下翻转，或在采样时把 V 反过来；其二，图片是异步加载的，<strong>务必在 <code>texImage2D</code> 之前确认解码完成</strong>，否则上传的是空白数据，画面会一片黑或一片白。
+      <strong>两个容易踩的坑：</strong>其一，UV 原点在左下，而 DOM 图片默认按自上而下存储，所以上传时通常设置 <code>UNPACK_FLIP_Y_WEBGL = true</code> 把像素翻成自下而上，或在采样时用 <code>1.0 - v</code>；其二，图片是异步加载的，<strong>务必在 <code>texImage2D</code> 之前确认解码完成</strong>，否则可能上传未完成的数据，画面会一片黑或一片白。
     </div>
 
     <h2>平铺与偏移观察</h2>
@@ -71,7 +71,7 @@ import W08Textures from './W08Textures.vue'
       纹理映射把「图长什么样」和「网格长什么样」拆开了：顶点只负责带上 <code>0</code> 到 <code>1</code> 的 UV，光栅化时插值，片段着色器按 UV 采样。<strong>方向颠倒、边缘拉伸、平铺出缝，几乎都能归到 UV 与 wrap 这两处没对齐。</strong>
     </p>
     <div class="lesson-term">
-      <span class="term-name">「UV 坐标」</span>是归一化的二维纹理坐标，通常取值 <code>0</code> 到 <code>1</code>，<code>(0, 0)</code> 在左下、U 向右、V 向上，用来把纹理像素映射到几何表面。牢记两点：它的 V 方向与常规屏幕坐标相反（纹理首行在顶部），越界 UV 的行为由 wrap 决定（<code>CLAMP_TO_EDGE</code> 夹紧、<code>REPEAT</code> 环绕无缝平铺）。
+      <span class="term-name">「UV 坐标」</span>是归一化的二维纹理坐标，通常取值 <code>0</code> 到 <code>1</code>，<code>(0, 0)</code> 在左下、U 向右、V 向上，用来把纹理像素映射到几何表面。牢记两点：DOM 图片默认自上而下，和 UV 的 V 方向相反，需翻转或取 <code>1.0 - v</code>；越界 UV 的行为由 wrap 决定（<code>CLAMP_TO_EDGE</code> 夹紧、<code>REPEAT</code> 环绕平铺）。
     </div>
   </LessonArticle>
 </template>

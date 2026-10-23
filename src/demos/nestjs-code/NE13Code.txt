@@ -1,0 +1,191 @@
+// 课程报名接口：同一请求共享上下文、跨请求隔离，审计日志器按注入方各得一份
+
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Injectable,
+  Module,
+  Post,
+  Scope,
+} from '@nestjs/common'
+import { REQUEST } from '@nestjs/core'
+import type { Request } from 'express'
+
+// ═══ 1. 请求作用域上下文：每个 HTTP 请求创建一份 ═══
+export interface RequestUser {
+  id: string
+  tenantId: string
+}
+
+@Injectable({ scope: Scope.REQUEST, durable: true })   // 说明：durable 让同一请求内的多次解析复用同一实例
+export class RequestContextService {
+  readonly requestId: string
+  readonly tenantId: string
+  private readonly startedAt = Date.now()
+
+  constructor(@Inject(REQUEST) request: Request & { user?: RequestUser }) {
+    this.requestId = String(request.headers['x-request-id'] ?? 'unknown')   // 结果：同一请求内多处注入读到同一个 ID
+    this.tenantId = request.user?.tenantId ?? 'public'                      // 说明：租户信息由鉴权中间件写入 request.user
+  }
+
+  elapsedMs(): number {
+    return Date.now() - this.startedAt
+  }
+}
+
+// ═══ 2. 瞬态审计日志：每个注入方各得一份 ═══
+let auditSeed = 0
+
+@Injectable({ scope: Scope.TRANSIENT })
+export class AuditLogger {
+  readonly instanceId = `audit-${++auditSeed}`      // 结果：OrderService 与 ReportService 拿到的编号不同
+
+  write(action: string, detail: Record<string, unknown>): void {
+    console.log(JSON.stringify({
+      action,
+      instanceId: this.instanceId,
+      at: new Date().toISOString(),
+      ...detail,
+    }))
+  }
+}
+
+// ═══ 3. 实体仓储：没有请求状态，保持默认单例 ═══
+export interface Course {
+  id: number
+  title: string
+  capacity: number
+  enrolled: number
+}
+
+@Injectable()
+export class CourseRepository {
+  private readonly rows = new Map<number, Course>([
+    [1, { id: 1, title: 'NestJS 模块化实战', capacity: 30, enrolled: 28 }],
+    [2, { id: 2, title: 'TypeORM 事务进阶', capacity: 20, enrolled: 20 }],
+  ])
+
+  findById(id: number): Course | undefined {
+    return this.rows.get(id)
+  }
+
+  save(course: Course): void {
+    this.rows.set(course.id, course)
+  }
+}
+
+// ═══ 4. 单例业务服务依赖请求作用域：作用域随注入链上浮 ═══
+@Injectable()
+export class EnrollmentService {
+  constructor(
+    private readonly repo: CourseRepository,
+    private readonly ctx: RequestContextService,   // 说明：依赖请求作用域后，本服务也按请求创建
+    private readonly audit: AuditLogger,           // 说明：瞬态实例由本服务独享
+  ) {}
+
+  enroll(courseId: number, userId: string) {
+    const course = this.repo.findById(courseId)
+    if (!course) throw new BadRequestException('课程不存在')
+    if (course.enrolled >= course.capacity) throw new BadRequestException('名额已满')
+
+    course.enrolled += 1
+    this.repo.save(course)
+
+    this.audit.write('course.enrolled', {
+      requestId: this.ctx.requestId,               // 结果：日志携带的是本次请求的 ID，而不是启动时那份
+      tenantId: this.ctx.tenantId,
+      courseId,
+      userId,
+      remaining: course.capacity - course.enrolled,
+      elapsedMs: this.ctx.elapsedMs(),
+    })
+
+    return {
+      courseId,
+      remaining: course.capacity - course.enrolled,
+      requestId: this.ctx.requestId,
+    }
+  }
+
+  auditInstanceId(): string {
+    return this.audit.instanceId
+  }
+}
+
+@Injectable()
+export class EnrollmentReportService {
+  constructor(
+    private readonly repo: CourseRepository,
+    private readonly ctx: RequestContextService,   // 说明：与 EnrollmentService 共享同一请求内的上下文
+    private readonly audit: AuditLogger,           // 说明：与 EnrollmentService 各持有一份瞬态实例
+  ) {}
+
+  summary() {
+    const courses = [1, 2]
+      .map((id) => this.repo.findById(id))
+      .filter((course): course is Course => course !== undefined)
+
+    this.audit.write('report.read', {
+      requestId: this.ctx.requestId,
+      tenantId: this.ctx.tenantId,
+      count: courses.length,
+    })
+
+    return {
+      tenantId: this.ctx.tenantId,
+      requestId: this.ctx.requestId,
+      auditInstance: this.audit.instanceId,
+      courses,
+    }
+  }
+}
+
+// ═══ 5. 控制器：一次请求里多次注入，验证上下文共享 ═══
+@Controller('enrollments')
+export class EnrollmentController {
+  constructor(
+    private readonly enrollment: EnrollmentService,
+    private readonly report: EnrollmentReportService,
+    private readonly ctx: RequestContextService,
+  ) {}
+
+  @Post()
+  create(@Body() body: { courseId: number; userId: string }) {
+    return this.enrollment.enroll(body.courseId, body.userId)
+  }
+
+  @Get('context')
+  context() {
+    return {
+      requestId: this.ctx.requestId,               // 结果：与 Service 内读到的值一致
+      tenantId: this.ctx.tenantId,
+      controllerElapsedMs: this.ctx.elapsedMs(),
+    }
+  }
+
+  @Get('audit-instances')
+  auditInstances() {
+    return {
+      enrollmentAudit: this.enrollment.auditInstanceId(),
+      reportAudit: this.report.summary().auditInstance,
+      // 结果：两个值不同，证明瞬态 Provider 每个注入方各得一份
+    }
+  }
+}
+
+// ═══ 6. 模块装配：作用域声明与普通 Provider 一样登记 ═══
+@Module({
+  controllers: [EnrollmentController],
+  providers: [
+    RequestContextService,   // 请求作用域
+    AuditLogger,             // 瞬态作用域
+    CourseRepository,        // 默认单例
+    EnrollmentService,       // 因依赖请求作用域而上浮
+    EnrollmentReportService,
+  ],
+  exports: [EnrollmentService],
+})
+export class EnrollmentModule {}

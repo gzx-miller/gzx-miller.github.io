@@ -1,7 +1,7 @@
 // MCP Server：用标准协议把外部工具接进 LangGraph
 // 场景：课程助手接入两个 MCP 服务——本地文件系统 + 远程课程数据库
 import { MultiServerMCPClient } from '@langchain/mcp-adapters'
-import { createReactAgent } from '@langchain/langgraph/prebuilt'
+import { createAgent } from 'langchain'
 import { ChatOpenAI } from '@langchain/openai'
 import { HumanMessage } from '@langchain/core/messages'
 
@@ -24,11 +24,11 @@ const client = new MultiServerMCPClient({
 const tools = await client.getTools()
 console.log('已接入工具:', tools.map((t) => t.name).join(', '))
 
-// 示例3: 把 MCP 工具直接交给 ReAct Agent，与本地工具用法完全一致
-const agent = createReactAgent({
-  llm: new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 }),
+// 示例3: 把 MCP 工具直接交给 createAgent，与本地工具用法完全一致
+const agent = createAgent({
+  model: new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 }),
   tools,
-  prompt: '你可以使用 MCP 工具查询课程数据库与执行计算，请先查证再回答。',
+  systemPrompt: '你可以使用 MCP 工具查询课程数据库与执行计算，请先查证再回答。',
 })
 
 const result = await agent.invoke({

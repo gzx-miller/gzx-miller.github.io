@@ -1,13 +1,10 @@
+import { createAgent, tool } from 'langchain'
 import { ChatOpenAI } from '@langchain/openai'
 import { OpenAIEmbeddings } from '@langchain/openai'
-import { MemoryVectorStore } from 'langchain/vectorstores/memory'
+import { MemoryVectorStore } from '@langchain/classic/vectorstores/memory'
 import { Document } from '@langchain/core/documents'
-import { tool } from '@langchain/core/tools'
+import { MemorySaver } from '@langchain/langgraph'
 import { z } from 'zod'
-import { AgentExecutor, createToolCallingAgent } from 'langchain/agents'
-import { ChatPromptTemplate, MessagesPlaceholder } from '@langchain/core/prompts'
-import { ChatMessageHistory } from 'langchain/stores/message/in_memory'
-import { RunnableWithMessageHistory } from '@langchain/core/runnables'
 
 // 示例1: 准备知识库文档
 const knowledgeDocs = [
@@ -55,96 +52,71 @@ const searchTool = tool(
 
 const tools = [searchTool]
 
-// 示例4: 创建带记忆的 Agent
+// 示例4: 创建带短期记忆的智能体
 const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 })
 
-const prompt = ChatPromptTemplate.fromMessages([
-  ['system', `你是一个专业的 LangChain 技术支持助手。
+const agent = createAgent({
+  model,
+  tools,
+  systemPrompt: `你是一个专业的 LangChain 技术支持助手。
 你可以使用知识库搜索工具来查找相关信息。
 如果知识库中没有答案，请诚实地说你不知道。
-请用简洁、专业的中文回答问题。`],
-  new MessagesPlaceholder('chat_history'),
-  ['human', '{input}'],
-  new MessagesPlaceholder('agent_scratchpad'),
-])
-
-const agent = createToolCallingAgent({ llm: model, tools, prompt })
-const agentExecutor = new AgentExecutor({
-  agent,
-  tools,
-  verbose: true,
-  maxIterations: 5,
+请用简洁、专业的中文回答问题。`,
+  checkpointer: new MemorySaver(),
 })
 
-// 示例5: 添加对话记忆
-const messageHistories: Record<string, ChatMessageHistory> = {}
-
-function getMessageHistory(sessionId: string) {
-  if (!messageHistories[sessionId]) {
-    messageHistories[sessionId] = new ChatMessageHistory()
-  }
-  return messageHistories[sessionId]
-}
-
-const agentWithMemory = new RunnableWithMessageHistory({
-  runnable: agentExecutor,
-  getMessageHistory,
-  inputMessagesKey: 'input',
-  historyMessagesKey: 'chat_history',
-})
-
-// 示例6: 使用智能问答助手
+// 示例5: 使用 thread_id 区分并持久化会话历史
 async function runQABot() {
-  const sessionId = 'user-001'
+  const config = { configurable: { thread_id: 'user-001' } }
 
   console.log('=== 智能问答助手 ===')
 
   // 第一轮：基础问题
   console.log('\n用户: 什么是 RAG？')
-  const response1 = await agentWithMemory.invoke(
-    { input: '什么是 RAG？' },
-    { configurable: { sessionId } }
+  const response1 = await agent.invoke(
+    { messages: [{ role: 'user', content: '什么是 RAG？' }] },
+    config
   )
-  console.log('助手:', response1.output)
+  console.log('助手:', response1.messages.at(-1)?.content)
 
   // 第二轮：追问（测试记忆）
   console.log('\n用户: 它的主要流程是什么？')
-  const response2 = await agentWithMemory.invoke(
-    { input: '它的主要流程是什么？' },
-    { configurable: { sessionId } }
+  const response2 = await agent.invoke(
+    { messages: [{ role: 'user', content: '它的主要流程是什么？' }] },
+    config
   )
-  console.log('助手:', response2.output)
+  console.log('助手:', response2.messages.at(-1)?.content)
 
   // 第三轮：另一个话题
   console.log('\n用户: LangChain 的 LCEL 是什么？')
-  const response3 = await agentWithMemory.invoke(
-    { input: 'LangChain 的 LCEL 是什么？' },
-    { configurable: { sessionId } }
+  const response3 = await agent.invoke(
+    { messages: [{ role: 'user', content: 'LangChain 的 LCEL 是什么？' }] },
+    config
   )
-  console.log('助手:', response3.output)
+  console.log('助手:', response3.messages.at(-1)?.content)
 
   // 第四轮：综合问题（需要推理 + 检索）
   console.log('\n用户: 如何用 LangChain 实现一个 RAG 系统？')
-  const response4 = await agentWithMemory.invoke(
-    { input: '如何用 LangChain 实现一个 RAG 系统？' },
-    { configurable: { sessionId } }
+  const response4 = await agent.invoke(
+    { messages: [{ role: 'user', content: '如何用 LangChain 实现一个 RAG 系统？' }] },
+    config
   )
-  console.log('助手:', response4.output)
+  console.log('助手:', response4.messages.at(-1)?.content)
 }
 
-// 示例7: 流式输出对话
+// 示例6: 流式输出对话
 async function streamQABot() {
-  const sessionId = 'user-002'
+  const config = { configurable: { thread_id: 'user-002' } }
 
-  const stream = await agentWithMemory.stream(
-    { input: '解释一下 Agent 的工作原理' },
-    { configurable: { sessionId } }
+  const stream = await agent.stream(
+    { messages: [{ role: 'user', content: '解释一下 Agent 的工作原理' }] },
+    { ...config, streamMode: 'messages' }
   )
 
   console.log('\n流式回答:')
-  for await (const step of stream) {
-    if (step.output) {
-      process.stdout.write(step.output)
+  for await (const [message] of stream) {
+    if (message.getType() === 'ai') {
+      process.stdout.write(message.content.toString())
     }
   }
   console.log()

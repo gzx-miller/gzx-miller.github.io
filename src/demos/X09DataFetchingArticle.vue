@@ -58,13 +58,16 @@ import X09DataFetching from './X09DataFetching.vue'
       </tbody>
     </table>
     <p>
-      想让数据一改就生效，就给请求打上 <code>tags</code>，在 Server Action 或 Route Handler 里调用 <code>revalidateTag('posts')</code> 精确失效；想按路径刷新则用 <code>revalidatePath</code>。缓存因此从「碰运气」变成一句可读的声明。
+      想让数据一改就生效，就给请求打上 <code>tags</code>，在 Server Action 或 Route Handler 里调用 <code>revalidateTag('posts', 'max')</code> 精确失效；Server Action 中需要立即读到新数据时用 <code>updateTag('posts')</code>，想按路径刷新则用 <code>revalidatePath</code>。缓存因此从「碰运气」变成一句可读的声明。
+    </p>
+    <p>
+      Next.js 16 启用 Cache Components 后，更推荐把缓存写在函数或组件上：函数体顶部加 <code>'use cache'</code>，用 <code>cacheLife</code> 控制生命周期、<code>cacheTag</code> 打标签。这样数据库查询等非 <code>fetch</code> 操作也能进入同一套缓存模型。
     </p>
     <p>
       还有一个白捡的好处是<strong>请求去重</strong>：在同一次渲染中，相同 URL 的 <code>fetch</code> 只会真正执行一次（Request Memoization）。所以多个组件各自请求同一份数据也不必担心翻倍，这对需要用 React 的 <code>cache()</code> 包一层非 fetch 的函数时同样成立。
     </p>
     <div class="lesson-box warn">
-      <strong>两个容易踩的坑：</strong>较新版本（15+）里 <code>fetch</code> 默认<strong>不缓存</strong>，需要缓存时要显式写上缓存项，别想当然以为它沿用旧默认；另外 Data Cache 存在服务端并跨请求共享，它<strong>不是浏览器缓存</strong>，用「清浏览器的缓存」来排查往往无效。
+      <strong>两个容易踩的坑：</strong><code>fetch</code> 默认是 <strong>auto no cache</strong>（开发时每次请求都取远端，构建静态路由时只取一次），需要持久缓存时要显式写上缓存项，别想当然以为它沿用旧默认；另外 Data Cache 存在服务端并跨请求共享，它<strong>不是浏览器缓存</strong>，用「清浏览器的缓存」来排查往往无效。
     </div>
     <p>
       排查缓存命中时也别靠直觉：先用日志确认取数函数有没有被重新执行，再结合构建输出的路由标记对照，才能判断到底命中了哪一层。
@@ -84,7 +87,7 @@ import X09DataFetching from './X09DataFetching.vue'
       数据获取这件事的核心矛盾是「渲染和数据谁先到位」。把它搬进 Server Component 直接 <code>await</code>，让数据先于 HTML 到达；再用手里的缓存选项，把「每次都取、多久变一次、何时主动失效」说清楚——首屏白屏和重复请求这两类问题就一起消失了。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「服务端 fetch 缓存」</span>指 Next.js 扩展过的 <code>fetch</code>：可用 <code>no-store</code> 关缓存、<code>force-cache</code> 持久缓存、<code>next.revalidate</code> 定时刷新、<code>next.tags</code> 打标签并用 <code>revalidateTag</code> 或 <code>revalidatePath</code> 主动失效。同一次渲染中相同 URL 的请求自动去重（Request Memoization），且 Data Cache 位于服务端、跨请求共享，并非浏览器缓存。
+      <span class="term-name">「服务端 fetch 缓存」</span>指 Next.js 扩展过的 <code>fetch</code>：可用 <code>no-store</code> 关缓存、<code>force-cache</code> 持久缓存、<code>next.revalidate</code> 定时刷新、<code>next.tags</code> 打标签并用 <code>revalidateTag(tag, 'max')</code> 或 <code>revalidatePath</code> 主动失效；Cache Components 下则优先用 <code>'use cache'</code> 配合 <code>cacheLife</code>/<code>cacheTag</code>。同一次渲染中相同 URL 的请求自动去重（Request Memoization），且 Data Cache 位于服务端、跨请求共享，并非浏览器缓存。
     </div>
   </LessonArticle>
 </template>

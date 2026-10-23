@@ -46,10 +46,9 @@ function getScoreColor(score: number): string {
 
 const evalCode = `// LLM-as-Judge 评估模式
 import { ChatOpenAI } from '@langchain/openai'
-import { StructuredOutputParser } from 'langchain/output_parsers'
 import { z } from 'zod'
 
-const evaluator = ChatOpenAI({ modelName: 'gpt-4o-mini' })
+const evaluator = new ChatOpenAI({ model: 'gpt-4o-mini' })
 
 const evalSchema = z.object({
   relevance: z.number().min(0).max(1),
@@ -58,15 +57,17 @@ const evalSchema = z.object({
   reasoning: z.string(),
 })
 
-const parser = StructuredOutputParser.fromZodSchema(evalSchema)
+// v1：直接让模型返回结构化评估结果
+const judge = evaluator.withStructuredOutput(evalSchema, {
+  name: 'evaluate_answer'
+})
 
 // 评估提示词
 const evalPrompt = \`评估以下回答的质量：
 问题：{question}
 回答：{answer}
 
-请从相关性、准确性和完整性三个维度打分。
-{format_instructions}\``
+请从相关性、准确性和完整性三个维度打分。\``
 </script>
 
 <template>

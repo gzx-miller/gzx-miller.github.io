@@ -7,66 +7,67 @@ const pluginType = ref('forms')
 const officialPlugins = [
   { name: '@tailwindcss/forms', desc: '表单元素美化重置', icon: '📝', status: '官方' },
   { name: '@tailwindcss/typography', desc: '排版样式 prose 类', icon: '📖', status: '官方' },
-  { name: '@tailwindcss/aspect-ratio', desc: '宽高比工具类', icon: '📐', status: '官方' },
-  { name: '@tailwindcss/line-clamp', desc: '文本截断（已内置）', icon: '✂️', status: '已内置' },
-  { name: '@tailwindcss/container-queries', desc: '容器查询 @container', icon: '📦', status: '官方' },
+  { name: '@tailwindcss/aspect-ratio', desc: '宽高比工具类（v4 已内置 aspect-*）', icon: '📐', status: '已内置' },
+  { name: '@tailwindcss/line-clamp', desc: '文本截断（v3.3 起已内置）', icon: '✂️', status: '已内置' },
+  { name: '@tailwindcss/container-queries', desc: '容器查询（v4 已内置 @container）', icon: '📦', status: '已内置' },
 ]
 
-const customPluginCode = `/** @type {import('tailwindcss').Config} */
-module.exports = {
-  plugins: [
-    <span style="color:#7c7c99">// 自定义插件函数</span>
-    plugin(function({ addUtilities, addComponents, theme }) {
+const customPluginCode = `<span style="color:#7c7c99">// plugins/autumn-plugin.js</span>
+import plugin from <span style="color:#a31414">'tailwindcss/plugin'</span>
 
-      <span style="color:#7c7c99">// 1. 添加自定义工具类</span>
-      addUtilities({
-        <span style="color:#8a8a3a">'.content-auto'</span>: {
-          contentVisibility: <span style="color:#a31414">'auto'</span>,
-        },
-        <span style="color:#8a8a3a">'.text-shadow'</span>: {
-          textShadow: <span style="color:#a31414">'0 2px 4px rgba(0,0,0,0.1)'</span>,
-        },
-      })
+export default plugin(function ({ addUtilities, addComponents, addVariant, theme }) {
 
-      <span style="color:#7c7c99">// 2. 添加组件类</span>
-      addComponents({
-        <span style="color:#8a8a3a">'.btn-primary'</span>: {
-          padding: <span style="color:#a31414">'0.5rem 1rem'</span>,
-          borderRadius: <span style="color:#a31414">'0.5rem'</span>,
-          fontWeight: <span style="color:#a31414">'600'</span>,
-          backgroundColor: theme(<span style="color:#a31414">'colors.orange.500'</span>),
-          color: <span style="color:#a31414">'#fff'</span>,
-          <span style="color:#8a8a3a">'&:hover'</span>: {
-            backgroundColor: theme(<span style="color:#a31414">'colors.orange.600'</span>),
-          },
-        },
-        <span style="color:#8a8a3a">'.card-autumn'</span>: {
-          padding: <span style="color:#a31414">'1.5rem'</span>,
-          borderRadius: <span style="color:#a31414">'1rem'</span>,
-          background: <span style="color:#a31414">'linear-gradient(135deg, #fffaf1, #fff0dc)'</span>,
-          border: <span style="color:#a31414">'1px solid #f0c38e'</span>,
-          boxShadow: <span style="color:#a31414">'0 4px 12px rgba(155,75,29,0.1)'</span>,
-        },
-      })
+  <span style="color:#7c7c99">// 1. 添加自定义工具类（单属性也可改用 CSS 的 @utility）</span>
+  addUtilities({
+    <span style="color:#8a8a3a">'.content-auto'</span>: {
+      contentVisibility: <span style="color:#a31414">'auto'</span>,
+    },
+    <span style="color:#8a8a3a">'.text-shadow'</span>: {
+      textShadow: <span style="color:#a31414">'0 2px 4px rgb(0 0 0 / 0.1)'</span>,
+    },
+  })
 
-      <span style="color:#7c7c99">// 3. 添加变体</span>
-      addVariant(<span style="color:#a31414">'hocus'</span>, [<span style="color:#a31414">'&:hover'</span>, <span style="color:#a31414">'&:focus'</span>])
-      addVariant(<span style="color:#a31414">'group-hocus'</span>, [<span style="color:#a31414">'.group:hover &'</span>, <span style="color:#a31414">'.group:focus &'</span>])
-    })
-  ]
-}`
+  <span style="color:#7c7c99">// 2. 添加组件类</span>
+  addComponents({
+    <span style="color:#8a8a3a">'.btn-primary'</span>: {
+      padding: <span style="color:#a31414">'0.5rem 1rem'</span>,
+      borderRadius: <span style="color:#a31414">'0.5rem'</span>,
+      fontWeight: <span style="color:#a31414">'600'</span>,
+      backgroundColor: theme(<span style="color:#a31414">'colors.orange.500'</span>),
+      color: <span style="color:#a31414">'#fff'</span>,
+      <span style="color:#8a8a3a">'&:hover'</span>: {
+        backgroundColor: theme(<span style="color:#a31414">'colors.orange.600'</span>),
+      },
+    },
+    <span style="color:#8a8a3a">'.card-autumn'</span>: {
+      padding: <span style="color:#a31414">'1.5rem'</span>,
+      borderRadius: <span style="color:#a31414">'1rem'</span>,
+      background: <span style="color:#a31414">'linear-gradient(135deg, #fffaf1, #fff0dc)'</span>,
+      border: <span style="color:#a31414">'1px solid #f0c38e'</span>,
+      boxShadow: <span style="color:#a31414">'0 4px 12px rgba(155,75,29,0.1)'</span>,
+    },
+  })
+
+  <span style="color:#7c7c99">// 3. 添加变体</span>
+  addVariant(<span style="color:#a31414">'hocus'</span>, [<span style="color:#a31414">'&:hover'</span>, <span style="color:#a31414">'&:focus'</span>])
+  addVariant(<span style="color:#a31414">'group-hocus'</span>, [<span style="color:#a31414">'.group:hover &'</span>, <span style="color:#a31414">'.group:focus &'</span>])
+})
+
+<span style="color:#7c7c99">// app.css：v4 在 CSS 入口用 @plugin 加载（不再写进 JS 配置）</span>
+<span style="color:#7c7c99">// @import "tailwindcss";</span>
+<span style="color:#7c7c99">// @plugin "./plugins/autumn-plugin.js";</span>`
 
 const pluginInstallCode = `<span style="color:#7c7c99"># 安装插件</span>
 npm install @tailwindcss/forms
 npm install @tailwindcss/typography
 
-<span style="color:#7c7c99">// tailwind.config.js 中注册</span>
-module.exports = {
-  plugins: [
-    require(<span style="color:#a31414">'@tailwindcss/forms'</span>),
-    require(<span style="color:#a31414">'@tailwindcss/typography'</span>),
-  ]
-}`
+<span style="color:#7c7c99">// app.css：v4 用 @plugin 直接注册</span>
+@import <span style="color:#a31414">"tailwindcss"</span>;
+@plugin <span style="color:#a31414">"@tailwindcss/forms"</span>;
+@plugin <span style="color:#a31414">"@tailwindcss/typography"</span>;
+
+<span style="color:#7c7c99">// v3 写法（仅作迁移对照）：tailwind.config.js 的 plugins 数组里 require()</span>`
+
 
 const typographyDemo = [
   { title: '秋日森林漫步指南', level: 'h1' },

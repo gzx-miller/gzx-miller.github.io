@@ -16,7 +16,7 @@ const scenarios = {
   () => $fetch('/api/users'), 
   { dedupe: 'defer' }  // 或 'cancel'
 )`,
-    desc: 'defer：已有相同 key 的请求进行中，则等待其完成共享结果。cancel：取消前一个请求，发起新请求。',
+    desc: 'defer：等进行中的同 key 请求结束后再发起新请求。cancel（默认）：取消前一个请求，只保留最新一次。',
   },
   transform: {
     title: '数据转换',
@@ -33,7 +33,7 @@ const scenarios = {
   },
   lazy: {
     title: 'Lazy 模式',
-    code: `// 不等待 SSR，客户端再请求
+    code: `// 不阻塞导航：SSR 仍会取数并写入 payload
 const { data, pending } = useLazyAsyncData(
   'analytics', 
   () => $fetch('/api/analytics')
@@ -70,7 +70,7 @@ const { data, pending } = useLazyAsyncData(
     <table style="width:100%;">
       <thead><tr><th>特性</th><th>useFetch</th><th>useAsyncData</th></tr></thead>
       <tbody>
-        <tr><td>Key 管理</td><td>自动从 URL 生成</td><td>手动指定</td></tr>
+        <tr><td>Key 管理</td><td>自动按调用位置生成</td><td>手动指定（省略时也自动生成）</td></tr>
         <tr><td>底层实现</td><td>封装 useAsyncData</td><td>底层 API</td></tr>
         <tr><td>适用场景</td><td>简单 HTTP 请求</td><td>复杂异步逻辑、自定义缓存</td></tr>
         <tr><td>灵活性</td><td>适中</td><td>更高</td></tr>

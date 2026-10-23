@@ -37,7 +37,7 @@ import LG01QuickStart from './LG01QuickStart.vue'
       框架接到 <code>tool_calls</code> 后执行对应函数，把结果包装成 <code>ToolMessage</code> 追加回消息列表，再让模型读着新消息继续推理。这一圈「思考（Thought）→ 行动（Action）→ 观察（Observation）」就是 <strong>ReAct 模式</strong>；信息足够时模型不再请求工具，直接产出最终回答，循环自然结束。
     </p>
     <p>
-      把这件事再往前推一步：<strong>这个循环本身可以建模成一张图</strong>——模型节点和工具节点之间有两条边，一条通向工具、一条通向结束。LangGraph 的 <code>createReactAgent</code> 就是这张图的一个预置实现：传给它模型、工具和提示词，返回的已经是一个会自己查、自己答的智能体。
+      把这件事再往前推一步：<strong>这个循环本身可以建模成一张图</strong>——模型节点和工具节点之间有两条边，一条通向工具、一条通向结束。LangChain 的 <code>createAgent</code> 就是这张图上的 Agent 抽象：它构建在 LangGraph 之上，传给它模型、工具和系统提示词，返回的已经是一个会自己查、自己答的智能体。
     </p>
 
     <h2>智能体循环运行轨迹</h2>
@@ -51,7 +51,7 @@ import LG01QuickStart from './LG01QuickStart.vue'
       智能体不是魔法，是把「模型 + 工具 + 循环」组装成一张可运行的状态图：模型在循环里决定调不调工具，工具结果以消息形式回灌，直到模型给出最终回答。读懂这张图，后面所有课程都是在改这张图——加分支、加记忆、加审批。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「ReAct Agent」</span>指把 LLM 放进「思考 → 行动 → 观察」循环的智能体：模型自行判断是否需要调用工具，工具结果以消息形式追加回对话，直到信息足够产出最终回答。<code>createReactAgent</code> 是这个循环的预置实现，传入 <code>llm</code>、<code>tools</code> 和 <code>prompt</code> 即得。要记住的边界：工具的描述与参数 Schema 决定调用准确率；每轮循环都消耗 token，迭代上限要结合预算设置。
+      <span class="term-name">「ReAct Agent」</span>指把 LLM 放进「思考 → 行动 → 观察」循环的智能体：模型自行判断是否需要调用工具，工具结果以消息形式追加回对话，直到信息足够产出最终回答。<code>createAgent</code> 是这个循环的 Agent 抽象——它构建在 LangGraph 之上，传入 <code>model</code>、<code>tools</code> 和 <code>systemPrompt</code> 即得。要记住的边界：工具的描述与参数 Schema 决定调用准确率；每轮循环都消耗 token，迭代上限要结合预算设置。
     </div>
   </LessonArticle>
 </template>

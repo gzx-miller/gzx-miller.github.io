@@ -5,7 +5,7 @@ import S03PiniaSubscriptions from './S03PiniaSubscriptions.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>一次「报名课程」只该是一个动作，可持久化那段代码却被执行了三遍——为什么一个业务动作会在 Store 里变成三次状态提交？
+      <strong>承接上文：</strong>一次「报名课程」只该是一个动作，可持久化那段代码却被执行了三遍——为什么一个业务动作会在 Store 里变成三次状态提交？
     </div>
 
     <h2>单次动作多处改动</h2>

@@ -1,0 +1,292 @@
+// 场景：课程平台对外提供 v1 / v2 接口，契约由控制器与 DTO 装饰器生成，并在 CI 中比对基线。
+// 结构：Module 装配 Provider 与两个版本的 Controller，main.ts 挂载 OpenAPI 文档并启用版本化。
+
+// ═══ 1. Module / Provider / Controller 完整上下文 ═══
+import {
+  Body,
+  Controller,
+  Get,
+  Injectable,
+  Module,
+  NotFoundException,
+  Param,
+  ParseIntPipe,
+  Post,
+} from '@nestjs/common'
+import { InjectRepository, TypeOrmModule } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
+import {
+  ApiBody,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiProperty,
+  ApiPropertyOptional,
+  ApiTags,
+} from '@nestjs/swagger'
+import {
+  IsBoolean,
+  IsEnum,
+  IsInt,
+  IsOptional,
+  IsString,
+  Length,
+  Min,
+} from 'class-validator'
+import { Course } from './course.entity'
+
+export enum CourseLevel {
+  BASIC = 'BASIC',
+  INTERMEDIATE = 'INTERMEDIATE',
+  ADVANCED = 'ADVANCED',
+}
+
+@Injectable()
+export class CourseRepository {
+  constructor(
+    @InjectRepository(Course)
+    private readonly repo: Repository<Course>,
+  ) {}
+
+  findById(id: number) {
+    return this.repo.findOneBy({ id })
+  }
+
+  findAll() {
+    return this.repo.find({ order: { id: 'ASC' }, take: 20 })
+  }
+
+  save(dto: CreateCourseV2Dto) {
+    return this.repo.save(this.repo.create(dto))
+  }
+}
+
+@Injectable()
+export class CoursesService {
+  constructor(private readonly coursesRepo: CourseRepository) {}
+
+  async findOne(id: number): Promise<CourseResponseDto> {
+    const course = await this.coursesRepo.findById(id)
+    if (!course) {
+      throw new NotFoundException(`课程 ${id} 不存在`)
+    }
+    return course
+  }
+
+  list(): Promise<CourseResponseDto[]> {
+    return this.coursesRepo.findAll() // 说明：v2 列表接口复用同一个 Service
+  }
+
+  create(dto: CreateCourseV2Dto): Promise<CourseResponseDto> {
+    return this.coursesRepo.save(dto)
+  }
+}
+
+// ═══ 2. DTO 契约：类型、示例、枚举与必填性 ═══
+export class CourseResponseDto {
+  @ApiProperty({ example: 42, description: '课程 ID' })
+  id!: number
+
+  @ApiProperty({ example: 'Vue3 组合式 API 实战' })
+  title!: string
+
+  @ApiProperty({ example: 30, minimum: 1 })
+  capacity!: number
+
+  @ApiPropertyOptional({
+    enum: CourseLevel,
+    enumName: 'CourseLevel',
+    example: CourseLevel.ADVANCED,
+  })
+  level?: CourseLevel
+
+  @ApiPropertyOptional({ example: false })
+  published?: boolean
+}
+
+export class CreateCourseV1Dto {
+  @ApiProperty({
+    description: '课程标题',
+    example: 'Vue3 组合式 API 实战',
+    minLength: 2,
+    maxLength: 60,
+  })
+  @IsString()
+  @Length(2, 60)
+  title!: string
+
+  @ApiProperty({ description: '名额上限', example: 30, minimum: 1 })
+  @IsInt()
+  @Min(1)
+  capacity!: number
+}
+
+export class CreateCourseV2Dto {
+  @ApiProperty({
+    description: '课程标题',
+    example: 'Vue3 组合式 API 实战',
+    minLength: 2,
+    maxLength: 60,
+  })
+  @IsString()
+  @Length(2, 60)
+  title!: string
+
+  @ApiProperty({ description: '名额上限', example: 30, minimum: 1 })
+  @IsInt()
+  @Min(1)
+  capacity!: number
+
+  @ApiPropertyOptional({
+    enum: CourseLevel,
+    enumName: 'CourseLevel',
+    example: CourseLevel.ADVANCED,
+    description: '课程难度，省略时按 BASIC 处理',
+  })
+  @IsOptional()
+  @IsEnum(CourseLevel)
+  level?: CourseLevel
+
+  @ApiPropertyOptional({ description: '是否立即上架', example: false, default: false })
+  @IsOptional()
+  @IsBoolean()
+  published?: boolean
+}
+
+// ═══ 3. 两个版本的 Controller：共享 Service，差异只在契约 ═══
+@ApiTags('课程')
+@Controller({ path: 'courses', version: '1' })
+export class CoursesV1Controller {
+  constructor(private readonly coursesService: CoursesService) {}
+
+  @Get(':id')
+  @ApiOperation({ summary: '按 ID 查询课程（v1，过渡期保留）', deprecated: true })
+  @ApiParam({ name: 'id', type: Number, example: 42 })
+  @ApiOkResponse({ type: CourseResponseDto })
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.coursesService.findOne(id)
+  }
+
+  @Post()
+  @ApiOperation({ summary: '创建课程（v1）', deprecated: true })
+  @ApiBody({ type: CreateCourseV1Dto })
+  @ApiCreatedResponse({ type: CourseResponseDto })
+  create(@Body() dto: CreateCourseV1Dto) {
+    return this.coursesService.create(dto)
+  }
+}
+
+@ApiTags('课程')
+@Controller({ path: 'courses', version: '2' })
+export class CoursesV2Controller {
+  constructor(private readonly coursesService: CoursesService) {}
+
+  @Get()
+  @ApiOperation({ summary: '分页查询课程列表' })
+  @ApiOkResponse({ type: [CourseResponseDto] })
+  list() {
+    return this.coursesService.list()
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: '按 ID 查询课程（v2，含 level 与 published）' })
+  @ApiParam({ name: 'id', type: Number, example: 42 })
+  @ApiOkResponse({ type: CourseResponseDto })
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.coursesService.findOne(id)
+  }
+
+  @Post()
+  @ApiOperation({ summary: '创建课程（v2）' })
+  @ApiBody({ type: CreateCourseV2Dto })
+  @ApiCreatedResponse({ type: CourseResponseDto })
+  create(@Body() dto: CreateCourseV2Dto) {
+    return this.coursesService.create(dto)
+  }
+}
+
+@Module({
+  imports: [TypeOrmModule.forFeature([Course])],
+  controllers: [CoursesV1Controller, CoursesV2Controller],
+  providers: [CoursesService, CourseRepository],
+  exports: [CoursesService],
+})
+export class CoursesModule {}
+
+// ═══ 4. main.ts：挂载 OpenAPI 文档并启用 URI 版本化 ═══
+import { ValidationPipe, VersioningType } from '@nestjs/common'
+import { NestFactory } from '@nestjs/core'
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
+import { AppModule } from './app.module'
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule)
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }))
+
+  app.enableVersioning({
+    type: VersioningType.URI,   // 结果：v2 控制器自动映射到 /v2/courses
+    defaultVersion: '1',        // 说明：未声明版本的控制器归入 v1
+  })
+
+  const config = new DocumentBuilder()
+    .setTitle('课程平台 API')
+    .setDescription('课程查询与创建接口，契约由控制器与 DTO 装饰器生成')
+    .setVersion('2.0.0')
+    .addBearerAuth()
+    .build()
+
+  const document = SwaggerModule.createDocument(app, config)
+  SwaggerModule.setup('docs', app, document, {
+    swaggerOptions: { persistAuthorization: true },
+  })
+
+  await app.listen(3000)
+}
+
+void bootstrap()
+
+// ═══ 5. HEADER 与 MEDIA_TYPE 两种替代策略（与 URI 三选一） ═══
+export function enableHeaderVersioning(app: Parameters<typeof SwaggerModule.createDocument>[0]) {
+  app.enableVersioning({
+    type: VersioningType.HEADER,
+    header: 'X-API-Version',    // 说明：客户端带 X-API-Version: 2 命中 v2 控制器
+    defaultVersion: '1',
+  })
+}
+
+export function enableMediaTypeVersioning(app: Parameters<typeof SwaggerModule.createDocument>[0]) {
+  app.enableVersioning({
+    type: VersioningType.MEDIA_TYPE,
+    key: 'v',                   // 说明：Accept: application/vnd.course.v2+json
+    defaultVersion: '1',
+  })
+}
+
+// ═══ 6. CI 契约校验：导出文档并与基线比对 ═══
+import { readFileSync, writeFileSync } from 'node:fs'
+
+export async function exportOpenApi(outputPath: string): Promise<void> {
+  const app = await NestFactory.create(AppModule, { logger: false })
+  app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' })
+
+  const config = new DocumentBuilder()
+    .setTitle('课程平台 API')
+    .setVersion('2.0.0')
+    .build()
+
+  const document = SwaggerModule.createDocument(app, config)
+  writeFileSync(outputPath, JSON.stringify(document, null, 2))
+  await app.close() // 结果：CI 产物 openapi.json 可直接用于 diff 或生成客户端
+}
+
+export function assertContractUnchanged(baselinePath: string, currentPath: string): void {
+  const baseline = JSON.parse(readFileSync(baselinePath, 'utf8'))
+  const current = JSON.parse(readFileSync(currentPath, 'utf8'))
+
+  if (JSON.stringify(baseline) !== JSON.stringify(current)) {
+    throw new Error(
+      'OpenAPI 契约发生变化：请确认是否为破坏性变更，破坏性变更必须提升版本号并保留过渡期',
+    )
+  }
+}

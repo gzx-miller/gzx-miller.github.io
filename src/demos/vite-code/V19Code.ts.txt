@@ -24,7 +24,7 @@ export default defineConfig({
 // - configResolved      配置解析完成
 // - configureServer     配置开发服务器
 // - transformIndexHtml  转换 index.html
-// - handleHotUpdate     处理 HMR 更新
+// - hotUpdate           处理 HMR 更新（旧钩子 handleHotUpdate 已废弃）
 // - configurePreviewServer  配置预览服务器
 // - resolveId (开发时)  解析模块 ID
 // - load (开发时)       加载模块

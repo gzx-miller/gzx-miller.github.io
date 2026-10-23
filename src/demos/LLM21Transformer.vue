@@ -1,6 +1,6 @@
 <template>
   <LlmArticle>
-    <div class="llm-question"><strong>开场问题：</strong>把注意力、FFN、残差拼在一起——2017 年那篇论文到底做了什么？</div>
+    <div class="llm-question"><strong>承接上文：</strong>把注意力、FFN、残差拼在一起——2017 年那篇论文到底做了什么？</div>
 
     <h2>仅有注意力的缺口</h2>
     <p>前两课造出了很厉害的部件：注意力让每个词都能回头看别的词，「它」终于知道指谁；加上多头，模型还能同时盯住指代、语法、情绪这些不同关系。那么问题来了：<strong>既然注意力能让词彼此看见，为什么 Transformer 还要加别的零件？</strong>只靠叠几层注意力不行吗？</p>

@@ -42,9 +42,9 @@ import W04Attributes from './W04Attributes.vue'
       不推翻「全局量用 uniform」，而是按<strong>数据出现的粒度</strong>把输入分成两类，再补上一条连接两个阶段的通道。三者的分工，就是这一课真正要记住的东西。
     </p>
     <ol class="lesson-steps">
-      <li><strong>attribute——逐顶点输入。</strong>每个顶点各一份，由 CPU 端的缓冲加上 <code>vertexAttribPointer</code> 提供。位置 <code>aPosition</code>、颜色 <code>aColor</code> 都属于它。边界很硬：<code>attribute</code> 只能在<strong>顶点着色器</strong>里声明，个数受 <code>GL_MAX_VERTEX_ATTRIBS</code> 限制（WebGL1 通常至少 8 个）。</li>
+      <li><strong>attribute——逐顶点输入。</strong>每个顶点各一份，由 CPU 端的缓冲加上 <code>vertexAttribPointer</code> 提供。位置 <code>aPosition</code>、颜色 <code>aColor</code> 都属于它。边界很硬：<code>attribute</code> 只能在<strong>顶点着色器</strong>里声明，个数受 <code>MAX_VERTEX_ATTRIBS</code> 限制（WebGL1 通常至少 8 个）。</li>
       <li><strong>uniform——全局只读量。</strong>单次 <code>draw call</code> 内所有顶点与像素共享同一份值，时间 <code>uTime</code>、开关 <code>uUseAttributeColor</code> 都属于它。它可以在每次绘制前更新，适合传时间、矩阵、颜色这类全局状态。</li>
-      <li><strong>varying——跨阶段的插值通道。</strong>顶点着色器把 <code>aColor</code> 赋给 <code>vColor</code>，片段着色器读到的就是插值后的值；光栅化会自动完成插值，你不用手写。</li>
+      <li><strong>varying——跨阶段的插值通道。</strong>顶点着色器把 <code>aColor</code> 赋给 <code>vColor</code>，片段着色器读到的就是插值后的值；光栅化会自动完成透视校正插值，你不用手写。</li>
     </ol>
     <p>
       本课把这三种粒度放进同一个形状里各司其职：顶点着色器读入 <code>aPosition</code>、<code>aColor</code> 和 <code>uTime</code>，按 <code>uTime</code> 与<strong>各顶点自身的 <code>aPosition</code></strong> 算出波浪位移，写进 <code>gl_Position</code>；片段着色器则在「属性色」与「按 <code>uTime</code> 动态算出的颜色」之间用 <code>mix</code> 按 <code>uUseAttributeColor</code> 混合。于是逐顶点的差异与全局的统一，恰好各自走对了通道。

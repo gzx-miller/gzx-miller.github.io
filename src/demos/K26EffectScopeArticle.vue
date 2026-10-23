@@ -5,7 +5,7 @@ import K26EffectScope from './K26EffectScope.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>工作台里切换了工作区，旧工作区的监听日志还在往外冒，后台定时器还在每秒加数——明明已经「退出」了，它为什么还在工作？
+      <strong>承接上文：</strong>工作台里切换了工作区，旧工作区的监听日志还在往外冒，后台定时器还在每秒加数——明明已经「退出」了，它为什么还在工作？
     </div>
 
     <h2>工作区副作用聚合</h2>

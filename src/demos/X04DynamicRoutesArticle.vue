@@ -18,7 +18,7 @@ import X04DynamicRoutes from './X04DynamicRoutes.vue'
 
     <h2>单段参数捕获</h2>
     <p>
-      最小的一步，是先用方括号捕获一段路径：<code>app/products/[id]/page.tsx</code>。页面组件会收到一个 <code>params</code> 对象，访问 <code>/products/123</code> 时 <code>params.id</code> 就是字符串 <code>'123'</code>，拿它去请求数据即可。
+      最小的一步，是先用方括号捕获一段路径：<code>app/products/[id]/page.tsx</code>。页面组件会收到一个 <code>Promise&lt;params&gt;</code>，访问 <code>/products/123</code> 时，<code>const { id } = await params</code> 得到的 <code>id</code> 就是字符串 <code>'123'</code>，拿它去请求数据即可。
     </p>
     <p>
       这一步做对了最关键的事——<strong>用文件名表达「这一段是变量」</strong>，一条路由就能覆盖整类页面。只要路径只有一段可变、且这一段必然存在，这样写就足够。
@@ -38,10 +38,10 @@ import X04DynamicRoutes from './X04DynamicRoutes.vue'
       不推翻「方括号捕获变量」，而是把捕获能力按需要分级，并为查询串单独留一个入口。
     </p>
     <ol class="lesson-steps">
-      <li>单段参数继续用 <code>[id]</code>：<code>params.id</code> 是<strong>字符串</strong>，适合 <code>/products/123</code> 这类固定一段的路径。</li>
-      <li>多段捕获用 <code>[...slug]</code>：<code>app/categories/[...slug]/page.tsx</code> 访问 <code>/categories/electronics/phones</code> 时，<code>params.slug</code> 是<strong>数组</strong> <code>['electronics', 'phones']</code>。</li>
-      <li>可选尾段用 <code>[[...slug]]</code>：<code>app/search/[[...query]]/page.tsx</code> 同时匹配 <code>/search</code> 与 <code>/search/react/hooks</code>；没有尾段时 <code>params.query</code> 可能为 <code>undefined</code>，取值前先兜底。</li>
-      <li>查询串改从 <code>searchParams</code> 读取：页面组件同时接收 <code>searchParams</code> 对象，用 <code>searchParams.utm_source</code> 这类写法拿到来源、页码等附加信息。</li>
+      <li>单段参数继续用 <code>[id]</code>：<code>const { id } = await params</code> 后，<code>id</code> 是<strong>字符串</strong>，适合 <code>/products/123</code> 这类固定一段的路径。</li>
+      <li>多段捕获用 <code>[...slug]</code>：<code>app/categories/[...slug]/page.tsx</code> 访问 <code>/categories/electronics/phones</code> 时，解包后的 <code>slug</code> 是<strong>数组</strong> <code>['electronics', 'phones']</code>。</li>
+      <li>可选尾段用 <code>[[...slug]]</code>：<code>app/search/[[...query]]/page.tsx</code> 同时匹配 <code>/search</code> 与 <code>/search/react/hooks</code>；没有尾段时解包后的 <code>query</code> 可能为 <code>undefined</code>，取值前先兜底。</li>
+      <li>查询串改从 <code>searchParams</code> 读取：页面组件同时接收 <code>searchParams</code>，用 <code>const { utm_source } = await searchParams</code> 拿到来源、页码等附加信息。</li>
     </ol>
     <p>
       到这里，「路径参数」和「查询参数」的分工就清楚了：<strong>决定资源身份的用 <code>params</code>，附加信息用 <code>searchParams</code></strong>。两者类型也不同，前者按段数可能是字符串或数组，后者的值同样可能是字符串或数组，因此读取前应先规范化为单值再用。
@@ -60,14 +60,14 @@ import X04DynamicRoutes from './X04DynamicRoutes.vue'
         <tr><th>写法</th><th>匹配示例</th><th>取到的值</th></tr>
       </thead>
       <tbody>
-        <tr><td><code>[id]</code></td><td><code>/products/123</code></td><td><code>params.id = '123'</code></td></tr>
-        <tr><td><code>[...slug]</code></td><td><code>/categories/a/b</code></td><td><code>params.slug = ['a', 'b']</code></td></tr>
-        <tr><td><code>[[...query]]</code></td><td><code>/search</code> 或 <code>/search/a/b</code></td><td><code>params.query</code> 可能为 <code>undefined</code></td></tr>
-        <tr><td>查询串</td><td><code>?utm_source=x</code></td><td><code>searchParams.utm_source = 'x'</code></td></tr>
+        <tr><td><code>[id]</code></td><td><code>/products/123</code></td><td><code>const { id } = await params</code> → <code>'123'</code></td></tr>
+        <tr><td><code>[...slug]</code></td><td><code>/categories/a/b</code></td><td><code>const { slug } = await params</code> → <code>['a', 'b']</code></td></tr>
+        <tr><td><code>[[...query]]</code></td><td><code>/search</code> 或 <code>/search/a/b</code></td><td>解包后的 <code>query</code> 可能为 <code>undefined</code></td></tr>
+        <tr><td>查询串</td><td><code>?utm_source=x</code></td><td><code>(await searchParams).utm_source = 'x'</code></td></tr>
       </tbody>
     </table>
     <div class="lesson-box warn">
-      <strong>两个要注意的副作用：</strong>一是在 Server Component 中读取 <code>searchParams</code>，会让这条路由<strong>转为动态渲染</strong>（每次请求执行），因为它依赖每次请求都可能不同的查询串；二是 <code>searchParams</code> 的每个值都可能是字符串或数组，直接当字符串拼接容易出错，先判断类型再使用。
+      <strong>两个要注意的副作用：</strong>一是在 Server Component 中读取 <code>searchParams</code> 会引入请求时数据——未启用 Cache Components 时整条路由<strong>转为动态渲染</strong>，启用后应把读取放进 <code>&lt;Suspense&gt;</code>，让其余部分保留静态壳；二是 <code>searchParams</code> 的每个值都可能是字符串或数组，直接当字符串拼接容易出错，先判断类型再使用。
     </div>
 
     <h2>参数解析结果</h2>
@@ -81,7 +81,7 @@ import X04DynamicRoutes from './X04DynamicRoutes.vue'
       动态路由这一课，本质是把「一类页面」压进一条规则：方括号捕获单段（字符串）、三点号捕获多段（数组）、双层方括号做可选捕获，路径参数走 <code>params</code>、附加信息走 <code>searchParams</code>。<code>generateStaticParams</code> 负责把已知参数预先静态化，而 Next.js 15+ 中这两个参数都是 Promise，记得用 <code>await</code> 解包。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「动态路由」</span>用文件名表达可变路径段：<code>[id]</code> 捕获单段、<code>[...slug]</code> 捕获多段（结果数组）、<code>[[...slug]]</code> 可选捕获。页面通过 <code>params</code> 读路径参数、通过 <code>searchParams</code> 读查询串，两者的值都可能是字符串或数组，使用前先规范化。<code>generateStaticParams()</code> 在构建期预生成动态路由的静态页；Next.js 15+ 中 <code>params</code> 与 <code>searchParams</code> 都是 Promise，需 <code>await</code> 解包。在 Server Component 中读取 <code>searchParams</code> 会使路由转为动态渲染。
+      <span class="term-name">「动态路由」</span>用文件名表达可变路径段：<code>[id]</code> 捕获单段、<code>[...slug]</code> 捕获多段（结果数组）、<code>[[...slug]]</code> 可选捕获。页面通过 <code>params</code> 读路径参数、通过 <code>searchParams</code> 读查询串，两者的值都可能是字符串或数组，使用前先规范化。<code>generateStaticParams()</code> 在构建期预生成动态路由的静态页；Next.js 15+ 中 <code>params</code> 与 <code>searchParams</code> 都是 Promise，需 <code>await</code> 解包。未启用 Cache Components 时，在 Server Component 中读取 <code>searchParams</code> 会使路由转为动态渲染；启用后应把读取放进 <code>&lt;Suspense&gt;</code>。
     </div>
   </LessonArticle>
 </template>

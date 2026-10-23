@@ -55,7 +55,7 @@ import N20Modules from './N20Modules.vue'
       再规范用户的配置入口。模块把选项读成 <code>configKey</code> 同名的键：若 <code>configKey</code> 是 <code>'myModule'</code>，使用者在 <code>nuxt.config.ts</code> 里就写 <code>myModule: { ... }</code>，未填的项由 <code>defaults</code> 兜底。这就是「一行安装」之外仍然留给使用者的那个旋钮。
     </p>
     <p>
-      最后是使用生态时该守的几条经验。优先在 <code>nuxt.com/modules</code> 里挑选官方或高星的社区模块；本地开发或调试模块时，可以用 <code>modulesDir</code> 或直接引用本地路径；构建期靠 <code>nuxt prepare</code> 生成 <code>.nuxt/</code> 下的类型声明，辅助模块开发；<strong>注册顺序即执行顺序</strong>，依赖其他模块能力的模块应放在其后注册。
+      最后是使用生态时该守的几条经验。优先在 <code>nuxt.com/modules</code> 里挑选官方或高星的社区模块；本地开发或调试模块时，放进项目根目录的 <code>modules/</code>（会自动注册），或在 <code>nuxt.config.ts</code> 的 <code>modules</code> 里直接引用本地路径；构建期靠 <code>nuxt prepare</code> 生成 <code>.nuxt/</code> 下的类型声明，辅助模块开发；<strong>注册顺序即执行顺序</strong>，依赖其他模块能力的模块应放在其后注册。
     </p>
     <div class="lesson-box warn">
       <strong>顺序不是小事：</strong><code>modules</code> 数组的顺序决定注册先后，也决定<strong>钩子与插件的执行次序</strong>。依赖别的模块的模块必须排在它之后——否则会出现在某台机器上偶发失败、换个环境又好了这类极难复现的问题，排查成本远高于当初多看一眼顺序。

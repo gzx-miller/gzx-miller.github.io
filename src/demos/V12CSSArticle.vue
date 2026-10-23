@@ -46,7 +46,7 @@ import V12CSS from './V12CSS.vue'
       接着补「隔离」。组件级隔离其实 Vite 早就给了：<code>&lt;style scoped&gt;</code> 会为选择器附加唯一属性，天然把样式框在当前组件内，<strong>普通项目用它就够了，不必上 CSS Modules</strong>。只有当你要把类名当数据传给 JS、或需要更明确的局部命名时，才用 <code>&lt;style module&gt;</code>：样式在 <code>:class="$style.xxx"</code> 里引用，Vite 会生成 <code>[name]__[local]___[hash]</code> 形式的局部类名，全局绝不会撞车。
     </p>
     <p>
-      最后补「可调试」。开发阶段打开 <code>css.devSourcemap</code>，浏览器 DevTools 里看到的样式就能直接定位回源码文件，而不是编译后的中间产物。另外，Tailwind 这类工具链<strong>走 PostCSS 接入即可</strong>，不需要再额外安装专门的 Vite 插件。
+      最后补「可调试」。开发阶段打开 <code>css.devSourcemap</code>，浏览器 DevTools 里看到的样式就能直接定位回源码文件，而不是编译后的中间产物。另外，Tailwind v4 提供官方 <code>@tailwindcss/vite</code> 插件，Vite 项目优先用它；也可以改用 <code>@tailwindcss/postcss</code> 走 PostCSS 接入，两者选其一，不要重复接入。
     </p>
 
     <h2>隔离方式对比</h2>

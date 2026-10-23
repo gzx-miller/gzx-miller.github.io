@@ -1,14 +1,13 @@
 // 人机交互：用 interrupt 中断执行，等人批准后从断点恢复
 // 场景：退款审批——金额超过 500 元时必须人工审批，批准后继续执行
-import { StateGraph, Annotation, START, END, interrupt, Command, MemorySaver } from '@langchain/langgraph'
+import { StateGraph, StateSchema, START, END, interrupt, Command, MemorySaver } from '@langchain/langgraph'
+import { z } from 'zod/v4'
 
-const OrderState = Annotation.Root({
-  orderId: Annotation<string>,
-  amount: Annotation<number>,
-  decision: Annotation<'approved' | 'rejected' | null>({
-    default: () => null,
-  }),
-  result: Annotation<string>,
+const OrderState = new StateSchema({
+  orderId: z.string(),
+  amount: z.number(),
+  decision: z.enum(['approved', 'rejected']).nullable().default(null),
+  result: z.string(),
 })
 
 // 示例1: 审核节点里调用 interrupt 暂停执行

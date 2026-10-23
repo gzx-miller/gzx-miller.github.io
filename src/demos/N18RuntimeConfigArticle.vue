@@ -34,7 +34,7 @@ import N18RuntimeConfig from './N18RuntimeConfig.vue'
     <ul>
       <li>只声明了默认值，各环境要怎么覆盖？总不能在每个环境的 CI 里都改一次 <code>nuxt.config.ts</code>。</li>
       <li>服务端和客户端的读法不一样：在浏览器里调用 <code>useRuntimeConfig()</code> 后写 <code>config.secretKey</code> 拿到的是 <code>undefined</code>，调试时很容易误判成「配置没读到」。</li>
-      <li>它和 <code>app.config.ts</code> 的关系不清——把主题色放错地方，就会出现「改了配置却没生效」。</li>
+      <li>它和 <code>app/app.config.ts</code> 的关系不清——把主题色放错地方，就会出现「改了配置却没生效」。</li>
       <li>把密钥误放进 <code>public</code> 而不自知：本地能正常读到，一切看起来都对，直到有人打开浏览器开发者工具。</li>
     </ul>
 
@@ -49,7 +49,7 @@ import N18RuntimeConfig from './N18RuntimeConfig.vue'
       再补读取场景。服务端用 <code>useRuntimeConfig(event)</code>，可以读到全部配置，包括私有项；客户端用 <code>useRuntimeConfig()</code>，<strong>只能读到 <code>public</code> 下的配置</strong>。这个差异不是缺陷，而是一条明确的安全边界：凡是要读密钥的逻辑，必须待在服务端一侧（<code>server/api</code>、<code>server/routes</code> 或服务端中间件里），不要在组件里试图读取它。
     </p>
     <p>
-      最后补构建期常量的安放。主题色、功能开关这类<strong>不敏感、不随环境变化、构建后就固定</strong>的常量，放 <code>app.config.ts</code>，用 <code>useAppConfig()</code> 读取。它和 <code>runtimeConfig</code> 的定位刚好互补：一个在构建期确定、不读环境变量，一个在运行时由环境变量注入。分清了这条线，就不会再出现「配置改了不生效」的困惑。
+      最后补构建期常量的安放。主题色、功能开关这类<strong>不敏感、不随环境变化、构建后就固定</strong>的常量，放 <code>app/app.config.ts</code>，用 <code>useAppConfig()</code> 读取。它和 <code>runtimeConfig</code> 的定位刚好互补：一个在构建期确定、不读环境变量，一个在运行时由环境变量注入。分清了这条线，就不会再出现「配置改了不生效」的困惑。
     </p>
     <div class="lesson-box warn">
       <strong>最该记住的一条：</strong>不要把密钥放进 <code>public</code> 配置——它会被打包并暴露到客户端代码里，任何访问者都能看到。反过来，<code>public</code> 是专门留给「本来就要暴露给浏览器的公钥、版本号」的。另外要意识到 <code>runtimeConfig</code> 是在<strong>应用启动时</strong>读取环境变量的，修改它之后需要重启 dev server 或重新部署才生效，热更新不会带上新值。
@@ -57,13 +57,13 @@ import N18RuntimeConfig from './N18RuntimeConfig.vue'
 
     <h2>配置定义与使用对照</h2>
     <figure class="lesson-figure">
-      <figcaption>三个页签分别是「配置定义 / 环境变量 / 使用方式」：配置定义页签里用「锁」与「开锁」两组图标摊开私有项和公有项各自的可见范围，并对照 <code>app.config.ts</code>；环境变量页签给 <code>NUXT_</code> 前缀到配置字段的映射规则；使用方式页签有一张 <code>runtimeConfig</code> 与 <code>appConfig</code> 的逐项对比表。照着表把「什么该放哪儿」对一遍。</figcaption>
+      <figcaption>三个页签分别是「配置定义 / 环境变量 / 使用方式」：配置定义页签里用「锁」与「开锁」两组图标摊开私有项和公有项各自的可见范围，并对照 <code>app/app.config.ts</code>；环境变量页签给 <code>NUXT_</code> 前缀到配置字段的映射规则；使用方式页签有一张 <code>runtimeConfig</code> 与 <code>appConfig</code> 的逐项对比表。照着表把「什么该放哪儿」对一遍。</figcaption>
       <N18RuntimeConfig />
     </figure>
 
     <h2>分层声明与可见范围</h2>
     <p>
-      运行时配置解决的是「同一份代码怎么在不同环境跑成不同样子，同时不把秘密带出服务器」：分层声明决定可见范围，<code>NUXT_</code> 前缀的环境变量负责覆盖，<code>useRuntimeConfig(event)</code> 与 <code>useRuntimeConfig()</code> 的差异守住安全边界，而构建期固定、不随环境变化的东西交给 <code>app.config.ts</code>。想清一个值「要不要给浏览器看、跟不跟环境变」，答案就唯一了。
+      运行时配置解决的是「同一份代码怎么在不同环境跑成不同样子，同时不把秘密带出服务器」：分层声明决定可见范围，<code>NUXT_</code> 前缀的环境变量负责覆盖，<code>useRuntimeConfig(event)</code> 与 <code>useRuntimeConfig()</code> 的差异守住安全边界，而构建期固定、不随环境变化的东西交给 <code>app/app.config.ts</code>。想清一个值「要不要给浏览器看、跟不跟环境变」，答案就唯一了。
     </p>
     <div class="lesson-term">
       <span class="term-name">「公有运行时配置（public runtimeConfig）」</span>指定义在 <code>runtimeConfig.public</code> 下的配置项，服务端与客户端都能读取，并且会被<strong>序列化进发往客户端的载荷</strong>。它适合承载本来就要暴露给浏览器的公钥、CDN 域名、应用版本号。<strong>边界</strong>：放进来的东西等同于公开，绝不能放密钥或任何服务端凭证；它与私有配置共用 <code>NUXT_</code> 前缀映射规则，但公有项要多一段 <code>PUBLIC_</code>（即形如 <code>NUXT_PUBLIC_API_KEY</code>），并且只有它能在客户端被读到。

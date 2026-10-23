@@ -1,6 +1,6 @@
 <template>
   <LlmArticle>
-    <div class="llm-question"><strong>开场问题：</strong>ChatGPT 之后呢——当下最活跃的研究方向，与大模型可能的演变，往哪儿使劲？</div>
+    <div class="llm-question"><strong>承接上文：</strong>ChatGPT 之后呢——当下最活跃的研究方向，与大模型可能的演变，往哪儿使劲？</div>
 
     <h2>前沿尚无标准答案</h2>
     <p>前面讲的是<strong>已经定型的历史</strong>——每一步都有清晰的因果。这最后一课换个姿势，看「正在发生」和「可能发生」的事。前沿之所以叫前沿，就因为它还没有标准答案：有的方向已落地、有的还在争论、有的两年后可能被证伪。所以不求记住结论，只求建立一张<strong>地图</strong>：知道大家往哪几个方向使劲、各要解决什么问题。</p>

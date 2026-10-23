@@ -38,7 +38,7 @@ import X17NextImage from './X17NextImage.vue'
       不推翻原生标签，而是给「放一张图」补上一层自动化的优化：Next.js 的 <code>next/image</code>。你仍然只是写一个图片组件，但它会<strong>按设备生成合适尺寸的 AVIF/WebP、默认懒加载，并按你给的尺寸预留位置</strong>。
     </p>
     <p>
-      第一步先区分图片来源。本地图片用 <code>import</code> 引入，导入对象自带宽高，组件就能自动防抖并自动生成模糊占位图；远程图片则要在 <code>next.config.js</code> 里配置 <code>remotePatterns</code> 域名白名单后才能用。
+      第一步先区分图片来源。本地图片用 <code>import</code> 引入，导入对象自带宽高，组件就能自动防抖并自动生成模糊占位图；远程图片则要在 <code>next.config.ts</code> 里配置 <code>remotePatterns</code> 域名白名单后才能用。
     </p>
     <p>
       为什么远程图要先「报备」？因为这套优化是靠服务端的图片处理端点完成的，它只会处理你明确信任的域名。这是一道安全边界：若不设限制，任何人都能拿你的站点当代理，去处理和缓存任意第三方图片。所以白名单没配好时，问题往往不在浏览器，而是运行时抛出的配置错误。
@@ -47,7 +47,7 @@ import X17NextImage from './X17NextImage.vue'
       第二步是告诉组件这张图占多大位置，这是消除抖动的关键。有两种写法：显式写 <code>width</code> 与 <code>height</code>；或尺寸不确定时用 <code>fill</code>，让图片铺满父容器——此时父元素要设成 <code>position: relative</code>，否则它不知道该填多大。
     </p>
     <p>
-      第三步是把「什么时候加载」和「加载时显示什么」一并管起来。首屏大图加 <code>priority</code>，它会提前预加载，直接影响最大内容元素（LCP）的到达时间；其余图片保持默认懒加载，进入视口才开始下载。用 <code>placeholder="blur"</code> 可以先铺一层低质量模糊图，减少图片「啪」地跳出来的突兀感——本地导入的图片会自动生成这张占位图，远程图则要你提供 <code>blurDataURL</code>。
+      第三步是把「什么时候加载」和「加载时显示什么」一并管起来。首屏大图加 <code>preload</code>，它会插入预加载提示，直接影响最大内容元素（LCP）的到达时间；其余图片保持默认懒加载，进入视口才开始下载。用 <code>placeholder="blur"</code> 可以先铺一层低质量模糊图，减少图片「啪」地跳出来的突兀感——本地导入的图片会自动生成这张占位图，远程图则要你提供 <code>blurDataURL</code>。
     </p>
     <p>
       最后是响应式。用 <code>sizes</code> 声明「不同视口下这张图实际显示多宽」，组件就会配合底层 <code>srcset</code> 生成多档尺寸，浏览器只下载当前视口真正需要的那一档。
@@ -64,10 +64,10 @@ import X17NextImage from './X17NextImage.vue'
 
     <h2>默认行为与覆盖</h2>
     <p>
-      图片优化的本质，是把「多大、何时下、占多大位置」从人的手工决策，变成组件能自动完成的默认行为。本地图用 <code>import</code>、远程图配白名单，尺寸用 <code>width</code> 与 <code>height</code> 或 <code>fill</code> 交代清楚，首图加 <code>priority</code>、其余交给懒加载——加载变快，抖动也随之消失。
+      图片优化的本质，是把「多大、何时下、占多大位置」从人的手工决策，变成组件能自动完成的默认行为。本地图用 <code>import</code>、远程图配白名单，尺寸用 <code>width</code> 与 <code>height</code> 或 <code>fill</code> 交代清楚，首图加 <code>preload</code>、其余交给懒加载——加载变快，抖动也随之消失。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「按需图片优化」</span><code>next/image</code> 的 <code>Image</code> 组件会按设备生成合适尺寸的 AVIF/WebP、默认懒加载，并通过 <code>width</code> 与 <code>height</code> 或 <code>fill</code> 预留位置以消除 CLS；本地图片需 <code>import</code>（自带尺寸与模糊占位），远程图片需在 <code>next.config.js</code> 配置 <code>remotePatterns</code> 白名单，首屏 LCP 图片用 <code>priority</code> 预加载。
+      <span class="term-name">「按需图片优化」</span><code>next/image</code> 的 <code>Image</code> 组件会按设备生成合适尺寸的 AVIF/WebP、默认懒加载，并通过 <code>width</code> 与 <code>height</code> 或 <code>fill</code> 预留位置以消除 CLS；本地图片需 <code>import</code>（自带尺寸与模糊占位），远程图片需在 <code>next.config.ts</code> 配置 <code>remotePatterns</code> 白名单，首屏 LCP 图片用 <code>preload</code> 预加载。
     </div>
   </LessonArticle>
 </template>

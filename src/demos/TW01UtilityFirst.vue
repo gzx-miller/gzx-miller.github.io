@@ -52,7 +52,7 @@ const utilityCode = `<span style="color:#7c7c99">// 传统 CSS 写法</span>
   gap: 1rem;
   padding: 1.25rem;
   border-radius: 1rem;
-  box-shadow: 0 10px 24px rgba(0,0,0,.1);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
 <span style="color:#7c7c99">// Tailwind 工具类写法（等价）</span>
@@ -66,7 +66,7 @@ const utilityCode = `<span style="color:#7c7c99">// 传统 CSS 写法</span>
 <span style="color:#8a8a3a">gap-4</span>      → gap: 1rem
 <span style="color:#8a8a3a">p-5</span>        → padding: 1.25rem
 <span style="color:#8a8a3a">rounded-2xl</span> → border-radius: 1rem
-<span style="color:#8a8a3a">shadow-lg</span>   → box-shadow: 0 10px 24px ...`
+<span style="color:#8a8a3a">shadow-lg</span>   → box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)`
 </script>
 
 <template>

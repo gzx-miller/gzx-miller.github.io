@@ -10,7 +10,7 @@ import WB18ExceptionHandling from './WB18ExceptionHandling.vue'
 
     <h2>错误码语义重载</h2>
     <p>
-      先看清两条旧路的隐藏成本。<strong>返回错误码</strong>：错误和正常结果<strong>共用同一个返回值通道</strong>，<code>-1</code> 既可能是「出错」，也可能是一个合法的负结果，语义被重载；想带上「哪张订单、哪个字段」，只能塞进别处或让调用方去拼；一旦调用变深，每一层都要判断、都要向上传，漏掉一层错误就断了。<strong>直接崩（trap）</strong>：粗暴是够粗暴，越界、除零、<code>unreachable</code> 都会让执行<strong>立刻中止</strong>，整个实例很可能就此进入不可用状态，可调用方拿到的信息量却近乎为零。
+      先看清两条旧路的隐藏成本。<strong>返回错误码</strong>：错误和正常结果<strong>共用同一个返回值通道</strong>，<code>-1</code> 既可能是「出错」，也可能是一个合法的负结果，语义被重载；想带上「哪张订单、哪个字段」，只能塞进别处或让调用方去拼；一旦调用变深，每一层都要判断、都要向上传，漏掉一层错误就断了。<strong>直接崩（trap）</strong>：粗暴是够粗暴，越界、除零、<code>unreachable</code> 都会让当前调用<strong>立刻中止</strong>，可调用方拿到的信息量却近乎为零；实例本身通常还能继续被调用，但内存可能已处于不一致状态。
     </p>
     <p>
       于是问题收敛成一句：<strong>怎么让 Wasm 主动抛出一个能携带结构化数据、又能被 JS 精确识别来源的错误，而且不把实例搞坏？</strong>
@@ -29,18 +29,18 @@ import WB18ExceptionHandling from './WB18ExceptionHandling.vue'
       <li>错误码和正常值<strong>共用一条返回通道</strong>，<code>-1</code> 到底是不是错误全凭约定，一旦有合法的负数结果就会误判。</li>
       <li>它<strong>带不了上下文</strong>：出错的具体字段、订单号、原始输入，只能靠额外参数或全局状态传，跨边界时很快乱掉。</li>
       <li>深层调用要<strong>逐层检查、逐层上抛</strong>，每一层都得记得判断，漏掉一层错误就被静默吞掉。</li>
-      <li>换成直接 <code>trap</code>（越界、除零、<code>unreachable</code>）虽然够直接，但它<strong>中止执行、实例可能再也不可用</strong>，且 JS 端拿到的只是没有自定义负载的运行时错误，信息同样丢失。</li>
+      <li>换成直接 <code>trap</code>（越界、除零、<code>unreachable</code>）虽然够直接，但它会<strong>中止当前调用</strong>，且 JS 端拿到的只是没有自定义负载的运行时错误，信息同样丢失；实例通常仍可调用，但内存状态可能已不可信。</li>
     </ul>
 
     <h2>trap与异常区分</h2>
     <p>
-      先把两个一直混在一起的概念<strong>拆开</strong>。<strong>trap</strong> 是运行时的机器级失败——数组越界、非法指令、显式 <code>unreachable</code>、除零等，执行会<strong>立刻中止</strong>，它不可被语言层的 <code>try/catch</code> 拦下，属于「硬失败」。<strong>异常（exception）</strong>是语言层的软失败：可以被 <code>try/catch</code> 捕获，可以携带数据，还能沿着调用栈向上寻找处理者。这一课要造的是后者。
+      先把两个一直混在一起的概念<strong>拆开</strong>。<strong>trap</strong> 是运行时的机器级失败——数组越界、非法指令、显式 <code>unreachable</code>、除零等，执行会<strong>立刻中止</strong>，它不可被 Wasm 的语言级异常处理拦下，属于「硬失败」。<strong>异常（exception）</strong>是语言层的软失败：可以被 <code>try_table</code> 的 catch 分支捕获，可以携带数据，还能沿着调用栈向上寻找处理者。这一课要造的是后者。
     </p>
     <p>
       先补<strong>异常的类型：<code>tag</code></strong>。用 <code>(tag $e (param i32))</code> 声明一个异常类型，括号里的 <code>param</code> 是它携带负载的签名——这里声明的是「带一个 <code>i32</code>」。<code>tag</code> 像一枚徽章，作用是让捕获端能认出「这是谁抛的」，而不是只看到一条没有出处的错误。
     </p>
     <p>
-      再补<strong>抛出：<code>throw</code></strong>。在 <code>div</code> 里，一旦发现除数是 <code>0</code>，就写 <code>throw $e</code>，把负载（演示里是 <code>100</code>，用来代表错误码或上下文）<strong>随异常一起抛出</strong>。抛出之后它就像别的语言一样，沿调用栈向上寻找是否有 <code>catch</code>。
+      再补<strong>抛出：<code>throw</code></strong>。在 <code>div</code> 里，一旦发现除数是 <code>0</code>，就写 <code>throw $e</code>，把负载（演示里是 <code>100</code>，用来代表错误码或上下文）<strong>随异常一起抛出</strong>。抛出之后它就像别的语言一样，沿调用栈向上寻找是否有 <code>try_table</code> 的 catch 分支。
     </p>
     <p>
       再补<strong>JS 侧的捕获与识别</strong>。异常跨越 Wasm/JS 边界后，JS 收到的不是字符串，而是一个 <code>WebAssembly.Exception</code> 对象。你可以用 <code>e.is(tag)</code> 判断它是不是来自你声明的那个 <code>tag</code>，再用 <code>e.getArg(tag, 0)</code> 把第 <code>0</code> 个负载取出来。这样 JS 能<strong>精确分辨异常来源并读到结构化数据</strong>，而不是对着一句 <code>RuntimeError</code> 猜发生了什么。
@@ -52,10 +52,10 @@ import WB18ExceptionHandling from './WB18ExceptionHandling.vue'
       <li>用 <code>e.is(tag)</code> 判定来源、<code>e.getArg(tag, 0)</code> 取出负载并展示。</li>
     </ol>
     <p>
-      再补<strong>在 Wasm 内部就地处理</strong>。不是所有错误都得回到 JS：如果本模块内就能兜住，直接在 Wasm 里用 <code>try/catch</code> 处理，可以省掉一次跨界往返。要记住的是，<strong>异常可以跨越 Wasm/JS 边界传递，并且不会破坏调用栈</strong>——这正是它和 trap 最本质的差别：trap 把执行整个掀翻，异常只是把控制权交给上层的处理者。
+      再补<strong>在 Wasm 内部就地处理</strong>。不是所有错误都得回到 JS：如果本模块内就能兜住，直接在 Wasm 里用 <code>try_table</code> 的 catch 分支处理，可以省掉一次跨界往返。要记住的是，<strong>异常可以跨越 Wasm/JS 边界传递，并且不会破坏调用栈</strong>——这正是它和 trap 最本质的差别：trap 把执行整个掀翻，异常只是把控制权交给上层的处理者。
     </p>
     <div class="lesson-box warn">
-      <strong>两个容易踩的边界：</strong>其一，异常处理提案相对较新，旧运行时或某些嵌入式环境下可能不支持，实例化时就会失败，上线前应当做能力检测并准备降级路径；其二，别把异常当流程控制——它只在真正例外时抛出，正常分支该用返回值就用返回值，否则异常会成为新的性能与可读性负担。
+      <strong>两个容易踩的边界：</strong>其一，异常处理已进入 Wasm 标准并获得主流引擎支持，但旧运行时可能不支持；另外旧式 <code>try/catch</code> 指令从未标准化、已被弃用，新代码和工具链应使用 <code>try_table</code>，上线前仍需做能力检测与降级；其二，别把异常当流程控制——它只在真正例外时抛出，正常分支该用返回值就用返回值，否则异常会成为新的性能与可读性负担。
     </div>
 
     <h2>除零异常捕获演示</h2>
@@ -69,7 +69,7 @@ import WB18ExceptionHandling from './WB18ExceptionHandling.vue'
       「出错」在 Wasm 里有两副面孔：<code>trap</code> 是机器级的硬失败，中止执行、不可拦截；异常是语言级的软失败，可被捕获、可携带数据。用 <code>(tag ...)</code> 声明异常类型、用 <code>throw</code> 带上负载抛出，JS 端用 <code>WebAssembly.Exception</code> 配合 <code>e.is(tag)</code> 与 <code>e.getArg(tag, i)</code> 就能精确识别来源并读出数据，而且不破坏调用栈。它比错误码更有信息量、比 trap 更可控，但需要环境支持，也不该被当作日常流程控制。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「trap（陷阱）」</span>指 Wasm 运行时检测到不可继续的错误（数组越界、非法指令、显式 <code>unreachable</code>、除零等）时<strong>立即中止执行</strong>的机制。它属于机器级硬失败，<strong>不能被语言层的 <code>try/catch</code> 拦截</strong>，抛到宿主后表现为一个不带自定义负载的异常，且实例可能进入不可恢复状态。边界与例外：与之相对的是异常处理提案提供的 <code>(tag ...)</code> + <code>throw</code>，那是可捕获、可携带负载、且不破坏调用栈的软失败；判断一个错误能否恢复，先看它是 trap 还是异常。
+      <span class="term-name">「trap（陷阱）」</span>指 Wasm 运行时检测到不可继续的错误（数组越界、非法指令、显式 <code>unreachable</code>、除零等）时<strong>立即中止执行</strong>的机制。它属于机器级硬失败，<strong>不能被 Wasm 的语言级异常处理拦截</strong>，抛到宿主后表现为一个不带自定义负载的异常。trap 会中止当前调用，但实例通常仍可继续使用，只是内存可能已处于不一致状态。边界与例外：与之相对的是标准异常处理提供的 <code>(tag ...)</code> + <code>throw</code> + <code>try_table</code>，那是可捕获、可携带负载、且不破坏调用栈的软失败；判断一个错误能否恢复，先看它是 trap 还是异常。
     </div>
   </LessonArticle>
 </template>

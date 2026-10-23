@@ -54,7 +54,7 @@ console.log(config.public.appVersion)  // ✅
 const appConfig = useAppConfig()
 console.log(appConfig.theme)  // 不可在运行时修改`
 
-const appConfigCode = `// app.config.ts（编译时配置）
+const appConfigCode = `// app/app.config.ts（编译时配置）
 export default defineAppConfig({
   theme: {
     primaryColor: '#e85d04',
@@ -67,11 +67,11 @@ export default defineAppConfig({
 })
 
 // 与 runtimeConfig 区别：
-// app.config.ts → 构建时确定，不可用环境变量
+// app/app.config.ts → 构建时确定，不可用环境变量
 // runtimeConfig → 运行时确定，可用环境变量`
 
 const configComparison = [
-  { feature: '定义位置', runtimeConfig: 'nuxt.config.ts', appConfig: 'app.config.ts' },
+  { feature: '定义位置', runtimeConfig: 'nuxt.config.ts', appConfig: 'app/app.config.ts' },
   { feature: '环境变量', runtimeConfig: '✅ 支持', appConfig: '❌ 不支持' },
   { feature: '运行时修改', runtimeConfig: '❌ 不可', appConfig: '❌ 不可' },
   { feature: '服务端私有值', runtimeConfig: '✅ 支持', appConfig: '❌ 全部暴露' },
@@ -108,7 +108,7 @@ const configComparison = [
               </div>
             </div>
           </div>
-          <h4 style="margin-top:8px;">对比 app.config.ts</h4>
+          <h4 style="margin-top:8px;">对比 app/app.config.ts</h4>
           <pre class="code-block" style="font-size:11px;">{{ appConfigCode }}</pre>
         </div>
       </div>

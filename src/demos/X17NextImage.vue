@@ -6,7 +6,7 @@ const features = [
   { feat: '懒加载', desc: '默认 loading="lazy"，进入视口才加载' },
   { feat: '防抖动', desc: '需指定 width/height 或 fill，避免 CLS' },
   { feat: '响应式', desc: 'sizes 属性配合 srcset 生成多档' },
-  { feat: '优先级', desc: 'priority 属性用于首屏 LCP 图片预加载' },
+  { feat: '优先级', desc: 'preload 属性用于首屏 LCP 图片预加载' },
   { feat: '占位符', desc: 'blurDataURL 生成低质量模糊预览' },
 ]
 
@@ -19,13 +19,13 @@ export default function Hero() {
     &lt;Image
       src={hero}            <span style="color:#7c7c99">// 导入对象，自带尺寸</span>
       alt="封面图"
-      priority              <span style="color:#7c7c99">// 首屏预加载</span>
+      preload               <span style="color:#7c7c99">// 首屏预加载</span>
       placeholder="blur"    <span style="color:#7c7c99">// 模糊占位</span>
     /&gt;
   )
 }
 
-<span style="color:#8a8a3a">// 远程图片 — 需配置 next.config.js 域名白名单</span>
+<span style="color:#8a8a3a">// 远程图片 — 需配置 next.config.ts 域名白名单</span>
 &lt;Image
   src="https://cdn.example.com/photo.jpg"
   alt="远程图"
@@ -34,15 +34,19 @@ export default function Hero() {
   sizes="(max-width: 768px) 100vw, 50vw"
 /&gt;
 
-<span style="color:#8a8a3a">// next.config.js</span>
-module.exports = {
+<span style="color:#8a8a3a">// next.config.ts</span>
+import type { NextConfig } from 'next'
+
+const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'cdn.example.com' }
     ],
     formats: ['image/avif', 'image/webp'],
   }
-}`
+}
+
+export default nextConfig`
 
 const vsImg = [
   { aspect: '优化', nextImage: '✅ 自动', plainImg: '❌ 手动' },

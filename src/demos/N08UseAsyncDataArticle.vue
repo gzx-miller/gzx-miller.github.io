@@ -29,8 +29,8 @@ import N08UseAsyncData from './N08UseAsyncData.vue'
 
     <h2>键冲突与数据覆盖</h2>
     <ul>
-      <li>key 得你自己保证<strong>全局唯一</strong>。两个地方写出相同的 key，后写的会覆盖前者的数据，而且不报错。</li>
-      <li>默认情况下，同一个 key 的并发请求可能各跑各的；快速切换时，先发的旧请求后返回，会<strong>覆盖</strong>掉新请求的结果——就是开场的竞态。</li>
+      <li>手动指定的 key 得你自己保证<strong>全局唯一</strong>。两个地方写出相同的 key，后写的会覆盖前者的数据，而且不报错。</li>
+      <li>默认的 <code>dedupe</code> 是 <code>'cancel'</code>：同一个 key 的新请求会取消上一个。但它只对<strong>同 key</strong>生效，不同 key 的请求各跑各的，快速切换时先发的旧请求后返回，仍会<strong>覆盖</strong>掉新请求的结果——这就是开场的竞态。</li>
       <li>原始响应会被直接写进 <code>data</code>。像 <code>price</code> 以「分」为单位这种事，就得在模板里到处做除法换算，既啰嗦又容易漏。</li>
       <li>数据没回来时 <code>data</code> 是 <code>undefined</code>，模板里直接访问 <code>data.items</code> 会当场报错。</li>
       <li>一个不重要的统计接口若也用默认方式（阻塞导航），整个路由切换都得等它。</li>
@@ -41,8 +41,8 @@ import N08UseAsyncData from './N08UseAsyncData.vue'
       不推翻这套用法，而是顺着「key → 并发 → 数据形状 → 时机与缓存」的顺序，一层层补足控制力。
     </p>
     <ol class="lesson-steps">
-      <li><strong>手动 key</strong>：给每次获取指定一把<strong>全局唯一的 key</strong>。Nuxt 靠这把 key 做结果缓存与请求去重——这也是它比 <code>useFetch</code> 更底层的地方：key 不再由 URL 自动生成，而是你说了算。</li>
-      <li><strong>并发与去重</strong>：要<strong>同时</strong>拉多个接口，别写成上下两句 <code>await</code>（那是串行），而是先分别调用、拿到各自的 Promise 后再统一等待。要处理同 key 的并发冲突，就用 <code>dedupe</code> 指定策略：<code>'defer'</code> 让进行中的同 key 请求<strong>共享结果</strong>，<code>'cancel'</code> 则<strong>取消前一个</strong>、只保留最新一次——开场那种「连点」造成的覆盖，用 <code>'cancel'</code> 就能治好。</li>
+      <li><strong>手动 key</strong>：给每次获取指定一把<strong>全局唯一的 key</strong>。Nuxt 靠这把 key 做结果缓存与请求去重——这也是它比 <code>useFetch</code> 更底层的地方：key 可以手动指定，不指定时才按调用位置自动生成，控制权在你手里。</li>
+      <li><strong>并发与去重</strong>：要<strong>同时</strong>拉多个接口，别写成上下两句 <code>await</code>（那是串行），而是先分别调用、拿到各自的 Promise 后再统一等待。要处理同 key 的并发冲突，就用 <code>dedupe</code> 指定策略：<code>'cancel'</code>（默认）<strong>取消前一个</strong>、只保留最新一次；<code>'defer'</code> 则等进行中的同 key 请求结束后再发起新请求——开场那种「连点」造成的覆盖，用 <code>'cancel'</code> 就能治好。</li>
       <li><strong>整理数据</strong>：<code>transform</code> 会在写入 <code>data</code> 之前对原始响应做加工（比如把「分」换算成「元」），它的返回值类型就是最终 <code>data</code> 的类型；<code>default</code> 则给 <code>data</code> 一个安全的初始值，让模板在数据到达之前也不会撞上 <code>undefined</code>。</li>
       <li><strong>时机与缓存</strong>：用 <code>useLazyAsyncData</code>（等价于 <code>lazy: true</code>）让请求<strong>不阻塞导航</strong>，请求期间 <code>pending</code> 为真，配合它渲染加载态即可；注意 <code>lazy</code> 只影响「导航要不要等」，并不改变请求什么时候发出，那是 <code>immediate: false</code> 单独控制的，两者含义不同。若要更细地决定「缓存从哪来、命中就不请求」，可用 <code>getCachedData</code> 自定义取缓存的逻辑；需要手动重取时，仍调用 <code>refresh()</code>。</li>
     </ol>
@@ -58,10 +58,10 @@ import N08UseAsyncData from './N08UseAsyncData.vue'
 
     <h2>缓存去重与并发控制</h2>
     <p>
-      <code>useAsyncData</code> 把控制权交还给你：一把手动指定的 key 决定缓存与去重，<code>dedupe</code> 决定并发时共享还是取消，<code>transform</code> 与 <code>default</code> 负责数据形状，<code>lazy</code> 决定导航要不要等。当你需要的不只是「取一个 URL」，而是「编排一段异步逻辑」时，它才是那把更合手的工具。
+      <code>useAsyncData</code> 把控制权交还给你：一把手动指定的 key 决定缓存与去重，<code>dedupe</code> 决定并发时取消旧请求还是等待旧请求，<code>transform</code> 与 <code>default</code> 负责数据形状，<code>lazy</code> 决定导航要不要等。当你需要的不只是「取一个 URL」，而是「编排一段异步逻辑」时，它才是那把更合手的工具。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「useAsyncData」</span>比 <code>useFetch</code> 更底层的异步数据 composable：由你<strong>手动提供全局唯一的 key</strong> 和一个返回 Promise 的处理函数，Nuxt 据此完成 SSR/CSR 数据传递、缓存与请求去重。通过 <code>dedupe</code> 控制并发策略（<code>'defer'</code> 共享进行中的同 key 请求、<code>'cancel'</code> 取消旧请求保留新请求）、<code>transform</code> 加工响应、<code>default</code> 提供初始值、<code>lazy</code> 与 <code>useLazyAsyncData</code> 不阻塞导航。边界：key 必须全局唯一，重复即互相覆盖；<code>lazy</code> 只影响是否阻塞导航、不改变请求时机；<code>immediate: false</code> 与 <code>lazy: true</code> 语义不同。
+      <span class="term-name">「useAsyncData」</span>比 <code>useFetch</code> 更底层的异步数据 composable：由你<strong>手动提供全局唯一的 key</strong> 和一个返回 Promise 的处理函数（省略 key 时按调用位置自动生成），Nuxt 据此完成 SSR/CSR 数据传递、缓存与请求去重。通过 <code>dedupe</code> 控制并发策略（<code>'cancel'</code> 为默认，取消旧请求保留新请求；<code>'defer'</code> 等旧请求结束后再发起）、<code>transform</code> 加工响应、<code>default</code> 提供初始值、<code>lazy</code> 与 <code>useLazyAsyncData</code> 不阻塞导航。<code>status</code> 会给出 <code>'idle' | 'pending' | 'success' | 'error'</code> 四态。边界：手动指定的 key 必须全局唯一，重复即互相覆盖；<code>lazy</code> 只影响是否阻塞导航、不改变请求时机；<code>immediate: false</code> 与 <code>lazy: true</code> 语义不同。
     </div>
   </LessonArticle>
 </template>

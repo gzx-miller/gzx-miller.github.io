@@ -144,8 +144,8 @@ export function SearchResults() {
 import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
 
-export default function DashboardPage() {
-  const cookieStore = cookies()
+export default async function DashboardPage() {
+  const cookieStore = await cookies()
   const session = cookieStore.get('session')
 
   if (!session) {

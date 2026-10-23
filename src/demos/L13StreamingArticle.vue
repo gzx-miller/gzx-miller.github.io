@@ -48,10 +48,10 @@ import L13Streaming from './L13Streaming.vue'
       第一层，只关心最终文本、但想让它<strong>早点开始出现</strong>——用 <code>stream</code>。它返回一个异步迭代器，模型每吐出一块就 yield 一块，你 <code>for await</code> 逐块拿到，边收边渲染。首 token 一到就能上屏，主观延迟从「整段生成完」降到「第一个字出现」。这是最常用的一层：API 简洁、性能好，聊天界面基本都用它。
     </p>
     <p>
-      第二层，链路变复杂后，光有 token 还不够，你要知道<strong>这块 token 是哪个环节吐的</strong>——用 <code>astream_events</code>。注意它的 <code>version</code> 必须指定为 <code>'v2'</code>，v1 已废弃。它返回的不是字符而是<strong>事件流</strong>：<code>on_chain_start</code>、<code>on_chat_model_start</code>、<code>on_chat_model_stream</code>、<code>on_chat_model_end</code>、<code>on_chain_end</code>……每个事件带 <code>name</code>、<code>run_id</code>、<code>tags</code> 等元数据。按 <code>run_id</code> 区分父子链路，就能定位到具体节点——这一层是给调试和监控用的，不是给最终用户看的。
+      第二层，链路变复杂后，光有 token 还不够，你要知道<strong>这块 token 是哪个环节吐的</strong>——用 <code>streamEvents</code>（Python 里的旧写法是 <code>astream_events</code>）。注意它的 <code>version</code> 必须指定为 <code>'v2'</code>，v1 已废弃。它返回的不是字符而是<strong>事件流</strong>：<code>on_chain_start</code>、<code>on_chat_model_start</code>、<code>on_chat_model_stream</code>、<code>on_chat_model_end</code>、<code>on_chain_end</code>……每个事件带 <code>name</code>、<code>run_id</code>、<code>tags</code> 等元数据。按 <code>run_id</code> 区分父子链路，就能定位到具体节点——这一层是给调试和监控用的，不是给最终用户看的。v1.3 起还可以改用事件流式投影（event streaming），按消息、状态、工具调用分别消费。
     </p>
     <p>
-      第三层，补两个常被忽略的执行方式。一是 <code>batch</code>——<code>invoke</code> 和 <code>stream</code> 都有对应的 <code>batch</code> / <code>abatch</code>，传入一组输入并用 <code>maxConcurrency</code> 控制并发，比循环 await 快得多。二是取消——把 <code>AbortController</code> 的 <code>signal</code> 传进调用，用户关页面时可以主动 abort，别为一个没人看的回答继续烧 token。
+      第三层，补两个常被忽略的执行方式。一是 <code>batch</code>——Runnable 提供 <code>batch</code>，传入一组输入并用 <code>maxConcurrency</code> 控制并发，比循环 await 快得多。二是取消——把 <code>AbortController</code> 的 <code>signal</code> 传进调用，用户关页面时可以主动 abort，别为一个没人看的回答继续烧 token。
     </p>
     <div class="lesson-box hint">
       <strong>生产环境最常见的组合：</strong><code>stream</code> 拿 token + <code>handleLLMNewToken</code> 回调把 token 推给前端（回调与流式共用同一个触发点）。如果 token 来得比屏幕刷新还快，逐块更新 DOM 反而更卡，可以在回调里<strong>节流</strong>——攒够一小段再统一 flush 一次。
@@ -59,13 +59,13 @@ import L13Streaming from './L13Streaming.vue'
 
     <h2>三种调用方式</h2>
     <figure class="lesson-figure">
-      <figcaption>切换 invoke / stream / astream_events 三个页签各点一次「运行」：invoke 会先静默两秒再整段蹦出，stream 逐字浮现，astream_events 则会在右侧日志里打出带 <code>run_id</code> 的 start / llm_chunk / end 事件。</figcaption>
+      <figcaption>切换 invoke / stream / streamEvents 三个页签各点一次「运行」：invoke 会先静默两秒再整段蹦出，stream 逐字浮现，streamEvents 则会在右侧日志里打出带 <code>run_id</code> 的 start / llm_chunk / end 事件。</figcaption>
       <L13Streaming />
     </figure>
 
     <h2>调用颗粒度选择</h2>
     <p>
-      invoke、stream、astream_events 不是三选一的竞品，而是同一件事的三个颗粒度：只要结果用 invoke，要实时上屏用 stream，要看清链路每一步用 astream_events。选哪一层，取决于你需要多细的过程。
+      invoke、stream、streamEvents 不是三选一的竞品，而是同一件事的三个颗粒度：只要结果用 invoke，要实时上屏用 stream，要看清链路每一步用 streamEvents。选哪一层，取决于你需要多细的过程。
     </p>
     <div class="lesson-term">
       <span class="term-name">「首 token 延迟（TTFT，Time To First Token）」</span>指从发出请求到收到第一个 token 所经过的时间，是流式场景下用户感知速度的核心指标。它的边界在于：它和总耗时是两回事——流式并不减少总生成时间，只是把首 token 更早交到你手里、缩短主观等待；因此选型时要分别看 TTFT 与总时延，别把「感觉快了」当成「真的更快了」。

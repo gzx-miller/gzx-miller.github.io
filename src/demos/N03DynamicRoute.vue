@@ -57,11 +57,11 @@ const catchAllResult = computed(() => {
 
     <div style="margin-top:12px;padding:10px;background:#fff8f0;border-radius:6px;">
       <strong>代码示例：</strong>
-      <pre style="font-size:12px;margin:4px 0;">// pages/courses/[id].vue
+      <pre style="font-size:12px;margin:4px 0;">// app/pages/courses/[id].vue
 const route = useRoute()
 const id = route.params.id  // 字符串类型
 
-// pages/docs/[...slug].vue
+// app/pages/docs/[...slug].vue
 const slug = route.params.slug  // 字符串数组</pre>
     </div>
   </div>

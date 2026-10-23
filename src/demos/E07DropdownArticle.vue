@@ -38,7 +38,7 @@ import E07Dropdown from './E07Dropdown.vue'
       不推翻「收拢入口」，而是让组件来承担弹层的开合与分发——这就是 <code>el-dropdown</code>。它管住「点击外部关闭、层级、键盘导航」这些通用问题，你把注意力放回业务本身。
     </p>
     <p>
-      第一层的改进是把<strong>每一项操作变成一个可识别的标识</strong>。菜单结构这样组织：触发源放进 reference 区，点击展开；菜单本身由 <code>el-dropdown-menu</code> 承担，里面的每个 <code>el-dropdown-item</code> 用 <code>command</code> 属性打一个唯一标识——比如 <code>edit</code>、<code>share</code>、<code>star</code>、<code>delete</code>。用户点选某项时触发 <code>@command</code> 事件，<strong>回调参数就是那一项所选的 command</strong>。
+      第一层的改进是把<strong>每一项操作变成一个可识别的标识</strong>。菜单结构这样组织：触发源放进默认插槽，点击展开；菜单本身由 <code>#dropdown</code> 插槽承载 <code>el-dropdown-menu</code>，里面的每个 <code>el-dropdown-item</code> 用 <code>command</code> 属性打一个唯一标识——比如 <code>edit</code>、<code>share</code>、<code>star</code>、<code>delete</code>。用户点选某项时触发 <code>@command</code> 事件，<strong>回调参数就是那一项所选的 command</strong>。
     </p>
     <p>
       这一步带来的变化很大：过去是「每个按钮各管各的」，现在是「所有命令汇入一个分发函数」。你只需要写一个 <code>handleCommand(command)</code>，在里面用 <code>switch</code> 或映射表把命令路由到对应逻辑。新增一个操作，只要加一项、加一个 command，不用再改绑定。
@@ -47,7 +47,7 @@ import E07Dropdown from './E07Dropdown.vue'
       第二层改进是补齐菜单项的表达能力。用 <code>disabled</code> 禁用某一项防止误操作，用 <code>divided</code> 在相邻项之间加一条分隔线。放在「切换选中项」的场景里，这两个属性配合得极其自然：把 command 设成课程名，用动态 <code>disabled</code> 把<strong>当前已选中的那一项标灰</strong>，用户一眼就知道自己现在在哪门课上。
     </p>
     <ol class="lesson-steps">
-      <li>把触发源放进 reference 区，点击后展开下拉菜单。</li>
+      <li>把触发源放进默认插槽，菜单结构放进 <code>#dropdown</code> 插槽，点击后展开。</li>
       <li>为每个菜单项定义唯一 <code>command</code>，在 <code>@command</code> 里统一分发处理。</li>
       <li>用 <code>disabled</code> 标记当前选中项或不可用项，用 <code>divided</code> 分隔命令分组。</li>
       <li>需要「主操作 + 附加菜单」时改用 <code>split-button</code>。</li>
@@ -64,7 +64,7 @@ import E07Dropdown from './E07Dropdown.vue'
 
     <h2>点击一次收拢入口</h2>
     <p>
-      下拉菜单解决的是「入口太多」与「命令要能分发」这两件事：入口收拢成一次点击，命令用 <code>command</code> 标识、经 <code>@command</code> 统一路由。分清 reference 与菜单、分清主按钮与下拉分支各自的事件，就能把一堆零散操作整理成一处清晰的入口。
+      下拉菜单解决的是「入口太多」与「命令要能分发」这两件事：入口收拢成一次点击，命令用 <code>command</code> 标识、经 <code>@command</code> 统一路由。分清触发源（默认插槽）与菜单（<code>#dropdown</code> 插槽）、分清主按钮与下拉分支各自的事件，就能把一堆零散操作整理成一处清晰的入口。
     </p>
     <div class="lesson-term">
       <span class="term-name">「下拉菜单」</span>把一组操作收拢到一个触发入口下。用 <code>#dropdown</code> 插槽放 <code>el-dropdown-menu</code>，每个 <code>el-dropdown-item</code> 用 <code>command</code> 标识操作、<code>disabled</code> 禁用、<code>divided</code> 加分隔线；点选后触发 <code>@command</code>，回调参数就是所选 command。<code>split-button</code> 把触发钮拆成主按钮与右侧箭头，二者分别走 <code>@click</code> 与 <code>@command</code>。

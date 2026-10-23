@@ -18,16 +18,16 @@ import TW16Production from './TW16Production.vue'
 
     <h2>安全名单兜底</h2>
     <p>
-      遇到「类名缺失」的第一个反应，通常是加一个安全名单（safelist），把所有可能用到的类名都列进去，一劳永逸。这个方案对的地方在于，<strong>它确实能让这些类名出现在产物里</strong>，问题立刻被「压」下去了。
+      遇到「类名缺失」的第一个反应，通常是加一个安全名单。v3 时代它叫 <code>safelist</code>，写在 JS 配置里；v4 的 JS 配置已不再支持这项选项，等价做法是在 CSS 里写 <code>@source inline(...)</code>，把所有可能用到的类名都列进去，一劳永逸。这个方案对的地方在于，<strong>它确实能让这些类名出现在产物里</strong>，问题立刻被「压」下去了。
     </p>
     <p>
-      但它治标不治本，而且副作用很大：safelist 是一张静态清单，它会<strong>无条件地把列进去的类全部生成</strong>，无论页面是否真的用到。<code>bg-orange-600</code> 到 <code>bg-orange-900</code> 全列一遍，产物体积立刻膨胀，而你真正的设计问题——「为什么类名要让运行时来拼」——被完全掩盖了。
+      但它治标不治本，而且副作用很大：安全名单是一张静态清单，它会<strong>无条件地把列进去的类全部生成</strong>，无论页面是否真的用到。<code>bg-orange-600</code> 到 <code>bg-orange-900</code> 全列一遍，产物体积立刻膨胀，而你真正的设计问题——「为什么类名要让运行时来拼」——被完全掩盖了。
     </p>
 
     <h2>变量拼接扫描失效</h2>
     <ul>
       <li>用变量拼接出的类名，在扫描时不存在完整字符串，构建器看不见，自然不生成。</li>
-      <li>大范围的 safelist 会掩盖架构问题，并让 CSS 产物无谓地膨胀。</li>
+      <li>大范围的安全名单（v3 的 safelist / v4 的 <code>@source inline</code>）会掩盖架构问题，并让 CSS 产物无谓地膨胀。</li>
       <li>模板文件不在自动检测范围内（如 monorepo 里的外部包、特殊目录）时，里面的类名会被整体漏掉。</li>
       <li>内联来源写得过宽，扫描范围过大，构建速度明显变慢。</li>
       <li>类名缺失与体积过大这两类问题，往往被混在一起盲目试错，缺少系统定位顺序。</li>
@@ -71,10 +71,10 @@ import TW16Production from './TW16Production.vue'
 
     <h2>源码文本扫描</h2>
     <p>
-      生产排查的核心，是牢牢记住 Tailwind 的工作方式：<strong>扫描的是文本，类名必须完整出现</strong>。动态拼接要改成完整静态字符串，扫描不到的来源要用 <code>@source</code> 纳入，范围过宽要用 <code>@source not</code> 排除，而 safelist 只是掩盖问题的止痛药，不是解药。
+      生产排查的核心，是牢牢记住 Tailwind 的工作方式：<strong>扫描的是文本，类名必须完整出现</strong>。动态拼接要改成完整静态字符串，扫描不到的来源要用 <code>@source</code> 纳入，范围过宽要用 <code>@source not</code> 排除，而安全名单（v3 的 safelist / v4 的 <code>@source inline</code>）只是掩盖问题的止痛药，不是解药。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「静态候选检测」</span>指 Tailwind 在构建时把源码当纯文本扫描，找出完整出现的候选类名并按需生成 CSS，而不解析运行时逻辑。约定：动态类名应映射为完整静态字符串而非拼接；<code>@source</code> 用于纳入自动检测范围之外的来源（如 <code>node_modules</code> 中的组件库），<code>@source not</code> 排除无关目录，<code>@source inline</code> 内联候选；大范围 safelist 会掩盖架构问题并膨胀产物。
+      <span class="term-name">「静态候选检测」</span>指 Tailwind 在构建时把源码当纯文本扫描，找出完整出现的候选类名并按需生成 CSS，而不解析运行时逻辑。约定：动态类名应映射为完整静态字符串而非拼接；<code>@source</code> 用于纳入自动检测范围之外的来源（如 <code>node_modules</code> 中的组件库），<code>@source not</code> 排除无关目录，<code>@source inline</code> 内联候选（对应 v3 的 safelist）；大范围的安全名单会掩盖架构问题并膨胀产物。
     </div>
   </LessonArticle>
 </template>

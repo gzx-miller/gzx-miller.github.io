@@ -42,7 +42,7 @@ import L10Memory from './L10Memory.vue'
 
     <h2>消息角色结构化</h2>
     <p>
-      不推翻「把历史喂给模型」，而是换一种喂法。第一步补<strong>结构化</strong>：把历史从「一段字符串」升级成「一串带角色的消息」。用 <code>ChatMessageHistory</code> 把每条消息连同角色（human / ai / system）一起存下来；再在提示词模板里用一个占位符 <code>MessagesPlaceholder</code> 预留「历史该插在哪」的位置，运行时把消息数组填进去。先补它，是因为它治好了「分不清谁在说话」的毛病——角色是结构，不是靠文字去猜的。
+      不推翻「把历史喂给模型」，而是换一种喂法。第一步补<strong>结构化</strong>：把历史从「一段字符串」升级成「一串带角色的消息」，即 <code>HumanMessage</code> / <code>AIMessage</code> / <code>SystemMessage</code> / <code>ToolMessage</code>。v1 的 <code>createAgent</code> 默认维护 <code>messages</code> 状态，提示词模板里仍可用 <code>MessagesPlaceholder</code> 预留「历史该插在哪」的位置。先补它，是因为它治好了「分不清谁在说话」的毛病——角色是结构，不是靠文字去猜的。
     </p>
     <p>
       第二步补<strong>滑动窗口</strong>：历史太长时，只取最近 k 轮（k 轮就是 2k 条消息）参与本次请求，更早的直接丢掉。它牺牲的是久远的记忆，换来的是「永远不超上下文、成本可预期」。
@@ -51,7 +51,7 @@ import L10Memory from './L10Memory.vue'
       第三步补<strong>摘要</strong>：如果早期信息也重要、不能一丢了之，就额外调一次模型，把旧历史压缩成一段摘要，用这段摘要替掉原始的多轮消息。它用「细节」换「空间」，让很久远的信息以浓缩的形式继续留在上下文里——这是窗口丢掉的东西的一种补偿。
     </p>
     <p>
-      最后补<strong>按会话自动管理</strong>：用 <code>RunnableWithMessageHistory</code> 把链包住，传入一个按 <code>sessionId</code> 取历史的函数；之后每次调用只要在 <code>configurable</code> 里带上 <code>sessionId</code>，它就会自动注入该会话的历史，并在结束后把新一轮问答写回。生产环境里，把这层存储从内存换成 Redis 或数据库，会话才能跨重启保住。
+      最后补<strong>按会话自动管理</strong>：v1 用 <code>createAgent({ checkpointer })</code> 给智能体挂上检查点，例如 <code>new MemorySaver()</code>；调用时在 <code>configurable.thread_id</code> 里指定会话，框架就会自动读写该会话的历史。旧版的 <code>RunnableWithMessageHistory</code> + <code>ChatMessageHistory</code> 仍可用，但不再是现行推荐。生产环境里，把内存检查点换成 Redis 或 Postgres，会话才能跨重启保住。
     </p>
     <div class="lesson-box warn">
       <strong>三种策略不是三选一，而是同一条时间轴上的搭配：</strong>窗口负责「最近说了什么」，摘要负责「更早大概聊过什么」，完整历史只在对话很短时才用得起。另外，摘要记忆不是免费的——每生成一次摘要都要多调一次模型，多出来的延迟和成本必须算进预算。
@@ -65,7 +65,7 @@ import L10Memory from './L10Memory.vue'
 
     <h2>记忆容量取舍</h2>
     <p>
-      Memory 要解决的从来不是「记住」，而是「在有限的上文里，记住多少、记哪一段」。把历史存成带角色的消息、按会话注入，再根据对话长短在「完整历史、最近若干轮、一句摘要」之间取舍，模型才能既接得住上文，又不至于撑爆上下文。
+      Memory 要解决的从来不是「记住」，而是「在有限的上文里，记住多少、记哪一段」。把历史存成带角色的消息、用检查点按会话持久化，再根据对话长短在「完整历史、最近若干轮、一句摘要」之间取舍，模型才能既接得住上文，又不至于撑爆上下文。
     </p>
     <div class="lesson-term">
       <span class="term-name">「滑动窗口记忆」</span>是只保留最近 k 轮对话作为上下文、更早消息直接丢弃的记忆策略（k 轮即 2k 条消息）。它保证上下文长度可控、成本稳定。边界是：被窗口切掉的信息是永久丢失的，一旦后续提问的代词（「它」「那个」）指向前文、而指代对象已被切走，模型就会失去对象；需要长期保留的内容应配合摘要或外部存储，而不是单纯把 k 调大。

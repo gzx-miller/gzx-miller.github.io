@@ -142,7 +142,6 @@ async function extractTextFromImage(imageUrl: string): Promise<string> {
 
 // 示例7: 结构化图像理解 + Zod
 import { z } from 'zod'
-import { StructuredOutputParser } from 'langchain/output_parsers'
 
 const imageAnalysisSchema = z.object({
   imageType: z.string().describe('图片类型，如风景、人物、图表、产品等'),
@@ -153,24 +152,21 @@ const imageAnalysisSchema = z.object({
   textContent: z.string().describe('图片中的文字内容，如果没有则填"无"'),
 })
 
-async function structuredImageAnalysis(imageUrl: string): Promise<any> {
-  const parser = StructuredOutputParser.fromZodSchema(imageAnalysisSchema)
-  const formatInstructions = parser.getFormatInstructions()
+const modelWithImageSchema = model.withStructuredOutput(imageAnalysisSchema, {
+  name: 'analyze_image',
+})
 
+async function structuredImageAnalysis(imageUrl: string): Promise<any> {
   const messages = [
     new HumanMessage({
       content: [
-        {
-          type: 'text',
-          text: `请分析这张图片。\n\n${formatInstructions}`,
-        },
+        { type: 'text', text: '请分析这张图片。' },
         { type: 'image_url', image_url: { url: imageUrl } },
       ],
     }),
   ]
 
-  const response = await model.invoke(messages)
-  return parser.parse(response.content as string)
+  return modelWithImageSchema.invoke(messages)
 }
 
 // 示例8: 多模态链式调用

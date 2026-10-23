@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed, shallowRef } from 'vue'
+import { ref, onMounted, onUnmounted, computed, shallowRef, watch } from 'vue'
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 const glState = shallowRef<{
@@ -9,6 +9,7 @@ const glState = shallowRef<{
   cubeVBO: WebGLBuffer
   cubeIndex: WebGLBuffer
   instVBO: WebGLBuffer
+  instData: Float32Array
   rafId: number
   instCount: number
   useInstancing: boolean
@@ -289,7 +290,7 @@ function render(time: number) {
     gl.uniformMatrix4fv(gl.getUniformLocation(state.progNonInst, 'u_proj'), false, proj)
     gl.uniformMatrix4fv(gl.getUniformLocation(state.progNonInst, 'u_view'), false, view)
 
-    const instData = generateInstanceData(count, spacingVal)
+    const instData = state.instData
     const angle = time * 0.001 * rotSpeed
 
     for (let i = 0; i < count; i++) {
@@ -366,6 +367,7 @@ onMounted(() => {
     cubeVBO,
     cubeIndex,
     instVBO,
+    instData,
     rafId: 0,
     lastTime: performance.now(),
     frameCount: 0,
@@ -376,6 +378,14 @@ onMounted(() => {
 
   glState.value = state
   state.rafId = requestAnimationFrame(render)
+})
+
+watch([instanceCount, spacing], ([count, gap]) => {
+  const state = glState.value
+  if (!state) return
+  state.instData = generateInstanceData(count, gap)
+  state.gl.bindBuffer(state.gl.ARRAY_BUFFER, state.instVBO)
+  state.gl.bufferData(state.gl.ARRAY_BUFFER, state.instData, state.gl.DYNAMIC_DRAW)
 })
 
 onUnmounted(() => {

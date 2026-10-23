@@ -52,7 +52,7 @@ import U06ScrollSwiper from './U06ScrollSwiper.vue'
       <li><code>refresher-enabled</code>：打开下拉刷新，让这个局部列表拥有自己的刷新手势，不必牵动整页。</li>
     </ol>
     <p>
-      第四层，轮播其实是同一套思路的另一个方向。<code>swiper</code> 内联多个 <code>swiper-item</code>，横向逐屏切换，配 <code>autoplay</code> 自动播放、<code>circular</code> 循环（滑到最后一张继续滑回第一张，而不是卡住回弹）、<code>indicator-dots</code> 指示点。这里最容易被忽略的是 <code>current</code> <strong>是双向绑定的</strong>：写 <code>:current="idx"</code> 能控制它跳到哪一屏，同时 <code>@change</code> 会把用户手动滑动后的新下标回传给你——两边同步，才能做到「点第 3 个圆点跳到第 3 张，手动滑动后圆点也跟着亮」。
+      第四层，轮播其实是同一套思路的另一个方向。<code>swiper</code> 内联多个 <code>swiper-item</code>，横向逐屏切换，配 <code>autoplay</code> 自动播放、<code>circular</code> 循环（滑到最后一张继续滑回第一张，而不是卡住回弹）、<code>indicator-dots</code> 指示点。这里最容易被忽略的是 <code>current</code> <strong>是受控属性而不是自动双向绑定</strong>：写 <code>:current="idx"</code> 能控制它跳到哪一屏，用户手动滑动后再由 <code>@change</code> 把新下标回传给你，你需要自己把它写回 <code>idx</code>——补上这一步，才能做到「点第 3 个圆点跳到第 3 张，手动滑动后圆点也跟着亮」。
     </p>
     <p>
       第五层，性能。<code>scroll-view</code> 只负责「滚动」这一件事，它<strong>不会替你省节点</strong>。列表很长时真正的省法是虚拟列表：只渲染视口内可见的十几项，用占位高度撑出滚动条，滑出去就回收复用。这是「能滚」和「滑得动」之间的那条分界线。
@@ -69,7 +69,7 @@ import U06ScrollSwiper from './U06ScrollSwiper.vue'
 
     <h2>声明式滚动封装</h2>
     <p>
-      <code>scroll-view</code> 与 <code>swiper</code> 把「滚动」这项原生能力封装成了声明式组件：方向要显式声明、容器要有确定尺寸、位置可以编程控制、当前下标能双向绑定。而列表到底「滑不滑得动」，取决于你渲染了多少节点。
+      <code>scroll-view</code> 与 <code>swiper</code> 把「滚动」这项原生能力封装成了声明式组件：方向要显式声明、容器要有确定尺寸、位置可以编程控制、当前下标可由 <code>:current</code> 受控并用 <code>@change</code> 回传。而列表到底「滑不滑得动」，取决于你渲染了多少节点。
     </p>
     <div class="lesson-term">
       <span class="term-name">「虚拟列表」</span>一种长列表渲染策略：只渲染视口内可见的少量条目，用占位高度撑出完整滚动长度，条目滑出视口即回收复用，把 DOM 数量控制在常数级。边界：它依赖可估算的条目高度（等高最省事），条目高度不定时要先测量，否则滚动条会跳动；<code>scroll-view</code> 本身不提供虚拟化，需要额外实现或使用现成组件。

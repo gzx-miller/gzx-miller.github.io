@@ -4,7 +4,7 @@ import { ref } from 'vue'
 const strategies = [
   { name: '子路径路由', pattern: '/zh/about, /en/about', desc: 'URL 带语言前缀，SEO 友好', recommended: true },
   { name: '域名策略', pattern: 'example.com, example.cn', desc: '不同域名不同语言', recommended: false },
-  { name: 'Cookie/Header', pattern: '根据 Accept-Language', desc: '自动检测，配合 middleware', recommended: true },
+  { name: 'Cookie/Header', pattern: '根据 Accept-Language', desc: '自动检测，配合 proxy.ts', recommended: true },
   { name: 'Dynamic i18n', pattern: 'App Router 原生方案', desc: 'Next.js 14+ 推荐，无插件', recommended: true },
 ]
 
@@ -20,23 +20,24 @@ export default async function Layout({
   params
 }: {
   children: React.ReactNode
-  params: { lang: 'en' | 'zh' }
+  params: Promise<{ lang: 'en' | 'zh' }>
 }) {
-  const dict = await dictionaries[params.lang]()
+  const { lang } = await params
+  const dict = await dictionaries[lang]()
   return (
-    &lt;html lang={params.lang}&gt;
+    &lt;html lang={lang}&gt;
       &lt;body&gt;&lt;I18nProvider dict={dict}&gt;{children}&lt;/I18nProvider&gt;&lt;/body&gt;
     &lt;/html&gt;
   )
 }
 
-<span style="color:#8a8a3a">// middleware.ts — 自动检测语言</span>
+<span style="color:#8a8a3a">// proxy.ts — 自动检测语言（Next.js 16 起替代 middleware.ts）</span>
 import { match } from '@formatjs/intl-localematcher'
 import Negotiator from 'negotiator'
 
 const locales = ['en', 'zh']
 
-export function middleware(request) {
+export function proxy(request) {
   const headers = { 'accept-language': request.headers.get('accept-language') || '' }
   const accept = new Negotiator({ headers }).languages()
   const lang = match(accept, locales, 'en')

@@ -28,7 +28,7 @@ import TW01UtilityFirst from './TW01UtilityFirst.vue'
       <li><code>items-center</code> → <code>align-items: center</code></li>
       <li><code>gap-4</code> → <code>gap: 1rem</code></li>
       <li><code>rounded-2xl</code> → <code>border-radius: 1rem</code></li>
-      <li><code>shadow-lg</code> → <code>box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1)</code></li>
+      <li><code>shadow-lg</code> → <code>box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)</code></li>
     </ul>
     <p>
       于是一个卡片写成 <code>class="flex items-center gap-4 p-5 rounded-2xl shadow-lg"</code>，<strong>读 HTML 就等于读样式</strong>——不用跳文件、不用想名字。它真正解决的是那个最原始的问题：命名瓶颈消失了，因为名字不再是抽象的语义标签，而是它恰好要施加的那条声明。

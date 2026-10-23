@@ -41,7 +41,7 @@ import U05BuiltinComponents from './U05BuiltinComponents.vue'
       <li><code>text</code>：行内文本，可嵌套、可复制、能正确换行（对应 <code>span</code>）。</li>
       <li><code>image</code>：图片（对应 <code>img</code>），<strong>默认尺寸 320px × 240px，必须显式设定宽高</strong>，或用 <code>mode</code> 控制缩放。</li>
       <li><code>button</code>：按钮，用 <code>size</code> / <code>type</code> / <code>loading</code> 等属性控制形态。</li>
-      <li><code>input</code>：输入框，<code>type</code> 支持 <code>text</code> / <code>number</code> / <code>digit</code> / <code>password</code> 等场景值。</li>
+      <li><code>input</code>：输入框，<code>type</code> 有效值为 <code>text</code> / <code>number</code> / <code>idcard</code> / <code>digit</code> / <code>tel</code> / <code>safe-password</code> / <code>nickname</code>；密码输入用独立的 <code>password</code> 布尔属性，不是 <code>type="password"</code>。</li>
     </ol>
     <p>
       这里要理解"为什么必须换"：这组内置组件会被<strong>编译到各端的原生等价物</strong>——小程序端映射到原生组件，H5 端映射到 <code>div</code>、<code>span</code>、<code>img</code> 这些标签。H5 虽然顺带也认识 div，但为了跨端一致，统一写内置组件，才不会出现"某端正常、某端塌掉"的分裂。

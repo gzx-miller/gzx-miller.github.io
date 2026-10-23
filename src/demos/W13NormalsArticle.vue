@@ -46,7 +46,7 @@ import W13Normals from './W13Normals.vue'
       为什么是这个矩阵？直觉上，缩放把某个轴压扁时，垂直它方向的面会「翘」起来，法线恰好要反着动——而「逆转置」做的正是把缩放的比例取倒数再转置，正好补上这一步。流程整理成：
     </p>
     <ol class="lesson-steps">
-      <li>为网格提供位置 + 法线两类 attribute（立方体每面一个面法线，保留硬边）。</li>
+      <li>为网格提供位置 + 法线两类 attribute（硬边拆开顶点用面法线，曲面共享顶点用平均法线）。</li>
       <li>由模型矩阵左上 3×3 求逆转置，得到 <code>uNormalMatrix</code>。</li>
       <li>顶点着色器用它变换法线并归一化：<code>vNormalWorld = normalize(uNormalMatrix * aNormal)</code>。</li>
       <li>在片段着色器中结合法线、光源、视线计算光照，并叠加沿法线的短线段，直接查看各面法线的朝向。</li>

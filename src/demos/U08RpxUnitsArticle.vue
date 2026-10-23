@@ -47,7 +47,7 @@ import U08RpxUnits from './U08RpxUnits.vue'
       <li>设备宽 414px 时，<code>1rpx = 414 ÷ 750 ≈ 0.552px</code>，同一个 <code>690rpx</code> 自动放大到约 <code>380.9px</code>。</li>
     </ol>
     <p>
-      不同端是怎么落地的也值得记一句：<strong>小程序与 App 端</strong>由框架在运行时按屏幕宽度解析 <code>rpx</code>；<strong>H5 端</strong>由编译器在编译期把 <code>rpx</code> 换算成 <code>rem</code>／<code>vw</code> 这类响应式单位。机制不同，效果一致——最终都随屏幕变化。
+      不同端是怎么落地的也值得记一句：<strong>小程序端</strong>由平台按 750 基准换算，<strong>App 端</strong>由运行时按屏幕宽度解析 <code>rpx</code>，<strong>H5（Vue3 + Vite）</strong>由编译器在编译期把 <code>rpx</code> 转成 <code>rem</code>。机制不同，效果一致——最终都随屏幕变化。
     </p>
     <p>
       那什么时候不该用 <code>rpx</code>？<strong>需要固定物理尺寸时用 <code>px</code></strong>。最典型的是 1px 细边框：用 <code>rpx</code> 缩放后可能变成 0.5px 这样的小数，在高分屏上会发虚。布局与占位仍然交给 <code>flex</code> 和百分比，<code>rpx</code> 主要负责的，是「绝对尺寸也能等比」。
@@ -67,7 +67,7 @@ import U08RpxUnits from './U08RpxUnits.vue'
       <code>rpx</code> 把「屏幕宽度」固定切成 750 份，设计稿标注就能原样落地，尺寸随设备等比缩放。它解决的是绝对尺寸的适配，<code>px</code> 留给固定物理尺寸，<code>flex</code> 与百分比负责布局——三者各管一段，混用之前先想清楚谁在缩放。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「rpx」</span>uni-app 的响应式长度单位，规定任意设备上屏幕宽度恒等于 750rpx，因此 1rpx 等于屏宽除以 750，尺寸随设备宽度等比缩放；设计稿宽 750 时标注值与代码值一一对应。边界：需要固定物理尺寸（如 1px 细边框）时用 <code>px</code>；H5 端由编译器把 rpx 转成 rem／vw，App 与小程序端由运行时解析；动态换算用 <code>uni.upx2px()</code>。
+      <span class="term-name">「rpx」</span>uni-app 的响应式长度单位，规定任意设备上屏幕宽度恒等于 750rpx，因此 1rpx 等于屏宽除以 750，尺寸随设备宽度等比缩放；设计稿宽 750 时标注值与代码值一一对应。边界：需要固定物理尺寸（如 1px 细边框）时用 <code>px</code>；小程序端由平台按 750 基准换算，App 端由运行时解析，H5（Vue3 + Vite）编译期转成 <code>rem</code>；动态换算用 <code>uni.upx2px()</code>。
     </div>
   </LessonArticle>
 </template>

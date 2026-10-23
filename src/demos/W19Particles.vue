@@ -28,10 +28,11 @@ const animating = ref(true)
 const fps = ref(0)
 const showForceField = ref(false)
 
-const textureSize = computed(() => {
-  const n = particleCount.value
-  return Math.ceil(Math.sqrt(n))
-})
+// 固定 128×128 的 2 次幂纹理，容纳最多 16384 个粒子；
+// 调整粒子数时只改变 draw count，避免重建 FBO 与浮点纹理。
+const TEX_SIZE = 128
+const MAX_PARTICLES = TEX_SIZE * TEX_SIZE
+const textureSize = computed(() => TEX_SIZE)
 
 const updateVS = `
 attribute vec2 a_position;
@@ -135,8 +136,8 @@ function createFloatTexture(gl: WebGLRenderingContext, size: number, data: Float
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, size, size, 0, gl.RGBA, type, data)
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT)
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT)
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
   return tex
 }
 
@@ -232,7 +233,7 @@ function render(time: number) {
   gl.uniform1f(gl.getUniformLocation(state.renderProg, 'u_particleSize'), particleSize.value)
   gl.uniform1f(gl.getUniformLocation(state.renderProg, 'u_time'), time * 0.001)
 
-  const count = Math.min(particleCount.value, texSize * texSize)
+  const count = Math.min(particleCount.value, MAX_PARTICLES)
   gl.drawArrays(gl.POINTS, 0, count)
 
   if (animating.value) {
@@ -258,20 +259,30 @@ onMounted(() => {
   }
 
   const floatExt = gl.getExtension('OES_texture_float')
-  const type = floatExt ? gl.FLOAT : gl.UNSIGNED_BYTE
+  const colorFloatExt = gl.getExtension('WEBGL_color_buffer_float')
+  if (!floatExt || !colorFloatExt) {
+    console.error('当前环境不支持浮点纹理渲染（需要 OES_texture_float 与 WEBGL_color_buffer_float）')
+    return
+  }
 
   const parent = canvas.parentElement!
   canvas.width = Math.min(parent.clientWidth, 480)
   canvas.height = Math.min(parent.clientWidth, 480)
 
-  const texSize = textureSize.value
-  const initData = initParticleData(particleCount.value, texSize)
+  const texSize = TEX_SIZE
+  const initData = initParticleData(MAX_PARTICLES, texSize)
 
-  const texA = createFloatTexture(gl, texSize, initData, type)
-  const texB = createFloatTexture(gl, texSize, null, type)
+  const texA = createFloatTexture(gl, texSize, initData, gl.FLOAT)
+  const texB = createFloatTexture(gl, texSize, null, gl.FLOAT)
 
   const fboA = createFBO(gl, texA)
   const fboB = createFBO(gl, texB)
+  gl.bindFramebuffer(gl.FRAMEBUFFER, fboA)
+  if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) !== gl.FRAMEBUFFER_COMPLETE) {
+    console.error('浮点 FBO 不完整，无法执行 GPGPU 更新')
+    return
+  }
+  gl.bindFramebuffer(gl.FRAMEBUFFER, null)
 
   const quadVBO = gl.createBuffer()!
   gl.bindBuffer(gl.ARRAY_BUFFER, quadVBO)
@@ -282,7 +293,7 @@ onMounted(() => {
 
   const particleVBO = gl.createBuffer()!
   gl.bindBuffer(gl.ARRAY_BUFFER, particleVBO)
-  gl.bufferData(gl.ARRAY_BUFFER, buildParticleIndices(particleCount.value), gl.STATIC_DRAW)
+  gl.bufferData(gl.ARRAY_BUFFER, buildParticleIndices(MAX_PARTICLES), gl.STATIC_DRAW)
 
   const updateProg = createProgram(gl, updateVS, updateFS)
   const renderProg = createProgram(gl, renderVS, renderFS)

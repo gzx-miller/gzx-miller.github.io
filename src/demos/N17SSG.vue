@@ -44,11 +44,11 @@ export default defineNuxtConfig({
 })`
 
 const deploymentTargets = [
-  { target: 'GitHub Pages', cmd: 'npx nuxi generate', note: '纯静态，部署 .output/public' },
+  { target: 'GitHub Pages', cmd: 'npx nuxt generate', note: '纯静态，部署 .output/public' },
   { target: 'Vercel', cmd: '自动检测', note: '零配置部署' },
-  { target: 'Cloudflare Pages', cmd: 'npx nuxi build', note: 'preset: cloudflare-pages' },
-  { target: 'Node.js 服务器', cmd: 'npx nuxi build', note: 'preset: node-server' },
-  { target: 'Deno Deploy', cmd: 'npx nuxi build', note: 'preset: deno-server' },
+  { target: 'Cloudflare Pages', cmd: 'npx nuxt build', note: 'preset: cloudflare-pages' },
+  { target: 'Node.js 服务器', cmd: 'npx nuxt build', note: 'preset: node-server' },
+  { target: 'Deno Deploy', cmd: 'npx nuxt build', note: 'preset: deno-server' },
 ]
 </script>
 

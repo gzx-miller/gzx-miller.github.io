@@ -1,18 +1,23 @@
-import type { Component } from 'vue'
 import type { Lesson } from '../lessons'
 import { restoreCodeSource } from '../code-restore'
 import N01ModulesDi from '../../demos/N01ModulesDiArticle.vue'
 import N02ControllersRoutes from '../../demos/N02ControllersRoutesArticle.vue'
+import N13ProviderScopes from '../../demos/N13ProviderScopesArticle.vue'
 import N03PipesValidation from '../../demos/N03PipesValidationArticle.vue'
 import N04GuardsJwt from '../../demos/N04GuardsJwtArticle.vue'
 import N05Interceptors from '../../demos/N05InterceptorsArticle.vue'
 import N06Middleware from '../../demos/N06MiddlewareArticle.vue'
 import N07ExceptionFilter from '../../demos/N07ExceptionFilterArticle.vue'
 import N08TypeOrmDb from '../../demos/N08TypeOrmDbArticle.vue'
+import N14Transactions from '../../demos/N14TransactionsArticle.vue'
+import N15Caching from '../../demos/N15CachingArticle.vue'
 import N09WebSocketGateway from '../../demos/N09WebSocketGatewayArticle.vue'
-import N10ScheduleTask from '../../demos/N10ScheduleTaskArticle.vue'
-import N11ConfigEnv from '../../demos/N11ConfigEnvArticle.vue'
+import N16Queues from '../../demos/N16QueuesArticle.vue'
 import N12Microservices from '../../demos/N12MicroservicesArticle.vue'
+import N11ConfigEnv from '../../demos/N11ConfigEnvArticle.vue'
+import N10ScheduleTask from '../../demos/N10ScheduleTaskArticle.vue'
+import N17Testing from '../../demos/N17TestingArticle.vue'
+import N18OpenApi from '../../demos/N18OpenApiArticle.vue'
 
 const nestjsCodeModules = import.meta.glob<string>('../../demos/nestjs-code/*', { query: '?raw', import: 'default' })
 
@@ -34,19 +39,26 @@ const NE09Code = createCodeLoader('nestjs-code/NE09Code.txt')
 const NE10Code = createCodeLoader('nestjs-code/NE10Code.txt')
 const NE11Code = createCodeLoader('nestjs-code/NE11Code.txt')
 const NE12Code = createCodeLoader('nestjs-code/NE12Code.txt')
+const NE13Code = createCodeLoader('nestjs-code/NE13Code.txt')
+const NE14Code = createCodeLoader('nestjs-code/NE14Code.txt')
+const NE15Code = createCodeLoader('nestjs-code/NE15Code.txt')
+const NE16Code = createCodeLoader('nestjs-code/NE16Code.txt')
+const NE17Code = createCodeLoader('nestjs-code/NE17Code.txt')
+const NE18Code = createCodeLoader('nestjs-code/NE18Code.txt')
 
 export const lessons: Lesson[] = [
   {
     id: 'NE_01',
     title: '模块与依赖注入：NestJS 的模块化架构',
     navTitle: '模块与依赖注入',
-    category: '模块化架构',
+    category: '基础架构',
     path: '/nestjs/n-1/modules-di',
     summary: '用课程管理模块展示 @Module 声明式组装：Controllers、Providers、Imports、Exports 与构造器注入。',
     demo: null,
     demoComponent: N01ModulesDi,
     code: NE01Code,
-    principle: 'NestJS 用模块（Module）把相关的控制器、服务、管道聚合为内聚单元。@Module 的四个数组各司其职：controllers 注册路由处理器、providers 登记可注入依赖、imports 引入其它模块、exports 决定哪些 Provider 对模块外部可见。依赖注入（DI）容器在启动时解析构造器参数并完成实例化与作用域管理；注意 @Injectable() 只是把类标记为候选，还必须出现在某个模块的 providers 里，容器才会真正托管它。',
+    principle:
+      'NestJS 用模块（Module）把相关的控制器、服务、管道聚合为内聚单元。@Module 的四个数组各司其职：controllers 注册路由处理器、providers 登记可注入依赖、imports 引入其它模块、exports 决定哪些 Provider 对模块外部可见。依赖注入（DI）容器在启动时解析构造器参数并完成实例化与作用域管理；注意 @Injectable() 只是把类标记为候选，还必须出现在某个模块的 providers 里，容器才会真正托管它。',
     flow: [
       '根模块 AppModule imports 业务模块（如 CourseModule）',
       '业务模块 controllers 注册路由，providers 注册服务',
@@ -66,13 +78,14 @@ export const lessons: Lesson[] = [
     id: 'NE_02',
     title: '控制器与路由：声明式 REST API',
     navTitle: '控制器与路由',
-    category: '模块化架构',
+    category: '基础架构',
     path: '/nestjs/n-2/controllers-routing',
     summary: '用课程 API 展示 @Controller、HTTP 方法装饰器、路径参数、查询参数与请求体 DTO 的绑定规则。',
     demo: null,
     demoComponent: N02ControllersRoutes,
     code: NE02Code,
-    principle: '控制器是请求的入口：@Controller 定义路由前缀，方法装饰器（@Get/@Post/@Patch/@Delete）绑定 HTTP 方法与子路径，二者拼接成最终路由（如 @Controller(\'courses\') 配合 @Get(\':id\') → GET /courses/:id）。参数装饰器把请求数据映射到方法参数：@Param 取路径参数、@Query 取查询字符串、@Body 取请求体、@Req/@Res 直接访问原始请求对象。配合 ParseIntPipe 等管道可就地转换参数类型。',
+    principle:
+      '控制器是请求的入口：@Controller 定义路由前缀，方法装饰器（@Get/@Post/@Patch/@Delete）绑定 HTTP 方法与子路径，二者拼接成最终路由（如 @Controller(\'courses\') 配合 @Get(\':id\') → GET /courses/:id）。参数装饰器把请求数据映射到方法参数：@Param 取路径参数、@Query 取查询字符串、@Body 取请求体、@Req/@Res 直接访问原始请求对象。配合 ParseIntPipe 等管道可就地转换参数类型。',
     flow: [
       '客户端请求 GET /courses/42',
       '路由匹配 CourseController 的 @Get(\':id\') 处理器',
@@ -90,15 +103,43 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'NE_03',
+    title: 'Provider 与注入作用域',
+    navTitle: '注入作用域',
+    category: '基础架构',
+    path: '/nestjs/n-3/provider-scopes',
+    summary: '用请求追踪 ID 展示 Singleton、Request、Transient 三种作用域在实例复用上的差异。',
+    demo: null,
+    demoComponent: N13ProviderScopes,
+    code: NE13Code,
+    principle:
+      'Provider 的作用域决定实例的创建与复用方式：默认 Singleton 在应用启动时创建一份、所有消费者共享；REQUEST 为每个请求创建新实例，并可注入当前 REQUEST 对象；TRANSIENT 为每个注入方各创建一份。作用域会沿注入链向上冒泡——单例服务一旦注入请求作用域的 Provider，自身也会被迫变成请求作用域，成本随之扩散。请求级实例适合存放请求上下文，不适合承载连接池、缓存等重资源。',
+    flow: [
+      '默认不声明 scope，Provider 即单例，应用启动时实例化一次。',
+      '需要请求上下文时用 @Injectable({ scope: Scope.REQUEST }) 并注入 REQUEST。',
+      '需要每个消费者独立实例时用 Scope.TRANSIENT。',
+      '检查注入链：请求作用域会向上传染，尽量把请求级依赖收敛在控制器层。',
+    ],
+    notes: [
+      '请求作用域会为每次请求新建实例并参与依赖树重建，高频接口要评估开销。',
+      '单例中注入请求作用域 Provider 会让单例也变成请求作用域，属于常见性能陷阱。',
+      '跨请求保留状态的场景应显式使用 Store/缓存，而不是依赖请求作用域实例。',
+      'durable providers 可让请求作用域在多个请求间复用部分实例，但会引入状态隔离问题。',
+    ],
+    problem: '解决「单例服务里混入请求级状态导致用户数据串号，或反之把重资源做成请求级导致性能骤降」的问题。',
+    officialUrl: 'https://docs.nestjs.com/fundamentals/injection-scopes',
+  },
+  {
+    id: 'NE_04',
     title: '管道与数据校验：ValidationPipe 与 DTO',
     navTitle: '管道与数据校验',
     category: '请求处理',
-    path: '/nestjs/n-3/pipes-validation',
+    path: '/nestjs/n-4/pipes-validation',
     summary: '用课程报名表单展示 DTO + class-validator 装饰器 + ValidationPipe 的声明式校验，以及错误响应结构。',
     demo: null,
     demoComponent: N03PipesValidation,
     code: NE03Code,
-    principle: '管道（Pipe）在数据进入处理器之前执行，负责转换与校验。ValidationPipe 基于 class-transformer + class-validator：先把请求体实例化为 DTO 类，再按装饰器规则逐字段校验，任一规则失败就抛出 400 错误，响应中包含 message 数组列出每个字段的失败原因。whitelist 模式自动剥离 DTO 未声明的多余字段，防止参数污染。',
+    principle:
+      '管道（Pipe）在数据进入处理器之前执行，负责转换与校验。ValidationPipe 基于 class-transformer + class-validator：先把请求体实例化为 DTO 类，再按装饰器规则逐字段校验，任一规则失败就抛出 400 错误，响应中包含 message 数组列出每个字段的失败原因。whitelist 模式自动剥离 DTO 未声明的多余字段，防止参数污染。',
     flow: [
       '请求体 JSON 到达 POST /enrollments',
       'ValidationPipe 将普通对象转换为 CreateEnrollmentDto 实例',
@@ -115,16 +156,17 @@ export const lessons: Lesson[] = [
     officialUrl: 'https://docs.nestjs.com/pipes',
   },
   {
-    id: 'NE_04',
+    id: 'NE_05',
     title: '守卫与 JWT 认证：登录鉴权链路',
     navTitle: '守卫与 JWT 认证',
     category: '请求处理',
-    path: '/nestjs/n-4/guards-jwt-auth',
+    path: '/nestjs/n-5/guards-jwt-auth',
     summary: '用学员登录场景展示 AuthGuard 校验 JWT 的完整链路：登录发 token、守卫解析验证、无凭证返回 401。',
     demo: null,
     demoComponent: N04GuardsJwt,
     code: NE04Code,
-    principle: '守卫（Guard）实现 CanActivate 接口，在请求进入路由处理器之前决定是否放行，是鉴权与授权的首选位置。JWT 流程：登录成功用 JwtService.sign 签发签名 token；之后每个受保护请求携带 Authorization: Bearer <token>，JwtAuthGuard 验签并解析 payload，无效或过期抛 401，有效则把用户信息挂到 request 上。守卫返回 false 时框架自动返回 403，抛 UnauthorizedException 则返回 401。',
+    principle:
+      '守卫（Guard）实现 CanActivate 接口，在请求进入路由处理器之前决定是否放行，是鉴权与授权的首选位置。JWT 流程：登录成功用 JwtService.sign 签发签名 token；之后每个受保护请求携带 Authorization: Bearer <token>，JwtAuthGuard 验签并解析 payload，无效或过期抛 401，有效则把用户信息挂到 request 上。守卫返回 false 时框架自动返回 403，抛 UnauthorizedException 则返回 401。',
     flow: [
       'POST /auth/login 校验用户名密码，签发 JWT',
       '客户端后续请求携带 Authorization: Bearer <token>',
@@ -141,16 +183,17 @@ export const lessons: Lesson[] = [
     officialUrl: 'https://docs.nestjs.com/guards',
   },
   {
-    id: 'NE_05',
+    id: 'NE_06',
     title: '拦截器：统一响应与请求计时',
     navTitle: '拦截器',
     category: '请求处理',
-    path: '/nestjs/n-5/interceptors',
+    path: '/nestjs/n-6/interceptors',
     summary: '用请求耗时面板展示拦截器的执行顺序：在处理器前后织入逻辑，统一包装响应结构。',
     demo: null,
     demoComponent: N05Interceptors,
     code: NE05Code,
-    principle: '拦截器（Interceptor）基于 RxJS 的 Observable 模型，在处理器执行前调用，并通过 next.handle() 拿到处理器返回的流：前置于 handle() 的代码在处理器之前运行，pipe 中的 map/tap 在处理器之后运行。由此可以在不修改业务代码的前提下完成响应包装、耗时统计、缓存、日志等横切关注点。',
+    principle:
+      '拦截器（Interceptor）基于 RxJS 的 Observable 模型，在处理器执行前调用，并通过 next.handle() 拿到处理器返回的流：前置于 handle() 的代码在处理器之前运行，pipe 中的 map/tap 在处理器之后运行。由此可以在不修改业务代码的前提下完成响应包装、耗时统计、缓存、日志等横切关注点。',
     flow: [
       '请求到达 → TransformInterceptor 记录开始时间',
       'next.handle() 调用处理器（控制器 → 服务）',
@@ -167,16 +210,17 @@ export const lessons: Lesson[] = [
     officialUrl: 'https://docs.nestjs.com/interceptors',
   },
   {
-    id: 'NE_06',
+    id: 'NE_07',
     title: '中间件：请求链路的洋葱模型',
     navTitle: '中间件',
     category: '请求处理',
-    path: '/nestjs/n-6/middleware',
+    path: '/nestjs/n-7/middleware',
     summary: '用请求日志链路展示中间件与守卫、管道、拦截器的执行顺序：洋葱模型的层层包裹。',
     demo: null,
     demoComponent: N06Middleware,
     code: NE06Code,
-    principle: '中间件在守卫之前执行，是请求生命周期的最外层。典型的执行顺序是：中间件 → 守卫 → 拦截器前置 → 管道 → 处理器 → 拦截器后置。MiddlewareConsumer 用 apply().forRoutes() 声明中间件的作用路径与方法，可用排除法 exclude() 跳过指定路由。中间件适合日志、CORS、请求体解析、Cookie 解析等与路由无关的横切逻辑。',
+    principle:
+      '中间件在守卫之前执行，是请求生命周期的最外层。典型的执行顺序是：中间件 → 守卫 → 拦截器前置 → 管道 → 处理器 → 拦截器后置。MiddlewareConsumer 用 apply().forRoutes() 声明中间件的作用路径与方法，可用排除法 exclude() 跳过指定路由。中间件适合日志、CORS、请求体解析、Cookie 解析等与路由无关的横切逻辑。',
     flow: [
       '请求进入 → LoggerMiddleware 记录日志并调用 next()',
       '守卫做鉴权决策 → 管道校验参数',
@@ -193,16 +237,17 @@ export const lessons: Lesson[] = [
     officialUrl: 'https://docs.nestjs.com/middleware',
   },
   {
-    id: 'NE_07',
+    id: 'NE_08',
     title: '异常过滤器：统一错误响应',
     navTitle: '异常过滤器',
     category: '请求处理',
-    path: '/nestjs/n-7/exception-filters',
+    path: '/nestjs/n-8/exception-filters',
     summary: '用三类典型异常展示 @Catch 过滤器如何把错误转换成统一的 JSON 响应结构。',
     demo: null,
     demoComponent: N07ExceptionFilter,
     code: NE07Code,
-    principle: '异常过滤器（Exception Filter）实现 ExceptionFilter 接口，用 @Catch() 声明捕获范围：@Catch(HttpException) 只处理 HTTP 异常，@Catch() 捕获所有异常。过滤器从 ArgumentsHost 中拿到响应对象，统一输出 JSON 结构。业务代码只需抛出带语义的异常（NotFoundException、BadRequestException 等），无需关心响应格式。',
+    principle:
+      '异常过滤器（Exception Filter）实现 ExceptionFilter 接口，用 @Catch() 声明捕获范围：@Catch(HttpException) 只处理 HTTP 异常，@Catch() 捕获所有异常。过滤器从 ArgumentsHost 中拿到响应对象，统一输出 JSON 结构。业务代码只需抛出带语义的异常（NotFoundException、BadRequestException 等），无需关心响应格式。',
     flow: [
       '处理器抛出 NotFoundException(课程 42 不存在)',
       '异常沿调用链冒泡，被全局过滤器捕获',
@@ -219,16 +264,17 @@ export const lessons: Lesson[] = [
     officialUrl: 'https://docs.nestjs.com/exception-filters',
   },
   {
-    id: 'NE_08',
+    id: 'NE_09',
     title: 'TypeORM 数据库：实体、仓储与事务',
     navTitle: 'TypeORM 数据库',
-    category: '数据与实时通信',
-    path: '/nestjs/n-8/typeorm-database',
+    category: '数据与持久化',
+    path: '/nestjs/n-9/typeorm-database',
     summary: '用课程报名业务展示实体定义、Repository 模式与事务：名额不足时整笔回滚。',
     demo: null,
     demoComponent: N08TypeOrmDb,
     code: NE08Code,
-    principle: 'TypeORM 是 NestJS 官方推荐的 ORM：实体类用装饰器描述表结构，Repository 提供类型安全的 CRUD。事务用于多步写操作：manager.transaction 回调内的所有语句在同一个数据库事务中执行，任一步抛错则整体回滚。报名场景的"检查名额 + 扣减人数"必须原子化，否则并发报名会超额。',
+    principle:
+      'TypeORM 是 NestJS 官方推荐的 ORM：实体类用装饰器描述表结构，Repository 提供类型安全的 CRUD。事务用于多步写操作：manager.transaction 回调内的所有语句在同一个数据库事务中执行，任一步抛错则整体回滚。报名场景的「检查名额 + 扣减人数」必须原子化，否则并发报名会超额。',
     flow: [
       'POST /enrollments 携带 courseId 请求报名',
       '事务开启 → 查询课程，检查 enrolled < capacity',
@@ -241,20 +287,75 @@ export const lessons: Lesson[] = [
       '复杂查询用 QueryBuilder 链式拼 SQL，如 createQueryBuilder(\'course\').where(\'c.capacity > :n\', { n: 0 }).getMany()',
       '迁移（Migration）管理表结构变更，避免手工改库',
     ],
-    problem: '并发下"先查询再判断再写入"存在竞态：两个请求同时读到剩余 1 个名额都可能通过检查。生产环境要用 SELECT ... FOR UPDATE 悲观锁或乐观锁（@Version 列）保证一致性。',
+    problem: '并发下「先查询再判断再写入」存在竞态：两个请求同时读到剩余 1 个名额都可能通过检查。生产环境要用 SELECT ... FOR UPDATE 悲观锁或乐观锁（@Version 列）保证一致性。',
     officialUrl: 'https://docs.nestjs.com/techniques/database',
   },
   {
-    id: 'NE_09',
+    id: 'NE_10',
+    title: '事务与并发控制',
+    navTitle: '事务与并发',
+    category: '数据与持久化',
+    path: '/nestjs/n-10/transactions',
+    summary: '用并发报名模拟器展示事务边界、隔离级别、悲观锁与乐观锁对超卖的影响。',
+    demo: null,
+    demoComponent: N14Transactions,
+    code: NE14Code,
+    principle:
+      '事务把多条写操作绑成原子单元，任一步失败整体回滚；但「先查后写」在并发下仍有竞态。数据库层锁才是最终防线：悲观锁用 SELECT ... FOR UPDATE 让后到者等待，乐观锁用 version 列在更新时校验版本、失败即重试。隔离级别决定脏读、不可重复读、幻读的可见性；事务应尽量短，绝不能在事务中做网络调用或等待用户输入。',
+    flow: [
+      '开启事务（DataSource.transaction 或 QueryRunner）。',
+      '在事务内读取待修改行，必要时加 pessimistic_write 锁。',
+      '校验业务条件后写入，任一步抛错由框架回滚。',
+      '提交后才返回响应；冲突时按策略重试或直接失败。',
+    ],
+    notes: [
+      '事务范围越大，锁持有时间越长，吞吐越低。',
+      '悲观锁适合冲突频繁的扣减场景，乐观锁适合读多写少。',
+      '默认隔离级别下仍可能出现幻读，范围查询要评估是否加锁。',
+      '事务里调用外部 API 会拉长锁窗口，失败还会误回滚，必须挪出去。',
+    ],
+    problem: '解决「并发请求同时通过名额检查，最终卖出超过库存」的数据一致性问题。',
+    officialUrl: 'https://docs.nestjs.com/techniques/database#transactions',
+  },
+  {
+    id: 'NE_11',
+    title: '缓存与性能',
+    navTitle: '缓存',
+    category: '数据与持久化',
+    path: '/nestjs/n-11/caching',
+    summary: '课程详情缓存：TTL、缓存键设计、穿透/击穿/雪崩三类问题的防护。',
+    demo: null,
+    demoComponent: N15Caching,
+    code: NE15Code,
+    principle:
+      '缓存把昂贵查询的结果放到内存或 Redis：读时先查缓存，未命中再回源并写回。TTL 决定一致性窗口；缓存键必须包含影响结果的全部维度（资源 id、语言、版本等）。三类典型问题各有对策：穿透用空值短 TTL 或布隆过滤器，击穿用互斥锁/单飞合并并发回源，雪崩给 TTL 加随机抖动并做多级缓存。多实例部署必须用 Redis 等共享缓存，进程内缓存会各存一份。',
+    flow: [
+      '读请求先按缓存键查询 CacheManager。',
+      '命中直接返回；未命中则回源数据库并写回。',
+      '写操作后主动删除相关键，缩短不一致窗口。',
+      '高并发未命中用互斥锁合并回源，避免击穿。',
+    ],
+    notes: [
+      '缓存键漏掉维度会把 A 用户的数据返回给 B 用户。',
+      'TTL 不是越长越好，要按数据变更频率设定。',
+      '空结果也要缓存（短 TTL），否则同一无效 id 会反复打库。',
+      '进程内缓存多实例不共享，横向扩展后必须换 Redis。',
+    ],
+    problem: '解决「热点查询反复打数据库、并发未命中瞬间击穿，以及缓存与数据库长期不一致」的问题。',
+    officialUrl: 'https://docs.nestjs.com/techniques/caching',
+  },
+  {
+    id: 'NE_12',
     title: 'WebSocket 网关：实时课堂通知',
     navTitle: 'WebSocket 网关',
-    category: '数据与实时通信',
-    path: '/nestjs/n-9/websocket-gateway',
+    category: '实时与集成',
+    path: '/nestjs/n-12/websocket-gateway',
     summary: '用课堂公告场景展示 @WebSocketGateway 的事件处理、房间（Room）隔离与广播推送。',
     demo: null,
     demoComponent: N09WebSocketGateway,
     code: NE09Code,
-    principle: '网关（Gateway）复用 DI 容器，把 WebSocket 消息映射为类方法。@SubscribeMessage 声明处理的事件名，@MessageBody 取消息数据，@ConnectedSocket 取客户端连接。socket.join(roomId) 让连接进入房间，client.to(roomId).emit() 只向该房间广播，实现课堂、群聊等场景的按组隔离推送。',
+    principle:
+      '网关（Gateway）复用 DI 容器，把 WebSocket 消息映射为类方法。@SubscribeMessage 声明处理的事件名，@MessageBody 取消息数据，@ConnectedSocket 取客户端连接。socket.join(roomId) 让连接进入房间，client.to(roomId).emit() 只向该房间广播，实现课堂、群聊等场景的按组隔离推送。',
     flow: [
       '学员连接 ws://localhost:3000，发送 joinRoom 事件',
       '网关把连接加入 classroom-1 房间，更新在线人数',
@@ -271,42 +372,71 @@ export const lessons: Lesson[] = [
     officialUrl: 'https://docs.nestjs.com/websockets/gateways',
   },
   {
-    id: 'NE_10',
-    title: '定时任务：@nestjs/schedule 调度',
-    navTitle: '定时任务',
-    category: '工程实践',
-    path: '/nestjs/n-10/scheduled-tasks',
-    summary: '用日报表场景展示 @Cron、@Interval、@Timeout 三种调度方式与 cron 表达式规则。',
+    id: 'NE_13',
+    title: '消息队列与异步任务',
+    navTitle: '消息队列',
+    category: '实时与集成',
+    path: '/nestjs/n-13/queues',
+    summary: '用订单通知展示 BullMQ 生产者/消费者、幂等消费、指数退避重试与死信队列。',
     demo: null,
-    demoComponent: N10ScheduleTask,
-    code: NE10Code,
-    principle: '@nestjs/schedule 模块基于 cron 表达式管理定时任务：@Cron 按表达式周期执行，@Interval 按固定毫秒间隔执行，@Timeout 延迟一次执行。cron 表达式的六段格式为"秒 分 时 日 月 周"，支持 *、?、/、-、, 等通配符。任务方法挂在 Injectable 服务上，可注入其它依赖，天然复用 DI 体系。',
+    demoComponent: N16Queues,
+    code: NE16Code,
+    principle:
+      '队列把耗时或易失败的工作从请求链路剥离：生产者 enqueue 后立即返回，消费者在后台处理，从而削峰、解耦、隔离故障。投递语义通常是 at-least-once，同一任务可能被消费多次，因此消费者必须幂等——用业务唯一键去重，而不是假设只执行一次。失败任务按指数退避重试，超过最大次数进入死信队列等待人工处理。',
     flow: [
-      '应用启动时扫描 @Cron/@Interval/@Timeout 装饰器注册任务',
-      '调度器按表达式计算下一次触发时间',
-      '到点调用对应方法，异常由调度器记录（默认不中断后续任务）',
-      '日报表任务每天 08:00 聚合昨日订单并落库',
+      '请求创建订单后，把通知任务 add 到队列并立即返回。',
+      '消费者 Worker 取出任务，执行业务逻辑。',
+      '失败按退避策略重试；超过次数转入死信队列。',
+      '监控队列积压、失败率与死信数量。',
     ],
     notes: [
-      'cron 第 6 位星期字段用 0-7（0/7 为周日），? 表示不指定',
-      'cron 使用服务器本地（默认）时区计算，跨时区部署需显式指定 timezone 选项，避免错点触发',
-      '任务失败默认只记日志，可用 try/catch + 告警提升可观测性',
-      '测试时用 @SchedulerRegistry 动态增删任务，便于 mock',
+      '至少一次投递意味着重复消费是常态，幂等键要落库。',
+      '重试必须设上限与退避，否则故障时会打爆下游。',
+      '任务负载要可序列化，避免传大对象与连接实例。',
+      '死信队列不是垃圾桶，要有告警与人工补偿流程。',
     ],
-    problem: '分布式部署下每个实例都会执行同一份 @Cron 任务，导致报表重复生成——需要引入分布式锁（如 Redis SETNX）或把任务收敛到单一调度实例。',
-    officialUrl: 'https://docs.nestjs.com/techniques/task-scheduling',
+    problem: '解决「请求链路被慢任务拖死、失败任务静默丢失、流量高峰打垮下游」的问题。',
+    officialUrl: 'https://docs.nestjs.com/techniques/queues',
   },
   {
-    id: 'NE_11',
+    id: 'NE_14',
+    title: '微服务：TCP 传输与消息模式',
+    navTitle: '微服务',
+    category: '实时与集成',
+    path: '/nestjs/n-14/microservices',
+    summary: '用下单场景展示微服务间 TCP 传输：ClientProxy 代理调用与 @MessagePattern 扣库存的请求-响应式 RPC。',
+    demo: null,
+    demoComponent: N12Microservices,
+    code: NE12Code,
+    principle:
+      'NestJS 微服务把传输层抽象为 Transport 策略（TCP、Redis、MQTT、gRPC、Kafka、RabbitMQ）。服务方用 @MessagePattern 声明消息处理函数，客户端用 ClientProxy.send(pattern, data) 发起请求-响应式调用（基于 RPC），也可以用 emit() 发送无需回执的事件。TCP 默认端口 3000，多服务需分配不同端口或用服务发现。',
+    flow: [
+      '订单服务收到 POST /orders 创建订单请求',
+      'OrderService 通过 ClientProxy 向库存服务发送 deduct_stock 消息',
+      '库存服务 @MessagePattern 匹配并扣减库存，返回结果',
+      '订单服务拿到结果后落库；超时/失败按策略处理',
+    ],
+    notes: [
+      'send() 返回 Observable，配合 timeout/retry/pipe 做容错',
+      '消息模式用 { cmd } 自定义，事件模式用字符串标识',
+      'gRPC 适用于强类型契约场景，Kafka 适合高吞吐事件流',
+      '跨服务链路追踪（traceId）是排查微服务问题的前提',
+    ],
+    problem: '服务间同步调用（send）会把延迟与故障互相传染——需要引入超时、重试、熔断与降级，必要时用事件（emit）解耦，让下游故障不阻塞主流程。',
+    officialUrl: 'https://docs.nestjs.com/microservices/basics',
+  },
+  {
+    id: 'NE_15',
     title: '配置管理：@nestjs/config 与环境',
     navTitle: '配置管理',
     category: '工程实践',
-    path: '/nestjs/n-11/config-env',
+    path: '/nestjs/n-15/config-env',
     summary: '用多环境部署场景展示 ConfigModule 读取 .env、自定义配置与启动校验。',
     demo: null,
     demoComponent: N11ConfigEnv,
     code: NE11Code,
-    principle: '@nestjs/config 封装 dotenv：ConfigModule.forRoot 读取 .env 文件并合并到配置对象，ConfigService 提供类型安全的 get 访问。自定义配置工厂（load 数组）可以集中做默认值与类型转换，避免散落 process.env 读取。生产环境配合环境变量注入（docker/CI），本地用 .env 文件，实现"配置与代码分离"。',
+    principle:
+      '@nestjs/config 封装 dotenv：ConfigModule.forRoot 读取 .env 文件并合并到配置对象，ConfigService 提供类型安全的 get 访问。自定义配置工厂（load 数组）可以集中做默认值与类型转换，避免散落 process.env 读取。生产环境配合环境变量注入（docker/CI），本地用 .env 文件，实现「配置与代码分离」。',
     flow: [
       '应用启动，ConfigModule 读取 .env 与 .env.local 文件',
       '配置工厂按优先级合并默认值，生成配置对象',
@@ -323,29 +453,84 @@ export const lessons: Lesson[] = [
     officialUrl: 'https://docs.nestjs.com/techniques/configuration',
   },
   {
-    id: 'NE_12',
-    title: '微服务：TCP 传输与消息模式',
-    navTitle: '微服务',
+    id: 'NE_16',
+    title: '定时任务：@nestjs/schedule 调度',
+    navTitle: '定时任务',
     category: '工程实践',
-    path: '/nestjs/n-12/microservices',
-    summary: '用下单场景展示微服务间 TCP 传输：ClientProxy 代理调用与 @MessagePattern 扣库存的请求-响应式 RPC。',
+    path: '/nestjs/n-16/scheduled-tasks',
+    summary: '用日报表场景展示 @Cron、@Interval、@Timeout 三种调度方式与 cron 表达式规则。',
     demo: null,
-    demoComponent: N12Microservices,
-    code: NE12Code,
-    principle: 'NestJS 微服务把传输层抽象为 Transport 策略（TCP、Redis、MQTT、gRPC、Kafka、RabbitMQ）。服务方用 @MessagePattern 声明消息处理函数，客户端用 ClientProxy.send(pattern, data) 发起请求-响应式调用（基于 RPC），也可以用 emit() 发送无需回执的事件。TCP 默认端口 3000，多服务需分配不同端口或用服务发现。',
+    demoComponent: N10ScheduleTask,
+    code: NE10Code,
+    principle:
+      '@nestjs/schedule 模块基于 cron 表达式管理定时任务：@Cron 按表达式周期执行，@Interval 按固定毫秒间隔执行，@Timeout 延迟一次执行。cron 表达式的六段格式为「秒 分 时 日 月 周」，支持 *、?、/、-、, 等通配符。任务方法挂在 Injectable 服务上，可注入其它依赖，天然复用 DI 体系。',
     flow: [
-      '订单服务收到 POST /orders 创建订单请求',
-      'OrderService 通过 ClientProxy 向库存服务发送 deduct_stock 消息',
-      '库存服务 @MessagePattern 匹配并扣减库存，返回结果',
-      '订单服务拿到结果后落库；超时/失败按策略处理',
+      '应用启动时扫描 @Cron/@Interval/@Timeout 装饰器注册任务',
+      '调度器按表达式计算下一次触发时间',
+      '到点调用对应方法，异常由调度器记录（默认不中断后续任务）',
+      '日报表任务每天 08:00 聚合昨日订单并落库',
     ],
     notes: [
-      'send() 返回 Observable，配合 timeout/retry/pipe 做容错',
-      '消息模式用 { cmd } 自定义，事件模式用字符串标识',
-      'gRPC 适用于强类型契约场景，Kafka 适合高吞吐事件流',
-      '跨服务链路追踪（traceId）是排查微服务问题的前提',
+      'cron 第 6 位星期字段用 0-7（0/7 为周日），? 表示不指定',
+      'cron 使用服务器本地（默认）时区计算，跨时区部署需显式指定 timezone 选项，避免错点触发',
+      '任务失败默认只记日志，可用 try/catch + 告警提升可观测性',
+      '测试时用 @SchedulerRegistry 动态增删任务，便于 mock',
     ],
-    problem: '服务间同步调用（send）会把延迟与故障互相传染——需要引入超时、重试、熔断与降级，必要时用事件（emit）解耦，让下游故障不阻塞主流程。',
-    officialUrl: 'https://docs.nestjs.com/microservices/basics',
+    problem: '分布式部署下每个实例都会执行同一份 @Cron 任务，导致报表重复生成——需要引入分布式锁（如 Redis SETNX）或把任务收敛到单一调度实例。',
+    officialUrl: 'https://docs.nestjs.com/techniques/task-scheduling',
+  },
+  {
+    id: 'NE_17',
+    title: '测试策略：单元、集成与 e2e',
+    navTitle: '测试策略',
+    category: '质量保障',
+    path: '/nestjs/n-17/testing',
+    summary: '用课程服务展示 Test.createTestingModule、依赖替换与 supertest 端到端测试的分层策略。',
+    demo: null,
+    demoComponent: N17Testing,
+    code: NE17Code,
+    principle:
+      '测试按范围分层：单元测试用 Test.createTestingModule 装配单个类，通过 useValue / useClass 替换依赖，只验证这个类的行为；集成测试保留真实模块装配，验证 Provider、数据库与配置能否协同；e2e 用 supertest 打真实 HTTP 链路，覆盖路由、守卫、管道、过滤器的完整组合。测试金字塔要求大量单元、少量集成、极少量 e2e，mock 要验证行为而不是实现细节。',
+    flow: [
+      '单元：装配被测类，用 useValue 替换依赖，断言输入输出。',
+      '集成：导入真实模块，接测试数据库，验证装配与查询。',
+      'e2e：创建完整应用，supertest 发请求，断言状态码与响应体。',
+      '用 overrideProvider 精准替换，避免整棵依赖树都被 mock。',
+    ],
+    notes: [
+      'mock 过度会让测试与实现耦合，重构时成片失败。',
+      'e2e 用独立测试数据库，跑完清理或事务回滚，避免污染。',
+      '异步代码要 await，否则断言可能先于结果执行。',
+      '测试覆盖「边界与失败路径」比堆正常路径更有价值。',
+    ],
+    problem: '解决「只靠手工点接口回归、重构后不敢改，或测试全是脆弱的实现细节断言」的问题。',
+    officialUrl: 'https://docs.nestjs.com/fundamentals/testing',
+  },
+  {
+    id: 'NE_18',
+    title: 'OpenAPI 文档与 API 版本化',
+    navTitle: '文档与版本化',
+    category: '质量保障',
+    path: '/nestjs/n-18/openapi-versioning',
+    summary: '用契约预览展示 Swagger 文档生成、DTO 注解与 URI/Header 版本化策略。',
+    demo: null,
+    demoComponent: N18OpenApi,
+    code: NE18Code,
+    principle:
+      '@nestjs/swagger 从控制器与 DTO 装饰器生成 OpenAPI 契约，SwaggerModule.createDocument / setup 把文档挂到指定路径；DTO 上的 @ApiProperty 补充类型、示例与枚举，让文档与校验规则同源。版本化由 VersioningType 统一配置，可选 URI（/v1）、HEADER 或 MEDIA_TYPE 策略；破坏性变更必须升版本并保留旧版过渡期，文档要纳入 CI 校验，避免实现与契约漂移。',
+    flow: [
+      'DTO 与控制器补 @ApiProperty / @ApiOperation 等注解。',
+      'SwaggerModule.createDocument 生成契约，setup 挂载文档页。',
+      'enableVersioning 选择策略，控制器用 @Version 标注。',
+      'CI 校验契约变更，破坏性变更走升版本流程。',
+    ],
+    notes: [
+      '文档注解与 class-validator 规则要同步，否则契约与校验不一致。',
+      '版本化策略一旦选定不要混用，否则客户端难以适配。',
+      '破坏性变更（删字段、改类型）必须升主版本。',
+      '文档路径在生产环境按需鉴权，避免暴露内部接口细节。',
+    ],
+    problem: '解决「接口靠口头约定、客户端反复对字段，以及升级时旧调用方被直接打断」的协作问题。',
+    officialUrl: 'https://docs.nestjs.com/openapi/introduction',
   },
 ]

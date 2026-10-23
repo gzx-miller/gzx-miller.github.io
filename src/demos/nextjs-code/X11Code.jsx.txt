@@ -42,9 +42,9 @@ import { NextResponse, NextRequest } from 'next/server'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const id = params.id
+  const { id } = await params
 
   // 根据 ID 查询数据...
   const post = { id, title: `文章 ${id}` }
@@ -55,9 +55,9 @@ export async function GET(
 // PUT 更新
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const id = params.id
+  const { id } = await params
   const body = await request.json()
 
   return NextResponse.json({ id, ...body })
@@ -66,9 +66,9 @@ export async function PUT(
 // DELETE 删除
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const id = params.id
+  const { id } = await params
   // 删除逻辑...
 
   return NextResponse.json({ message: `删除文章 ${id}` })
@@ -105,8 +105,8 @@ export async function POST(request: NextRequest) {
 
   // 验证用户...
 
-  // 方式1：通过 cookies() 设置
-  const cookieStore = cookies()
+  // 方式1：通过异步 cookies() 设置
+  const cookieStore = await cookies()
   cookieStore.set('session', 'token-123', {
     httpOnly: true,
     secure: process.env['NODE_ENV'] === 'production',

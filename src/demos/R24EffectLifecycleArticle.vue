@@ -5,7 +5,7 @@ import R24EffectLifecycle from './R24EffectLifecycle.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>计时器面板上，点「开始」，秒数开始跳；点「暂停」，秒数停了——看着一切正常。可如果你在 Effect 里打印日志，会发现「暂停」这一下不只关掉了计时器：React 先跑了一次<strong>清理</strong>，紧接着又执行了一遍 <strong>Effect</strong>，而这一次它什么都没建就退了出来。你只是把 <code>running</code> 从 <code>true</code> 改成 <code>false</code>，为什么要「先拆旧的、再跑一遍新的」？
+      <strong>承接上文：</strong>计时器面板上，点「开始」，秒数开始跳；点「暂停」，秒数停了——看着一切正常。可如果你在 Effect 里打印日志，会发现「暂停」这一下不只关掉了计时器：React 先跑了一次<strong>清理</strong>，紧接着又执行了一遍 <strong>Effect</strong>，而这一次它什么都没建就退了出来。你只是把 <code>running</code> 从 <code>true</code> 改成 <code>false</code>，为什么要「先拆旧的、再跑一遍新的」？
     </div>
 
     <h2>外部资源副作用</h2>

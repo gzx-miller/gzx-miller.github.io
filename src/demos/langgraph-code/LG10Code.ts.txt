@@ -1,6 +1,6 @@
 // RAG：把三种检索策略接进 LangGraph 智能体
 // 场景：课程知识库问答——向量检索、关键词检索、混合检索对比
-import { createReactAgent } from '@langchain/langgraph/prebuilt'
+import { createAgent } from 'langchain'
 import { ChatOpenAI, OpenAIEmbeddings } from '@langchain/openai'
 import { MemoryVectorStore } from 'langchain/vectorstores/memory'
 import { tool } from '@langchain/core/tools'
@@ -72,10 +72,10 @@ const hybridSearch = tool(async ({ query }) => {
 })
 
 // 示例4: 把检索工具交给 Agent——由它按问题类型挑策略
-const agent = createReactAgent({
-  llm: new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 }),
+const agent = createAgent({
+  model: new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 }),
   tools: [vectorSearch, keywordSearchTool, hybridSearch],
-  prompt: '你是课程知识库助手。先选择合适的检索工具查证，再基于检索内容回答并标注编号。',
+  systemPrompt: '你是课程知识库助手。先选择合适的检索工具查证，再基于检索内容回答并标注编号。',
 })
 
 const result = await agent.invoke({

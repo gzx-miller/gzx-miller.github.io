@@ -31,10 +31,10 @@ import LG02StateGraph from './LG02StateGraph.vue'
 
     <h2>有向状态图三件套</h2>
     <p>
-      不推翻状态与节点，把调度部分升级成 <code>StateGraph</code>：<strong>状态用 Annotation 声明、流转用边描述、执行交给框架</strong>。具体分四步补齐。
+      不推翻状态与节点，把调度部分升级成 <code>StateGraph</code>：<strong>状态用 StateSchema + zod 声明、流转用边描述、执行交给框架</strong>。具体分四步补齐。
     </p>
     <ol class="lesson-steps">
-      <li><strong>声明状态与合并规则</strong>：用 <code>Annotation.Root</code> 定义每个字段；列表和计数器这类「会反复更新」的字段必须配 reducer——<code>log</code> 用 <code>concat</code> 追加、<code>attempts</code> 用累加，节点返回的局部更新由 reducer 合并进总状态，覆盖与否不再靠自觉。</li>
+      <li><strong>声明状态与合并规则</strong>：用 <code>StateSchema</code> 定义每个字段，字段类型交给 zod schema；列表和计数器这类「会反复更新」的字段必须用 <code>ReducedValue</code> 配 reducer——<code>log</code> 用 <code>concat</code> 追加、<code>attempts</code> 用累加，节点返回的局部更新由 reducer 合并进总状态，覆盖与否不再靠自觉。</li>
       <li><strong>节点照旧是纯函数</strong>：接收当前状态、返回局部更新；正文节点重写时多返回一个 <code>attempts: 1</code>，计数器自己就滚了起来。</li>
       <li><strong>用边描述流转</strong>：普通边 <code>addEdge</code> 连固定顺序，条件边 <code>addConditionalEdges</code> 挂一个路由函数——它读状态、返回下一个节点名。质检不通过返回 <code>'content'</code>，回环就成立了；通过返回 <code>'summary'</code>，流程向前走。</li>
       <li><strong>给循环设终止条件</strong>：回环必须能走出去——要么质检放行、要么迭代数触顶强制走向 <code>END</code>。终止条件不是兜底，是环的一部分。</li>
@@ -54,7 +54,7 @@ import LG02StateGraph from './LG02StateGraph.vue'
       状态图解决的是「复杂流程的编排」：把流程拆成状态、节点、边三样东西，让框架按「当前状态 → 下一跳」驱动执行。链只回答「下一步是谁」，图回答「根据现在的情况，下一步该是谁」——分支与回环因此收进了同一种结构。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「StateGraph」</span>把工作流建模为有向状态图：<strong>状态</strong>用 Annotation 声明字段与合并规则（reducer），<strong>节点</strong>是「读状态、返回局部更新」的函数，<strong>边</strong>分普通边与条件边（路由函数读状态返回下一节点名）。要记住的边界：列表、计数器字段不配 reducer 会被整段覆盖；回环必须设计终止条件；状态字段加得越多，每次检查点序列化的负担越大——只放流程真正需要的。
+      <span class="term-name">「StateGraph」</span>把工作流建模为有向状态图：<strong>状态</strong>用 <code>StateSchema</code> + zod 声明字段类型与合并规则（reducer），<strong>节点</strong>是「读状态、返回局部更新」的函数，<strong>边</strong>分普通边与条件边（路由函数读状态返回下一节点名）。要记住的边界：列表、计数器字段不配 reducer 会被整段覆盖；回环必须设计终止条件；状态字段加得越多，每次检查点序列化的负担越大——只放流程真正需要的。
     </div>
   </LessonArticle>
 </template>

@@ -1,19 +1,20 @@
 // 并行执行：节点并发、Send 扇出与子图
 // 场景：一份作业批改工作流——三个维度并批，最后汇总
-import { StateGraph, Annotation, START, END, Send } from '@langchain/langgraph'
+import { StateGraph, StateSchema, ReducedValue, START, END, Send } from '@langchain/langgraph'
+import { z } from 'zod/v4'
 
-const ReviewState = Annotation.Root({
-  essay: Annotation<string>,
-  dimensions: Annotation<string[]>({
-    reducer: (left, right) => left.concat(right),
-    default: () => [],
-  }),
-  reviews: Annotation<Record<string, string>>({
+const ReviewState = new StateSchema({
+  essay: z.string(),
+  dimensions: new ReducedValue(
+    z.array(z.string()).default(() => []),
+    { reducer: (left, right) => left.concat(right) },
+  ),
+  reviews: new ReducedValue(
+    z.record(z.string(), z.string()).default(() => ({})),
     // 三个并行分支各写各人的 key，reducer 负责合并而不互相覆盖
-    reducer: (left, right) => ({ ...left, ...right }),
-    default: () => ({}),
-  }),
-  summary: Annotation<string>,
+    { reducer: (left, right) => ({ ...left, ...right }) },
+  ),
+  summary: z.string(),
 })
 
 // 示例1: 三个独立的审查节点——同一条边「扇出」到它们三个，框架会自动并发执行

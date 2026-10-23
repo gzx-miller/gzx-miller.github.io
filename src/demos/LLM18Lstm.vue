@@ -1,6 +1,6 @@
 <template>
   <LlmArticle>
-    <div class="llm-question"><strong>开场问题：</strong>RNN 的记忆为什么传不远？——给记忆装上「阀门」</div>
+    <div class="llm-question"><strong>承接上文：</strong>RNN 的记忆为什么传不远？——给记忆装上「阀门」</div>
 
     <h2>RNN记不住远处信息</h2>
     <p>上一课手算出了 RNN 的病：每读一个词，旧记忆就被「×0.6 再混入新词」稀释一次，读了 20 个词，20 步前的信息 <code>0.6²⁰ ≈ 0.00004</code>，几乎归零。</p>

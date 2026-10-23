@@ -54,7 +54,7 @@ import E12Security from './E12Security.vue'
       第五步补运维习惯：只加载可信内容、不加载远程脚本，定期跑 <code>npm audit</code> / <code>npm outdated</code> 做依赖体检。
     </p>
     <p>
-      最后一条最容易被漏掉：<strong>渲染进程要当成「随时可能被攻破」来对待</strong>，所以主进程是信任边界——所有经 IPC 传进主进程的参数都要校验，不能因为「这是我自己页面发的」就照单全收。
+      最后一条最容易被漏掉：<strong>渲染进程要当成「随时可能被攻破」来对待</strong>，所以主进程是信任边界——所有经 IPC 传进主进程的消息都要先校验 <code>event.senderFrame</code> 来源、再校验参数，不能因为「这是我自己页面发的」就照单全收。
     </p>
 
     <h2>安全清单逐项核对</h2>

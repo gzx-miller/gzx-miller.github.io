@@ -4,8 +4,8 @@ import { ref } from 'vue'
 const currentLayout = ref<'default' | 'custom'>('default')
 
 const layouts = [
-  { name: 'default', file: 'layouts/default.vue', desc: '默认布局，包含 NuxtPage 插槽' },
-  { name: 'custom', file: 'layouts/custom.vue', desc: '自定义布局，如带侧边栏的后台' },
+  { name: 'default', file: 'app/layouts/default.vue', desc: '默认布局，包含 NuxtPage 插槽' },
+  { name: 'custom', file: 'app/layouts/custom.vue', desc: '自定义布局，如带侧边栏的后台' },
 ]
 
 const pageMetaCode = `// 在页面组件中指定布局
@@ -13,7 +13,7 @@ definePageMeta({
   layout: 'custom'
 })`
 
-const defaultLayoutCode = `<!-- layouts/default.vue -->
+const defaultLayoutCode = `<!-- app/layouts/default.vue -->
 <template>
   <div class="layout">
     <header>网站导航栏</header>
@@ -22,7 +22,7 @@ const defaultLayoutCode = `<!-- layouts/default.vue -->
   </div>
 </template>`
 
-const customLayoutCode = `<!-- layouts/custom.vue -->
+const customLayoutCode = `<!-- app/layouts/custom.vue -->
 <template>
   <div class="layout">
     <aside>侧边菜单</aside>

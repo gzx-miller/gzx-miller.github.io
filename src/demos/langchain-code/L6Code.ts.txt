@@ -1,5 +1,5 @@
-import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter'
-import { TextLoader } from 'langchain/document_loaders/fs/text'
+import { RecursiveCharacterTextSplitter } from '@langchain/textsplitters'
+import { TextLoader } from '@langchain/classic/document_loaders/fs/text'
 import { Document } from '@langchain/core/documents'
 
 // 示例1: 基础文本切分
@@ -67,7 +67,7 @@ console.log('切分后元数据保留:', splitDocs[0].metadata)
 // const splitDocs = await splitter.splitDocuments(rawDocs)
 
 // 示例5: 按字符切分 CharacterTextSplitter
-import { CharacterTextSplitter } from 'langchain/text_splitter'
+import { CharacterTextSplitter } from '@langchain/textsplitters'
 
 const charSplitter = new CharacterTextSplitter({
   separator: '\n',
@@ -76,7 +76,7 @@ const charSplitter = new CharacterTextSplitter({
 })
 
 // 示例6: 切分代码 - 使用语言特定的切分器
-import { SupportedTextSplitterLanguages } from 'langchain/text_splitter'
+import { SupportedTextSplitterLanguages } from '@langchain/textsplitters'
 
 // 查看支持的语言
 console.log('支持的语言:', SupportedTextSplitterLanguages)

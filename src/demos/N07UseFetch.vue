@@ -48,9 +48,9 @@ const { data } = await useFetch('/api/users', {
   method: 'GET',
 })
 
-// 动态 URL（参数变化自动重新请求）
+// 动态 URL（用 getter 保持响应式，参数变化自动重发）
 const id = ref(1)
-const { data } = await useFetch(\`/api/users/\${id.value}\`)
+const { data } = await useFetch(() => \`/api/users/\${id.value}\`)
 
 // 只在客户端请求
 const { data } = await useFetch('/api/chart', {

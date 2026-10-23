@@ -19,9 +19,15 @@ void main() {
   gl_Position = uLightMVP * vec4(aPosition, 1.0);
 }`
 
-const depthFs = `precision mediump float;
+const depthFs = `precision highp float;
+vec4 packDepth(float depth) {
+  const vec4 bitShift = vec4(1.0, 255.0, 65025.0, 16581375.0);
+  vec4 enc = fract(depth * bitShift);
+  enc -= enc.yzww * vec4(1.0 / 255.0, 1.0 / 255.0, 1.0 / 255.0, 0.0);
+  return enc;
+}
 void main() {
-  gl_FragColor = vec4(gl_FragCoord.z, gl_FragCoord.z, gl_FragCoord.z, 1.0);
+  gl_FragColor = packDepth(gl_FragCoord.z);
 }`
 
 const sceneVs = `attribute vec3 aPosition;
@@ -41,7 +47,7 @@ void main() {
   gl_Position = uProjection * uView * wp;
 }`
 
-const sceneFs = `precision mediump float;
+const sceneFs = `precision highp float;
 varying vec3 vNormalWorld;
 varying vec3 vWorldPos;
 varying vec4 vLightSpacePos;
@@ -50,19 +56,24 @@ uniform vec3 uLightDir;
 uniform vec3 uViewPos;
 uniform vec3 uMatColor;
 uniform sampler2D uShadowMap;
+uniform vec2 uShadowTexel;
 uniform float uShadowBias;
 uniform float uShadowIntensity;
+
+float unpackDepth(vec4 rgba) {
+  return dot(rgba, vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+}
 
 float calcShadow(vec4 lightSpacePos) {
   vec3 projCoords = lightSpacePos.xyz / lightSpacePos.w;
   projCoords = projCoords * 0.5 + 0.5;
   if (projCoords.z > 1.0) return 0.0;
   float currentDepth = projCoords.z;
-  vec2 texelSize = 1.0 / vec2(textureSize(uShadowMap, 0));
   float shadow = 0.0;
   for (int x = -1; x <= 1; x++) {
     for (int y = -1; y <= 1; y++) {
-      float pcfDepth = texture2D(uShadowMap, projCoords.xy + vec2(x, y) * texelSize).r;
+      vec4 packed = texture2D(uShadowMap, projCoords.xy + vec2(x, y) * uShadowTexel);
+      float pcfDepth = unpackDepth(packed);
       shadow += currentDepth - uShadowBias > pcfDepth ? 1.0 : 0.0;
     }
   }
@@ -92,13 +103,15 @@ void main() {
   gl_Position = vec4(aPosition, 0.0, 1.0);
 }`
 
-const shadowMapFs = `precision mediump float;
+const shadowMapFs = `precision highp float;
 varying vec2 vUV;
 uniform sampler2D uShadowMap;
+float unpackDepth(vec4 rgba) {
+  return dot(rgba, vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+}
 void main() {
-  float depth = texture2D(uShadowMap, vUV).r;
-  float gray = depth;
-  gl_FragColor = vec4(gray, gray, gray, 1.0);
+  float depth = unpackDepth(texture2D(uShadowMap, vUV));
+  gl_FragColor = vec4(vec3(depth), 1.0);
 }`
 
 function createBox(w: number, h: number, d: number) {
@@ -142,8 +155,8 @@ function createSphere(latBands: number, longBands: number, radius: number) {
 
 function createGround() {
   const s = 5
-  const v = new Float32Array([-s,0,-s, s,0,-s, s,0,s, -s,0,-s, s,0,s, -s,0,s])
-  const n = new Float32Array([0,1,0, 0,1,0, 0,1,0, 0,1,0, 0,1,0, 0,1,0])
+  const v = new Float32Array([-s,0,-s, s,0,-s, s,0,s, -s,0,s])
+  const n = new Float32Array([0,1,0, 0,1,0, 0,1,0, 0,1,0])
   const idx = new Uint16Array([0,1,2, 0,2,3])
   return { vertices: v, normals: n, indices: idx }
 }
@@ -170,8 +183,8 @@ function mat4LookAt(eye: number[], center: number[], up: number[]) {
 
 function mat4Multiply(a: Float32Array, b: Float32Array) {
   const r = new Float32Array(16)
-  for (let i=0; i<4; i++) for (let j=0; j<4; j++)
-    r[i*4+j] = a[i*4+0]*b[0*4+j] + a[i*4+1]*b[1*4+j] + a[i*4+2]*b[2*4+j] + a[i*4+3]*b[3*4+j]
+  for (let row=0; row<4; row++) for (let col=0; col<4; col++)
+    r[col*4+row] = a[0*4+row]*b[col*4+0] + a[1*4+row]*b[col*4+1] + a[2*4+row]*b[col*4+2] + a[3*4+row]*b[col*4+3]
   return r
 }
 
@@ -221,8 +234,17 @@ function initGL() {
     gl.shaderSource(vs, vsSrc); gl.compileShader(vs)
     const fs = gl.createShader(gl.FRAGMENT_SHADER)!
     gl.shaderSource(fs, fsSrc); gl.compileShader(fs)
+    if (!gl.getShaderParameter(vs, gl.COMPILE_STATUS)) {
+      throw new Error(`顶点着色器编译失败: ${gl.getShaderInfoLog(vs)}`)
+    }
+    if (!gl.getShaderParameter(fs, gl.COMPILE_STATUS)) {
+      throw new Error(`片元着色器编译失败: ${gl.getShaderInfoLog(fs)}`)
+    }
     const p = gl.createProgram()!
     gl.attachShader(p, vs); gl.attachShader(p, fs); gl.linkProgram(p)
+    if (!gl.getProgramParameter(p, gl.LINK_STATUS)) {
+      throw new Error(`着色器程序链接失败: ${gl.getProgramInfoLog(p)}`)
+    }
     return p
   }
 
@@ -247,6 +269,7 @@ function initGL() {
     uViewPos: gl.getUniformLocation(progScene, 'uViewPos'),
     uMatColor: gl.getUniformLocation(progScene, 'uMatColor'),
     uShadowMap: gl.getUniformLocation(progScene, 'uShadowMap'),
+    uShadowTexel: gl.getUniformLocation(progScene, 'uShadowTexel'),
     uShadowBias: gl.getUniformLocation(progScene, 'uShadowBias'),
     uShadowIntensity: gl.getUniformLocation(progScene, 'uShadowIntensity'),
   }
@@ -279,8 +302,8 @@ function initGL() {
     shadowTexture = gl.createTexture()
     gl.bindTexture(gl.TEXTURE_2D, shadowTexture)
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, 0, gl.RGBA, gl.UNSIGNED_BYTE, null)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, shadowTexture, 0)
@@ -405,6 +428,7 @@ function initGL() {
     g.uniformMatrix4fv(sceneLocs.uProj, false, proj)
     g.uniformMatrix4fv(sceneLocs.uView, false, view)
     g.uniformMatrix4fv(sceneLocs.uLightMVP, false, sceneLMVP)
+    g.uniform2f(sceneLocs.uShadowTexel, 1 / SHADOW_MAP_SIZE, 1 / SHADOW_MAP_SIZE)
     g.uniform1f(sceneLocs.uShadowBias, shadowBias.value)
     g.uniform1f(sceneLocs.uShadowIntensity, shadowIntensity.value)
 

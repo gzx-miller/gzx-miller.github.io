@@ -44,7 +44,7 @@ import TW23Plugins from './TW23Plugins.vue'
       当你需要往体系里塞普通 CSS 时，用 <code>@layer</code> 把它放进明确的级联层级：<strong>基础样式放 base、组件类放 components、工具类放 utilities</strong>。层次分明之后，工具类覆盖组件、组件覆盖基础，顺序清晰可预期，不再靠堆 <code>!important</code> 去压。
     </p>
     <div class="lesson-box warn">
-      <strong>v4 的重要变化：</strong>默认不再自动读取 <code>tailwind.config.js</code>。插件属于 JS 配置能力，若要用旧式的 <code>plugin()</code>，必须在 CSS 里用 <code>@config</code> 显式加载配置；而简单工具请优先用 CSS-first 的 <code>@utility</code>，不必为此引入 JS 配置。
+      <strong>v4 的重要变化：</strong>默认不再读取 <code>tailwind.config.js</code>。插件属于 JS 能力，官方插件与本地插件文件都在 CSS 入口用 <code>@plugin</code> 引入，例如 <code>@plugin "@tailwindcss/typography";</code>；只有需要沿用一整份旧版 JS 配置时，才用 <code>@config "../tailwind.config.js"</code> 加载。简单工具仍请优先用 CSS-first 的 <code>@utility</code>。
     </div>
     <p>
       确实需要更复杂能力时，才落到 <code>plugin()</code>：<code>addBase</code> 添加基础样式、<code>addComponents</code> 添加组件类、<code>addUtilities</code> 添加工具类、<code>addVariant</code> 注册自定义变体、<code>matchUtilities</code> 按传入值动态生成工具类。官方插件里 <code>@tailwindcss/typography</code>（<code>prose</code> 排版）、<code>@tailwindcss/forms</code>（表单重置）覆盖了常见能力，而 <code>line-clamp</code>、<code>aspect-ratio</code>、<code>container-queries</code> 这类早已内置，不必再装同名插件。
@@ -67,10 +67,10 @@ import TW23Plugins from './TW23Plugins.vue'
 
     <h2>能力分级扩展策略</h2>
     <p>
-      扩展 Tailwind 有一条清晰的梯度：内置工具与任意值能解决的，不写任何东西；单用途能力用 <code>@utility</code>，自动获得变体与正确优先级；需要堆放普通 CSS 就用 <code>@layer</code> 找准位置；只有动态值或复杂逻辑才上 <code>plugin()</code>，并记住 v4 要经 <code>@config</code> 加载。关键是保持单一来源——同一个能力，别在裸 CSS 和工具类里各写一份。
+      扩展 Tailwind 有一条清晰的梯度：内置工具与任意值能解决的，不写任何东西；单用途能力用 <code>@utility</code>，自动获得变体与正确优先级；需要堆放普通 CSS 就用 <code>@layer</code> 找准位置；只有动态值或复杂逻辑才上 <code>plugin()</code>，并记住 v4 要在 CSS 里用 <code>@plugin</code> 加载插件模块（沿用整份旧版配置时才用 <code>@config</code>）。关键是保持单一来源——同一个能力，别在裸 CSS 和工具类里各写一份。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「@utility 与插件 API 的分工」</span><code>@utility</code> 用于注册<strong>简单、单用途</strong>的自定义工具类，自动接入变体系统与优先级排序，是 CSS-first 下的首选扩展方式；<code>plugin()</code> 的 <code>addBase</code> / <code>addComponents</code> / <code>addUtilities</code> / <code>addVariant</code> / <code>matchUtilities</code> 面向<strong>动态值或更复杂</strong>的扩展，属 JS 配置能力，v4 中需用 <code>@config</code> 显式加载。
+      <span class="term-name">「@utility 与插件 API 的分工」</span><code>@utility</code> 用于注册<strong>简单、单用途</strong>的自定义工具类，自动接入变体系统与优先级排序，是 CSS-first 下的首选扩展方式；<code>plugin()</code> 的 <code>addBase</code> / <code>addComponents</code> / <code>addUtilities</code> / <code>addVariant</code> / <code>matchUtilities</code> 面向<strong>动态值或更复杂</strong>的扩展，属 JS 能力，v4 中用 <code>@plugin</code> 引入插件模块（沿用整份旧版 JS 配置时才用 <code>@config</code>）。
     </div>
   </LessonArticle>
 </template>

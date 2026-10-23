@@ -4,29 +4,29 @@ import { ref } from 'vue'
 const activeTab = ref<'dirs' | 'auto' | 'config'>('dirs')
 
 const dirs = [
-  { dir: 'pages/', desc: '文件路由，每个 .vue 文件自动映射为路由' },
-  { dir: 'components/', desc: '自动导入，无需手动 import 即可在模板使用' },
-  { dir: 'composables/', desc: '自动导入，以 use 开头的函数全局可用' },
-  { dir: 'layouts/', desc: '布局模板，页面通过 definePageMeta 指定' },
-  { dir: 'plugins/', desc: '插件自动注册，文件名即插件执行顺序' },
-  { dir: 'middleware/', desc: '路由中间件，命名后直接在页面中引用' },
-  { dir: 'server/', desc: 'Nitro 服务端目录，api/ 和 routes/ 自动注册' },
+  { dir: 'app/pages/', desc: '文件路由，每个 .vue 文件自动映射为路由' },
+  { dir: 'app/components/', desc: '自动导入，无需手动 import 即可在模板使用' },
+  { dir: 'app/composables/', desc: '自动导入，以 use 开头的函数全局可用' },
+  { dir: 'app/layouts/', desc: '布局模板，页面通过 definePageMeta 指定' },
+  { dir: 'app/plugins/', desc: '插件自动注册，文件名即插件执行顺序' },
+  { dir: 'app/middleware/', desc: '路由中间件，命名后直接在页面中引用' },
+  { dir: 'server/', desc: '根目录的 Nitro 服务端目录，api/ 和 routes/ 自动注册' },
   { dir: 'public/', desc: '静态资源，直接通过根路径访问' },
-  { dir: 'assets/', desc: '构建资源，需通过 ~/assets/ 引入并经过构建处理' },
-  { dir: 'utils/', desc: '工具函数自动导入，无需手动 import' },
+  { dir: 'app/assets/', desc: '构建资源，通过 ~/assets/ 引入并经过构建处理' },
+  { dir: 'app/utils/', desc: '工具函数自动导入，无需手动 import' },
 ]
 
 const autoImports = [
   { from: 'vue', items: 'ref, reactive, computed, watch, onMounted…' },
   { from: 'vue-router', items: 'useRoute, useRouter, onBeforeRouteLeave…' },
   { from: '#app', items: 'useFetch, useAsyncData, useState, useHead…' },
-  { from: 'components/', items: '目录下所有 .vue 组件' },
-  { from: 'composables/', items: '以 use 开头的导出函数' },
-  { from: 'utils/', items: '所有具名导出函数' },
+  { from: 'app/components/', items: '目录下所有 .vue 组件' },
+  { from: 'app/composables/', items: '以 use 开头的导出函数' },
+  { from: 'app/utils/', items: '所有具名导出函数' },
 ]
 
 const configSections = [
-  { key: 'srcDir', desc: '指定源码目录，如 srcDir: "src/" 将源码移到 src 下' },
+  { key: 'srcDir', desc: '源码目录，Nuxt 4 默认为 app/' },
   { key: 'modules', desc: 'Nuxt 模块列表，如 @pinia/nuxt 自动集成 Pinia' },
   { key: 'css', desc: '全局样式文件，构建时注入所有页面' },
   { key: 'app.head', desc: '全局 <head> 配置，每个页面可用 useHead 覆盖' },

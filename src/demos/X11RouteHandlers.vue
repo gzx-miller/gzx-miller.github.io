@@ -33,9 +33,10 @@ export async function POST(request: Request) {
 <span style="color:#8a8a3a">// app/api/users/[id]/route.ts</span>
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const user = await db.user.findUnique({ where: { id: params.id } })
+  const { id } = await params
+  const user = await db.user.findUnique({ where: { id } })
   if (!user) return NextResponse.json({ error: '未找到' }, { status: 404 })
   return NextResponse.json(user)
 }`

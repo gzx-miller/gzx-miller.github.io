@@ -43,7 +43,7 @@ function useLocalStorage(key: string, defaultValue: string) {
 
 const note = useLocalStorage('demo-note', '松鼠的笔记')
 
-const codeExample = `// composables/useCounter.ts
+const codeExample = `// app/composables/useCounter.ts
 export function useCounter(initial = 0) {
   const count = ref(initial)
   const doubled = computed(() => count.value * 2)
@@ -90,7 +90,7 @@ const { count, doubled, increment } = useCounter(10)`
     </div>
 
     <div style="margin-top:10px;padding:10px;background:#fff8f0;border-radius:6px;font-size:13px;">
-      💡 <code>composables/</code> 目录下以 <code>use</code> 开头的函数自动全局可用。每个 composable 应只封装一个关注点，返回响应式状态和操作方法。
+      💡 <code>app/composables/</code> 目录下以 <code>use</code> 开头的函数自动全局可用。每个 composable 应只封装一个关注点，返回响应式状态和操作方法。
     </div>
   </div>
 </template>

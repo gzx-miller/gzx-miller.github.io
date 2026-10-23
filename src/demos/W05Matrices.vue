@@ -27,11 +27,12 @@ void main() {
   gl_FragColor = vec4(vColor, 1.0);
 }`
 
+// GLSL 的 mat3 按列主序存储，CPU 端数组也按列优先排列。
 function createTranslationMatrix(tx: number, ty: number): Float32Array {
   return new Float32Array([
-    1, 0, tx,
-    0, 1, ty,
-    0, 0, 1,
+    1, 0, 0,
+    0, 1, 0,
+    tx, ty, 1,
   ])
 }
 
@@ -39,8 +40,8 @@ function createRotationMatrix(angle: number): Float32Array {
   const c = Math.cos(angle)
   const s = Math.sin(angle)
   return new Float32Array([
-    c, -s, 0,
-    s, c, 0,
+    c, s, 0,
+    -s, c, 0,
     0, 0, 1,
   ])
 }
@@ -59,9 +60,9 @@ function multiplyMatrices(a: Float32Array, b: Float32Array): Float32Array {
     for (let col = 0; col < 3; col++) {
       let sum = 0
       for (let k = 0; k < 3; k++) {
-        sum += a[row * 3 + k] * b[k * 3 + col]
+        sum += a[k * 3 + row] * b[col * 3 + k]
       }
-      result[row * 3 + col] = sum
+      result[col * 3 + row] = sum
     }
   }
   return result
@@ -77,9 +78,9 @@ const currentMatrix = computed(() => {
 const matrixDisplay = computed(() => {
   const m = currentMatrix.value
   return [
-    [m[0].toFixed(3), m[1].toFixed(3), m[2].toFixed(3)],
-    [m[3].toFixed(3), m[4].toFixed(3), m[5].toFixed(3)],
-    [m[6].toFixed(3), m[7].toFixed(3), m[8].toFixed(3)],
+    [m[0].toFixed(3), m[3].toFixed(3), m[6].toFixed(3)],
+    [m[1].toFixed(3), m[4].toFixed(3), m[7].toFixed(3)],
+    [m[2].toFixed(3), m[5].toFixed(3), m[8].toFixed(3)],
   ]
 })
 
@@ -302,7 +303,7 @@ onUnmounted(() => {
     </div>
 
     <div class="matrix-section">
-      <h4>🧮 变换矩阵 (3×3, 行主序)</h4>
+      <h4>🧮 变换矩阵 (3×3, 按行展开显示；GPU 按列主序存储)</h4>
       <div class="matrix-display">
         <table class="matrix-table">
           <tbody>

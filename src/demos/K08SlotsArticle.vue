@@ -5,7 +5,7 @@ import K08Slots from './K08Slots.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>课程列表和课程详情都要用同一种卡片外壳，只有标题、正文和底部按钮不同——难道每处都复制一份卡片结构？
+      <strong>承接上文：</strong>课程列表和课程详情都要用同一种卡片外壳，只有标题、正文和底部按钮不同——难道每处都复制一份卡片结构？
     </div>
 
     <h2>卡片外壳与内容差异</h2>

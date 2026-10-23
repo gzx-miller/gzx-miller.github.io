@@ -5,7 +5,7 @@ import K02TemplateSyntax from './K02TemplateSyntax.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>输入框里改了关键词，下面的订单列表就自己少了几条，可我一行操作 DOM 的代码都没写——列表到底是被谁改的？
+      <strong>承接上文：</strong>输入框里改了关键词，下面的订单列表就自己少了几条，可我一行操作 DOM 的代码都没写——列表到底是被谁改的？
     </div>
 
     <h2>状态驱动视图</h2>

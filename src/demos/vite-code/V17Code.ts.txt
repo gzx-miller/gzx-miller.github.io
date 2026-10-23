@@ -86,15 +86,19 @@ export default defineConfig({
 
 // 问题 1: 某个包找不到（动态 import 的依赖）
 // 解决: 手动添加到 include
-optimizeDeps: {
-  include: ['some-dynamic-dep']
-}
+const dynamicDepConfig = defineConfig({
+  optimizeDeps: {
+    include: ['some-dynamic-dep']
+  }
+})
 
 // 问题 2: CommonJS 包报错
 // 解决: esbuild 通常能自动转换，如不行则:
-optimizeDeps: {
-  include: ['problematic-cjs-package']
-}
+const cjsConfig = defineConfig({
+  optimizeDeps: {
+    include: ['problematic-cjs-package']
+  }
+})
 
 // 问题 3: 启动太慢
 // 解决:

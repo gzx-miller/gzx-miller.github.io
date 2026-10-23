@@ -27,7 +27,7 @@ import N16ApiRoutes from './N16ApiRoutes.vue'
       具体到开场那个例子：<code>server/api/hello.ts</code> 里导出 <code>defineEventHandler(() =&gt; ({ message: '你好，小松鼠！' }))</code>，它就自动成为 <code>/api/hello</code>；返回值会被自动序列化成 JSON。
     </p>
     <p>
-      这个方案做对了一件事：<strong>路径不再写第二遍</strong>。文件在哪儿，接口就在哪儿，路由表被文件系统取代了。这条约定和 Nuxt 的 <code>pages/</code> 路由是同一套心智模型——目录结构即路径结构，你只是把「页面」换成了「接口」。
+      这个方案做对了一件事：<strong>路径不再写第二遍</strong>。文件在哪儿，接口就在哪儿，路由表被文件系统取代了。这条约定和 Nuxt 的 <code>app/pages/</code> 路由是同一套心智模型——目录结构即路径结构，你只是把「页面」换成了「接口」。
     </p>
 
     <h2>默认响应全部方法</h2>
@@ -52,7 +52,7 @@ import N16ApiRoutes from './N16ApiRoutes.vue'
       接着补响应的表达力。要改状态码用 <code>setResponseStatus(event, 201)</code>，要加响应头用 <code>setResponseHeader(event, 'Cache-Control', 'max-age=3600')</code>；要报错就用 <code>createError({ statusCode: 404, statusMessage: 'Not Found' })</code> 抛出，它会被转换成带状态码的错误响应，前端拿到的就是 404 而不是裸 500。
     </p>
     <p>
-      最后把这一层和周边划清边界。<code>server/api</code> 的路由空间与 <code>pages</code> 完全独立，接口文件与页面文件同名互不冲突；<code>server/middleware/</code> 下的文件会自动注册为服务端中间件，对每个服务端请求生效，适合做鉴权；<code>server/utils/</code> 里导出的函数同样自动导入，可在 API 处理器与中间件中复用。
+      最后把这一层和周边划清边界。<code>server/api</code> 的路由空间与 <code>app/pages</code> 完全独立，接口文件与页面文件同名互不冲突；<code>server/middleware/</code> 下的文件会自动注册为服务端中间件，对每个服务端请求生效，适合做鉴权；<code>server/utils/</code> 里导出的函数同样自动导入，可在 API 处理器与中间件中复用。
     </p>
     <div class="lesson-box warn">
       <strong>一个容易踩的坑：</strong>不带方法后缀的处理文件会对各种 HTTP 方法都做出响应。写删除、修改这类有副作用的接口时一定要加 <code>.delete.ts</code> / <code>.put.ts</code> 后缀，否则一个普通的 GET 请求就能触发写操作——这类问题在本地测试里几乎不会暴露，上线后却可能被爬虫误触发。

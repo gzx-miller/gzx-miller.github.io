@@ -57,14 +57,15 @@ export const metadata: Metadata = {
 import type { Metadata } from 'next'
 
 type Props = {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 // 动态生成 metadata
 export async function generateMetadata({
   params,
 }: Props): Promise<Metadata> {
-  const post = await fetch(`https://api.example.com/posts/${params.slug}`)
+  const { slug } = await params
+  const post = await fetch(`https://api.example.com/posts/${slug}`)
     .then(res => res.json())
 
   return {
@@ -79,7 +80,8 @@ export async function generateMetadata({
 }
 
 export default async function PostPage({ params }: Props) {
-  const post = await fetch(`https://api.example.com/posts/${params.slug}`)
+  const { slug } = await params
+  const post = await fetch(`https://api.example.com/posts/${slug}`)
     .then(res => res.json())
 
   return <article>{post.content}</article>
@@ -152,13 +154,14 @@ import { ImageResponse } from 'next/og'
 export async function generateImageMetadata({
   params,
 }: {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }) {
+  const { slug } = await params
   return [
     {
       contentType: 'image/png',
       size: { width: 1200, height: 630 },
-      id: params.slug,
+      id: slug,
     },
   ]
 }
@@ -166,12 +169,13 @@ export async function generateImageMetadata({
 export default async function Image({
   params,
 }: {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }) {
+  const { slug } = await params
   return new ImageResponse(
     (
       <div style={{ fontSize: 60, color: 'white', background: 'black', padding: '50px' }}>
-        <h1>{params.slug}</h1>
+        <h1>{slug}</h1>
       </div>
     ),
     {

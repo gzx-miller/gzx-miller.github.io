@@ -5,7 +5,7 @@ import K18Teleport from './K18Teleport.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>弹窗明明写了 <code>position: fixed</code>、<code>z-index: 9999</code>，却还是被父容器裁掉半边、被别的元素压住——问题到底出在哪？
+      <strong>承接上文：</strong>弹窗明明写了 <code>position: fixed</code>、<code>z-index: 9999</code>，却还是被父容器裁掉半边、被别的元素压住——问题到底出在哪？
     </div>
 
     <h2>卡片内嵌弹窗</h2>

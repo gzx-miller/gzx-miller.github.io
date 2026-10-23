@@ -91,13 +91,13 @@ function mat4LookAt(eye: number[], center: number[], up: number[]): Mat4 {
 
 function mat4Multiply(a: Mat4, b: Mat4): Mat4 {
   const out = new Float32Array(16)
-  for (let i = 0; i < 4; i++) {
-    for (let j = 0; j < 4; j++) {
-      out[i * 4 + j] =
-        a[i * 4 + 0] * b[0 * 4 + j] +
-        a[i * 4 + 1] * b[1 * 4 + j] +
-        a[i * 4 + 2] * b[2 * 4 + j] +
-        a[i * 4 + 3] * b[3 * 4 + j]
+  for (let row = 0; row < 4; row++) {
+    for (let col = 0; col < 4; col++) {
+      out[col * 4 + row] =
+        a[0 * 4 + row] * b[col * 4 + 0] +
+        a[1 * 4 + row] * b[col * 4 + 1] +
+        a[2 * 4 + row] * b[col * 4 + 2] +
+        a[3 * 4 + row] * b[col * 4 + 3]
     }
   }
   return out
@@ -117,30 +117,37 @@ function computeCameraPos(): [number, number, number] {
   return [x, y, z]
 }
 
-function createSceneVertices(): Float32Array {
+function createGridVertices(): Float32Array {
   const positions: number[] = []
   const gridSize = 4
   for (let i = -gridSize; i <= gridSize; i++) {
     positions.push(i, 0, -gridSize, i, 0, gridSize)
     positions.push(-gridSize, 0, i, gridSize, 0, i)
   }
+  return new Float32Array(positions)
+}
+
+function createCubeVertices(): Float32Array {
+  const positions: number[] = []
   const s = 0.5
-  const cube = (cx: number, cy: number, cz: number) => {
-    const v = [
-      -s, -s,  s,  s, -s,  s,  s,  s,  s, -s, -s,  s,  s,  s,  s, -s,  s,  s,
-       s, -s, -s, -s, -s, -s, -s,  s, -s,  s, -s, -s, -s,  s, -s,  s,  s, -s,
-      -s,  s,  s,  s,  s,  s,  s,  s, -s, -s,  s,  s,  s,  s, -s, -s,  s, -s,
-      -s, -s, -s,  s, -s, -s,  s, -s,  s, -s, -s, -s,  s, -s,  s, -s, -s,  s,
-       s, -s,  s,  s, -s, -s,  s,  s, -s,  s, -s,  s,  s,  s, -s,  s,  s,  s,
-      -s, -s, -s, -s, -s,  s, -s,  s,  s, -s, -s, -s, -s,  s,  s, -s,  s, -s,
-    ]
+  const v = [
+    -s, -s,  s,  s, -s,  s,  s,  s,  s, -s, -s,  s,  s,  s,  s, -s,  s,  s,
+     s, -s, -s, -s, -s, -s, -s,  s, -s,  s, -s, -s, -s,  s, -s,  s,  s, -s,
+    -s,  s,  s,  s,  s,  s,  s,  s, -s, -s,  s,  s,  s,  s, -s, -s,  s, -s,
+    -s, -s, -s,  s, -s, -s,  s, -s,  s, -s, -s, -s,  s, -s,  s, -s, -s,  s,
+     s, -s,  s,  s, -s, -s,  s,  s, -s,  s, -s,  s,  s,  s, -s,  s,  s,  s,
+    -s, -s, -s, -s, -s,  s, -s,  s,  s, -s, -s, -s, -s,  s,  s, -s,  s, -s,
+  ]
+  const centers: [number, number, number][] = [
+    [0, 0.5, 0],
+    [2, 0.25, -1],
+    [-1.5, 0.4, 1.5],
+  ]
+  for (const [cx, cy, cz] of centers) {
     for (let k = 0; k < v.length; k += 3) {
       positions.push(v[k] + cx, v[k + 1] + cy, v[k + 2] + cz)
     }
   }
-  cube(0, 0.5, 0)
-  cube(2, 0.25, -1)
-  cube(-1.5, 0.4, 1.5)
   return new Float32Array(positions)
 }
 
@@ -164,6 +171,7 @@ let uMVPLoc: WebGLUniformLocation | null = null
 let uColorLoc: WebGLUniformLocation | null = null
 let sceneBuffer: WebGLBuffer | null = null
 let cubeBuffer: WebGLBuffer | null = null
+let gridVertexCount = 0
 let lastTime = 0
 let animTime = 0
 let dragging = false
@@ -192,18 +200,19 @@ function render(time: number) {
   const camPos = computeCameraPos()
   const view = mat4LookAt(camPos, [targetX.value, targetY.value, targetZ.value], [0, 1, 0])
 
-  const mv = mat4Multiply(proj, view)
-
-  const model = mat4RotateY(animTime * 0.2)
-  const mvp = mat4Multiply(mv, model)
-  gl.uniformMatrix4fv(uMVPLoc, false, mvp)
+  const viewProj = mat4Multiply(proj, view)
 
   gl.bindBuffer(gl.ARRAY_BUFFER, sceneBuffer)
   gl.enableVertexAttribArray(positionLoc)
   gl.vertexAttribPointer(positionLoc, 3, gl.FLOAT, false, 0, 0)
 
+  gl.uniformMatrix4fv(uMVPLoc, false, viewProj)
   gl.uniform3f(uColorLoc, 0.45, 0.3, 0.18)
-  gl.drawArrays(gl.LINES, 0, 60)
+  gl.drawArrays(gl.LINES, 0, gridVertexCount)
+
+  const model = mat4RotateY(animTime * 0.2)
+  const mvp = mat4Multiply(viewProj, model)
+  gl.uniformMatrix4fv(uMVPLoc, false, mvp)
 
   gl.bindBuffer(gl.ARRAY_BUFFER, cubeBuffer)
   gl.vertexAttribPointer(positionLoc, 3, gl.FLOAT, false, 0, 0)
@@ -281,12 +290,13 @@ onMounted(() => {
   uMVPLoc = gl.getUniformLocation(program, 'uMVP')
   uColorLoc = gl.getUniformLocation(program, 'uColor')
 
-  const sceneData = createSceneVertices()
+  const sceneData = createGridVertices()
+  gridVertexCount = sceneData.length / 3
   sceneBuffer = gl.createBuffer()
   gl.bindBuffer(gl.ARRAY_BUFFER, sceneBuffer)
   gl.bufferData(gl.ARRAY_BUFFER, sceneData, gl.STATIC_DRAW)
 
-  const cubeData = new Float32Array(sceneData.buffer, 0, 324)
+  const cubeData = createCubeVertices()
   cubeBuffer = gl.createBuffer()
   gl.bindBuffer(gl.ARRAY_BUFFER, cubeBuffer)
   gl.bufferData(gl.ARRAY_BUFFER, cubeData, gl.STATIC_DRAW)

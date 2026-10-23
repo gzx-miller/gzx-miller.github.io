@@ -47,7 +47,7 @@ import W02Shaders from './W02Shaders.vue'
     <ol class="lesson-steps">
       <li>顶点着色器对<strong>每个顶点</strong>执行一次（三个顶点就是三次），职责是「定位置」，把顶点算好后必须写入 <code>gl_Position</code>；本课它读入 <code>aPosition</code>、<code>aColor</code> 与 <code>uRotation</code>，用旋转公式算出新坐标。</li>
       <li>顶点着色器把 <code>aColor</code> 赋给 <code>varying vColor</code> 输出——它管不了像素，只负责在<strong>顶点</strong>上把这个值交出去。</li>
-      <li>光栅化阶段（固定管线）把三角形离散成一堆片元，并在三个顶点之间对 <code>vColor</code> <strong>自动做线性插值</strong>：每个像素拿到的是三个顶点颜色按它在三角形中所处位置混合出的值。</li>
+      <li>光栅化阶段（固定管线）把三角形离散成一堆片元，并在三个顶点之间对 <code>vColor</code> <strong>自动做透视校正插值</strong>：每个像素按重心坐标混合三个顶点的颜色，默认还会做透视除法校正，避免 3D 透视下插值失真。</li>
       <li>片段着色器对<strong>每个像素</strong>执行一次，读入插值后的 <code>vColor</code> 并写入 <code>gl_FragColor</code>，于是三角形内部出现了平滑渐变。</li>
     </ol>
     <p>

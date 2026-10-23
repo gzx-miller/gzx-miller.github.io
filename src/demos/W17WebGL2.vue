@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed, shallowRef } from 'vue'
+import { ref, onMounted, onUnmounted, computed, shallowRef, nextTick } from 'vue'
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 const glState = shallowRef<{
@@ -265,6 +265,7 @@ function destroyState() {
     }
     state.gl.getExtension('WEBGL_lose_context')?.loseContext()
   }
+  glState.value = null
 }
 
 function initAPI(api: 'webgl1' | 'webgl2') {
@@ -342,8 +343,13 @@ onUnmounted(() => {
   destroyState()
 })
 
-function switchAPI(api: 'webgl1' | 'webgl2') {
+async function switchAPI(api: 'webgl1' | 'webgl2') {
+  if (api === currentAPI.value) return
+  destroyState()
+  // 同一个 canvas 一旦创建过某种上下文，就不能再创建另一种；
+  // 通过 key 替换 canvas，等 DOM 更新后再初始化。
   currentAPI.value = api
+  await nextTick()
   initAPI(api)
 }
 
@@ -386,8 +392,8 @@ gl.bindVertexArray(vao);`,
 gl.texImage2D(gl.TEXTURE_2D, 0, gl.R32I,
   width, height, 0, gl.RED_INTEGER, gl.INT, null);
 
-// 着色器中读写
-layout(binding = 0, r32i) uniform readonly highp isampler2D idTex;
+// 着色器中读取（GLSL ES 3.00 不支持 sampler 的 layout(binding)）
+uniform highp isampler2D idTex;
 int objectId = texture(idTex, uv).r;`,
   transform: `// Transform Feedback 捕获顶点输出
 const tf = gl.createTransformFeedback();
@@ -404,9 +410,12 @@ gl.endTransformFeedback();`,
 const attachments = [
   gl.COLOR_ATTACHMENT0, // 颜色
   gl.COLOR_ATTACHMENT1, // 法线
-  gl.COLOR_ATTACHMENT2, // 深度
 ];
 gl.drawBuffers(attachments);
+
+// 深度使用独立的 DEPTH_ATTACHMENT，不是颜色附件
+gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT,
+  gl.RENDERBUFFER, depthRenderbuffer);
 
 // 一次 draw call 输出多个 G-Buffer
 // 用于延迟渲染 (Deferred Shading)`,
@@ -420,7 +429,7 @@ gl.drawBuffers(attachments);
 
     <div class="demo-layout">
       <div class="canvas-wrap">
-        <canvas ref="canvasRef"></canvas>
+        <canvas :key="currentAPI" ref="canvasRef"></canvas>
         <div class="fps-badge">{{ fps }} FPS</div>
         <div class="api-badge" :class="currentAPI">
           {{ currentAPI === 'webgl2' ? 'WebGL2' : 'WebGL1' }}

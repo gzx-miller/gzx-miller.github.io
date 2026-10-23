@@ -61,7 +61,7 @@ import W10MultiTexture from './W10MultiTexture.vue'
       <li><strong>alpha</strong>：按 overlay 的 alpha 与 <code>f</code> 做加权，用于贴纸这类带透明通道的图。</li>
     </ul>
     <div class="lesson-box warn">
-      <strong>两个别混掉的概念：</strong>其一，纹理单元数量有上限，由 <code>GL_MAX_TEXTURE_IMAGE_UNITS</code> 决定，WebGL1 通常至少 8 个——不是想绑多少就绑多少。其二，本课的混色是<strong>在片段着色器内部</strong>完成的，属于「纹素对纹素」；如果你想让画出来的片元再和帧缓冲里<strong>已有</strong>的内容合成（比如真正的半透明物体叠在场景上），那是另一回事，需要启用 <code>gl.BLEND</code> 并配置 <code>blendFunc</code>，不是在着色器里 mix 就能了事。
+      <strong>两个别混掉的概念：</strong>其一，纹理单元数量有上限，由 <code>MAX_TEXTURE_IMAGE_UNITS</code> 决定，WebGL1 通常至少 8 个——不是想绑多少就绑多少。其二，本课的混色是<strong>在片段着色器内部</strong>完成的，属于「纹素对纹素」；如果你想让画出来的片元再和帧缓冲里<strong>已有</strong>的内容合成（比如真正的半透明物体叠在场景上），那是另一回事，需要启用 <code>gl.BLEND</code> 并配置 <code>blendFunc</code>，不是在着色器里 mix 就能了事。
     </div>
     <p>
       走到这里你会发现一个顺手的收获：<strong>一份网格配一套 attribute，通过多个 sampler 就能在单次 draw call 里组合多张纹理</strong>。同一组 UV 下采样多张图再按权重相加，正是法线贴图、粗糙度贴图这类 PBR 材质叠加的基础做法。
@@ -78,7 +78,7 @@ import W10MultiTexture from './W10MultiTexture.vue'
       多纹理混合把「一张图搞定」拆成「多张图各自采样 + 运行时加权」。关键是给每个 sampler 指定一个纹理单元，再按模式在片段着色器里合并。<strong>换效果只改 uniform 参数，不用回头重新 P 图。</strong>
     </p>
     <div class="lesson-term">
-      <span class="term-name">「纹理单元」</span>是 GPU 上用于绑定「采样器（sampler）↔ 纹理数据」的独立槽位（<code>TEXTURE0</code>、<code>TEXTURE1</code> ……），数量由 <code>GL_MAX_TEXTURE_IMAGE_UNITS</code> 决定，WebGL1 通常至少 8 个。注意 sampler 自身只是指向单元号的整数，不是数据容器；这里的混合发生在片元着色器内部，若要让结果与帧缓冲已有内容再合成，需另启用 <code>gl.BLEND</code>。
+      <span class="term-name">「纹理单元」</span>是 GPU 上用于绑定「采样器（sampler）↔ 纹理数据」的独立槽位（<code>TEXTURE0</code>、<code>TEXTURE1</code> ……），数量由 <code>MAX_TEXTURE_IMAGE_UNITS</code> 决定，WebGL1 通常至少 8 个。注意 sampler 自身只是指向单元号的整数，不是数据容器；这里的混合发生在片元着色器内部，若要让结果与帧缓冲已有内容再合成，需另启用 <code>gl.BLEND</code>。
     </div>
   </LessonArticle>
 </template>

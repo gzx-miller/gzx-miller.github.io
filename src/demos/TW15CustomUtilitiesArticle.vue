@@ -10,10 +10,10 @@ import TW15CustomUtilities from './TW15CustomUtilities.vue'
 
     <h2>多行文本截断</h2>
     <p>
-      你在做课程卡片的简介区域。一段长短不一的介绍文字，最多只能占三行，超出的部分要用省略号收掉。Tailwind 的内置工具没能直接表达这个能力（或者在旧版本里没有），于是你很自然地想到：写一段普通的 CSS 不就行了？
+      你在做课程卡片的简介区域。一段长短不一的介绍文字，最多只能占三行，超出的部分要用省略号收掉。Tailwind v4 已经内置了 <code>line-clamp-3</code>，但把时间拨回它还没有内置的年代（v3.3 之前），内置工具没法直接表达这个能力，于是你很自然地想到：写一段普通的 CSS 不就行了？
     </p>
     <p>
-      于是你在全局样式里定义了 <code>.line-clamp-3</code>，逻辑上完全正确，页面上也确实生效了。但你很快发现，它和 Tailwind 的其他类「不是一路人」：别的工具类可以随手加 <code>hover:</code>、<code>md:</code> 前缀，它不行；别的类有明确的优先级顺序，它却可能莫名其妙地被覆盖。问题不在 CSS 本身，而在于<strong>它没有融入 Tailwind 的体系</strong>。
+      于是你在全局样式里定义了 <code>.line-clamp-3</code>，逻辑上完全正确，页面上也确实生效了。但你很快发现，它和 Tailwind 的其他类「不是一路人」：别的工具类可以随手加 <code>hover:</code>、<code>md:</code> 前缀，它不行；别的类有明确的优先级顺序，它却可能莫名其妙地被覆盖。问题不在 CSS 本身，而在于<strong>它没有融入 Tailwind 的体系</strong>——这也正是 v4 要用 <code>@utility</code> 注册自定义工具的原因。
     </p>
 
     <h2>手写全局裸类</h2>
@@ -40,7 +40,7 @@ import TW15CustomUtilities from './TW15CustomUtilities.vue'
       写法上，静态能力直接声明；需要按参数生成值的，用占位符把参数引进来。例如为截断行数定义一个函数式工具：
     </p>
     <ol class="lesson-steps">
-      <li>先确认内置工具与任意值都无法清晰表达该能力——能内置就别自定义。</li>
+      <li>先确认内置工具与任意值都无法清晰表达该能力——能内置就别自定义（本课的 <code>line-clamp-*</code> 在 v4 已内置，这里只借它演示注册机制）。</li>
       <li>把单用途能力注册为 <code>@utility</code>，保持可组合、可加变体。</li>
       <li>按「基础样式 / 组件 / 工具」选择正确的 <code>@layer</code> 落位。</li>
       <li>给自定义工具加上 <code>hover:</code> 前缀，验证变体系统自动生效。</li>

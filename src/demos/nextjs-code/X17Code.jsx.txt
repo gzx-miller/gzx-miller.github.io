@@ -21,9 +21,10 @@ export default function Page() {
 // ============================================
 
 // 远程图片 - 需要配置域名白名单
-// next.config.js
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+// next.config.ts
+import type { NextConfig } from 'next'
+
+const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
@@ -39,7 +40,7 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
+export default nextConfig
 
 // 使用远程图片
 import Image from 'next/image'
@@ -69,7 +70,7 @@ export default function Page() {
         alt="Hero 图片"
         fill
         style={{ objectFit: 'cover' }}
-        priority // 首屏关键图片，预加载
+        preload // 首屏关键图片，插入 preload 提示
       />
     </div>
   )
@@ -98,7 +99,7 @@ export default function PhotoGallery() {
 
 // ============================================
 
-// priority 属性 - 首屏 LCP 图片
+// preload 属性 - 首屏 LCP 图片
 import Image from 'next/image'
 
 export default function HeroSection() {
@@ -109,7 +110,7 @@ export default function HeroSection() {
         alt="主图"
         width={1920}
         height={1080}
-        priority // 优先加载，提升 LCP
+        preload // 插入 preload 提示，提升 LCP
         sizes="100vw"
       />
     </section>

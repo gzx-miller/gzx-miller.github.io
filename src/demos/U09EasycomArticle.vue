@@ -37,7 +37,7 @@ import U09Easycom from './U09Easycom.vue'
 
     <h2>目录约定替代注册</h2>
     <p>
-      换一种思路：不要「注册」，要「约定」。<strong>easycom</strong> 规定，只要组件位于 <code>components/组件名/组件名.vue</code>，页面模板里就能直接写标签，既不用 <code>import</code>，也不用注册。框架在编译时扫描这个约定目录，命中的组件被<strong>异步加载、按需打包</strong>——用到的才进包，没用的不会被打进去。
+      换一种思路：不要「注册」，要「约定」。<strong>easycom</strong> 规定，只要组件位于 <code>components/组件名/组件名.vue</code>，页面模板里就能直接写标签，既不用 <code>import</code>，也不用注册。框架在编译时扫描这个约定目录，命中的组件被<strong>自动引入、按需打包</strong>——用到的才进包，没用的不会被打进去。
     </p>
     <p>
       关键全在「命名一致」这四个字上：<strong>目录名、文件名、标签名三者必须一模一样</strong>，这是默认匹配规则。比如 <code>components/course-card/course-card.vue</code>，对应模板里的标签就是 <code>&lt;course-card&gt;</code>；少一层目录、或者文件跟目录不同名，默认规则就匹配不上。

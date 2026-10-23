@@ -37,29 +37,29 @@ import X07StaticDynamic from './X07StaticDynamic.vue'
       不推翻「两种时机共存」，而是让框架<strong>根据代码里用到的能力</strong>自动判断，并给需要强制干预的场景留出开关。
     </p>
     <p>
-      默认情况下，路由若不包含任何与「当前请求」相关的信息，Next.js 会做<strong>静态渲染</strong>：构建时生成 HTML，之后所有用户拿到同一份，可被 CDN 缓存，首屏最快。反过来，只要组件树里用到了<strong>动态函数</strong>——例如 <code>cookies()</code> 读取 Cookie、<code>headers()</code> 读取请求头，或读取 <code>searchParams</code>——整条路由就转为<strong>动态渲染</strong>，在每次请求时执行。
+      默认情况下，路由若不包含任何与「当前请求」相关的信息，Next.js 会做<strong>静态渲染</strong>：构建时生成 HTML，之后所有用户拿到同一份，可被 CDN 缓存，首屏最快。反过来，只要组件树里用到了<strong>运行时 API</strong>——例如 <code>await cookies()</code> 读取 Cookie、<code>await headers()</code> 读取请求头，或读取 <code>await searchParams</code>——未启用 Cache Components 时整条路由转为<strong>动态渲染</strong>，在每次请求时执行；启用 Cache Components 后，则把这些读取收进 <code>&lt;Suspense&gt;</code>，静态壳先返回，动态片段再流式补齐。
     </p>
     <table>
       <thead>
         <tr><th>触发条件</th><th>渲染类型</th></tr>
       </thead>
       <tbody>
-        <tr><td>不含动态 API、数据可缓存</td><td>静态渲染（构建时生成）</td></tr>
-        <tr><td>调用 <code>cookies()</code> 或 <code>headers()</code>、读取 <code>searchParams</code></td><td>动态渲染（每次请求）</td></tr>
+        <tr><td>不含运行时 API、数据通过 <code>'use cache'</code> 或显式缓存</td><td>静态渲染（构建时生成）</td></tr>
+        <tr><td>调用 <code>await cookies()</code> 或 <code>await headers()</code>、读取 <code>await searchParams</code></td><td>未启用 Cache Components 时动态渲染；启用后进入 Suspense 流式输出</td></tr>
         <tr><td>显式 <code>cache: 'no-store'</code></td><td>动态渲染（每次请求）</td></tr>
       </tbody>
     </table>
     <p>
-      这里容易踩空：<strong>「用了动态函数」是路由级的</strong>。不是只有用到它的组件变动态，而是组件树里<strong>任意一处</strong>用了 <code>cookies()</code> 或 <code>headers()</code>，整条路由都会跟着变动态。因为这些值在构建时根本不存在，框架无法把结果提前固化。
+      这里容易踩空：在<strong>未启用 Cache Components</strong> 的模型里，<strong>「用了运行时 API」是路由级的</strong>。不是只有用到它的组件变动态，而是组件树里<strong>任意一处</strong>用了 <code>cookies()</code> 或 <code>headers()</code>，整条路由都会跟着变动态。因为这些值在构建时根本不存在，框架无法把结果提前固化。启用 Cache Components 后，框架可以只把这段读取标成动态，其余部分仍预渲染成静态壳。
     </p>
     <p>
-      接着是版本差异。<strong>早期版本里 <code>fetch</code> 默认会缓存</strong>，不加参数也会命中；<strong>较新版本（15+）中 <code>fetch</code> 默认不再缓存</strong>。因此，若希望数据是可缓存的静态内容，就要显式声明缓存策略。Next.js 16 进一步引入 Cache Components（<code>use cache</code>）的思路，把「哪些部分可静态、哪些随请求变化」表达得更显式，支持「静态外壳 + 动态内容」的组合。
+      接着是版本差异。<strong>早期版本里 <code>fetch</code> 默认会缓存</strong>，不加参数也会命中；<strong>Next.js 15 起 <code>fetch</code> 默认变成 auto no cache</strong>：开发时每次请求都取远端，构建静态路由时只取一次。因此，若希望数据是可缓存的静态内容，就要显式声明缓存策略。Next.js 16 起新建项目默认开启 Cache Components，用 <code>'use cache'</code>、<code>cacheLife</code>、<code>cacheTag</code> 统一表达缓存，支持「静态外壳 + 动态内容」的组合。
     </p>
     <p>
-      自动判断不满足时，可用路由级配置强制干预：导出 <code>dynamic = 'force-static'</code> 会强制静态（此时用了动态函数会直接报错，等于把问题提前暴露），导出 <code>dynamic = 'force-dynamic'</code> 则强制每次请求都执行，默认值 <code>'auto'</code> 交给框架判断。
+      自动判断不满足时，在<strong>未启用 Cache Components</strong> 的旧模型里仍可用路由级配置强制干预：导出 <code>dynamic = 'force-static'</code> 会强制静态（此时用了运行时 API 会直接报错，等于把问题提前暴露），导出 <code>dynamic = 'force-dynamic'</code> 则强制每次请求都执行，默认值 <code>'auto'</code> 交给框架判断。Next.js 16 启用 Cache Components 后，<code>dynamic</code>、<code>revalidate</code>、<code>fetchCache</code> 会被移除，改用 <code>'use cache'</code> 与 <code>&lt;Suspense&gt;</code> 表达。
     </p>
     <p>
-      最后解决「内容偶尔才变」的中间地带，用的是增量静态再生成（ISR）：通过 <code>export const revalidate = 60</code> 或给单个 <code>fetch</code> 加 <code>next: { revalidate: 60 }</code>，让静态页面每隔一段时间在后台重新生成一次。这样大多数请求命中缓存、速度很快，内容又不会长期滞留。配合 <code>generateStaticParams</code>，还能为一批动态路由预先静态化，未列出的再按需生成。
+      最后解决「内容偶尔才变」的中间地带，用的是增量静态再生成（ISR）。旧模型里通过 <code>export const revalidate = 60</code> 或给单个 <code>fetch</code> 加 <code>next: { revalidate: 60 }</code> 实现；Cache Components 下则在 <code>'use cache'</code> 作用域里调用 <code>cacheLife('hours')</code>，让静态内容每隔一段时间在后台重新验证。这样大多数请求命中缓存、速度很快，内容又不会长期滞留。配合 <code>generateStaticParams</code>，还能为一批动态路由预先静态化，未列出的再按需生成。
     </p>
     <div class="lesson-box hint">
       <strong>排查小贴士：</strong>执行 <code>next build</code> 后会输出一张路由表，用标记区分渲染类型——<code>○</code> 表示静态、<code>λ</code> 表示动态。想确认某页面属于哪种，看这张表比凭直觉猜可靠。
@@ -73,10 +73,10 @@ import X07StaticDynamic from './X07StaticDynamic.vue'
 
     <h2>请求依赖决定时机</h2>
     <p>
-      静态与动态渲染这一课，重点是「渲染时机由代码依赖决定」：不含请求相关信息、数据可缓存的路由做静态渲染，交给 CDN 缓存；一旦用到 <code>cookies()</code>／<code>headers()</code>／<code>searchParams</code> 或显式禁用缓存，整条路由转为动态。需要干预时用 <code>dynamic</code> 强制，需要折中时用 <code>revalidate</code> 做 ISR。
+      静态与动态渲染这一课，重点是「渲染时机由代码依赖决定」：不含请求相关信息、数据已缓存的路由做静态渲染，交给 CDN 缓存；一旦用到 <code>await cookies()</code>／<code>await headers()</code>／<code>await searchParams</code> 或显式禁用缓存，未启用 Cache Components 时整条路由转为动态；启用后则用 <code>&lt;Suspense&gt;</code> 保留静态壳。需要干预时旧模型可用 <code>dynamic</code> 强制，Cache Components 下用 <code>'use cache'</code> 与 <code>cacheLife</code> 控制缓存生命周期。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「静态与动态渲染」</span>指同一框架下的两种渲染时机：静态渲染在构建时生成 HTML，可被 CDN 缓存、首屏最快；动态渲染在每次请求时执行，适合依赖用户身份或查询串的内容。只要组件树中<strong>任意一处</strong>使用了 <code>cookies()</code>、<code>headers()</code>、<code>searchParams</code> 或 <code>cache: 'no-store'</code>，整条路由即转为动态。可用 <code>export const dynamic</code> 强制指定，用 <code>export const revalidate</code> 或 <code>next.revalidate</code> 做增量静态再生成。较新版本 <code>fetch</code> 默认不再缓存，需要缓存时应显式声明。
+      <span class="term-name">「静态与动态渲染」</span>指同一框架下的两种渲染时机：静态渲染在构建时生成 HTML，可被 CDN 缓存、首屏最快；动态渲染在每次请求时执行，适合依赖用户身份或查询串的内容。未启用 Cache Components 时，组件树中<strong>任意一处</strong>使用 <code>await cookies()</code>、<code>await headers()</code>、<code>await searchParams</code> 或 <code>cache: 'no-store'</code>，整条路由即转为动态；启用后应把动态读取放进 <code>&lt;Suspense&gt;</code>，静态壳仍可预渲染。旧模型可用 <code>export const dynamic</code> 强制指定，用 <code>export const revalidate</code> 或 <code>next.revalidate</code> 做增量静态再生成；Cache Components 下改用 <code>'use cache'</code> 配合 <code>cacheLife</code>。Next.js 15 起 <code>fetch</code> 默认 auto no cache，需要持久缓存时应显式声明。
     </div>
   </LessonArticle>
 </template>

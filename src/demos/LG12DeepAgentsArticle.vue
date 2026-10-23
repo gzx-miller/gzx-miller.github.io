@@ -27,7 +27,7 @@ import LG12DeepAgents from './LG12DeepAgents.vue'
       <li><strong>对话记忆</strong>：同 thread 持续对话，材料与结论跨轮延续。</li>
     </ol>
     <p>
-      用法上它仍是「模型 + 工具 + 提示词」的老配方，只是预置了一整套长任务装备：<code>createDeepAgent({ model, subagents, systemPrompt })</code>。
+      用法上它仍是「模型 + 工具 + 系统提示词」的组合，只是预置了一整套长任务装备：<code>createDeepAgent({ model, subagents, systemPrompt })</code>。
     </p>
     <div class="lesson-box warn">
       <strong>它不是万能升级包：</strong>四件套的代价是多轮工具调用——一次「简单推荐课程」也会被它拆成清单来跑，token 成本与延迟都显著高于普通 Agent。判断标准很简单：<strong>任务需要「计划 + 多个专家 + 产出文件」时才上 Deep Agents</strong>，普通问答与单工具任务保持轻量。

@@ -75,11 +75,14 @@ const mockRetrievedDocs: RetrievedDoc[] = [
 const mockAnswer = '秋日森林具有以下显著特点：\n\n1. **植被特征**：属于温带落叶阔叶林，主要树种包括橡树、枫树、山毛榉等。秋季时树叶呈现橙红、金黄等丰富色彩，是森林一年中最美的季节。\n\n2. **变色原理**：秋季气温下降和日照减少导致叶绿素分解，类胡萝卜素和花青素显现，形成壮观的秋色景观。\n\n3. **生态价值**：作为重要的碳汇，每年每公顷可吸收约15-20吨二氧化碳，在应对气候变化中发挥关键作用。\n\n4. **经济价值**：秋日森林旅游带动了餐饮、住宿、手工艺品等相关产业发展，创造了大量就业机会。'
 
 const codeExample = `// RAG 完整流水线实现
-import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter'
-import { MemoryVectorStore } from 'langchain/vectorstores/memory'
+import { RecursiveCharacterTextSplitter } from '@langchain/textsplitters'
+import { MemoryVectorStore } from '@langchain/classic/vectorstores/memory'
 import { OpenAIEmbeddings } from '@langchain/openai'
-import { createRetrievalChain } from 'langchain/chains/retrieval'
-import { createStuffDocumentsChain } from 'langchain/chains/combine_documents'
+import { ChatOpenAI } from '@langchain/openai'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
+import { StringOutputParser } from '@langchain/core/output_parsers'
+import { RunnablePassthrough, RunnableSequence } from '@langchain/core/runnables'
+import type { Document } from '@langchain/core/documents'
 
 // 1. 文档加载与切分
 const splitter = new RecursiveCharacterTextSplitter({
@@ -97,21 +100,26 @@ const vectorStore = await MemoryVectorStore.fromDocuments(
 // 3. 创建检索器
 const retriever = vectorStore.asRetriever({ k: 3 })
 
-// 4. 构建 RAG 链
-const combineChain = await createStuffDocumentsChain({
-  llm,
-  prompt: ragPrompt
-})
+// 4. 用 LCEL 构建 RAG 链（检索一次，单次生成）
+const llm = new ChatOpenAI({ model: 'gpt-4o-mini' })
+const ragPrompt = ChatPromptTemplate.fromMessages([
+  ['system', '你是知识库助手。只根据给出的资料回答，资料不足时明确说不知道。'],
+  ['human', '问题：{question}\\n\\n资料：{context}']
+])
+const formatDocs = (docs: Document[]) => docs.map(d => d.pageContent).join('\\n\\n')
 
-const ragChain = await createRetrievalChain({
-  retriever,
-  combineDocsChain: combineChain
-})
+const ragChain = RunnableSequence.from([
+  {
+    context: retriever.pipe(formatDocs),
+    question: new RunnablePassthrough(),
+  },
+  ragPrompt,
+  llm,
+  new StringOutputParser(),
+])
 
 // 5. 执行查询
-const result = await ragChain.invoke({
-  input: userQuestion
-})`
+const answer = await ragChain.invoke(userQuestion)`
 
 const knowledgePoints = [
   { title: '什么是 RAG', content: 'RAG (Retrieval-Augmented Generation) 即检索增强生成，是一种结合信息检索与大语言模型的技术框架，通过外部知识库增强模型回答的准确性和时效性。' },

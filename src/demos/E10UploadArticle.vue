@@ -47,7 +47,7 @@ import E10Upload from './E10Upload.vue'
       第三步，管住数量。用 <code>limit</code> 限制最多能选几个，超过上限时触发 <code>on-exceed</code>——在这里提示用户「最多可传 3 个」，而不是让第 4 个文件默默消失。已选文件列表用 <code>v-model:file-list</code> 双向管理，组件会替你维护它；要从列表里移除时，用 <code>on-remove</code> 同步清理对应的业务记录。
     </p>
     <p>
-      第四步，处理「先攒后传」的流程。有些场景不希望用户一选文件就立刻发出去——比如要先填表单、要凑齐一批再统一提交。这时把 <code>auto-upload</code> 设为 <code>false</code>，文件先进入 <code>file-list</code> 待命，等业务时机到了再调用 <code>submit()</code> 手动触发。
+      第四步，处理「先攒后传」的流程。有些场景不希望用户一选文件就立刻发出去——比如要先填表单、要凑齐一批再统一提交。这时把 <code>auto-upload</code> 设为 <code>false</code>，文件先进入 <code>file-list</code> 待命，等业务时机到了再调用 <code>submit()</code> 手动触发。如果上传要接自己的签名、分片或统一请求库，再用 <code>http-request</code> 完全接管默认 XHR 请求。
     </p>
     <div class="lesson-box warn">
       <strong>一个最容易误解的点：</strong><code>auto-upload=false</code> 只是「暂不上传」，<strong>文件此刻已经进入列表了</strong>，并不是不接收。最终仍必须显式发起上传，否则用户选完了、界面也显示了，服务端却什么都没收到——这种「看着像成功、其实没提交」的错最坑人。

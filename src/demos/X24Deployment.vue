@@ -21,8 +21,9 @@ const codeExample = `<span style="color:#8a8a3a">// 1. Vercel — 推送即部�
 git push origin main  <span style="color:#7c7c99">// Vercel 自动构建部署</span>
 
 <span style="color:#8a8a3a">// 2. Node.js 自托管</span>
-<span style="color:#7c7c99">// next.config.js</span>
-module.exports = { output: 'standalone' }
+<span style="color:#7c7c99">// next.config.ts</span>
+const nextConfig: NextConfig = { output: 'standalone' }
+export default nextConfig
 
 <span style="color:#7c7c99">// 构建 + 运行</span>
 next build
@@ -44,12 +45,13 @@ EXPOSE 3000
 CMD ["node", "server.js"]
 
 <span style="color:#8a8a3a">// 4. 静态导出</span>
-<span style="color:#7c7c99">// next.config.js</span>
-module.exports = { output: 'export' }
+<span style="color:#7c7c99">// next.config.ts</span>
+const nextConfig: NextConfig = { output: 'export' }
+export default nextConfig
 <span style="color:#7c7c99">// 生成 out/ 目录，托管到任意静态服务器</span>`
 
 const restrictions = [
-  '静态导出不支持：动态路由参数、Server Actions、Middleware、Image Optimization',
+  '静态导出不支持：Server Actions、Proxy、Image Optimization、ISR；Route Handler 仅支持静态 GET',
   'standalone 不含 node_modules，需 COPY 静态资源',
   'Vercel Edge Functions 限制：无 Node API，冷启动快',
 ]

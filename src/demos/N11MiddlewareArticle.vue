@@ -5,7 +5,7 @@ import N11Middleware from './N11Middleware.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>你在 <code>middleware/auth.ts</code> 里写好了「没登录就跳登录页」的判断，文件规规矩矩放在 <code>middleware/</code> 目录下。可切到 <code>/admin</code> 一试——没登录照样进去了，控制台连一条中间件日志都没有。文件名对了、目录对了、逻辑也没写错，它为什么一声不吭地被跳过了？
+      <strong>开场问题：</strong>你在 <code>app/middleware/auth.ts</code> 里写好了「没登录就跳登录页」的判断，文件规规矩矩放在 <code>app/middleware/</code> 目录下。可切到 <code>/admin</code> 一试——没登录照样进去了，控制台连一条中间件日志都没有。文件名对了、目录对了、逻辑也没写错，它为什么一声不吭地被跳过了？
     </div>
 
     <h2>导航拦截时机</h2>
@@ -21,10 +21,10 @@ import N11Middleware from './N11Middleware.vue'
 
     <h2>中间件文件定义</h2>
     <p>
-      先在 <code>middleware/</code> 下建一个文件，默认导出 <code>defineNuxtRouteMiddleware((to, from) =&gt; { ... })</code>，在函数里写判断；再在需要用它的页面里写 <code>definePageMeta({ middleware: 'auth' })</code>，把文件名当成名字引用过来。
+      先在 <code>app/middleware/</code> 下建一个文件，默认导出 <code>defineNuxtRouteMiddleware((to, from) =&gt; { ... })</code>，在函数里写判断；再在需要用它的页面里写 <code>definePageMeta({ middleware: 'auth' })</code>，把文件名当成名字引用过来。
     </p>
     <p>
-      这个方案做对了一件事：<strong>约定即注册</strong>。文件放进 <code>middleware/</code> 就自动被收录，文件名就是它的名字，页面按名引用即可，不用再去维护一张路由表，也不用在配置文件里登记。逻辑集中在一处，页面按需挂载。
+      这个方案做对了一件事：<strong>约定即注册</strong>。文件放进 <code>app/middleware/</code> 就自动被收录，文件名就是它的名字，页面按名引用即可，不用再去维护一张路由表，也不用在配置文件里登记。逻辑集中在一处，页面按需挂载。
     </p>
 
     <h2>页面声明与挂载</h2>
@@ -37,7 +37,7 @@ import N11Middleware from './N11Middleware.vue'
 
     <h2>全局中间件注册</h2>
     <p>
-      先补上「全站都要跑」的那一类。把无差别生效的逻辑放进以 <code>.global</code> 结尾的文件，例如 <code>middleware/stats.global.ts</code>，它会自动对所有路由生效，不需要任何页面声明。至此三类中间件的顺序也定下来了：<strong>全局中间件 → 页面声明的命名中间件（按数组顺序）→ 内联中间件</strong>。
+      先补上「全站都要跑」的那一类。把无差别生效的逻辑放进以 <code>.global</code> 结尾的文件，例如 <code>app/middleware/stats.global.ts</code>，它会自动对所有路由生效，不需要任何页面声明。至此三类中间件的顺序也定下来了：<strong>全局中间件 → 页面声明的命名中间件（按数组顺序）→ 内联中间件</strong>。
     </p>
     <p>
       接着补上「只跟这一个页面强相关、不值得单独建文件」的判断：<strong>内联中间件</strong>，直接把函数写进 <code>definePageMeta</code> 的 <code>middleware</code> 数组里。比如详情页判断 <code>to.params.id === 'forbidden'</code> 就 <code>navigateTo('/')</code>，就地收尾。
@@ -69,7 +69,7 @@ import N11Middleware from './N11Middleware.vue'
 
     <h2>执行顺序与放行规则</h2>
     <p>
-      路由中间件把「跳转前该跑的逻辑」从每个页面里抽出来，集中到 <code>middleware/</code> 一处：命名中间件由页面用 <code>definePageMeta</code> 按需挂载，<code>.global</code> 后缀让它对全站生效，内联中间件承接一时之需。执行顺序是全局 → 命名 → 内联，放行靠「不返回」、拦截靠 <code>navigateTo</code> / <code>abortNavigation</code>，而这一切都要在两端都成立。
+      路由中间件把「跳转前该跑的逻辑」从每个页面里抽出来，集中到 <code>app/middleware/</code> 一处：命名中间件由页面用 <code>definePageMeta</code> 按需挂载，<code>.global</code> 后缀让它对全站生效，内联中间件承接一时之需。执行顺序是全局 → 命名 → 内联，放行靠「不返回」、拦截靠 <code>navigateTo</code> / <code>abortNavigation</code>，而这一切都要在两端都成立。
     </p>
     <div class="lesson-term">
       <span class="term-name">「同构（isomorphic）」</span>指同一段代码同时运行在服务端与客户端两套环境里，并保持行为一致。Nuxt 的路由中间件就是同构执行的：SSR 首屏那一次导航与后续的客户端路由跳转都会调用它。边界：同构意味着中间件里<strong>不能依赖只有一端存在的 API</strong>（<code>window</code>、<code>localStorage</code>、<code>document</code>），两端都要读的数据应放在 cookie 或 <code>useState</code> 里；「同构」也不等于「两端结果必然相同」，涉及当前时间、随机数、端侧存储时仍需显式区分。

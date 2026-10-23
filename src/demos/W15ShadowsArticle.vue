@@ -34,13 +34,13 @@ import W15Shadows from './W15Shadows.vue'
 
     <h2>光空间坐标映射</h2>
     <p>
-      先补「怎么查」。第一遍从光源视角渲染时，顶点着色器用 <code>uLightMVP</code> 把网格变换到光空间，片段直接写 <code>gl_FragCoord.z</code>——记下的是这个点在该视角下的屏幕深度。第二遍换成相机视角渲染时，顶点着色器<strong>顺手把每个顶点的光空间坐标 <code>vLightSpacePos</code> 也算出来</strong>，这样片段阶段就能拿它去查表。
+      先补「怎么查」。第一遍从光源视角渲染时，顶点着色器用 <code>uLightMVP</code> 把网格变换到光空间，片段把 <code>gl_FragCoord.z</code> 打包进 RGBA 颜色附件，得到一张可采样的阴影贴图。第二遍换成相机视角渲染时，顶点着色器<strong>顺手把每个顶点的光空间坐标 <code>vLightSpacePos</code> 也算出来</strong>，这样片段阶段就能拿它去查表。
     </p>
     <p>
       到了片段着色器，把光空间坐标做<strong>透视除法并映射到 <code>[0, 1]</code></strong>，得到在阴影贴图上的采样坐标：<span class="lesson-kv">projCoords = lightSpacePos.xyz / w * 0.5 + 0.5</span>。用它采样 shadow map，就取到了「光源在这个方向看到的最浅深度」。整个流程是：
     </p>
     <ol class="lesson-steps">
-      <li>Pass 1：用 <code>uLightMVP</code> 把网格变换到光空间，把 <code>gl_FragCoord.z</code> 写入深度纹理。</li>
+      <li>Pass 1：用 <code>uLightMVP</code> 把网格变换到光空间，把 <code>gl_FragCoord.z</code> 打包写入阴影贴图。</li>
       <li>Pass 2：正常渲染场景，顶点着色器同时计算顶点的光空间坐标 <code>vLightSpacePos</code>。</li>
       <li>片段中把光空间坐标做透视除法并映射到 <code>[0, 1]</code>，用它采样 shadow map。</li>
       <li>比较当前深度与采样深度判断遮挡，对周围 3×3 共 9 个纹素做 PCF 平均得到软阴影，乘强度后作用于漫反射与高光。</li>
@@ -63,7 +63,7 @@ import W15Shadows from './W15Shadows.vue'
 
     <h2>深度比较判定</h2>
     <p>
-      阴影映射把「谁挡住了光」变成了一次「深度比较」。先从光源视角把场景的深度画下来，再从相机视角逐像素问一句：在光源看来，我是不是比记录里更远？是，就在阴影里。<strong>bias 负责堵住深度误差的缝，PCF 负责把生硬的边界揉软。</strong>
+      阴影映射把「谁挡住了光」变成了一次「深度比较」。先从光源视角把场景深度写进阴影贴图，再从相机视角逐像素问一句：在光源看来，我是不是比记录里更远？是，就在阴影里。<strong>bias 负责堵住深度误差的缝，PCF 负责把生硬的边界揉软。</strong>
     </p>
     <div class="lesson-term">
       <span class="term-name">「阴影映射（Shadow Mapping）」</span>是一种实时阴影技术，分两遍渲染：第一遍从光源视角渲染场景，把每个可见点的深度写入 shadow map；第二遍从相机视角渲染，把每个像素变换到光空间，用其深度与此处 shadow map 所记录的「离光源最近的深度」比较，若更深则说明被遮挡、处于阴影中。边界与例外：比较前要加 <code>bias</code> 抑制自遮挡（过大会产生阴影悬浮），边缘可用 3×3 PCF 平均柔化；平行光用正交投影构造光空间矩阵，点光源/聚光灯需六面或更深的方法。

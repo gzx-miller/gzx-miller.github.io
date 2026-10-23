@@ -1,21 +1,22 @@
 // 记忆：短期记忆靠 checkpointer，长期记忆靠 Store
 // 场景：学习助手——会话内记住上下文，跨会话记住学生偏好
-import { StateGraph, Annotation, START, END, MemorySaver, InMemoryStore } from '@langchain/langgraph'
+import { StateGraph, StateSchema, MessagesValue, START, END, MemorySaver, InMemoryStore } from '@langchain/langgraph'
 import { ChatOpenAI } from '@langchain/openai'
 import { HumanMessage, SystemMessage } from '@langchain/core/messages'
+import { z } from 'zod/v4'
 
 const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 })
-
-type AssistantState = {
-  messages: any[]
-  profile: string
-}
 
 // 示例1: 短期记忆——用 checkpointer 按 thread_id 保存会话内的消息历史
 // 同一个 thread_id 的每一次 invoke 都能读到之前的消息
 const checkpointer = new MemorySaver()
 
-async function chatNode(state: AssistantState, runtime: any) {
+const AssistantState = new StateSchema({
+  messages: MessagesValue,
+  profile: z.string().default(''),
+})
+
+async function chatNode(state: typeof AssistantState.State, runtime: any) {
   // 示例2: 长期记忆——从 Store 里读学生档案（跨会话、跨 thread）
   const userId = runtime.configurable?.user_id ?? 'student-01'
   const saved = await runtime.store.get(['profiles'], userId)
@@ -37,15 +38,7 @@ async function chatNode(state: AssistantState, runtime: any) {
   return { messages: [response] }
 }
 
-const graph = new StateGraph<AssistantState>({
-  channels: {
-    messages: {
-      default: () => [],
-      reducer: (left: any[], right: any[]) => left.concat(right),
-    },
-    profile: null,
-  } as any,
-})
+const graph = new StateGraph(AssistantState)
 
 graph.addNode('chat', chatNode)
 graph.addEdge(START, 'chat')

@@ -38,8 +38,8 @@ import X02FileRouting from './X02FileRouting.vue'
       不用推翻「目录即路由」，而是给目录名加一套<strong>约定符号</strong>，把上述每一种需求都翻译成一个可见的写法。核心依旧只有一句：<code>page.tsx</code> 才是页面的 UI 入口，目录层级就是 URL 层级，其余符号只是在描述「这一段路径怎么匹配」。
     </p>
     <ol class="lesson-steps">
-      <li>单段动态参数用方括号：<code>app/blog/[slug]/page.tsx</code> 匹配 <code>/blog/anything</code>，组件通过 <code>params.slug</code> 拿到那一段字符串。</li>
-      <li>多段捕获用三点号：<code>app/docs/[...slug]/page.tsx</code> 匹配 <code>/docs/a/b/c</code>，此时 <code>params.slug</code> 是 <code>['a', 'b', 'c']</code> 这样的数组。</li>
+      <li>单段动态参数用方括号：<code>app/blog/[slug]/page.tsx</code> 匹配 <code>/blog/anything</code>，组件通过 <code>const { slug } = await params</code> 拿到那一段字符串。</li>
+      <li>多段捕获用三点号：<code>app/docs/[...slug]/page.tsx</code> 匹配 <code>/docs/a/b/c</code>，此时解包后的 <code>slug</code> 是 <code>['a', 'b', 'c']</code> 这样的数组。</li>
       <li>可选的尾段用双层方括号：<code>app/shop/[[...slug]]/page.tsx</code> 既能匹配 <code>/shop</code>，也能匹配 <code>/shop/a/b</code>，零个路径段也算命中。</li>
       <li>只想分组、不改 URL 时用圆括号：<code>app/(marketing)/about/page.tsx</code> 的最终 URL 仍是 <code>/about</code>，圆括号部分只影响代码组织与布局。</li>
       <li>内部文件用下划线前缀隔离：<code>app/_components/Button.tsx</code> 里的 <code>_components</code> 不参与路由生成，可以安心放组件和工具。</li>
@@ -61,7 +61,7 @@ import X02FileRouting from './X02FileRouting.vue'
       </tbody>
     </table>
     <div class="lesson-box warn">
-      <strong>两个易错点：</strong>动态段的<strong>目录名要和页面里读取的 <code>params</code> 字段一致</strong>，把 <code>[slug]</code> 改成 <code>[id]</code> 后，组件里的 <code>params.slug</code> 也要同步改成 <code>params.id</code>，否则拿到的是 <code>undefined</code>；另外，<code>page.tsx</code> 之外的文件（<code>layout</code>／<code>loading</code>／<code>error</code> 等）本身<strong>不直接生成路由</strong>，它们只是页面周边的约定文件。
+      <strong>两个易错点：</strong>动态段的<strong>目录名要和页面里读取的 <code>params</code> 字段一致</strong>，把 <code>[slug]</code> 改成 <code>[id]</code> 后，组件里 <code>await params</code> 解包出的 <code>slug</code> 字段也要同步改成 <code>id</code>，否则拿到的是 <code>undefined</code>；另外，<code>page.tsx</code> 之外的文件（<code>layout</code>／<code>loading</code>／<code>error</code> 等）本身<strong>不直接生成路由</strong>，它们只是页面周边的约定文件。
     </div>
 
     <h2>写法与匹配范围</h2>

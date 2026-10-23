@@ -5,7 +5,7 @@ import K17Directive from './K17Directive.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>五个搜索框都要「一进页面就自动聚焦」，难道每个组件里都写一遍 <code>ref</code> 加 <code>onMounted</code>？这套样板代码能不能只写一次？
+      <strong>承接上文：</strong>五个搜索框都要「一进页面就自动聚焦」，难道每个组件里都写一遍 <code>ref</code> 加 <code>onMounted</code>？这套样板代码能不能只写一次？
     </div>
 
     <h2>输入框自动聚焦</h2>

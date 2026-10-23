@@ -71,21 +71,14 @@ const animationCode = `<span style="color:#7c7c99">// 内置动画</span>
 <span style="color:#8a8a3a">animate-bounce</span>  <span style="color:#7c7c99">// 弹跳</span>
 <span style="color:#8a8a3a">animate-ping</span>    <span style="color:#7c7c99">// 雷达扩散</span>
 
-<span style="color:#7c7c99">// 自定义动画（tailwind.config.js）</span>
-module.exports = {
-  theme: {
-    extend: {
-      animation: {
-        <span style="color:#8a8a3a">'float'</span>: <span style="color:#a31414">'float 3s ease-in-out infinite'</span>,
-        <span style="color:#8a8a3a">'fall'</span>: <span style="color:#a31414">'fall 2s ease-in forwards'</span>,
-      },
-      keyframes: {
-        float: {
-          <span style="color:#8a8a3a">'0%, 100%'</span>: { transform: <span style="color:#a31414">'translateY(0)'</span> },
-          <span style="color:#8a8a3a">'50%'</span>: { transform: <span style="color:#a31414">'translateY(-10px)'</span> },
-        }
-      }
-    }
+<span style="color:#7c7c99">// 自定义动画（v4：写在 app.css）</span>
+@theme {
+  --animate-float: float 3s ease-in-out infinite;
+  --animate-fall: fall 2s ease-in forwards;
+
+  @keyframes float {
+    <span style="color:#8a8a3a">0%, 100%</span> { transform: <span style="color:#a31414">translateY(0)</span>; }
+    <span style="color:#8a8a3a">50%</span> { transform: <span style="color:#a31414">translateY(-10px)</span>; }
   }
 }`
 </script>

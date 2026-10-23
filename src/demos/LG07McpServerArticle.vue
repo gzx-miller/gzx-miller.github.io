@@ -31,7 +31,7 @@ import LG07McpServer from './LG07McpServer.vue'
     <ol class="lesson-steps">
       <li><strong>配置 Server 清单</strong>：用 <code>MultiServerMCPClient</code> 声明要连哪些 Server——本地的用 <code>stdio</code> 拉起子进程，远端的用 <code>http</code> 连服务地址，两种可以混用。</li>
       <li><strong>一次拉取全部工具</strong>：<code>client.getTools()</code> 返回标准的 LangChain 工具数组，每个工具名自带 <strong>Server 前缀</strong>（如 <code>courseDb__query</code>），与原生 <code>tool()</code> 定义的工具用法完全一致。</li>
-      <li><strong>照常交给 Agent</strong>：把工具数组传进 <code>createReactAgent</code> 即可——模型侧看到的就是普通工具，谁来提供、走什么传输，它一概不需要知道。</li>
+      <li><strong>照常交给 Agent</strong>：把工具数组传进 <code>createAgent({ model, tools, systemPrompt })</code> 即可——模型侧看到的就是普通工具，谁来提供、走什么传输，它一概不需要知道。</li>
     </ol>
     <div class="lesson-box hint">
       <strong>值得记住的两个细节：</strong>工具名前缀不是装饰，日志里看到 <code>math__calculate</code> 就知道这次调用跨了哪个服务；用完 <code>client.close()</code> 释放 stdio 子进程与 HTTP 连接，长驻服务尤其要注意，否则连接会悄悄泄漏。

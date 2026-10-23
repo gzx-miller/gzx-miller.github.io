@@ -80,10 +80,9 @@ const mockToolResults: Record<string, string> = {
 }
 
 const codeExample = `// LangChain.js 函数调用与工具使用
+import { createAgent, tool } from 'langchain'
 import { ChatOpenAI } from '@langchain/openai'
-import { tool } from '@langchain/core/tools'
 import { z } from 'zod'
-import { AgentExecutor, createOpenAIToolsAgent } from 'langchain/agents'
 
 // 1. 定义工具
 const getWeatherTool = tool(
@@ -115,25 +114,22 @@ const searchTool = tool(
   }
 )
 
-// 2. 创建 Agent
+// 2. 创建 Agent（v1 现行写法）
 const tools = [getWeatherTool, searchTool]
 
-const prompt = ChatPromptTemplate.fromMessages([
-  ['system', '你是一个乐于助人的助手，善于使用工具解决问题。'],
-  ['human', '{input}'],
-  ['assistant', '{agent_scratchpad}']
-])
-
 const model = new ChatOpenAI({ model: 'gpt-4o', temperature: 0 })
-const agent = await createOpenAIToolsAgent({ llm: model, tools, prompt })
-const agentExecutor = new AgentExecutor({ agent, tools, verbose: true })
-
-// 3. 执行 Agent
-const result = await agentExecutor.invoke({
-  input: '北京今天天气怎么样？适合去森林玩吗？'
+const agent = createAgent({
+  model,
+  tools,
+  systemPrompt: '你是一个乐于助人的助手，善于使用工具解决问题。',
 })
 
-console.log(result.output)`
+// 3. 执行 Agent
+const result = await agent.invoke({
+  messages: [{ role: 'user', content: '北京今天天气怎么样？适合去森林玩吗？' }],
+})
+
+console.log(result.messages.at(-1)?.content)`
 
 const knowledgePoints = [
   { title: '什么是函数调用', content: '函数调用（Function Calling）是大语言模型的一种能力，模型可以根据用户意图，判断是否需要调用外部工具/函数来获取信息或执行操作，并生成符合格式的调用参数。' },

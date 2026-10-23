@@ -8,6 +8,7 @@ const glState = shallowRef<{
   program: WebGLProgram
   fboProgram: WebGLProgram
   vbo: WebGLBuffer
+  quadBuffer: WebGLBuffer
   fbo: WebGLFramebuffer
   fboTexture: WebGLTexture
   rbo: WebGLRenderbuffer
@@ -22,7 +23,7 @@ const animating = ref(true)
 const fps = ref(0)
 
 const effectLabels: Record<string, string> = {
-  bloom: 'Bloom 泛光',
+  bloom: '高亮增强（简化 Bloom）',
   blur: 'Gaussian Blur 高斯模糊',
   grayscale: 'Grayscale 灰度化',
   none: '原始渲染',
@@ -48,20 +49,20 @@ void main() {
     if (length(color.rgb) > threshold) {
       bloomSum = color.rgb * u_intensity;
     }
-    float s = sin(u_time) * 0.1 + 1.0;
-    gl_FragColor = vec4(color.rgb + bloomSum * s, 1.0);
+    // 简化版：只做高亮提取与叠加，不做多 pass 模糊。
+    gl_FragColor = vec4(color.rgb + bloomSum, 1.0);
   } else if (u_effect == 2) {
     vec3 sum = vec3(0.0);
     float step = 0.004 * u_intensity;
-    sum += texture2D(u_scene, v_uv + vec2(-step, -step)).rgb * 0.06136;
-    sum += texture2D(u_scene, v_uv + vec2(-step, 0.0)).rgb * 0.24477;
-    sum += texture2D(u_scene, v_uv + vec2(-step, step)).rgb * 0.06136;
-    sum += texture2D(u_scene, v_uv + vec2(0.0, -step)).rgb * 0.24477;
-    sum += texture2D(u_scene, v_uv).rgb * 0.38774;
-    sum += texture2D(u_scene, v_uv + vec2(0.0, step)).rgb * 0.24477;
-    sum += texture2D(u_scene, v_uv + vec2(step, -step)).rgb * 0.06136;
-    sum += texture2D(u_scene, v_uv + vec2(step, 0.0)).rgb * 0.24477;
-    sum += texture2D(u_scene, v_uv + vec2(step, step)).rgb * 0.06136;
+    sum += texture2D(u_scene, v_uv + vec2(-step, -step)).rgb * 0.0751136;
+    sum += texture2D(u_scene, v_uv + vec2(-step, 0.0)).rgb * 0.1238414;
+    sum += texture2D(u_scene, v_uv + vec2(-step, step)).rgb * 0.0751136;
+    sum += texture2D(u_scene, v_uv + vec2(0.0, -step)).rgb * 0.1238414;
+    sum += texture2D(u_scene, v_uv).rgb * 0.2041799;
+    sum += texture2D(u_scene, v_uv + vec2(0.0, step)).rgb * 0.1238414;
+    sum += texture2D(u_scene, v_uv + vec2(step, -step)).rgb * 0.0751136;
+    sum += texture2D(u_scene, v_uv + vec2(step, 0.0)).rgb * 0.1238414;
+    sum += texture2D(u_scene, v_uv + vec2(step, step)).rgb * 0.0751136;
     gl_FragColor = vec4(sum, 1.0);
   } else {
     gl_FragColor = color;
@@ -239,13 +240,7 @@ function render(time: number) {
   const program = state.fboProgram
   gl.useProgram(program)
 
-  const quadBuf = gl.createBuffer()
-  gl.bindBuffer(gl.ARRAY_BUFFER, quadBuf)
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-    -1, -1, 1, -1, -1, 1,
-    -1, 1, 1, -1, 1, 1,
-  ]), gl.STATIC_DRAW)
-
+  gl.bindBuffer(gl.ARRAY_BUFFER, state.quadBuffer)
   const posLoc2 = gl.getAttribLocation(program, 'a_position')
   gl.enableVertexAttribArray(posLoc2)
   gl.vertexAttribPointer(posLoc2, 2, gl.FLOAT, false, 0, 0)
@@ -260,8 +255,6 @@ function render(time: number) {
   gl.uniform1f(gl.getUniformLocation(program, 'u_time'), time * 0.001)
 
   gl.drawArrays(gl.TRIANGLES, 0, 6)
-
-  gl.deleteBuffer(quadBuf)
 
   if (animating.value) {
     state.rafId = requestAnimationFrame(render)
@@ -298,6 +291,13 @@ onMounted(() => {
 
   const { fbo, texture, rbo } = initFBO(gl, w, h)
 
+  const quadBuffer = gl.createBuffer()!
+  gl.bindBuffer(gl.ARRAY_BUFFER, quadBuffer)
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+    -1, -1, 1, -1, -1, 1,
+    -1, 1, 1, -1, 1, 1,
+  ]), gl.STATIC_DRAW)
+
   const state: any = {
     gl,
     canvas,
@@ -306,6 +306,7 @@ onMounted(() => {
     fbo,
     fboTexture: texture,
     rbo,
+    quadBuffer,
     rafId: 0,
     sceneInfo,
   }
@@ -340,12 +341,13 @@ onUnmounted(() => {
     state.gl.deleteFramebuffer(state.fbo)
     state.gl.deleteTexture(state.fboTexture)
     state.gl.deleteRenderbuffer(state.rbo)
+    state.gl.deleteBuffer(state.quadBuffer)
     state.gl.getExtension('WEBGL_lose_context')?.loseContext()
   }
 })
 
 const codeSnippets = computed(() => ({
-  bloom: `// Bloom 提取高亮 + 叠加
+  bloom: `// 简化 Bloom：只提取高亮并叠加，不做多 pass 模糊
 if (u_effect == 1) {
   vec3 bloomSum = vec3(0.0);
   float threshold = 0.8;
@@ -354,11 +356,11 @@ if (u_effect == 1) {
   }
   gl_FragColor = vec4(color.rgb + bloomSum, 1.0);
 }`,
-  blur: `// Gaussian 3x3 采样
+  blur: `// Gaussian 3x3 采样（权重之和为 1）
 vec3 sum = vec3(0.0);
 float step = 0.004 * u_intensity;
-sum += texture2D(u_scene, v_uv + vec2(-step, -step)).rgb * 0.06136;
-sum += texture2D(u_scene, v_uv + vec2(0.0, -step)).rgb * 0.24477;
+sum += texture2D(u_scene, v_uv + vec2(-step, -step)).rgb * 0.0751136;
+sum += texture2D(u_scene, v_uv + vec2(0.0, -step)).rgb * 0.1238414;
 // ... 9 tap Gaussian
 gl_FragColor = vec4(sum, 1.0);`,
   grayscale: `// 亮度加权灰度化
@@ -372,7 +374,7 @@ gl_FragColor = color;`,
 <template>
   <div class="demo-card">
     <h3>🌰 后处理效果</h3>
-    <p class="summary">场景渲染到 FBO 后，通过全屏四边形在片段着色器中实现 Bloom / 高斯模糊 / 灰度化。</p>
+    <p class="summary">场景渲染到 FBO 后，通过全屏四边形在片段着色器中实现简化 Bloom / 高斯模糊 / 灰度化。</p>
 
     <div class="demo-layout">
       <div class="canvas-wrap">
@@ -386,7 +388,7 @@ gl_FragColor = color;`,
           <span>后处理效果</span>
           <select v-model="effectType">
             <option value="none">原始渲染</option>
-            <option value="bloom">Bloom 泛光</option>
+            <option value="bloom">高亮增强（简化 Bloom）</option>
             <option value="blur">高斯模糊</option>
             <option value="grayscale">灰度化</option>
           </select>

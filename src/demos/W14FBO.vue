@@ -305,8 +305,8 @@ function initGL() {
       const t = new Float32Array([1,0,0,0, 0,1,0,0, 0,0,1,0, 1.5,0,0,1])
       const r = mat4RotateY(-angle * 1.5)
       const m = new Float32Array(16)
-      for (let i=0; i<4; i++) for (let j=0; j<4; j++)
-        m[i*4+j] = r[i*4+0]*t[0*4+j] + r[i*4+1]*t[1*4+j] + r[i*4+2]*t[2*4+j] + r[i*4+3]*t[3*4+j]
+      for (let row=0; row<4; row++) for (let col=0; col<4; col++)
+        m[col*4+row] = r[0*4+row]*t[col*4+0] + r[1*4+row]*t[col*4+1] + r[2*4+row]*t[col*4+2] + r[3*4+row]*t[col*4+3]
       return m
     })()
 

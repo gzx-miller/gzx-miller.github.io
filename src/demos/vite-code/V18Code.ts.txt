@@ -7,12 +7,9 @@ export default defineConfig({
   
   // esbuild 配置（同时影响开发和构建）
   esbuild: {
-    // 目标环境
+    // 目标环境：Vite 7 默认 'baseline-widely-available'
+    // 即 chrome107 / edge107 / firefox104 / safari16；这里降到 es2020 只是示例
     target: 'es2020',
-    // 等价于: ['es2020', 'chrome80', 'safari14', 'firefox72']
-    
-    // 支持的平台: 'browser' | 'node' | 'neutral'
-    platform: 'browser',
     
     // 是否启用 JSX 自动转换
     jsxFactory: 'h',

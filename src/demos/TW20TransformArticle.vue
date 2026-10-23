@@ -29,7 +29,7 @@ import TW20Transform from './TW20Transform.vue'
       <li>没有过渡，状态一变就是瞬移，观感生硬，也没法表达「从哪里来、到哪里去」。</li>
       <li>一着急补上 <code>transition-all</code>，结果把颜色、边框、布局属性全都拖进过渡，出现意想不到的抖动。</li>
       <li>有人图省事去动画 <code>width</code> 或 <code>height</code>，每一帧都触发布局重排，小列表还好，长列表立刻卡顿。</li>
-      <li>缩放和旋转一起用时，结果和预期对不上——<code>transform</code> 里函数的书写顺序会影响最终结果。</li>
+      <li>缩放和旋转一起用时，结果和预期对不上——多半是 <code>transform-origin</code> 没选对；Tailwind 的工具类会按固定顺序合成 <code>transform</code>，类名的书写顺序并不影响结果。</li>
       <li>想让多个元素错开滑入，光有 <code>hover</code> 触发不了，缺一段能自己播放的关键帧。</li>
       <li>对系统里开了「减少动态效果」的用户没有任何照顾，动画照放不误。</li>
     </ul>
@@ -48,7 +48,7 @@ import TW20Transform from './TW20Transform.vue'
       接着是关键帧动画。<code>animate-spin</code> 适合加载转圈，<code>animate-ping</code> 适合雷达扩散的提示点，<code>animate-pulse</code> 适合骨架屏呼吸，<code>animate-bounce</code> 适合引导注意。它们与 <code>hover</code> 触发无关，是「自己会跑」的。入场那种错开的滑入，则要靠自定义 <code>@keyframes</code> 把透明度与位移一起写进去，而不是硬用过渡去模拟。
     </p>
     <p>
-      最后别忘两个纪律。一是<strong>写作顺序</strong>：旋转与缩放写在一条 <code>transform</code> 里，顺序不同结果可能明显不同，固定一个习惯（比如先位移、再旋转、后缩放）能省掉很多猜谜。二是<strong>性能预算</strong>：大量元素同时动画会抢占主线程，动画数量要有节制，并且要为用户提供「减少动态效果」的替代方案。
+      最后别忘两个纪律。一是<strong>变换原点与合成顺序</strong>：Tailwind 会按固定顺序把位移、旋转、缩放合成到同一条 <code>transform</code>，类名的书写顺序不影响结果；只有在自己写的 CSS 里直接堆叠多个变换函数时，函数顺序才会改变结果，用 <code>origin-*</code> 固定原点通常比调整顺序更可靠。二是<strong>性能预算</strong>：大量元素同时动画会抢占主线程，动画数量要有节制，并且要为用户提供「减少动态效果」的替代方案。
     </p>
     <ol class="lesson-steps">
       <li>用 <code>scale</code> / <code>rotate</code> / <code>translate</code> / <code>skew</code> 与 <code>origin-*</code> 定义要呈现的变换。</li>

@@ -40,7 +40,7 @@ import V18Esbuild from './V18Esbuild.vue'
       接着补「JSX 怎么转」。浏览器不认识 JSX 语法，esbuild 把它转成函数调用。经典模式会转成 <code>React.createElement(...)</code>；在 Vue 里则配置 <code>jsxFactory: 'h'</code>、<code>jsxFragment: 'Fragment'</code>，再用 <code>jsxInject</code> 自动注入一行 <code>import { h, Fragment } from 'vue'</code>，省去每个文件手写。<code>tsconfig.json</code> 里那把 <code>jsx</code> 设成 <code>"preserve"</code>，意思就是「别让 <code>tsc</code> 动 JSX，保留原样交给 Vite/esbuild 处理」。
     </p>
     <p>
-      再补「按目标降级」。<code>target</code> 决定语法降级到哪个版本，比如 <code>es2020</code>；<code>drop: ['console', 'debugger']</code> 让构建时把调试代码抹掉；<code>platform</code> 区分 <code>browser</code> / <code>node</code> / <code>neutral</code>。这是一处权衡：<strong>目标越现代，产物越小、跑得越快，但能兼容的浏览器越窄</strong>，要按你的用户来决定。
+      再补「按目标降级」。<code>target</code> 决定语法降级到哪个版本，比如 <code>es2020</code>；Vite 7 的默认值是 <code>'baseline-widely-available'</code>（chrome107 / edge107 / firefox104 / safari16），通常不需要手动下调。<code>drop: ['console', 'debugger']</code> 让构建时把调试代码抹掉；而 <code>platform</code> 并不是 Vite 的 <code>esbuild</code> 选项，它只在直接调用 esbuild 的构建 API 时出现，Vite 里传进去不会生效。这是一处权衡：<strong>目标越现代，产物越小、跑得越快，但能兼容的浏览器越窄</strong>，要按你的用户来决定。
     </p>
     <p>
       最后补「遇到不支持的 TS 特性怎么办」。思路是<strong>顺着 esbuild 能理解的语法写</strong>：<code>const enum</code> 换成普通 <code>enum</code>；<code>export =</code> / <code>import =</code> 改成 ES Module 语法；依赖 <code>emitDecoratorMetadata</code> 的场景，转交给 Babel 插件链或官方插件处理。

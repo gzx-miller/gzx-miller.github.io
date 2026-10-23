@@ -50,11 +50,11 @@ async function demoStream() {
   console.log(`总 token 数: ${tokenCount}`)
 }
 
-// 示例3: astream_events - 事件级流式输出（v2）
-async function demoAstreamEvents() {
-  console.log('\n=== astream_events 方式 ===')
+// 示例3: streamEvents - 事件级流式输出（v2；旧写法 astream_events 仅见于 Python）
+async function demoStreamEvents() {
+  console.log('\n=== streamEvents 方式 ===')
 
-  const eventStream = await chain.astream_events(
+  const eventStream = await chain.streamEvents(
     { scene: '秋天的森林' },
     { version: 'v2' }
   )

@@ -5,7 +5,7 @@ import N06Composables from './N06Composables.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>你在 <code>composables/useCart.ts</code> 里写了购物车逻辑，页头用它显示商品数量、商品卡片用它负责加购。你以为这是「一处逻辑、一份状态」，结果在卡片上连点加购，页头的数字纹丝不动。更奇怪的是：这个函数页面里一行 import 都没写，却照样能调用——「免 import」和「状态不共享」这两件看起来矛盾的事，到底是怎么同时成立的？
+      <strong>开场问题：</strong>你在 <code>app/composables/useCart.ts</code> 里写了购物车逻辑，页头用它显示商品数量、商品卡片用它负责加购。你以为这是「一处逻辑、一份状态」，结果在卡片上连点加购，页头的数字纹丝不动。更奇怪的是：这个函数页面里一行 import 都没写，却照样能调用——「免 import」和「状态不共享」这两件看起来矛盾的事，到底是怎么同时成立的？
     </div>
 
     <h2>响应式逻辑复用</h2>
@@ -21,7 +21,7 @@ import N06Composables from './N06Composables.vue'
 
     <h2>约定目录自动导入</h2>
     <p>
-      约定就在这里：把函数放进 <code>composables/</code> 目录、名字以 <code>use</code> 开头，Nuxt 构建时会扫描到它，并在被引用的地方自动插入 import。函数内部用 <code>ref</code>、<code>computed</code> 建立状态，把加、减、重置这些操作作为函数一起返回，调用方直接解构使用即可。
+      约定就在这里：把函数放进 <code>app/composables/</code> 目录、名字以 <code>use</code> 开头，Nuxt 构建时会扫描到它，并在被引用的地方自动插入 import。函数内部用 <code>ref</code>、<code>computed</code> 建立状态，把加、减、重置这些操作作为函数一起返回，调用方直接解构使用即可。
     </p>
     <p>
       这个方案做对了一件事：<strong>它把「逻辑」从「组件」里搬了出来</strong>。同一段 <code>useCounter</code> 既能被页头用，也能被侧栏用；而它待在哪个目录、叫什么名字，本身就已经说明了「这是一个可复用的组合式函数」，不需要你手写 import 去指路。
@@ -32,7 +32,7 @@ import N06Composables from './N06Composables.vue'
       <li>每次调用 <code>useXxx()</code> 都会<strong>重新执行一遍函数体</strong>，得到一份全新的 <code>ref</code>。它不是全局单例：页头点加一，侧栏不会跟着变——这正是开场里那个「连点加购、页头不动」的原因。</li>
       <li>函数体在<strong>服务端和客户端都会执行一次</strong>。你在里面直接读 <code>localStorage</code> 或 <code>window</code>，服务端渲染时这些对象并不存在，整页就会报错。</li>
       <li>如果 composable 返回的是一个 <code>reactive</code> 对象，调用方直接解构取值会<strong>丢掉响应性</strong>——解构进普通变量之后，它就不再跟随源状态变化了。</li>
-      <li>只有当它待在 <code>composables/</code> 目录、且名字以 <code>use</code> 开头时才会被自动导入；放到别处或忘了前缀，运行时就会提示函数不存在。</li>
+      <li>只有当它待在 <code>app/composables/</code> 目录、且名字以 <code>use</code> 开头时才会被自动导入；放到别处或忘了前缀，运行时就会提示函数不存在。</li>
     </ul>
 
     <h2>复用逻辑边界补齐</h2>
@@ -40,7 +40,7 @@ import N06Composables from './N06Composables.vue'
       不推翻这个方案，而是一层层把它的边界补上。
     </p>
     <ol class="lesson-steps">
-      <li><strong>先立约定</strong>：把它安顿到 <code>composables/</code> 目录下、函数名以 <code>use</code> 开头。这两条同时满足，Nuxt 才会在构建时扫到并自动导入——这就是开场里「没写 import 也能调用」的答案。</li>
+      <li><strong>先立约定</strong>：把它安顿到 <code>app/composables/</code> 目录下、函数名以 <code>use</code> 开头。这两条同时满足，Nuxt 才会在构建时扫到并自动导入——这就是开场里「没写 import 也能调用」的答案。</li>
       <li><strong>再拆职责</strong>：一个 composable 只封装<strong>一个</strong>关注点；需要更复杂的业务时，让 composable 之间相互调用——先抽出一个基础的 <code>useCounter</code>，再在它之上组合出业务级的 <code>useCart</code>，每一层都能被单独复用与测试。</li>
       <li><strong>再保响应性</strong>：调用方解构时，保持拿到的是 <code>ref</code>（用 <code>.value</code> 访问）；若内部返回 <code>reactive</code> 对象，外面就用 <code>toRefs</code> 转换后再解构，别让响应性在解构那一刻被抹掉。</li>
       <li><strong>最后补双端安全</strong>（最关键的一步）：同一个 composable 在两端都会跑，而浏览器 API 只在客户端存在。稳妥的写法是用一个 <code>ref</code> 先放<strong>两端都安全</strong>的默认值，把读取 <code>localStorage</code> 的动作推迟到 <code>onMounted</code> 里——服务端渲染时跳过它，客户端挂载后再补上真实值。也可以先用 <code>import.meta<span>.client</span></code> 判断当前端侧，或用 <code>typeof(window) !== 'undefined'</code> 兜底。</li>
@@ -57,10 +57,10 @@ import N06Composables from './N06Composables.vue'
 
     <h2>按需注入复用约定</h2>
     <p>
-      在 Nuxt 里，<code>composables/</code> 目录加上 <code>use</code> 前缀，就是「免 import 复用逻辑」的约定：它把一段响应式逻辑从组件里抽出来，按需注入到任意调用方。但它既不是全局单例（每次调用一份新状态），又会在服务端和客户端各跑一次——<strong>把访问浏览器 API 的动作推迟到客户端</strong>，才是它能在 SSR 下稳稳工作的前提。
+      在 Nuxt 里，<code>app/composables/</code> 目录加上 <code>use</code> 前缀，就是「免 import 复用逻辑」的约定：它把一段响应式逻辑从组件里抽出来，按需注入到任意调用方。但它既不是全局单例（每次调用一份新状态），又会在服务端和客户端各跑一次——<strong>把访问浏览器 API 的动作推迟到客户端</strong>，才是它能在 SSR 下稳稳工作的前提。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「Composable（组合式函数）」</span>以 <code>use</code> 开头的函数，内部用 Vue 响应式 API 封装<strong>单一关注点</strong>的逻辑，返回响应式状态与操作方法；在 Nuxt 中，位于 <code>composables/</code> 目录且符合 <code>use</code> 前缀约定的会被自动导入。边界：每次调用都会新建独立的响应式状态（<strong>非全局单例</strong>，共享状态请用 <code>useState</code> 或 Pinia）；函数体会在<strong>服务端与客户端各执行一次</strong>，访问浏览器 API 前必须判环境或推迟到 <code>onMounted</code>。
+      <span class="term-name">「Composable（组合式函数）」</span>以 <code>use</code> 开头的函数，内部用 Vue 响应式 API 封装<strong>单一关注点</strong>的逻辑，返回响应式状态与操作方法；在 Nuxt 中，位于 <code>app/composables/</code> 目录且符合 <code>use</code> 前缀约定的会被自动导入。边界：每次调用都会新建独立的响应式状态（<strong>非全局单例</strong>，共享状态请用 <code>useState</code> 或 Pinia）；函数体会在<strong>服务端与客户端各执行一次</strong>，访问浏览器 API 前必须判环境或推迟到 <code>onMounted</code>。
     </div>
   </LessonArticle>
 </template>

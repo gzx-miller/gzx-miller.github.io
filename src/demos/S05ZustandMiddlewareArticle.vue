@@ -5,7 +5,7 @@ import S05ZustandMiddleware from './S05ZustandMiddleware.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>你只想在课程进度跨过某个值那一刻上报一次埋点，于是写了 <code>useCourseStore.subscribe(cb)</code>。结果只要 Store 里任何一个字段动一下——未读数加一、弹窗开关切一次——回调都被调一遍，日志刷屏；更别扭的是回调只给你新状态，你根本不知道它是从多少跳上来的，也就判断不出「刚刚到底有没有跨过那条线」。
+      <strong>承接上文：</strong>你只想在课程进度跨过某个值那一刻上报一次埋点，于是写了 <code>useCourseStore.subscribe(cb)</code>。结果只要 Store 里任何一个字段动一下——未读数加一、弹窗开关切一次——回调都被调一遍，日志刷屏；更别扭的是回调只给你新状态，你根本不知道它是从多少跳上来的，也就判断不出「刚刚到底有没有跨过那条线」。
     </div>
 
     <h2>横切能力归属</h2>

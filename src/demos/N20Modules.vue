@@ -62,7 +62,7 @@ const ecosystemTips = [
   { tip: '查找模块', desc: '访问 nuxt.com/modules 浏览官方和社区模块' },
   { tip: '安装模块', desc: 'pnpm add @nuxtjs/xxx，然后在 nuxt.config.ts 的 modules 中添加' },
   { tip: '模块顺序', desc: 'modules 数组中的顺序决定注册顺序，有依赖关系的需注意' },
-  { tip: '本地模块', desc: '使用 nuxt.config.ts 的 modulesDir 或直接引用本地路径' },
+  { tip: '本地模块', desc: '项目根目录 modules/ 下的模块会自动注册，也可在 nuxt.config.ts 直接引用本地路径' },
   { tip: '模块配置', desc: '通过 nuxt.config.ts 的同名键配置模块选项' },
   { tip: '开发模式', desc: 'nuxt prepare 生成 .nuxt/ 类型声明，辅助模块开发' },
 ]

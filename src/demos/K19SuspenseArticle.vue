@@ -5,7 +5,7 @@ import K19Suspense from './K19Suspense.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>课程详情页里有一块偏重、还要请求数据的学习报告，我想让它用到再加载，可每个异步组件都得自己写一遍 loading 分支——有没有办法在模板层面直接声明「这块内容在等，先显示什么」？
+      <strong>承接上文：</strong>课程详情页里有一块偏重、还要请求数据的学习报告，我想让它用到再加载，可每个异步组件都得自己写一遍 loading 分支——有没有办法在模板层面直接声明「这块内容在等，先显示什么」？
     </div>
 
     <h2>重模块按需加载</h2>

@@ -46,7 +46,7 @@ import W07Camera from './W07Camera.vue'
     </p>
     <ol class="lesson-steps">
       <li>维护半径 <code>radius</code>、方位角 <code>theta</code>、仰角 <code>phi</code> 与目标点 <code>target</code>。</li>
-      <li>由球坐标换算相机位置：<code>eye = target + r * (sin(phi)·cos(theta), cos(phi), sin(phi)·sin(theta))</code>。</li>
+      <li>由球坐标换算相机位置：绕目标做水平与垂直圆运动（用 <code>sin</code>/<code>cos</code> 由两个角度求出相机在圆上的偏移）。</li>
       <li>用 <code>lookAt(eye, target, up)</code> 生成 View 矩阵。</li>
       <li>把 View 与 Projection 相乘得到 VP（本课再合并为 <code>uMVP</code>），传入顶点着色器。</li>
     </ol>

@@ -17,23 +17,26 @@ const parsedParam = computed(() => {
 })
 
 const codeExample = `<span style="color:#7c7c99">// app/users/[id]/page.tsx</span>
-export default function Page({
-  params,        <span style="color:#8a8a3a">// { id: "42" }</span>
-  searchParams,  <span style="color:#8a8a3a">// URL 查询参数</span>
+export default async function Page({
+  params,        <span style="color:#8a8a3a">// Promise&lt;{ id: "42" }&gt;</span>
+  searchParams,  <span style="color:#8a8a3a">// Promise&lt;查询参数&gt;</span>
 }: {
-  params: { id: string }
-  searchParams: { [key: string]: string | string[] }
+  params: Promise&lt;{ id: string }&gt;
+  searchParams: Promise&lt;{ [key: string]: string | string[] }&gt;
 }) {
-  return &lt;h1&gt;用户 ID: {params.id}&lt;/h1&gt;
+  const { id } = await params
+  const query = await searchParams
+  return &lt;h1&gt;用户 ID: {id}&lt;/h1&gt;
 }
 
 <span style="color:#7c7c99">// app/docs/[...slug]/page.tsx — Catch-all</span>
-export default function Page({
-  params,  <span style="color:#8a8a3a">// { slug: ["a","b","c"] }</span>
+export default async function Page({
+  params,  <span style="color:#8a8a3a">// Promise&lt;{ slug: ["a","b","c"] }&gt;</span>
 }: {
-  params: { slug: string[] }
+  params: Promise&lt;{ slug: string[] }&gt;
 }) {
-  return &lt;h1&gt;文档路径: {params.slug.join('/')}&lt;/h1&gt;
+  const { slug } = await params
+  return &lt;h1&gt;文档路径: {slug.join('/')}&lt;/h1&gt;
 }`
 </script>
 

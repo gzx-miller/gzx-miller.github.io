@@ -1,37 +1,23 @@
 import type { Component } from 'vue'
 import type { Lesson } from '../lessons'
 import { restoreCodeSource } from '../code-restore'
-import K01AppEntry from '../../demos/K01AppEntryArticle.vue'
-import K02TemplateSyntax from '../../demos/K02TemplateSyntaxArticle.vue'
-import K03Reactivity from '../../demos/K03ReactivityArticle.vue'
-import K04ComputedWatch from '../../demos/K04ComputedWatchArticle.vue'
-import K05ConditionList from '../../demos/K05ConditionListArticle.vue'
-import K06FormModel from '../../demos/K06FormModelArticle.vue'
-import K07ComponentBasics from '../../demos/K07ComponentBasicsArticle.vue'
-import K08Slots from '../../demos/K08SlotsArticle.vue'
-import K09Communication from '../../demos/K09CommunicationArticle.vue'
-import K10LifecycleRef from '../../demos/K10LifecycleRefArticle.vue'
-import K11Composable from '../../demos/K11ComposableArticle.vue'
-import K12Routing from '../../demos/K12RoutingArticle.vue'
-import K13Pinia from '../../demos/K13PiniaArticle.vue'
-import K14AsyncState from '../../demos/K14AsyncStateArticle.vue'
-import K15DynamicKeepAlive from '../../demos/K15DynamicKeepAliveArticle.vue'
-import K16Transition from '../../demos/K16TransitionArticle.vue'
-import K17Directive from '../../demos/K17DirectiveArticle.vue'
-import K18Teleport from '../../demos/K18TeleportArticle.vue'
-import K19Suspense from '../../demos/K19SuspenseArticle.vue'
-import K20Performance from '../../demos/K20PerformanceArticle.vue'
-import K21TestingMaintainability from '../../demos/K21TestingMaintainabilityArticle.vue'
+import K01K02Pair from '../../demos/K01K02Pair.vue'
+import K03K04Pair from '../../demos/K03K04Pair.vue'
+import K05K06Pair from '../../demos/K05K06Pair.vue'
+import K07K08Pair from '../../demos/K07K08Pair.vue'
+import K09K10Pair from '../../demos/K09K10Pair.vue'
+import K11K17Pair from '../../demos/K11K17Pair.vue'
+import K12K14Pair from '../../demos/K12K14Pair.vue'
+import K13K29Pair from '../../demos/K13K29Pair.vue'
+import K15K19Pair from '../../demos/K15K19Pair.vue'
+import K16K18Pair from '../../demos/K16K18Pair.vue'
+import K20K21Pair from '../../demos/K20K21Pair.vue'
+import K23K24Pair from '../../demos/K23K24Pair.vue'
+import K25K26Pair from '../../demos/K25K26Pair.vue'
+import K30K31Pair from '../../demos/K30K31Pair.vue'
 import K22CustomVModel from '../../demos/K22CustomVModelArticle.vue'
-import K23ErrorHandling from '../../demos/K23ErrorHandlingArticle.vue'
-import K24PluginDev from '../../demos/K24PluginDevArticle.vue'
-import K25ShallowReactivity from '../../demos/K25ShallowReactivityArticle.vue'
-import K26EffectScope from '../../demos/K26EffectScopeArticle.vue'
 import K27AttributeForwarding from '../../demos/K27AttributeForwardingArticle.vue'
 import K28ComponentExpose from '../../demos/K28ComponentExposeArticle.vue'
-import K29StateBoundaries from '../../demos/S01StateBoundariesArticle.vue'
-import K30PiniaSetupStore from '../../demos/S02PiniaSetupStoreArticle.vue'
-import K31PiniaSubscriptions from '../../demos/S03PiniaSubscriptionsArticle.vue'
 import K32VuexMigration from '../../demos/S11VuexMigrationArticle.vue'
 import K33PiniaPlugin from '../../demos/S17PiniaPluginArticle.vue'
 import K34PiniaGetters from '../../demos/S18PiniaGettersArticle.vue'
@@ -68,23 +54,13 @@ function createCodeLoader(path: string) {
 
 const K01Code = createCodeLoader('K01AppEntry.vue')
 
-const K02Code = createCodeLoader('K02TemplateSyntax.vue')
-
 const K03Code = createCodeLoader('K03Reactivity.vue')
-
-const K04Code = createCodeLoader('K04ComputedWatch.vue')
 
 const K05Code = createCodeLoader('K05ConditionList.vue')
 
-const K06Code = createCodeLoader('K06FormModel.vue')
-
 const K07Code = createCodeLoader('K07ComponentBasics.vue')
 
-const K08Code = createCodeLoader('K08Slots.vue')
-
 const K09Code = createCodeLoader('K09Communication.vue')
-
-const K10Code = createCodeLoader('K10LifecycleRef.vue')
 
 const K11Code = createCodeLoader('K11Composable.vue')
 
@@ -92,41 +68,23 @@ const K12Code = createCodeLoader('K12Routing.vue')
 
 const K13Code = createCodeLoader('K13Pinia.vue')
 
-const K14Code = createCodeLoader('K14AsyncState.vue')
-
 const K15Code = createCodeLoader('K15DynamicKeepAlive.vue')
 
 const K16Code = createCodeLoader('K16Transition.vue')
 
-const K17Code = createCodeLoader('K17Directive.vue')
-
-const K18Code = createCodeLoader('K18Teleport.vue')
-
-const K19Code = createCodeLoader('K19Suspense.vue')
-
 const K20Code = createCodeLoader('K20Performance.vue')
-
-const K21Code = createCodeLoader('K21TestingMaintainability.vue')
 
 const K22Code = createCodeLoader('K22CustomVModel.vue')
 
 const K23Code = createCodeLoader('K23ErrorHandling.vue')
 
-const K24Code = createCodeLoader('K24PluginDev.vue')
-
 const K25Code = createCodeLoader('K25ShallowReactivity.vue')
-
-const K26Code = createCodeLoader('K26EffectScope.vue')
 
 const K27Code = createCodeLoader('K27AttributeForwarding.vue')
 
 const K28Code = createCodeLoader('K28ComponentExpose.vue')
 
-const K29Code = createCodeLoader('S01StateBoundaries.vue')
-
 const K30Code = createCodeLoader('S02PiniaSetupStore.vue')
-
-const K31Code = createCodeLoader('S03PiniaSubscriptions.vue')
 
 const K32Code = createCodeLoader('S11VuexMigration.vue')
 
@@ -145,17 +103,17 @@ const K38Code = createCodeLoader('K38DefineModel.vue')
 export const lessons: Lesson[] = [
 {
     id: 'K_1',
-    title: '应用创建、入口挂载、SFC 基础结构',
-    navTitle: '应用',
+    title: '应用创建与模板语法',
+    navTitle: '应用与模板',
     category: '工程起点',
     path: '/vue/k-1/app-entry',
-    summary: '从入口文件理解 Vue 应用实例、插件注册、根组件挂载和单文件组件的基本组成。',
+    summary: '从 createApp、mount 和 SFC 结构认识应用入口，再用插值、指令、条件循环与事件绑定把响应式状态映射成交互界面。',
     demo: null,
-    demoComponent: K01AppEntry,
+    demoComponent: K01K02Pair,
     code: K01Code,
     language: 'vue',
     principle:
-      'Vue3 应用从 createApp 创建独立的应用实例开始：每个实例拥有自己的组件树、插件注册表、全局配置与挂载目标，因此同一页面可以并存多个互不干扰的 Vue 应用。SFC 把 template、script、style 三种关注点收进同一文件，配合编译器在构建期完成模板编译，让组件成为可维护、可复用的最小页面单元。',
+      'Vue3 应用从 createApp 创建独立的应用实例开始：每个实例拥有自己的组件树、插件注册表、全局配置与挂载目标，因此同一页面可以并存多个互不干扰的 Vue 应用。SFC 把 template、script、style 三种关注点收进同一文件，配合编译器在构建期完成模板编译，让组件成为可维护、可复用的最小页面单元。模板语法进一步把这套应用变成可交互界面：插值显示文本、指令处理条件与循环、事件绑定把用户动作交回组件逻辑，全部由模板编译器和响应式系统精确更新 DOM。',
     flow: [
       '在 main.ts 中创建应用实例，导入全局样式和根组件。',
       '通过 app.use 注册 Router、Pinia 等跨页面能力，让后续组件可以读取路由和 store。',
@@ -171,45 +129,18 @@ export const lessons: Lesson[] = [
     problem: '解决"Vue 项目从哪里启动、全局能力在哪里接入、页面如何被根组件接管"的入门问题。',
   },
 {
-    id: 'K_2',
-    title: '模板语法、插值、指令、事件绑定',
-    navTitle: '模板语法',
-    category: '模板基础',
-    path: '/vue/k-2/template-syntax',
-    summary: '用订单搜索展示插值、v-model、v-if、v-for、属性绑定和事件绑定如何协作。',
-    demo: null,
-    demoComponent: K02TemplateSyntax,
-    code: K02Code,
-    language: 'vue',
-    principle:
-      'Vue 模板是一层声明式视图描述：开发者只声明“状态是什么、页面应该长什么样”，模板编译器会把它转换成渲染函数，由响应式系统在状态变化时精确更新对应 DOM，无需手动操作节点。插值负责显示文本、指令负责常见 DOM 行为（条件、循环、属性绑定）、事件绑定把用户动作交回组件逻辑，三者共同构成模板的协作模型。',
-    flow: [
-      '输入框通过 v-model 把关键词同步到响应式状态。',
-      'computed 根据关键词过滤订单列表，避免在模板中写复杂表达式。',
-      '模板根据过滤结果使用 v-if/v-else 显示反馈，并通过 v-for 渲染列表。',
-      '修改关键词后观察只有依赖它的 DOM 区域被精确更新。',
-    ],
-    notes: [
-      '模板里可以写表达式，但复杂判断应移到 computed 或函数中，让模板保持可读。',
-      'v-for 的 key 要稳定且能代表数据身份，不要使用随机数。',
-      '事件处理函数只处理本次交互，不要在模板中堆叠过多内联逻辑。',
-      '模板最终会编译为渲染函数，调试版可通过组件面板对照查看。',
-    ],
-    problem: '解决"如何把用户输入、条件判断、列表展示和点击事件组织成一个可读交互"的问题。',
-  },
-{
     id: 'K_3',
-    title: '响应式基础：ref、reactive、模板自动解包',
-    navTitle: '响应式',
+    title: '响应式基础与计算监听',
+    navTitle: '响应式计算',
     category: '响应式',
     path: '/vue/k-3/reactivity',
-    summary: '用学习进度展示 ref 与 reactive 的适用边界，以及模板自动解包的阅读方式。',
+    summary: '用 ref、reactive 建立响应式状态，再用 computed、watch 和 watchEffect 表达派生值与副作用。',
     demo: null,
-    demoComponent: K03Reactivity,
+    demoComponent: K03K04Pair,
     code: K03Code,
     language: 'vue',
     principle:
-      'ref 把单个值包装成响应式引用，reactive 把对象转换成响应式代理。模板读取这些状态时会自动追踪依赖，状态变化后依赖它的视图会重新渲染。reactive 的局限：不能替换整个对象（会丢失响应式），不能用于原始类型，解构会丢失响应式需用 toRefs。',
+      'ref 把单个值包装成响应式引用，reactive 把对象转换成响应式代理。模板读取这些状态时会自动追踪依赖，状态变化后依赖它的视图会重新渲染。reactive 的局限：不能替换整个对象（会丢失响应式），不能用于原始类型，解构会丢失响应式需用 toRefs。在此基础上，computed 负责缓存派生值，watch 监听明确来源执行副作用，watchEffect 自动收集依赖，三者共同决定状态变化后的计算与响应。',
     flow: [
       '用 ref 保存章节数量，用 reactive 保存用户资料这类对象状态。',
       '点击按钮时修改 count.value 和 profile.level。',
@@ -225,45 +156,18 @@ export const lessons: Lesson[] = [
     problem: '解决"数据变化后页面为什么会自动更新，以及 ref/reactive 应该怎么选"的问题。',
   },
 {
-    id: 'K_4',
-    title: '计算与监听：computed、watch、watchEffect',
-    navTitle: '计算监听',
-    category: '响应式',
-    path: '/vue/k-4/computed-watch',
-    summary: '用购物车金额展示派生数据、精确监听和自动依赖收集的区别。',
-    demo: null,
-    demoComponent: K04ComputedWatch,
-    code: K04Code,
-    language: 'vue',
-    principle:
-      'computed 适合描述可缓存的派生值；watch 适合监听明确来源并执行副作用，支持 deep 和 immediate 选项；watchEffect 会自动收集同步读取到的依赖，适合快速建立依赖驱动的副作用。选择口径：优先 computed，需要明确触发源与副作用时用 watch。',
-    flow: [
-      '单价或数量变化后，total 自动重新计算。',
-      'watch 监听 total，把金额变化写入日志。',
-      'watchEffect 根据数量阈值给出批量优惠提示。',
-      '对比 computed 与 watch 的触发日志，验证前者只在依赖变化时重算。',
-    ],
-    notes: [
-      '能用 computed 表达的状态不要用 watch 手动同步，避免出现两份数据不一致。',
-      'watch 的回调适合请求、日志、本地存储和与外部系统同步。',
-      'watchEffect 依赖收集更隐式，复杂场景下 watch 的可读性通常更好。',
-      'watch 监听对象属性时需要 deep: true 才能检测嵌套变化；immediate: true 可在初始化时立即执行一次。',
-    ],
-    problem: '解决"派生值该用 computed 还是 watch 维护，副作用如何绑定到明确的状态来源"的问题。',
-  },
-{
     id: 'K_5',
-    title: '条件与列表渲染：v-if、v-show、v-for、key',
-    navTitle: '条件列表',
+    title: '条件列表与表单绑定',
+    navTitle: '列表与表单',
     category: '模板基础',
     path: '/vue/k-5/condition-list',
-    summary: '用任务看板展示条件渲染、显示切换和列表身份维护。',
+    summary: '用 v-if、v-show、v-for 和 key 组织列表展示，再用 v-model、修饰符与校验把用户输入同步进业务状态。',
     demo: null,
-    demoComponent: K05ConditionList,
+    demoComponent: K05K06Pair,
     code: K05Code,
     language: 'vue',
     principle:
-      'v-if 在条件为假时不创建节点（惰性渲染、切换有开销），v-show 始终创建、仅切换 display 样式（首渲染开销高、切换成本低），v-for 根据数组在每次渲染时生成一组节点。key 是列表项的身份标识：靠它，diff 算法才能在列表增删排序时复用正确的 DOM 与组件实例，避免状态错位。',
+      'v-if 在条件为假时不创建节点（惰性渲染、切换有开销），v-show 始终创建、仅切换 display 样式（首渲染开销高、切换成本低），v-for 根据数组在每次渲染时生成一组节点。key 是列表项的身份标识：靠它，diff 算法才能在列表增删排序时复用正确的 DOM 与组件实例，避免状态错位。当列表中的每一行需要被用户编辑时，v-model 又把表单控件与响应式状态连成双向关系，配合修饰符和 computed 校验形成完整的输入闭环。',
     flow: [
       '任务数组作为单一数据来源，模板只负责把它展示出来。',
       '勾选开关改变 showDone，已完成任务通过 v-show 控制可见性。',
@@ -279,45 +183,18 @@ export const lessons: Lesson[] = [
     problem: '解决"页面内容如何根据状态出现、隐藏，以及列表增删排序时如何稳定更新"的问题。',
   },
 {
-    id: 'K_6',
-    title: '表单处理：v-model、修饰符、基础校验',
-    navTitle: '表单处理',
-    category: '用户输入',
-    path: '/vue/k-6/form-model',
-    summary: '用活动报名表展示双向绑定、输入清洗和提交条件控制。',
-    demo: null,
-    demoComponent: K06FormModel,
-    code: K06Code,
-    language: 'vue',
-    principle:
-      'v-model 是“绑定值 + 事件监听”的语法糖：对文本输入展开为 value 绑定与 input 事件处理，从而把表单控件与响应式状态连接成双向关系；修饰符（.trim、.number、.lazy）在同步前处理常见输入细节；校验逻辑通常用 computed 表达，让提交按钮状态与提示文案随输入自动更新。',
-    flow: [
-      '用户填写姓名、邮箱并勾选同意项。',
-      'v-model.trim 把输入同步到 form，同时去掉首尾空格。',
-      'canSubmit 根据表单状态计算是否允许提交。',
-      '提交后清空表单，验证 v-model 绑定的状态同步复位。',
-    ],
-    notes: [
-      '前端校验用于即时反馈，真实提交仍必须依赖服务端校验。',
-      '表单字段多且属于同一业务对象时，reactive 对象更便于组织。',
-      '不要只通过禁用按钮表达错误，必要时应给出明确提示。',
-      '多字段表单可先集中定义校验规则，再交给 computed 汇总结果。',
-    ],
-    problem: '解决"用户输入如何进入业务状态，并驱动提交按钮、校验提示等反馈同步更新"的问题。',
-  },
-{
     id: 'K_7',
-    title: '组件基础：props、emits、局部状态',
-    navTitle: '组件基础',
+    title: '组件基础与插槽',
+    navTitle: '组件与插槽',
     category: '组件',
     path: '/vue/k-7/component-basics',
-    summary: '用可编辑卡片展示组件输入、内部草稿和事件输出的边界。',
+    summary: '用 props、emits 和局部状态建立组件输入输出边界，再用默认、具名和作用域插槽把内容定制权交回使用者。',
     demo: null,
-    demoComponent: K07ComponentBasics,
+    demoComponent: K07K08Pair,
     code: K07Code,
     language: 'vue',
     principle:
-      'props 是父级传入的只读输入，更新必须由父级发起；emits 是组件向外通知的事件，参数即变更载荷；局部状态承载组件自己的临时交互，例如未保存的编辑草稿。三者各司其职，组件才形成"输入 → 交互 → 输出"清晰、可预测、可复用的边界。明确边界后，组件才能被安全地组合与替换，也更容易被测试。',
+      'props 是父级传入的只读输入，更新必须由父级发起；emits 是组件向外通知的事件，参数即变更载荷；局部状态承载组件自己的临时交互，例如未保存的编辑草稿。三者各司其职，组件才形成"输入 → 交互 → 输出"清晰、可预测、可复用的边界。明确边界后，组件才能被安全地组合与替换，也更容易被测试。插槽补上了内容定制这一环：组件保留外壳与行为，使用者决定标题、正文和底部按钮，作用域插槽还能把内部数据回传给父级模板。',
     flow: [
       'props 接收外部传入的初始标题。',
       '输入框修改组件内部 draft，避免直接改 props。',
@@ -333,45 +210,18 @@ export const lessons: Lesson[] = [
     problem: '解决"组件如何定义可预测的输入输出边界，并让内部编辑交互保持独立"的问题。',
   },
 {
-    id: 'K_8',
-    title: '插槽：默认插槽、具名插槽、作用域插槽',
-    navTitle: '插槽',
-    category: '组件',
-    path: '/vue/k-8/slots',
-    summary: '用课程卡片展示组件提供结构，使用者定制内容的模式。',
-    demo: null,
-    demoComponent: K08Slots,
-    code: K08Code,
-    language: 'vue',
-    principle:
-      '插槽让组件保留自己的外壳、布局和行为，把内容区域开放给使用者决定。默认插槽承载主体内容，具名插槽对应多个命名位置，作用域插槽则把组件内部数据作为参数回传给父级模板——父级提供内容、子组件决定渲染位置，这正是"结构复用、内容定制"的关键分工。',
-    flow: [
-      'CourseCard 负责卡片结构，声明 header、default、footer 三个内容位置。',
-      '父级在使用组件时填入课程名、说明和价格。',
-      '作用域插槽把 product 交给父级，让父级决定如何展示这条数据。',
-      '为卡片传入不同的插槽组合，验证外壳结构保持不变。',
-    ],
-    notes: [
-      '插槽适合内容定制，不适合承担复杂状态通信。',
-      '具名插槽越多，组件使用成本越高，应保持命名直接。',
-      '作用域插槽传出的数据要稳定，不要暴露太多内部实现细节。',
-      '默认内容写在 slot 标签内部，父级未提供内容时即可兜底显示。',
-    ],
-    problem: '解决"多个页面都要用同一种卡片外壳，但标题、正文、底部按钮各不相同，复制多份结构后改一处要动全身"的问题。',
-  },
-{
     id: 'K_9',
-    title: '组件通信：父子通信、provide/inject',
-    navTitle: '组件通信',
+    title: '组件通信与生命周期',
+    navTitle: '通信与生命周期',
     category: '组件',
     path: '/vue/k-9/communication',
-    summary: '用课程主题同步展示跨层级依赖注入的基本方式。',
+    summary: '用 props/emits 和 provide/inject 打通父子与跨层通信，再结合生命周期钩子和模板引用管理 DOM 与资源清理。',
     demo: null,
-    demoComponent: K09Communication,
+    demoComponent: K09K10Pair,
     code: K09Code,
     language: 'vue',
     principle:
-      '父子之间优先用 props 向下传值、emits 向上通知，数据流单向清晰；当数据需要跨越多层中间组件、又更像“上下文能力”（主题、语言、表单上下文、组件库配置）时，由上层 provide 注入、任意深度的后代 inject 读取，中间层无需感知。注意注入值默认非响应式，传 ref 或 reactive 对象时后代才能跟随变化。',
+      '父子之间优先用 props 向下传值、emits 向上通知，数据流单向清晰；当数据需要跨越多层中间组件、又更像“上下文能力”（主题、语言、表单上下文、组件库配置）时，由上层 provide 注入、任意深度的后代 inject 读取，中间层无需感知。注意注入值默认非响应式，传 ref 或 reactive 对象时后代才能跟随变化。组件通信解决数据如何流动，生命周期与模板引用则解决组件何时能访问真实 DOM、以及定时器和监听器应在何时随组件销毁而释放。',
     flow: [
       '上层组件维护 theme，并通过 provide 暴露给后代。',
       '后代组件通过 inject 获取同一个响应式主题。',
@@ -387,45 +237,18 @@ export const lessons: Lesson[] = [
     problem: '解决"深层组件不想逐层传 props，但又需要读取上层上下文"的问题。',
   },
 {
-    id: 'K_10',
-    title: '生命周期与 DOM 引用',
-    navTitle: '生命周期',
-    category: '组件',
-    path: '/vue/k-10/lifecycle-ref',
-    summary: '用自动聚焦计时器展示挂载、卸载和 template ref。',
-    demo: null,
-    demoComponent: K10LifecycleRef,
-    code: K10Code,
-    language: 'vue',
-    principle:
-      '生命周期钩子描述组件进入页面、更新和离开页面的时机；template ref 让组件在必要时访问真实 DOM 或子组件实例。onBeforeUnmount 适合在组件完全卸载前清理副作用，onUnmounted 确认组件已完全卸载。把资源创建与释放写在同一处，是避免泄漏的基本纪律。',
-    flow: [
-      '组件挂载后，inputRef 才能拿到真实输入框并执行 focus。',
-      'onMounted 中启动计时器，页面持续更新停留时间。',
-      'onUnmounted 中清理计时器，避免组件离开后仍然执行回调。',
-      '反复挂载卸载组件，在性能面板确认没有遗留的定时器或监听器。',
-    ],
-    notes: [
-      'DOM 相关操作必须等到 onMounted 之后。',
-      '定时器、事件监听、订阅和第三方实例都应在 onBeforeUnmount 或 onUnmounted 中释放。',
-      '能通过声明式状态完成的事情，不要优先使用 DOM 操作。',
-      '组件未挂载时模板引用为 null，访问前应做空值守卫。',
-    ],
-    problem: '解决"组件什么时候能访问 DOM，以及外部资源如何随组件销毁而清理"的问题。',
-  },
-{
     id: 'K_11',
-    title: '组合式函数：可复用 composable',
-    navTitle: '组合函数',
+    title: '组合式函数与自定义指令',
+    navTitle: '组合与指令',
     category: '复用',
     path: '/vue/k-11/composable',
-    summary: '用验证码倒计时展示如何把有状态逻辑抽成可复用函数。',
+    summary: '把有状态逻辑抽成可复用的 composable，再用自定义指令封装自动聚焦等底层 DOM 行为。',
     demo: null,
-    demoComponent: K11Composable,
+    demoComponent: K11K17Pair,
     code: K11Code,
     language: 'vue',
     principle:
-      '组合式函数（composable）把响应式状态、派生值、方法与生命周期钩子封装进一个普通函数，借助组合式 API 的运行时上下文，函数内创建的 ref 与副作用能正确挂载到调用它的组件实例上。组件调用后获得一组可直接使用的状态与行为——复用逻辑而不复用 UI，是替代 mixin 的现代方案，同一逻辑可在多组件间甚至跨项目共享。',
+      '组合式函数（composable）把响应式状态、派生值、方法与生命周期钩子封装进一个普通函数，借助组合式 API 的运行时上下文，函数内创建的 ref 与副作用能正确挂载到调用它的组件实例上。组件调用后获得一组可直接使用的状态与行为——复用逻辑而不复用 UI，是替代 mixin 的现代方案，同一逻辑可在多组件间甚至跨项目共享。自定义指令从另一侧补齐复用：当需求落在一个具体 DOM 节点上（如自动聚焦、点击外部关闭），用 v-xxx 声明比 composable 或组件更直接。',
     flow: [
       '组件调用 useCountdown 并传入初始秒数。',
       '组合式函数内部管理 seconds、isFinished、start 和 reset。',
@@ -442,17 +265,17 @@ export const lessons: Lesson[] = [
   },
 {
     id: 'K_12',
-    title: '路由：动态参数、导航守卫',
-    navTitle: '路由',
+    title: '路由与异步加载状态',
+    navTitle: '路由与异步',
     category: '路由',
     path: '/vue/k-12/routing/lee',
-    summary: '用成员详情展示 NuxtLink、动态参数和全局路由中间件。',
+    summary: '用 Nuxt 文件路由、动态参数和中间件组织页面跳转，再为异步请求显式建模 loading、error、empty 与 success 状态。',
     demo: null,
-    demoComponent: K12Routing,
+    demoComponent: K12K14Pair,
     code: K12Code,
     language: 'vue',
     principle:
-      '本项目的 Nuxt 文件路由把目录与文件名直接映射为 URL，页面组件无需手写路由表；动态参数（如 /vue/k-12/routing/lee 中的 slug）让同一个页面承载不同资源；路由中间件则在跳转前集中处理标题、权限、非法地址等横切逻辑，避免这些判断散落在每个页面里。',
+      '本项目的 Nuxt 文件路由把目录与文件名直接映射为 URL，页面组件无需手写路由表；动态参数（如 /vue/k-12/routing/lee 中的 slug）让同一个页面承载不同资源；路由中间件则在跳转前集中处理标题、权限、非法地址等横切逻辑，避免这些判断散落在每个页面里。页面进入后往往还要请求数据，异步状态需要显式建模 loading、error、empty 和 success，才能避免白屏、闪烁或错误被吞掉。',
     flow: [
       '用户点击 NuxtLink，地址从 lee 切换到 ming。',
       '组件通过 useRoute 读取 catch-all 路由的 slug 参数。',
@@ -469,17 +292,17 @@ export const lessons: Lesson[] = [
   },
 {
     id: 'K_13',
-    title: 'Pinia 状态管理：store、getter、action',
-    navTitle: 'Pinia',
+    title: 'Pinia 状态管理与状态边界',
+    navTitle: '状态与边界',
     category: '状态管理',
     path: '/vue/k-13/pinia-store',
-    summary: '用课程购物车展示全局 store 的状态、派生值和业务动作。',
+    summary: '用 Pinia 的 state、getter、action 管理跨组件业务状态，并先判断状态归属，避免把组件状态和远程缓存都塞进 Store。',
     demo: null,
-    demoComponent: K13Pinia,
+    demoComponent: K13K29Pair,
     code: K13Code,
     language: 'vue',
     principle:
-      'Pinia 把跨组件、跨页面共享的业务状态集中到独立 store 中：state 保存原始数据，getter 用 computed 语义表达派生结果（自带缓存与类型推导），action 封装修改流程且天然支持异步，组件只需调用意图明确的 action、读取派生好的 getter，不必知道状态修改的内部细节，也让这些逻辑便于单元测试。',
+      'Pinia 把跨组件、跨页面共享的业务状态集中到独立 store 中：state 保存原始数据，getter 用 computed 语义表达派生结果（自带缓存与类型推导），action 封装修改流程且天然支持异步，组件只需调用意图明确的 action、读取派生好的 getter，不必知道状态修改的内部细节，也让这些逻辑便于单元测试。但在建 Store 之前应先判断状态归属：组件私有状态、URL 参数和远程缓存各有更合适的工具，只有跨页面共享且具有业务生命周期的状态才值得进入 Pinia。',
     flow: [
       '组件通过 useCartStore 获取购物车 store。',
       '列表读取 cart.items，总价读取 cart.total getter。',
@@ -495,45 +318,18 @@ export const lessons: Lesson[] = [
     problem: '解决"多个页面或组件需要读写同一份业务状态，且修改流程需要统一维护"的问题。',
   },
 {
-    id: 'K_14',
-    title: '异步请求与加载状态',
-    navTitle: '异步状态',
-    category: '异步',
-    path: '/vue/k-14/async-state',
-    summary: '用异步课程列表展示 loading、error、success 三态。',
-    demo: null,
-    demoComponent: K14AsyncState,
-    code: K14Code,
-    language: 'vue',
-    principle:
-      '异步请求不是只有"有没有数据"两种状态，还包括加载中（loading）、失败（error）、空数据（empty）和成功（success）等分支。显式建模这些状态，配合模板分支和错误边界，页面反馈才能稳定可靠，避免出现"白屏""闪烁""错误吞掉"等体验问题。',
-    flow: [
-      '触发加载时打开 loading，并清空旧错误和旧数据。',
-      '异步完成后写入课程列表；失败时写入用户可读的错误文案。',
-      'finally 中关闭 loading，确保成功和失败都能结束加载态。',
-      '断开网络重试，验证错误分支展示可读文案且 loading 正常结束。',
-    ],
-    notes: [
-      '真实接口要处理重复请求、取消请求和过期响应覆盖新数据的问题。',
-      '错误提示应该面向用户，不要只依赖 console.error。',
-      '加载态、空态、错误态应在 UI 上有明确区别。',
-      '把请求状态建模为单一枚举（idle/loading/success/error），避免多个布尔同时为真。',
-    ],
-    problem: '解决"接口请求期间页面该显示什么，以及请求失败后如何反馈与恢复"的问题。',
-  },
-{
     id: 'K_15',
-    title: '动态组件与缓存：component、KeepAlive',
-    navTitle: '动态组件',
+    title: '动态组件、KeepAlive 与 Suspense',
+    navTitle: '动态与异步组件',
     category: '组件',
     path: '/vue/k-15/dynamic-keep-alive',
-    summary: '用学习工作台展示按状态切换组件并缓存实例。',
+    summary: '用 component 与 KeepAlive 切换并缓存面板实例，再用 defineAsyncComponent 和 Suspense 声明组件级异步边界。',
     demo: null,
-    demoComponent: K15DynamicKeepAlive,
+    demoComponent: K15K19Pair,
     code: K15Code,
     language: 'vue',
     principle:
-      '动态组件通过 component 的 is 属性决定当前渲染哪个组件。KeepAlive 会缓存离开的组件实例，让再次切回时保留内部状态。支持 include/exclude 控制缓存范围，max 控制最大缓存数量。动态组件负责"渲染哪一个"，KeepAlive 负责"记住上一个"，两者职责分明。',
+      '动态组件通过 component 的 is 属性决定当前渲染哪个组件。KeepAlive 会缓存离开的组件实例，让再次切回时保留内部状态。支持 include/exclude 控制缓存范围，max 控制最大缓存数量。动态组件负责"渲染哪一个"，KeepAlive 负责"记住上一个"，两者职责分明。当被切换或延迟加载的组件本身依赖异步数据时，Suspense 把“加载中”提升为模板层面的异步边界，等待期间统一渲染 fallback。',
     flow: [
       '用户点击"笔记"或"练习"切换 currentTab。',
       'component 根据 currentTab 渲染对应面板。',
@@ -550,17 +346,17 @@ export const lessons: Lesson[] = [
   },
 {
     id: 'K_16',
-    title: '过渡动画：Transition、TransitionGroup',
-    navTitle: '过渡动画',
+    title: '过渡动画与 Teleport',
+    navTitle: '动画与浮层',
     category: '体验',
     path: '/vue/k-16/transition',
-    summary: '用学习提醒展示单元素和列表元素的进入离开动画。',
+    summary: '用 Transition、TransitionGroup 表达进入离开动画，再用 Teleport 把弹窗等浮层渲染到 body。',
     demo: null,
-    demoComponent: K16Transition,
+    demoComponent: K16K18Pair,
     code: K16Code,
     language: 'vue',
     principle:
-      'Transition 在元素进入和离开时自动添加阶段类名，CSS 根据这些类名执行动画。TransitionGroup 则处理列表中多个元素的增删移动。也可以通过 JavaScript 钩子（@before-enter、@enter、@leave）实现更复杂的动画控制。',
+      'Transition 在元素进入和离开时自动添加阶段类名，CSS 根据这些类名执行动画。TransitionGroup 则处理列表中多个元素的增删移动。也可以通过 JavaScript 钩子（@before-enter、@enter、@leave）实现更复杂的动画控制。Teleport 处理另一类体验问题：组件逻辑和响应式作用域不变，但 DOM 被渲染到 body，弹窗因此不会被父级裁剪或被层叠上下文压制。',
     flow: [
       '状态变化让提示文字进入或离开 DOM。',
       'Vue 自动添加 fade-enter、fade-leave 等阶段类。',
@@ -576,99 +372,18 @@ export const lessons: Lesson[] = [
     problem: '解决"页面状态变化太突然，用户难以清晰感知界面到底发生了什么变化"的问题。',
   },
 {
-    id: 'K_17',
-    title: '自定义指令',
-    navTitle: '自定义指令',
-    category: '复用',
-    path: '/vue/k-17/directive',
-    summary: '用自动聚焦搜索框展示指令如何封装底层 DOM 行为。',
-    demo: null,
-    demoComponent: K17Directive,
-    code: K17Code,
-    language: 'vue',
-    principle:
-      '自定义指令直接作用在真实 DOM 元素上，适合封装"低层 DOM 行为"——比如自动聚焦、点击外部关闭、权限显隐、滚动观察、拖拽、长按等场景，这些需求用组件或组合式函数表达都不如指令直接；当业务能落到一个具体 DOM 节点时，指令比组件更轻量。',
-    flow: [
-      '定义 vFocus 指令，并在 mounted 阶段接收绑定的 DOM 元素。',
-      '元素挂载后调用 el.focus()。',
-      '组件中用 v-focus 声明这个 DOM 行为，不再重复写 onMounted 和 ref。',
-      '把指令从元素上移除，验证聚焦行为随之消失、无残留副作用。',
-    ],
-    notes: [
-      '业务状态和 UI 结构优先用组件或组合式函数表达。',
-      '指令应尽量小而专注，只封装 DOM 级行为。',
-      '涉及事件监听的指令要在 unmounted 中清理监听器。',
-      '指令的 value 与修饰符会随绑定更新，updated 钩子里可读取最新参数。',
-    ],
-    problem: '解决"多个元素需要同一种 DOM 行为，重复写 ref/onMounted 很啰嗦"的问题。',
-  },
-{
-    id: 'K_18',
-    title: 'Teleport：弹窗与全局层',
-    navTitle: 'Teleport',
-    category: '体验',
-    path: '/vue/k-18/teleport',
-    summary: '用确认弹窗展示组件内容如何渲染到 body。',
-    demo: null,
-    demoComponent: K18Teleport,
-    code: K18Code,
-    language: 'vue',
-    principle:
-      'Teleport 把组件的逻辑保留在原组件体系中（响应式作用域、props、事件都不变），但实际 DOM 渲染到指定的另一个目标节点（如 body）。弹窗因此不会被父级的 overflow: hidden 裁剪、不会被 transform 创建的新包含块改变定位、也不会困在父级的层叠上下文中被 z-index 压住。',
-    flow: [
-      '组件内部用 open 控制弹窗是否显示。',
-      'Teleport to="body" 把弹窗 DOM 移到 body 下。',
-      '点击关闭按钮后修改 open，弹窗从 body 中移除。',
-      '在元素面板确认弹窗节点挂在 body 下，而非组件所在容器。',
-    ],
-    notes: [
-      '弹窗、通知、下拉浮层和全局抽屉都常用 Teleport。',
-      '真实产品还要处理焦点陷阱、Esc 关闭、滚动锁定和无障碍标签。',
-      'Teleport 改变 DOM 位置，不改变组件的响应式作用域。',
-      '需要移动已挂载的节点时，可用 disabled 属性动态开关 Teleport。',
-    ],
-    problem: '解决"弹窗浮层被父容器裁剪或被层叠上下文压住，无法自然覆盖全局页面"的问题。',
-  },
-{
-    id: 'K_19',
-    title: 'Suspense 与异步组件',
-    navTitle: 'Suspense',
-    category: '异步',
-    path: '/vue/k-19/suspense',
-    summary: '用异步学习报告展示 fallback 和延迟加载组件。',
-    demo: null,
-    demoComponent: K19Suspense,
-    code: K19Code,
-    language: 'vue',
-    principle:
-      'defineAsyncComponent 把组件拆成独立 chunk 按需加载；Suspense 会等待其异步依赖（含 async setup）全部落定，等待期间渲染 fallback 插槽，完成后切换到真实内容。它把"加载中"从组件里手写的 loading 分支，提升为模板层面可声明的异步边界。',
-    flow: [
-      'defineAsyncComponent 返回一个延迟解析的组件。',
-      'Suspense 捕获异步等待阶段并展示 fallback 插槽。',
-      '组件解析完成后，fallback 被替换为真实学习报告。',
-      '用网络面板查看组件 chunk 的按需加载请求与解析时机。',
-    ],
-    notes: [
-      '异步边界要控制粒度，过细会增加复杂度，过粗会拖慢可见内容。',
-      '关键首屏内容不宜全部异步化，否则用户会长时间只看到占位。',
-      '异步失败时应提供错误兜底，本内容聚焦成功路径和等待态。',
-      'Suspense 可同时等待多个 async setup 与异步组件，任一未落定就保持 fallback。',
-    ],
-    problem: '解决"重组件或远程依赖加载期间页面空白，用户无法判断是否仍在加载"的问题。',
-  },
-{
     id: 'K_20',
-    title: '性能与工程实践',
-    navTitle: '性能实践',
+    title: '性能优化与测试可维护性',
+    navTitle: '性能与测试',
     category: '工程实践',
     path: '/vue/k-20/performance',
-    summary: '用课程列表展示过滤、v-memo 和列表渲染的基础优化思路。',
+    summary: '先测量再优化，用 computed、v-memo 和列表策略降低渲染成本，并把核心逻辑抽到可测试的 composable 与 store。',
     demo: null,
-    demoComponent: K20Performance,
+    demoComponent: K20K21Pair,
     code: K20Code,
     language: 'vue',
     principle:
-      '性能优化的核心是减少不必要的计算、渲染与资源加载：computed 基于依赖缓存派生结果，依赖不变时不重算；v-memo 在依赖数组未变化时跳过这段子树的重渲染；大列表则考虑分页、虚拟滚动与后端过滤。所有手段都应建立在测量的基础上——先用性能工具确认瓶颈，再对症选择，过早优化只会增加复杂度。',
+      '性能优化的核心是减少不必要的计算、渲染与资源加载：computed 基于依赖缓存派生结果，依赖不变时不重算；v-memo 在依赖数组未变化时跳过这段子树的重渲染；大列表则考虑分页、虚拟滚动与后端过滤。所有手段都应建立在测量的基础上——先用性能工具确认瓶颈，再对症选择，过早优化只会增加复杂度。可维护性与性能同样依赖清晰边界：把业务逻辑抽到 composable 或 store，既减少组件负担，也让测试可以聚焦用户行为与业务结果。',
     flow: [
       '用户输入关键词，keyword 变化触发 visibleCourses 重新计算。',
       'computed 避免无关状态变化时重复执行过滤逻辑。',
@@ -682,33 +397,6 @@ export const lessons: Lesson[] = [
       '测量以生产构建为准，开发模式的耗时与真实表现差异很大。',
     ],
     problem: '解决"数据量变大或组件变重后页面响应逐渐变慢，如何定位瓶颈并治理"的问题。',
-  },
-{
-    id: 'K_21',
-    title: '测试与可维护性',
-    navTitle: '测试维护',
-    category: '工程实践',
-    path: '/vue/k-21/testing-maintainability',
-    summary: '用检查清单说明哪些 Vue3 代码适合被单测覆盖。',
-    demo: null,
-    demoComponent: K21TestingMaintainability,
-    code: K21Code,
-    language: 'vue',
-    principle:
-      '可维护的代码通常拥有清晰的输入与输出，也因此容易测试：组件测试关注用户行为与渲染结果（输入、点击、提交后看到什么），组合式函数测试关注状态在调用过程中的变化轨迹，store 测试关注 action 与 getter 承载的业务规则。把纯逻辑抽到 composable 或 store，测试成本会明显低于直接测组件细节。',
-    flow: [
-      '把纯业务逻辑抽到 composable 或 store，降低组件测试难度。',
-      '用测试描述用户行为，例如输入、点击、提交后的可见结果。',
-      '持续运行 type-check、test 和 build，把回归尽早暴露出来。',
-      '修复一个缺陷时先补一条失败用例，再让实现转绿。',
-    ],
-    notes: [
-      '测试应关注业务结果，不要过度绑定内部实现细节。',
-      '测试名称要像规格说明，让以后的人能理解为什么要保留它。',
-      '高风险逻辑优先测试，低价值快照不要大量堆积。',
-      '测试文件与被测模块同名并相邻存放，便于对照维护。',
-    ],
-    problem: '解决"项目变大后修改缺少信心、回归难以及时发现、知识内容难以长期维护"的问题。',
   },
 {
     id: 'K_22',
@@ -739,17 +427,17 @@ export const lessons: Lesson[] = [
   },
 {
     id: 'K_23',
-    title: '错误处理：errorCaptured、全局错误处理',
-    navTitle: '错误处理',
+    title: '错误处理与插件开发',
+    navTitle: '错误与插件',
     category: '工程实践',
     path: '/vue/k-23/error-handling',
-    summary: '用错误边界展示 onErrorCaptured 捕获后代错误和 app.config.errorHandler 全局兜底。',
+    summary: '用 onErrorCaptured 和全局 errorHandler 捕获降级错误，再通过插件 install 统一注册全局能力。',
     demo: null,
-    demoComponent: K23ErrorHandling,
+    demoComponent: K23K24Pair,
     code: K23Code,
     language: 'vue',
     principle:
-      'onErrorCaptured 在当前组件捕获后代组件抛出的错误，返回 false 可阻止错误继续冒泡。app.config.errorHandler 注册全局错误处理器，捕获所有未被 errorCaptured 拦截的错误，适合上报监控服务。',
+      'onErrorCaptured 在当前组件捕获后代组件抛出的错误，返回 false 可阻止错误继续冒泡。app.config.errorHandler 注册全局错误处理器，捕获所有未被 errorCaptured 拦截的错误，适合上报监控服务。插件机制则把可复用的全局能力（组件、指令、provide 注入）收进 install，在 app.use 时一次装配，错误处理与插件都服务于应用的统一治理。',
     flow: [
       '后代组件渲染或生命周期中抛出错误。',
       'onErrorCaptured 捕获错误，展示降级 UI 并记录日志。',
@@ -765,45 +453,18 @@ export const lessons: Lesson[] = [
     problem: '解决"组件错误如何被捕获并降级展示，全局错误如何统一上报处理"的问题。',
   },
 {
-    id: 'K_24',
-    title: '插件开发：app.use、全局能力注册',
-    navTitle: '插件开发',
-    category: '工程实践',
-    path: '/vue/k-24/plugin-dev',
-    summary: '用通知插件展示 Vue 插件的 install 方法、全局组件注册和 provide/inject 注入。',
-    demo: null,
-    demoComponent: K24PluginDev,
-    code: K24Code,
-    language: 'vue',
-    principle:
-      'Vue 插件是一个带有 install 方法的对象，app.use() 时自动调用。install 接收 app 实例和可选配置，可以注册全局组件、指令，或通过 app.provide 注入全局能力。组件中通过 inject 获取插件提供的方法。',
-    flow: [
-      '定义插件对象，实现 install(app, options) 方法。',
-      'install 中注册全局组件、指令或通过 app.provide 注入方法。',
-      'main.ts 中调用 app.use(plugin, options) 安装插件。',
-      '组件中通过 inject(key) 获取插件提供的能力。',
-    ],
-    notes: [
-      '优先使用 provide/inject 而非 app.config.globalProperties，前者类型更安全。',
-      'InjectionKey 确保 provide 和 inject 的类型一致。',
-      '插件配置通过 install 的第二个参数传入，支持默认值。',
-      '第三方库（Router、Pinia、Element Plus）都是通过插件机制注册的。',
-    ],
-    problem: '解决"如何封装可复用的全局能力，让多个项目或组件共享同一套安装逻辑"的问题。',
-  },
-{
     id: 'K_25',
-    title: '浅层响应式：shallowRef、triggerRef',
-    navTitle: '浅层响应式',
+    title: '浅层响应式与作用域副作用',
+    navTitle: '浅响应与作用域',
     category: '响应式进阶',
     path: '/vue/k-25/shallow-reactivity',
-    summary: '用门店库存工作台演示大型数据只追踪顶层变化，以及批量修改后主动刷新视图。',
+    summary: '用 shallowRef、triggerRef 控制大型数据的更新时机，再用 effectScope、onScopeDispose 统一启停一组副作用。',
     demo: null,
-    demoComponent: K25ShallowReactivity,
+    demoComponent: K25K26Pair,
     code: K25Code,
     language: 'vue',
     principle:
-      'shallowRef 只追踪 .value 被整体替换这一件事，不会把内部对象递归转换为深层响应式代理，因此省下了为海量深层字段建立代理的开销。原地修改深层数据不会触发更新，需要手动调用 triggerRef 主动通知依赖刷新，或者直接替换整个 .value；适合大型目录、第三方实例与批量更新场景。',
+      'shallowRef 只追踪 .value 被整体替换这一件事，不会把内部对象递归转换为深层响应式代理，因此省下了为海量深层字段建立代理的开销。原地修改深层数据不会触发更新，需要手动调用 triggerRef 主动通知依赖刷新，或者直接替换整个 .value；适合大型目录、第三方实例与批量更新场景。effectScope 从生命周期维度解决同类问题：把一组 watch、computed 与外部订阅收进同一作用域，调用 stop 时统一清理，避免逐个手动停止造成遗漏。',
     flow: [
       '把较大的商品目录放入 shallowRef，避免为每个深层字段建立响应式代理。',
       '批量修改商品库存时只更新普通对象，界面暂不重新渲染。',
@@ -817,33 +478,6 @@ export const lessons: Lesson[] = [
       'shallowRef 包裹的数组 push 等原地操作同样不触发更新，收尾时记得 triggerRef。',
     ],
     problem: '解决"大型对象无需深层代理，如何控制更新时机并减少响应式开销"的问题。',
-  },
-{
-    id: 'K_26',
-    title: '作用域副作用：effectScope、onScopeDispose',
-    navTitle: '副作用作用域',
-    category: '响应式进阶',
-    path: '/vue/k-26/effect-scope',
-    summary: '用工作台订阅演示将监听器和定时器放进同一作用域，并在退出业务模块时统一清理。',
-    demo: null,
-    demoComponent: K26EffectScope,
-    code: K26Code,
-    language: 'vue',
-    principle:
-      'effectScope 可以收集其内部创建的 computed、watch 和 watchEffect，调用 stop 后统一停止这些响应式副作用。onScopeDispose 用于注册同一作用域内的额外清理逻辑。把一组副作用的生命周期打包管理，正是它相对逐个手动停止的价值。',
-    flow: [
-      '进入工作台时创建一个 effectScope。',
-      '在 scope.run 中启动工作区监听和后台同步定时器。',
-      '切换工作区时，watchEffect 自动响应并记录新的订阅目标。',
-      '退出工作台时调用 scope.stop，监听器与 onScopeDispose 清理逻辑一起停止。',
-    ],
-    notes: [
-      '组件 setup 本身已经运行在作用域中，effectScope 更适合组件外的服务和可复用状态模块。',
-      '定时器、WebSocket 和第三方订阅仍需通过 onScopeDispose 显式释放。',
-      '已经停止的 scope 不应重复运行，重新进入业务模块时应创建新作用域。',
-      '作用域停止后其内已创建的 watch 不再触发，但外部资源仍需显式释放。',
-    ],
-    problem: '解决"一组相关监听和外部订阅如何统一启停，避免遗漏清理造成泄漏"的问题。',
   },
 {
     id: 'K_27',
@@ -900,28 +534,18 @@ export const lessons: Lesson[] = [
     problem: '解决"父组件确实需要调用子组件命令时，如何保持类型安全和封装边界"的问题。',
   },
 {
-    id: 'K_29', title: '先判断状态归属，再选择 Store', navTitle: '状态边界', category: '状态设计',
-    path: '/vue/k-29/state-boundaries', summary: '区分组件状态、URL 状态、客户端共享状态和服务端缓存状态。',
-    demo: null,
-    demoComponent: K29StateBoundaries, code: K29Code, language: 'vue',
-    principle: 'Store 只应承载需要跨组件共享、具有业务生命周期的客户端状态；表单瞬时输入、URL 参数、组件私有 UI 状态和远程缓存各有更合适的归属。把它们一股脑塞进 Pinia 会让状态臃肿、来源混乱且难以调试。正确做法是先用"状态归属"判断：问清每段状态的唯一事实来源、共享范围与生命周期，再选最小且匹配语义的工具。',
-    flow: ['先回答"这段状态只在一个组件内用吗"：是则留在组件的 ref/reactive，不做全局管理。', '再判断"刷新或分享后是否仍需保持"：可分享的筛选视图放 URL query，跨会话偏好放 localStorage。', '来自服务端 API 的数据交给 TanStack Query / useFetch 等缓存层，自动处理请求去重、失效与加载态。', '只有多个页面或组件都要读写同一份业务状态（如购物车）时才交给 Pinia，让组件保持独立。'],
-    notes: ['全局可访问不等于应该全局存储，单组件可用的 UI 状态用 ref 即可。', '远程数据自带缓存失效、请求去重与重试问题，交给 TanStack Query 比塞进 Store 更合适。', '同一份数据应只有一个事实来源：组件、URL、Store、远程各司其职，避免多处来源造成不一致。', '状态归属的决策应自外向内递进，先排除组件级与远程缓存，最后才考虑是否动用 Store。'],
-    problem: '解决"什么状态应该进入 Store，以及什么时候根本不需要 Store"的问题。',
-  },
-{
     id: 'K_30',
-    title: 'Pinia Setup Store 与 storeToRefs',
-    navTitle: 'Pinia Setup Store',
+    title: 'Pinia Setup Store 与订阅',
+    navTitle: 'Setup Store',
     category: 'Pinia 进阶',
     path: '/vue/k-30/pinia-setup-store',
-    summary: '用学习计划实现组合式 Store：state、getter、action 与 storeToRefs 的安全解构。',
+    summary: '用组合式 API 组织 Setup Store 并以 storeToRefs 安全解构，再用 $patch 合并更新、$subscribe 接入持久化等副作用。',
     demo: null,
-    demoComponent: K30PiniaSetupStore,
+    demoComponent: K30K31Pair,
     code: K30Code,
     language: 'vue',
     principle:
-      'Setup Store 用组合式 API 组织状态：ref 表达 state，computed 表达 getter，普通函数表达 action，name 参数称为 store id。Store 实例本身是响应式的，直接读取 store.courses 没问题，但解构时响应性会被切断；storeToRefs 能把 state 和 getter 解构成保留响应性的 ref，而 action 不需要也不应该用 storeToRefs 包裹。',
+      'Setup Store 用组合式 API 组织状态：ref 表达 state，computed 表达 getter，普通函数表达 action，name 参数称为 store id。Store 实例本身是响应式的，直接读取 store.courses 没问题，但解构时响应性会被切断；storeToRefs 能把 state 和 getter 解构成保留响应性的 ref，而 action 不需要也不应该用 storeToRefs 包裹。$patch 把同一业务动作中的多个修改合并成一次提交，$subscribe 则观察每次状态变更并驱动持久化、审计等基础设施副作用，记得在组件销毁时取消订阅。',
     flow: [
       'defineStore(\'learning\', () => {...}) 的回调返回 state、getter 和 action。',
       '组件调用 useLearningStore() 拿到同一个 store 实例（按 id 单例）。',
@@ -935,33 +559,6 @@ export const lessons: Lesson[] = [
       'store id 在应用内唯一，重复调用 useLearningStore() 返回同一个实例。',
     ],
     problem: '解决"如何用组合式 API 组织 Pinia Store，并在组件里解构时保留响应性"的问题。',
-  },
-{
-    id: 'K_31',
-    title: 'Pinia 批量更新、订阅与副作用',
-    navTitle: 'Pinia 订阅',
-    category: 'Pinia 进阶',
-    path: '/vue/k-31/pinia-subscriptions',
-    summary: '通过 $patch 合并多个修改，用 $subscribe 观察状态变更并驱动持久化等基础设施副作用。',
-    demo: null,
-    demoComponent: K31PiniaSubscriptions,
-    code: K31Code,
-    language: 'vue',
-    principle:
-      '$patch 把同一业务动作中的多个修改合并成一次提交，支持对象形式和基于旧状态的函数形式；$subscribe 像 watch 一样观察 store 的每次状态变更，回调收到 mutation（含 type、storeId、payload）和最新 state，mutation.type 区分 direct、patch object 与 patch function。它返回一个取消函数，组件销毁时必须调用，避免订阅泄漏。',
-    flow: [
-      'store.$subscribe(...) 注册观察者，并保存返回的 unsubscribe 函数。',
-      '通过 store.$patch(函数形式) 完成一组互相依赖的修改，例如向数组 push 新课程。',
-      '订阅回调读取 mutation.type 与最新 state，追加到事件列表用于展示或持久化。',
-      '组件 onUnmounted 时调用 unsubscribe，避免离开后仍触发回调。',
-    ],
-    notes: [
-      '订阅回调不应再次无条件修改同一状态，否则会形成无限循环提交。',
-      '$patch 对象形式适合覆盖，含 push/splice 等需参考旧值的操作应使用函数形式。',
-      '需要脱离组件生命周期时，可传 { detached: true } 由调用方手动清理订阅。',
-      'SSR 下的持久化要区分服务端与客户端，水合后再读取并回填本地状态。',
-    ],
-    problem: '解决"如何观察 Pinia 状态变化，并把持久化或审计等副作用统一接入"的问题。',
   },
 {
     id: 'K_32',

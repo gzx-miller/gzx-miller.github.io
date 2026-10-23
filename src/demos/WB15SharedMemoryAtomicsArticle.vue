@@ -29,7 +29,7 @@ import WB15SharedMemoryAtomics from './WB15SharedMemoryAtomics.vue'
       <li>普通 load/store <strong>依旧会丢更新</strong>——原子性只属于原子指令，共享内存本身不会自动帮你加锁。</li>
       <li>光在模块里写 <code>shared</code> 还不够：页面必须启用<strong>跨源隔离</strong>（COOP/COEP 响应头），否则 <code>SharedArrayBuffer</code> 根本创建不出来，<code>crossOriginIsolated</code> 是 <code>false</code>。</li>
       <li>原子访问要求<strong>自然对齐</strong>：地址没落在 4 的倍数上，会直接 trap，而不是悄悄降级。</li>
-      <li>共享内存<strong>不能增长</strong>：<code>(memory 1 1 shared)</code> 里最小值必须等于最大值，容量得在声明时就把上限定死。</li>
+      <li>共享内存<strong>必须声明最大页数</strong>：<code>shared</code> 不能省略 <code>max</code>。<code>(memory 1 1 shared)</code> 只是把 <code>min</code> 与 <code>max</code> 都设为 1 来固定大小；也可以写成 <code>(memory 1 4 shared)</code> 并增长到 4 页。</li>
       <li>原子指令比普通读写慢，别把它当默认选项到处用。</li>
     </ul>
 
@@ -41,10 +41,10 @@ import WB15SharedMemoryAtomics from './WB15SharedMemoryAtomics.vue'
       再补<strong>返回值语义</strong>，这一点最容易记反：<code>rmw.add</code> 返回的是<strong>操作前的旧值</strong>，不是加完之后的新值。所以想显示「当前点赞数」，不能拿它的返回值当读数——要么用 <code>atomic.load</code>，要么建一个 <code>Int32Array</code> 视图直接读这块共享内存，演示里就是用后者拿最终值的。
     </p>
     <p>
-      接着补<strong>常用的指令族</strong>：<code>atomic.load</code> / <code>store</code> / <code>add</code> / <code>sub</code> 覆盖了基本的原子读写与增减；再往上是 <code>wait</code> / <code>notify</code>，让一个线程能在某个地址上阻塞等待、由另一个线程把它唤醒——这是自己实现锁、以及线程间发信号的基础。
+      接着补<strong>常用的指令族</strong>：<code>i32.atomic.load</code> / <code>i32.atomic.store</code> / <code>i32.atomic.rmw.add</code> / <code>i32.atomic.rmw.sub</code> 覆盖了基本的原子读写与增减；再往上是 <code>memory.atomic.wait32</code> / <code>memory.atomic.notify</code>，让一个线程能在某个地址上阻塞等待、由另一个线程把它唤醒——这是自己实现锁、以及线程间发信号的基础。注意浏览器通常不允许主线程执行 <code>wait</code>，等待方应放在 Worker 中。
     </p>
     <p>
-      最后补<strong>两个必须先满足的环境前提</strong>，缺一不可：模块侧，memory 必须标 <code>shared</code> 且 <code>min = max</code>，buffer 才会是 <code>SharedArrayBuffer</code>；页面侧，必须处于<strong>跨源隔离</strong>状态（响应头带 COOP/COEP），<code>SharedArrayBuffer</code> 才可用。任一条件不成立，要么 buffer 不是 SAB，要么累加又退化成非原子，前面的功夫全白费。
+      最后补<strong>两个必须先满足的环境前提</strong>，缺一不可：模块侧，memory 必须标 <code>shared</code> 并声明 <code>max</code>，buffer 才会是 <code>SharedArrayBuffer</code>；页面侧，必须处于<strong>跨源隔离</strong>状态（响应头带 COOP/COEP），<code>SharedArrayBuffer</code> 才可用。任一条件不成立，要么 buffer 不是 SAB，要么累加又退化成非原子，前面的功夫全白费。
     </p>
     <div class="lesson-box warn">
       <strong>两个高频误区：</strong>其一，以为「用了共享内存就并发安全」——不是，共享内存只负责「同一块」，安全靠的是你每一步都走原子指令；其二，以为 <code>atomicAdd</code> 返回的是自增后的值——它返回<strong>旧值</strong>，要读当前计数请用 <code>atomic.load</code> 或类型化数组视图。
@@ -58,10 +58,10 @@ import WB15SharedMemoryAtomics from './WB15SharedMemoryAtomics.vue'
 
     <h2>可见性与原子性</h2>
     <p>
-      多线程共享计数器会丢更新，是因为「读-改-写」三步可能被打断。共享内存（<code>SharedArrayBuffer</code>）只解决「同一块内存」，真正的安全来自原子指令：<code>i32.atomic.rmw.add</code> 把读改写合成一气呵成的操作。前提是模块声明 <code>shared</code> 且 <code>min = max</code>、页面启用 COOP/COEP 跨源隔离；并且要记住它返回的是旧值。
+      多线程共享计数器会丢更新，是因为「读-改-写」三步可能被打断。共享内存（<code>SharedArrayBuffer</code>）只解决「同一块内存」，真正的安全来自原子指令：<code>i32.atomic.rmw.add</code> 把读改写合成一气呵成的操作。前提是模块声明 <code>shared</code> 并给出 <code>max</code>、页面启用 COOP/COEP 跨源隔离；并且要记住它返回的是旧值。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「原子读-改-写（atomic read-modify-write）」</span>指在共享内存上以单条不可分割的指令完成「读值、修改、写回」，从而在多线程并发下不丢更新。Wasm 中以 <code>i32.atomic.rmw.add</code> 实现 <code>atomicAdd</code>，返回<strong>操作前的旧值</strong>。边界：共享内存需在模块声明为 <code>(memory … shared)</code> 且 <code>min = max</code>（不可增长），页面还必须启用 COOP/COEP 跨源隔离 <code>SharedArrayBuffer</code> 才可用；原子访问要求自然对齐，未对齐会 trap；普通 load/store 仍会丢更新；常用指令还包括 <code>atomic.load</code> / <code>store</code> / <code>sub</code> 以及 <code>wait</code> / <code>notify</code>，且原子指令比普通读写慢。
+      <span class="term-name">「原子读-改-写（atomic read-modify-write）」</span>指在共享内存上以单条不可分割的指令完成「读值、修改、写回」，从而在多线程并发下不丢更新。Wasm 中以 <code>i32.atomic.rmw.add</code> 实现 <code>atomicAdd</code>，返回<strong>操作前的旧值</strong>。边界：共享内存需在模块声明为 <code>(memory … shared)</code> 且必须给出 <code>max</code>（<code>min = max</code> 可固定大小），页面还必须启用 COOP/COEP 跨源隔离 <code>SharedArrayBuffer</code> 才可用；原子访问要求自然对齐，未对齐会 trap；普通 load/store 仍会丢更新；常用指令还包括 <code>i32.atomic.load</code> / <code>store</code> / <code>i32.atomic.rmw.sub</code> 以及 <code>memory.atomic.wait32</code> / <code>notify</code>，且原子指令比普通读写慢。
     </div>
   </LessonArticle>
 </template>

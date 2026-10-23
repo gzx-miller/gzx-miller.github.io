@@ -5,7 +5,7 @@ import K14AsyncState from './K14AsyncState.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>接口还没回来，页面到底该显示什么？为什么我加了个 <code>loading</code>，断网时用户看到的还是一片空白？
+      <strong>承接上文：</strong>接口还没回来，页面到底该显示什么？为什么我加了个 <code>loading</code>，断网时用户看到的还是一片空白？
     </div>
 
     <h2>异步请求结果分支</h2>

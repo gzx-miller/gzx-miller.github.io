@@ -41,17 +41,17 @@ export default function BlogPage() {
 
 // ============================================
 
-// useFormState - 跟踪返回值
+// useActionState - 跟踪返回值与提交状态
 // app/components/PostForm.tsx
 'use client'
 
-import { useFormState } from 'react-dom'
+import { useActionState } from 'react'
 import { createPost } from '../actions'
 
 const initialState = { message: '', errors: {} }
 
 export function PostForm() {
-  const [state, formAction] = useFormState(createPost, initialState)
+  const [state, formAction, isPending] = useActionState(createPost, initialState)
 
   return (
     <form action={formAction}>
@@ -59,7 +59,9 @@ export function PostForm() {
       {state.errors?.title && <p>{state.errors.title}</p>}
 
       <textarea name="content" />
-      <button type="submit">发布</button>
+      <button type="submit" disabled={isPending}>
+        {isPending ? '提交中...' : '发布'}
+      </button>
 
       {state.message && <p>{state.message}</p>}
     </form>

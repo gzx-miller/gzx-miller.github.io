@@ -103,6 +103,7 @@ export const lessons: Lesson[] = [
       '片段着色器须用 precision 声明浮点精度，mediump 与 highp 会换算取舍，影响精度与开销。',
     ],
     problem: '解决"第一次上手 WebGL 时无从下手，上下文获取、着色器编译、缓冲上传与 draw call 整套启动流程串不起来"的问题。',
+    officialUrl: 'https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Getting_started_with_WebGL',
   },
   {
     id: 'W_2',
@@ -116,11 +117,11 @@ export const lessons: Lesson[] = [
     code: W02Code,
     language: 'glsl',
     principle:
-      'GLSL 是 OpenGL ES 的着色器语言，一份 Shader Program 由顶点着色器和片段着色器组成。顶点着色器对每个顶点执行一次，读取 attribute 输入、处理变换并写入 gl_Position；片段着色器对每个像素执行一次并写入 gl_FragColor。顶点着色器通过 varying 把数据交给片段着色器，varying 的值会在光栅化阶段于两个顶点之间自动线性插值。本课用一个随 uniform uRotation 旋转的三角形演示这套分工与 varying 插值。',
+      'GLSL 是 OpenGL ES 的着色器语言，一份 Shader Program 由顶点着色器和片段着色器组成。顶点着色器对每个顶点执行一次，读取 attribute 输入、处理变换并写入 gl_Position；片段着色器对每个像素执行一次并写入 gl_FragColor。顶点着色器通过 varying 把数据交给片段着色器，varying 的值会在光栅化阶段于两个顶点之间自动做透视校正插值。本课用一个随 uniform uRotation 旋转的三角形演示这套分工与 varying 插值。',
     flow: [
       '顶点着色器读取 attribute aPosition/aColor 与 uniform uRotation，用旋转公式算出新坐标写入 gl_Position。',
       '顶点着色器把 aColor 作为 varying vColor 输出。',
-      '光栅化阶段在三个顶点之间对 vColor 自动线性插值。',
+      '光栅化阶段在三个顶点之间对 vColor 自动做透视校正插值。',
       '片段着色器读取插值后的 vColor 写入 gl_FragColor，得到带渐变的旋转三角形。',
     ],
     notes: [
@@ -130,6 +131,7 @@ export const lessons: Lesson[] = [
       'uniform 是两个着色器通用的全局只读输入，单次 draw call 内所有顶点与像素共享，适合传时间、角度等。',
     ],
     problem: '解决"写 GLSL 时分不清两个着色器各自负责什么、顶点上的颜色传不到像素上"的问题。',
+    officialUrl: 'https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Adding_2D_content_to_a_WebGL_context',
   },
   {
     id: 'W_3',
@@ -157,6 +159,7 @@ export const lessons: Lesson[] = [
       'VAO 只保存状态而非数据，绑定后无需重复执行 enableVertexAttribArray / vertexAttribPointer；WebGL1 用扩展、WebGL2 原生支持。',
     ],
     problem: '解决"每次绘制都重复上传顶点数据、相邻面顶点不共用，显存与带宽白白浪费"的问题。',
+    officialUrl: 'https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawElements',
   },
   {
     id: 'W_4',
@@ -178,12 +181,13 @@ export const lessons: Lesson[] = [
       'varying vColor 把颜色传给片段着色器，片段端按 uUseAttributeColor 在属性色与动态色之间 mix。',
     ],
     notes: [
-      'attribute 个数受 GL_MAX_VERTEX_ATTRIBS 限制（WebGL1 中通常至少 8 个）。',
+      'attribute 个数受 MAX_VERTEX_ATTRIBS 限制（WebGL1 中通常至少 8 个）。',
       'uniform 可在每次 draw 前更新，适合传时间、矩阵、颜色等全局状态。',
       'varying 在光栅化阶段做透视校正插值，无需在着色器里手写插值。',
       'attribute/varying 是 WebGL1 的旧关键字，WebGL2 的 #version 300 es 改用 in/out；本课沿用 WebGL1 写法以便对照入门。',
     ],
     problem: '解决"分不清 attribute、uniform、varying 各自适合传什么数据，导致值传不进去或每帧重复上传"的问题。',
+    officialUrl: 'https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/vertexAttribPointer',
   },
   {
     id: 'W_5',
@@ -211,6 +215,7 @@ export const lessons: Lesson[] = [
       'GLSL 的 mat3/mat4 按列主序（column-major）存储，CPU 端数组需按其约定排布，与常见行主序不同。',
     ],
     problem: '解决"物体要同时做平移、旋转、缩放时，逐个手算顶点坐标既繁琐又容易把顺序弄反"的问题。',
+    officialUrl: 'https://webgl2fundamentals.org/webgl/lessons/webgl-2d-matrices.html',
   },
   {
     id: 'W_6',
@@ -238,6 +243,7 @@ export const lessons: Lesson[] = [
       'Model→View→Projection 的顺序必须保持不变，调换会投影出错。',
     ],
     problem: '解决"3D 模型在屏幕上位置不对、远近大小失真时，不知该调整哪一级坐标变换"的问题。',
+    officialUrl: 'https://webgl2fundamentals.org/webgl/lessons/webgl-3d-perspective.html',
   },
   {
     id: 'W_7',
@@ -265,6 +271,7 @@ export const lessons: Lesson[] = [
       'View 矩阵只决定"从哪看"，不修改模型数据本身；第一人称相机通常直接累加 yaw/pitch 与位移。',
     ],
     problem: '解决"用户想绕着模型转圈看、拉近拉远，而直接改坐标的方式生硬难用"的交互问题。',
+    officialUrl: 'https://webgl2fundamentals.org/webgl/lessons/webgl-3d-camera.html',
   },
   {
     id: 'W_8',
@@ -286,12 +293,13 @@ export const lessons: Lesson[] = [
       '片段着色器对 vUV 做平铺/偏移后调用 texture2D（uTexture, uv）采样输出。',
     ],
     notes: [
-      'UV 是归一化二维坐标，(0,0) 在左下、U 向右、V 向上，对应纹理图像第一行位于顶部。',
-      '采样越界的 UV 行为由 wrap 决定：CLAMP_TO_EDGE 夹紧、REPEAT 环绕做无缝平铺。',
-      '纹理 y 轴与 WebGL 屏幕坐标方向相反，上传前通常需在 CPU 端把图片上下翻转。',
+      'UV 是归一化二维坐标，(0,0) 在左下、U 向右、V 向上；DOM 图片默认自上而下，直接采样会上下颠倒。',
+      '采样越界的 UV 行为由 wrap 决定：CLAMP_TO_EDGE 夹紧、REPEAT 环绕平铺；接缝是否无缝取决于纹理边缘内容。',
+      'DOM 图片默认自上而下存储，而 UV 的 V 轴向上；上传时可设 UNPACK_FLIP_Y_WEBGL=true 翻转，或在采样时用 1.0-v。',
       '图片需异步加载，texImage2D 之前要确认 Image 已完成解码，否则上传的是空白数据。',
     ],
     problem: '解决"图片贴到网格上方向颠倒、边缘拉伸变形，或平铺时接缝处出现明显折线"的问题。',
+    officialUrl: 'https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Using_textures_in_WebGL',
   },
   {
     id: 'W_9',
@@ -315,10 +323,11 @@ export const lessons: Lesson[] = [
     notes: [
       'MIN_FILTER 决定缩小过滤（可为 NEAREST/LINEAR 或带 MIPMAP_*），MAG_FILTER 决定放大过滤（仅 NEAREST/LINEAR）。',
       'LINEAR_MIPMAP_LINEAR（三线性）在层内与跨层都做插值，质量最高但开销也最大。',
-      'WebGL1 中完整 mip 链通常要求纹理尺寸为 2 的幂；WebGL2 / NPOT 扩展才允许非 2 次幂并带 mip。',
+      'WebGL1 中完整 mip 链要求纹理尺寸为 2 的幂；非 2 次幂只能用 NEAREST/LINEAR 且 wrap 必须为 CLAMP_TO_EDGE，WebGL2 才完整支持 NPOT 带 mip。',
       '各向异性过滤（EXT_texture_filter_anisotropic）可改善斜视角纹理的模糊，属于进阶优化。',
     ],
     problem: '解决"纹理缩小时画面出现摩尔纹与闪烁、放大时边缘发糊，画质明显劣化"的问题。',
+    officialUrl: 'https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texParameteri',
   },
   {
     id: 'W_10',
@@ -340,12 +349,13 @@ export const lessons: Lesson[] = [
       '按选中的 mix/add/multiply/alpha 模式与 uBlendFactor 合并后输出。',
     ],
     notes: [
-      '可用纹理单元数由 GL_MAX_TEXTURE_IMAGE_UNITS 决定，WebGL1 通常至少 8 个；sampler 只是指向单元号的整数。',
+      '可用纹理单元数由 MAX_TEXTURE_IMAGE_UNITS 决定，WebGL1 通常至少 8 个；sampler 只是指向单元号的整数。',
       '本课的混色在片段着色器内部完成（纹素对纹素）；若要让片元再与帧缓冲已有内容合成（如透明物体），需启用 gl.BLEND 并配 blendFunc。',
       '一份网格配一套 attribute，通过多个 sampler 即可在单次 draw call 内组合多张纹理。',
       '同一 UV 下采样多张图再加权，是法线贴图、粗糙度贴图等 PBR 材质叠加的基础。',
     ],
     problem: '解决"如何在一个物体上叠加多种纹理效果（如颜色+法线+高光）"的问题。',
+    officialUrl: 'https://webgl2fundamentals.org/webgl/lessons/webgl-texture-units.html',
   },
   {
     id: 'W_11',
@@ -373,6 +383,7 @@ export const lessons: Lesson[] = [
       '法线矩阵取模型矩阵的逆转置，配合世界空间光照，是后面进阶光照的基础。',
     ],
     problem: '解决"3D 物体通体一个颜色像剪影，看不出曲面起伏与光源方向"的基础光照问题。',
+    officialUrl: 'https://learnopengl.com/Lighting/Basic-Lighting',
   },
   {
     id: 'W_12',
@@ -400,6 +411,7 @@ export const lessons: Lesson[] = [
       '本课镜面高光用固定强度与白色 specular，未乘光源/材质颜色，突出高光位置与形状即可。',
     ],
     problem: '解决"球体等光滑表面缺少高光点，材质看起来平淡、没有金属或漆面反光质感"的问题。',
+    officialUrl: 'https://learnopengl.com/Lighting/Basic-Lighting',
   },
   {
     id: 'W_13',
@@ -427,6 +439,7 @@ export const lessons: Lesson[] = [
       '变换后务必归一化，否则点积、反射等运算得到的强度会被额外放大或缩小。',
     ],
     problem: '解决"模型做了非等比缩放后光照全错，明明朝光的表面却发暗"的法线变换问题。',
+    officialUrl: 'https://learnopengl.com/Lighting/Basic-Lighting',
   },
   {
     id: 'W_14',
@@ -450,10 +463,11 @@ export const lessons: Lesson[] = [
     notes: [
       'FBO 不存储图像本身，必须挂接纹理或渲染缓冲附件；用纹理作颜色附件便于后续采样复用。',
       '只需确认 FBO 完整（checkFramebufferStatus），附件格式不匹配或有遗漏会返回 incomplete。',
-      '切回屏幕需 bindFramebuffer(null)；离屏纹理尺寸通常与屏幕分辨率一致，第 2 遍按比例映射。',
+      '切回屏幕需 bindFramebuffer(null)；离屏纹理尺寸按质量与性能需求选择，若要 1:1 贴合屏幕再与屏幕分辨率一致。',
       '基于 FBO 的离屏渲染是后处理、阴影映射、G-Buffer、镜像水面等高级技术共用的一条基础通道，本课先掌握"渲到纹理再读回"。',
     ],
     problem: '解决"想把渲染结果截下来复用（做后处理、镜像、缩略图），却只能画到屏幕上"的问题。',
+    officialUrl: 'https://webgl2fundamentals.org/webgl/lessons/webgl-render-to-texture.html',
   },
   {
     id: 'W_15',
@@ -481,6 +495,7 @@ export const lessons: Lesson[] = [
       '平行光在光空间用一个正交投影构成 uLightMVP；点光源/聚光灯需六面或更深的方法，属进阶。',
     ],
     problem: '解决"场景里的物体悬空漂浮、相互之间没有任何遮挡阴影，真实感缺失"的问题。',
+    officialUrl: 'https://learnopengl.com/Advanced-Lighting/Shadows/Shadow-Mapping',
   },
   {
     id: 'W_16',
@@ -508,6 +523,7 @@ export const lessons: Lesson[] = [
       '后处理开销集中在片段着色器的纹理采样次数，采样越多越贵，是移动端的主要瓶颈。',
     ],
     problem: '解决"场景画完后还想叠加泛光、模糊、灰度等全屏特效，却无处下手"的问题。',
+    officialUrl: 'https://webgl2fundamentals.org/webgl/lessons/webgl-image-processing.html',
   },
   {
     id: 'W_17',
@@ -535,6 +551,7 @@ export const lessons: Lesson[] = [
       '整数/浮点纹理渲染目标等需配合相应扩展（如 EXT_color_buffer_float）；Transform Feedback、MRT 亦为 WebGL2 增强能力。',
     ],
     problem: '解决"WebGL1 中 uniform 只能逐个设置、VAO 与 3D 纹理等能力缺失，导致代码冗长且状态切换开销大"的问题。',
+    officialUrl: 'https://webgl2fundamentals.org/webgl/lessons/webgl2-whats-new.html',
   },
   {
     id: 'W_18',
@@ -552,16 +569,17 @@ export const lessons: Lesson[] = [
     flow: [
       '创建实例属性缓冲（每实例的位置、旋转），加载到 buffer。',
       '用 vertexAttribDivisor 把实例属性设为除数 1（每实例推进一次）。',
-      '调用带实例数的绘制（WebGL1 扩展为 drawElementsInstancedANGLE）一次画完。',
-      '顶点着色器用 gl_InstanceID 或逐实例 attribute 获得该实例的偏移与旋转。',
+      '调用带实例数的绘制（WebGL1 扩展为 drawArraysInstancedANGLE）一次画完。',
+      '顶点着色器用逐实例 attribute 获得偏移与旋转；WebGL2 也可用内置的 gl_InstanceID。',
     ],
     notes: [
       'divisor=1 表示该属性每实例推进一次，divisor=0 表示逐顶点；由此把属性划分为逐顶点与逐实例两类。',
-      '实例属性个数受 GL_MAX_VERTEX_ATTRIBS 约束（它们也是普通 attribute 槽位）。',
+      '实例属性个数受 MAX_VERTEX_ATTRIBS 约束（它们也是普通 attribute 槽位）。',
       'WebGL1 用 ANGLE_instanced_arrays 扩展（vertexAttribDivisorANGLE / drawArraysInstancedANGLE），WebGL2 原生同名 API 不需要扩展。',
       '适合草地、雨滴、粒子、网格阵列等大量相同几何体；相比逐个 draw 大幅减少 CPU→GPU 状态切换。',
     ],
     problem: '解决"上千个相同物体逐个 draw call 绘制时 CPU 开销爆炸、帧率崩塌"的问题。',
+    officialUrl: 'https://webgl2fundamentals.org/webgl/lessons/webgl-instanced-drawing.html',
   },
   {
     id: 'W_19',
@@ -589,6 +607,7 @@ export const lessons: Lesson[] = [
       '用着色器内存读写而非 CPU 逐粒子回算，粒子数量上可以做到好几万甚至更多。',
     ],
     problem: '解决"数万个粒子要实时更新位置与速度，CPU 逐点循环计算根本跑不到 60 帧"的性能问题。',
+    officialUrl: 'https://webgl2fundamentals.org/webgl/lessons/webgl-gpgpu.html',
   },
   {
     id: 'W_20',
@@ -612,9 +631,10 @@ export const lessons: Lesson[] = [
     notes: [
       'draw call 有固定 CPU 与驱动开销，reduce 数量是移动端 WebGL 最直接有效的优化之一，可用实例化、合批、图集达成。',
       '避免在渲染循环里反复 createBuffer/createTexture 并丢弃，优先复用并只在初始上传一次。',
-      '纹理压缩（如对 WebGL1 的 S3TC、跨平台常用的 ETC2）能明显降低显存与带宽，配合 Mipmap 效果更佳。',
+      '纹理压缩（桌面常见的 S3TC、移动常见的 ETC2/EAC）能明显降低显存与带宽，配合 Mipmap 效果更佳。',
       '上下文属性 preserveDrawingBuffer 默认 false 反而利于性能，仅截图等场景需要时才开；开启会阻止驱动优化。',
     ],
     problem: '解决"WebGL 应用上线后卡顿掉帧，不知是 draw call、带宽还是纹理设置拖了后腿"的排查问题。',
+    officialUrl: 'https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/WebGL_best_practices',
   },
 ]

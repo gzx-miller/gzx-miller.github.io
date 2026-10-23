@@ -27,9 +27,10 @@ SECRET_KEY=xxx                              <span style="color:#7c7c99">// 仅�
 .env.[development|production]
 .env
 
-<span style="color:#8a8a3a">// next.config.js</span>
-<span style="color:#e85d04">/** @type {import('next').NextConfig} */</span>
-const nextConfig = {
+<span style="color:#8a8a3a">// next.config.ts</span>
+<span style="color:#e85d04">import type { NextConfig } from 'next'</span>
+
+const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
     remotePatterns: [{ protocol: 'https', hostname: 'cdn.example.com' }]
@@ -41,7 +42,7 @@ const nextConfig = {
   },
   output: 'standalone',
 }
-module.exports = nextConfig
+export default nextConfig
 
 <span style="color:#8a8a3a">// 读取运行时配置（服务端）</span>
 import { db } from '@/lib/db'  <span style="color:#7c7c99">// process.env.DATABASE_URL</span>`

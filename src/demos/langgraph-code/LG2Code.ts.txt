@@ -1,28 +1,30 @@
 // 状态图：用 StateGraph 把工作流建模成「节点 + 边」
 // 场景：课程内容生产线——大纲 → 内容 → 质检（不达标回炉重写）→ 摘要
-import { StateGraph, Annotation, START, END } from '@langchain/langgraph'
+import { StateGraph, StateSchema, ReducedValue, START, END } from '@langchain/langgraph'
 import { ChatOpenAI } from '@langchain/openai'
 import { ChatPromptTemplate } from '@langchain/core/prompts'
 import { StringOutputParser } from '@langchain/core/output_parsers'
+import { z } from 'zod/v4'
 
 const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 })
 const parser = new StringOutputParser()
 
-// 示例1: 用 Annotation.Root 定义图状态
-// messages 这类列表字段必须配 reducer，节点返回的局部更新才会「追加」而不是覆盖
-const GraphState = Annotation.Root({
-  topic: Annotation<string>,
-  outline: Annotation<string>,
-  content: Annotation<string>,
-  summary: Annotation<string>,
-  attempts: Annotation<number>({
-    reducer: (left, right) => (left ?? 0) + (right ?? 0),
-    default: () => 0,
-  }),
-  log: Annotation<string[]>({
-    reducer: (left, right) => left.concat(right),
-    default: () => [],
-  }),
+// 示例1: 用 StateSchema + zod 定义图状态
+// 普通字段直接写 zod schema；列表、计数器这类需要合并的字段用 ReducedValue 配 reducer，
+// 节点返回的局部更新才会「追加 / 累加」而不是覆盖
+const GraphState = new StateSchema({
+  topic: z.string(),
+  outline: z.string(),
+  content: z.string(),
+  summary: z.string(),
+  attempts: new ReducedValue(
+    z.number().default(0),
+    { reducer: (left, right) => (left ?? 0) + (right ?? 0) },
+  ),
+  log: new ReducedValue(
+    z.array(z.string()).default(() => []),
+    { reducer: (left, right) => left.concat(right) },
+  ),
 })
 
 // 示例2: 节点函数——接收当前状态，返回一份局部更新

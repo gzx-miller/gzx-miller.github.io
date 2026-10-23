@@ -5,7 +5,7 @@
 //     page.tsx
 //     about/
 //       page.tsx
-// middleware.ts
+// proxy.ts
 // i18n/
 //   config.ts
 //   dictionaries/
@@ -76,15 +76,16 @@ export async function generateStaticParams() {
   return i18n.locales.map(locale => ({ lang: locale }))
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
   params,
 }: {
   children: React.ReactNode
-  params: { lang: string }
+  params: Promise<{ lang: string }>
 }) {
+  const { lang } = await params
   return (
-    <html lang={params.lang}>
+    <html lang={lang}>
       <body>{children}</body>
     </html>
   )
@@ -94,8 +95,9 @@ export default function RootLayout({
 export async function generateMetadata({
   params,
 }: {
-  params: { lang: string }
+  params: Promise<{ lang: string }>
 }): Promise<Metadata> {
+  const { lang } = await params
   const titles: Record<string, string> = {
     zh: '我的网站',
     en: 'My Website',
@@ -103,7 +105,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: titles[params.lang] || titles.zh,
+    title: titles[lang] || titles.zh,
   }
 }
 
@@ -116,9 +118,10 @@ import { Locale } from '@/i18n/config'
 export default async function HomePage({
   params,
 }: {
-  params: { lang: Locale }
+  params: Promise<{ lang: Locale }>
 }) {
-  const dict = await getDictionary(params.lang)
+  const { lang } = await params
+  const dict = await getDictionary(lang)
 
   return (
     <main>
@@ -162,7 +165,7 @@ export function LanguageSwitcher() {
 
 // ============================================
 
-// middleware.ts - 自动语言检测
+// proxy.ts - 自动语言检测
 import { NextResponse, type NextRequest } from 'next/server'
 import { i18n } from './i18n/config'
 
@@ -185,7 +188,7 @@ function getLocale(request: NextRequest): string {
   return i18n.defaultLocale
 }
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname
 
   // 检查路径是否已有 locale

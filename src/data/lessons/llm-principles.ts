@@ -1,27 +1,21 @@
-import type { Component } from 'vue'
 import type { Lesson } from '../lessons'
 import { restoreCodeSource } from '../code-restore'
-import LLM01Vector from '../../demos/LLM01Vector.vue'
-import LLM02Ops from '../../demos/LLM02Ops.vue'
-import LLM03Matrix from '../../demos/LLM03Matrix.vue'
-import LLM04Transform from '../../demos/LLM04Transform.vue'
+import LLM01VectorOps from '../../demos/LLM01VectorOps.vue'
+import LLM03MatrixTransform from '../../demos/LLM03MatrixTransform.vue'
 import LLM05Gradient from '../../demos/LLM05Gradient.vue'
 import LLM06Prob from '../../demos/LLM06Prob.vue'
 import LLM07Neuron from '../../demos/LLM07Neuron.vue'
 import LLM08Activation from '../../demos/LLM08Activation.vue'
-import LLM09Network from '../../demos/LLM09Network.vue'
-import LLM10Loss from '../../demos/LLM10Loss.vue'
+import LLM09NetworkLoss from '../../demos/LLM09NetworkLoss.vue'
 import LLM11Softmax from '../../demos/LLM11Softmax.vue'
 import LLM12Sgd from '../../demos/LLM12Sgd.vue'
 import LLM13Backprop from '../../demos/LLM13Backprop.vue'
 import LLM14Ngram from '../../demos/LLM14Ngram.vue'
 import LLM15Word2Vec from '../../demos/LLM15Word2Vec.vue'
 import LLM16Ffnn from '../../demos/LLM16Ffnn.vue'
-import LLM17Rnn from '../../demos/LLM17Rnn.vue'
-import LLM18Lstm from '../../demos/LLM18Lstm.vue'
+import LLM17RnnLstm from '../../demos/LLM17RnnLstm.vue'
 import LLM19Attention from '../../demos/LLM19Attention.vue'
-import LLM20Multihead from '../../demos/LLM20Multihead.vue'
-import LLM21Transformer from '../../demos/LLM21Transformer.vue'
+import LLM20MultiheadTransformer from '../../demos/LLM20MultiheadTransformer.vue'
 import LLM22Tokenizer from '../../demos/LLM22Tokenizer.vue'
 import LLM23Arch from '../../demos/LLM23Arch.vue'
 import LLM24Residual from '../../demos/LLM24Residual.vue'
@@ -29,8 +23,7 @@ import LLM25Training from '../../demos/LLM25Training.vue'
 import LLM26Sparse from '../../demos/LLM26Sparse.vue'
 import LLM27Moe from '../../demos/LLM27Moe.vue'
 import LLM28Distill from '../../demos/LLM28Distill.vue'
-import LLM29Recap from '../../demos/LLM29Recap.vue'
-import LLM30Frontier from '../../demos/LLM30Frontier.vue'
+import LLM29RecapFrontier from '../../demos/LLM29RecapFrontier.vue'
 
 const llmPrinciplesCodeModules = import.meta.glob<string>('../../demos/llm-principles-code/*', { query: '?raw', import: 'default' })
 
@@ -40,27 +33,27 @@ function createCodeLoader(path: string) {
   return () => loader().then(restoreCodeSource)
 }
 
-const LLM1Code = createCodeLoader('llm-principles-code/LLM1Code.py.txt')
-const LLM2Code = createCodeLoader('llm-principles-code/LLM2Code.py.txt')
-const LLM3Code = createCodeLoader('llm-principles-code/LLM3Code.py.txt')
-const LLM4Code = createCodeLoader('llm-principles-code/LLM4Code.py.txt')
+function createCombinedCodeLoader(...paths: string[]) {
+  const loaders = paths.map(createCodeLoader)
+  return () => Promise.all(loaders.map((loader) => loader())).then((sources) => sources.join('\n\n'))
+}
+
+const LLM1Code = createCombinedCodeLoader('llm-principles-code/LLM1Code.py.txt', 'llm-principles-code/LLM2Code.py.txt')
+const LLM3Code = createCombinedCodeLoader('llm-principles-code/LLM3Code.py.txt', 'llm-principles-code/LLM4Code.py.txt')
 const LLM5Code = createCodeLoader('llm-principles-code/LLM5Code.py.txt')
 const LLM6Code = createCodeLoader('llm-principles-code/LLM6Code.py.txt')
 const LLM7Code = createCodeLoader('llm-principles-code/LLM7Code.py.txt')
 const LLM8Code = createCodeLoader('llm-principles-code/LLM8Code.py.txt')
-const LLM9Code = createCodeLoader('llm-principles-code/LLM9Code.py.txt')
-const LLM10Code = createCodeLoader('llm-principles-code/LLM10Code.py.txt')
+const LLM9Code = createCombinedCodeLoader('llm-principles-code/LLM9Code.py.txt', 'llm-principles-code/LLM10Code.py.txt')
 const LLM11Code = createCodeLoader('llm-principles-code/LLM11Code.py.txt')
 const LLM12Code = createCodeLoader('llm-principles-code/LLM12Code.py.txt')
 const LLM13Code = createCodeLoader('llm-principles-code/LLM13Code.py.txt')
 const LLM14Code = createCodeLoader('llm-principles-code/LLM14Code.py.txt')
 const LLM15Code = createCodeLoader('llm-principles-code/LLM15Code.py.txt')
 const LLM16Code = createCodeLoader('llm-principles-code/LLM16Code.py.txt')
-const LLM17Code = createCodeLoader('llm-principles-code/LLM17Code.py.txt')
-const LLM18Code = createCodeLoader('llm-principles-code/LLM18Code.py.txt')
+const LLM17Code = createCombinedCodeLoader('llm-principles-code/LLM17Code.py.txt', 'llm-principles-code/LLM18Code.py.txt')
 const LLM19Code = createCodeLoader('llm-principles-code/LLM19Code.py.txt')
-const LLM20Code = createCodeLoader('llm-principles-code/LLM20Code.py.txt')
-const LLM21Code = createCodeLoader('llm-principles-code/LLM21Code.py.txt')
+const LLM20Code = createCombinedCodeLoader('llm-principles-code/LLM20Code.py.txt', 'llm-principles-code/LLM21Code.py.txt')
 const LLM22Code = createCodeLoader('llm-principles-code/LLM22Code.py.txt')
 const LLM23Code = createCodeLoader('llm-principles-code/LLM23Code.py.txt')
 const LLM24Code = createCodeLoader('llm-principles-code/LLM24Code.py.txt')
@@ -70,51 +63,37 @@ const LLM28Code = createCodeLoader('llm-principles-code/LLM28Code.py.txt')
 export const lessons: Lesson[] = [
   {
     id: 'LLM_1',
-    title: '向量与数字照片',
-    navTitle: '向量的起点',
+    title: '向量、运算与余弦相似度',
+    navTitle: '向量与相似度',
     category: '基础数学',
     path: '/llm-principles/llm-1/what-is-vector',
-    summary: '认识向量把「像不像」变成可计算的坐标与距离，先亲历概念再理解维度的意义。',
+    summary: '先给事物打数字分，再把一维升级为向量；距离暴露篇幅干扰后，用点积与余弦相似度只看方向，把「像不像」变成可计算的夹角。',
     demo: null,
-    demoComponent: LLM01Vector,
+    demoComponent: LLM01VectorOps,
     code: LLM1Code,
     language: 'python',
-  },
-  {
-    id: 'LLM_2',
-    title: '向量运算与余弦相似度',
-    navTitle: '向量的运算',
-    category: '基础数学',
-    path: '/llm-principles/llm-2/vector-ops',
-    summary: '把「相似」变成可计算的数，从末端距离的盲点一路迭代到只看方向的余弦相似度。',
-    demo: null,
-    demoComponent: LLM02Ops,
-    code: LLM2Code,
-    language: 'python',
+    principle: '向量是一组有顺序的数字，距离衡量位置远近，点积与余弦相似度衡量方向一致程度；除以模长后，长度不再干扰相似判断。',
+    flow: ['把对象编码成特征向量', '用欧氏距离比较绝对位置', '发现篇幅导致长度干扰', '改用点积除以模长比较方向'],
+    notes: ['余弦相似度取值为 −1~1，1 表示方向完全一致', '向量加减按分量进行，语义类比由此成立', '维度不足就继续加维，模型维度由数据学习'],
+    problem: '词频向量长度随篇幅变化时，欧氏距离会把同话题的短摘要判成不相似。',
+    officialUrl: 'https://www.3blue1brown.com/topics/linear-algebra',
   },
   {
     id: 'LLM_3',
-    title: '矩阵与多组变换',
-    navTitle: '矩阵',
+    title: '矩阵、线性变换与全连接层',
+    navTitle: '矩阵与变换',
     category: '基础数学',
     path: '/llm-principles/llm-3/matrix',
-    summary: '矩阵把多组权重排成一张表，矩阵乘向量本质是「每行与输入做点积」、同时算多个加权求和；维度规则「内层匹配、外层定维」决定了神经网络每层的输入输出形态。',
+    summary: '把多组加权求和排成矩阵，按「内层匹配、外层定维」做乘法；换个视角看，同一个乘法是对整个空间做旋转、拉伸、切变与翻转的线性变换，W 管变形、b 管平移。',
     demo: null,
-    demoComponent: LLM03Matrix,
+    demoComponent: LLM03MatrixTransform,
     code: LLM3Code,
     language: 'python',
-  },
-  {
-    id: 'LLM_4',
-    title: '线性变换与矩阵乘法',
-    navTitle: '线性变换',
-    category: '基础数学',
-    path: '/llm-principles/llm-4/linear-transform',
-    summary: '揭穿矩阵乘法的几何真相——对整个空间做旋转、拉伸、切变与翻转的统一变换。',
-    demo: null,
-    demoComponent: LLM04Transform,
-    code: LLM4Code,
-    language: 'python',
+    principle: '矩阵把多组权重排成 m×n 表，矩阵乘向量是每行与输入做点积；几何上它是对整个空间的一次线性变换，矩阵各列就是基向量的落点。',
+    flow: ['把多组加权求和排成 m×n 矩阵', '按内层匹配、外层定维做 Wx', '用基向量落点理解空间变形', '加入偏置 b 完成平移'],
+    notes: ['W(m×n)·x(n)=y(m)，内层维度必须相等', '线性变换保持直线、平行、等距，原点不动', '纯线性层叠加仍等价于一层'],
+    problem: '逐点追踪整张空间的去向不可行，需要抓住基向量这组骨架。',
+    officialUrl: 'https://www.3blue1brown.com/topics/linear-algebra',
   },
   {
     id: 'LLM_5',
@@ -127,6 +106,11 @@ export const lessons: Lesson[] = [
     demoComponent: LLM05Gradient,
     code: LLM5Code,
     language: 'python',
+    principle: '导数给出单变量变化率，偏导数给出多变量各自的影响，梯度把偏导数打包成指向增长最快方向的向量；沿 −∇L 更新即梯度下降。',
+    flow: ['从导数理解瞬时变化率', '用偏导数拆解多参数影响', '把偏导数组成梯度向量', '沿负梯度方向按学习率更新'],
+    notes: ['梯度指向上升最快方向，下降需取负', '学习率过大会震荡，过小收敛慢', '梯度为零只说明驻点，不保证是最小值'],
+    problem: '参数规模巨大且损失不可视，无法靠人工试错逐个调参。',
+    officialUrl: 'https://www.3blue1brown.com/lessons/gradient-descent',
   },
   {
     id: 'LLM_6',
@@ -139,6 +123,11 @@ export const lessons: Lesson[] = [
     demoComponent: LLM06Prob,
     code: LLM6Code,
     language: 'python',
+    principle: '概率分布非负且总和为 1；信息量 −log p 衡量事件带来的惊讶程度，熵是它的期望，交叉熵衡量预测分布与真实分布的差距。',
+    flow: ['把输出归一成概率分布', '用 −log p 度量单个事件的信息量', '对真实分布求期望得到交叉熵', '独热标签下交叉熵简化为 −log q(正确类)'],
+    notes: ['交叉熵越小，预测分布越接近真实分布', '独热标签下只保留正确类别的概率', 'softmax 常与交叉熵配合用于分类'],
+    problem: '模型输出是分数而非概率，无法直接与真实答案比较。',
+    officialUrl: 'https://www.deeplearningbook.org/contents/prob.html',
   },
   {
     id: 'LLM_7',
@@ -151,6 +140,11 @@ export const lessons: Lesson[] = [
     demoComponent: LLM07Neuron,
     code: LLM7Code,
     language: 'python',
+    principle: '神经元先做加权求和 z=w·x+b，再用激活函数把分数映射成输出；单个神经元的分界是超平面，多神经元并排加 softmax 才构成一层。',
+    flow: ['为每种线索设权重', '加权求和并加偏置', '用 Sigmoid 压成概率', '每种答案各配一个神经元并归一'],
+    notes: ['偏置 b 是可学习的门槛', '单个神经元只能切一张超平面', '多神经元输出需 softmax 归一'],
+    problem: '仅有分数没有门槛无法判断，且单神经元无法处理多分类。',
+    officialUrl: 'https://www.3blue1brown.com/topics/neural-networks',
   },
   {
     id: 'LLM_8',
@@ -163,30 +157,28 @@ export const lessons: Lesson[] = [
     demoComponent: LLM08Activation,
     code: LLM8Code,
     language: 'python',
+    principle: '没有激活函数时多层线性变换可合并为一层；激活函数引入非线性弯折，使网络能逼近曲线边界，ReLU 因正区间梯度稳定成为现代默认。',
+    flow: ['证明两层线性网络等价于一层', '观察单层只能画超平面', '在层间插入非线性激活', '用 ReLU 等缓解饱和'],
+    notes: ['线性叠线性仍是线性', 'Sigmoid/Tanh 两端饱和会削弱梯度', 'ReLU 计算简单且正区间不衰减'],
+    problem: 'XOR、圆形区域等非线性边界无法被任何直线分开。',
+    officialUrl: 'https://www.deeplearningbook.org/contents/mlp.html',
   },
   {
     id: 'LLM_9',
-    title: '神经网络与训练循环',
-    navTitle: '网络与训练',
+    title: '神经网络、训练循环与损失函数',
+    navTitle: '网络与损失',
     category: '神经网络',
     path: '/llm-principles/llm-9/network-training',
-    summary: '把神经元叠成一张网，走通前向、算损失、求梯度、更新参数的完整训练循环。',
+    summary: '把神经元叠成网络后，训练循环靠前向、损失、梯度、更新四步调参；损失函数把错误压成一个可微的数，回归用 MSE、分类用交叉熵，为梯度下降提供方向标。',
     demo: null,
-    demoComponent: LLM09Network,
+    demoComponent: LLM09NetworkLoss,
     code: LLM9Code,
     language: 'python',
-  },
-  {
-    id: 'LLM_10',
-    title: '损失函数与误差尺度',
-    navTitle: '损失函数',
-    category: '神经网络',
-    path: '/llm-principles/llm-10/loss-function',
-    summary: '损失函数把「错得多离谱」压成一个可微的数、为梯度下降提供方向标：回归用均方误差，分类用交叉熵 −log(正确类概率)，后者对越离谱的错误给出越大的梯度推力。',
-    demo: null,
-    demoComponent: LLM10Loss,
-    code: LLM10Code,
-    language: 'python',
+    principle: '神经网络是带参数 θ 的大函数，训练循环由前向计算、损失评估、梯度求解、参数更新四步组成；损失函数把误差压成可微标量，为更新提供方向。',
+    flow: ['前一层输出作为后一层输入', '前向计算得到预测', '用 MSE 或交叉熵算损失', '反向求梯度并更新 θ'],
+    notes: ['训练调参数，推理时参数冻结', '回归常用均方误差，分类常用交叉熵', '只对回答段计算损失是 SFT 的常见做法'],
+    problem: '数十亿参数无法手工设定，需要可自动优化的目标。',
+    officialUrl: 'https://www.3blue1brown.com/topics/neural-networks',
   },
   {
     id: 'LLM_11',
@@ -199,6 +191,11 @@ export const lessons: Lesson[] = [
     demoComponent: LLM11Softmax,
     code: LLM11Code,
     language: 'python',
+    principle: 'Softmax 先对分数取指数保证非负，再除以总和归一，使输出构成概率分布；温度 T 缩放 logits 可调节分布的尖锐程度。',
+    flow: ['对每个 logit 取 exp', '求和得到归一化分母', '逐项相除得到概率', '用温度调节随机性'],
+    notes: ['减去最大值可避免指数溢出', 'T<1 更确定，T>1 更随机', 'Softmax 不改变分数之间的大小顺序'],
+    problem: '模型输出的原始分数有正有负、总和不为 1，不能当概率使用。',
+    officialUrl: 'https://www.deeplearningbook.org/contents/mlp.html',
   },
   {
     id: 'LLM_12',
@@ -211,6 +208,11 @@ export const lessons: Lesson[] = [
     demoComponent: LLM12Sgd,
     code: LLM12Code,
     language: 'python',
+    principle: '梯度下降沿负梯度更新参数，学习率控制步长；Mini-batch 在稳定性与速度间折中，动量累积历史方向，Adam 再叠加每参数自适应学习率。',
+    flow: ['计算当前 batch 的梯度', '按学习率缩放步长', '用动量平滑更新方向', '用一阶二阶矩估计自适应调整'],
+    notes: ['全量梯度稳定但慢，单样本快但抖', '学习率是最关键的超参数', 'Adam 是 Transformer 训练的常用默认'],
+    problem: '固定学习率在参数尺度差异大时容易震荡或停滞。',
+    officialUrl: 'https://www.deeplearningbook.org/contents/optimization.html',
   },
   {
     id: 'LLM_13',
@@ -223,6 +225,11 @@ export const lessons: Lesson[] = [
     demoComponent: LLM13Backprop,
     code: LLM13Code,
     language: 'python',
+    principle: '反向传播在计算图上用链式法则从输出向输入逐层求导，一次前向保存中间值、一次反向得到全部参数梯度；连乘导致梯度消失或爆炸。',
+    flow: ['前向计算并保存中间激活', '从损失对输出求导', '按链式法则逐层回传', '累加各参数梯度并更新'],
+    notes: ['共享参数需要累加梯度', '梯度消失可用 ReLU、残差、归一化缓解', '梯度爆炸可用裁剪与更小学习率控制'],
+    problem: '数值差分求梯度成本随参数量线性增长，无法用于大模型。',
+    officialUrl: 'https://www.3blue1brown.com/lessons/backpropagation',
   },
   {
     id: 'LLM_14',
@@ -235,6 +242,11 @@ export const lessons: Lesson[] = [
     demoComponent: LLM14Ngram,
     code: LLM14Code,
     language: 'python',
+    principle: 'N-gram 基于马尔可夫假设，用最近 N−1 个词的共现频率估计下一个词的条件概率；它把词当离散符号，组合数量随 N 指数增长。',
+    flow: ['统计语料中的 N 元组频次', '用频次比值估计条件概率', '按概率采样或取最大', '用平滑处理未见组合'],
+    notes: ['N 越大上下文越长，但稀疏越严重', '平滑可避免零概率', '无法建模词与词之间的语义相似'],
+    problem: '词表很大时绝大多数 N 元组从未出现，概率被判为零。',
+    officialUrl: 'https://web.stanford.edu/~jurafsky/slp3/',
   },
   {
     id: 'LLM_15',
@@ -247,6 +259,11 @@ export const lessons: Lesson[] = [
     demoComponent: LLM15Word2Vec,
     code: LLM15Code,
     language: 'python',
+    principle: '词向量把词映射为稠密向量，分布式假设认为上下文相似的词语义相近；Word2Vec 用遮词或跳词预测训练，使语义关系表现为向量方向。',
+    flow: ['随机初始化词向量', '用上下文预测中心词或反之', '按预测误差更新相关向量', '得到语义空间中的稠密表示'],
+    notes: ['相似词在向量空间中距离更近', '国王−男人+女人≈女王来自训练后的几何结构', '每词一个固定向量，无法区分一词多义'],
+    problem: '独热向量维度等于词表且任意两词距离相同，无法表达语义相似。',
+    officialUrl: 'https://arxiv.org/abs/1301.3781',
   },
   {
     id: 'LLM_16',
@@ -259,30 +276,28 @@ export const lessons: Lesson[] = [
     demoComponent: LLM16Ffnn,
     code: LLM16Code,
     language: 'python',
+    principle: '前馈语言模型把最近 N 个词的词向量拼接后经隐藏层预测下一个词；词向量让未见组合获得相近输入，缓解稀疏，但上下文窗口仍然固定。',
+    flow: ['取最近 N 个词的词向量', '拼接后送入全连接层', '输出词表上的概率分布', '按交叉熵训练词向量与权重'],
+    notes: ['词向量与网络参数联合训练', '相似词带来相似输入，可泛化到未见组合', '窗口大小仍是硬限制'],
+    problem: 'N-gram 的稀疏灾难来自把词当独立符号，未见组合概率为零。',
+    officialUrl: 'https://www.jmlr.org/papers/volume3/bengio03a/bengio03a.pdf',
   },
   {
     id: 'LLM_17',
-    title: 'RNN循环网络与记忆',
-    navTitle: 'RNN',
+    title: 'RNN、LSTM 与记忆阀门',
+    navTitle: 'RNN 与 LSTM',
     category: '自然语言处理',
     path: '/llm-principles/llm-17/rnn',
-    summary: 'RNN 用随读词更新的记忆向量 h = tanh(W[词, 旧记忆]+b) 挣脱固定窗口，整条序列复用同一套参数；但旧记忆随距离逐词稀释、梯度沿时间连乘消失，学不到远距离依赖。',
+    summary: 'RNN 用随词更新的记忆向量挣脱固定窗口，却因逐词稀释与梯度连乘记不住远处；LSTM 拆出长期记忆 C 和三扇 sigmoid 门，有选择地忘记、写入、读出，代价是无法并行。',
     demo: null,
-    demoComponent: LLM17Rnn,
+    demoComponent: LLM17RnnLstm,
     code: LLM17Code,
     language: 'python',
-  },
-  {
-    id: 'LLM_18',
-    title: 'LSTM与记忆阀门',
-    navTitle: 'LSTM',
-    category: '自然语言处理',
-    path: '/llm-principles/llm-18/lstm',
-    summary: 'LSTM 用长期记忆 C（高速公路）+ 短期记忆 h 两条线，以忘记/写入/读出三扇由 sigmoid 算出的门「有选择」地保留信息，使记忆可几乎无损地传几十上百步、大幅缓解梯度消失；代价是必须顺序读词、无法并行。',
-    demo: null,
-    demoComponent: LLM18Lstm,
-    code: LLM18Code,
-    language: 'python',
+    principle: 'RNN 用隐藏状态 h 逐步读入序列，同套参数在所有时间步复用；LSTM 增加长期记忆 C 与输入门、遗忘门、输出门，让信息有选择地保留。',
+    flow: ['读入当前词与上一步记忆', '线性变换后经 tanh 得到新记忆', 'LSTM 用三扇门控制写入、遗忘、读出', '输出当前步结果并传递状态'],
+    notes: ['RNN 沿时间连乘梯度，长依赖易消失', 'LSTM 的 C 提供近似恒等的高速通道', '顺序计算限制并行，是 Transformer 的动机之一'],
+    problem: '固定窗口看不到更早的词，代词指代等长距离依赖无法建模。',
+    officialUrl: 'https://colah.github.io/posts/2015-08-Understanding-LSTMs/',
   },
   {
     id: 'LLM_19',
@@ -295,30 +310,28 @@ export const lessons: Lesson[] = [
     demoComponent: LLM19Attention,
     code: LLM19Code,
     language: 'python',
+    principle: '注意力用 Query 与所有 Key 的点积打分，经缩放与 softmax 得到权重，再对 Value 加权求和；每个位置可直接访问任意距离的上下文，且可并行计算。',
+    flow: ['线性投影得到 Q、K、V', '计算 QKᵀ 并除以 √d_k', 'softmax 归一成注意力权重', '对 V 加权求和得到输出'],
+    notes: ['缩放避免高维点积使 softmax 饱和', '因果掩码保证解码器看不到未来', '计算复杂度随序列长度呈 O(n²)'],
+    problem: 'RNN 必须顺序传递信息，远距离依赖会被逐步稀释。',
+    officialUrl: 'https://arxiv.org/abs/1706.03762',
   },
   {
     id: 'LLM_20',
-    title: '多头注意力与并行分工',
-    navTitle: '多头注意力',
+    title: '多头注意力与 Transformer 架构',
+    navTitle: '多头与 Transformer',
     category: '大语言模型',
     path: '/llm-principles/llm-20/multihead',
-    summary: '多头注意力并排跑 H 套独立的 Query/Key/Value，每个头借用 d/H 维的低维工作空间各抓一种关系，拼接后经线性层融合；总成本几乎等同单头，却能同时建模多种关系（乃至涌现归纳头等上下文能力）。',
+    summary: '多头注意力让 H 套独立 Q/K/V 各抓一种关系，拼接后再融合；把多头注意力与 FFN 交替堆叠、加位置编码与残差，就是可并行的 Transformer——GPT 与 BERT 的共同地基。',
     demo: null,
-    demoComponent: LLM20Multihead,
+    demoComponent: LLM20MultiheadTransformer,
     code: LLM20Code,
     language: 'python',
-  },
-  {
-    id: 'LLM_21',
-    title: 'Transformer架构与地基',
-    navTitle: 'Transformer',
-    category: '大语言模型',
-    path: '/llm-principles/llm-21/transformer',
-    summary: '一个 Transformer block = 注意力（横向通信）+ 前馈网络 FFN（纵向加工），配位置编码把顺序塞回输入，可并行、可堆叠，末尾线性层 + softmax 预测下一个词；正是 GPT、BERT 等一切大模型的地基。',
-    demo: null,
-    demoComponent: LLM21Transformer,
-    code: LLM21Code,
-    language: 'python',
+    principle: '多头注意力把模型维度拆成 H 份，各头独立学习一种关系后拼接融合；Transformer 块由多头注意力、前馈网络、残差与归一化组成，可并行堆叠。',
+    flow: ['把 Q、K、V 投影到 H 个子空间', '各头独立做缩放点积注意力', '拼接各头输出并线性融合', '接 FFN、残差与归一化堆叠成块'],
+    notes: ['总计算量与单头相近，表达力更强', '位置编码补回顺序信息', '解码器用掩码自注意力保持自回归'],
+    problem: '单套 Q/K/V 只能表达一种关系，指代、语法、语义会互相干扰。',
+    officialUrl: 'https://jalammar.github.io/illustrated-transformer/',
   },
   {
     id: 'LLM_22',
@@ -331,6 +344,11 @@ export const lessons: Lesson[] = [
     demoComponent: LLM22Tokenizer,
     code: LLM22Code,
     language: 'python',
+    principle: 'Tokenizer 把文本切成词表内的子词并映射为整数 ID；BPE 从字符开始反复合并高频相邻对，在词表大小与未登录词之间取得平衡。',
+    flow: ['把文本按规则预切分', '用 BPE 等算法合并高频子词', '查词表得到 token ID', '解码时按规则拼回文本'],
+    notes: ['模型处理的是 token，不是字符', '稀有词会被拆成多个子词', '中文与代码的 token 效率通常低于英文'],
+    problem: '词表过大会稀疏，过小则大量未登录词，字符级又让序列过长。',
+    officialUrl: 'https://huggingface.co/learn/nlp-course/chapter6/1',
   },
   {
     id: 'LLM_23',
@@ -343,6 +361,11 @@ export const lessons: Lesson[] = [
     demoComponent: LLM23Arch,
     code: LLM23Code,
     language: 'python',
+    principle: '按可见范围区分架构：双向编码器看全句适合理解，因果解码器遮住未来适合生成，编码器-解码器先编码再解码；纯解码器因统一任务形式成为主流。',
+    flow: ['编码器双向读取输入', '解码器逐 token 自回归生成', '交叉注意力对齐输入与输出', '按任务选择掩码方式'],
+    notes: ['BERT 类使用双向注意力', 'GPT 类使用因果掩码', '编码器-解码器适合翻译等序列到序列任务'],
+    problem: '生成任务不能看到未来 token，理解任务又希望利用双向上下文。',
+    officialUrl: 'https://huggingface.co/learn/nlp-course/chapter1/1',
   },
   {
     id: 'LLM_24',
@@ -355,6 +378,11 @@ export const lessons: Lesson[] = [
     demoComponent: LLM24Residual,
     code: LLM24Code,
     language: 'python',
+    principle: '残差连接 y=f(x)+x 为梯度提供恒等捷径，LayerNorm 对每个 token 的特征做归一化稳定数值；Pre-LN 把归一化放在子层前，使深层训练更稳定。',
+    flow: ['子层计算 f(x)', '与输入相加得到 f(x)+x', '对特征维做均值方差归一化', '按 Pre-LN 或 Post-LN 排列'],
+    notes: ['残差缓解深度方向的梯度消失', 'LayerNorm 不跨样本统计，适合变长序列', 'Pre-LN 通常比 Post-LN 更易训练深层网络'],
+    problem: '上百层网络沿深度连乘梯度，信号极易衰减或爆炸。',
+    officialUrl: 'https://arxiv.org/abs/1607.06450',
   },
   {
     id: 'LLM_25',
@@ -365,6 +393,11 @@ export const lessons: Lesson[] = [
     summary: '从「会接话」到「会帮忙」要跨三步：预训练在海量文本上预测下一个词获得知识，SFT 用指令-回答范例且只算回答段损失学格式，RLHF 用人类两两偏好炼出奖励模型、配合 KL 缰绳拧出价值观（PPO → DPO）。',
     demo: null,
     demoComponent: LLM25Training,
+    principle: '大模型训练分三阶段：预训练用下一个 token 预测获得通用能力，SFT 用指令-回答数据学习格式，RLHF/DPO 用人类偏好对齐行为。',
+    flow: ['海量文本上自监督预训练', '指令数据监督微调', '训练奖励模型或直接偏好优化', '用 KL 约束防止偏离基座模型'],
+    notes: ['SFT 通常只对回答部分计算损失', 'RLHF 需奖励模型，DPO 可跳过显式奖励', '对齐阶段数据质量比数量更关键'],
+    problem: '预训练模型只会续写，不会按指令安全地完成任务。',
+    officialUrl: 'https://arxiv.org/abs/2203.02155',
   },
   {
     id: 'LLM_26',
@@ -375,6 +408,11 @@ export const lessons: Lesson[] = [
     summary: '注意力的账单是 O(n²)：稀疏注意力只让部分 token 配对来「少算」，KV 缓存复用已算好的 K/V 来「不重算」，FlashAttention 用在线 softmax 分块在 SRAM 中计算、使大矩阵不落显存来「快搬」；三者可叠加支撑长上下文。',
     demo: null,
     demoComponent: LLM26Sparse,
+    principle: '注意力 O(n²) 的成本可通过稀疏化减少配对、KV 缓存避免重复计算、FlashAttention 分块与在线 softmax 减少显存读写来优化。',
+    flow: ['识别注意力计算与显存瓶颈', '用稀疏模式减少 QK 配对', '缓存历史 K/V 供自回归复用', '用分块与在线 softmax 降低 HBM 读写'],
+    notes: ['KV 缓存以显存换解码速度', 'FlashAttention 不改变数学结果，只改变计算顺序', '长上下文通常需要多种手段叠加'],
+    problem: '序列变长时注意力计算与 KV 缓存显存都按平方或线性快速增长。',
+    officialUrl: 'https://arxiv.org/abs/2205.14135',
   },
   {
     id: 'LLM_27',
@@ -387,6 +425,11 @@ export const lessons: Lesson[] = [
     demoComponent: LLM27Moe,
     code: LLM27Code,
     language: 'python',
+    principle: 'MoE 把 FFN 替换为多个专家和一个路由器，每个 token 只激活 Top-K 专家；总参数决定容量，激活参数决定计算量。',
+    flow: ['路由器为 token 打分', '选择 Top-K 专家', '各专家独立计算并加权合并', '用负载均衡损失防止专家塌缩'],
+    notes: ['总参数与激活参数需要区分', '专家需常驻显存，带来内存压力', '跨卡路由引入通信开销'],
+    problem: '稠密模型扩大参数量时，每个 token 的计算成本同步上升。',
+    officialUrl: 'https://arxiv.org/abs/2101.03961',
   },
   {
     id: 'LLM_28',
@@ -399,25 +442,25 @@ export const lessons: Lesson[] = [
     demoComponent: LLM28Distill,
     code: LLM28Code,
     language: 'python',
+    principle: '蒸馏让学生模型拟合教师模型的软标签分布，软标签携带类别间的相对关系；温度 T 放大暗知识，损失由蒸馏项与真实标签项加权组成。',
+    flow: ['教师模型对样本输出 logits', '升温后 softmax 得到软分布', '学生模型拟合软分布', '与真实标签交叉熵加权合并'],
+    notes: ['软标签比硬标签提供更多类间信息', '温度过高会过度平滑', '蒸馏可压缩模型而不必改结构'],
+    problem: '部署环境算力有限，而大模型参数与延迟过高。',
+    officialUrl: 'https://arxiv.org/abs/1503.02531',
   },
   {
     id: 'LLM_29',
-    title: '原理串讲到Transformer',
-    navTitle: '原理串讲',
-    category: '大语言模型',
+    title: '原理串讲与前沿展望',
+    navTitle: '串讲与前沿',
+    category: '收束与展望',
     path: '/llm-principles/llm-29/recap',
-    summary: '把 30 课串成一条线——每一代技术，都是来解上一代那个死结的。',
+    summary: '把前面各代技术按「上一代死结 → 这一代解法」串成一条线，再看向推理时计算、多模态、智能体、长上下文与效率优化等正在发生的前沿方向。',
     demo: null,
-    demoComponent: LLM29Recap,
-  },
-  {
-    id: 'LLM_30',
-    title: '前沿未来与下一程',
-    navTitle: '前沿与未来',
-    category: '大语言模型',
-    path: '/llm-principles/llm-30/frontier',
-    summary: '看懂当下最活跃的方向与几道硬墙：推理与测试时计算（多想几步）、多模态、智能体、更长上下文与更省（MoE/量化/蒸馏），以及数据、对齐与安全、架构 O(n²)、评测这四道绕不开的难题。',
-    demo: null,
-    demoComponent: LLM30Frontier,
+    demoComponent: LLM29RecapFrontier,
+    principle: '按「上一代死结 → 这一代解法」串联 N-gram、词向量、RNN、注意力与 Transformer；前沿方向集中在推理时计算、多模态、智能体、长上下文与效率优化。',
+    flow: ['回看每一代技术要解决的死结', '理解解法带来的新限制', '把 Transformer 放回演进链条', '用同样框架观察前沿方向'],
+    notes: ['没有一种架构解决所有问题', '前沿结论仍在变化，需要持续验证', '判断新名词先问它解决了什么死结'],
+    problem: '知识点孤立记忆容易遗忘，也难以判断新技术为何出现。',
+    officialUrl: 'https://huggingface.co/learn/nlp-course',
   },
 ]

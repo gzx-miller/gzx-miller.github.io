@@ -30,8 +30,8 @@ import N07UseFetch from './N07UseFetch.vue'
     <h2>服务端预取与键复用</h2>
     <ul>
       <li>它默认会在<strong>服务端</strong>执行。如果这个接口依赖只有浏览器才有的信息，服务端取到的可能是错的，甚至直接报错。</li>
-      <li>服务端与客户端之间的复用靠的是一把「自动生成的 key」。两个不同的请求如果算出了<strong>同一个 key</strong>，就会互相顶掉对方的数据——你以为各取各的，实际共享了同一份缓存。</li>
-      <li>它只在<strong>能被追踪到的依赖</strong>变化时重新请求。URL 里放的是 <code>ref</code> 才会建立响应式依赖；用普通变量拼出 URL，值变了它也不会重发。</li>
+      <li>服务端与客户端之间的复用靠的是一把「自动生成的 key」。自动 key 由 URL、请求选项与<strong>调用位置</strong>共同推导，<strong>每个调用点各自唯一</strong>；同一调用点（含同一组件的多个实例）才共享状态，跨组件的同 URL 请求不会自动共享。</li>
+      <li>它只在<strong>能被追踪到的依赖</strong>变化时重新请求。URL 要传成 <code>ref</code>、<code>computed</code> 或 getter（如 <code>() =&gt; `/api/users/${id.value}`</code>）才会建立响应式依赖；用模板字符串直接取 <code>id.value</code> 拼成一个普通字符串，值变了它也不会重发。</li>
       <li>有些接口（图表数据、个性化推荐）本来就只该在浏览器请求，默认的 SSR 执行反而帮了倒忙。</li>
     </ul>
 
@@ -40,13 +40,13 @@ import N07UseFetch from './N07UseFetch.vue'
       先看清它替你做了什么，再一层层补上参数、状态与开关。
     </p>
     <ol class="lesson-steps">
-      <li><strong>自动 key 与 payload 恢复</strong>：<code>useFetch</code> 会按请求 URL <strong>自动生成一把 key</strong>，再用这把 key 把「服务端取到的结果」写进随 HTML 一起下发的 <strong>payload</strong>。客户端 Hydration 时先查 payload，命中就直接拿——于是同一 URL 在服务端与客户端之间<strong>只请求一次</strong>。开场里那第二趟，正是手动 <code>onMounted</code> 拿不到 payload、只能自己再请求一遍的结果。</li>
-      <li><strong>参数与响应式 URL</strong>：用 <code>query</code>、<code>method</code> 等选项组合出完整请求；更关键的是把 <code>ref</code> 拼接进 URL 或放进 <code>query</code>，它的值一变，组件就会自动重新请求，不用你手写 watch。</li>
+      <li><strong>自动 key 与 payload 恢复</strong>：<code>useFetch</code> 会依据请求 URL、选项与<strong>调用位置</strong><strong>自动生成一把 key</strong>（每个调用点唯一），再用这把 key 把「服务端取到的结果」写进随 HTML 一起下发的 <strong>payload</strong>。客户端 Hydration 时先查 payload，命中就直接拿——于是同一调用点在服务端与客户端之间<strong>只请求一次</strong>。开场里那第二趟，正是手动 <code>onMounted</code> 拿不到 payload、只能自己再请求一遍的结果。</li>
+      <li><strong>参数与响应式 URL</strong>：用 <code>query</code>、<code>method</code> 等选项组合出完整请求；更关键的是把 URL 写成返回字符串的 getter（或 <code>computed</code>），或把 <code>ref</code> 放进 <code>query</code>，它的值一变，组件就会自动重新请求，不用你手写 watch。</li>
       <li><strong>刷新与错误</strong>：<code>pending</code> 驱动加载态、<code>error</code> 驱动错误提示，需要重取时调用 <code>refresh()</code>。加载、失败、刷新三条路径都收在同一套返回值里，不必再各自写一遍。</li>
       <li><strong>仅客户端请求</strong>：对只在浏览器才成立的接口，加上 <code>server: false</code> 就能跳过服务端执行，改为仅在客户端发起。</li>
     </ol>
     <div class="lesson-box warn">
-      <strong>当心自动 key：</strong><code>useFetch</code> 的 key 是按 URL 生成的，<strong>同一 URL 会共享同一份结果</strong>。若你有两处请求 URL 相同、其实想要不同数据，它们会撞在同一把 key 上互相覆盖；反过来，同一 key 的请求在页面切换之间还能直接复用缓存，需要强制刷新时用 <code>refresh()</code>，或干脆换成不同的 key。
+      <strong>当心自动 key：</strong><code>useFetch</code> 的自动 key 按<strong>调用点</strong>生成——不同组件里即使 URL 相同，也各自发起请求、互不共享；同一组件的多个实例则共享同一份状态。若确实想让多个组件共用同一份 <code>data</code>、<code>error</code> 与 <code>status</code>，就给它们传同一个显式 <code>key</code>；只有撞了同一个显式 key 才会互相覆盖，需要强制刷新时用 <code>refresh()</code>。
     </div>
 
     <h2>四个返回值分工</h2>
@@ -57,10 +57,10 @@ import N07UseFetch from './N07UseFetch.vue'
 
     <h2>一次取数与两端复用</h2>
     <p>
-      <code>useFetch</code> 的省心之处，在于它把「服务端取一次、客户端复用」这条链路封进了一句声明：按 URL 自动生成 key，SSR 的结果写进 payload，客户端 Hydration 时直接恢复，于是同一 URL 只请求一次。记住两条边界——<strong>它默认在服务端执行</strong>、<strong>同 URL 共享同一把 key 与缓存</strong>——就能既拿到 SSR 的首屏数据，又不重复请求。
+      <code>useFetch</code> 的省心之处，在于它把「服务端取一次、客户端复用」这条链路封进了一句声明：按调用点自动生成 key，SSR 的结果写进 payload，客户端 Hydration 时直接恢复，于是同一调用点只请求一次。记住两条边界——<strong>它默认在服务端执行</strong>、<strong>自动 key 按调用点唯一</strong>——就能既拿到 SSR 的首屏数据，又不重复请求。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「useFetch」</span>Nuxt 提供的声明式数据获取 composable，本质是 <code>useAsyncData(key, () =&gt; $fetch(url))</code> 的封装：<strong>按请求 URL 自动生成 key</strong>，SSR 时在服务端发起请求并把结果写进 payload，客户端 Hydration 时从 payload 恢复，因此同一 URL 不会重复请求。边界：<strong>默认在服务端执行</strong>（<code>server: false</code> 可改为仅客户端）；响应式 URL 与 <code>query</code> 变化会自动重发；同一 key 在页面切换间复用缓存，强制刷新用 <code>refresh()</code> 或更换 key。
+      <span class="term-name">「useFetch」</span>Nuxt 提供的声明式数据获取 composable，本质是 <code>useAsyncData(key, () =&gt; $fetch(url))</code> 的封装：<strong>依据 URL、选项与调用位置自动生成 key（每个调用点唯一）</strong>，SSR 时在服务端发起请求并把结果写进 payload，客户端 Hydration 时从 payload 恢复，因此同一调用点不会重复请求。边界：<strong>默认在服务端执行</strong>（<code>server: false</code> 可改为仅客户端）；响应式 URL 与 <code>query</code> 变化会自动重发；同一调用点的结果在页面切换间复用缓存，跨组件共享需显式传同一个 <code>key</code>，强制刷新用 <code>refresh()</code>。
     </div>
   </LessonArticle>
 </template>

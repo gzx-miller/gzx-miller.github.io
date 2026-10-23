@@ -59,10 +59,10 @@ import X01ProjectStructure from './X01ProjectStructure.vue'
       其中 <code>error.tsx</code> 需要特别留意：因为它要处理「重试」这类交互，所以文件顶部必须写 <code>'use client'</code>，组件会收到 <code>error</code> 与 <code>reset</code> 两个参数，前者用于上报日志（常见做法是在 <code>useEffect</code> 里打印），后者用于重新渲染出错的那一段。
     </p>
     <p>
-      除了 <code>app/</code>，项目根还有两个常被问到的位置：<code>public/</code> 放静态资源，目录下的文件可以直接通过 <code>/</code> 访问（例如 <code>public/logo.png</code> 对应 <code>/logo.png</code>）；<code>next.config.js</code> 则是框架配置文件，像允许远程图片域名、开启严格模式这类开关都写在这里。
+      除了 <code>app/</code>，项目根还有两个常被问到的位置：<code>public/</code> 放静态资源，目录下的文件可以直接通过 <code>/</code> 访问（例如 <code>public/logo.png</code> 对应 <code>/logo.png</code>）；<code>next.config.ts</code> 则是框架配置文件，像允许远程图片域名、开启严格模式这类开关都写在这里。
     </p>
     <div class="lesson-box warn">
-      <strong>两个容易踩的坑：</strong>其一，<code>pages/</code> 目录仍能运行，但已逐步淘汰，新项目请统一用 <code>app/</code>；其二，迁移期间 <code>pages/</code> 与 <code>app/</code> 可以并存，<strong>但同一条路径不能在两处同时定义</strong>，否则会在构建时冲突报错。
+      <strong>两个容易踩的坑：</strong>其一，<code>pages/</code>（Pages Router）仍受支持，但新项目应优先使用 <code>app/</code>；其二，迁移期间 <code>pages/</code> 与 <code>app/</code> 可以并存，<strong>但同一条路径不能在两处同时定义</strong>，否则会在构建时冲突报错。
     </div>
 
     <h2>文件职责归属</h2>
@@ -76,7 +76,7 @@ import X01ProjectStructure from './X01ProjectStructure.vue'
       项目结构这一课，真正的转变是「路由从配置文件搬进了目录结构」：目录层级即 URL，<code>page.tsx</code> 是唯一入口，<code>layout</code>／<code>loading</code>／<code>error</code>／<code>not-found</code> 则把共享外壳与各种状态收进约定文件名。你不再维护路由表，只需要按约定摆放文件。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「App Router」</span>是 Next.js 基于文件系统的路由方案：以 <code>app/</code> 目录组织代码，目录层级即 URL 层级，<code>page.tsx</code> 是唯一的路由入口，<code>layout.tsx</code> 提供共享布局（根布局必须含 <code>&lt;html&gt;</code> 与 <code>&lt;body&gt;</code>），<code>loading</code>／<code>error</code>／<code>not-found</code> 分别约定加载、错误与 404 状态。<code>pages/</code> 仍可运行但已逐步淘汰，两者并存时同一路径不可重复定义。
+      <span class="term-name">「App Router」</span>是 Next.js 基于文件系统的路由方案：以 <code>app/</code> 目录组织代码，目录层级即 URL 层级，<code>page.tsx</code> 是唯一的路由入口，<code>layout.tsx</code> 提供共享布局（根布局必须含 <code>&lt;html&gt;</code> 与 <code>&lt;body&gt;</code>），<code>loading</code>／<code>error</code>／<code>not-found</code> 分别约定加载、错误与 404 状态。<code>pages/</code>（Pages Router）仍受支持，但新项目应优先使用 <code>app/</code>；两者并存时同一路径不可重复定义。
     </div>
   </LessonArticle>
 </template>

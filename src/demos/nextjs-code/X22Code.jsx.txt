@@ -59,9 +59,10 @@ export function Analytics() {
 
 // ============================================
 
-// next.config.js - 完整配置示例
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+// next.config.ts - 完整配置示例
+import type { NextConfig } from 'next'
+
+const nextConfig: NextConfig = {
   // React 严格模式
   reactStrictMode: true,
 
@@ -107,15 +108,9 @@ const nextConfig = {
 
   // 压缩
   compress: true,
-
-  // 构建指示器
-  devIndicators: {
-    buildActivity: true,
-    buildActivityPosition: 'bottom-right',
-  },
 }
 
-module.exports = nextConfig
+export default nextConfig
 
 // ============================================
 
@@ -125,14 +120,13 @@ module.exports = nextConfig
 
 // output: 'export' - 纯静态导出
 // 生成完全静态的 HTML 文件，可部署到任何静态托管
-// 限制：不支持 Server Actions、Middleware、Image Optimization、API Routes
+// 限制：不支持 Server Actions、Proxy、Image Optimization、ISR；Route Handler 仅支持静态 GET
 
 // ============================================
 
-// 在 next.config.js 中使用环境变量
-// next.config.js
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+// 在 next.config.ts 中使用环境变量
+// next.config.ts
+const nextConfig: NextConfig = {
   env: {
     // 也可以在这里定义，但推荐用 .env 文件
     CUSTOM_VAR: 'value',

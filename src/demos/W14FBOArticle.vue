@@ -38,7 +38,7 @@ import W14FBO from './W14FBO.vue'
     </p>
     <ol class="lesson-steps">
       <li>创建 FBO 并绑定，创建一张颜色纹理作为 <code>COLOR_ATTACHMENT0</code> 附件：用 <code>texImage2D</code> 分配一张 RGBA 空纹理（数据传 <code>null</code>），并设好 <code>filter</code> 与 <code>wrap</code>。</li>
-      <li>配齐深度附件（<code>DEPTH_ATTACHMENT</code>，用一个 renderbuffer），否则深度遮挡会错。</li>
+      <li>本课的 3D 场景还需要深度附件（<code>DEPTH_ATTACHMENT</code>，用一个 renderbuffer），否则前后遮挡会错。</li>
       <li>用 <code>checkFramebufferStatus</code> 检查完整性，只有返回 <code>FRAMEBUFFER_COMPLETE</code> 才算配好。</li>
       <li>第一遍：绑定 FBO，把场景渲染到它的颜色纹理里。</li>
       <li>第二遍：<code>bindFramebuffer(FRAMEBUFFER, null)</code> 切回默认帧缓冲，用一块全屏四边形采样那张纹理显示出来。</li>
@@ -50,7 +50,7 @@ import W14FBO from './W14FBO.vue'
       第二遍的「画布」是一块<strong>全屏四边形</strong>：顶点直接在顶点着色器里输出 NDC 坐标（<code>gl_Position = vec4(aPosition, 0.0, 1.0)</code>），UV 由顶点位置换算，正好覆盖整屏。它的片段着色器 <code>texture2D</code> 采样 FBO 纹理，再对取到的颜色做逐像素处理——原样、反相、灰度、棕褐，想加哪种就加哪种。这样一来，同一份场景只要换一个处理分支，就能得到不同效果，<strong>完全不必回去改每个物体的着色器</strong>。
     </p>
     <div class="lesson-box warn">
-      <strong>三条别踩的线：</strong>FBO 不存储图像本身，它只是一组附件的挂载点，把颜色纹理挂上去，离屏结果才可被采样；切回屏幕一定要 <code>bindFramebuffer(null)</code>，否则会继续往离屏纹理上画；离屏纹理的尺寸通常取与屏幕分辨率一致（或按比例），第二遍映射时才不会被拉伸变形。
+      <strong>三条别踩的线：</strong>FBO 不存储图像本身，它只是一组附件的挂载点，把颜色纹理挂上去，离屏结果才可被采样；切回屏幕一定要 <code>bindFramebuffer(null)</code>，否则会继续往离屏纹理上画；离屏纹理尺寸可以按质量与性能需求选择；若第二遍要 1:1 贴合屏幕，就让它与屏幕分辨率一致，避免拉伸变形。
     </div>
     <p>
       最后记住一点格局：这条「渲到纹理、再读回来」的通道，是后处理、阴影映射、G-Buffer、镜像水面等一大批高级技术<strong>共用的地基</strong>。本课先把最基础的一步走通：把场景画进纹理，再从纹理里把它读出来。

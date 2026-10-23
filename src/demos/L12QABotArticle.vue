@@ -45,19 +45,19 @@ import L12QABot from './L12QABot.vue'
       不推翻「检索 + 生成」，而是把这条固定流水线升级成一个<strong>能自己决定动作的执行者</strong>，再给整条环路补上记忆。
     </p>
     <p>
-      第一步补<strong>记忆</strong>，因为它是后面所有环节的前提。用 <code>RunnableWithMessageHistory</code> 按 <code>sessionId</code> 注入历史消息，底层用 <code>ChatMessageHistory</code> 存每一轮问答。先补它，是因为代词的指代对象就藏在历史里——没有历史，连「它」是谁都无从谈起。
+      第一步补<strong>记忆</strong>，因为它是后面所有环节的前提。v1 用 <code>createAgent</code> 配合 <code>checkpointer</code>（如 <code>MemorySaver</code>），调用时在 <code>configurable.thread_id</code> 指定会话，框架就会按会话保存并注入历史消息。先补它，是因为代词的指代对象就藏在历史里——没有历史，连「它」是谁都无从谈起。
     </p>
     <p>
-      第二步把<strong>检索包装成工具</strong>，把决定权交给 Agent。Retriever 不再被无条件调用，而是封装成一个带名字和描述的工具（如 <code>knowledge_base_search</code>），交给 <code>createToolCallingAgent</code>。Agent 先推理「这个问题要不要查、该查什么」，再决定是否调用工具、调几次。这样寒暄就不查库，复杂问题能来回查多轮。
+      第二步把<strong>检索包装成工具</strong>，把决定权交给 Agent。Retriever 不再被无条件调用，而是用 <code>tool()</code> 加 Zod 参数 schema 封装成一个带名字和描述的工具（如 <code>knowledge_base_search</code>），交给 <code>createAgent</code>。Agent 先推理「这个问题要不要查、该查什么」，再决定是否调用工具、调几次。这样寒暄就不查库，复杂问题能来回查多轮。
     </p>
     <p>
-      第三步补<strong>带记忆的 Agent</strong>：用 <code>AgentExecutor</code> 执行，外面再套一层 <code>RunnableWithMessageHistory</code>，把历史注入到 <code>chat_history</code> 占位符，<code>agent_scratchpad</code> 则留给 Agent 记录自己的思考与工具调用轨迹。至此，整条环路按下面的顺序转起来：
+      第三步补<strong>带记忆的 Agent</strong>：直接 <code>createAgent({ model, tools, checkpointer })</code>，由框架维护 <code>messages</code> 状态，检查点按 <code>thread_id</code> 保存历史，不再需要手工拼 <code>agent_scratchpad</code>。旧版 <code>AgentExecutor</code> + <code>RunnableWithMessageHistory</code> 的写法仅用于维护旧代码。至此，整条环路按下面的顺序转起来：
     </p>
     <ol class="lesson-steps">
       <li>从 Memory 中取出该会话的历史，让 Agent 知道用户之前问过什么、代词指向谁。</li>
       <li>Agent 判断是否需要检索；需要就通过 Retriever 从 VectorStore 查回相关文档片段。</li>
       <li>Agent 结合检索结果与历史上下文，推理生成最终答案。</li>
-      <li>把本轮问答写回 Memory，供下一轮继续引用。</li>
+      <li>把本轮问答写回检查点，供下一轮继续引用。</li>
     </ol>
     <div class="lesson-box warn">
       <strong>上线前必须认清的两个瓶颈：</strong>检索质量是 RAG 成败的关键——文档切分和检索策略（k 的大小、重排、混合检索）对最终答案的影响，往往比换模型更大；多轮对话里检索查询要结合历史做改写（指代消解），否则代词会让检索跑偏。此外，Agent 本身不是 100% 可靠，生产环境要准备降级：Agent 失败时回退到简单的链式问答，别让整条路一起挂。

@@ -6,7 +6,7 @@ const middlewareType = ref<'named' | 'global' | 'page'>('named')
 const middlewareData = {
   named: {
     title: '命名中间件',
-    code: `// middleware/auth.ts
+    code: `// app/middleware/auth.ts
 export default defineNuxtRouteMiddleware((to, from) => {
   const isLoggedIn = false // 模拟判断
   if (!isLoggedIn && to.path.startsWith('/admin')) {
@@ -21,7 +21,7 @@ definePageMeta({
   },
   global: {
     title: '全局中间件',
-    code: `// middleware/stats.global.ts
+    code: `// app/middleware/stats.global.ts
 // 文件名带 .global 后缀自动全局生效
 export default defineNuxtRouteMiddleware((to, from) => {
   console.log('页面访问：', to.path)

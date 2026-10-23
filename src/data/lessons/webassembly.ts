@@ -103,6 +103,7 @@ export const lessons: Lesson[] = [
       'instantiate 前引擎会先做类型校验，非法模块抛出 CompileError 被拒绝。',
     ],
     problem: '解决"只见过 .wasm 文件却读不懂其二进制结构，也没法在浏览器里把它实例化调用"的问题。',
+    officialUrl: 'https://webassembly.github.io/spec/core/binary/modules.html',
   },
   {
     id: 'WB_2',
@@ -130,6 +131,8 @@ export const lessons: Lesson[] = [
       '调试时可用 wasm2wat 反编译任意 .wasm 文件。',
     ],
     problem: '解决"拿到 .wasm 二进制无从下手，需要一份可读文本逐条对照指令含义"的问题。',
+    officialUrl:
+      'https://developer.mozilla.org/en-US/docs/WebAssembly/Guides/Understanding_the_text_format',
   },
   {
     id: 'WB_3',
@@ -157,6 +160,7 @@ export const lessons: Lesson[] = [
       '类型系统是验证器安全检查与高效编译的基础。',
     ],
     problem: '解决"跨语言写 Wasm 时类型对不上：i64 传参报错、f32 精度悄悄丢失却找不到原因"的问题。',
+    officialUrl: 'https://webassembly.github.io/spec/core/syntax/types.html',
   },
   {
     id: 'WB_4',
@@ -184,6 +188,8 @@ export const lessons: Lesson[] = [
       '指令不直接访问内存，须用显式的 load / store 指令。',
     ],
     problem: '解决"看 WAT 时不明白运算指令怎么在栈上取操作数、算完的结果又去了哪里"的问题。',
+    officialUrl:
+      'https://webassembly.github.io/spec/core/syntax/instructions.html#numeric-instructions',
   },
   {
     id: 'WB_5',
@@ -211,6 +217,8 @@ export const lessons: Lesson[] = [
       '内存按页增长，1 页 = 64KiB = 65536 字节。',
     ],
     problem: '解决"Wasm 里数据存哪里，以及 JS 写入的数据如何与 Wasm 共享、互不拷贝"的问题。',
+    officialUrl:
+      'https://developer.mozilla.org/en-US/docs/WebAssembly/Reference/JavaScript_interface/Memory',
   },
   {
     id: 'WB_6',
@@ -238,6 +246,7 @@ export const lessons: Lesson[] = [
       'wasm-bindgen 等工具可自动生成字符串编解码胶水代码。',
     ],
     problem: '解决"Wasm 没有字符串，JS 和 Wasm 之间如何传递字符串"的问题。',
+    officialUrl: 'https://developer.mozilla.org/en-US/docs/WebAssembly/Reference/Memory',
   },
   {
     id: 'WB_7',
@@ -265,6 +274,8 @@ export const lessons: Lesson[] = [
       '返回值类型必须与签名声明的 result 类型一致。',
     ],
     problem: '解决"写 Wasm 函数时参数与局部变量索引混在一起，取错值或返回值与签名对不上"的问题。',
+    officialUrl:
+      'https://webassembly.github.io/spec/core/syntax/instructions.html#variable-instructions',
   },
   {
     id: 'WB_8',
@@ -292,6 +303,7 @@ export const lessons: Lesson[] = [
       'Wasm 调用宿主导入的函数是同步的。',
     ],
     problem: '解决"Wasm 模块如何与 JS 交换能力（导入导出与全局状态）"的问题。',
+    officialUrl: 'https://webassembly.github.io/spec/core/syntax/modules.html',
   },
   {
     id: 'WB_9',
@@ -319,6 +331,7 @@ export const lessons: Lesson[] = [
       '对象等引用类型不能直接传入，需走内存指针或 externref。',
     ],
     problem: '解决"JS 数值传给 Wasm 时会发生什么转换、如何避免精度问题"的问题。',
+    officialUrl: 'https://developer.mozilla.org/en-US/docs/WebAssembly/Reference/JavaScript_interface',
   },
   {
     id: 'WB_10',
@@ -346,6 +359,8 @@ export const lessons: Lesson[] = [
       '表格元素类型统一为 funcref（引用类型）。',
     ],
     problem: '解决"Wasm 如何在运行时动态调用不同函数，JS 又如何干预"的问题。',
+    officialUrl:
+      'https://webassembly.github.io/spec/core/syntax/instructions.html#syntax-call-indirect',
   },
   {
     id: 'WB_11',
@@ -359,7 +374,7 @@ export const lessons: Lesson[] = [
     code: WB11Code,
     language: 'wat',
     principle:
-      'Wasm 不使用 goto，只有 block、loop、if/else 三种结构化控制结构，配合 br / br_if 按标签深度跳转来实现分支与循环。递归函数通过 call 调用自身，每次调用占用独立栈帧。fib 用 i32.lt_u 判断基线条件，else 分支递归调用 fib(n-1) 与 fib(n-2) 后求和。',
+      'Wasm 不使用 goto，核心结构化块是 block、loop、if/else（标准还包含 try_table 等），配合 br、br_if、br_table 按标签深度跳转来实现分支与循环。递归函数通过 call 调用自身，每次调用占用独立栈帧。fib 用 i32.lt_u 判断基线条件，else 分支递归调用 fib(n-1) 与 fib(n-2) 后求和。',
     flow: [
       '用 i32.lt_u 比较 n 与 2，作为递归基线条件的判断。',
       'if 的 then 分支在 n < 2 时直接返回 n。',
@@ -373,6 +388,8 @@ export const lessons: Lesson[] = [
       '深递归会占用大量栈帧，过大的 n 可能触发栈溢出异常。',
     ],
     problem: '解决"没有 goto 的 Wasm 里如何用 block/loop/br 表达分支、循环与递归"的问题。',
+    officialUrl:
+      'https://webassembly.github.io/spec/core/syntax/instructions.html#control-instructions',
   },
   {
     id: 'WB_12',
@@ -400,6 +417,8 @@ export const lessons: Lesson[] = [
       '越界访问会触发 RuntimeError，天然防缓冲区溢出。',
     ],
     problem: '解决"Wasm 没有数组类型，列表数据要如何按字节布局、用指针遍历求和"的问题。',
+    officialUrl:
+      'https://webassembly.github.io/spec/core/syntax/instructions.html#memory-instructions',
   },
   {
     id: 'WB_13',
@@ -427,6 +446,7 @@ export const lessons: Lesson[] = [
       '高频回调有跨边界开销，性能敏感时应批量传递数据。',
     ],
     problem: '解决"同一份 Wasm 二进制要在不同宿主环境表现不同，又不想编译多份、改一处要重编多次"的问题。',
+    officialUrl: 'https://developer.mozilla.org/en-US/docs/WebAssembly/Guides/Using_the_JavaScript_API',
   },
   {
     id: 'WB_14',
@@ -454,6 +474,7 @@ export const lessons: Lesson[] = [
       '引用类型让 Wasm 安全地保管宿主对象而无需拷贝。',
     ],
     problem: '解决"把大对象（DOM 节点、缓存句柄）传入 Wasm 时不愿承受复制数据的开销，又担心对象生命周期失控"的问题。',
+    officialUrl: 'https://webassembly.github.io/spec/core/syntax/types.html#reference-types',
   },
   {
     id: 'WB_15',
@@ -476,11 +497,13 @@ export const lessons: Lesson[] = [
     ],
     notes: [
       '原子指令保证并发下计数不丢失。',
-      '常用操作：atomic.load / store / add / sub / wait / notify。',
-      'SharedArrayBuffer 需 COOP/COEP 跨源隔离才能启用。',
+      '常用操作：i32.atomic.load / store / i32.atomic.rmw.add / sub，以及 memory.atomic.wait32 / notify。',
+      '内存必须声明 shared 且给出 max；SharedArrayBuffer 还需 COOP/COEP 跨源隔离才能启用。',
       'atomicAdd（rmw.add）返回操作前的旧值。',
     ],
     problem: '解决"多个 Worker 同时对同一个计数器加一，普通读写会互相覆盖、最终结果总少于预期"的竞态问题。',
+    officialUrl:
+      'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer',
   },
   {
     id: 'WB_16',
@@ -508,6 +531,8 @@ export const lessons: Lesson[] = [
       '真实项目可用 comlink 等库简化 Worker 通信。',
     ],
     problem: '解决"单个 Worker 跑不满多核、主线程还被计算任务卡死，而多开 Worker 共享计数又会算错"的问题。',
+    officialUrl:
+      'https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers',
   },
   {
     id: 'WB_17',
@@ -535,6 +560,8 @@ export const lessons: Lesson[] = [
       'SIMD 是数据并行，可与多线程组合叠加加速。',
     ],
     problem: '解决"图像处理、矩阵运算这类批量同构计算逐元素循环太慢，CPU 通道利用率低下"的提速问题。',
+    officialUrl:
+      'https://webassembly.github.io/spec/core/syntax/instructions.html#vector-instructions',
   },
   {
     id: 'WB_18',
@@ -558,10 +585,12 @@ export const lessons: Lesson[] = [
     notes: [
       'tag 定义异常类型，throw 时可携带若干 payload 参数。',
       'JS 用 e.is(tag) 判断来源、getArg(tag, i) 取负载。',
-      'Wasm 内部也可用 try/catch 就地处理异常，无需回到 JS。',
+      'Wasm 内部可用 try_table 的 catch 分支就地处理异常，无需回到 JS。',
       '异常可跨 Wasm/JS 边界传递，不破坏调用栈。',
     ],
     problem: '解决"Wasm 内部出错时只能返回错误码层层判断，或直接 trap 崩溃，无法携带上下文信息跨越边界"的问题。',
+    officialUrl:
+      'https://developer.mozilla.org/en-US/docs/WebAssembly/Reference/Exception_handling/try_table',
   },
   {
     id: 'WB_19',
@@ -575,7 +604,7 @@ export const lessons: Lesson[] = [
     code: WB19Code,
     language: 'javascript',
     principle:
-      'Wasm 是预编译的字节码，执行路径接近机器码、更可预测；JS 依赖 JIT 对热点做内联与优化、需要预热。本 demo 对同一递归 fib 分别用 Wasm 与 JS 实现，取多次运行的最小值来剔除 JIT 波动后再做对比。跨边界的每次调用都有固定开销，小函数高频跨界反而更慢，应尽量把计算留在模块内。',
+      'Wasm 是紧凑的二进制指令格式，引擎加载时校验并编译为机器码，执行路径更可预测；JS 依赖 JIT 对热点做内联与优化、需要预热。本 demo 对同一递归 fib 分别用 Wasm 与 JS 实现，取多次运行的最小值来剔除 JIT 波动后再做对比。跨边界的每次调用都有固定开销，小函数高频跨界反而更慢，应尽量把计算留在模块内。',
     flow: [
       '同一递归 fib 算法分别用 Wasm 与 JS 各实现一份。',
       '先预热，再多次测量并取最小值。',
@@ -589,6 +618,7 @@ export const lessons: Lesson[] = [
       '测量要预热并多次取样，取最小值以减小抖动。',
     ],
     problem: '解决"听说 Wasm 性能好就想全面替换 JS，却不清楚哪些场景真能提速、哪些反而更慢"的选型问题。',
+    officialUrl: 'https://developer.mozilla.org/en-US/docs/WebAssembly/Guides/Concepts',
   },
   {
     id: 'WB_20',
@@ -616,5 +646,7 @@ export const lessons: Lesson[] = [
       '部署需正确 MIME（application/wasm），线程特性还需 COOP/COEP。',
     ],
     problem: '解决"本地写好的 .wasm 怎么接入前端工程、如何流式加载并配合 MIME 与缓存正确上线"的工程问题。',
+    officialUrl:
+      'https://developer.mozilla.org/en-US/docs/WebAssembly/Reference/JavaScript_interface/instantiateStreaming_static',
   },
 ]

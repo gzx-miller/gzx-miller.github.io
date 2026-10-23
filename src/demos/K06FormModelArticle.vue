@@ -5,7 +5,7 @@ import K06FormModel from './K06FormModel.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>用户在输入框里打字，我并没有写任何赋值语句，代码里那个变量怎么就跟着变了？
+      <strong>承接上文：</strong>用户在输入框里打字，我并没有写任何赋值语句，代码里那个变量怎么就跟着变了？
     </div>
 
     <h2>表单输入与按钮联动</h2>

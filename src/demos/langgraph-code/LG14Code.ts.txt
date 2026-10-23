@@ -20,14 +20,14 @@
 //   - 支持编辑状态后「从这里重跑」，不必从头再来
 
 // 示例3: 结构化日志——本地没有 Studio 时，用 stream 自己打印追踪
-import { createReactAgent } from '@langchain/langgraph/prebuilt'
+import { createAgent } from 'langchain'
 import { ChatOpenAI } from '@langchain/openai'
 import { HumanMessage } from '@langchain/core/messages'
 
-const agent = createReactAgent({
-  llm: new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 }),
+const agent = createAgent({
+  model: new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 }),
   tools: [],
-  prompt: '你是课程助手。',
+  systemPrompt: '你是课程助手。',
 })
 
 const startedAt = Date.now()

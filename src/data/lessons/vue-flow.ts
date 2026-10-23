@@ -13,6 +13,10 @@ import VF09Demo from '../../demos/VF09StateManageArticle.vue'
 import VF10Demo from '../../demos/VF10DragDropArticle.vue'
 import VF11Demo from '../../demos/VF11AutoLayoutArticle.vue'
 import VF12Demo from '../../demos/VF12ReadonlyThemeArticle.vue'
+import VF13Demo from '../../demos/VF13NestedNodesArticle.vue'
+import VF14Demo from '../../demos/VF14HistoryArticle.vue'
+import VF15Demo from '../../demos/VF15SerializeArticle.vue'
+import VF16Demo from '../../demos/VF16PerformanceArticle.vue'
 // 该分类专属的演示样式，随分类数据一起按需加载
 import '../../styles/category-vue-flow.css'
 // ⚠️ Vue Flow 官方样式（core / controls / minimap）+ 站点双主题适配，
@@ -50,6 +54,14 @@ const VF10Code = createCodeLoader('VF10DragDrop.vue')
 const VF11Code = createCodeLoader('VF11AutoLayout.vue')
 
 const VF12Code = createCodeLoader('VF12ReadonlyTheme.vue')
+
+const VF13Code = createCodeLoader('VF13NestedNodes.vue')
+
+const VF14Code = createCodeLoader('VF14History.vue')
+
+const VF15Code = createCodeLoader('VF15Serialize.vue')
+
+const VF16Code = createCodeLoader('VF16Performance.vue')
 
 export const lessons: Lesson[] = [
   {
@@ -387,5 +399,116 @@ export const lessons: Lesson[] = [
     ],
     problem: '解决"流程图放进深色主题页面刺眼扎白、在纯展示页被用户误拖误连线"的问题。',
     officialUrl: 'https://vueflow.dev/guide/theming.html',
+  },
+  {
+    id: 'VF_13',
+    title: '嵌套节点与分组：parentNode 与 extent',
+    navTitle: '嵌套分组',
+    category: '进阶能力',
+    path: '/vue-flow/vf-13/nested-nodes',
+    summary: '用课程模块分组演示 parentNode 的父子归属与相对坐标，并让 extent 把子节点拖动限制在父容器内。',
+    demo: null,
+    demoComponent: VF13Demo,
+    code: VF13Code,
+    language: 'vue',
+    principle:
+      '在节点上声明 parentNode: 父节点 id，就建立了分组归属。子节点的 position 随即改为相对父节点左上角的偏移，最终位置由「父节点位置 + 子节点相对位置」算出，所以拖动父节点时子节点整体跟随。parentNode 必须指向已存在的节点，缺失会触发父节点缺失错误；父子关系也不能成环。extent: "parent" 只把拖动限制在父容器尺寸范围内，不会替业务做布局；父容器尺寸变化不会自动重排子节点，删除父节点则会级联移除子节点及其相连的边。',
+    flow: [
+      '用自定义 group 类型节点画分组容器，普通卡片作为子节点声明 parentNode。',
+      '子节点 position 按父节点左上角给相对值，再补 extent: "parent" 限制拖动范围。',
+      '拖动父节点验证整组跟随，拖拽子节点验证它停在父容器边界内。',
+      '脱离分组时先把相对坐标换算成画布绝对坐标，再清空 parentNode 与 extent。',
+    ],
+    notes: [
+      '父节点必须先存在：已在画布中，或在同一批数据里排在子节点之前。',
+      '改挂父级或脱离分组时必须同步换算 position，否则节点会瞬移。',
+      '父容器加高或缩窄不会自动重排子节点，需要业务层重新计算相对坐标。',
+      '删除父节点会连同子节点与相关连线一起移除；只想解散分组就先迁移子节点。',
+    ],
+    problem: '解决"分组框只是视觉垫底、拖动父容器时卡片不跟随、子节点又能随便拖出边界"的问题。',
+  },
+  {
+    id: 'VF_14',
+    title: '撤销与重做：快照式历史与拖拽合并',
+    navTitle: '撤销与重做',
+    category: '进阶能力',
+    path: '/vue-flow/vf-14/history',
+    summary: '用快照式历史实现画布撤销与重做，并按 dragstart/dragstop 把一次拖拽合并成一条记录。',
+    demo: null,
+    demoComponent: VF14Demo,
+    code: VF14Code,
+    language: 'vue',
+    principle:
+      '快照式历史在变更前用 toObject() 导出整图并深拷贝进 undo 栈；撤销时弹出快照，用 fromObject() 恢复，同时把当前状态压入 redo 栈；重做反向操作。任何新操作都会清空 redo 栈，避免重做出与当前时间线冲突的分支。拖拽不能按每次位置变化入栈，而要在 dragstart 暂存变更前快照、dragstop 时合并提交一条记录。栈深要设上限，入栈必须深拷贝，否则历史会随运行态一起被改掉。',
+    flow: [
+      '变更前调用 toObject()，深拷贝后压入 undo 栈，并清空 redo 栈。',
+      '撤销时弹出 undo 快照，当前状态进入 redo，再用 fromObject() 恢复画布。',
+      '拖拽只在 dragstart 记录起点，dragstop 判断位置变化后合并为一条历史。',
+      '限制栈深并展示 undo/redo 数量与历史指针，便于观察时间线位置。',
+    ],
+    notes: [
+      '不要监听 drag 持续入栈，否则一次拖拽会产生几十上百条无意义记录。',
+      '快照必须深拷贝：直接存响应式引用，历史会跟着当前节点一起变化。',
+      'fromObject() 是异步的，恢复完成前应禁用连续撤销与重做。',
+      '快照只保存可序列化数据；图外的业务状态若参与展示，也要一并纳入。',
+    ],
+    problem: '解决"画布改坏后无法回退、拖一次节点就塞满历史、撤销后状态对不上"的问题。',
+    officialUrl: 'https://vueflow.dev/composables/useVueFlow.html',
+  },
+  {
+    id: 'VF_15',
+    title: '序列化与持久化：toObject 与版本迁移',
+    navTitle: '序列化持久化',
+    category: '生产实践',
+    path: '/vue-flow/vf-15/serialize',
+    summary: '把画布保存为 JSON、恢复时做 schema 版本校验与未知节点类型降级，保证刷新与升级后都能打开。',
+    demo: null,
+    demoComponent: VF15Demo,
+    code: VF15Code,
+    language: 'vue',
+    principle:
+      'useVueFlow().toObject() 导出的是纯数据（nodes、edges、viewport 等），组件实例、函数与 DOM 引用不会混入；保存时附带 schemaVersion、保存时间与节点类型清单，恢复前先校验版本与必需字段，不兼容就走迁移函数或明确拒绝。恢复时按 type 查已注册组件，未知类型降级成占位节点而不是渲染空白；fromObject 之后用 fitView 或 setViewport 复位视口。',
+    flow: [
+      '变更后调用 toObject()，附加 schemaVersion、savedAt 与类型清单再落库。',
+      '读取时校验版本与结构，旧版本走迁移函数，无法迁移则提示用户。',
+      '按节点 type 映射组件，未知类型降级为占位卡片并保留连线。',
+      'fromObject 恢复数据，再用 fitView / setViewport 复位视口。',
+    ],
+    notes: [
+      'node.data 只放可序列化的业务字段，函数、组件实例、DOM 引用都会丢失或报错。',
+      '版本号缺失按 0 处理，迁移函数要幂等，重复执行结果一致。',
+      '未知类型直接丢弃会让连线悬空，必须降级保留节点。',
+      '画布数据与业务数据分开存，避免把整份业务对象塞进图里。',
+    ],
+    problem: '解决"刷新即丢、换版本后旧数据打不开、未知节点让整图渲染空白"的持久化问题。',
+    officialUrl: 'https://vueflow.dev/composables/useVueFlow.html',
+  },
+  {
+    id: 'VF_16',
+    title: '性能与预渲染：大图渲染与 Nuxt 集成',
+    navTitle: '性能与预渲染',
+    category: '生产实践',
+    path: '/vue-flow/vf-16/performance',
+    summary: '用 50/200/800 节点压测对照可视区域渲染，并说明画布在 Nuxt 静态预渲染下的正确挂载方式。',
+    demo: null,
+    demoComponent: VF16Demo,
+    code: VF16Code,
+    language: 'vue',
+    principle:
+      '大图性能取决于两件事：渲染多少、每帧算什么。onlyRenderVisibleElements 只渲染视口内的节点与连线；节点组件避免昂贵计算与深层嵌套；事件回调里不要同步遍历全量节点。容器必须有明确高度，否则尺寸测量为 0、画布塌陷。画布依赖浏览器 DOM 测量，SSR / 静态预渲染必须用 ClientOnly 或动态导入包裹，否则预渲染阶段会直接失败。',
+    flow: [
+      '给画布容器固定高度，交由实例测量尺寸。',
+      '大数据量开启 onlyRenderVisibleElements，只渲染视口内元素。',
+      '节点组件保持轻量，重计算移到 computed 或数据准备阶段。',
+      'Nuxt 中用 ClientOnly / 动态导入挂载画布，避免预渲染访问 DOM。',
+    ],
+    notes: [
+      '容器高度为 0 是「画布不显示」的第一大原因。',
+      '可视区域渲染降低的是绘制量，数据处理与布局计算仍要自己控制。',
+      '事件回调里遍历全量节点会让拖拽明显掉帧。',
+      '预渲染报 window is not defined 时，先检查画布是否被 ClientOnly 包裹。',
+    ],
+    problem: '解决"节点一多就卡顿、首屏渲染空白，以及 Nuxt 预渲染阶段画布直接报错"的问题。',
+    officialUrl: 'https://vueflow.dev/guide/',
   },
 ]

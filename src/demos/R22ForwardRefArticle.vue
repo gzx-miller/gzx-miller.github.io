@@ -5,7 +5,7 @@ import R22ForwardRef from './R22ForwardRef.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>报名表里有姓名和邮箱两个输入框，你把它们封装成了自定义组件 <code>&lt;TextInput label="姓名" /&gt;</code>。提交时如果没填，你想让第一个输入框自动聚焦——于是给组件挂上 <code>ref={nameRef}</code>。挂了，可点下提交，<code>nameRef.current</code> 却是 <code>null</code>。ref 明明传进去了，为什么子组件里拿不到它指向的元素？
+      <strong>承接上文：</strong>报名表里有姓名和邮箱两个输入框，你把它们封装成了自定义组件 <code>&lt;TextInput label="姓名" /&gt;</code>。提交时如果没填，你想让第一个输入框自动聚焦——于是给组件挂上 <code>ref={nameRef}</code>。挂了，可点下提交，<code>nameRef.current</code> 却是 <code>null</code>。ref 明明传进去了，为什么子组件里拿不到它指向的元素？
     </div>
 
     <h2>数据与引用通道</h2>

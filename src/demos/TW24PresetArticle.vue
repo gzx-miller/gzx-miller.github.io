@@ -38,10 +38,10 @@ import TW24Preset from './TW24Preset.vue'
       思路是把公共令牌抽成一个<strong>可复用的共享单元</strong>，项目只引用它、再覆盖差异。在 v4 的 CSS-first 体系里，推荐的做法是写成一份带 <code>@theme</code> 的共享 CSS 文件：里面用带命名空间的变量定义设计令牌（<code>--color-*</code>、<code>--font-*</code>、<code>--spacing-*</code>、<code>--radius-*</code>、<code>--animate-*</code> 等），项目通过 <code>@import</code> 引入即可，编译器据此生成对应的工具类。
     </p>
     <p>
-      如果项目仍在用旧式的 JavaScript 配置，则把 <code>theme</code> 抽成一个<strong>预设对象</strong>，经 <code>presets</code> 数组引入。预设同样可以包含自定义插件。这样一套令牌被「引用」而不是「复制」，改一处、所有项目同步受益。把它发布成 npm 包，还能用语义化版本做版本化迭代——需要尝鲜的项目升版本，需要稳定的项目锁版本。
+      如果项目仍在用旧式的 JavaScript 配置，则把 <code>theme</code> 抽成一个<strong>预设对象</strong>，经 <code>presets</code> 数组引入（v4 需先用 <code>@config</code> 加载这份遗留配置）。预设同样可以包含自定义插件。这样一套令牌被「引用」而不是「复制」，改一处、所有项目同步受益。把它发布成 npm 包，还能用语义化版本做版本化迭代——需要尝鲜的项目升版本，需要稳定的项目锁版本。
     </p>
     <div class="lesson-box hint">
-      <strong>项目层只写差异：</strong>项目自己的配置里只 <code>extend</code> 需要新增或覆盖的令牌，例如加一个项目特有的强调色。公共规范与局部个性并存，既不会污染全局，也不会为了一个特殊值把整套令牌又抄一遍。
+      <strong>项目层只写差异：</strong>项目自己的 <code>@theme</code> 里只声明需要新增或覆盖的令牌，例如加一个项目特有的强调色（旧式 JS 配置则对应 <code>theme.extend</code>）。公共规范与局部个性并存，既不会污染全局，也不会为了一个特殊值把整套令牌又抄一遍。
     </div>
     <p>
       有几条约定必须记住。第一，<strong>v4 默认不再自动读取 <code>tailwind.config.js</code></strong>，遗留的 JS 配置必须在 CSS 里用 <code>@config</code> 显式加载，否则预设不会被应用。第二，CSS-first 下更推荐把设计系统写成一份共用 CSS 再 <code>@import</code>，而不是拆成多份独立 JS 配置——单一入口更容易维护。第三，预设可以嵌套与组合，令牌应由设计与开发<strong>共同定义</strong>，并配合语义化版本发布。

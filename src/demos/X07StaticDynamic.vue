@@ -3,28 +3,37 @@ import { ref } from 'vue'
 
 const renderTypes = [
   { type: '静态渲染', timing: '构建时', when: '默认行为', example: '博客文章、产品页', color: '#65a30d' },
-  { type: '动态渲染', timing: '请求时', when: '使用了动态函数', example: '用户 dashboard、搜索', color: '#e85d04' },
+  { type: '动态渲染', timing: '请求时', when: '访问运行时 API 或显式禁用缓存', example: '用户 dashboard、搜索', color: '#e85d04' },
 ]
 
 const dynamicSignals = [
-  { signal: 'cookies()', desc: '读取 Cookie', force: '动态' },
-  { signal: 'headers()', desc: '读取请求头', force: '动态' },
-  { signal: 'searchParams', desc: 'URL 查询参数', force: '动态' },
+  { signal: 'await cookies()', desc: '读取 Cookie（异步 API）', force: '动态' },
+  { signal: 'await headers()', desc: '读取请求头（异步 API）', force: '动态' },
+  { signal: 'await searchParams', desc: 'URL 查询参数（Promise）', force: '动态' },
   { signal: "fetch(..., { cache: 'no-store' })", desc: '禁用缓存', force: '动态' },
   { signal: "fetch(..., { next: { revalidate: 0 } })", desc: '零秒重新验证', force: '动态' },
   { signal: 'noStore()', desc: '明确 opt-out 缓存', force: '动态' },
 ]
 
 const staticSignals = [
-  { signal: 'fetch() 默认', desc: 'force-cache（构建时缓存）', force: '静态' },
+  { signal: "'use cache' + cacheLife()", desc: 'Cache Components 显式缓存', force: '静态' },
+  { signal: "fetch(..., { cache: 'force-cache' })", desc: '显式持久缓存', force: '静态' },
   { signal: "fetch(..., { next: { revalidate: 60 } })", desc: 'ISR，60 秒重新验证', force: '静态' },
   { signal: 'generateStaticParams()', desc: '预生成动态路由', force: '静态' },
 ]
 
 const codeExample = `<span style="color:#8a8a3a">// 静态渲染（默认）— 构建时生成 HTML</span>
-export default async function Page() {
+import { cacheLife } from 'next/cache'
+
+async function getPosts() {
+  'use cache'
+  cacheLife('hours')
   const res = await fetch('https://api.example.com/posts')
-  const posts = await res.json()
+  return res.json()
+}
+
+export default async function Page() {
+  const posts = await getPosts()
   return &lt;PostList posts={posts} /&gt;
 }
 
@@ -32,7 +41,7 @@ export default async function Page() {
 import { cookies } from 'next/headers'
 
 export default async function Dashboard() {
-  const token = cookies().get('token')?.value  <span style="color:#7c7c99">// 触发动态</span>
+  const token = (await cookies()).get('token')?.value  <span style="color:#7c7c99">// 触发动态</span>
   const user = await getUser(token)
   return &lt;Profile user={user} /&gt;
 }`
@@ -71,8 +80,8 @@ export default async function Dashboard() {
         <h4>代码对比</h4>
         <pre class="mini-code" v-html="codeExample"></pre>
         <div class="detail-box">
-          <p><strong>判断规则：</strong>只要组件树中使用了任何动态函数，整个路由就变成动态渲染。</p>
-          <p><strong>Next.js 14+：</strong>默认尽量静态，按需动态（Partial Prerendering 实验中）。</p>
+          <p><strong>判断规则：</strong>未启用 Cache Components 时，组件树中任何一处访问运行时 API，整条路由转为动态。</p>
+          <p><strong>Cache Components：</strong>把运行时读取放进 &lt;Suspense&gt;，先输出静态壳，再流式填充动态内容。</p>
         </div>
       </div>
     </div>

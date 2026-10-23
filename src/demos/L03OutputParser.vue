@@ -23,7 +23,7 @@ const parsedResults: Record<ParserType, { label: string; data: unknown }> = {
     data: ['Vue3 组合式 API 实战', 'TypeScript 类型体操', '前端工程化实践'],
   },
   structured: {
-    label: 'StructuredOutputParser (Zod)',
+    label: 'withStructuredOutput (Zod)',
     data: [
       { name: 'Vue3 组合式 API 实战', level: '中级', audience: '有 Vue2 基础' },
       { name: 'TypeScript 类型体操', level: '高级', audience: '有 TS 基础' },

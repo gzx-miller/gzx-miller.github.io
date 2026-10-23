@@ -1,21 +1,21 @@
 // 上下文工程：分清 State、Store 与 Runtime 三种上下文
 // 场景：课程推荐智能体——图内状态、跨会话记忆、运行时注入三层分工
-import { StateGraph, Annotation, START, END, InMemoryStore } from '@langchain/langgraph'
+import { StateGraph, StateSchema, ReducedValue, START, END, InMemoryStore } from '@langchain/langgraph'
 import { ChatOpenAI } from '@langchain/openai'
 import { createMiddleware } from 'langchain'
 import { HumanMessage, SystemMessage } from '@langchain/core/messages'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 
 const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 })
 
 // 示例1: 第一层——State 是「图内状态」：跟着这次运行走，节点间共享读写
-const RecState = Annotation.Root({
-  query: Annotation<string>,
-  answer: Annotation<string>,
-  logs: Annotation<string[]>({
-    reducer: (left, right) => left.concat(right),
-    default: () => [],
-  }),
+const RecState = new StateSchema({
+  query: z.string(),
+  answer: z.string(),
+  logs: new ReducedValue(
+    z.array(z.string()).default(() => []),
+    { reducer: (left, right) => left.concat(right) },
+  ),
 })
 
 // 示例2: 第二层——Context 是「运行时配置」：外部注入、节点只读

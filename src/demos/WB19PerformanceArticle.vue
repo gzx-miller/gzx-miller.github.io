@@ -49,10 +49,10 @@ import WB19Performance from './WB19Performance.vue'
       再补<strong>缓存编译结果</strong>。<code>WebAssembly.compile</code> 产出的 <code>WebAssembly.Module</code> 是<strong>不可变、且可结构化克隆</strong>的，可以放进 <code>IndexedDB</code> 缓存；用户再次访问时把它取出来直接 <code>instantiate</code>，<strong>整段编译跳过</strong>，首屏只剩下下载或读缓存。到这一步，「启动时间」这笔账基本就压到位了。
     </p>
     <div class="lesson-box warn">
-      <strong>两个容易配错的地方：</strong>其一，别为了体积把重计算模块也一律改成 <code>-Oz</code>——有些模块在 <code>-Oz</code> 下执行会明显变慢，省下的几十 KB 换不回用户多等的计算时间，要按模块分别定位；其二，<code>instantiateStreaming</code> 对 MIME 非常敏感，服务器没配好 <code>application/wasm</code> 时它会静默回退或直接失败，务必在真实响应头下验证，而不是只看本地开发服务器。
+      <strong>两个容易配错的地方：</strong>其一，别为了体积把重计算模块也一律改成 <code>-Oz</code>——有些模块在 <code>-Oz</code> 下执行会明显变慢，省下的几十 KB 换不回用户多等的计算时间，要按模块分别定位；其二，<code>instantiateStreaming</code> 对 MIME 非常敏感，服务器没配好 <code>application/wasm</code> 时它会拒绝并抛错，需要你捕获后回退到 <code>instantiate</code>，务必在真实响应头下验证，而不是只看本地开发服务器。
     </div>
     <p>
-      最后回到「执行」这另一半账。前面解决的是「第一次要等多久」，而「跑起来之后快不快」是另一回事：Wasm 是预编译的字节码，执行路径接近机器码、更可预测；JS 依赖 JIT 对热点做内联和优化，<strong>需要预热</strong>。所以测量执行耗时要<strong>先预热、再多次取样取最小值</strong>，剔除 JIT 的波动，否则结论会被单次抖动带偏。还有一个每次调用都要付的成本别忘了：<strong>跨 Wasm/JS 边界有固定开销</strong>，小函数被高频调用反而更慢，所以优化的方向是尽量<strong>把计算留在模块内部</strong>，而不是频繁跨边界来回。
+      最后回到「执行」这另一半账。前面解决的是「第一次要等多久」，而「跑起来之后快不快」是另一回事：Wasm 是紧凑的二进制指令格式，引擎加载时校验并编译为机器码，执行路径更可预测；JS 依赖 JIT 对热点做内联和优化，<strong>需要预热</strong>。所以测量执行耗时要<strong>先预热、再多次取样取最小值</strong>，剔除 JIT 的波动，否则结论会被单次抖动带偏。还有一个每次调用都要付的成本别忘了：<strong>跨 Wasm/JS 边界有固定开销</strong>，小函数被高频调用反而更慢，所以优化的方向是尽量<strong>把计算留在模块内部</strong>，而不是频繁跨边界来回。
     </p>
 
     <h2>预热取样对比</h2>

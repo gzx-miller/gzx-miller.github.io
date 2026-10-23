@@ -65,7 +65,7 @@ export const lessons: Lesson[] = [
     demoComponent: V01Core, code: V01Code, language: 'typescript',
     principle: 'Vite 把工程分为开发与构建两个阶段：开发阶段利用浏览器原生 ESM 对源码做按需即时编译，无需打包成 bundle，HMR 只更新发生变化的模块；生产阶段切换 Rollup 打包，做 Tree Shaking、代码分割与压缩，输出高度优化的静态产物。',
     flow: ['通过核心概念卡片理解原生 ESM、Rollup 构建、HMR 与插件系统。', '对比 Vite 与传统打包器（Webpack）的差异。', '查看常用配置示例，了解 dev server、代理、别名与分包。', '启动一个最小项目，对比 dev 冷启动与生产构建产物的差异。'],
-    notes: ['冷启动不受项目规模影响，代价是一次性的依赖预构建。', 'HMR 基于原生 ESM，只精确实时更新发生变化的模块。', '开发阶段按需加载源文件本身，生产阶段才做打包压缩优化。', 'vite preview 可在本地以生产行为预览 dist 产物，部署前先验证。'],
+    notes: ['Vite 7 要求 Node.js 20.19+ 或 22.12+，Node 18 已 EOL，不再支持。', '冷启动不受项目规模影响，代价是一次性的依赖预构建。', 'HMR 基于原生 ESM，只精确实时更新发生变化的模块。', '开发阶段按需加载源文件本身，生产阶段才做打包压缩优化。', 'vite preview 可在本地以生产行为预览 dist 产物，部署前先验证。'],
     problem: '解决"传统打包器冷启动慢、HMR 更新延迟、依赖图膨胀拖慢日常开发"的问题。',
   },
 {
@@ -75,7 +75,7 @@ export const lessons: Lesson[] = [
     demoComponent: V02Config, code: V02Code, language: 'typescript',
     principle: 'vite.config.ts 是 Vite 的项目级配置入口：用 defineConfig 包装可获得完整的类型推导与提示；既可导出静态对象，也可导出接收 { mode, command } 的函数，在函数内按环境返回不同配置，或在条件成立时动态追加插件。',
     flow: ['用 defineConfig 编写 server、build、resolve.alias 等基础配置。', '把配置改为函数形式，接收 { mode, command } 按环境返回不同配置。', '在函数内按环境变量（如 ANALYZE）条件性添加插件或调整构建选项。', '环境差异放函数式配置、敏感值放环境变量，避免把密钥或路径硬编码进配置文件。'],
-    notes: ['使用 defineConfig 可获得完整类型提示，避免手写配置时字段拼错或被静默忽略。', 'resolve.alias 设置路径别名，css.preprocessorOptions 可注入全局样式。', '函数式配置的返回值会与默认配置深度合并，返回空对象也不会丢失默认行为。', '配置字段拼写错误可能被静默忽略，改动后用 vite --debug 检查最终解析结果。'],
+    notes: ['使用 defineConfig 可获得完整类型提示，避免手写配置时字段拼错或被静默忽略。', 'Vite 7 的配置文件按 ESM 加载，统一用 import / export default，不要再写 require() 或 module.exports。', 'resolve.alias 设置路径别名，css.preprocessorOptions 可注入全局样式。', '函数式配置的返回值会与默认配置深度合并，返回空对象也不会丢失默认行为。', '配置字段拼写错误可能被静默忽略，改动后用 vite --debug 检查最终解析结果。'],
     problem: '解决"开发/生产需要不同的 server、minify、sourcemap 等设置，手动改配置文件既繁琐又容易漏改"的问题。',
   },
 {
@@ -135,7 +135,7 @@ export const lessons: Lesson[] = [
     demoComponent: V08Build, code: V08Code, language: 'typescript',
     principle: 'Vite 生产构建基于 Rollup：每个动态 import() 会生成独立 chunk 实现按需加载；rollupOptions.output.manualChunks 可把依赖按组拆分以获得更好的缓存复用；压缩默认用 Esbuild（速度快），可切换 Terser（压缩率更高、可配置 drop_console 等选项）。',
     flow: ['在路由中用 () => import("../views/Home.vue") 配置路由级懒加载。', '在 rollupOptions.output.manualChunks 中按框架、UI 库、工具库分组依赖。', '切换 minify 为 terser 并配置 drop_console，对比产物体积变化。', '用可视化插件查看各 chunk 的体积构成，验证分包是否达到预期。'],
-    notes: ['动态 import() 是代码分割的基础，缺少它时 Rollup 只能产出单一大 chunk。', '分包不是越细越好，拆得过散会增加请求数，建议按“变更频率”归组。', 'chunkSizeWarningLimit 只影响警告阈值，不代表超过阈值的 chunk 一定需要拆分。', 'build.target 决定语法降级目标，面向现代浏览器可适当提高以减少产物体积。'],
+    notes: ['动态 import() 是代码分割的基础，缺少它时 Rollup 只能产出单一大 chunk。', '分包不是越细越好，拆得过散会增加请求数，建议按“变更频率”归组。', 'chunkSizeWarningLimit 只影响警告阈值，不代表超过阈值的 chunk 一定需要拆分。', 'build.target 默认是 baseline-widely-available（chrome107 / edge107 / firefox104 / safari16），通常无需手动调整；只有兼容更旧浏览器时才下调。'],
     problem: '解决"首屏需要下载的 chunk 过大、大依赖与业务代码混在一起导致上线后缓存全部失效"的问题。',
   },
 {
@@ -173,9 +173,9 @@ export const lessons: Lesson[] = [
     path: '/vite/v-12/css', summary: 'Vite 内置支持 PostCSS、Sass/Less/Stylus 预处理器和 CSS Modules。',
     demo: null,
     demoComponent: V12CSS, code: V12Code, language: 'typescript',
-    principle: 'Vite 自动读取 postcss.config.js 或 css.postcss 中的插件链并应用于全部样式；安装 sass/less 后即可直接在 <style lang="scss"> 中书写预处理器语法，css.preprocessorOptions 可向每个样式文件注入共享变量；CSS Modules 在 SFC 的 <style module> 中开箱即用。',
-    flow: ['在 postcss.config.js（或 css.postcss）中配置 autoprefixer、tailwindcss 等插件。', '安装 sass 后书写 <style lang="scss">，用 preprocessorOptions.additionalData 注入全局变量。', '在 <style module> 中书写样式，通过 :class="$style.xxx" 使用局部类名。', '开发阶段开启 css.devSourcemap，浏览器调试样式时可直接定位到源文件。'],
-    notes: ['Vue SFC 的 <style scoped> 已提供组件级样式隔离，普通场景不必再用 CSS Modules。', '预处理器需要单独安装（npm install -D sass），Vite 不内置编译器。', 'additionalData 只能注入变量与 mixin 定义，放入实际样式会被重复输出到每个文件。', 'Tailwind 等工具链通过 PostCSS 接入即可，不必额外安装专门的 Vite 插件。'],
+    principle: 'Vite 自动读取 postcss.config.mjs 或 css.postcss 中的插件链并应用于全部样式；安装 sass/less 后即可直接在 <style lang="scss"> 中书写预处理器语法，css.preprocessorOptions 可向每个样式文件注入共享变量（Vite 7 只支持 Sass modern API，注入用 @use）；CSS Modules 在 SFC 的 <style module> 中开箱即用。',
+    flow: ['在 postcss.config.mjs（或 css.postcss）中配置 autoprefixer、@tailwindcss/postcss 等插件。', '安装 sass 后书写 <style lang="scss">，用 preprocessorOptions.additionalData 以 @use 注入全局变量。', '在 <style module> 中书写样式，通过 :class="$style.xxx" 使用局部类名。', '开发阶段开启 css.devSourcemap，浏览器调试样式时可直接定位到源文件。'],
+    notes: ['Vue SFC 的 <style scoped> 已提供组件级样式隔离，普通场景不必再用 CSS Modules。', '预处理器需要单独安装（npm install -D sass），Vite 不内置编译器；Vite 7 已移除 Sass legacy API，无需再配置 api 选项。', 'additionalData 只能注入变量与 mixin 定义，放入实际样式会被重复输出到每个文件。', 'Tailwind v4 在 Vite 项目里优先用官方 @tailwindcss/vite 插件，也可改用 @tailwindcss/postcss 走 PostCSS，两者选其一。'],
     problem: '解决"全局样式逐步失控、希望统一接入 Tailwind、Sass 变量与组件级样式隔离"的问题。',
   },
 {

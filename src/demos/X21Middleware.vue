@@ -2,10 +2,10 @@
 import { ref } from 'vue'
 
 const features = [
-  { feat: '执行时机', desc: '每个请求、缓存前，Edge Runtime 运行' },
-  { feat: '位置', desc: '项目根或 src/ 下的 middleware.ts' },
+  { feat: '执行时机', desc: '每个请求、路由渲染前，Node.js 运行时执行' },
+  { feat: '位置', desc: '项目根或 src/ 下的 proxy.ts' },
   { feat: '能力', desc: '重写、重定向、改请求头、改响应头' },
-  { feat: '限制', desc: '不能访问 Node API，依赖需兼容 Edge' },
+  { feat: '限制', desc: '不要依赖共享模块或全局变量，逻辑保持轻量' },
 ]
 
 const useCases = [
@@ -16,11 +16,11 @@ const useCases = [
   { case: '地理重定向', example: '按地区跳转不同子站' },
 ]
 
-const codeExample = `<span style="color:#8a8a3a">// middleware.ts — 项目根或 src/ 下</span>
+const codeExample = `<span style="color:#8a8a3a">// proxy.ts — 项目根或 src/ 下（Next.js 16 起替代 middleware.ts）</span>
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const token = request.cookies.get('token')?.value
 
   <span style="color:#7c7c99">// 未登录 → 重定向到登录页</span>
@@ -47,7 +47,7 @@ export const config = {
 
 <template>
   <div class="demo-card">
-    <h3>Middleware 中间件</h3>
+    <h3>Proxy 请求代理（原 Middleware）</h3>
 
     <div style="display:flex;gap:16px;margin-bottom:12px;">
       <div style="flex:1;">
@@ -74,7 +74,7 @@ export const config = {
         <pre class="mini-code" v-html="codeExample"></pre>
         <div class="detail-box">
           <p><strong>性能：</strong>用 matcher 限定路径，避免对所有请求执行。</p>
-          <p><strong>注意：</strong>middleware 在 Edge Runtime，慎用重依赖。</p>
+          <p><strong>注意：</strong>Proxy 运行在 Node.js 运行时，但不要把重逻辑或状态放进这里。</p>
         </div>
       </div>
     </div>

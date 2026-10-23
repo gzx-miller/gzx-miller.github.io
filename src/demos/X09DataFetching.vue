@@ -2,15 +2,17 @@
 import { ref } from 'vue'
 
 const cacheOptions = [
-  { option: "cache: 'force-cache'", desc: '默认，构建时缓存，永久有效', when: '静态内容', color: '#65a30d' },
+  { option: "cache: 'force-cache'", desc: '显式开启持久缓存（fetch 默认 auto no cache）', when: '静态内容', color: '#65a30d' },
   { option: "cache: 'no-store'", desc: '不缓存，每次请求都重新获取', when: '实时数据', color: '#e85d04' },
   { option: "next: { revalidate: 60 }", desc: 'ISR，60 秒后重新验证', when: '半静态内容', color: '#d97706' },
   { option: "next: { tags: ['posts'] }", desc: '按标签缓存，可主动失效', when: '按需更新', color: '#0891b2' },
 ]
 
-const codeExample = `<span style="color:#8a8a3a">// 1. 默认缓存（静态）</span>
-const res = await fetch('https://api.example.com/posts')
-<span style="color:#7c7c99">// 等价于 fetch(url, { cache: 'force-cache' })</span>
+const codeExample = `<span style="color:#8a8a3a">// 1. 显式持久缓存（静态）</span>
+const res = await fetch('https://api.example.com/posts', {
+  cache: 'force-cache'
+})
+<span style="color:#7c7c99">// fetch 默认 auto no cache，需要缓存时必须显式声明</span>
 
 <span style="color:#8a8a3a">// 2. 禁用缓存（动态）</span>
 const res = await fetch('https://api.example.com/live', {
@@ -29,11 +31,11 @@ const res = await fetch('https://api.example.com/posts', {
 
 <span style="color:#8a8a3a">// 在 Server Action 或 Route Handler 中失效</span>
 import { revalidateTag } from 'next/cache'
-revalidateTag('posts')  <span style="color:#7c7c99">// 清除该标签缓存</span>`
+revalidateTag('posts', 'max')  <span style="color:#7c7c99">// 后台刷新该标签缓存</span>`
 
 const fetchFacts = [
-  'Next.js 扩展了原生 fetch，自动去重和缓存',
-  '同一渲染周期内相同 URL 的 fetch 只执行一次',
+  'Next.js 扩展了原生 fetch，同一次渲染内自动去重',
+  'fetch 默认 auto no cache，需要持久缓存时显式声明',
   'Server Component 中直接 await fetch，无需 useEffect',
   '缓存存储在服务端，跨请求共享',
 ]

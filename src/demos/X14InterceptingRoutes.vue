@@ -23,17 +23,19 @@ app/
 <span style="color:#8a8a3a">// app/feed/(..)photo/[id]/page.tsx — 拦截版</span>
 import { Modal } from '@/components/Modal'
 
-export default function InterceptedPhoto({ params }) {
+export default async function InterceptedPhoto({ params }) {
+  const { id } = await params
   return (
     &lt;Modal&gt;
-      &lt;Photo id={params.id} /&gt;
+      &lt;Photo id={id} /&gt;
     &lt;/Modal&gt;
   )
 }
 
 <span style="color:#8a8a3a">// app/photo/[id]/page.tsx — 直接访问版</span>
-export default function PhotoPage({ params }) {
-  return &lt;Photo id={params.id} fullscreen /&gt;
+export default async function PhotoPage({ params }) {
+  const { id } = await params
+  return &lt;Photo id={id} fullscreen /&gt;
 }`
 
 const flow = [

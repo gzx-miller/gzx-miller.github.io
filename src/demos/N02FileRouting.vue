@@ -2,15 +2,15 @@
 import { ref, computed } from 'vue'
 
 const routes = [
-  { file: 'pages/index.vue', path: '/', desc: '首页' },
-  { file: 'pages/about.vue', path: '/about', desc: '关于页' },
-  { file: 'pages/users/index.vue', path: '/users', desc: '用户列表' },
-  { file: 'pages/users/[id].vue', path: '/users/:id', desc: '用户详情（动态）' },
-  { file: 'pages/blog/[...slug].vue', path: '/blog/:slug(.*)*', desc: '博客 Catch-all' },
-  { file: 'pages/parent/child.vue', path: '/parent/child', desc: '嵌套子路由' },
+  { file: 'app/pages/index.vue', path: '/', desc: '首页' },
+  { file: 'app/pages/about.vue', path: '/about', desc: '关于页' },
+  { file: 'app/pages/users/index.vue', path: '/users', desc: '用户列表' },
+  { file: 'app/pages/users/[id].vue', path: '/users/:id', desc: '用户详情（动态）' },
+  { file: 'app/pages/blog/[...slug].vue', path: '/blog/:slug(.*)*', desc: '博客 Catch-all' },
+  { file: 'app/pages/parent/child.vue', path: '/parent/child', desc: '嵌套子路由' },
 ]
 
-const selectedFile = ref('pages/index.vue')
+const selectedFile = ref('app/pages/index.vue')
 
 const selectedRoute = computed(() => routes.find(r => r.file === selectedFile.value))
 

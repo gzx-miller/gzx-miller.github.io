@@ -46,11 +46,11 @@ import TW11SizingSpacing from './TW11SizingSpacing.vue'
       <tbody>
         <tr><td>固定尺寸</td><td><code>w-32</code>、<code>size-10</code></td><td>头像、图标等恒定尺寸</td></tr>
         <tr><td>流体尺寸</td><td><code>w-full</code>、<code>w-1/2</code></td><td>随容器伸缩的布局块</td></tr>
-        <tr><td>边界约束</td><td><code>max-w-screen-md</code>、<code>min-h-10</code></td><td>限制最大宽度、保证最小高度</td></tr>
+        <tr><td>边界约束</td><td><code>max-w-3xl</code>、<code>min-h-10</code></td><td>限制最大宽度、保证最小高度</td></tr>
       </tbody>
     </table>
     <p>
-      先问一句：这个容器是<strong>固定、流体，还是受最大宽度约束</strong>？答案决定用 <code>w-*</code> 还是 <code>max-w-*</code>。<code>size-*</code> 是 <code>w-*</code> 与 <code>h-*</code> 的合体，方形元素用它最简洁；<code>max-w-screen-md</code> 这类约束让内容在宽屏上不会无限拉伸。
+      先问一句：这个容器是<strong>固定、流体，还是受最大宽度约束</strong>？答案决定用 <code>w-*</code> 还是 <code>max-w-*</code>。<code>size-*</code> 是 <code>w-*</code> 与 <code>h-*</code> 的合体，方形元素用它最简洁；<code>max-w-3xl</code> 这类约束让内容在宽屏上不会无限拉伸。
     </p>
     <p>
       然后是间距的两个层面。盒子<strong>内部</strong>的留白用 <code>p-*</code>、盒子<strong>对外</strong>的留白用 <code>m-*</code>，两者都作用于盒模型。而<strong>同级元素之间</strong>的间距优先用布局层面的间隙 <code>gap-*</code>——它在轨道之间一次性插入等距间隔，不会像相邻 <code>margin</code> 那样叠加，也不会给首尾元素多出边距。<code>space-x-*</code> / <code>space-y-*</code> 则是在相邻子元素之间用选择器插边距，遇到换行或反序会露出破绽，只适合已知顺序的单行排列。
@@ -76,7 +76,7 @@ import TW11SizingSpacing from './TW11SizingSpacing.vue'
       尺寸与间距的本质，是把页面里所有「多大、留多少空」的决策，从随手填的像素，收敛到一套有语义、有刻度的系统上。容器先分清固定、流体与边界约束，同级间距优先交给 <code>gap</code>，并且永远别忘记 <code>min-w-0</code>——节奏统一了，页面自然就稳了。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「设计尺度」</span>指一套有限、成倍数的数值刻度（默认以 4 为基数）。尺寸工具区分固定（<code>w-32</code>、<code>size-10</code>）、流体（<code>w-full</code>）与边界约束（<code>max-w-screen-md</code>、<code>min-h-10</code>）；间距工具区分盒模型内外的 <code>p-*</code>/<code>m-*</code>、Flex/Grid 轨道的 <code>gap-*</code> 与相邻子元素的 <code>space-*</code>。同级间距优先用 <code>gap</code>，并为可能溢出的子项补上 <code>min-w-0</code>。
+      <span class="term-name">「设计尺度」</span>指一套有限、成倍数的数值刻度（默认以 4 为基数）。尺寸工具区分固定（<code>w-32</code>、<code>size-10</code>）、流体（<code>w-full</code>）与边界约束（<code>max-w-3xl</code>、<code>min-h-10</code>）；间距工具区分盒模型内外的 <code>p-*</code>/<code>m-*</code>、Flex/Grid 轨道的 <code>gap-*</code> 与相邻子元素的 <code>space-*</code>。同级间距优先用 <code>gap</code>，并为可能溢出的子项补上 <code>min-w-0</code>。
     </div>
   </LessonArticle>
 </template>

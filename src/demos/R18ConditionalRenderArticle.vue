@@ -5,7 +5,7 @@ import R18ConditionalRender from './R18ConditionalRender.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>折扣区一直用 <code>{count &amp;&amp; &lt;Discount /&gt;}</code> 控制，跑了大半年都好好的；直到某次活动把 <code>count</code> 设成了 <code>0</code>，页面角落凭空多出一个孤零零的「0」——条件明明是假的，这个 0 究竟是谁渲染上去的？
+      <strong>承接上文：</strong>折扣区一直用 <code>{count &amp;&amp; &lt;Discount /&gt;}</code> 控制，跑了大半年都好好的；直到某次活动把 <code>count</code> 设成了 <code>0</code>，页面角落凭空多出一个孤零零的「0」——条件明明是假的，这个 0 究竟是谁渲染上去的？
     </div>
 
     <h2>条件渲染表达式化</h2>

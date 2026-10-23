@@ -1,0 +1,162 @@
+// 服务端流式输出：stream 的四种 streamMode、异步迭代与 SSE 边界
+// 场景：课程助教生成回答，服务端同时推送节点进度、token 与业务事件
+import { StateGraph, StateSchema, MessagesValue, START, END } from '@langchain/langgraph'
+import { ChatOpenAI } from '@langchain/openai'
+import { AIMessage, HumanMessage } from '@langchain/core/messages'
+import { tool } from '@langchain/core/tools'
+import { createAgent } from 'langchain'
+import { z } from 'zod'
+
+const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0, streaming: true })
+
+// ═══ 1. 状态：消息用 MessagesValue，其余字段用 Zod 声明 ═══
+const LessonState = new StateSchema({
+  messages: MessagesValue,
+  topic: z.string(),
+  outline: z.string().default(''),
+  draft: z.string().default(''),
+  summary: z.string().default(''),
+})
+
+// ═══ 2. 节点：custom 模式由 writer 主动写入业务事件 ═══
+async function outlineNode(state: typeof LessonState.State, config: any) {
+  config.writer?.({ type: 'progress', node: 'outline', percent: 20 })
+
+  const response = await model.invoke(`为「${state.topic}」写三级大纲`)
+  const outline = String(response.content)
+
+  config.writer?.({ type: 'progress', node: 'outline', percent: 100 })
+  return { outline, messages: [response] }
+}
+
+async function contentNode(state: typeof LessonState.State, config: any) {
+  config.writer?.({ type: 'progress', node: 'content', percent: 30 })
+
+  // 结果：逐 token 消费模型流，messages 模式才能拿到真正的 token 粒度
+  const tokenStream = await model.stream(`根据大纲写正文：\n${state.outline}`)
+  let draft = ''
+
+  for await (const chunk of tokenStream) {
+    draft += String(chunk.content)
+  }
+
+  config.writer?.({ type: 'progress', node: 'content', percent: 100 })
+  return { draft, messages: [new AIMessage(draft)] }
+}
+
+async function summaryNode(state: typeof LessonState.State) {
+  const response = await model.invoke(`把正文压缩成 100 字摘要：\n${state.draft}`)
+  return { summary: String(response.content), messages: [response] }
+}
+
+const graph = new StateGraph(LessonState)
+  .addNode('outline', outlineNode)
+  .addNode('content', contentNode)
+  .addNode('summary', summaryNode)
+  .addEdge(START, 'outline')
+  .addEdge('outline', 'content')
+  .addEdge('content', 'summary')
+  .addEdge('summary', END)
+
+const app = graph.compile()
+
+const input = {
+  topic: 'LangGraph 流式输出',
+  messages: [new HumanMessage('讲讲 LangGraph 的流式输出')],
+}
+
+// ═══ 3. values：每个超步给完整状态，适合调试与最终结果预览 ═══
+for await (const state of await app.stream(input, { streamMode: 'values' })) {
+  console.log('[values] 字段：', Object.keys(state).join(', '))
+  console.log('[values] 当前摘要：', state.summary)
+}
+
+// ═══ 4. updates：只给节点增量，适合步骤条与状态灯 ═══
+for await (const update of await app.stream(input, { streamMode: 'updates' })) {
+  const [nodeName, delta] = Object.entries(update)[0] as [string, Record<string, unknown>]
+  console.log(`[updates] ${nodeName} 写入字段：${Object.keys(delta).join(', ')}`)
+}
+
+// ═══ 5. messages：逐 token 输出，meta 标注来源节点 ═══
+for await (const [chunk, meta] of await app.stream(input, { streamMode: 'messages' })) {
+  if (meta?.langgraph_node === 'content' && typeof chunk.content === 'string') {
+    process.stdout.write(chunk.content)
+  }
+}
+
+// ═══ 6. custom：只接收节点 writer 写入的事件 ═══
+for await (const event of await app.stream(input, { streamMode: 'custom' })) {
+  console.log('[custom] 业务事件：', event)
+}
+
+// ═══ 7. 组合模式：每个事件以 [mode, chunk] 到达 ═══
+for await (const [mode, chunk] of await app.stream(input, {
+  streamMode: ['updates', 'custom'],
+})) {
+  console.log(`[组合] ${mode} →`, chunk)
+}
+
+// ═══ 8. SSE 边界：服务端只负责序列化与写出 ═══
+interface SseSink {
+  write(chunk: string): void
+  end(): void
+}
+
+function toSse(event: string, data: unknown): string {
+  return `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`
+}
+
+async function pipeToSse(sink: SseSink, topic: string): Promise<void> {
+  const controller = new AbortController()
+
+  try {
+    const stream = await app.stream(
+      { topic, messages: [new HumanMessage(topic)] },
+      { streamMode: 'custom', signal: controller.signal },
+    )
+
+    for await (const event of stream) {
+      const type = typeof event === 'object' && event && 'type' in event ? String(event.type) : 'message'
+      sink.write(toSse(type, event))
+    }
+  } catch (error) {
+    // 断流后停止迭代：用户已经离开，不必继续消耗模型额度
+    controller.abort()
+    sink.write(toSse('error', { message: 'stream aborted' }))
+    throw error
+  } finally {
+    sink.end()
+  }
+}
+
+const sink: SseSink = {
+  write: (chunk) => process.stdout.write(chunk),
+  end: () => console.log('[sse] connection closed'),
+}
+
+await pipeToSse(sink, 'LangGraph 流式输出')
+
+// ═══ 9. 预置智能体同样支持流式：createAgent 来自 langchain v1 ═══
+const searchCourses = tool(
+  async ({ keyword }) => `检索到 3 门「${keyword}」课程`,
+  {
+    name: 'search_courses',
+    description: '按关键词检索课程库',
+    schema: z.object({ keyword: z.string() }),
+  },
+)
+
+const agent = createAgent({
+  model,
+  tools: [searchCourses],
+  systemPrompt: '你是课程助手，回答前先检索课程库。',
+})
+
+for await (const [chunk, meta] of await agent.stream(
+  { messages: [new HumanMessage('推荐三门 LangGraph 课程')] },
+  { streamMode: 'messages' },
+)) {
+  if (meta?.langgraph_node === 'agent' && typeof chunk.content === 'string') {
+    process.stdout.write(chunk.content)
+  }
+}

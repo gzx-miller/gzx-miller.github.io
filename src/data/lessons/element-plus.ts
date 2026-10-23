@@ -118,6 +118,7 @@ export const lessons: Lesson[] = [
       '成组按钮由 ElButtonGroup 负责相邻边框合并，单独加边框会叠线。',
     ],
     problem: '解决"页面里按钮类型乱用，重要操作不突出、危险操作与普通操作难以分辨"的问题。',
+    officialUrl: 'https://element-plus.org/zh-CN/component/button.html',
   },
 {
     id: 'E_2',
@@ -131,7 +132,7 @@ export const lessons: Lesson[] = [
     code: E02Code,
     language: 'vue',
     principle:
-      'ElForm 通过 :model 提供数据对象，rules 定义校验规则，每条 ElFormItem 用 prop 关联 model 中的字段，表单控件再通过 v-model 绑定到对应字段。通过 ref 拿到 FormInstance 后可调用 validate 整体校验、validateField 局部校验、resetFields 重置为初始值；rules 支持 required、min/max、email 等内置规则和 validator 自定义校验函数。',
+      'ElForm 通过 :model 提供数据对象，rules 定义校验规则，每条 ElFormItem 用 prop 关联 model 中的字段，表单控件再通过 v-model 绑定到对应字段。通过 ref 拿到 FormInstance 后可调用 validate 整体校验、validateField 局部校验、resetFields 重置为初始值；validate 不传回调时返回 Promise，可直接 await，传入回调时按 (valid, fields) 回调执行。rules 支持 required、min/max、email 等内置规则和 validator 自定义校验函数。',
     flow: [
       '用 reactive 定义 form 数据对象，并为需要校验的字段编写 rules。',
       'ElInput、ElSelect、ElCheckbox、ElDatePicker 等控件通过 v-model 绑定到 form 对应字段。',
@@ -145,6 +146,7 @@ export const lessons: Lesson[] = [
       'resetFields 会同时清空值并恢复初始校验状态，适合"重置表单"按钮。',
     ],
     problem: '解决"注册、下单等表单里校验提示散乱、提交后错误定位困难，用户体验与数据质量双双失控"的问题。',
+    officialUrl: 'https://element-plus.org/zh-CN/component/form.html',
   },
 {
     id: 'E_3',
@@ -158,7 +160,7 @@ export const lessons: Lesson[] = [
     code: E03Code,
     language: 'vue',
     principle:
-      'ElTable 通过 :data 传入数组渲染表格，ElTableColumn 用 prop 绑定字段、label 定义表头。单元格默认直接输出字段原文；需要格式化或加控件时用 #default 作用域插槽解构 row 自定义渲染。stripe 开启斑马纹，row-key 提供稳定行标识。',
+      'ElTable 通过 :data 传入数组渲染表格，ElTableColumn 用 prop 绑定字段、label 定义表头。单元格默认直接输出字段原文；需要格式化或加控件时用 #default 作用域插槽解构 row 自定义渲染。stripe 开启斑马纹，row-key 提供稳定行标识；多选列用 type="selection"，跨页保留勾选需配合 row-key 与 reserve-selection，树形数据则用 tree-props 指定 children 字段。数据量极大时可改用 el-table-v2，以 columns 数组（key/dataKey/title/width）声明列，并用 estimated-row-height 支持动态行高。',
     flow: [
       '准备表格数据数组，逐列声明 ElTableColumn 的 prop 与 label。',
       '对价格、状态等字段用 template #default="{ row }" 自定义渲染，如拼货币符号或 ElTag 状态标签。',
@@ -168,10 +170,11 @@ export const lessons: Lesson[] = [
     notes: [
       '自定义单元格里要访问当前行数据时，务必从作用域插槽解构 row。',
       '金额、状态映射等格式化逻辑抽成纯函数或 computed，保持模板简洁、便于复用与测试。',
-      '列多时可固定列宽，长文本列用 min-width 自适应；数据量大时配合分页或虚拟滚动。',
+      '列多时可固定列宽，长文本列用 min-width 自适应；数据量大时优先分页，确需一次渲染大量行再改用 el-table-v2。',
       '排序、筛选交给后端时，在 @sort-change 里携排序字段重新请求，前端不硬算全量数据。',
     ],
     problem: '解决"如何用 ElTable 渲染、过滤、分页和操作结构化数据"的问题。',
+    officialUrl: 'https://element-plus.org/zh-CN/component/table.html',
   },
 {
     id: 'E_4',
@@ -185,7 +188,7 @@ export const lessons: Lesson[] = [
     code: E04Code,
     language: 'vue',
     principle:
-      'ElDialog 通过 v-model 控制显示状态，title 设置标题、width 设置宽度。默认插槽放主体内容，footer 插槽放底栏按钮；show-close 控制右上角关闭按钮是否显示。关闭图标或取消按钮都会把 v-model 更新为 false。',
+      'ElDialog 通过 v-model 控制显示状态，title 设置标题、width 设置宽度。默认插槽放主体内容，footer 插槽放底栏按钮；show-close 控制右上角关闭按钮是否显示。关闭图标或取消按钮都会把 v-model 更新为 false。默认渲染在当前位置，父级 overflow 或层叠上下文会裁剪弹层时用 append-to-body 挂到 body；destroy-on-close 可在关闭时销毁内部内容与状态。',
     flow: [
       '用 ref 保存布尔值控制开关，点击打开按钮把值置为 true。',
       '把表单或提示内容放入默认插槽，底栏操作按钮放入 footer 插槽。',
@@ -199,6 +202,7 @@ export const lessons: Lesson[] = [
       '对话框内的表单打开时应重置校验状态，避免上一次的红色错误提示带到下一次。',
     ],
     problem: '解决"需要强打断的确认或录入时，如何展示模态对话框并组织标题与操作按钮"的问题。',
+    officialUrl: 'https://element-plus.org/zh-CN/component/dialog.html',
   },
 {
     id: 'E_5',
@@ -226,6 +230,7 @@ export const lessons: Lesson[] = [
       '错误提示要给出具体失败原因与后续动作，避免泛化的"操作失败"四个字。',
     ],
     problem: '解决"操作完成后毫无反馈、危险操作一点就执行，用户误删误提交后无法挽回"的问题。',
+    officialUrl: 'https://element-plus.org/zh-CN/component/message.html',
   },
 {
     id: 'E_6',
@@ -253,6 +258,7 @@ export const lessons: Lesson[] = [
       '触屏设备没有 hover：移动端要保证关键信息本身可读，或改用 click 触发。',
     ],
     problem: '解决"如何在不跳转页面的前提下，为悬浮或点击展示辅助信息与快捷操作入口"的问题。',
+    officialUrl: 'https://element-plus.org/zh-CN/component/popover.html',
   },
 {
     id: 'E_7',
@@ -268,7 +274,7 @@ export const lessons: Lesson[] = [
     principle:
       'ElDropdown 通过 #dropdown 插槽放 ElDropdownMenu，菜单项 ElDropdownItem 用 command 标识操作、disabled 禁用、divided 加分隔线。点选菜单项触发 @command 事件，回调参数就是所选 command。split-button 把触发钮拆成主按钮和右侧下拉箭头。',
     flow: [
-      '触发源（按钮或文字）放 reference 区，点击后展开下拉菜单。',
+      '触发源（按钮或文字）放默认插槽，菜单结构放入 #dropdown 插槽，点击触发源展开。',
       '为每个 ElDropdownItem 定义唯一 command，在 @command 里统一分发处理。',
       '需要主操作加附加菜单时用 split-button：主按钮触发 @click，箭头展开走 @command。',
       '切换选中项场景下，用动态 disabled 标记当前选中项。',
@@ -280,6 +286,7 @@ export const lessons: Lesson[] = [
       '命令项较多时用 divided 分区或分组展示，避免十个命令平铺成一条难以扫读的长列表。',
     ],
     problem: '解决"众多操作命令平铺成按钮太占空间，需要收拢进下拉菜单并按命令统一分发"的问题。',
+    officialUrl: 'https://element-plus.org/zh-CN/component/dropdown.html',
   },
 {
     id: 'E_8',
@@ -293,7 +300,7 @@ export const lessons: Lesson[] = [
     code: E08Code,
     language: 'vue',
     principle:
-      'ElTabs 通过 v-model 绑定当前激活 pane 的 name，每个 ElTabPane 用 label 设置标签文本、name 标识身份。切换标签时触发 @tab-click。disabled=true 的 pane 不可点击，type="card" 切换为卡片样式。',
+      'ElTabs 通过 v-model 绑定当前激活 pane 的 name，每个 ElTabPane 用 label 设置标签文本、name 标识身份。切换标签时触发 @tab-click。disabled=true 的 pane 不可点击，type="card" 切换为卡片样式；ElTabPane 的 lazy 控制内容是否延迟到首次激活再渲染。',
     flow: [
       '用 v-model 绑定当前激活标签页的 name。',
       '把每个面板内容放在对应 ElTabPane 内，并设置 label 与 name。',
@@ -301,12 +308,13 @@ export const lessons: Lesson[] = [
       '不可切换的页签加 disabled，顶部导航风格可用 type="card"。',
     ],
     notes: [
-      '切换时只渲染当前激活 pane 的内容，各 pane 之间应保持独立、互不依赖。',
+      'ElTabPane 默认会随标签页一起渲染内容，仅靠显隐切换；需要按需渲染时给 pane 加 lazy，各 pane 之间仍应保持独立、互不依赖。',
       '禁用页签用 disabled 标注，避免点到空内容占位页。',
       'type="card" 使用卡片样式，适合作为顶部导航分组。',
       '需要拦截切换（如未保存提示）时，可用 before-leave 守卫阻止不满足条件的切换。',
     ],
     problem: '解决"同一块区域要轮换展示多个面板，纵向堆叠太长、跳转新页面又丢失操作上下文"的问题。',
+    officialUrl: 'https://element-plus.org/zh-CN/component/tabs.html',
   },
 {
     id: 'E_9',
@@ -334,6 +342,7 @@ export const lessons: Lesson[] = [
       '删除末页最后一条数据后 currentPage 可能越界：处理完后回退一页并重新请求。',
     ],
     problem: '解决"课程列表数据较多时如何分页展示，并联动每页条数与页码避免空页"的问题。',
+    officialUrl: 'https://element-plus.org/zh-CN/component/pagination.html',
   },
 {
     id: 'E_10',
@@ -347,7 +356,7 @@ export const lessons: Lesson[] = [
     code: E10Code,
     language: 'vue',
     principle:
-      'ElUpload 支持点击选择与 drag 拖拽两种方式，auto-upload=false 时不自动发请求，文件先进入 file-list 待业务手动 submit()。before-upload 在每个文件真正上传前执行，可校验类型/大小，返回 false 或拒绝的 Promise 即阻止该文件；limit 限制最大数量，超出时触发 on-exceed。v-model:file-list 双向管理已选文件列表，on-remove 处理移除。',
+      'ElUpload 支持点击选择与 drag 拖拽两种方式，auto-upload=false 时不自动发请求，文件先进入 file-list 待业务手动 submit()。before-upload 在每个文件真正上传前执行，可校验类型/大小，返回 false 或拒绝的 Promise 即阻止该文件；limit 限制最大数量，超出时触发 on-exceed。v-model:file-list 双向管理已选文件列表，on-remove 处理移除；需要完全接管上传请求（自定义签名、改走业务请求库）时用 http-request 覆盖组件内置的 XHR 行为。',
     flow: [
       '用户点击或拖拽文件进入上传区域，accept 限定可选类型。',
       'before-upload 校验文件类型和大小，不满足则返回 false 阻止上传。',
@@ -361,6 +370,7 @@ export const lessons: Lesson[] = [
       'accept 只是选择器的过滤提示而非强制校验：真正的拦截必须写在 before-upload 里。',
     ],
     problem: '解决"用户上传文件时类型不符、体积超标，往往到服务端才发现错误，来回重传"的问题。',
+    officialUrl: 'https://element-plus.org/zh-CN/component/upload.html',
   },
 {
     id: 'E_11',
@@ -388,6 +398,7 @@ export const lessons: Lesson[] = [
       '级联选项数据来自接口时先加载再渲染：空 options 会让用户误判为无数据。',
     ],
     problem: '解决"省市区、类目等多级数据用平铺选项选择，层级一深用户就点不明白"的问题。',
+    officialUrl: 'https://element-plus.org/zh-CN/component/cascader.html',
   },
 {
     id: 'E_12',
@@ -401,7 +412,7 @@ export const lessons: Lesson[] = [
     code: E12Code,
     language: 'vue',
     principle:
-      'ElTooltip 在触发源悬浮或点击时显示提示。placement 控制弹出方向（top/bottom/left/right），trigger 选择触发方式（hover/click）。纯文本用 content 属性提供，#content 插槽支持多行、列表等结构化富内容。',
+      'ElTooltip 在触发源悬浮或点击时显示提示。placement 控制弹出方向（top/bottom/left/right 及带 start/end 的组合值），trigger 选择触发方式（hover/click/focus/contextmenu）。纯文本用 content 属性提供，#content 插槽支持多行、列表等结构化富内容。',
     flow: [
       '用 placement 设置提示方向，辅助说明默认使用 hover 触发。',
       '需要用户主动查看时改用 trigger="click"。',
@@ -415,6 +426,7 @@ export const lessons: Lesson[] = [
       '触屏与键盘场景没有 hover：关键说明要么直接展示，要么同时提供 click 触发。',
     ],
     problem: '解决"图标按钮和陌生术语没有任何解释，用户看不懂又不敢点、频繁误击"的问题。',
+    officialUrl: 'https://element-plus.org/zh-CN/component/tooltip.html',
   },
 {
     id: 'E_13',
@@ -442,6 +454,7 @@ export const lessons: Lesson[] = [
       'shortcuts 的区间由函数动态计算：确认"最近 7 天"等口径包含首尾哪一端，与后端对齐。',
     ],
     problem: '解决"报表筛选日期时手动逐天点选易错、口径不统一，经常选出无效区间"的问题。',
+    officialUrl: 'https://element-plus.org/zh-CN/component/date-picker.html',
   },
 {
     id: 'E_14',
@@ -469,6 +482,7 @@ export const lessons: Lesson[] = [
       'setCheckedKeys 是一次性写入：树数据刷新后需要重新调用，它不会自动跟随更新。',
     ],
     problem: '解决"菜单权限、组织架构等层级数据在勾选和搜索时困难重重，保存后又难以准确回显"的问题。',
+    officialUrl: 'https://element-plus.org/zh-CN/component/tree.html',
   },
 {
     id: 'E_15',
@@ -496,6 +510,7 @@ export const lessons: Lesson[] = [
       '打开时把焦点移入抽屉首个控件、关闭后归还触发按钮，键盘与无障碍体验更完整。',
     ],
     problem: '解决"列表里点开详情跳新页会丢失筛选与滚动位置，返回后上下文全没了"的问题。',
+    officialUrl: 'https://element-plus.org/zh-CN/component/drawer.html',
   },
 {
     id: 'E_16',
@@ -523,6 +538,7 @@ export const lessons: Lesson[] = [
       '步骤数量建议控制在 3-5 个：过多会让横向步骤条在小屏折行拥挤、读数变慢。',
     ],
     problem: '解决"报名、审批等多阶段流程中用户不知道走到哪一步、还要等多久"的进度传达问题。',
+    officialUrl: 'https://element-plus.org/zh-CN/component/steps.html',
   },
 {
     id: 'E_17', title: '穿梭框：Transfer 数据分配', navTitle: '穿梭框', category: '数据组件',
@@ -533,6 +549,7 @@ export const lessons: Lesson[] = [
     flow: ['准备带唯一 key 与可读 label 的数据源，并用 v-model 绑定右栏目标集合。', '开启 filterable 并用 filter-method 按 label 过滤左侧候选项。', '配置 titles 说明两栏语义（可选课程 / 已选课程）。', '提交前从 v-model 的右栏 key 集合反查完整数据项，作为落库结果。'],
     notes: ['数据项的 key 必须唯一且稳定，否则穿梭与回显会出现错位。', 'data 里的 disabled 可锁定不可移动的条目。', '穿梭相关事件（change 等）可用于联动外部状态；大数据量注意过滤性能。', '为左右栏配置空状态文案：候选为空时提示"暂无可选项"而非空白面板，减少困惑。'],
     problem: '解决"在两个集合之间分配数据项时手动增删繁琐、无法搜索且容易漏选错选"的问题。',
+    officialUrl: 'https://element-plus.org/zh-CN/component/transfer.html',
   },
 {
     id: 'E_18', title: '结果页：Result 操作反馈', navTitle: '结果页', category: '反馈组件',
@@ -543,6 +560,7 @@ export const lessons: Lesson[] = [
     flow: ['根据操作结果选择对应 icon 状态。', '用 title、sub-title 说明发生了什么。', '在 extra 插槽中放置"继续操作 / 查看详情"等按钮。', '补充结果编号、金额等关键业务信息，失败页同时提供重试入口。'],
     notes: ['结果页适合表单提交或流程结束后的整页反馈。', '更轻量的成功/失败反馈优先用 ElMessage 或 ElMessageBox。', 'sub-title 文案宜给出下一步建议，而不仅是状态名称。', '同一业务流程沿用同一结果页结构，用 icon 与文案参数区分状态，降低用户学习成本。'],
     problem: '解决"提交完成或失败之后，用户在略显空白的页面上得不到清晰结论与下一步指引"的问题。',
+    officialUrl: 'https://element-plus.org/zh-CN/component/result.html',
   },
 {
     id: 'E_19', title: '进度条：Progress 学习进度', navTitle: '进度条', category: '数据组件',
@@ -553,6 +571,7 @@ export const lessons: Lesson[] = [
     flow: ['根据业务数据把进度折算为 0-100 的百分比。', '选择展示类型与尺寸，需要分段时用 color 对象数组或函数按值取色。', '监听数据变化动态更新 percentage，并处理完成/异常态。', '多任务场景把各任务进度汇总为一个总进度展示，避免用户逐个查看。'],
     notes: ['type=dashboard（仪表盘）时 width 控制整体画布尺寸，不要与 stroke-width 混淆。', 'color 可传分段数组 [{color, percentage}] 或函数按值返回颜色。', '进度到达 100% 时给用户下一步引导，而不是静默结束。', 'percentage 传入前裁剪到 0-100：异常数据会导致进度条绘制溢出或反向。'],
     problem: '解决"任务完成度、下载进度等状态只能靠文字描述，用户缺乏直观的量化感知"的问题。',
+    officialUrl: 'https://element-plus.org/zh-CN/component/progress.html',
   },
 {
     id: 'E_20', title: '骨架屏：Skeleton 加载占位', navTitle: '骨架屏', category: '反馈组件',
@@ -563,5 +582,6 @@ export const lessons: Lesson[] = [
     flow: ['数据加载前把 loading 置为 true，展示骨架屏。', '用 #template 布置 ElSkeletonItem 占位结构，形状对齐真实内容。', '数据就绪后置 loading=false，切到 #default 的真实内容。', '为骨架容器限定最小高度，占位与真实内容切换时布局不塌陷。'],
     notes: ['骨架形状应尽量贴近最终内容，减少加载完成后的跳动感。', '简短的按钮/列表加载可直接用 v-loading，避免全局滥用骨架屏。', '切换 loading 时可配合过渡动画，让内容出现更平滑。', '骨架块的数量与结构贴近真实列表（用 count 平铺卡片骨架），比通用三行占位跳动更少。'],
     problem: '解决"接口请求期间页面长时间白屏，用户误以为卡死而反复刷新"的加载体验问题。',
+    officialUrl: 'https://element-plus.org/zh-CN/component/skeleton.html',
   }
 ]

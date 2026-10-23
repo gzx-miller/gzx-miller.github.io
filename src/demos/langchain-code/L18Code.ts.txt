@@ -3,7 +3,7 @@ import { ChatPromptTemplate } from '@langchain/core/prompts'
 import { StringOutputParser } from '@langchain/core/output_parsers'
 import { RunnableSequence, RunnablePassthrough } from '@langchain/core/runnables'
 import { OpenAIEmbeddings } from '@langchain/openai'
-import { MemoryVectorStore } from 'langchain/vectorstores/memory'
+import { MemoryVectorStore } from '@langchain/classic/vectorstores/memory'
 import { Document } from '@langchain/core/documents'
 
 const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 })

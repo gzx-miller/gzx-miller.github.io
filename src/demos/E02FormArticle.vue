@@ -43,7 +43,7 @@ import E02Form from './E02Form.vue'
       <code>trigger</code> 决定「什么时候校验」，要和控件行为对上：输入类控件用 <code>blur</code>，用户填完离开时提醒；选择类控件用 <code>change</code>，选中那一瞬就反馈。时机不对，用户还没填完就被标红，反而添乱。
     </p>
     <p>
-      拿到实例后，三个方法覆盖了绝大部分场景：<code>validate</code> 做整体校验并返回是否通过，<code>validateField</code> 只校验指定字段，<code>resetFields</code> 一次性清空值并把校验状态恢复为初始。<strong>提交时的正确姿势是先 <code>await validate()</code>，通过后再执行业务提交</strong>；若后端返回字段级错误，再把它映射回对应的 <code>prop</code> 并聚焦到那一项，用户就能立刻看到问题出在哪。
+      拿到实例后，三个方法覆盖了绝大部分场景：<code>validate</code> 做整体校验并返回是否通过，<code>validateField</code> 只校验指定字段，<code>resetFields</code> 一次性清空值并把校验状态恢复为初始。<strong>提交时的正确姿势是先 <code>await validate()</code>，通过后再执行业务提交</strong>——不传回调时它返回 Promise；如果仍使用回调写法，则回调参数为 <code>(valid, fields)</code>，两种方式都在官方 API 内。若后端返回字段级错误，再把它映射回对应的 <code>prop</code> 并聚焦到那一项，用户就能立刻看到问题出在哪。
     </p>
     <div class="lesson-box warn">
       <strong>两个必须记住的点：</strong>自定义 <code>validator</code> 里 <code>callback()</code> 表示通过、<code>callback(new Error('…'))</code> 表示失败，<strong>失败分支千万不能漏</strong>，否则校验会「静默通过」；另外，前端校验只负责即时反馈，<strong>真实提交仍然必须依赖服务端校验</strong>，绝不能把它当作安全边界。

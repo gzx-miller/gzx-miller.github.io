@@ -27,7 +27,9 @@ export default defineConfig({
       name: 'MyUILib',
       
       // 输出格式: 'es' | 'cjs' | 'umd' | 'iife'
-      formats: ['es', 'cjs', 'umd'],
+      // 多入口会做代码分割，此时不能再输出 umd / iife，
+      // 需要 UMD 时请改成单入口并只保留一种格式
+      formats: ['es', 'cjs'],
       
       // 输出文件名
       fileName: (format, entryName) => {
@@ -42,22 +44,23 @@ export default defineConfig({
       external: ['vue', 'vue-router', 'pinia'],
       
       output: {
-        // UMD 模式下的全局变量映射
+        // UMD / IIFE 模式下的全局变量映射（这里保留作参考）
         globals: {
           vue: 'Vue',
           'vue-router': 'VueRouter',
           pinia: 'Pinia'
         },
         
-        // CSS 输出配置
+        // CSS 输出配置（Rollup 4 起用 names 数组，name 已废弃）
         assetFileNames: (assetInfo) => {
-          if (assetInfo.name === 'style.css') return 'index.css'
-          return assetInfo.name || 'assets/[name][extname]'
+          const name = assetInfo.names[0]
+          if (name === 'style.css') return 'index.css'
+          return name || 'assets/[name][extname]'
         }
       }
     },
     
-    // 库模式下默认不压缩 CSS
+    // 库模式的 CSS 处理：按入口拆分；单入口时可设为 false 合并为一份
     cssCodeSplit: true,
     
     // 源码映射（便于调试）

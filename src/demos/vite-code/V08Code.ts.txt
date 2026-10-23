@@ -14,8 +14,9 @@ export default defineConfig({
     // 压缩方式: 'esbuild' | 'terser' | false
     minify: 'esbuild',
     
-    // 目标环境
-    target: 'es2015',
+    // 目标环境：Vite 7 默认 'baseline-widely-available'
+    // 即 chrome107 / edge107 / firefox104 / safari16
+    target: 'baseline-widely-available',
     
     // 代码分割配置
     rollupOptions: {

@@ -1,6 +1,6 @@
 <template>
   <LlmArticle>
-    <div class="llm-question"><strong>开场问题：</strong>矩阵乘法到底在做什么？——旋转、拉伸、搬动整个空间。</div>
+    <div class="llm-question"><strong>承接上文：</strong>矩阵乘法到底在做什么？——旋转、拉伸、搬动整个空间。</div>
 
     <h2>提出问题换眼镜看Wx</h2>
     <p>上一课把矩阵乘向量 <code>Wx</code> 当成一台「算账」的计算器：喂一个向量、吐一个向量。这一课给同一个 Wx 换一副眼镜，看它在<em>几何上</em>到底在做什么。先捡回一个事实：向量既是串数字，也是坐标纸上从原点出发的箭头。既然输入 x 是一个点、算出的 Wx 也是一个点，那矩阵乘法本质上做的其实是——<strong>把输入这个点搬到另一个位置</strong>。取 <code>W=[2,1;1,2]</code>、<code>x=[1,1]</code>，算出 <code>Wx=[3,3]</code>，这个 W 就把点 [1,1] 搬到了 [3,3]。</p>

@@ -49,7 +49,7 @@ import V11SSR from './V11SSR.vue'
       接着补「依赖怎么处理」。服务端代码跑在 Node 里，有些依赖不能被建进 SSR 产物，有些又必须被建进去，于是 <code>ssr.external</code> 与 <code>ssr.noExternal</code> 各管一头：前者让依赖保持外部引用、运行时从 <code>node_modules</code> 加载，后者强制把依赖打进服务端产物——只发 ESM、或需要被转换的库往往必须这样做。
     </p>
     <p>
-      最后是「产出与部署」。SSR 应用有两份产物：一份给服务端（渲染用），一份给客户端（Hydration 用），要<strong>分别构建后一起部署</strong>到一个能跑 Node 的服务器上。这也正是它与纯静态站最大的区别——目标环境必须有 Node。顺带一提，本仓库（小松鼠举栗子）本身就是 Nuxt 4 + Vite 的 SSR 应用，Nuxt 就是把上面这一整套流程封装成了开箱即用。
+      最后是「产出与部署」。SSR 应用有两份产物：一份给服务端（渲染用），一份给客户端（Hydration 用），要<strong>分别构建后一起部署</strong>到一个能跑 Node 的服务器上：客户端照常执行 <code>vite build</code>，服务端则用 <code>vite build --ssr src/entry-server.ts</code> 指定 SSR 入口。这也正是它与纯静态站最大的区别——目标环境必须有 Node。顺带一提，本仓库（小松鼠举栗子）本身就是 Nuxt 4 + Vite 的 SSR 应用，Nuxt 就是把上面这一整套流程封装成了开箱即用。
     </p>
     <div class="lesson-box warn">
       <strong>两条最容易踩的线：</strong>依赖浏览器 API 的代码要放进 <code>onMounted</code> 或 <code>&lt;ClientOnly&gt;</code> 里，避免服务端执行时找不到 <code>window</code>；首屏数据的请求要写在支持 SSR 的加载函数中，因为 <code>onMounted</code> 在服务端根本不会执行，写在那里等于服务端渲染的是空数据。

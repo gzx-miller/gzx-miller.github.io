@@ -1,14 +1,14 @@
 // app/products/[id]/page.tsx - 单段动态路由
 // 访问 /products/123，params.id = '123'
-export default function ProductPage({
+export default async function ProductPage({
   params,
   searchParams,
 }: {
-  params: { id: string }
-  searchParams: { [key: string]: string | string[] | undefined }
+  params: Promise<{ id: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
-  const productId = params.id
-  const utmSource = searchParams.utm_source as string | undefined
+  const { id: productId } = await params
+  const utmSource = (await searchParams).utm_source as string | undefined
 
   return (
     <div>
@@ -22,16 +22,17 @@ export default function ProductPage({
 
 // app/categories/[...slug]/page.tsx - Catch-all 多段
 // 访问 /categories/electronics/phones，params.slug = ['electronics', 'phones']
-export default function CategoryPage({
+export default async function CategoryPage({
   params,
 }: {
-  params: { slug: string[] }
+  params: Promise<{ slug: string[] }>
 }) {
+  const { slug } = await params
   return (
     <div>
       <h1>分类路径</h1>
       <ol>
-        {params.slug.map((seg, i) => (
+        {slug.map((seg, i) => (
           <li key={i}>{seg}</li>
         ))}
       </ol>
@@ -43,12 +44,13 @@ export default function CategoryPage({
 
 // app/search/[[...query]]/page.tsx - 可选 Catch-all
 // 匹配 /search、/search/react、/search/react/hooks
-export default function SearchPage({
+export default async function SearchPage({
   params,
 }: {
-  params: { query?: string[] }
+  params: Promise<{ query?: string[] }>
 }) {
-  const query = params.query?.join(' ') || ''
+  const { query: segments } = await params
+  const query = segments?.join(' ') || ''
 
   return (
     <div>

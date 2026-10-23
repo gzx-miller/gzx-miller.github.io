@@ -75,7 +75,7 @@ import X10ServerActions from './X10ServerActions.vue'
       Server Action 的核心，是把「客户端打包请求、服务端处理、客户端刷新」这条往返链路，收成一次<strong>到服务端函数的直接调用</strong>。表单 action 指向服务端函数，提交自动完成，缓存随 <code>revalidatePath</code> 刷新；再配合 <code>useFormStatus</code>、<code>useActionState</code>、<code>useOptimistic</code> 补上交互细节。我们只需记住「参数和返回值要可序列化」这一条边界，就换来了更少的胶水代码和更稳的安全默认值。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「Server Action」</span>是用 <code>'use server'</code> 声明的服务端函数，前端通过 POST 调用。可绑定到 <code>&lt;form action={...}&gt;</code> 实现无 JS 也能提交的表单，并自带 CSRF 防护与参数序列化；执行后用 <code>revalidatePath</code> 或 <code>revalidateTag</code> 刷新缓存。React 19 下用 <code>useActionState</code> 跟踪返回值、<code>useFormStatus</code> 跟踪提交状态、<code>useOptimistic</code> 做乐观更新，参数与返回值必须可序列化。
+      <span class="term-name">「Server Action」</span>是用 <code>'use server'</code> 声明的服务端函数，前端通过 POST 调用。可绑定到 <code>&lt;form action={...}&gt;</code> 实现无 JS 也能提交的表单，并自带 CSRF 防护与参数序列化；执行后用 <code>revalidatePath</code> 刷新路径缓存；需要立即读到新数据时用 <code>updateTag</code>，其他场景用 <code>revalidateTag(tag, 'max')</code> 做后台刷新。React 19 下用 <code>useActionState</code> 跟踪返回值、<code>useFormStatus</code> 跟踪提交状态、<code>useOptimistic</code> 做乐观更新，参数与返回值必须可序列化。
     </div>
   </LessonArticle>
 </template>

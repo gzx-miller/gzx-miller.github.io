@@ -5,7 +5,7 @@ import K21TestingMaintainability from './K21TestingMaintainability.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>项目变大以后，每改一处代码都要靠手动点页面来确认没坏——有没有办法让「改完到底还对不对」这件事，交给机器替我盯着？
+      <strong>承接上文：</strong>项目变大以后，每改一处代码都要靠手动点页面来确认没坏——有没有办法让「改完到底还对不对」这件事，交给机器替我盯着？
     </div>
 
     <h2>报名规则持续扩张</h2>

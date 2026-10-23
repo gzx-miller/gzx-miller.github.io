@@ -5,7 +5,7 @@ import S22Recoil from './S22Recoil.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>一个统计面板要显示「完成率」，它订阅的是整份 todo 数组。你勾掉一项，整份列表重渲染是应该的，可那个只显示 <code>3/5</code> 的小面板也跟着重渲染——它明明只关心完成数，凭什么数组一变它就得跟着跑一遍？
+      <strong>承接上文：</strong>一个统计面板要显示「完成率」，它订阅的是整份 todo 数组。你勾掉一项，整份列表重渲染是应该的，可那个只显示 <code>3/5</code> 的小面板也跟着重渲染——它明明只关心完成数，凭什么数组一变它就得跟着跑一遍？
     </div>
 
     <h2>原始值与派生值</h2>

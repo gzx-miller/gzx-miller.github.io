@@ -88,7 +88,8 @@ function createProgram(gl: WebGLRenderingContext, vs: string, fs: string): WebGL
 
 function buildTriangleData(count: number, instanced: boolean) {
   const tris = count
-  const perTri = instanced ? 6 : 9
+  const perVertex = instanced ? 9 : 6
+  const perTri = perVertex * 3
   const data = new Float32Array(tris * perTri)
   for (let i = 0; i < tris; i++) {
     const o = i * perTri
@@ -230,13 +231,17 @@ function render(time: number) {
         drawCalls++
       }
     }
-  } else if (batched) {
-    gl.drawArrays(gl.TRIANGLES, 0, count * 3)
-    drawCalls = 1
   } else {
-    for (let i = 0; i < count; i++) {
-      gl.drawArrays(gl.TRIANGLES, i * 3, 3)
-      drawCalls++
+    // 关闭实例属性，避免 divisor=1 的残留状态污染逐顶点绘制。
+    gl.disableVertexAttribArray(offLoc)
+    if (batched) {
+      gl.drawArrays(gl.TRIANGLES, 0, count * 3)
+      drawCalls = 1
+    } else {
+      for (let i = 0; i < count; i++) {
+        gl.drawArrays(gl.TRIANGLES, i * 3, 3)
+        drawCalls++
+      }
     }
   }
 
@@ -246,6 +251,7 @@ function render(time: number) {
 
   totalTriangles.value = tris
   gpuMemoryMB.value = Math.round(tris * (instanced ? 27 : 18) * 4 / 1024 / 1024 * 100) / 100
+
 
   state.rafId = requestAnimationFrame(render)
 }
@@ -335,7 +341,7 @@ const drawCallBar = computed(() => {
 <template>
   <div class="demo-card">
     <h3>🌰 性能优化与调试</h3>
-    <p class="summary">实时监控 FPS、Draw Call、GPU 显存。开启/关闭优化策略，观察性能指标的动态变化。</p>
+    <p class="summary">实时监控 FPS、Draw Call、顶点缓冲占用。开启/关闭优化策略，观察性能指标的动态变化。</p>
 
     <div class="demo-layout">
       <div class="left-panel">
@@ -360,7 +366,7 @@ const drawCallBar = computed(() => {
             <span class="metric-value">{{ currentDrawCalls }}</span>
           </div>
           <div class="metric-card">
-            <span class="metric-label">GPU 显存</span>
+            <span class="metric-label">顶点缓冲</span>
             <span class="metric-value">{{ gpuMemoryMB.toFixed(2) }}MB</span>
           </div>
           <div class="metric-card">
@@ -416,9 +422,9 @@ const drawCallBar = computed(() => {
         </label>
 
         <label class="control-item checkbox">
-          <input type="checkbox" v-model="vsyncEnabled" />
-          <span>VSync (垂直同步)</span>
-          <small class="hint">限制帧率到显示器刷新率</small>
+          <input type="checkbox" v-model="vsyncEnabled" disabled />
+          <span>VSync（由浏览器控制）</span>
+          <small class="hint">rAF 始终跟随刷新率，WebGL 没有关闭 VSync 的开关</small>
         </label>
 
         <label class="control-item">
@@ -450,15 +456,15 @@ const drawCallBar = computed(() => {
         </div>
 
         <div class="code-display">
-          <h5>Chrome DevTools 分析命令</h5>
-          <pre><code>// 查看 GPU 信息
+          <h5>Chrome DevTools 分析入口</h5>
+          <pre><code>// 查看 GPU 与 WebGL 特性
 chrome://gpu
 
-// WebGL 面板
-chrome://inspect/#devices
+// 帧率与绘制耗时
+DevTools → Performance 面板录制
 
-// FPS 监控
-performance.now() 差值计算</code></pre>
+// 实时 FPS / 分层信息
+DevTools → Rendering 面板</code></pre>
         </div>
       </div>
     </div>

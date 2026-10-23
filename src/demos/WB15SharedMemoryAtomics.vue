@@ -12,14 +12,16 @@ const isolated = ref(false)
 const status = ref('')
 
 let atomicExports: any = null
+let sharedMemory: WebAssembly.Memory | null = null
 let sab: SharedArrayBuffer | null = null
 
 onMounted(async () => {
   isolated.value = typeof window !== 'undefined' && window.crossOriginIsolated === true
   try {
-    const instance = await instantiateWasm('atomic')
+    sharedMemory = new WebAssembly.Memory({ initial: 1, maximum: 1, shared: true })
+    const instance = await instantiateWasm('atomic', { env: { memory: sharedMemory } })
     atomicExports = instance.exports
-    sab = instance.exports.memory.buffer as SharedArrayBuffer
+    sab = sharedMemory.buffer as unknown as SharedArrayBuffer
     isSab.value = sab instanceof SharedArrayBuffer
     count.value = 0
     status.value = 'atomic 模块已加载：共享内存 + atomicAdd 原子自增'
@@ -79,8 +81,8 @@ const themeLabel = computed(() => (theme.value === 'light' ? '浅色 🍂' : '�
       <p><strong>🌰 核心概念：</strong></p>
       <ul>
         <li>普通读写在多线程下会"丢更新"，原子指令保证读-改-写一气呵成</li>
-        <li>常用原子操作：<code>atomic.load/store/add/sub</code> 等，还有 <code>wait/notify</code></li>
-        <li>共享内存必须在模块声明 <code>shared</code>，否则 buffer 是普通 ArrayBuffer</li>
+        <li>常用原子操作：<code>i32.atomic.load/store</code>、<code>i32.atomic.rmw.add/sub</code>，以及 <code>memory.atomic.wait32/notify</code></li>
+        <li>共享内存必须声明 <code>shared</code> 并给出 <code>max</code>，否则 buffer 不是 SharedArrayBuffer</li>
         <li>SharedArrayBuffer 需要跨源隔离（COOP/COEP 响应头）才能启用</li>
       </ul>
     </div>

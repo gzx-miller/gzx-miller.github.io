@@ -26,7 +26,7 @@ import W20Performance from './W20Performance.vue'
 
     <h2>帧率测量指标</h2>
     <p>
-      先把「测量」建起来。用 <code>requestAnimationFrame</code> 驱动渲染循环，在循环里用相邻两帧的时间差算出帧时间与 FPS，同时统计三个关键数字：<strong>draw call 数</strong>、<strong>三角形总数</strong>、<strong>显存占用</strong>（缓冲与纹理的估算）。
+      先把「测量」建起来。用 <code>requestAnimationFrame</code> 驱动渲染循环，在循环里用相邻两帧的时间差算出帧时间与 FPS，同时统计三个关键数字：<strong>draw call 数</strong>、<strong>三角形总数</strong>、<strong>顶点缓冲占用</strong>（本演示只统计 VBO 字节数）。
     </p>
     <p>
       这个方案做对了一件事：<strong>它把「感觉卡」变成了「哪个指标越界」</strong>。有了这几个数，判断就有了落点——draw call 高通常指向 CPU 瓶颈，三角形和采样量高通常指向 GPU 瓶颈，显存大则可能落进带宽瓶颈。
@@ -45,13 +45,13 @@ import W20Performance from './W20Performance.vue'
       先削最大头——draw call。它有两条路，本课都能亲手拨：<strong>实例化</strong>，把重复几何的逐实例差异做成属性，一次 draw 画完 N 个；<strong>合批（batching）</strong>，把多个分散的小网格合并进一个大的 index buffer，一次性画出来。两者都把 N 次提交压成 1 次，也正是本课 draw call 计数变化的来源。
     </p>
     <p>
-      再砍显存与带宽。纹理改用压缩格式（WebGL1 的 S3TC、跨平台常用的 ETC2），再配合 <code>Mipmap</code>，能明显降低显存占用和采样带宽。注意压缩格式要看设备支持，先查扩展、备好回退路径。
+      再砍显存与带宽。纹理改用压缩格式（桌面常见的 S3TC、移动常见的 ETC2/EAC，后者通过 <code>WEBGL_compressed_texture_etc</code> 获取），再配合 <code>Mipmap</code>，能明显降低显存占用和采样带宽。注意压缩格式要看设备支持，先查扩展、备好回退路径。
     </p>
     <p>
       然后堵住「每帧重建」。不要在渲染循环里 <code>createBuffer</code> / <code>createTexture</code> 又随手丢掉——缓冲和纹理应当在初始化时建好、只上传一次，之后一直复用。每帧新建再丢弃，等于每帧都在制造垃圾并拖慢驱动。
     </p>
     <p>
-      最后留意几个反直觉的开关。上下文属性 <code>preserveDrawingBuffer</code> 默认就是 <code>false</code>，这反而有利于性能，只有在需要截图这类场景才打开它——而一旦打开，会阻止驱动做优化。VSync 会把帧率压在显示器刷新率上，想测「设备真实上限」时也得先把它考虑进去。
+      最后留意几个反直觉的开关。上下文属性 <code>preserveDrawingBuffer</code> 默认就是 <code>false</code>，这反而有利于性能，只有在需要截图这类场景才打开它——而一旦打开，会阻止驱动做优化。<code>requestAnimationFrame</code> 会与显示器刷新率同步（通常表现为 VSync），WebGL 没有直接关闭 VSync 的 API；想测「设备真实上限」时应改用多帧统计或其他计时方式。
     </p>
     <p>
       做完这些，仍要回到那两张实时柱状图。<strong>FPS 趋势</strong>与 <strong>draw call 趋势</strong>会随你拨动开关实时变化——每改一步，都该在图上看到对应指标往好的方向走，而不是凭感觉宣布「优化了」。
@@ -62,7 +62,7 @@ import W20Performance from './W20Performance.vue'
 
     <h2>四项指标联动</h2>
     <figure class="lesson-figure">
-      <figcaption>拨动「实例化」「CPU 端合批」开关、拖动「渲染对象数」滑块，紧盯 FPS、帧时间、Draw Call、GPU 显存四个实时指标，以及下方 FPS 与 Draw Call 两条趋势柱状图，亲手验证哪一种优化把哪一项指标压了下去。</figcaption>
+      <figcaption>拨动「实例化」「CPU 端合批」开关、拖动「渲染对象数」滑块，紧盯 FPS、帧时间、Draw Call、顶点缓冲四个实时指标，以及下方 FPS 与 Draw Call 两条趋势柱状图，亲手验证哪一种优化把哪一项指标压了下去。</figcaption>
       <W20Performance />
     </figure>
 

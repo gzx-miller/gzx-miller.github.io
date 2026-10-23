@@ -115,13 +115,13 @@ function mat4LookAt(eye: number[], center: number[], up: number[]): Mat4 {
 
 function mat4Multiply(a: Mat4, b: Mat4): Mat4 {
   const out = new Float32Array(16)
-  for (let i = 0; i < 4; i++) {
-    for (let j = 0; j < 4; j++) {
-      out[i * 4 + j] =
-        a[i * 4 + 0] * b[0 * 4 + j] +
-        a[i * 4 + 1] * b[1 * 4 + j] +
-        a[i * 4 + 2] * b[2 * 4 + j] +
-        a[i * 4 + 3] * b[3 * 4 + j]
+  for (let row = 0; row < 4; row++) {
+    for (let col = 0; col < 4; col++) {
+      out[col * 4 + row] =
+        a[0 * 4 + row] * b[col * 4 + 0] +
+        a[1 * 4 + row] * b[col * 4 + 1] +
+        a[2 * 4 + row] * b[col * 4 + 2] +
+        a[3 * 4 + row] * b[col * 4 + 3]
     }
   }
   return out

@@ -5,7 +5,7 @@ import R15ErrorBoundary from './R15ErrorBoundary.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>课程列表里有一张卡片的数据少了一个字段，渲染时读它的属性抛了错——结果不是那一张卡片出问题，而是<strong>整个页面瞬间变白</strong>，连顶部导航都没了。
+      <strong>承接上文：</strong>课程列表里有一张卡片的数据少了一个字段，渲染时读它的属性抛了错——结果不是那一张卡片出问题，而是<strong>整个页面瞬间变白</strong>，连顶部导航都没了。
     </div>
 
     <h2>渲染错误整树卸载</h2>

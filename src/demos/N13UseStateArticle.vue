@@ -5,7 +5,7 @@ import N13UseState from './N13UseState.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>为了让主题在导航栏和设置页之间同步，你在 <code>composables/useTheme.ts</code> 的模块顶层写了 <code>const theme = ref('light')</code>，再导出 <code>useTheme()</code> 把它交出去。纯前端跑起来一切正常，两个组件都跟着变。上线开 SSR 后，同事把他的主题切成暗色，你刷新页面——第一眼看到的也是暗色。一个模块级的 ref，怎么就把两个人的界面搅到一起了？
+      <strong>开场问题：</strong>为了让主题在导航栏和设置页之间同步，你在 <code>app/composables/useTheme.ts</code> 的模块顶层写了 <code>const theme = ref('light')</code>，再导出 <code>useTheme()</code> 把它交出去。纯前端跑起来一切正常，两个组件都跟着变。上线开 SSR 后，同事把他的主题切成暗色，你刷新页面——第一眼看到的也是暗色。一个模块级的 ref，怎么就把两个人的界面搅到一起了？
     </div>
 
     <h2>模块级状态串扰</h2>

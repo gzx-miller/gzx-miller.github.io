@@ -32,8 +32,8 @@ import W18Instancing from './W18Instancing.vue'
     <h2>属性除数缺失</h2>
     <ul>
       <li><strong>不设 divisor 会全叠在一起。</strong>如果实例属性仍按逐顶点（<code>divisor = 0</code>）推进，那么同一份几何的每个顶点读到的都是缓冲开头的几个值，N 个物体全部长到同一个位置、同一个角度上，看上去只画了一个。</li>
-      <li><strong>WebGL1 里没有这个原生 API。</strong>得先 <code>getExtension('ANGLE_instanced_arrays')</code>，方法名还带 <code>ANGLE</code> 后缀（<code>vertexAttribDivisorANGLE</code> / <code>drawElementsInstancedANGLE</code>），拿不到扩展就只能退回逐个绘制。</li>
-      <li><strong>属性槽位是有限的。</strong>实例属性也占用普通的 attribute 槽位，个数受 <code>GL_MAX_VERTEX_ATTRIBS</code> 限制——逐实例属性用得越多，留给逐顶点属性的槽位就越少。</li>
+      <li><strong>WebGL1 里没有这个原生 API。</strong>得先 <code>getExtension('ANGLE_instanced_arrays')</code>，方法名还带 <code>ANGLE</code> 后缀（<code>vertexAttribDivisorANGLE</code> / <code>drawArraysInstancedANGLE</code>），拿不到扩展就只能退回逐个绘制。</li>
+      <li><strong>属性槽位是有限的。</strong>实例属性也占用普通的 attribute 槽位，个数受 <code>MAX_VERTEX_ATTRIBS</code> 限制——逐实例属性用得越多，留给逐顶点属性的槽位就越少。</li>
       <li><strong>不是所有场景都省钱。</strong>如果每个物体的几何各不相同，或实例数量很少，实例化带来的收益并不明显，有时还不如干脆把几何合并成一个大网格。</li>
     </ul>
 
@@ -54,7 +54,7 @@ import W18Instancing from './W18Instancing.vue'
       最后做对照。关掉实例化、用同一个循环逐个 draw，盯着 draw call 计数——它会从 1 涨到实例数，帧率也跟着掉下来。整个差别就落在「一次提交」和「提交 N 次」这一处上。
     </p>
     <div class="lesson-box warn">
-      <strong>四条边界：</strong><code>divisor = 1</code> 表示「每实例推进一次」、<code>divisor = 0</code> 表示逐顶点，两者由此把属性分成逐顶点与逐实例两类；WebGL1 必须走 <code>ANGLE_instanced_arrays</code> 扩展（API 带 <code>ANGLE</code> 后缀），WebGL2 才有同名原生 API，记得做扩展检测与回退；实例属性会占用 attribute 槽位，受 <code>GL_MAX_VERTEX_ATTRIBS</code> 约束；实例化适合草地、雨滴、粒子、网格阵列这类「大量相同几何」，几何各异时要另想办法（合批或图集）。
+      <strong>四条边界：</strong><code>divisor = 1</code> 表示「每实例推进一次」、<code>divisor = 0</code> 表示逐顶点，两者由此把属性分成逐顶点与逐实例两类；WebGL1 必须走 <code>ANGLE_instanced_arrays</code> 扩展（API 带 <code>ANGLE</code> 后缀），WebGL2 才有同名原生 API，记得做扩展检测与回退；实例属性会占用 attribute 槽位，受 <code>MAX_VERTEX_ATTRIBS</code> 约束；实例化适合草地、雨滴、粒子、网格阵列这类「大量相同几何」，几何各异时要另想办法（合批或图集）。
     </div>
 
     <h2>绘制次数对比</h2>
@@ -68,7 +68,7 @@ import W18Instancing from './W18Instancing.vue'
       实例化渲染把「N 个相同几何、N 次提交」变成「N 个相同几何、一次提交」。做法是把逐实例的差异做成顶点属性，再用属性除数把它标成「每实例推进一次」；一次 draw call 里，GPU 就替你把这份几何复制了 N 遍，只是每遍换了一行实例数据。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「属性除数（Vertex Attribute Divisor）」</span>是实例化渲染中用来区分逐顶点属性与逐实例属性的机制：<code>divisor = 0</code> 表示该属性每处理一个顶点前进一次（逐顶点），<code>divisor = 1</code> 表示每画完一个实例才前进一次（逐实例）。正是它让「一份几何、N 组实例数据」的绘制成为可能，从而把 N 次 draw call 压成一次。边界与例外：WebGL1 需 <code>ANGLE_instanced_arrays</code> 扩展且 API 带 <code>ANGLE</code> 后缀，WebGL2 为原生；实例属性占用 attribute 槽位，受 <code>GL_MAX_VERTEX_ATTRIBS</code> 限制；几何各异的物体不适用，需改用合批或图集。
+      <span class="term-name">「属性除数（Vertex Attribute Divisor）」</span>是实例化渲染中用来区分逐顶点属性与逐实例属性的机制：<code>divisor = 0</code> 表示该属性每处理一个顶点前进一次（逐顶点），<code>divisor = 1</code> 表示每画完一个实例才前进一次（逐实例）。正是它让「一份几何、N 组实例数据」的绘制成为可能，从而把 N 次 draw call 压成一次。边界与例外：WebGL1 需 <code>ANGLE_instanced_arrays</code> 扩展且 API 带 <code>ANGLE</code> 后缀，WebGL2 为原生；实例属性占用 attribute 槽位，受 <code>MAX_VERTEX_ATTRIBS</code> 限制；几何各异的物体不适用，需改用合批或图集。
     </div>
   </LessonArticle>
 </template>

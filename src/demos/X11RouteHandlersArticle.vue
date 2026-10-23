@@ -40,10 +40,10 @@ import X11RouteHandlers from './X11RouteHandlers.vue'
       <code>export async function GET()</code> 里用 <code>NextResponse.json(posts)</code> 返回数据；<code>export async function POST(request: NextRequest)</code> 里 <code>await request.json()</code> 解析请求体，再用 <code>NextResponse.json(newPost, { status: 201 })</code> 返回创建结果。GET、POST、PUT、DELETE、PATCH 都是同一种写法。
     </p>
     <p>
-      动态段和查询串也各有位置。<code>app/api/posts/[id]/route.ts</code> 的函数第二个参数拿 <code>params</code>，里面的 <code>id</code> 就是路径里的动态段；查询参数则从 <code>new URL(request.url).searchParams</code> 里取，比如 <code>searchParams.get('q')</code>。
+      动态段和查询串也各有位置。<code>app/api/posts/[id]/route.ts</code> 的函数第二个参数拿到的 <code>params</code> 是 Promise，先 <code>await</code> 再取 <code>id</code>；查询参数则从 <code>new URL(request.url).searchParams</code> 里取，比如 <code>searchParams.get('q')</code>。
     </p>
     <p>
-      和响应相关的常见操作也都能覆盖：用 <code>cookies()</code> 或 <code>response.cookies.set</code> 写 Cookie（记得带上 <code>httpOnly</code>、<code>secure</code>、<code>sameSite</code> 等属性），用 <code>headers</code> 选项自定义响应头，比如给 GET 的结果加上 <code>Cache-Control</code>。
+      和响应相关的常见操作也都能覆盖：用 <code>await cookies()</code> 或 <code>response.cookies.set</code> 写 Cookie（记得带上 <code>httpOnly</code>、<code>secure</code>、<code>sameSite</code> 等属性），用 <code>headers</code> 选项自定义响应头，比如给 GET 的结果加上 <code>Cache-Control</code>。
     </p>
     <table>
       <thead>
@@ -83,7 +83,7 @@ import X11RouteHandlers from './X11RouteHandlers.vue'
       Route Handler 补上了「服务端对外接口」这一层：在 <code>app/api/</code> 下按目录层级写 <code>route.ts</code>，导出同名方法处理请求，用 <code>NextResponse</code> 返回 JSON、状态码与响应头，动态段与查询串各归其位。它和 Server Action 不是替代关系，而是「给外人用的 API」与「给自家表单用的函数」的分工。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「Route Handler」</span>是 <code>app/api/</code> 下用 <code>route.ts</code> 定义的 HTTP 接口，文件名固定、目录层级即 API 路径。每个导出的方法（GET/POST/PUT/DELETE/PATCH）对应一个处理函数并返回 <code>NextResponse</code>：动态参数取自第二参数的 <code>params</code>，查询串取自 <code>new URL(request.url).searchParams</code>。GET 满足静态条件时可缓存，写操作默认不缓存，可运行在 Node 或 Edge Runtime。
+      <span class="term-name">「Route Handler」</span>是 <code>app/api/</code> 下用 <code>route.ts</code> 定义的 HTTP 接口，文件名固定、目录层级即 API 路径。每个导出的方法（GET/POST/PUT/DELETE/PATCH）对应一个处理函数并返回 <code>NextResponse</code>：动态参数取自第二参数 <code>params</code>（Promise，需 <code>await</code>），查询串取自 <code>new URL(request.url).searchParams</code>。GET 满足静态条件时可缓存，写操作默认不缓存，可运行在 Node 或 Edge Runtime。
     </div>
   </LessonArticle>
 </template>

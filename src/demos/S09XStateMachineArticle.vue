@@ -5,7 +5,7 @@ import S09XStateMachine from './S09XStateMachine.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>结算页你写了三个布尔值：<code>isSubmitting</code>、<code>isSuccess</code>、<code>isFailure</code>。上线后客服反馈：有人点完提交，按钮消失了，页面卡在那里。你一看日志——<code>isSubmitting</code> 是 <code>true</code> 的同时 <code>isSuccess</code> 也成了 <code>true</code>。按钮的渲染条件是 <code>!isSubmitting &amp;&amp; !isSuccess</code>，两边都不满足，界面就空了。三个布尔一共 8 种组合，你实际只写了其中 4 种。
+      <strong>承接上文：</strong>结算页你写了三个布尔值：<code>isSubmitting</code>、<code>isSuccess</code>、<code>isFailure</code>。上线后客服反馈：有人点完提交，按钮消失了，页面卡在那里。你一看日志——<code>isSubmitting</code> 是 <code>true</code> 的同时 <code>isSuccess</code> 也成了 <code>true</code>。按钮的渲染条件是 <code>!isSubmitting &amp;&amp; !isSuccess</code>，两边都不满足，界面就空了。三个布尔一共 8 种组合，你实际只写了其中 4 种。
     </div>
 
     <h2>布尔组合冲突</h2>

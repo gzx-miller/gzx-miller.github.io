@@ -37,26 +37,26 @@ const importMap: Record<ImportSource, { title: string; items: { name: string; de
   component: {
     title: '组件自动导入',
     items: [
-      { name: 'components/MyButton.vue', desc: '模板中直接用 <MyButton />' },
-      { name: 'components/UserCard.vue', desc: '模板中直接用 <UserCard />' },
-      { name: 'components/base/Input.vue', desc: '前缀命名 <BaseInput />' },
-      { name: 'components/admin/Table.vue', desc: '路径前缀 <AdminTable />' },
+      { name: 'app/components/MyButton.vue', desc: '模板中直接用 <MyButton />' },
+      { name: 'app/components/UserCard.vue', desc: '模板中直接用 <UserCard />' },
+      { name: 'app/components/base/Input.vue', desc: '前缀命名 <BaseInput />' },
+      { name: 'app/components/admin/Table.vue', desc: '路径前缀 <AdminTable />' },
     ],
   },
   composable: {
     title: 'Composables 自动导入',
     items: [
-      { name: 'composables/useCart.ts', desc: '导出 useCart，全局可用' },
-      { name: 'composables/useAuth.ts', desc: '导出 useAuth，全局可用' },
-      { name: 'composables/useTheme.ts', desc: '导出 useTheme，全局可用' },
+      { name: 'app/composables/useCart.ts', desc: '导出 useCart，全局可用' },
+      { name: 'app/composables/useAuth.ts', desc: '导出 useAuth，全局可用' },
+      { name: 'app/composables/useTheme.ts', desc: '导出 useTheme，全局可用' },
     ],
   },
   util: {
     title: '工具函数自动导入',
     items: [
-      { name: 'utils/format.ts', desc: '导出 formatDate，全局可用' },
-      { name: 'utils/validate.ts', desc: '导出 isValidEmail，全局可用' },
-      { name: 'utils/helper.ts', desc: '导出 debounce，全局可用' },
+      { name: 'app/utils/format.ts', desc: '导出 formatDate，全局可用' },
+      { name: 'app/utils/validate.ts', desc: '导出 isValidEmail，全局可用' },
+      { name: 'app/utils/helper.ts', desc: '导出 debounce，全局可用' },
     ],
   },
 }

@@ -46,13 +46,13 @@ import U13AppLifecycle from './U13AppLifecycle.vue'
       <li><code>onError</code>：捕获未处理的异常，统一上报。</li>
     </ol>
     <p>
-      接着要理解它们的<strong>层次关系</strong>：应用生命周期<strong>包住</strong>页面生命周期。<strong>冷启动</strong>时，顺序大致是 <code>App.onLaunch</code> → <code>App.onShow</code> → 首个页面的 <code>onLoad</code> → <code>onShow</code> → <code>onReady</code>；而<strong>热启动</strong>（从后台切回）只触发 <code>App.onShow</code>——页面实例还活着，不会重新 <code>onLoad</code>，<code>onLaunch</code> 也不会重跑。这条推论直接决定了逻辑该放哪：<strong>「一辈子只做一次」的放 <code>onLaunch</code>，「每次回到前台都要做」的放 <code>onShow</code></strong>。开场那个失灵的登录态恢复，正确位置就是 <code>onShow</code>，而不是 <code>onLaunch</code>。
+      接着要理解它们的<strong>层次关系</strong>：应用生命周期<strong>包住</strong>页面生命周期。<strong>冷启动</strong>时，顺序大致是 <code>App.onLaunch</code> → <code>App.onShow</code> → 首个页面的 <code>onLoad</code> → <code>onShow</code> → <code>onReady</code>；而<strong>热启动</strong>（从后台切回）会触发 <code>App.onShow</code>，当前页面也会触发页面级 <code>onShow</code>，但页面实例还活着，不会重新 <code>onLoad</code> / <code>onReady</code>，<code>onLaunch</code> 也不会重跑。这条推论直接决定了逻辑该放哪：<strong>「一辈子只做一次」的放 <code>onLaunch</code>，「每次回到前台都要做」的放 <code>onShow</code></strong>。开场那个失灵的登录态恢复，正确位置就是 <code>onShow</code>，而不是 <code>onLaunch</code>。
     </p>
     <p>
       再解决「跨页面共享数据放哪」。挂在应用实例上的 <code>globalData</code> 可以用 <code>getApp().globalData</code> 在任意页面读写，正适合用户信息、登录态这类「要跨页面、但不怎么频繁变」的数据。但它有一条必须记住的边界：<strong><code>globalData</code> 不是响应式的</strong>，改它不会自动刷新视图——页面要用，得在 <code>onShow</code> 里把它同步一份到自己的 <code>data</code> / <code>ref</code>。所以凡是高频共享、需要驱动视图的状态，应该交给 Pinia 或全局 store，而不是硬塞进 <code>globalData</code>。
     </p>
     <p>
-      再往下，把「必做的两件事」落到具体钩子上：<strong>登录态恢复</strong>——<code>onLaunch</code> 里读缓存、<code>onShow</code> 里每次复核（因为热启动只走 <code>onShow</code>）；<strong>版本更新</strong>——小程序端用 <code>uni.getUpdateManager()</code> 探测新版本并提示用户重启。这两件事不写在 <code>App.vue</code>，就一定要在某个入口页里重复写，而入口页是会被绕过的。
+      再往下，把「必做的两件事」落到具体钩子上：<strong>登录态恢复</strong>——<code>onLaunch</code> 里读缓存、<code>onShow</code> 里每次复核（因为热启动不会再走 <code>onLaunch</code>）；<strong>版本更新</strong>——小程序端用 <code>uni.getUpdateManager()</code> 探测新版本并提示用户重启。这两件事不写在 <code>App.vue</code>，就一定要在某个入口页里重复写，而入口页是会被绕过的。
     </p>
     <p>
       最后一个容易混的点：<strong><code>App.vue</code> 是入口，不是配置中心</strong>。<code>appid</code>、页面路由、窗口样式这些配置写在 <code>pages.json</code> / <code>manifest.json</code> 里；<code>App.vue</code> 只放全局逻辑和全局样式。
@@ -72,7 +72,7 @@ import U13AppLifecycle from './U13AppLifecycle.vue'
       应用生命周期和页面生命周期是两个层次：应用只出生一次，之后在前后台之间往返；页面会反复被创建和销毁。<strong>把「只做一次」的初始化放 <code>onLaunch</code>、「每次回前台」的逻辑放 <code>onShow</code>、异常兜底放 <code>onError</code></strong>，跨页面数据用 <code>getApp().globalData</code>，并记住它不响应式——这样冷启动、热启动、直达页三条路径才不会各漏一块。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「冷启动与热启动」</span>冷启动指应用进程不存在、从零拉起，会完整走一遍 <code>App.onLaunch</code> 与 <code>App.onShow</code>，并创建首个页面（<code>onLoad</code> → <code>onShow</code> → <code>onReady</code>）；热启动指应用已被系统保留在后台，再次打开<strong>只触发 <code>App.onShow</code></strong>，页面实例与 <code>globalData</code> 都还在，<code>onLaunch</code> 不会重跑。边界：依赖「启动时执行一次」的逻辑必须放 <code>onLaunch</code>，「每次回到前台都要做」的逻辑必须放 <code>onShow</code>，否则热启动必然漏掉。
+      <span class="term-name">「冷启动与热启动」</span>冷启动指应用进程不存在、从零拉起，会完整走一遍 <code>App.onLaunch</code> 与 <code>App.onShow</code>，并创建首个页面（<code>onLoad</code> → <code>onShow</code> → <code>onReady</code>）；热启动指应用已被系统保留在后台，再次打开会触发 <code>App.onShow</code>（当前页面也会触发页面级 <code>onShow</code>），但页面实例与 <code>globalData</code> 都还在，不会重走 <code>onLoad</code>，<code>onLaunch</code> 也不会重跑。边界：依赖「启动时执行一次」的逻辑必须放 <code>onLaunch</code>，「每次回到前台都要做」的逻辑必须放 <code>onShow</code>，否则热启动必然漏掉。
     </div>
   </LessonArticle>
 </template>

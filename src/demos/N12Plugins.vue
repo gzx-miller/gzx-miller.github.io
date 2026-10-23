@@ -6,17 +6,17 @@ const pluginType = ref<'auto' | 'client' | 'custom'>('auto')
 const pluginExamples = {
   auto: {
     title: '自动注册插件',
-    code: `// plugins/element-plus.ts
+    code: `// app/plugins/element-plus.ts
 import ElementPlus from 'element-plus'
 
 export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.use(ElementPlus)
 })`,
-    desc: 'plugins/ 目录下的文件自动注册，按文件名字母序执行。无需在 nuxt.config.ts 中配置。',
+    desc: 'app/plugins/ 目录下的文件自动注册，按文件名字母序执行。无需在 nuxt.config.ts 中配置。',
   },
   client: {
     title: '仅客户端插件',
-    code: `// plugins/chart.client.ts
+    code: `// app/plugins/chart.client.ts
 import * as echarts from 'echarts'
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -27,7 +27,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   },
   custom: {
     title: '插件注入 provide/inject',
-    code: `// plugins/i18n.ts
+    code: `// app/plugins/i18n.ts
 export default defineNuxtPlugin((nuxtApp) => {
   const messages = {
     zh: { hello: '你好' },

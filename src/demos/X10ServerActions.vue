@@ -58,8 +58,8 @@ const features = [
   '无需手写 API 端点，直接在服务端运行',
   'form action 属性原生支持',
   '自动处理 CSRF 防护',
-  '配合 revalidatePath / revalidateTag 刷新缓存',
-  '支持 useFormState / useFormStatus 跟踪状态',
+  '配合 revalidatePath / updateTag 刷新缓存',
+  '支持 useActionState / useFormStatus 跟踪状态',
   '可用 useOptimistic 实现乐观更新',
 ]
 </script>

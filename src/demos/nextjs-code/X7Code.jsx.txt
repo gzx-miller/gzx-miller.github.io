@@ -1,10 +1,13 @@
-// 静态渲染（默认）- 构建时生成 HTML
+// 静态渲染（默认）- 构建时预渲染
 // app/page.tsx
+import { cacheLife } from 'next/cache'
+
 async function getPosts() {
-  // fetch 默认 force-cache，触发静态渲染
-  const res = await fetch('https://api.example.com/posts', {
-    cache: 'force-cache', // 默认值，可以省略
-  })
+  // 启用 Cache Components 时用 use cache 显式声明缓存
+  'use cache'
+  cacheLife('hours')
+
+  const res = await fetch('https://api.example.com/posts')
   return res.json()
 }
 
@@ -21,13 +24,14 @@ export default async function HomePage() {
 
 // ============================================
 
-// 动态渲染 - 使用 cookies() 触发
+// 读取 Cookie - 使用异步 cookies()
 // app/dashboard/page.tsx
 import { cookies } from 'next/headers'
 
 export default async function DashboardPage() {
-  // 读取 cookie 会让整个路由变为动态渲染
-  const cookieStore = cookies()
+  // 未启用 Cache Components 时，读取 cookie 会让整条路由变为动态渲染
+  // 启用后应把这段读取放进 <Suspense>，保留可预渲染的静态壳
+  const cookieStore = await cookies()
   const userId = cookieStore.get('userId')?.value
 
   const user = await fetch(`https://api.example.com/users/${userId}`, {
@@ -39,11 +43,11 @@ export default async function DashboardPage() {
 
 // ============================================
 
-// 动态渲染 - 使用 headers() 触发
+// 读取请求头 - 使用异步 headers()
 import { headers } from 'next/headers'
 
 export default async function Page() {
-  const headersList = headers()
+  const headersList = await headers()
   const userAgent = headersList.get('user-agent')
 
   return <p>你的浏览器: {userAgent}</p>
@@ -51,22 +55,23 @@ export default async function Page() {
 
 // ============================================
 
-// 动态渲染 - 使用 searchParams 触发
+// 读取 searchParams - 先 await 解包
 // app/search/page.tsx
-export default function SearchPage({
+export default async function SearchPage({
   searchParams,
 }: {
-  searchParams: { q?: string }
+  searchParams: Promise<{ q?: string }>
 }) {
-  // searchParams 会触发动态渲染
-  const query = searchParams.q
+  // 未启用 Cache Components 时触发动态渲染
+  // 启用后把读取放进 <Suspense>，或用 use cache: private 缓存
+  const { q } = await searchParams
 
-  return <h1>搜索: {query}</h1>
+  return <h1>搜索: {q}</h1>
 }
 
 // ============================================
 
-// 路由级配置：强制静态或动态
+// 路由级配置：旧模型（未启用 Cache Components）下的写法
 // app/blog/page.tsx
 
 // 强制静态渲染（即使使用了动态函数也报错）
@@ -78,17 +83,21 @@ export const dynamic = 'force-static'
 // 自动（默认）- 根据使用的 API 自动判断
 // export const dynamic = 'auto'
 
+// Next.js 16 启用 Cache Components 后，dynamic/revalidate/fetchCache 会被移除
+// 改用 use cache 与 <Suspense> 表达静态与动态
+
 export default function BlogPage() {
   return <h1>博客</h1>
 }
 
 // ============================================
 
-// ISR (Incremental Static Regeneration)
+// ISR (Incremental Static Regeneration) - 旧模型写法
 // 静态页面 + 定时重新生成
 // app/products/[id]/page.tsx
 
 // 每隔 60 秒重新生成页面
+// 启用 Cache Components 后改为在缓存函数中调用 cacheLife
 export const revalidate = 60
 
 async function getProduct(id: string) {
@@ -105,8 +114,9 @@ export async function generateStaticParams() {
 export default async function ProductPage({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
-  const product = await getProduct(params.id)
+  const { id } = await params
+  const product = await getProduct(id)
   return <h1>{product.name}</h1>
 }

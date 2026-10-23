@@ -16,13 +16,14 @@
 // ============================================
 
 // 2. Node.js 自托管（output: 'standalone'）
-// next.config.js
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+// next.config.ts
+import type { NextConfig } from 'next'
+
+const nextConfig: NextConfig = {
   output: 'standalone', // 生成独立部署包
 }
 
-module.exports = nextConfig
+export default nextConfig
 
 // 构建命令：
 // pnpm next build
@@ -86,16 +87,15 @@ node_modules
 // ============================================
 
 // 4. 静态导出（output: 'export'）
-// next.config.js
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+// next.config.ts
+const nextConfig: NextConfig = {
   output: 'export', // 纯静态导出
   images: {
     unoptimized: true, // 静态导出需要关闭图片优化
   },
 }
 
-module.exports = nextConfig
+export default nextConfig
 
 // 构建命令：
 // pnpm next build
@@ -106,11 +106,11 @@ module.exports = nextConfig
 // Vercel / Netlify / GitHub Pages / Cloudflare Pages / Nginx
 
 // 静态导出限制：
-// - 不支持 Server Components 的动态特性
+// - 不支持依赖请求的动态数据（cookies/headers 等）
 // - 不支持 Server Actions
-// - 不支持 Middleware
+// - 不支持 Proxy
 // - 不支持 Image Optimization（需 unoptimized: true）
-// - 不支持 Route Handlers（API Routes）
+// - Route Handler 仅支持构建期可确定的 GET，其他方法不支持
 // - 不支持 Incremental Static Regeneration
 
 // ============================================

@@ -5,7 +5,7 @@ import K10LifecycleRef from './K10LifecycleRef.vue'
 <template>
   <LessonArticle>
     <div class="lesson-question">
-      <strong>开场问题：</strong>弹窗一打开就想让输入框自动聚焦，可代码刚跑就报错——那个输入框那时候还不存在吗？
+      <strong>承接上文：</strong>弹窗一打开就想让输入框自动聚焦，可代码刚跑就报错——那个输入框那时候还不存在吗？
     </div>
 
     <h2>弹窗聚焦与停留计时</h2>

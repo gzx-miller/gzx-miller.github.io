@@ -34,7 +34,7 @@ import X12Caching from './X12Caching.vue'
 
     <h2>多层缓存分工</h2>
     <p>
-      正确的思路不是「全不缓存」，而是<strong>认出有几层缓存、各自负责什么、失效时怎么级联</strong>。Next.js 的缓存从快到慢有四层：
+      正确的思路不是「全不缓存」，而是<strong>认出有几层缓存、各自负责什么、失效时怎么级联</strong>。在<strong>未启用 Cache Components 的旧模型</strong>里，Next.js 的缓存从快到慢有四层：
     </p>
     <table>
       <thead>
@@ -44,18 +44,18 @@ import X12Caching from './X12Caching.vue'
         <tr><td>Request Memoization</td><td>单次渲染内的 fetch 去重</td><td>单次请求</td></tr>
         <tr><td>Data Cache</td><td>fetch 结果的持久缓存</td><td>直到失效或被重新验证</td></tr>
         <tr><td>Full Route Cache</td><td>整条路由的 HTML 与 RSC payload</td><td>构建时生成，随 Data Cache 变化</td></tr>
-        <tr><td>Router Cache</td><td>客户端已访问路由的 RSC</td><td>会话内，约 30 秒到 5 分钟</td></tr>
+        <tr><td>Router Cache</td><td>客户端已访问路由的 RSC</td><td>会话内；静态页面默认约 5 分钟，动态页面默认不缓存</td></tr>
       </tbody>
     </table>
     <p>
-      它们不是并列关系，而是有先后与依赖的。<strong>Data Cache 是基础</strong>：它存的是每个 <code>fetch</code> 的结果，跨请求共享。一旦失效 Data Cache，依赖它的 Full Route Cache 会重新生成，Router Cache 也随之失效——这就是级联刷新。理解这条链，开场的困惑就有了答案：改完数据只更新了数据库，缓存层全都没动，页面自然还是旧的。
+      它们不是并列关系，而是有先后与依赖的。在这个旧模型里，<strong>Data Cache 是基础</strong>：它存的是每个 <code>fetch</code> 的结果，跨请求共享。一旦失效 Data Cache，依赖它的 Full Route Cache 会重新生成，Router Cache 也随之失效——这就是级联刷新。理解这条链，开场的困惑就有了答案：改完数据只更新了数据库，缓存层全都没动，页面自然还是旧的。
     </p>
     <p>
       那么怎么主动失效？按用途分成几种：
     </p>
     <ol class="lesson-steps">
       <li>按路径失效：<code>revalidatePath('/blog')</code>，刷新某条路由及其依赖；动态路由可写 <code>revalidatePath('/blog/[slug]', 'page')</code>。</li>
-      <li>按标签失效（更推荐）：给 <code>fetch</code> 打上 <code>next: { tags: ['posts'] }</code>，变更后用 <code>revalidateTag('posts')</code> 精确清掉所有带该标签的请求。</li>
+      <li>按标签失效（更推荐）：给 <code>fetch</code> 打上 <code>next: { tags: ['posts'] }</code>，变更后用 <code>revalidateTag('posts', 'max')</code> 后台刷新；Server Action 中需要立即读到新数据时用 <code>updateTag('posts')</code>。</li>
       <li>定时失效：用 <code>next: { revalidate: 60 }</code> 或路由级 <code>export const revalidate = 60</code>，适合半静态内容。</li>
       <li>客户端主动刷新：在客户端组件里调用 <code>router.refresh()</code>，清掉 Router Cache 并重新请求服务端。</li>
     </ol>
@@ -69,7 +69,7 @@ import X12Caching from './X12Caching.vue'
       实践里还要给标签起一套能长期用的名字：像 <code>post-1</code>、<code>post-list</code> 这样「谁变了清谁」的粒度，比笼统地都用 <code>data</code> 有用得多，因为失效的精确度直接决定了你会不会误伤无关的缓存、被迫把本可复用的结果也一起作废。
     </p>
     <p>
-      另外，较新的 Next.js 16 引入了 Cache Components（<code>use cache</code>），把缓存从「隐式推断」推向「显式声明」，让「哪段结果被缓存」在代码里一眼可见。它的方向是让缓存更可控而不是更隐蔽，这与上面「逐层认账」的思路是一致的。
+      另外，Next.js 16 的 Cache Components（<code>use cache</code>）已经是新建项目的默认模型：把缓存写在函数或组件上，用 <code>cacheLife</code> 控制生命周期、<code>cacheTag</code> 打标签，未缓存的读取放进 <code>&lt;Suspense&gt;</code> 流式输出。它把缓存从「隐式推断」推向「显式声明」，让「哪段结果被缓存」在代码里一眼可见；启用后 <code>dynamic</code>、<code>revalidate</code>、<code>fetchCache</code> 等路由级配置会被移除。这与上面「逐层认账」的思路是一致的，只是把认账的对象从缓存层换成了具体的函数边界。
     </p>
 
     <h2>缓存失效级联</h2>
@@ -78,12 +78,12 @@ import X12Caching from './X12Caching.vue'
       <X12Caching />
     </figure>
 
-    <h2>四层缓存体系</h2>
+    <h2>缓存模型与失效</h2>
     <p>
-      缓存不是「开或关」一个开关，而是四层各司其职的体系：Request Memoization 管单次渲染去重、Data Cache 管持久结果、Full Route Cache 管整条路由、Router Cache 管客户端会话。失效 Data Cache 会级联刷新上层，所以数据更新后正确的动作是主动 <code>revalidateTag</code> 或 <code>revalidatePath</code>，而不是盲目全关缓存。
+      Cache Components 下，缓存的单位是函数或组件：写 <code>'use cache'</code>、用 <code>cacheLife</code> 定生命周期、用 <code>cacheTag</code> 打标签，失效时按标签或路径处理。旧模型则是四层各司其职：Request Memoization 管单次渲染去重、Data Cache 管持久结果、Full Route Cache 管整条路由、Router Cache 管客户端会话；失效 Data Cache 会级联刷新上层。无论哪种模型，数据更新后正确的动作都是主动 <code>revalidateTag</code>／<code>updateTag</code>／<code>revalidatePath</code>，而不是盲目全关缓存。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「四层缓存」</span>指 Request Memoization（单次渲染内相同 URL 的 fetch 去重）、Data Cache（fetch 结果的服务端持久缓存）、Full Route Cache（静态渲染产出的 HTML 与 RSC payload）、Router Cache（客户端会话内已访问路由的缓存，约 30 秒到 5 分钟）。Data Cache 是基础，失效它会级联刷新 Full Route 与 Router 层；可用 <code>revalidatePath</code> 或 <code>revalidateTag</code> 主动失效，客户端用 <code>router.refresh()</code> 清除。
+      <span class="term-name">「Next.js 缓存」</span>在 Cache Components 下指以 <code>'use cache'</code> 缓存的函数或组件结果，生命周期由 <code>cacheLife</code> 决定，可通过 <code>cacheTag</code> 配合 <code>revalidateTag</code>／<code>updateTag</code> 失效。旧模型的「四层缓存」指 Request Memoization（单次渲染内相同 URL 的 fetch 去重）、Data Cache（fetch 结果的服务端持久缓存）、Full Route Cache（静态渲染产出的 HTML 与 RSC payload）、Router Cache（客户端会话内已访问路由的缓存；静态页默认约 5 分钟，动态页默认不缓存）。旧模型里 Data Cache 是基础，失效它会级联刷新 Full Route 与 Router 层，客户端用 <code>router.refresh()</code> 清除。
     </div>
   </LessonArticle>
 </template>

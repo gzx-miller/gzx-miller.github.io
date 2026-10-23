@@ -2,40 +2,29 @@ import type { Component } from 'vue'
 import type { Lesson } from '../lessons'
 import { restoreCodeSource } from '../code-restore'
 import R01ComponentProps from '../../demos/R01ComponentPropsArticle.vue'
-import R02StateUpdates from '../../demos/R02StateUpdatesArticle.vue'
-import R03ListsKeys from '../../demos/R03ListsKeysArticle.vue'
+import R02R06Pair from '../../demos/R02R06Pair.vue'
+import R03R18Pair from '../../demos/R03R18Pair.vue'
 import R04ControlledForm from '../../demos/R04ControlledFormArticle.vue'
-import R05EffectSync from '../../demos/R05EffectSyncArticle.vue'
-import R06Reducer from '../../demos/R06ReducerArticle.vue'
+import R05R24Pair from '../../demos/R05R24Pair.vue'
 import R07Context from '../../demos/R07ContextArticle.vue'
 import R08CustomHook from '../../demos/R08CustomHookArticle.vue'
 import R09RefDom from '../../demos/R09RefDomArticle.vue'
 import R10Memoization from '../../demos/R10MemoizationArticle.vue'
-import R11DeferredValue from '../../demos/R11DeferredValueArticle.vue'
+import R11R20Pair from '../../demos/R11R20Pair.vue'
 import R12ExternalStore from '../../demos/R12ExternalStoreArticle.vue'
 import R13Portal from '../../demos/R13PortalArticle.vue'
-import R14LazySuspense from '../../demos/R14LazySuspenseArticle.vue'
-import R15ErrorBoundary from '../../demos/R15ErrorBoundaryArticle.vue'
+import R14R15Pair from '../../demos/R14R15Pair.vue'
 import R16AccessibleId from '../../demos/R16AccessibleIdArticle.vue'
 import R17EventHandler from '../../demos/R17EventHandlerArticle.vue'
-import R18ConditionalRender from '../../demos/R18ConditionalRenderArticle.vue'
 import R19Composition from '../../demos/R19CompositionArticle.vue'
-import R20Transition from '../../demos/R20TransitionArticle.vue'
-import R21ImperativeHandle from '../../demos/R21ImperativeHandleArticle.vue'
-import R22ForwardRef from '../../demos/R22ForwardRefArticle.vue'
+import R21R22Pair from '../../demos/R21R22Pair.vue'
 import R23StrictMode from '../../demos/R23StrictModeArticle.vue'
-import R24EffectLifecycle from '../../demos/R24EffectLifecycleArticle.vue'
-import R25ZustandSelectors from '../../demos/S04ZustandSelectorsArticle.vue'
-import R26ZustandMiddleware from '../../demos/S05ZustandMiddlewareArticle.vue'
-import R27JotaiAtoms from '../../demos/S06JotaiAtomsArticle.vue'
+import R25R26Pair from '../../demos/R25R26Pair.vue'
+import R27R33Pair from '../../demos/R27R33Pair.vue'
 import R28JotaiAsyncAtoms from '../../demos/S07JotaiAsyncAtomsArticle.vue'
-import R29ReduxToolkit from '../../demos/S08ReduxToolkitArticle.vue'
-import R30XStateMachine from '../../demos/S09XStateMachineArticle.vue'
-import R31Valtio from '../../demos/S12ValtioArticle.vue'
+import R29R30R35Pair from '../../demos/R29R30R35Pair.vue'
+import R31R34Pair from '../../demos/R31R34Pair.vue'
 import R32TanStackQuery from '../../demos/S13TanStackQueryArticle.vue'
-import R33Recoil from '../../demos/S22RecoilArticle.vue'
-import R34Mobx from '../../demos/S23MobxArticle.vue'
-import R35Overmind from '../../demos/S24OvermindArticle.vue'
 
 const vueCodeModules = import.meta.glob<string>('../../demos/*.vue', { query: '?raw', import: 'default' })
 const jsxCodeModules = import.meta.glob<string>('../../demos/react-jsx/*.jsx', { query: '?raw', import: 'default' })
@@ -74,8 +63,6 @@ const R04Code = createCodeLoader('react-jsx/R04ControlledForm.jsx')
 
 const R05Code = createCodeLoader('react-jsx/R05EffectSync.jsx')
 
-const R06Code = createCodeLoader('react-jsx/R06Reducer.jsx')
-
 const R07Code = createCodeLoader('react-jsx/R07Context.jsx')
 
 const R08Code = createCodeLoader('react-jsx/R08CustomHook.jsx')
@@ -92,29 +79,17 @@ const R13Code = createCodeLoader('react-jsx/R13Portal.jsx')
 
 const R14Code = createCodeLoader('react-jsx/R14LazySuspense.jsx')
 
-const R15Code = createCodeLoader('react-jsx/R15ErrorBoundary.jsx')
-
 const R16Code = createCodeLoader('react-jsx/R16AccessibleId.jsx')
 
 const R17Code = createCodeLoader('react-jsx/R17EventHandler.jsx')
 
-const R18Code = createCodeLoader('react-jsx/R18ConditionalRender.jsx')
-
 const R19Code = createCodeLoader('react-jsx/R19Composition.jsx')
-
-const R20Code = createCodeLoader('react-jsx/R20Transition.jsx')
 
 const R21Code = createCodeLoader('react-jsx/R21ImperativeHandle.jsx')
 
-const R22Code = createCodeLoader('react-jsx/R22ForwardRef.jsx')
-
 const R23Code = createCodeLoader('react-jsx/R23StrictMode.jsx')
 
-const R24Code = createCodeLoader('react-jsx/R24EffectLifecycle.jsx')
-
 const R25Code = createCodeLoader('state-react/S04ZustandSelectors.js')
-
-const R26Code = createCodeLoader('state-react/S05ZustandMiddleware.js')
 
 const R27Code = createCodeLoader('state-react/S06JotaiAtoms.js')
 
@@ -122,20 +97,15 @@ const R28Code = createCodeLoader('state-react/S07JotaiAsyncAtoms.js')
 
 const R29Code = createCodeLoader('state-react/S08ReduxToolkit.js')
 
-const R30Code = createCodeLoader('state-react/S09XStateMachine.js')
-
 const R31Code = createCodeLoader('react-code/R31Code.jsx.txt')
 const R32Code = createCodeLoader('react-code/R32Code.jsx.txt')
-const R33Code = createCodeLoader('react-code/R33Code.jsx.txt')
-const R34Code = createCodeLoader('react-code/R34Code.js.txt')
-const R35Code = createCodeLoader('react-code/R35Code.js.txt')
 
 export const lessons: Lesson[] = [
 {
     id: 'R_1',
     title: 'createRoot、函数组件与 Props',
     navTitle: '组件与 Props',
-    category: '组件基础',
+    category: '组件与渲染',
     path: '/react/r-1/component-props',
     summary: '用训练营课程卡片理解 createRoot 挂载、函数组件组合、单向数据流与只读 Props。',
     demo: null,
@@ -160,63 +130,63 @@ export const lessons: Lesson[] = [
   },
 {
     id: 'R_2',
-    title: 'useState 与对象、数组的不可变更新',
-    navTitle: '状态更新',
-    category: '状态管理',
+    title: 'useState 与 useReducer：状态更新与复杂状态转换',
+    navTitle: '状态与 Reducer',
+    category: '状态与副作用',
     path: '/react/r-2/state-updates',
-    summary: '用购物车数量调整演示 useState、函数式更新以及数组、对象的不可变替换。',
+    summary: '用购物车数量调整与项目入组流程演示 useState 的函数式更新、不可变替换，以及 useReducer 集中管理相互关联的状态转换。',
     demo: null,
-    demoComponent: R02StateUpdates,
+    demoComponent: R02R06Pair,
     code: R02Code,
     language: 'jsx',
     principle:
-      'useState 为组件保存跨渲染的状态快照，调用 setter 只表示"请求下一次渲染"，不会立即改写当前变量。对象与数组状态必须用新引用整体替换旧值：React 依赖 Object.is 比较新旧状态，原地修改既破坏状态快照，也可能让更新被 React 跳过。',
+      'useState 为组件保存跨渲染的状态快照，调用 setter 只表示"请求下一次渲染"，不会立即改写当前变量。对象与数组状态必须用新引用整体替换旧值：React 依赖 Object.is 比较新旧状态，原地修改既破坏状态快照，也可能让更新被 React 跳过。当多个字段彼此关联、更新路径交织时，可用 useReducer 把状态转移集中到纯 reducer，由 dispatch 的 action 驱动。',
     flow: [
       'useState 保存购物车数组，总价在每次渲染时由数组实时推导。',
       '点击加减按钮通过函数式 setter 更新，确保基于最新状态计算。',
       'map 只替换目标商品条目，其余条目保持原引用不动。',
-      '打印渲染次数，确认只有依赖被替换的子树重新渲染。',
+      '把入组流程的 next/approve/reset 交给 reducer，确认每个 action 只对应一种合法转移。',
     ],
     notes: [
       '下一状态依赖上一状态时优先写 setState(current => next)。',
       '不要用 push、splice 或直接改 item.count 的方式更新 React 状态。',
       '总价可由购物车推导，不需要额外 state 或 Effect。',
-      '开发环境 StrictMode 会让更新函数执行两次，纯函数才能保证结果安全。',
+      'reducer 必须保持纯函数，彼此独立的简单状态仍优先用 useState。',
     ],
-    problem: '解决"复杂状态如何可靠更新，并保持 React 状态快照和渲染一致"的问题。',
+    problem: '解决"复杂状态如何可靠更新，以及在字段相互关联时如何集中管理状态转换"的问题。',
   },
 {
     id: 'R_3',
-    title: '条件列表、稳定 Key 与派生数据',
-    navTitle: '列表与 Key',
-    category: '渲染模式',
+    title: '条件列表、稳定 Key 与条件渲染',
+    navTitle: '列表与条件渲染',
+    category: '组件与渲染',
     path: '/react/r-3/lists-keys',
-    summary: '用课程检索展示列表映射、稳定 key，以及在渲染阶段直接计算筛选结果。',
+    summary: '用课程检索与列表/详情切换演示列表映射、稳定 key，以及 &&、三元运算符和提前返回三种条件渲染写法。',
     demo: null,
-    demoComponent: R03ListsKeys,
+    demoComponent: R03R18Pair,
     code: R03Code,
     language: 'jsx',
     principle:
-      'React 依赖 key 在多次渲染间区分同级列表项的"身份"。稳定的业务 ID（如课程 id）让 React 能正确复用节点并保留各项目的挂载状态；数组索引在插入、删除或重排时会改变身份，容易造成状态错位。能从 Props 或 State 推导出的数据应在渲染阶段直接计算，避免用 Effect 维护一份可能不同步的冗余 State。',
+      'React 依赖 key 在多次渲染间区分同级列表项的"身份"。稳定的业务 ID（如课程 id）让 React 能正确复用节点并保留各项目的挂载状态；数组索引在插入、删除或重排时会改变身份，容易造成状态错位。能从 Props 或 State 推导出的数据应在渲染阶段直接计算，避免用 Effect 维护一份可能不同步的冗余 State。条件渲染没有模板指令：&& 表达"满足才渲染"，三元运算符表达二选一，提前返回用于剩余逻辑较多时退出组件。',
     flow: [
       '输入框把关键词写入唯一的 keyword 状态。',
       '组件每次渲染时用 keyword 过滤课程数组，得到 visibleCourses。',
       'map 以课程 ID 作为 key 渲染当前可见的课程卡片。',
-      '在浏览器扩展里改动列表顺序，观察节点复用与状态错位的差异。',
+      '折扣区、列表与详情分别用 &&、三元与提前返回渲染，确认假值 0 不会意外出现在页面上。',
     ],
     notes: [
       'key 只需在当前同级列表内唯一，并不会作为普通 Props 传给组件。',
       '列表顺序会变化时不要用数组索引作为 key，否则节点可能被错误复用。',
-      '筛选结果不是独立事实，不应再用 Effect 同步到另一份 State。',
       '渲染中能算出的值就不要存进 State，避免引入需要同步的第二个来源。',
+      '&& 左侧为 0 等假值时会渲染出 0，应改用三元运算符或显式布尔转换。',
     ],
-    problem: '解决"动态列表如何保持项目身份，以及如何避免派生状态与来源不同步"的问题。',
+    problem: '解决"动态列表如何保持项目身份，以及条件分支写法不统一、可选内容意外渲染出 0"的问题。',
   },
 {
     id: 'R_4',
     title: '受控表单、统一字段更新与提交校验',
     navTitle: '受控表单',
-    category: '用户输入',
+    category: '组件与渲染',
     path: '/react/r-4/controlled-form',
     summary: '用训练营报名表展示受控表单的 value、onChange、统一字段更新与提交校验。',
     demo: null,
@@ -241,63 +211,36 @@ export const lessons: Lesson[] = [
   },
 {
     id: 'R_5',
-    title: 'useEffect：与外部系统同步和清理订阅',
-    navTitle: 'Effect 同步',
-    category: '副作用',
+    title: 'useEffect：外部同步、清理与生命周期',
+    navTitle: 'Effect 同步与清理',
+    category: '状态与副作用',
     path: '/react/r-5/effect-sync',
-    summary: '用跨时区时钟说明 useEffect 的适用边界、依赖数组与清理函数。',
+    summary: '用跨时区时钟、窗口尺寸与计时器演示 useEffect 的适用边界、依赖数组、清理函数以及挂载、更新、卸载的生命周期模式。',
     demo: null,
-    demoComponent: R05EffectSync,
+    demoComponent: R05R24Pair,
     code: R05Code,
     language: 'jsx',
     principle:
-      'useEffect 只用于让组件与 React 之外的系统保持同步，例如定时器、浏览器事件、网络连接或第三方组件。React 在界面提交到 DOM 后运行 Effect，并在重新运行前或组件卸载时调用其返回的清理函数。纯粹基于数据派生界面的计算不属于 Effect，应留在渲染阶段。',
+      'useEffect 只用于让组件与 React 之外的系统保持同步，例如定时器、浏览器事件、网络连接或第三方组件。React 在界面提交到 DOM 后运行 Effect，并在重新运行前或组件卸载时调用其返回的清理函数。空依赖只在挂载与卸载时运行，带依赖的 Effect 在依赖变化时先清理再重新同步；纯粹基于数据派生界面的计算不属于 Effect，应留在渲染阶段。',
     flow: [
       '组件挂载后 Effect 创建 setInterval，每秒更新 now 状态。',
       'Effect 返回 clearInterval 清理函数，组件卸载时取消计时器。',
       '切换时区只改变格式化参数，格式化在渲染阶段完成，不需要重建计时器。',
-      '卸载组件后确认计时器停止，没有残留回调在更新状态。',
+      '窗口尺寸与计时器 Effect 分别在依赖变化、卸载时执行清理，确认 setup 与 cleanup 成对出现。',
     ],
     notes: [
       '依赖数组必须包含 Effect 里读取的响应式值，不要靠"漏写依赖"来控制执行次数。',
       '开发环境 StrictMode 会额外跑一次 setup + cleanup 以暴露清理缺陷。',
       '筛选、排序、格式化等纯计算通常不需要 Effect。',
-      '需要区分"与外部系统同步"和"派生数据"两类逻辑，只有前者属于 Effect。',
+      '互不相关的副作用应拆成独立 Effect，只做挂载清理时依赖数组写空但不要省略第二个参数。',
     ],
-    problem: '解决"何时应使用 Effect，以及如何避免订阅泄漏和重复同步"的问题。',
-  },
-{
-    id: 'R_6',
-    title: 'useReducer：集中管理复杂状态转换',
-    navTitle: 'Reducer',
-    category: '状态管理',
-    path: '/react/r-6/reducer',
-    summary: '用项目入组流程展示 reducer、action 与可预测的有限状态转换。',
-    demo: null,
-    demoComponent: R06Reducer,
-    code: R06Code,
-    language: 'jsx',
-    principle:
-      'useReducer 把"状态如何变化"从事件处理器中抽离，集中到纯 reducer 函数。事件处理器只 dispatch 语义明确的 action；reducer 接收当前状态与该 action，返回下一个状态。当字段彼此关联、多个更新路径交织、或状态变化需要集中审计时，它是比散落多个 useState 更清晰的建模方式。',
-    flow: [
-      '定义初始状态与 reducer 支持的 next/approve/reset 三种 action。',
-      '按钮点击只 dispatch 对应 action，由 reducer 决定状态如何转移。',
-      '组件按 state 渲染当前进度：step 决定步骤高亮，approved 控制确认文案。',
-      '为 reducer 编写纯函数测试，覆盖每个 action 的状态转移。',
-    ],
-    notes: [
-      'reducer 必须保持纯函数，不要在内部请求接口或修改外部变量。',
-      '对未知 action 主动抛错，有助于尽早发现调用错误。',
-      '彼此独立的简单状态优先用 useState，不必为所有状态引入 reducer。',
-      '把状态转移表写进注释或文档，评审时更容易发现缺失的 action。',
-    ],
-    problem: '解决"多个事件共同修改相互关联的状态时，更新逻辑分散且难以追踪"的问题。',
+    problem: '解决"何时应使用 Effect，以及如何避免订阅泄漏、旧同步逻辑残留"的问题。',
   },
 {
     id: 'R_7',
     title: 'Context：跨层共享与 Provider 边界',
     navTitle: 'Context',
-    category: '组件通信',
+    category: '状态与副作用',
     path: '/react/r-7/context',
     summary: '用工作台主题演示 createContext、Provider 与深层组件订阅。',
     demo: null,
@@ -324,7 +267,7 @@ export const lessons: Lesson[] = [
     id: 'R_8',
     title: '自定义 Hook：复用有状态逻辑',
     navTitle: '自定义 Hook',
-    category: '逻辑复用',
+    category: '状态与副作用',
     path: '/react/r-8/custom-hook',
     summary: '用浏览器在线状态订阅展示自定义 Hook 的命名、组合与每次调用的独立状态。',
     demo: null,
@@ -351,7 +294,7 @@ export const lessons: Lesson[] = [
     id: 'R_9',
     title: 'useRef：DOM 引用与非渲染数据',
     navTitle: 'Ref 与 DOM',
-    category: '命令式协作',
+    category: 'DOM 与命令式',
     path: '/react/r-9/ref-dom',
     summary: '用课程检索演示 useRef 聚焦输入框，以及保存不触发渲染的会话计数。',
     demo: null,
@@ -378,7 +321,7 @@ export const lessons: Lesson[] = [
     id: 'R_10',
     title: 'memo、useMemo 与 useCallback：有依据地减少重复工作',
     navTitle: '记忆化优化',
-    category: '性能',
+    category: '并发与性能',
     path: '/react/r-10/memoization',
     summary: '用课程筛选与无关外观更新演示组件、计算结果与回调引用的记忆化边界。',
     demo: null,
@@ -403,28 +346,28 @@ export const lessons: Lesson[] = [
   },
 {
     id: 'R_11',
-    title: 'useDeferredValue：延后非关键界面更新',
-    navTitle: '延迟值',
-    category: '并发渲染',
+    title: 'useDeferredValue 与 useTransition：延后非关键更新',
+    navTitle: '延迟与过渡更新',
+    category: '并发与性能',
     path: '/react/r-11/deferred-value',
-    summary: '用大列表搜索演示输入立即更新，而结果区域以较低优先级追赶最新关键词。',
+    summary: '用大列表搜索演示 useDeferredValue 的后台追赶，以及 useTransition 的 isPending 与可中断过渡更新。',
     demo: null,
-    demoComponent: R11DeferredValue,
+    demoComponent: R11R20Pair,
     code: R11Code,
     language: 'jsx',
     principle:
-      'useDeferredValue 返回一个可落后于最新值的版本，让 React 优先提交输入这类紧急更新，再在后台"追赶"较慢的结果渲染；后台渲染可被新的输入中断。它改善的是交互流畅度而非减少计算量，也不会减少网络请求，更不是固定时长的防抖。旧值与新值不一致时，可弱化结果区域的视觉强调，明确提示内容正在更新。',
+      'useDeferredValue 返回一个可落后于最新值的版本，让 React 优先提交输入这类紧急更新，再在后台"追赶"较慢的结果渲染；后台渲染可被新的输入中断。useTransition 返回 [isPending, startTransition]，把结果渲染这类非紧急更新放进 startTransition 即可被更紧急的输入中断。两者改善的是交互流畅度而非减少计算量，旧值与新值不一致时可弱化结果区域的视觉强调。',
     flow: [
       '受控输入同步更新 keyword，保证键入即时可见。',
       'deferredKeyword 由 useDeferredValue(keyword) 在后台追赶，并驱动结果筛选与 useMemo 重算。',
       '两值不同时用 isStale 置 aria-busy 并降低结果区域透明度。',
-      '快速连续输入，观察结果区域先落后再追赶的更新节奏。',
+      '需要显式控制触发时机时改用 startTransition 包裹筛选更新，并用 isPending 弱化结果区域。',
     ],
     notes: [
       '不要把控制文本输入的 State 更新放进 Transition，键入必须同步更新。',
-      'useDeferredValue 不会自动阻止请求；请求去重与防抖仍需单独处理。',
+      'useDeferredValue 与 useTransition 都不会自动阻止请求；请求去重与防抖仍需单独处理。',
       '只有当结果渲染明显较慢时才有收益，小列表不值得使用。',
-      '延迟值只优化渲染调度；对网络请求它不减少调用次数，去重仍需单独处理。',
+      '过渡更新可被中断但不会被丢弃，最终仍会提交一致的状态。',
     ],
     problem: '解决"昂贵的结果区域重新渲染时，如何让文本输入始终保持流畅响应"的问题。',
   },
@@ -432,7 +375,7 @@ export const lessons: Lesson[] = [
     id: 'R_12',
     title: 'useSyncExternalStore：一致地订阅外部状态',
     navTitle: '外部 Store',
-    category: '状态集成',
+    category: '并发与性能',
     path: '/react/r-12/external-store',
     summary: '用独立计数 Store 演示 subscribe、getSnapshot 与多个消费者的一致更新。',
     demo: null,
@@ -459,7 +402,7 @@ export const lessons: Lesson[] = [
     id: 'R_13',
     title: 'createPortal：跨 DOM 层级渲染弹窗',
     navTitle: 'Portal',
-    category: 'DOM 协作',
+    category: 'DOM 与命令式',
     path: '/react/r-13/portal',
     summary: '用发布确认弹窗演示内容脱离受裁切容器渲染，同时仍属于原 React 组件树。',
     demo: null,
@@ -484,63 +427,36 @@ export const lessons: Lesson[] = [
   },
 {
     id: 'R_14',
-    title: 'lazy 与 Suspense：按需加载组件代码',
-    navTitle: '懒加载',
-    category: '加载体验',
+    title: 'lazy、Suspense 与 Error Boundary：加载与容错',
+    navTitle: '懒加载与容错',
+    category: '加载与容错',
     path: '/react/r-14/lazy-suspense',
-    summary: '用延迟出现的学习报告演示 lazy 组件首次渲染时挂起，以及 Suspense 后备界面。',
+    summary: '用延迟出现的学习报告与故障卡片演示 lazy 按需加载、Suspense 后备界面，以及错误边界隔离局部渲染错误。',
     demo: null,
-    demoComponent: R14LazySuspense,
+    demoComponent: R14R15Pair,
     code: R14Code,
     language: 'jsx',
     principle:
-      'lazy 把函数组件的加载函数延后到组件第一次需要渲染时才调用，并把结果缓存，避免重复执行。组件在等待代码加载时会"挂起"(suspend)，最近的 Suspense 边界随即显示 fallback，加载完成后切换到真实内容。实际工程通常把 lazy 与动态 import 配合，让构建工具拆分出独立代码块。',
+      'lazy 把函数组件的加载函数延后到组件第一次需要渲染时才调用，并把结果缓存，避免重复执行。组件在等待代码加载时会"挂起"(suspend)，最近的 Suspense 边界随即显示 fallback，加载完成后切换到真实内容。加载 Promise 被拒绝时错误会交给最近的错误边界；类组件通过 getDerivedStateFromError 切换到后备界面，componentDidCatch 用于记录错误信息。',
     flow: [
       '初始不渲染报告组件，因此 lazy 的加载函数尚未被调用。',
       '点击"查看报告"后首次渲染 Lazy 组件，Suspense 立即显示后备状态。',
       '返回的 Promise 解析出 default 组件后，React 用真实报告替换 fallback。',
-      '在网络面板确认组件代码被拆成独立 chunk、点击后才加载。',
+      '模拟课程卡片渲染抛错，确认错误边界只替换故障区域并保留重试路径。',
     ],
     notes: [
       'lazy 声明应放在组件外部，避免每次渲染重建组件并意外重置其状态。',
       'Suspense 不捕获 Effect 或普通事件处理器中的常规数据请求。',
-      '加载 Promise 被拒绝时，错误会交给最近的错误边界。',
-      '嵌套多个 Suspense 边界时可做渐进式加载，让不同区域各自展示后备。',
-    ],
-    problem: '解决"不常用的大型功能如何延后加载，并在等待期间提供稳定反馈"的问题。',
-  },
-{
-    id: 'R_15',
-    title: 'Error Boundary：隔离渲染错误并提供降级界面',
-    navTitle: '错误边界',
-    category: '容错',
-    path: '/react/r-15/error-boundary',
-    summary: '用故障课程卡片演示错误边界如何保护页面其他区域并提供可恢复的后备内容。',
-    demo: null,
-    demoComponent: R15ErrorBoundary,
-    code: R15Code,
-    language: 'jsx',
-    principle:
-      '类组件通过 static getDerivedStateFromError 在子树渲染出错时切换到后备界面，componentDidCatch 用于记录错误信息。React 目前仍要求用类组件实现错误边界；边界不能捕获自身错误、普通事件处理器中的错误、服务端渲染错误以及大多数异步回调里的错误。',
-    flow: [
-      '点击"模拟故障"让课程卡片在下一次渲染中抛出错误。',
-      '错误边界捕获子树错误并渲染局部降级内容，其余页面保持可用。',
-      '重试按钮先重置触发故障的状态，再清除边界的失败标记使子树恢复。',
-      '故意在事件处理器中抛错，验证边界捕获不到、需 try/catch 兜底。',
-    ],
-    notes: [
       '错误边界应按功能区域布置，避免整页崩溃，也不宜细碎到难以维护。',
-      'componentDidCatch 可接入监控上报，但不要记录敏感用户数据。',
-      '事件处理器中的错误应使用 try/catch 加错误状态处理，而不是依赖错误边界。',
-      '错误边界恢复时要点亮明确的重试路径，避免用户被困在降级界面。',
+      '错误边界捕获不到事件处理器与大多数异步回调中的错误，这些场景需 try/catch 兜底。',
     ],
-    problem: '解决"局部组件渲染失败时，如何避免整个 React 根节点失去界面"的问题。',
+    problem: '解决"不常用功能如何延后加载，以及局部组件渲染失败时如何避免整页变白"的问题。',
   },
 {
     id: 'R_16',
     title: 'useId：稳定连接标签与可访问性说明',
     navTitle: '可访问 ID',
-    category: '可访问性',
+    category: '可访问性与开发体验',
     path: '/react/r-16/accessible-id',
     summary: '用动态课程字段演示 useId 为 label、input 与辅助说明生成稳定且唯一的关联标识。',
     demo: null,
@@ -567,7 +483,7 @@ export const lessons: Lesson[] = [
     id: 'R_17',
     title: '事件处理：合成事件与处理器模式',
     navTitle: '事件处理',
-    category: '用户交互',
+    category: '组件与渲染',
     path: '/react/r-17/event-handler',
     summary: '用课程搜索和表单提交演示合成事件对象、preventDefault 与事件处理器设计。',
     demo: null,
@@ -591,37 +507,10 @@ export const lessons: Lesson[] = [
     problem: '解决"表单提交导致整页刷新、事件信息读取方式在浏览器间不统一"的问题。',
   },
 {
-    id: 'R_18',
-    title: '条件渲染：逻辑与、三元表达式与提前返回',
-    navTitle: '条件渲染',
-    category: '渲染模式',
-    path: '/react/r-18/conditional-render',
-    summary: '用课程列表与详情切换演示 &&、三元运算符和提前返回三种条件渲染方式。',
-    demo: null,
-    demoComponent: R18ConditionalRender,
-    code: R18Code,
-    language: 'jsx',
-    principle:
-      'React 没有模板指令，条件渲染完全依赖 JavaScript 表达式。逻辑与 (&&) 表达"满足则显示、否则不渲染"；三元运算符表达二选一；提前返回则用于分支后剩余逻辑较多时提前退出当前组件。具体选用哪种由可读性与场景决定，没有唯一的标准答案。',
-    flow: [
-      '折扣区域用 && 控制显示：showDiscount 为 false 时不渲染任何内容。',
-      'selected 用三元运算符在课程列表与详情之间二选一渲染。',
-      'CourseDetail 内部用提前返回，未传入课程时直接 return null。',
-      '把条件改成可能为 0 的数值，验证渲染结果不是意外的 0。',
-    ],
-    notes: [
-      '&& 左侧为 0 等假值表达式时会渲染出 0，应改用三元运算符或显式布尔转换。',
-      'if/else 是语句而非表达式，不能直接嵌入 JSX 条件渲染。',
-      '分支过多时应拆分为独立子组件，让每个组件保持单一职责。',
-      '多个互斥条件用三元或提前返回表达，避免多层嵌套的三元链。',
-    ],
-    problem: '解决"没有模板指令可用时，条件分支写法不统一、可选内容意外渲染出 0"的问题。',
-  },
-{
     id: 'R_19',
     title: '组件组合：children 与 render props 模式',
     navTitle: '组件组合',
-    category: '组件设计',
+    category: '组件与渲染',
     path: '/react/r-19/composition',
     summary: '用课程卡片与统计面板演示 children 插槽和 render props 两种组合方式。',
     demo: null,
@@ -645,91 +534,37 @@ export const lessons: Lesson[] = [
     problem: '解决"容器外壳相似而内容各异时，每换一种内容就要复制一份容器组件"的问题。',
   },
 {
-    id: 'R_20',
-    title: 'useTransition：标记非紧急状态更新',
-    navTitle: '过渡更新',
-    category: '并发渲染',
-    path: '/react/r-20/transition',
-    summary: '用大列表搜索演示 useTransition 的 isPending 与将筛选标记为可中断过渡更新的思路。',
-    demo: null,
-    demoComponent: R20Transition,
-    code: R20Code,
-    language: 'jsx',
-    principle:
-      'useTransition 返回 [isPending, startTransition]。把非紧急的状态更新（如大列表筛选）放进 startTransition，React 就会把它标记为低优先级的过渡更新；一旦有更紧急的更新（例如输入框同步），React 会中断过渡更新、优先推进紧急更新。它应作用于"用户交互触发但结果渲染较慢"的更新。',
-    flow: [
-      '输入框 onChange 同步更新 keyword，保证键入即时可见。',
-      'filtered 在渲染阶段按 keyword 实时计算，结果区域据此展示。',
-      'useTransition 返回的 isPending 用于在过渡进行时弱化列表区域。',
-      '反复触发过渡更新，确认紧急输入不被低优先级渲染阻塞。',
-    ],
-    notes: [
-      '真正昂贵的列表更新应整体包裹进 startTransition；控制文本输入的 setState 必须保持紧急同步，不放入 Transition。',
-      'useDeferredValue 是 useTransition 的声明式替代，适合不需要显式控制触发时机的场景。',
-      '过渡更新可被中断但不会被丢弃，React 会保证最终提交一致的状态。',
-      '过渡更新的收益要以测量为准，拆细后反而失去批处理优势时要回退。',
-    ],
-    problem: '解决"用户输入触发昂贵列表渲染时，如何让输入框始终保持流畅响应"的问题。',
-  },
-{
     id: 'R_21',
-    title: 'useImperativeHandle：限定组件暴露的命令式接口',
-    navTitle: '命令式接口',
-    category: '命令式协作',
+    title: 'useImperativeHandle 与 forwardRef：命令式 Ref 接口',
+    navTitle: 'Ref 命令式接口',
+    category: 'DOM 与命令式',
     path: '/react/r-21/imperative-handle',
-    summary: '用搜索框演示 useImperativeHandle 限定父组件通过 ref 能调用的方法。',
+    summary: '用搜索框与报名表单演示 useImperativeHandle 限定父组件能调用的方法，以及 forwardRef 把 ref 转发给内部 DOM 节点。',
     demo: null,
-    demoComponent: R21ImperativeHandle,
+    demoComponent: R21R22Pair,
     code: R21Code,
     language: 'jsx',
     principle:
-      'useImperativeHandle 与 forwardRef 搭配，可精确限定父组件通过 ref 能访问到的方法。默认 ref 指向组件内部的某个 DOM 节点；useImperativeHandle 会把它重定向为自定义对象，只暴露必要的命令式操作，从而保留封装。React 19 还把 ref 变成了函数组件的普通 prop，不再强制使用 forwardRef。',
+      'useImperativeHandle 与 forwardRef 搭配，可精确限定父组件通过 ref 能访问到的方法。默认 ref 指向组件内部的某个 DOM 节点；useImperativeHandle 会把它重定向为自定义对象，只暴露必要的命令式操作，从而保留封装。forwardRef 让自定义组件把接收到的 ref 转发给内部的 DOM 节点。React 19 还把 ref 变成了函数组件的普通 prop，不再强制使用 forwardRef。',
     flow: [
       'SearchInput 接收 ref，并在内部用另一个 ref 指向真实 input 元素。',
       'useImperativeHandle 只暴露 focus、clear、getValue 三个方法。',
       '父组件经 searchRef.current 调用这些方法，无法触碰内部 DOM 结构。',
-      '在父组件中尝试访问未暴露的属性，确认编译期或运行时报错。',
+      '自定义输入组件用 forwardRef 把 ref 转发到内部 input，父组件经 ref.current 聚焦或读取值。',
     ],
     notes: [
       'useImperativeHandle 的工厂函数应返回稳定对象，避免给父组件造成不必要的变化。',
       '命令式接口应作为最后手段；能用声明式 Props 与 State 表达的需求优先声明式解决。',
-      'React 19 中 ref 可作为函数组件普通 prop 直接接收，配合 useImperativeHandle 使用同样成立。',
+      'ref 转发跨多层组件时每一层都要转发一步，React 19 也可把 ref 当作普通 prop。',
       '暴露的方法命名以使用意图为准（focus、clear），不要泄露内部实现细节。',
     ],
     problem: '解决"父组件如何调用子组件的命令式方法，同时不暴露内部实现细节"的问题。',
   },
 {
-    id: 'R_22',
-    title: 'forwardRef：跨组件传递 Ref',
-    navTitle: '转发 Ref',
-    category: '命令式协作',
-    path: '/react/r-22/forward-ref',
-    summary: '用报名表单演示 forwardRef 让自定义输入组件把 ref 转发给内部 DOM 节点。',
-    demo: null,
-    demoComponent: R22ForwardRef,
-    code: R22Code,
-    language: 'jsx',
-    principle:
-      'forwardRef 让自定义组件把接收到的 ref 转发给内部的 DOM 节点，方便聚焦、测量或与第三方库集成这类必须直接操作元素的场景。它包裹组件后，第二个参数就是外部传入的 ref。React 19 更新：ref 现在可以作为函数组件的普通 prop 被直接接收，forwardRef 仍是广为兼容的写法。',
-    flow: [
-      'TextInput 用 forwardRef 把传入的 ref 转发到内部 input 元素。',
-      '父组件分别用 nameRef 与 emailRef 引用两个输入框。',
-      '提交时通过 ref.current 读取当前值，重置时直接清空 DOM 元素。',
-      '在父组件挂载后立即调用 focus，验证转发链路可用。',
-    ],
-    notes: [
-      'ref 转发可以跨多层组件链连续传递，但每一层都需要转发一步。',
-      '配合 useImperativeHandle 可自定义 ref 暴露的内容，而不仅是整个 DOM 节点。',
-      'React 19 也可把 ref 作普通 prop 传给函数组件，forwardRef 用于保持传统写法与兼容旧代码。',
-      'ref 转发只暴露 DOM 节点时，父组件对子组件内部实现的依赖依然被限制。',
-    ],
-    problem: '解决"自定义组件如何把内部 DOM 节点引用安全地转发给父组件"的问题。',
-  },
-{
     id: 'R_23',
     title: 'StrictMode：开发环境额外检查',
     navTitle: '严格模式',
-    category: '开发体验',
+    category: '可访问性与开发体验',
     path: '/react/r-23/strict-mode',
     summary: '用 Effect 执行日志演示 StrictMode 的双重调用机制如何暴露清理缺失。',
     demo: null,
@@ -753,140 +588,99 @@ export const lessons: Lesson[] = [
     problem: '解决"如何在开发阶段尽早发现不纯渲染和 Effect 清理缺失"的问题。',
   },
 {
-    id: 'R_24',
-    title: 'useEffect 生命周期：挂载、更新与卸载的常见模式',
-    navTitle: 'Effect 生命周期',
-    category: '副作用',
-    path: '/react/r-24/effect-lifecycle',
-    summary: '用窗口尺寸、计时器与在线状态演示 Effect 的挂载、依赖更新与清理卸载模式。',
+    id: 'R_25',
+    title: 'Zustand：细粒度 Selector 与 Middleware',
+    navTitle: 'Zustand 订阅与中间件',
+    category: '状态库',
+    path: '/react/r-25/zustand-selectors',
+    summary: '用购物车 Store 与课程进度演示 Zustand 的细粒度 selector 订阅，以及 subscribeWithSelector 中间件的选择性订阅。',
     demo: null,
-    demoComponent: R24EffectLifecycle,
-    code: R24Code,
+    demoComponent: R25R26Pair,
+    code: R25Code,
     language: 'jsx',
-    principle:
-      'Effect 在组件挂载后执行；依赖变化时会先跑一次清理、再重新 setup；组件卸载时执行最后一次清理。空依赖数组让 Effect 只在挂载与卸载时运行；带依赖的 Effect 在依赖变化时重新与外部系统同步；需要按条件启停时（如 onlyIf 运行）可提前 return，让不满足条件时保持干净。',
-    flow: [
-      'WindowSize 的 Effect 用空依赖，只在挂载时添加 resize 监听、卸载时移除。',
-      'Timer 的 Effect 依赖 running：切换开关时先清旧计时器再按状态决定是否新建。',
-      'OnlineStatus 的 Effect 在挂载时订阅网络事件、卸载时解除订阅。',
-      '在依赖变化时打印清理与 setup 顺序，确认配对执行。',
-    ],
-    notes: [
-      '只挂载/卸载执行时依赖数组写空，但不能省略第二个参数本身。',
-      '清理函数会在"依赖变化重新执行前"和"组件卸载时"各跑一次。',
-      '互不相关的副作用应拆成独立 Effect，而不是塞进一个 Effect 里。',
-      '影响运行条件的值要进入依赖数组，否则 Effect 会引用过期闭包。',
-    ],
-    problem: '解决"挂载时注册的监听忘记清理、依赖变化后旧的同步逻辑仍在运行"的问题。',
+    principle: 'Zustand 用 create 在 React 树之外构建独立 Store，通过 useStore 的 Hook API 暴露给组件。每个 selector 把状态投影成最小切片；切片引用不变时组件就不会重渲染，从而把无关更新的影响隔离在真正读取它的组件内。中间件包裹 create 的创建器，为其追加持久化、DevTools 或 subscribeWithSelector 等横切能力，而组件的消费方式保持不变。',
+    flow: ['create((set) => (…)) 定义状态与修改函数。', '组件用多个 selector 分别取 items、coupon 等最小切片。', 'action 用 set 合并新状态，只有读取相关切片的组件响应更新。', '用 subscribeWithSelector 按 selector 订阅 progress，回调同时拿到变化前后的值并在清理阶段取消订阅。'],
+    notes: ['selector 若返回新对象（如每次新建数组），需要关注相等比较是否导致无限重渲染。', 'Store 不依赖 React 树，可在组件外直接调用 getState().action 操作。', '不读取的状态切片变化不会让该组件重渲染。', '不同中间件的组合顺序会影响类型推导，持久化要用固定存储 Key 并规划 migrate。'],
+    problem: '解决"如何以很少样板代码共享状态、精确控制重渲染，并按切片监听变化"的问题。',
   },
 {
-    id: 'R_25', title: 'Zustand Store 与细粒度 Selector', navTitle: 'Zustand Selector', category: '轻量 Store',
-    path: '/react/r-25/zustand-selectors', summary: '用购物车 Store 展示超越 useState 的 Hook API、Action 与细粒度 selector 订阅。',
+    id: 'R_27',
+    title: 'Jotai 与 Recoil：原子状态与派生图',
+    navTitle: '原子状态',
+    category: '状态库',
+    path: '/react/r-27/jotai-atoms',
+    summary: '用数量、价格与总价 Atom 演示 Jotai 的原子组合与依赖追踪，并用 Recoil 的 Atom/Selector 理解细粒度派生更新。',
     demo: null,
-    demoComponent: R25ZustandSelectors, code: R25Code, language: 'jsx',
-    principle: 'Zustand 用 create 在 React 树之外构建独立 Store，通过 useStore 的 Hook API 暴露给组件。每个 selector 把状态投影成最小切片；切片引用不变时组件就不会重渲染，从而把无关更新的影响隔离在真正读取它的组件内。',
-    flow: ['create((set) => (…)) 定义状态与修改函数。', '组件用多个 selector 分别取 items、coupon 等最小切片。', 'action 用 set 合并新状态，只有读取相关切片的组件响应更新。', '在 DevTools 中观察 action 触发后哪些组件重渲染。'],
-    notes: ['selector 若返回新对象（如每次新建数组），需要关注相等比较是否导致无限重渲染。', 'Store 不依赖 React 树，可在组件外直接调用 getState().action 操作。', '不读取的状态切片变化不会让该组件重渲染。', '选择器要返回稳定切片；需要派生数组或对象时用浅比较选择器（如 useShallow）。'],
-    problem: '解决"React 中如何以很少样板代码共享状态并精确控制组件重渲染"的问题。',
-  },
-{
-    id: 'R_26', title: 'Zustand Middleware 与选择性订阅', navTitle: 'Zustand Middleware', category: '轻量 Store',
-    path: '/react/r-26/zustand-middleware', summary: '用课程进度演示 subscribeWithSelector 中间件的选择性订阅。',
-    demo: null,
-    demoComponent: R26ZustandMiddleware, code: R26Code, language: 'jsx',
-    principle: 'Zustand 中间件包裹 create 的创建器，为其追加持久化、DevTools、Immer 或 subscribeWithSelector 等横切能力，而组件的消费方式保持不变。subscribeWithSelector 让 store.subscribe 能按 selector 订阅并同时拿到变化前后的值。',
-    flow: ['用 subscribeWithSelector 创建启用选择性订阅的 Store。', '经 subscribe 指定 selector 订阅 progress，读取变化前后两个值。', '订阅返回取消函数，在 effect 清理阶段取消以求不留订阅泄漏。', '触发一次状态变化，验证订阅回调收到前后两个快照值。'],
-    notes: ['不同中间件的组合顺序会影响类型推导与行为。', '持久化等中间件需要用常量的存储 Key，且要规划好版本迁移。', '订阅了 selector 后只有该切片变化时回调才被触发。', '持久化中间件升级状态结构时要写好 migrate，避免旧数据直接崩溃。'],
-    problem: '解决"如何扩展 Zustand 能力，并在不引发整树更新的前提下监听特定状态变化"的问题。',
-  },
-{
-    id: 'R_27', title: 'Jotai 原子状态与派生图', navTitle: 'Jotai Atom', category: '原子化状态',
-    path: '/react/r-27/jotai-atoms', summary: '用数量、价格与总价 Atom 理解原子组合和依赖追踪。',
-    demo: null,
-    demoComponent: R27JotaiAtoms, code: R27Code, language: 'jsx',
-    principle: 'Jotai 以 atom 为最小状态单元：基础 atom 直接持有值，派生(derived) atom 通过读取其他 atom 自动建立依赖图。某个原子变化时，只有依赖链路上真正受影响的消费者会被触发更新，从而实现细粒度的按需重渲染。把它放进组件树后，更新范围自然收敛到依赖链。',
-    flow: ['创建 countAtom、priceAtom 两个可写基础原子。', '用 totalAtom = atom((get) => …) 读取二者构造派生原子。', '组件用 useAtom 读写基础原子、useAtomValue 只读派生值，驱动界面显示总价。', '单独更新一个基础原子，确认只有依赖它的组件重渲染。'],
-    notes: ['atom 应在组件外部定义以保持引用稳定，避免每次渲染重建。', '需要动态创建大量原子时可引入 atomFamily 管理。', '派生原子本身不可直写，其值始终来自依赖原子的当前状态。', '原子按功能领域拆分并集中导出，避免业务文件中散落定义。'],
+    demoComponent: R27R33Pair,
+    code: R27Code,
+    language: 'jsx',
+    principle: 'Jotai 以 atom 为最小状态单元：基础 atom 直接持有值，派生(derived) atom 通过读取其他 atom 自动建立依赖图。某个原子变化时，只有依赖链路上真正受影响的消费者会被触发更新，从而实现细粒度的按需重渲染。Recoil 同样以 Atom 为最小状态单元、Selector 为派生状态，组件只订阅自己读取的原子及其派生链。',
+    flow: ['创建 countAtom、priceAtom 两个可写基础原子。', '用 totalAtom = atom((get) => …) 读取二者构造派生原子。', '组件用 useAtom 读写基础原子、useAtomValue 只读派生值，驱动界面显示总价。', '用 Recoil 的 atom/selector 定义原始状态与完成率，只更新一个 atom 验证未依赖它的组件不重渲染。'],
+    notes: ['atom 应在组件外部定义以保持引用稳定，避免每次渲染重建。', '需要动态创建大量原子时可引入 atomFamily 管理。', '派生原子本身不可直写，其值始终来自依赖原子的当前状态。', 'Recoil 与 React 生态深度绑定，选型时需评估其维护活跃度与替代方案。'],
     problem: '解决"复杂页面如何把状态拆成可组合、可追踪、按需更新的细粒度原子单元"的问题。',
   },
 {
-    id: 'R_28', title: 'Jotai 异步 Atom 与 Suspense', navTitle: 'Jotai 异步 Atom', category: '原子化状态',
-    path: '/react/r-28/jotai-async-atoms', summary: '用异步课程 Atom 演示依赖驱动的刷新与 Suspense 等待边界。',
+    id: 'R_28',
+    title: 'Jotai 异步 Atom 与 Suspense',
+    navTitle: 'Jotai 异步 Atom',
+    category: '状态库',
+    path: '/react/r-28/jotai-async-atoms',
+    summary: '用异步课程 Atom 演示依赖驱动的刷新与 Suspense 等待边界。',
     demo: null,
-    demoComponent: R28JotaiAsyncAtoms, code: R28Code, language: 'jsx',
+    demoComponent: R28JotaiAsyncAtoms,
+    code: R28Code,
+    language: 'jsx',
     principle: 'Jotai 的读取函数可以返回 Promise，从而定义"异步原子"；它一旦被读取就会执行，执行中的 Promise 会触发 useAtomValue 所在的组件进入挂起(suspend)状态，由外层 Suspense 展示后备界面。当异步 atom 读取了某个刷新原子时，只要刷新原子变化，异步 atom 就会失效并重新计算。',
     flow: ['refreshAtom 作为刷新依赖，异步 coursesAtom 读取它以建立重算关系。', '组件读取异步 atom 时会挂起，外层 Suspense 显示"加载中"后备。', '点击"重新读取"更新 refreshAtom，使异步 atom 失效并重新拉取课程。', '验证多个组件同时读取同一异步原子时只发起一次请求。'],
     notes: ['异步 atom 适合以原子为依赖、天然可组合的加载场景。', '并发取消、去重等更复杂的服务端缓存语义，仍需交给专门请求库。', '同一异步 atom 被多个组件读取时，结果会被共享缓存，避免重复执行。', '异步原子需要失败兜底：出错时可转交错误边界或展示重试入口。'],
     problem: '解决"原子化状态如何以可组合的方式表达异步数据及其重新加载流程"的问题。',
   },
 {
-    id: 'R_29', title: 'Redux Toolkit 的 Slice 与单向数据流', navTitle: 'Redux Toolkit', category: '结构化状态',
-    path: '/react/r-29/redux-toolkit', summary: '用报名 Slice 展示 Redux Toolkit 的 reducer、action、selector 与 Provider。',
+    id: 'R_29',
+    title: 'Redux Toolkit、XState 与 Overmind：集中式与结构化状态',
+    navTitle: '集中式状态',
+    category: '状态库',
+    path: '/react/r-29/redux-toolkit',
+    summary: '用报名 Slice、结算状态机与分形 Store 演示 Redux Toolkit 的单向数据流、XState 的合法状态转换与 Overmind 的命名空间组织。',
     demo: null,
-    demoComponent: R29ReduxToolkit, code: R29Code, language: 'jsx',
-    principle: 'Redux Toolkit 用 createSlice 把初始状态与 reducer 放在一起，同时自动生成对应的 action；configureStore 再组合成单一 store。所有改动都必须经过 dispatch 走一遍可追踪的单向数据流，配合 DevTools 可回溯每一次变更，适合状态规则严格、需要统一调试工具的团队。',
-    flow: ['createSlice 定义初始状态与 enroll/reset 等 reducer，并自动生成 actions.enroll 等对象。', 'configureStore 组合业务 Slice，用 Provider 把 store 提供给组件树。', '组件用 useSelector 读取名额与报名数，用 useDispatch 发起 action。', '在 DevTools 时间线中回放每次 dispatch，核对状态变化轨迹。'],
-    notes: ['reducer 里"看似直接修改"的写法由 Immer 自动转成不可变更新，无需手写 spread。', '不要把光标位置、临时输入等短暂 UI 状态塞进全局 Store。', 'selector 应返回最稳定的最小切片，避免不必要的全局重渲染。', '按功能域拆分 slice，避免单个 store 文件随业务增长无限膨胀。'],
-    problem: '解决"大型 React 项目如何获得可预测的状态流与统一调试工具"的问题。',
+    demoComponent: R29R30R35Pair,
+    code: R29Code,
+    language: 'jsx',
+    principle: 'Redux Toolkit 用 createSlice 把初始状态与 reducer 放在一起，同时自动生成对应的 action；configureStore 再组合成单一 store。所有改动都必须经过 dispatch 走一遍可追踪的单向数据流，配合 DevTools 可回溯每一次变更。XState 用 createMachine 显式列举互斥状态与可接受事件，使非法转换在建模阶段就被排除；Overmind 则以命名空间聚合 state、actions、derived 与 effects，让副作用独立成层。',
+    flow: ['createSlice 定义初始状态与 enroll/reset 等 reducer，并自动生成 actions.enroll 等对象。', 'configureStore 组合业务 Slice，用 Provider 把 store 提供给组件树。', '组件用 useSelector 读取名额与报名数，用 useDispatch 发起 action。', '结算流程用状态机声明 editing/submitting/failure/success 的合法转换，非法事件被拒绝而不是产生组合态。'],
+    notes: ['reducer 里"看似直接修改"的写法由 Immer 自动转成不可变更新，无需手写 spread。', '不要把光标位置、临时输入等短暂 UI 状态塞进全局 Store。', '简单布尔或极少状态不必引入状态机，应按流程复杂度选型。', 'Overmind 的 actions 只改 state，网络、存储等副作用一律放进 effects。'],
+    problem: '解决"大型项目如何获得可预测、可回溯且能排除非法组合的集中式状态流"的问题。',
   },
 {
-    id: 'R_30', title: 'XState 有限状态机与合法转换', navTitle: 'XState 状态机', category: '结构化状态',
-    path: '/react/r-30/xstate-machine', summary: '用结算流程限制 editing、submitting、failure 与 success 的合法转换。',
+    id: 'R_31',
+    title: 'Valtio 与 MobX：Proxy 与 Observable 响应式状态',
+    navTitle: '响应式状态',
+    category: '状态库',
+    path: '/react/r-31/valtio',
+    summary: '用 Valtio 的 proxy/snapshot 与 MobX 的 Observable/observer 理解自动追踪依赖的响应式状态管理。',
     demo: null,
-    demoComponent: R30XStateMachine, code: R30Code, language: 'jsx',
-    principle: '有限状态机把互斥的状态与可接受的事件显式列举出来，使非法转换在建模阶段就被排除。XState 用 createMachine 描述状态图：每个状态声明它响应的事件与目标，并支持守卫(guard)、副作用(invoke/actor)、并行状态等，适合结算、审批等多步骤关键流程。',
-    flow: ['枚举业务互斥的状态：editing、submitting、failure、success(event 驱动的 final 态)。', '为每个状态声明允许转换的事件，如 editing 只接受 SUBMIT。', '组件用 useMachine 订阅状态快照 snapshot，并通过 send 触发事件推动流程。', '发送非法事件，验证状态机忽略或拒绝并使流程保持稳定。'],
-    notes: ['简单布尔或极少状态用 useState 即可，不必引入状态机。', '副作用应用 invoke/actor 建模，组件经 useActor/useMachine 订阅快照。', '状态图可直接对齐产品与测试认知，减少"非法组合"类缺陷。', '状态机的测试从状态图出发：为每条转移写一个用例，覆盖面一目了然。'],
-    problem: '解决"多个布尔值或字段自由组合时，出现的非法流程状态难以被拦截"的问题。',
+    demoComponent: R31R34Pair,
+    code: R31Code,
+    language: 'jsx',
+    principle: 'Valtio 用 Proxy 包裹状态对象，直接赋值属性即触发更新，无需 Provider 与 reducer 样板代码；组件再用 useSnapshot 取到不可变快照用于渲染，快照层会自动追踪组件实际读到的路径，从而把重渲染收敛到真正依赖它的组件。MobX 用 makeAutoObservable 把类字段变为 observable，action 统一修改状态、computed 派生只读值并缓存、observer 组件按实际读取的字段自动订阅。',
+    flow: ['用 proxy 创建响应式状态对象，跨组件共享引用。', '在组件或动作里直接修改 proxy 的属性（如 state.count++）。', '组件用 useSnapshot 读取并渲染，系统按所读路径自动收集依赖。', '在 MobX 中把批量修改包进 action/runInAction，确认统计值只重算一次、列表只重渲染一轮。'],
+    notes: ['Valtio 提供 subscribe 订阅任意路径的变化，便于接入调试或持久化。', '不要把 proxy 对象整体放进 React Context，快照隔离更适合组件消费。', 'useSnapshot 的可变性对象不宜作 props 长期保存，尽量保持组件使用模式一致。', 'MobX 的依赖是隐式收集的，可配合 enforceActions 保证状态只在 action 中被修改。'],
+    problem: '解决"如何用最少样板代码获得自动追踪依赖的响应式状态，并让变更链路可追踪"的问题。',
   },
 {
-    id: 'R_31', title: 'Valtio 与 Proxy 响应式状态', navTitle: 'Valtio', category: '轻量 Store',
-    path: '/react/r-31/valtio', summary: '用 Valtio 的 proxy/snapshot 模式管理 React 状态，理解 Proxy 响应式原理。',
+    id: 'R_32',
+    title: 'TanStack Query 服务端状态',
+    navTitle: 'TanStack Query',
+    category: '状态库',
+    path: '/react/r-32/tanstack-query',
+    summary: '用缓存策略、乐观更新和后台同步管理服务端数据状态。',
     demo: null,
-    demoComponent: R31Valtio, code: R31Code, language: 'jsx',
-    principle: 'Valtio 用 Proxy 包裹状态对象，直接赋值属性即触发更新，无需 Provider 与 reducer 样板代码；组件再用 useSnapshot 取到不可变快照用于渲染，快照层会自动追踪组件实际读到的路径，从而把重渲染收敛到真正依赖它的组件。',
-    flow: ['用 proxy 创建响应式状态对象，跨组件共享引用。', '在组件或动作里直接修改 proxy 的属性（如 state.count++）。', '组件用 useSnapshot 读取并渲染，系统按所读路径自动收集依赖。', '去掉未使用的快照字段，确认依赖收集范围随之缩小。'],
-    notes: ['Valtio 提供 subscribe 订阅任意路径的变化，便于接入调试或持久化。', '不要把 proxy 对象整体放进 React Context，快照隔离更适合组件消费。', 'useSnapshot 的可变性对象不宜作 props 长期保存，尽量保持组件使用模式一致。', 'valtio 状态在组件外可直接读写，适合接入调试工具或非 React 逻辑。'],
-    problem: '解决"如何用最少的样板代码获得自动追踪依赖的响应式状态管理体验"的问题。',
-  },
-{
-    id: 'R_32', title: 'TanStack Query 服务端状态', navTitle: 'TanStack Query', category: '服务端状态',
-    path: '/react/r-32/tanstack-query', summary: '用缓存策略、乐观更新和后台同步管理服务端数据状态。',
-    demo: null,
-    demoComponent: R32TanStackQuery, code: R32Code, language: 'jsx',
+    demoComponent: R32TanStackQuery,
+    code: R32Code,
+    language: 'jsx',
     principle: 'TanStack Query 把"服务端数据"看作缓存而非组件本地状态：staleTime 决定数据在多久内视为新鲜、期间不重复请求，gcTime 控制不再使用后的回收时机。useQuery 负责读取与缓存，useMutation 负责写入，配合乐观更新可在请求完成前先更新界面、失败时回滚。',
     flow: ['用 QueryClient 统一配置 staleTime、gcTime 与窗口聚焦时是否重取。', 'useQuery 以 courses 作为 queryKey 获取并缓存课程列表。', 'useMutation 上传新课程：onMutate 先写入乐观值，onError 回滚，onSettled 使缓存失效以对齐服务端。', '断网后提交，验证乐观更新被回滚且提示可重试。'],
     notes: ['服务端状态与本地 UI 状态分开管理，避免重复当"事实来源"。', 'queryKey 的结构直接决定缓存命中与失效粒度，需稳定且能标识查询语义。', 'staleTime 控制请求频率，gcTime 控制缓存保留时长；均需针对数据特性取值。', '失效策略按数据变化频率设计，频繁失效会让缓存形同虚设。'],
     problem: '解决"如何高效管理服务端数据的缓存、新鲜度、同步以及乐观更新体验"的问题。',
-  },
-{
-    id: 'R_33', title: 'Recoil 原子状态与 Selector', navTitle: 'Recoil', category: '原子化状态',
-    path: '/react/r-33/recoil', summary: '了解 Recoil 的 Atom 与 Selector 模型，理解原子化状态管理的细粒度更新。',
-    demo: null,
-    demoComponent: R33Recoil, code: R33Code, language: 'jsx',
-    principle: 'Recoil 以 Atom 为最小状态单元，Selector 是从一个或多个 atom 推导出的派生状态。组件用 useRecoilState/useRecoilValue 读写，每个 atom 独立追踪订阅；只有读取了变化原子或其派生链的组件才会更新，从而实现细粒度的组件级重渲染。',
-    flow: ['用 atom 定义原始状态并指定全局唯一的 key。', '用 selector 的 get 读取依赖的 atom 构造派生值，如字符数、完成率。', '组件经 useRecoilState 读写 atom、useRecoilValue 订阅派生 selector 展示统计。', '只更新一个 atom，验证未依赖它的组件不重渲染。'],
-    notes: ['Recoil 的状态图也支持异步 selector，并能配合 Suspense 使用。', '每个 atom/selector 独立维护订阅，更新粒度较其他全局 store 更细。', 'Recoil 与 React 生态深度绑定，主要面向 React 项目。', '选型时关注维护活跃度：同作者已有替代工具，评估后再采用 Recoil。'],
-    problem: '解决"大型应用中状态更新粒度过粗，频繁引发大量不必要的组件重渲染"的问题。',
-  },
-{
-    id: 'R_34', title: 'MobX 响应式状态与 Observable', navTitle: 'MobX', category: '结构化状态',
-    path: '/react/r-34/mobx', summary: '理解 MobX 的 Observable 响应式模型，掌握 action、computed 和 observer 的协作方式。',
-    demo: null,
-    demoComponent: R34Mobx, code: R34Code, language: 'javascript',
-    principle: 'MobX 用 Observable 把普通对象（如 class 实例）包装成可观察图谱：action 在组件之外统一修改状态，computed（getter）派生只读值并缓存，observer 包裹的组件会记录渲染时用到的 observable 字段并随其变化自动重渲染。这种"透明反应"心智模型贴近面向对象领域建模，适合复杂业务状态。',
-    flow: ['用 makeAutoObservable 让类字段自动可观察，并把修改方法标为 action。', '在 action 内统一变更状态，触发依赖收集与通知。', 'observer 组件渲染时用到哪些字段，就只订阅这些字段，变化时自动更新。', '在 DevTools 中核对哪些 observable 被实际追踪。'],
-    notes: ['MobX 的响应式是隐式收集的，代码更简洁，但需要理解"谁被追踪、何时重跑"。', 'configure({ enforceActions: "always" }) 保证状态只能在 action 中被修改。', '复杂领域模型优先用 class 搭配 makeAutoObservable 表达。', '跨组件的异步流程用 runInAction 包裹批量修改，减少中间态通知。'],
-    problem: '解决"状态更新逻辑分散、视图与状态同步复杂、变更链路难以完整追踪"的问题。',
-  },
-{
-    id: 'R_35', title: 'Overmind 分形状态管理', navTitle: 'Overmind', category: '结构化状态',
-    path: '/react/r-35/overmind', summary: '了解 Overmind 的分形架构，掌握命名空间组织状态与 effects 隔离副作用。',
-    demo: null,
-    demoComponent: R35Overmind, code: R35Code, language: 'javascript',
-    principle: 'Overmind 以"分形"方式组织全局状态：state、actions、derived 与 effects 按命名空间聚合，天然支持状态追踪、DevTools 与时间旅行调试。核心约定是 actions 只改 state，网络、存储等副作用一律放进 effects，让 UI 层保持纯净、便于替换与测试。',
-    flow: ['用 createOvermind 依配置创建 store，按命名空间放好 state、actions 与 effects。', '组件经 useOvermind 解构出 state 与 actions 使用。', 'actions 直接修改 state，需要的外部能力（如 fetch）从 effects 注入。', '用测试替身注入 effects，验证 actions 逻辑独立可测。'],
-    notes: ['Overmind 同时支持 Vue、React 等框架，同一份逻辑可跨端复用。', '状态变更都能回溯到具体 action 调用，极大地方便调试与审计。', 'effects 独立成层，测试时可用替身注入，避免真实网络与存储。', '状态划分先按业务域命名空间拆开，再按 actions/effects 归位。'],
-    problem: '解决"状态管理中副作用耦合、导致调试困难，以及跨框架复用成本偏高"的问题。',
   }
 ]

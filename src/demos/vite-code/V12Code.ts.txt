@@ -1,19 +1,23 @@
 // vite.config.ts - CSS 相关配置
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import autoprefixer from 'autoprefixer'
+import postcssNested from 'postcss-nested'
+import tailwindcss from '@tailwindcss/postcss'
+// ESM 配置文件统一用 import，不再使用 require()
 
 export default defineConfig({
   plugins: [vue()],
   css: {
-    // PostCSS 配置（也可以用 postcss.config.js）
+    // PostCSS 配置（也可以用 postcss.config.mjs）
     postcss: {
       plugins: [
+        // Tailwind v4 的 PostCSS 适配器
+        tailwindcss(),
         // 自动添加浏览器前缀
-        require('autoprefixer'),
+        autoprefixer(),
         // CSS 嵌套
-        require('postcss-nested'),
-        // 自定义插件
-        require('tailwindcss')
+        postcssNested()
       ]
     },
     
@@ -28,13 +32,13 @@ export default defineConfig({
     // 预处理器配置
     preprocessorOptions: {
       scss: {
-        // 全局注入的变量和 mixin
+        // 全局注入的变量和 mixin；Vite 7 只保留 Sass modern API，
+        // 因此用 @use 替代已废弃的 @import
         additionalData: `
-          @import "@/styles/variables.scss";
-          @import "@/styles/mixins.scss";
-        `,
-        // 其他 sass 选项
-        api: 'modern-compiler'
+          @use "@/styles/variables.scss" as *;
+          @use "@/styles/mixins.scss" as *;
+        `
+        // Vite 7 已移除 Sass legacy API，api: 'modern-compiler' 选项不再需要
       },
       less: {
         // Less 全局变量
@@ -48,12 +52,12 @@ export default defineConfig({
 })
 
 // ====================
-// PostCSS 配置文件 (postcss.config.js)
+// PostCSS 配置文件 (postcss.config.mjs)
 // ====================
 
 export default {
   plugins: {
-    tailwindcss: {},
+    '@tailwindcss/postcss': {},
     autoprefixer: {}
   }
 }

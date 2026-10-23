@@ -21,7 +21,7 @@ import N19ErrorHandling from './N19ErrorHandling.vue'
 
     <h2>全局错误页放置</h2>
     <p>
-      在项目根目录放一个 <code>error.vue</code>，它接收一个包含 <code>statusCode</code>、<code>statusMessage</code>、<code>url</code> 的 <code>error</code> prop，用它统一渲染路由级错误页。
+      在 <code>app/</code> 目录放一个 <code>error.vue</code>，它接收一个包含 <code>statusCode</code>、<code>statusMessage</code>、<code>url</code> 的 <code>error</code> prop，用它统一渲染路由级错误页。
     </p>
     <p>
       这个方案做对了一件事：<strong>错误页从「框架默认」变成了「你定义的一页」</strong>。所有路由级错误有了一个统一出口，你可以决定它长什么样、给什么文案、放什么操作按钮。

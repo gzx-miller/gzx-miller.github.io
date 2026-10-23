@@ -32,15 +32,16 @@ export default function Layout({
 
 // app/photo/[id]/page.tsx - 真实页面（全屏）
 // 直接访问 /photo/123 时显示这个
-export default function PhotoPage({
+export default async function PhotoPage({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
+  const { id } = await params
   return (
     <div className="photo-fullscreen">
-      <h1>照片 #{params.id}</h1>
-      <img src={`/photos/${params.id}.jpg`} alt="" />
+      <h1>照片 #{id}</h1>
+      <img src={`/photos/${id}.jpg`} alt="" />
       <p>这是全屏页面，直接访问 URL 时看到</p>
     </div>
   )
@@ -52,13 +53,15 @@ export default function PhotoPage({
 // 客户端导航到 /photo/123 时显示这个（弹窗形式）
 'use client'
 
+import { use } from 'react'
 import { useRouter } from 'next/navigation'
 
 export default function PhotoModal({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
+  const { id } = use(params)
   const router = useRouter()
 
   function close() {
@@ -68,8 +71,8 @@ export default function PhotoModal({
   return (
     <div className="modal-overlay" onClick={close}>
       <div className="modal" onClick={e => e.stopPropagation()}>
-        <h2>照片 #{params.id}</h2>
-        <img src={`/photos/${params.id}.jpg`} alt="" />
+        <h2>照片 #{id}</h2>
+        <img src={`/photos/${id}.jpg`} alt="" />
         <button onClick={close}>关闭</button>
       </div>
     </div>

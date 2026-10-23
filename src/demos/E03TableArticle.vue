@@ -40,10 +40,10 @@ import E03Table from './E03Table.vue'
       更值得坚持的是：<strong>把格式化逻辑抽成纯函数</strong>，例如一个负责金额、一个负责状态映射。模板里只留函数调用，简洁、可复用，也方便单独测试。列表上方的搜索框通过 <code>@input</code> 触发过滤，把结果写回 <code>:data</code> 绑定的数组即可。
     </p>
     <p>
-      视觉与性能上还有几个开关：<code>stripe</code> 开启斑马纹，<code>row-key</code> 提供稳定的行标识（用于选择、展开等状态跟踪），列多时给固定列宽、给长文本列 <code>min-width</code> 做自适应。
+      视觉与性能上还有几个开关：<code>stripe</code> 开启斑马纹，<code>row-key</code> 提供稳定的行标识（用于选择、展开等状态跟踪），多选列用 <code>type="selection"</code>，跨页保留勾选需配合 <code>row-key</code> 与 <code>reserve-selection</code>；树形数据用 <code>tree-props</code> 指定 <code>children</code> 字段，列多时给固定列宽、给长文本列 <code>min-width</code> 做自适应。数据量极大、需要一次性渲染时，改用 <code>el-table-v2</code>：列由 <code>columns</code> 数组（<code>key</code>/<code>dataKey</code>/<code>title</code>/<code>width</code>）声明，动态行高用 <code>estimated-row-height</code>。
     </p>
     <div class="lesson-box warn">
-      <strong>两个别踩的坑：</strong>自定义单元格里要访问当前行数据，<strong>务必从作用域插槽解构 <code>row</code></strong>，直接引用外层变量会拿到错误的数据；数据量大时应配合分页或虚拟滚动，并且<strong>把排序、筛选交给后端</strong>——在 <code>@sort-change</code> 里带上排序字段重新请求，而不是在前端硬算全量数据。
+      <strong>两个别踩的坑：</strong>自定义单元格里要访问当前行数据，<strong>务必从作用域插槽解构 <code>row</code></strong>，直接引用外层变量会拿到错误的数据；数据量大时优先分页，确需一次渲染大量行再改用虚拟表格，并且<strong>把排序、筛选交给后端</strong>——在 <code>@sort-change</code> 里带上排序字段重新请求，而不是在前端硬算全量数据。
     </div>
 
     <h2>金额与状态列渲染</h2>

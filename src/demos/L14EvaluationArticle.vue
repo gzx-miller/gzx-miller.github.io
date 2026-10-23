@@ -45,13 +45,13 @@ import L14Evaluation from './L14Evaluation.vue'
       第一步先<strong>定义维度</strong>。别笼统地问「好不好」，拆成能分别打分的几项：相关性（答的是不是这个问题）、准确性（事实对不对）、完整性（要点覆盖没）。先拆维度，是为了让分数可解释——总分掉了，你能立刻看出是准确性塌了还是完整性不足。
     </p>
     <p>
-      第二步<strong>构造评估提示词</strong>让裁判打分。把评分规则写清楚、要求它按固定格式输出分数和理由，否则裁判自己也会跑题。接着补<strong>结构化</strong>：裁判用「我觉得相关性大概 4 分吧」这种大白话输出，你没法程序化汇总；于是用 Zod 定义评估结果的 schema（<code>relevance</code> / <code>accuracy</code> / <code>completeness</code> / <code>totalScore</code> / <code>feedback</code>），再用 <code>StructuredOutputParser</code> 把裁判的输出解析成对象，这样一批样本的分数才能自动求平均、按类别统计。
+      第二步<strong>构造评估提示词</strong>让裁判打分。把评分规则写清楚、要求它按固定格式输出分数和理由，否则裁判自己也会跑题。接着补<strong>结构化</strong>：裁判用「我觉得相关性大概 4 分吧」这种大白话输出，你没法程序化汇总；于是用 Zod 定义评估结果的 schema（<code>relevance</code> / <code>accuracy</code> / <code>completeness</code> / <code>totalScore</code> / <code>feedback</code>），再用 <code>model.withStructuredOutput(schema)</code> 直接拿到带类型的对象，这样一批样本的分数才能自动求平均、按类别统计。旧版 <code>StructuredOutputParser</code> 的链式拼装不再作为 v1 首选。
     </p>
     <p>
       第三步补<strong>对比与校准</strong>。有了分数还不够，你还得知道改前改后谁更好，于是让裁判同时对两个回答做 A/B 对比。更关键的是：自动评分是有偏的，裁判可能偏爱长答案、偏爱和自己风格相近的回答。<strong>人工评分是校准自动评估的金标准</strong>，要拿它的差异去回头修评估提示词，抽样至少 50 到 100 条才有统计意义。
     </p>
     <p>
-      最后是<strong>持续监控</strong>：把评估做成能在生产里定期抽样跑的流程，而不是上线前跑一次就完。LangChain 提供了 <code>StringEvaluator</code>、QA 评估器等现成工具，LangSmith 则有内置的评估与追踪，用来把这套流程常态化。
+      最后是<strong>持续监控</strong>：把评估做成能在生产里定期抽样跑的流程，而不是上线前跑一次就完。LangSmith 提供数据集、评估器（deterministic matcher 或 LLM-as-judge）与实验对比，LangChain 的测试文档也给出了单元测试、集成测试和轨迹评估的做法，用来把这套流程常态化。
     </p>
     <div class="lesson-box warn">
       <strong>别把裁判当真理：</strong>评估提示词本身也需要被评估——它同样会受模型偏见影响。所以人工评分不是可有可无的补充，而是校准自动评估偏差的唯一锚点；同时评估维度要按业务定制，不同应用的关注点本来就不一样。

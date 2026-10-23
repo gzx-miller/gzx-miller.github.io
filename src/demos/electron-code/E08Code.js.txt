@@ -1,0 +1,221 @@
+// ========== 1. 文件选择对话框 main.js ==========
+const { app, BrowserWindow, dialog, ipcMain } = require('electron')
+const path = require('path')
+
+// 打开文件选择对话框
+async function showOpenDialog(win) {
+  const result = await dialog.showOpenDialog(win, {
+    // 对话框标题
+    title: '选择文件',
+    // 默认打开的目录
+    defaultPath: app.getPath('documents'),
+    // 文件名输入框默认值
+    defaultPath: 'default.txt',
+    // 文件类型过滤器
+    filters: [
+      { name: '文本文件', extensions: ['txt', 'md'] },
+      { name: '图片', extensions: ['jpg', 'png', 'gif', 'webp'] },
+      { name: '所有文件', extensions: ['*'] }
+    ],
+    // 对话框属性
+    properties: [
+      'openFile',       // 允许选择文件
+      'openDirectory',  // 允许选择目录
+      'multiSelections', // 允许多选
+      'showHiddenFiles' // 显示隐藏文件
+    ],
+    // 自定义按钮标签（macOS）
+    buttonLabel: '选择'
+  })
+
+  if (!result.canceled) {
+    console.log('选择的文件:', result.filePaths)
+    return result.filePaths
+  }
+  return null
+}
+
+// ========== 2. 保存文件对话框 ==========
+async function showSaveDialog(win, defaultName = 'untitled.txt') {
+  const result = await dialog.showSaveDialog(win, {
+    title: '保存文件',
+    defaultPath: path.join(app.getPath('documents'), defaultName),
+    filters: [
+      { name: '文本文件', extensions: ['txt'] },
+      { name: 'JSON', extensions: ['json'] },
+      { name: '所有文件', extensions: ['*'] }
+    ],
+    // 如果文件名已存在，是否显示确认提示（默认 true）
+    showsTagField: false
+  })
+
+  if (!result.canceled && result.filePath) {
+    console.log('保存到:', result.filePath)
+    return result.filePath
+  }
+  return null
+}
+
+// ========== 3. 消息对话框 ==========
+// 信息提示框
+async function showInfoBox(win, title, message) {
+  const result = await dialog.showMessageBox(win, {
+    type: 'info',          // 'none', 'info', 'error', 'question', 'warning'
+    title: title,
+    message: message,
+    detail: '这是详细信息',
+    buttons: ['确定', '取消'],
+    defaultId: 0,          // 默认按钮索引
+    cancelId: 1,           // 按 ESC 时触发的按钮索引
+    icon: path.join(__dirname, 'assets/icon.png'),
+    // 复选框
+    checkboxLabel: '不再提示',
+    checkboxChecked: false
+  })
+
+  console.log('点击的按钮:', result.response)
+  console.log('复选框状态:', result.checkboxChecked)
+  return result
+}
+
+// 错误对话框
+async function showErrorBox(title, message) {
+  await dialog.showErrorBox(title, message)
+}
+
+// 确认对话框
+async function showConfirmBox(win, message) {
+  const result = await dialog.showMessageBox(win, {
+    type: 'question',
+    title: '确认',
+    message: message,
+    buttons: ['确定', '取消'],
+    defaultId: 1,
+    cancelId: 1
+  })
+  return result.response === 0 // 0 是确定
+}
+
+// ========== 4. 完整使用示例 ==========
+async function handleFileOperations(win) {
+  // 打开文件
+  const filePaths = await showOpenDialog(win)
+  if (filePaths && filePaths.length > 0) {
+    // 读取文件内容...
+  }
+
+  // 保存文件
+  const savePath = await showSaveDialog(win, 'my-file.txt')
+  if (savePath) {
+    // 写入文件...
+  }
+
+  // 确认退出
+  const confirmed = await showConfirmBox(win, '确定要退出吗？未保存的更改将丢失。')
+  if (confirmed) {
+    app.quit()
+  }
+
+  // 显示错误
+  // showErrorBox('操作失败', '无法连接到服务器')
+}
+
+// ========== 5. 通过 IPC 暴露给渲染进程 ==========
+// main.js
+ipcMain.handle('dialog:openFile', async (event, options = {}) => {
+  const win = BrowserWindow.fromWebContents(event.sender)
+  const result = await dialog.showOpenDialog(win, {
+    title: options.title || '选择文件',
+    defaultPath: options.defaultPath || app.getPath('documents'),
+    filters: options.filters || [{ name: '所有文件', extensions: ['*'] }],
+    properties: options.properties || ['openFile']
+  })
+  return result
+})
+
+ipcMain.handle('dialog:saveFile', async (event, options = {}) => {
+  const win = BrowserWindow.fromWebContents(event.sender)
+  return await dialog.showSaveDialog(win, {
+    title: options.title || '保存文件',
+    defaultPath: options.defaultPath,
+    filters: options.filters
+  })
+})
+
+ipcMain.handle('dialog:messageBox', async (event, options) => {
+  const win = BrowserWindow.fromWebContents(event.sender)
+  return await dialog.showMessageBox(win, options)
+})
+
+// ========== 6. preload.js 暴露 API ==========
+// const { contextBridge, ipcRenderer } = require('electron')
+//
+// contextBridge.exposeInMainWorld('dialogAPI', {
+//   openFile: (options) => ipcRenderer.invoke('dialog:openFile', options),
+//   saveFile: (options) => ipcRenderer.invoke('dialog:saveFile', options),
+//   showMessage: (options) => ipcRenderer.invoke('dialog:messageBox', options),
+//   confirm: (message) =>
+//     ipcRenderer.invoke('dialog:messageBox', {
+//       type: 'question',
+//       title: '确认',
+//       message: message,
+//       buttons: ['确定', '取消'],
+//       defaultId: 1,
+//       cancelId: 1
+//     }).then(r => r.response === 0)
+// })
+
+// ========== 7. 渲染进程使用 ==========
+// async function selectAndReadFile() {
+//   const result = await window.dialogAPI.openFile({
+//     filters: [{ name: '文本文件', extensions: ['txt', 'md'] }],
+//     properties: ['openFile']
+//   })
+//
+//   if (!result.canceled) {
+//     const filePath = result.filePaths[0]
+//     // 然后通过另一个 IPC 读取文件内容
+//   }
+// }
+//
+// async function saveDocument() {
+//   const confirmed = await window.dialogAPI.confirm('确定保存？')
+//   if (!confirmed) return
+//
+//   const result = await window.dialogAPI.saveFile({
+//     filters: [{ name: 'JSON', extensions: ['json'] }],
+//     defaultPath: 'data.json'
+//   })
+//
+//   if (!result.canceled && result.filePath) {
+//     // 保存文件
+//   }
+// }
+
+// ========== 8. 同步对话框（不推荐，会阻塞主进程） ==========
+function syncDialogExample(win) {
+  // showOpenDialog 同步版本
+  // const result = dialog.showOpenDialogSync(win, { ... })
+  // if (result) {
+  //   console.log(result) // 返回文件路径数组
+  // }
+
+  // showSaveDialog 同步版本
+  // const filePath = dialog.showSaveDialogSync(win, { ... })
+
+  // showMessageBox 同步版本
+  // const buttonIndex = dialog.showMessageBoxSync(win, { ... })
+}
+
+// ========== 9. 应用启动示例 ==========
+app.whenReady().then(() => {
+  const win = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true
+    }
+  })
+  win.loadFile('index.html')
+})

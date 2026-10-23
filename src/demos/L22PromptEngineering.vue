@@ -101,7 +101,6 @@ const comparisonResults: Record<string, { result: string; score: number }> = {
 const codeExample = `// LangChain.js 提示词工程实践
 import { ChatPromptTemplate, FewShotChatMessagePromptTemplate } from '@langchain/core/prompts'
 import { ChatOpenAI } from '@langchain/openai'
-import { StructuredOutputParser } from 'langchain/output_parsers'
 import { z } from 'zod'
 
 const model = new ChatOpenAI({ model: 'gpt-4o', temperature: 0.7 })
@@ -133,29 +132,27 @@ const examplePrompt = ChatPromptTemplate.fromMessages([
 ])
 const fewShotPrompt = new FewShotChatMessagePromptTemplate({
   examples,
-  examplePrompt,
-  prefix: '请用诗意的语言描述季节：',
-  suffix: ['human', '{input}'],
-  inputVariables: ['input']
+  examplePrompt
 })
-const fewShotChain = fewShotPrompt.pipe(model)
+const fewShotChain = ChatPromptTemplate.fromMessages([
+  ['system', '请用诗意的语言描述季节。'],
+  fewShotPrompt,
+  ['human', '{input}']
+]).pipe(model)
+const fewShotResult = await fewShotChain.invoke({ input: '秋天' })
 
-// 4. 结构化输出
-const parser = StructuredOutputParser.fromZodSchema(
-  z.object({
-    bestTime: z.string().describe('最佳观赏时间'),
-    attractions: z.array(z.string()).describe('推荐景点'),
-    tips: z.array(z.string()).describe('旅游建议')
-  })
-)
-const structuredPrompt = ChatPromptTemplate.fromTemplate(
-  '请提供关于{topic}的旅游信息。\\n{format_instructions}'
-)
-const structuredChain = structuredPrompt.pipe(model).pipe(parser)
-const structuredResult = await structuredChain.invoke({
-  topic: '秋日森林',
-  format_instructions: parser.getFormatInstructions()
-})`
+// 4. 结构化输出（v1：withStructuredOutput）
+const forestSchema = z.object({
+  bestTime: z.string().describe('最佳观赏时间'),
+  attractions: z.array(z.string()).describe('推荐景点'),
+  tips: z.array(z.string()).describe('旅游建议')
+})
+const modelWithForest = model.withStructuredOutput(forestSchema, {
+  name: 'forest_travel_info'
+})
+const structuredResult = await modelWithForest.invoke(
+  '请提供关于秋日森林的旅游信息。'
+)`
 
 const knowledgePoints = [
   { title: '什么是提示词工程', content: '提示词工程（Prompt Engineering）是一门设计和优化提示词的艺术与科学，旨在让大语言模型更好地理解和执行任务，产出更高质量、更符合预期的结果。' },

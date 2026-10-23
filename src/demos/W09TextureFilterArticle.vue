@@ -10,7 +10,7 @@ import W09TextureFilter from './W09TextureFilter.vue'
 
     <h2>最近邻采样失真</h2>
     <p>
-      你已经能把纹理贴到网格上，也知道每个屏幕像素会按插值出来的 UV 去采样。但采样时到底该「取哪一个纹素」这件事，你还没做决定。默认地，显卡取离 UV 最近的那一个纹素。
+      你已经能把纹理贴到网格上，也知道每个屏幕像素会按插值出来的 UV 去采样。但采样时到底该「取哪一个纹素」这件事，你还没做决定。如果只把过滤设为 <code>NEAREST</code>，显卡就取离 UV 最近的那一个纹素。
     </p>
     <p>
       只取一个最近纹素，会在两个方向上同时出问题：
@@ -49,7 +49,7 @@ import W09TextureFilter from './W09TextureFilter.vue'
       于是流程变成：
     </p>
     <ol class="lesson-steps">
-      <li>按 2 的幂，用 <code>texImage2D</code> 的 <code>level</code> 参数逐级生成并上传各 mip 层。</li>
+      <li>让每一级尺寸减半直到 <code>1×1</code>：可用 <code>generateMipmap</code> 自动生成，或用 <code>texImage2D</code> 的 <code>level</code> 参数逐级上传。</li>
       <li>把 <code>MIN_FILTER</code> 设为 <code>NEAREST_MIPMAP_NEAREST</code> 或 <code>LINEAR_MIPMAP_LINEAR</code>，<code>MAG_FILTER</code> 单独设置。</li>
       <li>用缩放参数改变屏幕上纹素的覆盖比例，观察不同过滤下的清晰度差异。</li>
       <li>用层级滑杆单独查看某一 mip 层，直观对比各层的清晰度。</li>
@@ -61,7 +61,7 @@ import W09TextureFilter from './W09TextureFilter.vue'
       走到这里，放大与缩小终于可以分开配置了。<code>MAG_FILTER</code> 只管放大；<code>MIN_FILTER</code> 只管缩小，而且它既可以是普通的 <code>NEAREST</code> / <code>LINEAR</code>，也可以是带 <code>MIPMAP_</code> 的组合。
     </p>
     <div class="lesson-box warn">
-      <strong>三条边界：</strong>其一，<code>MAG_FILTER</code> <strong>只能</strong>设 <code>NEAREST</code> 或 <code>LINEAR</code>，不能带 <code>MIPMAP_</code> 后缀——放大时根本用不到更小的层。其二，WebGL1 里一条完整的 mip 链通常要求纹理尺寸为 2 的幂，否则过滤不完整；WebGL2 或 NPOT 扩展才允许非 2 次幂纹理带 mip。其三，斜视角下纹理仍会发糊，可用各向异性过滤（<code>EXT_texture_filter_anisotropic</code>）改善，属于进阶优化。
+      <strong>三条边界：</strong>其一，<code>MAG_FILTER</code> <strong>只能</strong>设 <code>NEAREST</code> 或 <code>LINEAR</code>，不能带 <code>MIPMAP_</code> 后缀——放大时根本用不到更小的层。其二，WebGL1 中只有 2 的幂纹理才能生成完整 mip 链；非 2 次幂纹理只能用 <code>NEAREST</code>/<code>LINEAR</code> 且 wrap 必须为 <code>CLAMP_TO_EDGE</code>，WebGL2 才完整支持 NPOT 纹理带 mip。其三，斜视角下纹理仍会发糊，可用各向异性过滤（<code>EXT_texture_filter_anisotropic</code>）改善，属于进阶优化。
     </div>
 
     <h2>锯齿与平滑对比</h2>
@@ -75,7 +75,7 @@ import W09TextureFilter from './W09TextureFilter.vue'
       纹理过滤回答的是「一次采样取几个纹素、怎么加权」。<strong>放大靠 NEAREST 与 LINEAR 二选一，缩小则必须靠 Mipmap 逐级降采样，再加上跨层插值，才能压住摩尔纹与闪烁。</strong>两者需求相反，所以要分开配置。
     </p>
     <div class="lesson-term">
-      <span class="term-name">「Mipmap」</span>是一组按 2 的幂逐级缩小的预生成纹理副本，用于纹理缩小时由硬件按屏幕覆盖面积自动选层、必要时跨层混合，以减轻摩尔纹与闪烁。记住边界：<code>MIN_FILTER</code> 可用带 <code>MIPMAP_</code> 的过滤，<code>MAG_FILTER</code> 只能用 <code>NEAREST</code> / <code>LINEAR</code>；三线性 <code>LINEAR_MIPMAP_LINEAR</code> 质量最好但开销最大；WebGL1 完整 mip 链通常要求纹理为 2 的幂。
+      <span class="term-name">「Mipmap」</span>是一组逐级减半的预生成纹理副本（直到 <code>1×1</code>），用于纹理缩小时由硬件按屏幕覆盖面积自动选层、必要时跨层混合，以减轻摩尔纹与闪烁。记住边界：<code>MIN_FILTER</code> 可用带 <code>MIPMAP_</code> 的过滤，<code>MAG_FILTER</code> 只能用 <code>NEAREST</code> / <code>LINEAR</code>；三线性 <code>LINEAR_MIPMAP_LINEAR</code> 质量最好但开销最大；WebGL1 完整 mip 链要求纹理为 2 的幂，NPOT 纹理必须配合 <code>CLAMP_TO_EDGE</code> 且不能带 mip。
     </div>
   </LessonArticle>
 </template>
