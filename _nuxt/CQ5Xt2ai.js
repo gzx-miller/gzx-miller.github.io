@@ -1,0 +1,259 @@
+const n=`// ========== 1. 系统托盘 main.js ==========
+const { app, BrowserWindow, Tray, Menu, Notification, nativeImage } = require('electron')
+const path = require('path')
+
+let tray = null
+let mainWindow = null
+
+// 创建系统托盘
+function createTray() {
+  // 托盘图标（推荐使用 16x16 和 32x32 的 PNG）
+  const iconPath = path.join(__dirname, 'assets/tray-icon.png')
+  const trayIcon = nativeImage.createFromPath(iconPath)
+
+  tray = new Tray(trayIcon)
+
+  // 设置托盘提示文字
+  tray.setToolTip('我的 Electron 应用')
+
+  // 设置托盘菜单
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: '显示主窗口',
+      click: () => {
+        if (mainWindow) {
+          mainWindow.show()
+          mainWindow.focus()
+        }
+      }
+    },
+    {
+      label: '隐藏主窗口',
+      click: () => {
+        if (mainWindow) {
+          mainWindow.hide()
+        }
+      }
+    },
+    { type: 'separator' },
+    {
+      label: '设置',
+      click: () => {
+        console.log('打开设置')
+      }
+    },
+    { type: 'separator' },
+    {
+      label: '退出',
+      click: () => {
+        app.quit()
+      }
+    }
+  ])
+
+  tray.setContextMenu(contextMenu)
+
+  // 单击托盘图标事件
+  tray.on('click', () => {
+    if (mainWindow) {
+      if (mainWindow.isVisible()) {
+        mainWindow.hide()
+      } else {
+        mainWindow.show()
+      }
+    }
+  })
+
+  // 双击托盘图标事件
+  tray.on('double-click', () => {
+    if (mainWindow) {
+      mainWindow.show()
+      mainWindow.focus()
+    }
+  })
+
+  // 右键点击（通常显示上下文菜单，Electron 已自动处理）
+  tray.on('right-click', () => {
+    tray.popUpContextMenu()
+  })
+}
+
+// ========== 2. 更新托盘图标 ==========
+function updateTrayIcon(hasNotification) {
+  if (!tray) return
+
+  const iconName = hasNotification ? 'tray-icon-unread.png' : 'tray-icon.png'
+  const iconPath = path.join(__dirname, 'assets', iconName)
+  tray.setImage(nativeImage.createFromPath(iconPath))
+}
+
+// ========== 3. 系统通知 ==========
+// 简单通知
+function showNotification(title, body) {
+  const notification = new Notification({
+    title: title,
+    body: body,
+    // 图标
+    icon: path.join(__dirname, 'assets/notification-icon.png'),
+    // 声音（macOS）
+    silent: false,
+    // 超时时间
+    timeoutType: 'default' // 'default' 或 'never'
+  })
+
+  notification.show()
+
+  // 通知被点击
+  notification.on('click', () => {
+    console.log('通知被点击')
+    if (mainWindow) {
+      mainWindow.show()
+      mainWindow.focus()
+    }
+  })
+
+  // 通知关闭
+  notification.on('close', () => {
+    console.log('通知已关闭')
+  })
+
+  // 通知操作按钮（仅部分平台支持）
+  // notification.on('action', (event, index) => {
+  //   console.log('点击了操作按钮:', index)
+  // })
+}
+
+// 通知示例
+function showDownloadComplete() {
+  showNotification(
+    '下载完成',
+    '文件已经下载完成，点击查看'
+  )
+}
+
+// ========== 4. 完整的托盘应用模式 ==========
+// 关闭窗口时最小化到托盘，而不是退出
+function createMainWindow() {
+  const win = new BrowserWindow({
+    width: 800,
+    height: 600,
+    show: false, // 初始不显示，等 ready-to-show
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true
+    }
+  })
+
+  win.loadFile('index.html')
+
+  // 准备好再显示
+  win.once('ready-to-show', () => {
+    win.show()
+  })
+
+  // 窗口关闭时隐藏到托盘（不退出应用）
+  win.on('close', (event) => {
+    // 如果是用户主动退出应用（通过托盘菜单退出），则真的关闭
+    if (app.isQuiting) {
+      return
+    }
+
+    // 否则隐藏到托盘
+    event.preventDefault()
+    win.hide()
+
+    // 显示通知告知用户
+    showNotification('应用已最小化', '程序在系统托盘中继续运行')
+  })
+
+  return win
+}
+
+// 自定义退出方法
+function quitApp() {
+  app.isQuiting = true
+  app.quit()
+}
+
+// ========== 5. macOS Dock 图标隐藏 ==========
+// 纯托盘应用可以隐藏 Dock 图标
+function setupDock() {
+  if (process.platform === 'darwin') {
+    // 隐藏 Dock 图标
+    app.dock.hide()
+
+    // 或者显示 Dock 图标
+    // app.dock.show()
+
+    // 设置 Dock 菜单
+    const dockMenu = Menu.buildFromTemplate([
+      {
+        label: '新窗口',
+        click: () => {}
+      }
+    ])
+    app.dock.setMenu(dockMenu)
+
+    // 设置 Dock 图标徽章（数字角标）
+    app.dock.setBadge('5')
+
+    // 弹跳 Dock 图标
+    // app.dock.bounce('critical') // 一直弹直到点击
+    // app.dock.bounce('informational') // 弹一下
+  }
+}
+
+// ========== 6. Windows 任务栏气球通知 ==========
+// Windows 上 Tray 也可以显示气球提示
+function showTrayBalloon() {
+  if (tray && process.platform === 'win32') {
+    tray.displayBalloon({
+      title: '通知标题',
+      content: '这是气球通知内容',
+      icon: path.join(__dirname, 'assets/tray-icon.png'),
+      noSound: false,
+      respectQuietTime: false
+    })
+
+    // 气球被点击
+    tray.on('balloon-click', () => {
+      console.log('气球通知被点击')
+    })
+  }
+}
+
+// ========== 7. 预加载脚本暴露通知 API ==========
+// preload.js
+// const { contextBridge, ipcRenderer } = require('electron')
+//
+// contextBridge.exposeInMainWorld('notificationAPI', {
+//   showNotification: (title, body) =>
+//     ipcRenderer.invoke('notification:show', title, body),
+//   updateTrayBadge: (count) =>
+//     ipcRenderer.invoke('tray:update-badge', count)
+// })
+
+// main.js 对应实现
+// ipcMain.handle('notification:show', (_event, title, body) => {
+//   showNotification(title, body)
+// })
+//
+// ipcMain.handle('tray:update-badge', (_event, count) => {
+//   if (process.platform === 'darwin') {
+//     app.dock.setBadge(count > 0 ? String(count) : '')
+//   }
+// })
+
+// ========== 8. 应用启动时初始化 ==========
+app.whenReady().then(() => {
+  mainWindow = createMainWindow()
+  createTray()
+  setupDock()
+})
+
+// macOS 激活时
+app.on('activate', () => {
+  if (mainWindow) {
+    mainWindow.show()
+  }
+})`;export{n as default};

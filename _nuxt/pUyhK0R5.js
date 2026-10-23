@@ -1,0 +1,11 @@
+const e=`import numpy as np
+
+# MoE：把占 2/3 参数的 FFN 换成 N 个专家 + 一个路由器
+# 每个 token 只交给得分最高的 Top-K 个专家
+def route(x, router_weights, top_k=2):
+    scores = router_weights @ x          # 每个专家给个分数
+    experts = np.argsort(scores)[-top_k:]  # 只留 Top-K
+    return experts
+
+# 妙处：总参数多(知识容量大)，但每次推理只用其中一小部分(算力省)
+# 三大坑：负载不均衡(加惩罚)、显存翻倍、专家间通信开销`;export{e as default};

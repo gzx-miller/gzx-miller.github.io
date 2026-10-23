@@ -1,0 +1,210 @@
+const n=`// ========== 1. 启动性能优化 main.js ==========
+const { app, BrowserWindow } = require('electron')
+const path = require('path')
+
+// 优化一: 尽早创建窗口（利用 ready 之前的时间）
+// 但要等 app.whenReady() 之后
+let mainWindow = null
+
+app.whenReady().then(() => {
+  createMainWindow()
+})
+
+// 优化二: 使用 ready-to-show 避免白屏闪烁
+function createMainWindow() {
+  mainWindow = new BrowserWindow({
+    width: 1200,
+    height: 800,
+    show: false, // 先不显示
+    backgroundColor: '#f0f0f0', // 设置背景色，减少视觉闪烁
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true,
+      // 优化: 启用 V8 代码缓存
+      // 默认已启用
+    }
+  })
+
+  // 加载页面
+  mainWindow.loadFile('index.html')
+
+  // DOM 准备好后再显示
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show()
+  })
+
+  return mainWindow
+}
+
+// ========== 2. V8 内存调优 ==========
+// 启动参数调整 V8 堆内存（在 package.json 或主进程中设置）
+// 注意: 应在 app 就绪前设置
+app.commandLine.appendSwitch('js-flags', '--max-old-space-size=4096')
+
+// 其他有用的 Chromium 开关:
+// 禁用硬件加速（如果有渲染问题）
+// app.disableHardwareAcceleration()
+//
+// 禁用 GPU 进程
+// app.commandLine.appendSwitch('disable-gpu')
+//
+// 启用高 DPI 支持
+// app.commandLine.appendSwitch('high-dpi-support', '1')
+
+// ========== 3. 内存监控 ==========
+function monitorMemory() {
+  // 主进程内存
+  const mem = process.memoryUsage()
+  console.log('主进程内存:')
+  console.log(\`  RSS: \${Math.round(mem.rss / 1024 / 1024)} MB\`)
+  console.log(\`  堆总量: \${Math.round(mem.heapTotal / 1024 / 1024)} MB\`)
+  console.log(\`  堆已用: \${Math.round(mem.heapUsed / 1024 / 1024)} MB\`)
+
+  // 渲染进程内存（通过 webContents）
+  // mainWindow.webContents.getProcessMemoryInfo().then(info => {
+  //   console.log('渲染进程内存:', info)
+  // })
+}
+
+// 定时监控
+setInterval(monitorMemory, 30000) // 每 30 秒
+
+// ========== 4. 渲染进程性能优化 ==========
+// 4.1 懒加载模块
+// renderer.js:
+// async function loadHeavyModule() {
+//   // 动态 import，首屏不加载
+//   const heavyModule = await import('./heavy-module.js')
+//   heavyModule.doWork()
+// }
+
+// 4.2 虚拟列表（大数据量表格/列表）
+// 使用虚拟滚动，只渲染可视区域的 DOM
+// 库: vue-virtual-scroller, react-window
+
+// 4.3 减少重排重绘
+// - 用 transform 代替 top/left 动画
+// - 批量修改 DOM
+// - 使用 will-change 提示浏览器
+
+// ========== 5. IPC 性能优化 ==========
+// 5.1 避免频繁的小消息
+// ❌ 不好: 每次按键都发 IPC
+// ✅ 好: 使用防抖/节流
+
+// 5.2 大文件不要通过 IPC 传整个内容
+// ❌ 不好: ipcRenderer.invoke('read-file') 返回整个文件内容
+// ✅ 好: 传递文件路径，渲染进程通过其他方式（如 fetch file://）读取
+//       或用流方式分片传输
+
+// 5.3 批量操作合并
+// 把多次 IPC 合并为一次
+// ipcMain.handle('batch-ops', async (_event, operations) => {
+//   const results = []
+//   for (const op of operations) {
+//     results.push(await executeOp(op))
+//   }
+//   return results
+// })
+
+// ========== 6. 窗口管理优化 ==========
+// 6.1 及时释放窗口引用，防止内存泄漏
+const windowMap = new Map()
+
+function createWindow(id) {
+  const win = new BrowserWindow({...})
+  windowMap.set(id, win)
+
+  win.on('closed', () => {
+    windowMap.delete(id) // 重要: 移除引用
+  })
+
+  return win
+}
+
+// 6.2 隐藏非活动窗口而不是销毁
+// （如果用户会频繁切换）
+function hideWindow(win) {
+  win.hide() // 隐藏，不销毁，下次显示更快
+}
+
+function showWindow(win) {
+  win.show()
+}
+
+// 6.3 限制渲染进程数量
+// 每个新窗口约占用 30-50MB 内存
+// 考虑复用窗口或使用单窗口 + 多 Tab
+
+// ========== 7. 主进程性能优化 ==========
+// 7.1 避免主进程阻塞
+// CPU 密集任务放到:
+// - Utility 进程 (UtilityProcess)
+// - Worker 线程 (worker_threads)
+// - 子进程 (child_process)
+
+// 7.2 使用 Utility 进程 (Electron 14+)
+// const { UtilityProcess } = require('electron')
+//
+// function runHeavyTask(data) {
+//   const child = new UtilityProcess()
+//   child.start({
+//     scriptPath: path.join(__dirname, 'heavy-task.js'),
+//     args: [JSON.stringify(data)]
+//   })
+//
+//   child.on('message', (result) => {
+//     console.log('计算结果:', result)
+//   })
+// }
+
+// 7.3 使用 Node.js Worker 线程
+// const { Worker } = require('worker_threads')
+//
+// function runInWorker(scriptPath, data) {
+//   return new Promise((resolve, reject) => {
+//     const worker = new Worker(scriptPath, { workerData: data })
+//     worker.on('message', resolve)
+//     worker.on('error', reject)
+//     worker.on('exit', (code) => {
+//       if (code !== 0) reject(new Error(\`Worker 退出码: \${code}\`))
+//     })
+//   })
+// }
+
+// ========== 8. 性能分析工具 ==========
+// 8.1 Chrome DevTools (渲染进程)
+// - Performance 面板: 分析运行时性能
+// - Memory 面板: 分析内存泄漏
+// - Lighthouse: 网页性能审计
+
+// 8.2 主进程调试
+// 启动时加 --inspect:
+//   electron --inspect=5858 .
+// 然后在 chrome://inspect 中调试
+
+// 8.3 进程内存
+// 任务管理器 (开发中)
+// 或: process.memoryUsage()
+
+// 8.4 启动时间分析
+// 打开 DevTools Performance 面板，勾选 Screenshots，重新加载
+
+// ========== 9. 打包优化 ==========
+// 9.1 asar 打包（默认开启，加速文件读取）
+// 9.2 代码分割 (Webpack/Vite/Rollup)
+// 9.3 Tree shaking
+// 9.4 图片资源压缩
+// 9.5 只打包需要的文件 (package.json build.files)
+
+// ========== 10. 性能优化检查清单 ==========
+// [ ] 显示骨架屏/背景色避免白屏
+// [ ] 首屏只加载必要代码
+// [ ] 懒加载非关键模块
+// [ ] 大列表用虚拟滚动
+// [ ] 避免主进程执行 CPU 密集任务
+// [ ] 及时释放窗口引用
+// [ ] IPC 消息防抖/节流
+// [ ] 大文件不通过 IPC 传输
+// [ ] 定期检查内存泄漏
+// [ ] 使用最新版 Electron 和 Chromium`;export{n as default};

@@ -1,0 +1,131 @@
+const n=`// 路由组目录结构：
+// app/
+//   (marketing)/
+//     layout.tsx    - 营销站布局
+//     page.tsx      - /
+//     about/
+//       page.tsx    - /about
+//   (dashboard)/
+//     layout.tsx    - 后台布局
+//     page.tsx      - /dashboard（注意：路由组不影响 URL）
+//     settings/
+//       page.tsx    - /dashboard/settings
+
+// ============================================
+
+// app/(marketing)/layout.tsx - 营销布局
+export default function MarketingLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <div className="marketing">
+      <nav className="marketing-nav">
+        <a href="/">首页</a>
+        <a href="/about">关于</a>
+      </nav>
+      {children}
+      <footer>营销页底部</footer>
+    </div>
+  )
+}
+
+// app/(marketing)/page.tsx - 首页（URL: /）
+export default function HomePage() {
+  return <h1>欢迎来到我们的产品</h1>
+}
+
+// app/(marketing)/about/page.tsx - 关于页（URL: /about）
+export default function AboutPage() {
+  return <h1>关于我们</h1>
+}
+
+// ============================================
+
+// app/(dashboard)/layout.tsx - 后台布局
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <div className="dashboard">
+      <aside>
+        <nav>
+          <a href="/dashboard">概览</a>
+          <a href="/dashboard/settings">设置</a>
+        </nav>
+      </aside>
+      <main>{children}</main>
+    </div>
+  )
+}
+
+// app/(dashboard)/page.tsx - 后台首页（URL: /dashboard）
+export default function DashboardPage() {
+  return <h1>仪表盘</h1>
+}
+
+// app/(dashboard)/settings/page.tsx - 设置页（URL: /dashboard/settings）
+export default function SettingsPage() {
+  return <h1>设置</h1>
+}
+
+// ============================================
+
+// 私有文件夹 - 存放内部组件，不生成路由
+// 目录结构：
+// app/
+//   _components/         - 私有组件文件夹
+//     Button.tsx
+//     Card.tsx
+//   _lib/                - 私有工具函数
+//     utils.ts
+//   _hooks/              - 私有 hooks
+//     useTheme.ts
+//   page.tsx
+
+// ============================================
+
+// app/_components/Button.tsx - 私有组件
+'use client'
+
+export function Button({
+  children,
+  onClick,
+}: {
+  children: React.ReactNode
+  onClick?: () => void
+}) {
+  return (
+    <button className="btn" onClick={onClick}>
+      {children}
+    </button>
+  )
+}
+
+// ============================================
+
+// 在页面中使用私有组件
+// app/page.tsx
+import { Button } from './_components/Button'
+
+export default function HomePage() {
+  return (
+    <div>
+      <h1>首页</h1>
+      <Button>点击我</Button>
+    </div>
+  )
+}
+
+// ============================================
+
+// 命名约定总结：
+// [param]     - 动态路由参数
+// [...slug]   - Catch-all 动态路由
+// (group)     - 路由组（不影响 URL）
+// @slot       - 并行路由插槽
+// _folder     - 私有文件夹（不参与路由）
+// (.)folder   - 同级拦截路由`;export{n as default};

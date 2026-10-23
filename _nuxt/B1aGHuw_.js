@@ -1,0 +1,253 @@
+const e=`// 场景：课程模块采用单元、集成、e2e 三层测试，验证业务分支、依赖装配与真实 HTTP 契约。
+// 结构：CourseModule 装配 Controller 与 Provider，测试分别替换仓储、启动模块、启动完整应用。
+
+// ═══ 1. 被测上下文：Module / Controller / Provider ═══
+import { Body, Controller, Get, Injectable, NotFoundException, Param, ParseIntPipe, Post } from '@nestjs/common'
+import { Module } from '@nestjs/common'
+import { InjectRepository, TypeOrmModule } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
+import { Course } from './course.entity'
+import { CreateCourseDto } from './create-course.dto'
+
+@Injectable()
+export class CourseRepository {
+  constructor(
+    @InjectRepository(Course)
+    private readonly repo: Repository<Course>,
+  ) {}
+
+  findById(id: number) {
+    return this.repo.findOneBy({ id })
+  }
+
+  save(dto: CreateCourseDto) {
+    return this.repo.save(this.repo.create(dto))
+  }
+}
+
+@Injectable()
+export class CourseService {
+  constructor(private readonly courseRepo: CourseRepository) {}
+
+  async findOne(id: number): Promise<Course> {
+    const course = await this.courseRepo.findById(id)
+    if (!course) {
+      throw new NotFoundException(\`课程 \${id} 不存在\`) // 结果：HTTP 层由异常过滤器转成 404
+    }
+    return course
+  }
+
+  async create(dto: CreateCourseDto): Promise<Course> {
+    return this.courseRepo.save(dto)
+  }
+}
+
+@Controller('courses')
+export class CourseController {
+  constructor(private readonly courseService: CourseService) {}
+
+  @Get(':id')
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.courseService.findOne(id)
+  }
+
+  @Post()
+  create(@Body() dto: CreateCourseDto) {
+    return this.courseService.create(dto)
+  }
+}
+
+@Module({
+  imports: [TypeOrmModule.forFeature([Course])],
+  controllers: [CourseController],
+  providers: [CourseService, CourseRepository],
+  exports: [CourseService],
+})
+export class CourseModule {}
+
+// ═══ 2. 单元测试：只装配一个类，边界用 useValue 替换 ═══
+import { Test, TestingModule } from '@nestjs/testing'
+
+describe('CourseService（单元测试）', () => {
+  let service: CourseService
+  const repoMock = {
+    findById: jest.fn(),
+    save: jest.fn(),
+  }
+
+  beforeEach(async () => {
+    jest.clearAllMocks()
+    const moduleRef = await Test.createTestingModule({
+      providers: [
+        CourseService,
+        { provide: CourseRepository, useValue: repoMock }, // 说明：仓储被替换，测试不连数据库
+      ],
+    }).compile()
+
+    service = moduleRef.get(CourseService) // 结果：拿到真实 CourseService 实例
+  })
+
+  it('课程不存在时抛 NotFoundException', async () => {
+    repoMock.findById.mockResolvedValue(null)
+    await expect(service.findOne(42)).rejects.toBeInstanceOf(NotFoundException)
+  })
+
+  it('课程存在时返回对应实体', async () => {
+    repoMock.findById.mockResolvedValue({ id: 42, title: 'Vue3 实战', capacity: 30 })
+    await expect(service.findOne(42)).resolves.toMatchObject({ id: 42 })
+    // 说明：只断言返回值，不断言仓储被调用的次数，重构内部实现时测试仍然有效
+  })
+})
+
+// ═══ 3. 其它替换方式：useClass 与 overrideProvider ═══
+class InMemoryCourseRepository {
+  private readonly rows = new Map<number, Course>()
+
+  async findById(id: number) {
+    return this.rows.get(id) ?? null
+  }
+
+  async save(dto: CreateCourseDto) {
+    const course = { id: this.rows.size + 1, ...dto } as Course
+    this.rows.set(course.id, course)
+    return course
+  }
+}
+
+it('useClass：用内存实现替换真实仓储', async () => {
+  const moduleRef = await Test.createTestingModule({
+    providers: [
+      CourseService,
+      { provide: CourseRepository, useClass: InMemoryCourseRepository },
+    ],
+  }).compile()
+
+  const service = moduleRef.get(CourseService)
+  await expect(service.findOne(1)).rejects.toBeInstanceOf(NotFoundException)
+})
+
+it('overrideProvider：导入真实模块后覆盖内部 Provider', async () => {
+  const repoMock = { findById: jest.fn(), save: jest.fn() }
+  const moduleRef = await Test.createTestingModule({
+    imports: [CourseModule],
+  })
+    .overrideProvider(CourseRepository)
+    .useValue(repoMock)
+    .overrideProvider(DataSource)
+    .useValue({}) // 说明：跳过真实数据库连接，只验证模块装配
+    .compile()
+
+  expect(moduleRef.get(CourseService)).toBeInstanceOf(CourseService)
+})
+
+// ═══ 4. 集成测试：验证模块装配与路由映射 ═══
+import { PATH_METADATA } from '@nestjs/common/constants'
+import { INestApplication } from '@nestjs/common'
+
+describe('CourseModule（集成测试）', () => {
+  let moduleRef: TestingModule
+  const repoMock = { findById: jest.fn(), save: jest.fn() }
+
+  beforeAll(async () => {
+    moduleRef = await Test.createTestingModule({
+      imports: [CourseModule],
+    })
+      .overrideProvider(CourseRepository)
+      .useValue(repoMock)
+      .overrideProvider(DataSource)
+      .useValue({}) // 说明：只验证装配关系，不真正建立数据库连接
+      .compile()
+  })
+
+  it('容器能解析 Controller 与 Service', () => {
+    expect(moduleRef.get(CourseController)).toBeInstanceOf(CourseController)
+    expect(moduleRef.get(CourseService)).toBeInstanceOf(CourseService)
+    // 结果：Provider 漏注册或模块未导出会在这里直接失败
+  })
+
+  it('控制器路由前缀保持 courses', () => {
+    const prefix = Reflect.getMetadata(PATH_METADATA, CourseController)
+    expect(prefix).toBe('courses')
+  })
+})
+
+// ═══ 5. e2e：启动完整应用，用 supertest 打真实 HTTP 链路 ═══
+import request from 'supertest'
+import { ValidationPipe } from '@nestjs/common'
+import { AppModule } from '../app.module'
+
+describe('课程接口（e2e）', () => {
+  let app: INestApplication
+  const repoMock = {
+    findById: jest.fn(),
+    save: jest.fn(),
+  }
+
+  beforeAll(async () => {
+    const moduleRef = await Test.createTestingModule({
+      imports: [AppModule],
+    })
+      .overrideProvider(CourseRepository)
+      .useValue(repoMock)
+      .compile()
+
+    app = moduleRef.createNestApplication()
+    app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }))
+    await app.init() // 结果：路由、守卫、管道、过滤器全部就位
+  })
+
+  afterAll(async () => {
+    await app.close()
+  })
+
+  it('GET /courses/42 返回 200 与课程体', async () => {
+    repoMock.findById.mockResolvedValue({ id: 42, title: 'Vue3 实战', capacity: 30 })
+    await request(app.getHttpServer())
+      .get('/courses/42')
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body).toMatchObject({ id: 42, title: 'Vue3 实战' })
+      })
+  })
+
+  it('GET /courses/999 返回 404', async () => {
+    repoMock.findById.mockResolvedValue(null)
+    await request(app.getHttpServer())
+      .get('/courses/999')
+      .expect(404)
+  })
+})
+
+// ═══ 6. 数据库集成测试：每个用例独立事务并回滚 ═══
+import { DataSource, QueryRunner } from 'typeorm'
+
+describe('CourseRepository（数据库集成测试）', () => {
+  let dataSource: DataSource
+  let queryRunner: QueryRunner
+
+  beforeAll(async () => {
+    dataSource = await new DataSource({
+      type: 'postgres',
+      url: process.env.TEST_DATABASE_URL,
+      entities: [Course],
+    }).initialize()
+  })
+
+  beforeEach(async () => {
+    queryRunner = dataSource.createQueryRunner()
+    await queryRunner.connect()
+    await queryRunner.startTransaction() // 说明：用例内所有写入都落在同一事务
+  })
+
+  afterEach(async () => {
+    await queryRunner.rollbackTransaction()
+    await queryRunner.release() // 结果：用例之间互不污染，无需手工清表
+  })
+
+  it('写入课程后能在同一事务中读到', async () => {
+    const repo = queryRunner.manager.getRepository(Course)
+    await repo.save(repo.create({ title: 'Vue3 实战', capacity: 30 }))
+    await expect(repo.count()).resolves.toBe(1)
+  })
+})
+`;export{e as default};

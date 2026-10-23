@@ -1,0 +1,12 @@
+const a=`import autograd.numpy as np  # 占位，示意计算图
+from autograd import grad
+
+# 反向传播 = 链式法则在计算图上从输出传回每个参数
+def forward(W1, W2, x):
+    h = np.maximum(0, W1 @ x)      # 隐藏层 ReLU
+    return W2 @ h                   # 输出层（线性）
+
+x = np.array([1.0, 2.0])
+loss_W1 = grad(lambda W1: ((forward(W1, np.array([1.0, -1.0]), x) - 1) ** 2), 0)
+# 每层参数得到自己的梯度 dL/dW，前向存值、反向复用，代价仅约两倍的“前向”
+# 弱点：长链路连乘导致梯度消失，靠 ReLU 和残差连接缓解（见 24 课）`;export{a as default};

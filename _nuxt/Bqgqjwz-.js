@@ -1,0 +1,18 @@
+const e=`// logger.middleware.ts —— 中间件是请求进入路由前的第一站
+@Injectable()
+export class LoggerMiddleware implements NestMiddleware {
+  use(req: Request, res: Response, next: () => void) {
+    console.log(\`\${req.method} \${req.originalUrl} @ \${new Date().toISOString()}\`)
+    next()  // 必须调用 next() 放行，否则请求卡死
+  }
+}
+
+// app.module.ts —— 配置中间件作用于哪些路由
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggerMiddleware)
+      .forRoutes('courses')          // 仅对 /courses* 生效
+      // .forRoutes({ path: '*', method: RequestMethod.ALL })
+  }
+}`;export{e as default};

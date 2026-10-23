@@ -1,0 +1,319 @@
+const n=`// ========== 1. 多窗口管理器 main.js ==========
+const { app, BrowserWindow, ipcMain } = require('electron')
+const path = require('path')
+
+// 窗口引用管理（使用 Map，不要用全局变量）
+const windowManager = {
+  windows: new Map(), // id -> window
+  nextId: 1,
+
+  // 创建窗口
+  create(type, options = {}) {
+    const id = \`\${type}-\${this.nextId++}\`
+
+    const win = new BrowserWindow({
+      width: options.width || 800,
+      height: options.height || 600,
+      title: options.title || '新窗口',
+      x: options.x,
+      y: options.y,
+      webPreferences: {
+        preload: path.join(__dirname, 'preload.js'),
+        contextIsolation: true
+      },
+      ...options.windowOptions
+    })
+
+    // 存储窗口元数据
+    win.data = {
+      id,
+      type,
+      createdAt: Date.now()
+    }
+
+    // 加载对应页面
+    const pageMap = {
+      main: 'index.html',
+      editor: 'editor.html',
+      preview: 'preview.html',
+      settings: 'settings.html'
+    }
+    win.loadFile(pageMap[type] || 'index.html')
+
+    // 窗口关闭时移除引用
+    win.on('closed', () => {
+      this.windows.delete(id)
+      console.log(\`窗口 \${id} 已关闭，剩余 \${this.windows.size} 个窗口\`)
+    })
+
+    this.windows.set(id, win)
+    console.log(\`创建窗口 \${id}，共 \${this.windows.size} 个窗口\`)
+
+    return { id, win }
+  },
+
+  // 获取窗口
+  get(id) {
+    return this.windows.get(id)
+  },
+
+  // 获取所有窗口
+  getAll() {
+    return Array.from(this.windows.values())
+  },
+
+  // 按类型获取窗口
+  getByType(type) {
+    return Array.from(this.windows.values()).filter(w => w.data.type === type)
+  },
+
+  // 关闭所有窗口
+  closeAll() {
+    this.getAll().forEach(win => win.close())
+  },
+
+  // 广播消息给所有窗口
+  broadcast(channel, data, excludeId = null) {
+    this.windows.forEach((win, id) => {
+      if (id !== excludeId) {
+        win.webContents.send(channel, data)
+      }
+    })
+  }
+}
+
+// ========== 2. 窗口间通信（通过主进程中转） ==========
+// 模式一: 广播消息
+ipcMain.handle('window:broadcast', (event, { channel, data }) => {
+  const senderWin = BrowserWindow.fromWebContents(event.sender)
+  const senderId = senderWin?.data?.id
+  windowManager.broadcast(channel, data, senderId)
+  return { success: true }
+})
+
+// 模式二: 发送给指定窗口
+ipcMain.handle('window:sendTo', (event, { targetId, channel, data }) => {
+  const targetWin = windowManager.get(targetId)
+  if (targetWin) {
+    targetWin.webContents.send(channel, {
+      from: event.sender.data?.id,
+      data
+    })
+    return { success: true }
+  }
+  return { success: false, error: '目标窗口不存在' }
+})
+
+// 模式三: 获取窗口列表
+ipcMain.handle('window:list', () => {
+  return windowManager.getAll().map(win => ({
+    id: win.data.id,
+    type: win.data.type,
+    title: win.getTitle(),
+    isFocused: win.isFocused()
+  }))
+})
+
+// ========== 3. 创建子窗口示例 ==========
+// 方式一: 从主进程创建
+ipcMain.handle('window:create', (event, { type, options }) => {
+  const { id, win } = windowManager.create(type, options)
+  return { id }
+})
+
+// 方式二: window.open (渲染进程)
+// 注意: 需要 nativeWindowOpen: true
+// renderer.js:
+// const newWindow = window.open('editor.html', '_blank', 'width=600,height=400')
+
+// ========== 4. 预加载脚本暴露窗口管理 API ==========
+// preload.js
+// const { contextBridge, ipcRenderer } = require('electron')
+//
+// contextBridge.exposeInMainWorld('windowAPI', {
+//   // 创建新窗口
+//   createWindow: (type, options) =>
+//     ipcRenderer.invoke('window:create', { type, options }),
+//
+//   // 获取窗口列表
+//   listWindows: () => ipcRenderer.invoke('window:list'),
+//
+//   // 广播消息
+//   broadcast: (channel, data) =>
+//     ipcRenderer.invoke('window:broadcast', { channel, data }),
+//
+//   // 发送给指定窗口
+//   sendTo: (targetId, channel, data) =>
+//     ipcRenderer.invoke('window:sendTo', { targetId, channel, data }),
+//
+//   // 接收消息
+//   onWindowMessage: (channel, callback) => {
+//     ipcRenderer.on(channel, (_event, data) => callback(data))
+//   },
+//
+//   // 关闭当前窗口
+//   close: () => window.close(),
+//
+//   // 最小化
+//   minimize: () => ipcRenderer.invoke('window:minimize'),
+//
+//   // 最大化/还原
+//   toggleMaximize: () => ipcRenderer.invoke('window:toggle-maximize')
+// })
+
+// main.js 对应实现
+// ipcMain.handle('window:minimize', (event) => {
+//   const win = BrowserWindow.fromWebContents(event.sender)
+//   win?.minimize()
+// })
+//
+// ipcMain.handle('window:toggle-maximize', (event) => {
+//   const win = BrowserWindow.fromWebContents(event.sender)
+//   if (!win) return
+//   if (win.isMaximized()) {
+//     win.unmaximize()
+//   } else {
+//     win.maximize()
+//   }
+// })
+
+// ========== 5. 渲染进程使用示例 ==========
+// async function openEditor() {
+//   const result = await window.windowAPI.createWindow('editor', {
+//     title: '编辑器',
+//     width: 1000,
+//     height: 700
+//   })
+//   console.log('新窗口 ID:', result.id)
+// }
+//
+// async function sendMessageToAll() {
+//   await window.windowAPI.broadcast('chat-message', {
+//     from: 'user1',
+//     text: '大家好！'
+//   })
+// }
+//
+// // 监听消息
+// window.windowAPI.onWindowMessage('chat-message', (msg) => {
+//   console.log(\`收到 \${msg.from} 的消息: \${msg.text}\`)
+// })
+
+// ========== 6. 父子窗口 (BrowserWindow parent) ==========
+function createChildWindow(parentWin) {
+  const childWin = new BrowserWindow({
+    width: 400,
+    height: 300,
+    parent: parentWin, // 父窗口
+    modal: true,        // 模态窗口（阻塞父窗口）
+    webPreferences: {
+      contextIsolation: true
+    }
+  })
+  childWin.loadFile('dialog.html')
+  return childWin
+}
+
+// ========== 7. 窗口位置记忆 ==========
+const Store = require('electron-store')
+const store = new Store({ name: 'window-state' })
+
+function createWindowWithState() {
+  const savedState = store.get('mainWindow') || {}
+
+  const win = new BrowserWindow({
+    width: savedState.width || 1200,
+    height: savedState.height || 800,
+    x: savedState.x,
+    y: savedState.y,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true
+    }
+  })
+
+  // 如果之前是最大化，恢复最大化
+  if (savedState.isMaximized) {
+    win.maximize()
+  }
+
+  win.loadFile('index.html')
+
+  // 关闭时保存状态
+  win.on('close', () => {
+    if (!win.isMaximized()) {
+      const [x, y] = win.getPosition()
+      const [width, height] = win.getSize()
+      store.set('mainWindow', { x, y, width, height, isMaximized: false })
+    } else {
+      store.set('mainWindow.isMaximized', true)
+    }
+  })
+
+  return win
+}
+
+// ========== 8. 内存泄漏预防 ==========
+// 1. 窗口关闭后一定要从 Map 中删除引用
+// 2. 移除所有事件监听器
+// 3. 清除定时器
+// 4. 断开 IPC 连接
+
+// 错误示例 ❌
+// const windows = [] // 全局数组
+// function createWin() {
+//   const win = new BrowserWindow()
+//   windows.push(win) // 只加不删 -> 内存泄漏
+// }
+
+// 正确示例 ✅
+// const windows = new Map()
+// function createWin(id) {
+//   const win = new BrowserWindow()
+//   windows.set(id, win)
+//   win.on('closed', () => {
+//     windows.delete(id) // 关闭时删除
+//   })
+// }
+
+// ========== 9. 多窗口应用的启动逻辑 ==========
+app.whenReady().then(() => {
+  // 创建主窗口
+  windowManager.create('main', {
+    title: '主窗口',
+    width: 1200,
+    height: 800
+  })
+
+  // macOS 激活时
+  app.on('activate', () => {
+    if (windowManager.windows.size === 0) {
+      windowManager.create('main')
+    }
+  })
+})
+
+// 所有窗口关闭时
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit()
+  }
+})
+
+// ========== 10. 多窗口数据共享方案 ==========
+// 方案 1: 主进程作为数据源 (推荐)
+// - 所有数据存储在主进程
+// - 渲染进程通过 IPC 读写
+// - 数据变更时主进程广播通知
+//
+// 方案 2: 共享存储 (electron-store / SQLite)
+// - 多个窗口读写同一个存储
+// - 需要处理数据同步和冲突
+//
+// 方案 3: MessageChannel (直接通信)
+// - 性能好，但建立连接麻烦
+// - 适合高频大量数据传输
+//
+// 方案 4: BroadcastChannel (同源渲染进程)
+// - 浏览器标准 API
+// - 简单易用，但只能在同源页面间使用`;export{n as default};

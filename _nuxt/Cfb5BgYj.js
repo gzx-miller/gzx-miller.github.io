@@ -1,0 +1,91 @@
+const n=`import { createAgent, tool } from 'langchain'
+import { ChatOpenAI } from '@langchain/openai'
+import { z } from 'zod'
+
+// 示例1: 定义工具
+const searchTool = tool(
+  async ({ query }) => {
+    // 模拟搜索结果
+    const mockResults: Record<string, string> = {
+      'LangChain': 'LangChain 是一个用于开发 LLM 应用的开源框架，支持 Python 和 JavaScript。',
+      'OpenAI': 'OpenAI 是一家人工智能研究公司，开发了 GPT 系列模型。',
+      'RAG': 'RAG (检索增强生成) 是一种结合检索和生成的技术，可以提升 LLM 回答的准确性。',
+    }
+    return mockResults[query] || \`未找到关于"\${query}"的信息\`
+  },
+  {
+    name: 'web_search',
+    description: '搜索网络获取信息。当你需要回答实时性问题或不了解的知识时使用。',
+    schema: z.object({
+      query: z.string().describe('搜索关键词'),
+    }),
+  }
+)
+
+const calculatorTool = tool(
+  async ({ expression }) => {
+    try {
+      const result = eval(expression)
+      return \`计算结果: \${result}\`
+    } catch (e) {
+      return '计算错误，请检查表达式'
+    }
+  },
+  {
+    name: 'calculator',
+    description: '进行数学计算。当你需要做加减乘除等数学运算时使用。',
+    schema: z.object({
+      expression: z.string().describe('数学表达式，如 "2 + 3 * 4"'),
+    }),
+  }
+)
+
+const tools = [searchTool, calculatorTool]
+
+// 示例2: 创建智能体（v1 现行写法）
+const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 })
+
+const agent = createAgent({
+  model,
+  tools,
+  systemPrompt: '你是一个 helpful 的助手。你可以使用工具来帮助回答问题。',
+})
+
+// 示例3: 简单问题（不需要工具）
+const result1 = await agent.invoke({
+  messages: [{ role: 'user', content: '你好，请介绍一下你自己' }],
+})
+console.log('回答:', result1.messages.at(-1)?.content)
+
+// 示例4: 需要搜索的问题
+const result2 = await agent.invoke({
+  messages: [{ role: 'user', content: 'LangChain 是什么？' }],
+})
+console.log('回答:', result2.messages.at(-1)?.content)
+
+// 示例5: 需要计算的问题
+const result3 = await agent.invoke({
+  messages: [{ role: 'user', content: '123 乘以 456 等于多少？' }],
+})
+console.log('回答:', result3.messages.at(-1)?.content)
+
+// 示例6: 多步骤推理问题
+const result4 = await agent.invoke({
+  messages: [{ role: 'user', content: 'RAG 是什么？用一句话解释，然后计算 15 的平方是多少？' }],
+})
+console.log('回答:', result4.messages.at(-1)?.content)
+
+// 示例7: 流式观察 Agent 的执行过程
+const stream = await agent.stream(
+  { messages: [{ role: 'user', content: '搜索 LangChain 的信息，然后用一句话总结' }] },
+  { streamMode: 'messages' }
+)
+
+for await (const [message] of stream) {
+  if (message.getType() === 'ai' && message.tool_calls?.length) {
+    console.log('工具调用:', message.tool_calls)
+  } else if (message.getType() === 'tool') {
+    console.log('工具结果:', message.content.toString().slice(0, 50))
+  }
+}
+`;export{n as default};

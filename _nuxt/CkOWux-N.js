@@ -1,0 +1,63 @@
+const n=`// ========== 1. 主进程入口 main.js ==========
+// 主进程管理应用生命周期和所有原生能力
+const { app, BrowserWindow } = require('electron')
+const path = require('path')
+
+// 主进程单例，负责创建窗口、管理生命周期
+function createWindow() {
+  const mainWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true,
+      nodeIntegration: false
+    }
+  })
+  mainWindow.loadFile('index.html')
+}
+
+app.whenReady().then(() => {
+  createWindow()
+})
+
+// ========== 2. 预加载脚本 preload.js ==========
+// 预加载脚本在渲染进程加载前运行，可同时访问 Node.js 和 DOM API
+const { contextBridge, ipcRenderer } = require('electron')
+
+// 通过 contextBridge 安全暴露 API 给渲染进程
+contextBridge.exposeInMainWorld('electronAPI', {
+  getAppVersion: () => ipcRenderer.invoke('get-app-version'),
+  onMessage: (callback) => ipcRenderer.on('message', (_event, data) => callback(data))
+})
+
+// ========== 3. 渲染进程 renderer.js ==========
+// 渲染进程运行 Web 页面，只能访问预加载脚本暴露的 API
+console.log('Electron 版本:', window.electronAPI)
+
+async function getVersion() {
+  const version = await window.electronAPI.getAppVersion()
+  console.log('App 版本:', version)
+}
+
+// ========== 4. 进程模型说明 ==========
+// 主进程 (Main)       -> 1个，管理应用、窗口、原生 API
+// 渲染进程 (Renderer)  -> 每个窗口一个，运行 Web 页面
+// 预加载脚本 (Preload) -> 每个渲染进程一个，桥接主进程与渲染进程
+// Utility 进程         -> 可选，运行 CPU 密集任务
+
+// ========== 5. package.json 配置 ==========
+{
+  "name": "my-electron-app",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  }
+}
+
+// ========== 6. 进程间通信模式 ==========
+// 1. invoke/handle: 渲染进程 -> 主进程（请求-响应）
+// 2. send/on:       渲染进程 -> 主进程（单向）
+// 3. sendToWebContents: 主进程 -> 渲染进程
+// 4. MessagePort:   渲染进程之间直接通信（通过主进程中转端口）`;export{n as default};

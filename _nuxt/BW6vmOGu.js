@@ -1,0 +1,42 @@
+const d=`<!-- 基础 3 列网格 -->
+<div class="grid grid-cols-3 gap-4">
+  <div class="rounded-lg bg-amber-100 p-4">1</div>
+  <div class="rounded-lg bg-amber-100 p-4">2</div>
+  <div class="rounded-lg bg-amber-100 p-4">3</div>
+  <div class="rounded-lg bg-amber-100 p-4">4</div>
+  <div class="rounded-lg bg-amber-100 p-4">5</div>
+  <div class="rounded-lg bg-amber-100 p-4">6</div>
+</div>
+
+<!-- 跨列布局 -->
+<div class="grid grid-cols-4 gap-3">
+  <div class="col-span-2 rounded-lg bg-orange-200 p-4">跨 2 列</div>
+  <div class="rounded-lg bg-orange-100 p-4">3</div>
+  <div class="rounded-lg bg-orange-100 p-4">4</div>
+  <div class="rounded-lg bg-orange-100 p-4">5</div>
+  <div class="col-span-3 rounded-lg bg-orange-200 p-4">跨 3 列</div>
+</div>
+
+<!-- 响应式网格：移动端 1 列，平板 2 列，桌面 3 列 -->
+<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+  <article class="rounded-xl bg-amber-50 p-4">卡片 A</article>
+  <article class="rounded-xl bg-amber-50 p-4">卡片 B</article>
+  <article class="rounded-xl bg-amber-50 p-4">卡片 C</article>
+</div>
+
+<!-- 12 栅格系统 -->
+<div class="grid grid-cols-12 gap-2">
+  <div class="col-span-12 rounded bg-orange-300 p-2 text-center">col-span-12</div>
+  <div class="col-span-6 rounded bg-orange-200 p-2 text-center">col-span-6</div>
+  <div class="col-span-6 rounded bg-orange-200 p-2 text-center">col-span-6</div>
+  <div class="col-span-4 rounded bg-orange-100 p-2 text-center">4</div>
+  <div class="col-span-4 rounded bg-orange-100 p-2 text-center">4</div>
+  <div class="col-span-4 rounded bg-orange-100 p-2 text-center">4</div>
+</div>
+
+<!-- place-items 对齐 -->
+<div class="grid h-40 grid-cols-3 gap-2 rounded-lg bg-stone-100 place-items-center">
+  <div class="rounded bg-amber-200 px-3 py-2">居中</div>
+  <div class="rounded bg-amber-200 px-3 py-2">对齐</div>
+  <div class="rounded bg-amber-200 px-3 py-2">示例</div>
+</div>`;export{d as default};

@@ -1,0 +1,91 @@
+const e=`// 并行执行：节点并发、Send 扇出与子图
+// 场景：一份作业批改工作流——三个维度并批，最后汇总
+import { StateGraph, StateSchema, ReducedValue, START, END, Send } from '@langchain/langgraph'
+import { z } from 'zod/v4'
+
+const ReviewState = new StateSchema({
+  essay: z.string(),
+  dimensions: new ReducedValue(
+    z.array(z.string()).default(() => []),
+    { reducer: (left, right) => left.concat(right) },
+  ),
+  reviews: new ReducedValue(
+    z.record(z.string(), z.string()).default(() => ({})),
+    // 三个并行分支各写各人的 key，reducer 负责合并而不互相覆盖
+    { reducer: (left, right) => ({ ...left, ...right }) },
+  ),
+  summary: z.string(),
+})
+
+// 示例1: 三个独立的审查节点——同一条边「扇出」到它们三个，框架会自动并发执行
+async function grammarNode(state: typeof ReviewState.State) {
+  return { reviews: { grammar: \`语法审查（\${state.essay.length} 字）：无重大语法错误\` } }
+}
+async function logicNode(state: typeof ReviewState.State) {
+  return { reviews: { logic: '逻辑审查：论证链完整' } }
+}
+async function styleNode(state: typeof ReviewState.State) {
+  return { reviews: { style: '文风审查：建议减少口头语' } }
+}
+
+// 示例2: 汇总节点收口——三条支线全部完成后才执行（fan-in）
+async function mergeNode(state: typeof ReviewState.State) {
+  const all = Object.entries(state.reviews).map(([k, v]) => \`\${k}: \${v}\`)
+  return { summary: all.join('\\n') }
+}
+
+const reviewer = new StateGraph(ReviewState)
+  .addNode('grammar', grammarNode)
+  .addNode('logic', logicNode)
+  .addNode('style', styleNode)
+  .addNode('merge', mergeNode)
+  .addEdge(START, 'grammar')
+  .addEdge(START, 'logic')
+  .addEdge(START, 'style')
+  .addEdge('grammar', 'merge')
+  .addEdge('logic', 'merge')
+  .addEdge('style', 'merge')
+  .addEdge('merge', END)
+  .compile()
+
+// 示例3: Send API——运行前才知道要切几份时，用 Map-reduce 动态扇出
+// 每个 Send 创建一个子任务实例，各自拿到一条独立输入
+async function reviewSingle(state: { dimension: string; essay: string }) {
+  return { reviews: { [state.dimension]: \`「\${state.dimension}」维度审查完成\` } }
+}
+
+function dispatch(state: typeof ReviewState.State) {
+  // Map 阶段：为每个维度生成一个 Send（替代静态的多条边）
+  return state.dimensions.map((dimension) => new Send('reviewSingle', { dimension, essay: state.essay }))
+}
+
+const mapReduce = new StateGraph(ReviewState)
+  .addNode('reviewSingle', reviewSingle)
+  .addNode('merge', mergeNode)
+  .addConditionalEdges(START, dispatch, ['reviewSingle'])
+  .addEdge('reviewSingle', 'merge')
+  .addEdge('merge', END)
+  .compile()
+
+const result = await mapReduce.invoke({
+  essay: 'LangGraph 是有向状态图框架……',
+  dimensions: ['语法', '逻辑', '文风', '事实'],
+})
+console.log(result.summary)
+
+// 示例4: 子图——把整张编译好的图当作另一个图里的节点
+const outer = new StateGraph(ReviewState)
+  .addNode('reviewer', reviewer) // reviewer 是上面编译好的子图
+  .addEdge(START, 'reviewer')
+  .addEdge('reviewer', END)
+  .compile()
+
+// 示例5: 并行安全的前提——并行分支写同一字段时必须各写各的 key（或都走 reducer）
+// 否则后完成的节点会覆盖先完成的结果，并发场景尤难排查
+
+// 示例6: 何时并行
+// - 子任务互不依赖、都只读同一份输入 → 扇出并行
+// - 分支数量运行时才知道（按条目逐个处理）→ Send / Map-reduce
+// - 一组流程要整体复用（批改、审核）→ 打包成子图
+console.log('并行原则：先画清依赖，再并发；合并点只留一个。')
+`;export{e as default};

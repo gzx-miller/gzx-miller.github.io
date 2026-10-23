@@ -1,0 +1,245 @@
+const n=`// ========== 1. 原生 autoUpdater (基础) main.js ==========
+const { app, autoUpdater, dialog } = require('electron')
+
+// 配置更新服务器地址
+// 服务器需要返回正确格式的更新元数据
+const updateServer = 'https://your-update-server.com/updates/latest'
+
+autoUpdater.setFeedURL({
+  url: updateServer
+})
+
+// 检查更新
+function checkForUpdates() {
+  autoUpdater.checkForUpdates()
+}
+
+// ========== 2. autoUpdater 事件 ==========
+// 正在检查更新
+autoUpdater.on('checking-for-update', () => {
+  console.log('正在检查更新...')
+})
+
+// 发现新版本
+autoUpdater.on('update-available', (info) => {
+  console.log('发现新版本:', info.version)
+  console.log('发布日期:', info.releaseDate)
+  // 可以通知用户
+})
+
+// 当前已是最新版本
+autoUpdater.on('update-not-available', (info) => {
+  console.log('当前已是最新版本')
+})
+
+// 正在下载更新
+autoUpdater.on('update-downloading', (event) => {
+  console.log('正在下载更新...')
+  console.log('进度:', event.percent)
+})
+
+// 更新下载完成
+autoUpdater.on('update-downloaded', (event) => {
+  console.log('更新已下载完成')
+  console.log('版本:', event.version)
+
+  // 询问用户是否立即更新
+  const dialogOpts = {
+    type: 'info',
+    buttons: ['立即重启', '稍后'],
+    title: '应用更新',
+    message: \`新版本 \${event.version} 已下载完成\`,
+    detail: '点击"立即重启"安装更新'
+  }
+
+  dialog.showMessageBox(dialogOpts).then((returnValue) => {
+    if (returnValue.response === 0) {
+      // 退出并安装更新
+      autoUpdater.quitAndInstall()
+    }
+  })
+})
+
+// 更新出错
+autoUpdater.on('error', (error) => {
+  console.error('更新出错:', error.message)
+})
+
+// ========== 3. 使用 electron-updater (推荐, electron-builder 内置) ==========
+// 安装: npm install electron-updater
+// const { autoUpdater } = require('electron-updater')
+//
+// autoUpdater.checkForUpdatesAndNotify()
+//
+// autoUpdater.on('update-available', (info) => {
+//   console.log('发现更新:', info.version)
+// })
+//
+// autoUpdater.on('download-progress', (progress) => {
+//   console.log(\`下载进度: \${progress.percent}%\`)
+//   console.log(\`速度: \${progress.bytesPerSecond} B/s\`)
+// })
+//
+// autoUpdater.on('update-downloaded', () => {
+//   autoUpdater.quitAndInstall()
+// })
+
+// ========== 4. 更新服务器配置 (electron-builder) ==========
+// package.json 中的 build 配置
+// {
+//   "build": {
+//     "appId": "com.myapp.id",
+//     "productName": "MyApp",
+//     "publish": {
+//       "provider": "generic",
+//       "url": "https://your-server.com/updates"
+//     },
+//     "mac": {
+//       "category": "public.app-category.productivity"
+//     },
+//     "win": {
+//       "target": "nsis"
+//     },
+//     "linux": {
+//       "target": "AppImage"
+//     }
+//   }
+// }
+//
+// 发布到 GitHub:
+// "publish": {
+//   "provider": "github",
+//   "owner": "username",
+//   "repo": "repo-name"
+// }
+
+// ========== 5. 通过 IPC 暴露更新状态 ==========
+// main.js
+const { ipcMain, BrowserWindow } = require('electron')
+
+let mainWindow = null
+
+function sendUpdateStatus(type, data) {
+  if (mainWindow) {
+    mainWindow.webContents.send('update-status', { type, data })
+  }
+}
+
+autoUpdater.on('checking-for-update', () => {
+  sendUpdateStatus('checking', {})
+})
+
+autoUpdater.on('update-available', (info) => {
+  sendUpdateStatus('available', { version: info.version })
+})
+
+autoUpdater.on('update-not-available', () => {
+  sendUpdateStatus('not-available', {})
+})
+
+autoUpdater.on('update-downloaded', (info) => {
+  sendUpdateStatus('downloaded', { version: info.version })
+})
+
+autoUpdater.on('error', (error) => {
+  sendUpdateStatus('error', { message: error.message })
+})
+
+// 渲染进程触发检查更新
+ipcMain.handle('update:check', () => {
+  autoUpdater.checkForUpdates()
+})
+
+// 渲染进程触发安装更新
+ipcMain.handle('update:install', () => {
+  autoUpdater.quitAndInstall()
+})
+
+// ========== 6. preload.js ==========
+// const { contextBridge, ipcRenderer } = require('electron')
+//
+// contextBridge.exposeInMainWorld('updateAPI', {
+//   checkForUpdates: () => ipcRenderer.invoke('update:check'),
+//   installUpdate: () => ipcRenderer.invoke('update:install'),
+//   onUpdateStatus: (callback) => {
+//     ipcRenderer.on('update-status', (_event, status) => {
+//       callback(status)
+//     })
+//   }
+// })
+
+// ========== 7. 渲染进程使用 ==========
+// function setupAutoUpdate() {
+//   window.updateAPI.onUpdateStatus((status) => {
+//     switch (status.type) {
+//       case 'checking':
+//         console.log('正在检查更新...')
+//         break
+//       case 'available':
+//         console.log('发现新版本:', status.data.version)
+//         break
+//       case 'not-available':
+//         console.log('已是最新版本')
+//         break
+//       case 'downloaded':
+//         console.log('更新已下载，点击安装')
+//         // window.updateAPI.installUpdate()
+//         break
+//       case 'error':
+//         console.error('更新失败:', status.data.message)
+//         break
+//     }
+//   })
+//
+//   // 手动检查更新
+//   // window.updateAPI.checkForUpdates()
+// }
+
+// ========== 8. 手动更新检查 ==========
+function manualUpdateCheck() {
+  // 启动时检查
+  app.whenReady().then(() => {
+    mainWindow = new BrowserWindow({
+      width: 800,
+      height: 600,
+      webPreferences: {
+        preload: 'preload.js',
+        contextIsolation: true
+      }
+    })
+    mainWindow.loadFile('index.html')
+
+    // 延迟一会儿再检查（避免影响启动速度）
+    setTimeout(() => {
+      checkForUpdates()
+    }, 3000)
+  })
+}
+
+// ========== 9. 更新注意事项 ==========
+// 1. macOS 需要代码签名才能启用自动更新
+// 2. Windows 推荐使用代码签名证书
+// 3. 更新包需要放到服务器上
+// 4. 不同平台的更新格式不同:
+//    - macOS: .dmg, .zip
+//    - Windows: .exe (NSIS), nupkg (Squirrel)
+//    - Linux: AppImage, deb, rpm
+// 5. 自动更新需要在打包后的应用中测试
+// 6. 提供手动下载入口作为备选
+
+// ========== 10. 版本号比较 ==========
+// semver 示例: 1.2.3 < 1.2.4 < 1.3.0 < 2.0.0
+// 更新服务器返回的版本号必须符合 semver 规范
+
+// 简单版本比较
+function compareVersions(v1, v2) {
+  const parts1 = v1.split('.').map(Number)
+  const parts2 = v2.split('.').map(Number)
+  for (let i = 0; i < Math.max(parts1.length, parts2.length); i++) {
+    const p1 = parts1[i] || 0
+    const p2 = parts2[i] || 0
+    if (p1 > p2) return 1
+    if (p1 < p2) return -1
+  }
+  return 0
+}`;export{n as default};

@@ -1,0 +1,158 @@
+const n=`// ========== 1. 主进程 IPC: ipcMain.handle (推荐) ==========
+// main.js
+const { app, BrowserWindow, ipcMain } = require('electron')
+const path = require('path')
+const fs = require('fs/promises')
+
+// 注册 IPC 处理函数（渲染进程用 invoke 调用）
+ipcMain.handle('read-user-data', async (_event, fileName) => {
+  try {
+    const userDataPath = app.getPath('userData')
+    const filePath = path.join(userDataPath, fileName)
+    const content = await fs.readFile(filePath, 'utf-8')
+    return { success: true, data: content }
+  } catch (error) {
+    return { success: false, error: error.message }
+  }
+})
+
+// 同步 IPC（不推荐，会阻塞渲染进程）
+ipcMain.on('sync-message', (event, arg) => {
+  console.log('收到同步消息:', arg)
+  event.returnValue = '同步响应'
+})
+
+// ========== 2. 预加载脚本: 暴露 IPC API ==========
+// preload.js
+const { contextBridge, ipcRenderer } = require('electron')
+
+contextBridge.exposeInMainWorld('electronAPI', {
+  // 调用主进程方法（Promise 方式）
+  readUserData: (fileName) => ipcRenderer.invoke('read-user-data', fileName),
+
+  // 发送单向消息
+  sendNotification: (message) => ipcRenderer.send('send-notification', message),
+
+  // 监听主进程事件
+  onUpdateAvailable: (callback) => {
+    ipcRenderer.on('update-available', (_event, data) => callback(data))
+  },
+
+  // 一次性监听
+  onceUpdateDownloaded: (callback) => {
+    ipcRenderer.once('update-downloaded', (_event, data) => callback(data))
+  },
+
+  // 移除监听器
+  removeUpdateListener: () => {
+    ipcRenderer.removeAllListeners('update-available')
+  }
+})
+
+// ========== 3. 渲染进程调用 ==========
+// renderer.js
+async function loadSettings() {
+  const result = await window.electronAPI.readUserData('settings.json')
+  if (result.success) {
+    console.log('设置:', JSON.parse(result.data))
+  } else {
+    console.error('读取失败:', result.error)
+  }
+}
+
+// 发送单向消息
+window.electronAPI.sendNotification('用户已登录')
+
+// 监听主进程事件
+window.electronAPI.onUpdateAvailable((version) => {
+  console.log('发现新版本:', version)
+})
+
+// ========== 4. 主进程向渲染进程发送消息 ==========
+// main.js
+function sendMessageToRenderer(win, channel, data) {
+  // 向指定窗口发送
+  win.webContents.send(channel, data)
+}
+
+// 向所有窗口广播
+function broadcastToAll(channel, data) {
+  const windows = BrowserWindow.getAllWindows()
+  windows.forEach(win => {
+    win.webContents.send(channel, data)
+  })
+}
+
+// 示例: 发送更新通知
+ipcMain.on('send-notification', (event, message) => {
+  const win = BrowserWindow.fromWebContents(event.sender)
+  win.webContents.send('notification-received', {
+    from: 'system',
+    message
+  })
+})
+
+// ========== 5. 窗口间通信（通过主进程中转） ==========
+// main.js
+const windowMap = new Map()
+
+// 注册窗口
+ipcMain.handle('register-window', (event, windowId) => {
+  windowMap.set(windowId, event.sender)
+  return { success: true }
+})
+
+// 向指定窗口发送消息
+ipcMain.handle('send-to-window', (_event, { targetId, message }) => {
+  const target = windowMap.get(targetId)
+  if (target) {
+    target.send('window-message', message)
+    return { success: true }
+  }
+  return { success: false, error: '窗口不存在' }
+})
+
+// ========== 6. MessagePort 直接通信 ==========
+// preload.js
+contextBridge.exposeInMainWorld('messagePort', {
+  // 请求端口
+  requestPort: () => ipcRenderer.invoke('request-port'),
+  // 接收端口
+  onPort: (callback) => {
+    ipcRenderer.on('port', (event) => {
+      callback(event.ports[0])
+    })
+  }
+})
+
+// main.js
+ipcMain.handle('request-port', (event) => {
+  const portPair = new MessageChannel()
+  // 把 port2 发送给另一个窗口
+  // anotherWin.webContents.postMessage('port', null, [portPair.port2])
+  // 返回 port1 给请求方
+  event.sender.postMessage('port', null, [portPair.port1])
+  return { success: true }
+})
+
+// ========== 7. IPC 安全最佳实践 ==========
+// 1. 不要直接暴露 ipcRenderer 整个对象
+// 2. 验证参数类型和范围
+// 3. 使用白名单通道
+// 4. 不要返回敏感数据给不可信的渲染进程
+// 5. 对于文件操作，限制在特定目录内
+
+// 示例: 参数验证
+ipcMain.handle('read-file', async (_event, filePath) => {
+  // 验证参数类型
+  if (typeof filePath !== 'string') {
+    throw new Error('文件路径必须是字符串')
+  }
+  // 限制在用户数据目录内（防止路径穿越）
+  const userDataPath = app.getPath('userData')
+  const resolvedPath = path.resolve(userDataPath, filePath)
+  if (!resolvedPath.startsWith(userDataPath)) {
+    throw new Error('不允许访问该目录')
+  }
+  // ... 读取文件
+})`;export{n as default};

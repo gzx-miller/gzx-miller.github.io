@@ -1,0 +1,88 @@
+const t=`// 状态图：用 StateGraph 把工作流建模成「节点 + 边」
+// 场景：课程内容生产线——大纲 → 内容 → 质检（不达标回炉重写）→ 摘要
+import { StateGraph, StateSchema, ReducedValue, START, END } from '@langchain/langgraph'
+import { ChatOpenAI } from '@langchain/openai'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
+import { StringOutputParser } from '@langchain/core/output_parsers'
+import { z } from 'zod/v4'
+
+const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 })
+const parser = new StringOutputParser()
+
+// 示例1: 用 StateSchema + zod 定义图状态
+// 普通字段直接写 zod schema；列表、计数器这类需要合并的字段用 ReducedValue 配 reducer，
+// 节点返回的局部更新才会「追加 / 累加」而不是覆盖
+const GraphState = new StateSchema({
+  topic: z.string(),
+  outline: z.string(),
+  content: z.string(),
+  summary: z.string(),
+  attempts: new ReducedValue(
+    z.number().default(0),
+    { reducer: (left, right) => (left ?? 0) + (right ?? 0) },
+  ),
+  log: new ReducedValue(
+    z.array(z.string()).default(() => []),
+    { reducer: (left, right) => left.concat(right) },
+  ),
+})
+
+// 示例2: 节点函数——接收当前状态，返回一份局部更新
+async function outlineNode(state: typeof GraphState.State) {
+  const prompt = ChatPromptTemplate.fromTemplate('为「{topic}」生成一份三级课程大纲')
+  const outline = await prompt.pipe(model).pipe(parser).invoke({ topic: state.topic })
+  return { outline, log: [\`大纲生成完成（\${outline.length} 字）\`] }
+}
+
+async function contentNode(state: typeof GraphState.State) {
+  const prompt = ChatPromptTemplate.fromTemplate('根据大纲展开课程正文：\\n{outline}')
+  const content = await prompt.pipe(model).pipe(parser).invoke({ outline: state.outline })
+  return { content, attempts: 1, log: [\`正文生成完成（第 \${(state.attempts ?? 0) + 1} 稿）\`] }
+}
+
+async function reviewNode(state: typeof GraphState.State) {
+  // 质检规则：正文过短视为不合格
+  const passed = state.content.length >= 500
+  return { log: [passed ? '质检通过' : \`质检不通过：正文仅 \${state.content.length} 字，退回重写\`] }
+}
+
+async function summaryNode(state: typeof GraphState.State) {
+  const prompt = ChatPromptTemplate.fromTemplate('为以下正文写 100 字摘要：\\n{content}')
+  const summary = await prompt.pipe(model).pipe(parser).invoke({ content: state.content })
+  return { summary, log: ['摘要生成完成'] }
+}
+
+// 示例3: 条件路由函数——读状态，返回下一个节点名
+function routeAfterReview(state: typeof GraphState.State): 'content' | 'summary' {
+  return state.content.length >= 500 ? 'summary' : 'content'
+}
+
+// 示例4: 组装状态图
+const graph = new StateGraph(GraphState)
+  .addNode('outline', outlineNode)
+  .addNode('content', contentNode)
+  .addNode('review', reviewNode)
+  .addNode('summary', summaryNode)
+  .addEdge(START, 'outline')
+  .addEdge('outline', 'content')
+  .addEdge('content', 'review')
+  // 条件边：质检不通过就指回 content，形成「改到合格为止」的循环
+  .addConditionalEdges('review', routeAfterReview, {
+    content: 'content',
+    summary: 'summary',
+  })
+  .addEdge('summary', END)
+
+const app = graph.compile()
+
+// 示例5: 执行并观察
+const result = await app.invoke({ topic: 'LangGraph 入门' })
+console.log('摘要:', result.summary)
+console.log('执行日志:\\n' + result.log.map((line) => \`  - \${line}\`).join('\\n'))
+
+// 示例6: 流式观察每个节点的执行顺序与状态更新
+for await (const step of await app.stream({ topic: 'LangGraph 入门' })) {
+  const [nodeName, update] = Object.entries(step)[0] as [string, any]
+  console.log(\`[执行节点] \${nodeName} → 更新字段: \${Object.keys(update).join(', ')}\`)
+}
+`;export{t as default};

@@ -1,0 +1,276 @@
+const n=`// ========== 1. 全局快捷键 main.js ==========
+const { app, BrowserWindow, globalShortcut, Menu } = require('electron')
+const path = require('path')
+
+// 注册全局快捷键
+function registerGlobalShortcuts() {
+  // 注册单个快捷键
+  const ret = globalShortcut.register('CommandOrControl+Alt+K', () => {
+    console.log('用户按下了 Ctrl+Alt+K')
+    // 显示/隐藏窗口
+    toggleWindow()
+  })
+
+  if (!ret) {
+    console.log('快捷键注册失败（可能被其他应用占用）')
+  }
+
+  // 检查快捷键是否注册成功
+  console.log('快捷键已注册:', globalShortcut.isRegistered('CommandOrControl+Alt+K'))
+
+  // 注册媒体快捷键
+  globalShortcut.register('MediaPlayPause', () => {
+    console.log('播放/暂停')
+  })
+
+  globalShortcut.register('MediaNextTrack', () => {
+    console.log('下一首')
+  })
+
+  globalShortcut.register('MediaPreviousTrack', () => {
+    console.log('上一首')
+  })
+}
+
+// 切换窗口显示/隐藏
+let mainWindow = null
+function toggleWindow() {
+  if (!mainWindow) return
+
+  if (mainWindow.isVisible()) {
+    mainWindow.hide()
+  } else {
+    mainWindow.show()
+    mainWindow.focus()
+  }
+}
+
+// ========== 2. 注销快捷键 ==========
+function unregisterShortcuts() {
+  // 注销单个快捷键
+  globalShortcut.unregister('CommandOrControl+Alt+K')
+
+  // 注销所有快捷键
+  globalShortcut.unregisterAll()
+}
+
+// 应用退出时必须注销
+app.on('will-quit', () => {
+  unregisterShortcuts()
+})
+
+// ========== 3. 菜单快捷键（accelerator） ==========
+// 菜单快捷键不需要手动注册，定义在 MenuItem 中即可
+function createMenuWithShortcuts() {
+  const template = [
+    {
+      label: '文件',
+      submenu: [
+        {
+          label: '新建',
+          accelerator: 'CmdOrCtrl+N',
+          click: () => {
+            console.log('新建文件')
+          }
+        },
+        {
+          label: '打开',
+          accelerator: 'CmdOrCtrl+O',
+          click: () => {}
+        },
+        {
+          label: '保存',
+          accelerator: 'CmdOrCtrl+S',
+          click: () => {}
+        },
+        {
+          label: '另存为',
+          accelerator: 'CmdOrCtrl+Shift+S',
+          click: () => {}
+        }
+      ]
+    },
+    {
+      label: '编辑',
+      submenu: [
+        { role: 'undo', accelerator: 'CmdOrCtrl+Z' },
+        { role: 'redo', accelerator: 'CmdOrCtrl+Shift+Z' },
+        { type: 'separator' },
+        { role: 'cut' },
+        { role: 'copy' },
+        { role: 'paste' }
+      ]
+    },
+    {
+      label: '视图',
+      submenu: [
+        {
+          label: '刷新',
+          accelerator: 'F5',
+          click: () => {
+            if (mainWindow) {
+              mainWindow.webContents.reload()
+            }
+          }
+        },
+        {
+          label: '开发者工具',
+          accelerator: 'F12',
+          // 或 accelerator: 'CmdOrCtrl+Shift+I',
+          click: () => {
+            if (mainWindow) {
+              mainWindow.webContents.toggleDevTools()
+            }
+          }
+        },
+        {
+          label: '全屏',
+          accelerator: 'F11',
+          click: () => {
+            if (mainWindow) {
+              mainWindow.setFullScreen(!mainWindow.isFullScreen())
+            }
+          }
+        }
+      ]
+    }
+  ]
+
+  const menu = Menu.buildFromTemplate(template)
+  Menu.setApplicationMenu(menu)
+}
+
+// ========== 4. 快捷键格式详解 ==========
+// 修饰符（Modifier keys）:
+//   Command (或 Cmd)      - macOS Command 键
+//   Control (或 Ctrl)     - Control 键
+//   CommandOrControl      - macOS 上是 Cmd，其他是 Ctrl（推荐跨平台）
+//   Alt                   - Alt 键
+//   Option                - 同 Alt（macOS 叫法）
+//   Shift                 - Shift 键
+//   Super                 - Windows 键 / macOS Command 键
+//
+// 功能键:
+//   F1 - F24              - 功能键
+//   Space                 - 空格键
+//   Enter / Return        - 回车键
+//   Backspace             - 退格键
+//   Delete                - 删除键
+//   Escape / Esc          - 退出键
+//   Tab                   - 制表键
+//
+// 方向键:
+//   Up, Down, Left, Right
+//   Home, End, PageUp, PageDown
+//
+// 其他:
+//   PrintScreen, ScrollLock, Pause
+//   Insert
+//   MediaPlayPause, MediaNextTrack, MediaPreviousTrack, MediaStop
+//   VolumeUp, VolumeDown, VolumeMute
+
+// 示例组合:
+const shortcutExamples = [
+  'CmdOrCtrl+A',
+  'CmdOrCtrl+Shift+P',
+  'Alt+Tab',
+  'CmdOrCtrl+Shift+Alt+M',
+  'F5',
+  'Shift+F10',
+  'Ctrl+Alt+Delete' // 注意：系统快捷键可能无法注册
+]
+
+// ========== 5. 渲染进程监听键盘事件 ==========
+// 渲染进程可以用普通的 Web API 监听键盘事件
+// 但全局快捷键必须通过主进程注册
+
+// renderer.js 中的键盘监听
+// document.addEventListener('keydown', (e) => {
+//   // Ctrl+S
+//   if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+//     e.preventDefault()
+//     console.log('保存')
+//   }
+//
+//   // F5 刷新
+//   if (e.key === 'F5') {
+//     e.preventDefault()
+//     location.reload()
+//   }
+// })
+
+// ========== 6. 通过 IPC 动态注册快捷键 ==========
+// preload.js
+// const { contextBridge, ipcRenderer } = require('electron')
+//
+// contextBridge.exposeInMainWorld('shortcutAPI', {
+//   register: (accelerator, actionId) =>
+//     ipcRenderer.invoke('shortcut:register', accelerator, actionId),
+//   unregister: (accelerator) =>
+//     ipcRenderer.invoke('shortcut:unregister', accelerator),
+//   onTrigger: (callback) =>
+//     ipcRenderer.on('shortcut:trigger', (_event, actionId) => callback(actionId))
+// })
+
+// main.js 实现
+// const shortcutHandlers = new Map()
+//
+// ipcMain.handle('shortcut:register', (_event, accelerator, actionId) => {
+//   const success = globalShortcut.register(accelerator, () => {
+//     // 触发时通知渲染进程
+//     _event.sender.send('shortcut:trigger', actionId)
+//   })
+//   if (success) {
+//     shortcutHandlers.set(accelerator, actionId)
+//   }
+//   return success
+// })
+//
+// ipcMain.handle('shortcut:unregister', (_event, accelerator) => {
+//   globalShortcut.unregister(accelerator)
+//   shortcutHandlers.delete(accelerator)
+//   return true
+// })
+
+// ========== 7. 快捷键冲突处理 ==========
+function safeRegister(accelerator, callback) {
+  // 先检查是否已被注册
+  if (globalShortcut.isRegistered(accelerator)) {
+    console.warn(\`快捷键 \${accelerator} 已被占用\`)
+    return false
+  }
+
+  const success = globalShortcut.register(accelerator, callback)
+  if (!success) {
+    console.error(\`注册快捷键失败: \${accelerator}\`)
+  }
+  return success
+}
+
+// ========== 8. 应用启动时初始化 ==========
+app.whenReady().then(() => {
+  mainWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true
+    }
+  })
+  mainWindow.loadFile('index.html')
+
+  // 注册全局快捷键
+  registerGlobalShortcuts()
+
+  // 创建菜单（菜单内的快捷键会自动生效）
+  createMenuWithShortcuts()
+})
+
+// 应用失焦时（可选，看需求决定是否注销）
+// app.on('browser-window-blur', () => {
+//   unregisterShortcuts()
+// })
+//
+// app.on('browser-window-focus', () => {
+//   registerGlobalShortcuts()
+// })`;export{n as default};

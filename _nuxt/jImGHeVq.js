@@ -1,0 +1,42 @@
+const n=`// plugins/autumn-plugin.js
+import plugin from 'tailwindcss/plugin'
+
+export default plugin(function ({ addBase, addComponents, matchUtilities, theme }) {
+  // 基础样式：h1 / h2 的默认排版
+  addBase({
+    h1: { fontSize: theme('fontSize.3xl'), fontWeight: theme('fontWeight.bold') },
+    h2: { fontSize: theme('fontSize.2xl'), fontWeight: theme('fontWeight.bold') },
+  })
+
+  // 组件类：按钮
+  addComponents({
+    '.btn': {
+      padding: \`\${theme('spacing.2')} \${theme('spacing.4')}\`,
+      borderRadius: theme('borderRadius.lg'),
+      fontWeight: theme('fontWeight.medium'),
+      backgroundColor: theme('colors.orange.600'),
+      color: 'white',
+      '&:hover': {
+        backgroundColor: theme('colors.orange.700'),
+      },
+    },
+  })
+
+  // 动态值工具类：text-shadow-*
+  matchUtilities(
+    {
+      'text-shadow': (value) => ({ textShadow: value }),
+    },
+    { values: theme('textShadow') }
+  )
+})
+
+// app.css：v4 用 @plugin 在 CSS 入口加载插件
+// @import "tailwindcss";
+// @plugin "@tailwindcss/forms";
+// @plugin "@tailwindcss/typography";
+// @plugin "./plugins/autumn-plugin.js";
+//
+// v3 写法（仅作迁移对照）：在 tailwind.config.js 的 plugins 数组里 require(...)。
+// v4 不再自动读取 tailwind.config.js；遗留配置需在 CSS 里用 @config 显式加载。
+`;export{n as default};

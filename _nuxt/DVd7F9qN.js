@@ -1,0 +1,119 @@
+const n=`// 基础数据获取 - Server Component 中直接 await
+// app/page.tsx
+async function getPosts() {
+  // Next.js 扩展了原生 fetch
+  const res = await fetch('https://api.example.com/posts')
+  if (!res.ok) throw new Error('获取失败')
+  return res.json()
+}
+
+export default async function HomePage() {
+  // 直接 await，无需 useEffect
+  const posts = await getPosts()
+
+  return (
+    <ul>
+      {posts.map((post: any) => (
+        <li key={post.id}>{post.title}</li>
+      ))}
+    </ul>
+  )
+}
+
+// ============================================
+
+// 缓存策略：use cache + cacheLife（Cache Components 推荐）
+import { cacheLife, cacheTag } from 'next/cache'
+
+async function getCachedPosts() {
+  'use cache'
+  cacheLife('hours')
+  cacheTag('posts')
+
+  const res = await fetch('https://api.example.com/posts')
+  return res.json()
+}
+
+// ============================================
+
+// 缓存策略：force-cache - 显式持久缓存（fetch 默认 auto no cache）
+async function getCachedData() {
+  const res = await fetch('https://api.example.com/data', {
+    cache: 'force-cache',
+  })
+  return res.json()
+}
+
+// ============================================
+
+// 缓存策略：no-store - 不缓存，每次请求都重新获取
+async function getFreshData() {
+  const res = await fetch('https://api.example.com/data', {
+    cache: 'no-store',
+  })
+  return res.json()
+}
+
+// ============================================
+
+// 缓存策略：revalidate - ISR 定时刷新
+async function getRevalidatedData() {
+  const res = await fetch('https://api.example.com/data', {
+    next: {
+      revalidate: 60, // 60 秒后重新验证
+    },
+  })
+  return res.json()
+}
+
+// ============================================
+
+// 缓存策略：tags - 按标签缓存，可主动失效
+async function getPosts() {
+  const res = await fetch('https://api.example.com/posts', {
+    next: {
+      tags: ['posts'], // 打上标签
+    },
+  })
+  return res.json()
+}
+
+async function getUsers() {
+  const res = await fetch('https://api.example.com/users', {
+    next: {
+      tags: ['users'],
+    },
+  })
+  return res.json()
+}
+
+// 在 Server Action 或 Route Handler 中主动失效
+// import { revalidateTag, updateTag } from 'next/cache'
+// revalidateTag('posts', 'max') // 后台刷新，期间继续提供旧内容
+// updateTag('posts') // 仅在 Server Action 中使用，下一次请求立即读到新数据
+
+// ============================================
+
+// 同次渲染自动去重（Request Memoization）
+// 同一个 URL 的 fetch 在同一次渲染中只执行一次
+async function getPageData() {
+  // 这两次调用只会真正发起一次请求
+  const [posts, comments] = await Promise.all([
+    fetch('https://api.example.com/posts').then(r => r.json()),
+    fetch('https://api.example.com/posts').then(r => r.json()),
+  ])
+  return { posts, comments }
+}
+
+// ============================================
+
+// 路由级 revalidate 配置（旧模型；启用 Cache Components 后改用 cacheLife）
+// app/blog/page.tsx
+
+// 整个路由每 30 秒重新生成
+export const revalidate = 30
+
+export default async function BlogPage() {
+  const posts = await fetch('https://api.example.com/posts').then(r => r.json())
+  return <h1>博客列表 ({posts.length})</h1>
+}`;export{n as default};

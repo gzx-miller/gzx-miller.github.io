@@ -1,0 +1,61 @@
+const e=`// 人机交互：用 interrupt 中断执行，等人批准后从断点恢复
+// 场景：退款审批——金额超过 500 元时必须人工审批，批准后继续执行
+import { StateGraph, StateSchema, START, END, interrupt, Command, MemorySaver } from '@langchain/langgraph'
+import { z } from 'zod/v4'
+
+const OrderState = new StateSchema({
+  orderId: z.string(),
+  amount: z.number(),
+  decision: z.enum(['approved', 'rejected']).nullable().default(null),
+  result: z.string(),
+})
+
+// 示例1: 审核节点里调用 interrupt 暂停执行
+// interrupt 的参数会成为「等待人工输入」时暴露给前端的问题描述
+async function reviewNode(state: typeof OrderState.State) {
+  if (state.amount <= 500) {
+    return { decision: 'approved', result: '金额在阈值内，自动通过' }
+  }
+
+  const decision = interrupt({
+    question: \`订单 \${state.orderId} 申请退款 ￥\${state.amount}，是否批准？\`,
+    options: ['approved', 'rejected'],
+  })
+
+  return { decision, result: '' }
+}
+
+// 示例2: 执行节点根据人工决定继续跑
+async function executeNode(state: typeof OrderState.State) {
+  const result =
+    state.decision === 'approved' ? \`订单 \${state.orderId} 已退款 ￥\${state.amount}\` : \`订单 \${state.orderId} 退款被驳回\`
+  return { result }
+}
+
+const graph = new StateGraph(OrderState)
+  .addNode('review', reviewNode)
+  .addNode('execute', executeNode)
+  .addEdge(START, 'review')
+  .addEdge('review', 'execute')
+  .addEdge('execute', END)
+
+// 示例3: 编译时必须挂 checkpointer——中断时的状态保存全靠它
+const app = graph.compile({ checkpointer: new MemorySaver() })
+
+const config = { configurable: { thread_id: 'order-20261013-001' } }
+
+// 示例4: 第一次 invoke——流程在 interrupt 处挂起，返回 __interrupt__ 字段
+const first = await app.invoke({ orderId: 'A-1001', amount: 880 }, config)
+console.log('挂起等待审批:', JSON.stringify(first.__interrupt__))
+
+// 示例5: 检查点里保留了完整状态快照，随时可以查「走到哪了」
+const snapshot = await app.getState(config)
+console.log('当前节点:', snapshot.next) // ['review']
+
+// 示例6: 用户在前端点「批准」——用 Command({ resume }) 从断点恢复
+const resumed = await app.invoke(new Command({ resume: 'approved' }), config)
+console.log('恢复后结果:', resumed.result) // 订单 A-1001 已退款 ￥880
+
+// 若审批被驳回：new Command({ resume: 'rejected' }) → 退款被驳回
+// 同一 thread_id 可再次发起新订单，历史检查点都在
+`;export{e as default};

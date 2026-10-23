@@ -1,0 +1,128 @@
+const n=`import { tool, Tool } from '@langchain/core/tools'
+import { z } from 'zod'
+import { ChatOpenAI } from '@langchain/openai'
+
+// 示例1: 使用 tool 函数定义工具（推荐方式）
+const weatherTool = tool(
+  async ({ city, date }) => {
+    const mockWeather: Record<string, any> = {
+      '北京': { temp: 25, condition: '晴', humidity: 45 },
+      '上海': { temp: 28, condition: '多云', humidity: 65 },
+      '深圳': { temp: 32, condition: '雷阵雨', humidity: 80 },
+    }
+    const weather = mockWeather[city] || { temp: 20, condition: '未知', humidity: 50 }
+    return \`\${city} \${date} 天气: \${weather.condition}, 温度 \${weather.temp}°C, 湿度 \${weather.humidity}%\`
+  },
+  {
+    name: 'get_weather',
+    description: '获取指定城市的天气信息。查询天气预报时使用。',
+    schema: z.object({
+      city: z.string().describe('城市名称，如"北京"、"上海"'),
+      date: z.string().describe('日期，格式 YYYY-MM-DD'),
+    }),
+  }
+)
+
+console.log('工具名称:', weatherTool.name)
+console.log('工具描述:', weatherTool.description)
+
+// 示例2: 直接调用工具
+const result = await weatherTool.invoke({ city: '北京', date: '2024-07-01' })
+console.log('调用结果:', result)
+
+// 示例3: 定义多个工具
+const searchTool = tool(
+  async ({ query }) => {
+    return \`搜索"\${query}"的结果：...\`
+  },
+  {
+    name: 'web_search',
+    description: '搜索网络获取信息',
+    schema: z.object({
+      query: z.string().describe('搜索关键词'),
+    }),
+  }
+)
+
+const calculatorTool = tool(
+  async ({ a, b, operation }) => {
+    let result: number
+    switch (operation) {
+      case 'add': result = a + b; break
+      case 'subtract': result = a - b; break
+      case 'multiply': result = a * b; break
+      case 'divide': result = a / b; break
+      default: result = 0
+    }
+    return \`\${a} \${operation} \${b} = \${result}\`
+  },
+  {
+    name: 'calculator',
+    description: '执行基础数学运算',
+    schema: z.object({
+      a: z.number().describe('第一个数字'),
+      b: z.number().describe('第二个数字'),
+      operation: z.enum(['add', 'subtract', 'multiply', 'divide']).describe('运算类型'),
+    }),
+  }
+)
+
+const tools = [weatherTool, searchTool, calculatorTool]
+
+// 示例4: 模型调用工具（Function Calling）
+const model = new ChatOpenAI({ model: 'gpt-4o-mini' }).bind({
+  tools: tools.map(t => ({
+    type: 'function' as const,
+    function: {
+      name: t.name,
+      description: t.description,
+      parameters: (t as any).schema ? (t as any).schema : {},
+    },
+  })),
+})
+
+// 示例5: 使用 withStructuredOutput 实现工具调用
+const modelWithTools = new ChatOpenAI({ model: 'gpt-4o-mini' }).bindTools(tools)
+
+const response = await modelWithTools.invoke([
+  { role: 'user', content: '北京今天天气怎么样？' }
+])
+
+// 检查是否有工具调用
+if (response.tool_calls && response.tool_calls.length > 0) {
+  console.log('工具调用:', response.tool_calls)
+  // 执行工具调用
+  for (const toolCall of response.tool_calls) {
+    const toolInstance = tools.find(t => t.name === toolCall.name)
+    if (toolInstance) {
+      const toolResult = await toolInstance.invoke(toolCall.args)
+      console.log('工具结果:', toolResult)
+    }
+  }
+}
+
+// 示例6: 继承 Tool 类定义工具（旧方式）
+class CustomSearchTool extends Tool {
+  name = 'custom_search'
+  description = '自定义搜索工具'
+
+  async _call(input: string): Promise<string> {
+    return \`搜索结果: \${input}\`
+  }
+}
+
+const customTool = new CustomSearchTool()
+
+// 示例7: 工具的元数据和标签
+const taggedTool = tool(
+  async ({ query }) => \`结果: \${query}\`,
+  {
+    name: 'tagged_search',
+    description: '带标签的搜索工具',
+    schema: z.object({ query: z.string() }),
+    tags: ['search', 'production'],
+    metadata: { version: '1.0.0' },
+  }
+)
+console.log('工具标签:', taggedTool.tags)
+console.log('工具元数据:', taggedTool.metadata)`;export{n as default};

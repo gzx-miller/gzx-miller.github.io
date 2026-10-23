@@ -1,0 +1,5 @@
+const e=`<label class="block text-sm font-medium" for="email">报名邮箱</label>
+<input id="email" type="email" aria-describedby="email-help"
+  class="mt-1 w-full rounded-lg border border-stone-300 px-3 py-2 invalid:border-red-500 focus-visible:outline-2 focus-visible:outline-orange-600 disabled:cursor-not-allowed disabled:opacity-50">
+<p id="email-help" class="mt-1 text-sm text-stone-600">用于接收课程通知</p>
+`;export{e as default};

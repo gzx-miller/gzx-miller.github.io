@@ -1,0 +1,64 @@
+const n=`// app/blog/page.tsx - 静态路由 /blog
+export default function BlogPage() {
+  return <h1>博客列表</h1>
+}
+
+// ============================================
+
+// app/blog/[slug]/page.tsx - 动态路由 /blog/:slug
+// 方括号表示动态参数
+export default async function BlogPostPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
+  return <h1>文章：{slug}</h1>
+}
+
+// ============================================
+
+// app/docs/[...slug]/page.tsx - Catch-all 路由 /docs/a/b/c
+// params.slug 是数组 ['a', 'b', 'c']
+export default async function DocsPage({
+  params,
+}: {
+  params: Promise<{ slug: string[] }>
+}) {
+  const { slug } = await params
+  return <h1>文档路径：{slug.join(' / ')}</h1>
+}
+
+// ============================================
+
+// app/shop/[[...slug]]/page.tsx - 可选 Catch-all
+// 匹配 /shop、/shop/a、/shop/a/b 等
+export default async function ShopPage({
+  params,
+}: {
+  params: Promise<{ slug?: string[] }>
+}) {
+  const { slug } = await params
+  const path = slug?.join(' / ') || '首页'
+  return <h1>商店：{path}</h1>
+}
+
+// ============================================
+
+// app/(marketing)/about/page.tsx - 路由组
+// URL 仍是 /about，(marketing) 不影响路径
+// 可用于组织代码和独立布局
+export default function AboutPage() {
+  return <h1>关于我们</h1>
+}
+
+// ============================================
+
+// app/_components/Button.tsx - 私有文件夹
+// _ 前缀的文件夹不参与路由生成
+// 用于存放内部组件和工具函数
+'use client'
+
+export function Button({ children }: { children: React.ReactNode }) {
+  return <button className="btn">{children}</button>
+}`;export{n as default};

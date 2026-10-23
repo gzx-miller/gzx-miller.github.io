@@ -1,0 +1,181 @@
+const n=`// 持久化与检查点：按 thread_id 保存每一步状态，支持续跑与时间旅行
+// 场景：课程助手多轮对话——服务重启后能接着聊，也能回看或分叉历史
+import { StateGraph, StateSchema, MessagesValue, START, END, MemorySaver, InMemoryStore } from '@langchain/langgraph'
+import { ChatOpenAI } from '@langchain/openai'
+import { HumanMessage, SystemMessage } from '@langchain/core/messages'
+import { z } from 'zod'
+
+const model = new ChatOpenAI({ model: 'gpt-4o-mini', temperature: 0 })
+
+// ═══ 1. 状态：线程内的短期上下文 ═══
+const ChatState = new StateSchema({
+  messages: MessagesValue,
+  studentId: z.string(),
+  summary: z.string().default(''),
+})
+
+// ═══ 2. 两种存储各管一段：store 跨线程，checkpointer 管线程内 ═══
+const store = new InMemoryStore()
+const checkpointer = new MemorySaver()
+
+// ═══ 3. 节点：从 store 读长期档案，从状态读短期消息 ═══
+async function agentNode(state: typeof ChatState.State, runtime: any) {
+  const saved = await runtime.store.get(['students'], state.studentId)
+  const profile = saved?.value?.summary ?? '暂无长期档案'
+
+  const response = await model.invoke([
+    new SystemMessage(\`你是课程助手。学生长期档案：\${profile}\`),
+    ...state.messages,
+  ])
+
+  return { messages: [response] }
+}
+
+async function summaryNode(state: typeof ChatState.State, runtime: any) {
+  const lastAnswer = String(state.messages.at(-1)?.content ?? '')
+  const summary = lastAnswer.slice(0, 60)
+
+  // 结果：长期记忆写入 store，换一个 thread_id 仍然读得到
+  await runtime.store.put(['students'], state.studentId, {
+    summary,
+    updatedAt: Date.now(),
+  })
+
+  return { summary }
+}
+
+// ═══ 4. 组装并编译：checkpointer 与 store 同时挂上 ═══
+const graph = new StateGraph(ChatState)
+  .addNode('agent', agentNode)
+  .addNode('summary', summaryNode)
+  .addEdge(START, 'agent')
+  .addEdge('agent', 'summary')
+  .addEdge('summary', END)
+
+const app = graph.compile({ checkpointer, store })
+
+// ═══ 5. 同一 thread_id：第二轮自动接续第一轮的状态 ═══
+const config = { configurable: { thread_id: 'course-thread-01' } }
+
+await app.invoke(
+  {
+    messages: [new HumanMessage('我叫小明，想学 Vue3')],
+    studentId: 'student-01',
+  },
+  config,
+)
+
+const followUp = await app.invoke(
+  { messages: [new HumanMessage('我叫什么名字？')], studentId: 'student-01' },
+  config,
+)
+
+console.log('会话内追问：', followUp.messages.at(-1)?.content)
+// 结果：模型能看到上一轮消息，正确回答「小明」
+
+// ═══ 6. getState：读最新快照，确认线程执行到哪 ═══
+const latest = await app.getState(config)
+console.log('下一批节点：', latest.next)
+console.log('当前摘要：', latest.values.summary)
+console.log('检查点编号：', latest.config.configurable?.checkpoint_id)
+
+// ═══ 7. getStateHistory：按时间回看整条线程 ═══
+const history: Array<{ id?: string; next: string[] }> = []
+
+for await (const snapshot of app.getStateHistory(config)) {
+  history.push({
+    id: snapshot.config.configurable?.checkpoint_id,
+    next: snapshot.next,
+  })
+}
+
+console.log(\`历史快照共 \${history.length} 份\`)
+console.log('最近三份：', history.slice(0, 3))
+
+// ═══ 8. updateState：从某个检查点分叉，生成新快照 ═══
+const forkConfig = {
+  configurable: {
+    thread_id: 'course-thread-01',
+    checkpoint_id: latest.config.configurable?.checkpoint_id,
+  },
+}
+
+await app.updateState(forkConfig, { summary: '手动修正：学生偏好从入门课开始' })
+
+const forked = await app.getState(config)
+console.log('分叉后的摘要：', forked.values.summary)
+// 说明：旧检查点保留，新快照带新的 checkpoint_id
+
+// ═══ 9. 换一个 thread_id：短期记忆清零，长期档案仍在 ═══
+const newThread = { configurable: { thread_id: 'course-thread-02' } }
+
+const crossThread = await app.invoke(
+  { messages: [new HumanMessage('还记得我的学习偏好吗？')], studentId: 'student-01' },
+  newThread,
+)
+
+console.log('跨线程召回：', crossThread.summary)
+// 结果：来自 store 的长期记忆仍可读取，线程内消息历史则为空
+
+// ═══ 10. 生产检查点实现：MemorySaver 不能上线 ═══
+import { PostgresSaver } from '@langchain/langgraph-checkpoint-postgres'
+import { SqliteSaver } from '@langchain/langgraph-checkpoint-sqlite'
+
+// 单机部署：文件即数据库，适合小流量与本地验证
+const sqliteCheckpointer = SqliteSaver.fromConnString('./checkpoints.db')
+
+// 多实例部署：所有进程连同一个 Postgres，首次启动要建表
+const pgCheckpointer = PostgresSaver.fromConnString(process.env.DATABASE_URL ?? '')
+await pgCheckpointer.setup()
+
+const prodApp = graph.compile({ checkpointer: pgCheckpointer, store })
+
+// ═══ 11. 保留策略：检查点会随超步线性增长 ═══
+interface CheckpointRow {
+  threadId: string
+  checkpointId: string
+  createdAt: number
+}
+
+const RETENTION_DAYS = 30
+const KEEP_PER_THREAD = 20
+
+function shouldPrune(row: CheckpointRow, now = Date.now()): boolean {
+  const ageDays = (now - row.createdAt) / (1000 * 60 * 60 * 24)
+  return ageDays > RETENTION_DAYS
+}
+
+function keepLatestPerThread(rows: CheckpointRow[]): CheckpointRow[] {
+  const grouped = new Map<string, CheckpointRow[]>()
+
+  for (const row of rows) {
+    const list = grouped.get(row.threadId) ?? []
+    list.push(row)
+    grouped.set(row.threadId, list)
+  }
+
+  const kept: CheckpointRow[] = []
+
+  for (const list of grouped.values()) {
+    list.sort((a, b) => b.createdAt - a.createdAt)
+    kept.push(...list.slice(0, KEEP_PER_THREAD).filter((row) => !shouldPrune(row)))
+  }
+
+  return kept
+}
+
+const retained = keepLatestPerThread([
+  { threadId: 'course-thread-01', checkpointId: 'ckpt-30', createdAt: Date.now() },
+  { threadId: 'course-thread-01', checkpointId: 'ckpt-29', createdAt: Date.now() - 86400000 },
+  { threadId: 'course-thread-02', checkpointId: 'ckpt-03', createdAt: Date.now() - 40 * 86400000 },
+])
+
+console.log('保留的检查点：', retained.map((row) => row.checkpointId))
+// 结果：超过 TTL 的 ckpt-03 被清掉，每个线程最多保留 20 份
+
+// ═══ 12. 挂起中的线程不要清：恢复要靠 next 与最近检查点 ═══
+const pending = await prodApp.getState(config)
+if (pending.next.length > 0) {
+  console.log('该线程仍在等待执行，保留策略需跳过：', config.configurable.thread_id)
+}
+`;export{n as default};

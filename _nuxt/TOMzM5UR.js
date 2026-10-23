@@ -1,0 +1,37 @@
+const t=`// main.ts —— 库存服务作为 TCP 微服务启动
+const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+  StockModule,
+  {
+    transport: Transport.TCP,      // 传输层：TCP（默认 3000 端口）
+    options: { port: 4001 },
+  },
+)
+await app.listen()
+
+// stock.controller.ts —— 微服务控制器：监听消息模式
+@Controller()
+export class StockController {
+  // 客户端 send({ cmd: 'deduct_stock' }, data) 会匹配到这里
+  @MessagePattern({ cmd: 'deduct_stock' })
+  deductStock(@Payload() data: { skuId: string; qty: number }) {
+    return this.stockService.deduct(data)   // 返回值回传调用方
+  }
+}
+
+// order.service.ts —— 订单服务通过 ClientProxy 调用库存服务
+@Injectable()
+export class OrderService {
+  @Client({
+    transport: Transport.TCP,
+    options: { port: 4001 },
+  })
+  private readonly stockClient: ClientProxy
+
+  async createOrder(dto: CreateOrderDto) {
+    const stock = await this.stockClient
+      .send({ cmd: 'deduct_stock' }, dto)   // 请求-响应模式
+      .pipe(timeout(5_000))                  // 超时保护
+      .toPromise()
+    return this.orderRepo.save({ ...dto, stock })
+  }
+}`;export{t as default};

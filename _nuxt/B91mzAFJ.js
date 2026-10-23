@@ -1,0 +1,110 @@
+const n=`import { createAgent } from 'langchain'
+import { ChatOpenAI } from '@langchain/openai'
+import { ChatPromptTemplate, MessagesPlaceholder } from '@langchain/core/prompts'
+import { StringOutputParser } from '@langchain/core/output_parsers'
+import { MemorySaver } from '@langchain/langgraph'
+import type { BaseMessage } from '@langchain/core/messages'
+
+const model = new ChatOpenAI({ model: 'gpt-4o-mini' })
+
+// 示例1: 短期记忆 - 用 checkpointer 按 thread_id 保存会话
+const checkpointer = new MemorySaver()
+
+const agent = createAgent({
+  model,
+  tools: [],
+  systemPrompt: '你是一个友好的 AI 助手，请用中文回答问题。',
+  checkpointer,
+})
+
+async function chatWithAgentMemory() {
+  const config = { configurable: { thread_id: 'user-001' } }
+
+  await agent.invoke(
+    { messages: [{ role: 'user', content: '你好，我叫小明' }] },
+    config
+  )
+
+  // 复用同一个 thread_id，模型能读到上一轮的历史
+  const result = await agent.invoke(
+    { messages: [{ role: 'user', content: '我叫什么名字？' }] },
+    config
+  )
+  console.log('回答:', result.messages.at(-1)?.content)
+}
+
+// 示例2: 窗口记忆 - 只保留最近 k 轮
+function getWindowMessages(messages: BaseMessage[], k: number) {
+  // 每轮包含一条 human 和一条 ai，因此保留最近 2 * k 条
+  return messages.slice(-2 * k)
+}
+
+async function chatWithWindowMemory() {
+  const config = { configurable: { thread_id: 'user-002' } }
+
+  await agent.invoke({ messages: [{ role: 'user', content: '第一轮问题' }] }, config)
+  await agent.invoke({ messages: [{ role: 'user', content: '第二轮问题' }] }, config)
+  const result = await agent.invoke(
+    { messages: [{ role: 'user', content: '第三轮问题' }] },
+    config
+  )
+
+  const windowMessages = getWindowMessages(result.messages, 2)
+  console.log('窗口记忆消息数:', windowMessages.length)
+}
+
+// 示例3: 摘要记忆 - 历史过长时压缩为一段摘要
+const summarizePrompt = ChatPromptTemplate.fromMessages([
+  ['system', '请把下面的对话历史压缩成一段简洁的中文摘要，保留关键事实与用户偏好。'],
+  new MessagesPlaceholder('history'),
+])
+
+const summaryChain = summarizePrompt.pipe(model).pipe(new StringOutputParser())
+
+async function summarizeHistory(messages: BaseMessage[]) {
+  return summaryChain.invoke({ history: messages })
+}
+
+// 示例4: 把窗口历史手动注入提示词模板
+const promptWithHistory = ChatPromptTemplate.fromMessages([
+  ['system', '你是一个友好的 AI 助手，请结合历史回答。'],
+  new MessagesPlaceholder('history'),
+  ['human', '{input}'],
+])
+
+const chainWithHistory = promptWithHistory.pipe(model).pipe(new StringOutputParser())
+
+async function chatWithInjectedHistory() {
+  const history: BaseMessage[] = [
+    { role: 'user', content: '我叫小红' } as BaseMessage,
+    { role: 'assistant', content: '你好小红！' } as BaseMessage,
+  ]
+
+  const answer = await chainWithHistory.invoke({
+    history,
+    input: '我叫什么名字？',
+  })
+  console.log('回答:', answer)
+}
+
+// 示例5: 按会话隔离 - 不同 thread_id 互不影响
+async function chatInTwoThreads() {
+  const configA = { configurable: { thread_id: 'session-a' } }
+  const configB = { configurable: { thread_id: 'session-b' } }
+
+  await agent.invoke({ messages: [{ role: 'user', content: '我叫小刚' }] }, configA)
+  await agent.invoke({ messages: [{ role: 'user', content: '我叫小美' }] }, configB)
+
+  const resultA = await agent.invoke(
+    { messages: [{ role: 'user', content: '我叫什么名字？' }] },
+    configA
+  )
+  const resultB = await agent.invoke(
+    { messages: [{ role: 'user', content: '我叫什么名字？' }] },
+    configB
+  )
+
+  console.log('会话 A:', resultA.messages.at(-1)?.content)
+  console.log('会话 B:', resultB.messages.at(-1)?.content)
+}
+`;export{n as default};
